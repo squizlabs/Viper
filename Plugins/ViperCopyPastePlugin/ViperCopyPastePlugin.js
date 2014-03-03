@@ -1557,6 +1557,7 @@ ViperCopyPastePlugin.prototype = {
         var indentLvl  = {};
         var li         = null;
         var newList    = true;
+        var prevType   = null;
 
         var circleCharsArray = [111, 167, 183, 223, 8721, 8226];
         var circleChars      = [];
@@ -1586,7 +1587,6 @@ ViperCopyPastePlugin.prototype = {
         for (var i = 0; i < pln; i++) {
             var pEl          = pElems[i];
             var listTypeInfo = this._getListType(pEl, listTypes);
-
             if (listTypeInfo === null) {
                 // Next list item will be the start of a new list.
                 newList = true;
@@ -1597,6 +1597,12 @@ ViperCopyPastePlugin.prototype = {
             var listStyle  = listTypeInfo.listStyle;
             var level      = (pEl.getAttribute('style') || '').match(/level([\d])+/mi);
             ViperUtil.setHtml(pEl, listTypeInfo.html);
+
+            if (prevType !== listType) {
+                newList = true;
+            }
+
+            prevType = listType;
 
             if (!level) {
                 level = 1;
