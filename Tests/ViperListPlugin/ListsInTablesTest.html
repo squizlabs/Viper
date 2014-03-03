@@ -1,0 +1,65 @@
+<div id="test-1">
+    <table border="1" cellpadding="2" cellspacing="3">
+        <caption><strong>Table 1.2:</strong> The table caption text goes here la</caption>
+        <tbody><tr>
+            <th>Col1 Header</th>
+            <th>Col2 Header</th>
+            <th>Col3 Header</th>
+        </tr>
+        <tr>
+            <td>Cell 1 %1%</td>
+            <td>Cell 2</td>
+            <td>
+                <ul>
+                    <li>item 1</li>
+                    <li>item 2 %2%</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <ol>
+                    <li>item 1</li>
+                    <li>item 2 %3%</li>
+                </ol>
+            </td>
+            <td>Cell 5 %4%</td>
+            <td>Cell 6</td>
+        </tr>
+    </tbody></table>
+</div>
+
+<div id="test-2">
+    <table id="test" border="1" cellpadding="2" cellspacing="3">
+      <caption><strong>Table 1.2:</strong> The table caption text %1%</caption>
+      <thead>
+        <tr>
+          <th id="testr1c1">Col1 Header</th>
+          <th id="testr1c2">Col2 %2%</th>
+          <th id="testr1c3">Col3 Header</th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr>
+          <td headers="testr1c1 testr1c2 testr1c3" colspan="3">Note: this is the table footer %3%</td>
+        </tr>
+      </tfoot>
+      <tbody>
+        <tr>
+          <td headers="testr1c1">nec porta ante</td>
+          <td headers="testr1c2">sapien %4% vel</td>
+          <td headers="testr1c3">
+            <ul>
+              <li>purus neque luctus ligula, vel molestie arcu</li>
+              <li>purus neque luctus</li>
+              <li>vel molestie arcu</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td headers="testr1c1">nec porta ante</td>
+          <td headers="testr1c2 testr1c3" colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td>
+        </tr>
+      </tbody>
+    </table>
+</div>
