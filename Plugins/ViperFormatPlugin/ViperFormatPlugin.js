@@ -628,8 +628,13 @@ ViperFormatPlugin.prototype = {
             var lineage         = self._inlineToolbar.getLineage();
             var currentLinIndex = self._inlineToolbar.getCurrentLineageIndex(true);
             var formatElement   = lineage[currentLinIndex];
-            if (formatElement && formatElement.nodeType !== ViperUtil.TEXT_NODE) {
-                nodeSelection = formatElement;
+
+            if (!nodeSelection || lineage[(lineage.length - 1)] !== nodeSelection) {
+                // If the last item of the lineage is currently selected then use nodeSelection else use the
+                // currently selected lineage item.
+                if (formatElement && formatElement.nodeType !== ViperUtil.TEXT_NODE) {
+                    nodeSelection = formatElement;
+                }
             }
 
             // Anchor.
