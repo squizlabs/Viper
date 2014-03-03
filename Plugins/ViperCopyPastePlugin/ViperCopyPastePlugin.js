@@ -921,8 +921,9 @@ ViperCopyPastePlugin.prototype = {
 
     _cleanStyleAttributes: function(content, contentType)
     {
-        var self = this;
-        content  = content.replace(new RegExp('<(\\w[^>]*) style="([^"]*)"([^>]*)', 'gi'), function() {
+        var self  = this;
+        var quote = '"';
+        var replaceCallback = function() {
             var styles      = arguments[2];
             var stylesList  = styles.split(';');
             var validStyles = [];
@@ -935,14 +936,19 @@ ViperCopyPastePlugin.prototype = {
             }
 
             if (validStyles.length > 0) {
-                styles      = validStyles.join(';');
-                replacement = '<' + arguments[1] + ' style="' + styles + '"' + arguments[3];
+                styles    = validStyles.join(';');
+                replacement = '<' + arguments[1] + ' style=' + quote + styles + quote + arguments[3];
             } else {
                 replacement = '<' + arguments[1] + arguments[3];
             }
 
             return replacement;
-        });
+        };
+
+        content = content.replace(new RegExp('<(\\w[^>]*) style="([^"]*)"([^>]*)', 'gi'), replaceCallback);
+
+        quote   = "'";
+        content = content.replace(new RegExp('<(\\w[^>]*) style=\'([^\']*)\'([^>]*)', 'gi'), replaceCallback);
 
         return content;
 
@@ -1022,7 +1028,6 @@ ViperCopyPastePlugin.prototype = {
         ViperUtil.setHtml(tmp, content);
 
         ViperUtil.$(tmp).find('[class]').removeAttr('class');
-        ViperUtil.$(tmp).find('[style]').removeAttr('style');
         ViperUtil.$(tmp).find('br[clear]').removeAttr('clear');
 
         // Remove all attributes from table related elements.
@@ -1715,6 +1720,16 @@ ViperCopyPastePlugin.prototype = {
                     list.appendChild(li);
                 }
             }
+        }
+
+        // Remove all p tags inside LI elements.
+        var pInLI = ViperUtil.find(div, 'li > p');
+        for (var i = 0; i < pInLI.length; i++) {
+            while (pInLI[i].firstChild) {
+                ViperUtil.insertBefore(pInLI[i], pInLI[i].firstChild);
+            }
+
+            ViperUtil.remove(pInLI[i]);
         }
 
         content = ViperUtil.getHtml(div);
