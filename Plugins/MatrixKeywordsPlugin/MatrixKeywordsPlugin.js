@@ -139,40 +139,40 @@ MatrixKeywordsPlugin.prototype = {
     _createSelection: function(id, name, label, options)
     {
 	var selectionArea = document.createElement('div');
-	dfx.addClass(selectionArea, 'Matrix-Viper-selection');
+	ViperUtil.addClass(selectionArea, 'Matrix-Viper-selection');
 
 	var labelEl = document.createElement('label');
-	dfx.addClass(labelEl, 'Matrix-Viper-selection-label');
+	ViperUtil.addClass(labelEl, 'Matrix-Viper-selection-label');
 	selectionArea.appendChild(labelEl);
 
 	var main = document.createElement('div');
-	dfx.addClass(main, 'Matrix-Viper-selection-main');
+	ViperUtil.addClass(main, 'Matrix-Viper-selection-main');
 	labelEl.appendChild(main);
 
 	var title = document.createElement('span');
-	dfx.addClass(title, 'Matrix-Viper-selection-title');
-	dfx.setHtml(title, label);
+	ViperUtil.addClass(title, 'Matrix-Viper-selection-title');
+	ViperUtil.setHtml(title, label);
 	
 	// add padding-left css property to the title, 
 	var width = 0;
 	// Wrap the element in a generic class so the width calculation is correct
 	// for the font size.
 	var tmp = document.createElement('div');
-	dfx.addClass(tmp, 'ViperITP');
+	ViperUtil.addClass(tmp, 'ViperITP');
 
 	if (navigator.userAgent.match(/iPad/i) !== null) {
-	    dfx.addClass(tmp, 'device-ipad');
+	    ViperUtil.addClass(tmp, 'device-ipad');
 	}
-	dfx.setStyle(tmp, 'display', 'block');
+	ViperUtil.setStyle(tmp, 'display', 'block');
 	tmp.appendChild(title);
 	this.viper.addElement(tmp);
-	width = (dfx.getElementWidth(title) + 10) + 'px';
+	width = (ViperUtil.getElementWidth(title) + 10) + 'px';
 	tmp.parentNode.removeChild(tmp);
-	dfx.setStyle(main, 'padding-left', width);
+	ViperUtil.setStyle(main, 'padding-left', width);
 	main.appendChild(title);
 
 	var select = document.createElement("select");
-	dfx.addClass(select, 'Matrix-Viper-selection-input');
+	ViperUtil.addClass(select, 'Matrix-Viper-selection-input');
 	select.setAttribute("name", name);
 	select.setAttribute("id", id);
 
