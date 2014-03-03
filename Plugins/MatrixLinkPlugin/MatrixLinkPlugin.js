@@ -1,6 +1,6 @@
 function MatrixLinkPlugin(viper)
 {
-    dfx.inherits('MatrixLinkPlugin', 'ViperLinkPlugin');
+    ViperUtil.inherits('MatrixLinkPlugin', 'ViperLinkPlugin');
     ViperLinkPlugin.call(this, viper);
 
 }
@@ -30,7 +30,7 @@ MatrixLinkPlugin.prototype = {
         var assetPicker = tools.createButton(idPrefix + ':assetPicker', '', 'Pick Asset', 'Viper-ees-target', function() {
             self.pickAsset(idPrefix);
         });
-        dfx.insertAfter(urlField, assetPicker);
+        ViperUtil.insertAfter(urlField, assetPicker);
 
         // Url value may need to be updated if the link is internal.
         var urlValue = tools.getItem(idPrefix + ':url').getValue();
@@ -39,13 +39,13 @@ MatrixLinkPlugin.prototype = {
             urlValue = urlValue.replace('./?a=', '');
 
             // Internal URL.
-            dfx.removeClass(main, 'Viper-emailLink');
-            dfx.addClass(main, 'Viper-internalLink');
+            ViperUtil.removeClass(main, 'Viper-emailLink');
+            ViperUtil.addClass(main, 'Viper-internalLink');
 
             // If the link content has %asset_summary_xx% keyword then check the summary
             // checkbox.
             var link = this.getLinkFromRange();
-            if (link && dfx.getHtml(link).match(/%asset_summary_\d+%/)) {
+            if (link && ViperUtil.getHtml(link).match(/%asset_summary_\d+%/)) {
                 incSummary = true;
             }
 
@@ -69,20 +69,20 @@ MatrixLinkPlugin.prototype = {
 
         // Insert anchor row after URL field.
         var urlRow = tools.getItem(idPrefix + ':urlRow').element;
-        dfx.insertAfter(urlRow, anchorRow);
+        ViperUtil.insertAfter(urlRow, anchorRow);
 
         // The URL field needs to change the interface to internal URL interface
         // if the value is an internal URL.
         this.viper.registerCallback('ViperTools:changed:' + idPrefix + ':url', 'MatrixLinkPlugin', function() {
             var urlValue = self.viper.ViperTools.getItem(idPrefix + ':url').getValue();
-            if (dfx.hasClass(main, 'Viper-emailLink') === false) {
+            if (ViperUtil.hasClass(main, 'Viper-emailLink') === false) {
                 // Not an email, check if its internal URL.
                 if (self._isInternalLink(urlValue) === true) {
                     // Internal URL.
-                    dfx.removeClass(main, 'Viper-emailLink');
-                    dfx.addClass(main, 'Viper-internalLink');
+                    ViperUtil.removeClass(main, 'Viper-emailLink');
+                    ViperUtil.addClass(main, 'Viper-internalLink');
                 } else {
-                    dfx.removeClass(main, 'Viper-internalLink');
+                    ViperUtil.removeClass(main, 'Viper-internalLink');
                 }
             }
         });
@@ -94,7 +94,7 @@ MatrixLinkPlugin.prototype = {
 
         // Insert it before new window option.
         var newWindowRow = tools.getItem(idPrefix + ':newWindowRow').element;
-        dfx.insertBefore(newWindowRow, includeSummaryRow);
+        ViperUtil.insertBefore(newWindowRow, includeSummaryRow);
 
         tools.getItem('ViperLinkPlugin:vtp:link').addSubSectionActionWidgets('ViperLinkPlugin:vtp:linkSubSection', ['ViperLinkPlugin:vtp:anchor', 'ViperLinkPlugin:vtp:includeSummary']);
 
@@ -135,7 +135,7 @@ MatrixLinkPlugin.prototype = {
         link.setAttribute('href', href);
 
         // Remove summary keyword.
-        dfx.setHtml(link, dfx.getHtml(link).replace(/[ ]*%asset_summary_\d+%/, ''));
+        ViperUtil.setHtml(link, ViperUtil.getHtml(link).replace(/[ ]*%asset_summary_\d+%/, ''));
 
         // Content of the link may need to change due to the summary keyword.
         var includeSummary = this.viper.ViperTools.getItem(idPrefix + ':includeSummary').getValue();
@@ -159,14 +159,14 @@ MatrixLinkPlugin.prototype = {
             urlValue = urlValue.replace('./?a=', '');
 
             // Internal URL.
-            dfx.removeClass(main, 'Viper-emailLink');
-            dfx.addClass(main, 'Viper-internalLink');
+            ViperUtil.removeClass(main, 'Viper-emailLink');
+            ViperUtil.addClass(main, 'Viper-internalLink');
 
             // If the link content has %asset_summary_xx% keyword then check the summary
             // checkbox.
             var link       = this.getLinkFromRange();
             var incSummary = false;
-            if (link && dfx.getHtml(link).match(/%asset_summary_\d+%/)) {
+            if (link && ViperUtil.getHtml(link).match(/%asset_summary_\d+%/)) {
                 incSummary = true;
             }
 
@@ -184,7 +184,7 @@ MatrixLinkPlugin.prototype = {
         } else {
             tools.getItem('ViperLinkPlugin:vtp:anchor').setValue('');
             tools.getItem('ViperLinkPlugin:vtp:includeSummary').setValue(false);
-            dfx.removeClass(main, 'Viper-internalLink');
+            ViperUtil.removeClass(main, 'Viper-internalLink');
         }//end if
 
     },
@@ -203,14 +203,14 @@ MatrixLinkPlugin.prototype = {
             urlValue = urlValue.replace('./?a=', '');
 
             // Internal URL.
-            dfx.removeClass(main, 'Viper-emailLink');
-            dfx.addClass(main, 'Viper-internalLink');
+            ViperUtil.removeClass(main, 'Viper-emailLink');
+            ViperUtil.addClass(main, 'Viper-internalLink');
 
             // If the link content has %asset_summary_xx% keyword then check the summary
             // checkbox.
             var link       = this.getLinkFromRange();
             var incSummary = false;
-            if (link && dfx.getHtml(link).match(/%asset_summary_\d+%/)) {
+            if (link && ViperUtil.getHtml(link).match(/%asset_summary_\d+%/)) {
                 incSummary = true;
             }
 
@@ -228,7 +228,7 @@ MatrixLinkPlugin.prototype = {
         } else {
             tools.getItem('ViperLinkPlugin:vitp:anchor').setValue('');
             tools.getItem('ViperLinkPlugin:vitp:includeSummary').setValue(false);
-            dfx.removeClass(main, 'Viper-internalLink');
+            ViperUtil.removeClass(main, 'Viper-internalLink');
         }//end if
 
     },
@@ -286,10 +286,10 @@ MatrixLinkPlugin.prototype = {
      */
     isPluginElement: function(element)
     {
-        var assetFinderOverlay = dfx.getId('ees_assetFinderOverlay');
+        var assetFinderOverlay = ViperUtil.getId('ees_assetFinderOverlay');
         if (element !== this._toolbar
-            && dfx.isChildOf(element, this._toolbar) === false
-            && dfx.isChildOf(element, assetFinderOverlay) === false
+            && ViperUtil.isChildOf(element, this._toolbar) === false
+            && ViperUtil.isChildOf(element, assetFinderOverlay) === false
         ) {
             return false;
         }

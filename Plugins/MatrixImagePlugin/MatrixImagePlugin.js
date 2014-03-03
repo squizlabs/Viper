@@ -1,6 +1,6 @@
 function MatrixImagePlugin(viper)
 {
-    dfx.inherits('MatrixImagePlugin', 'ViperImagePlugin');
+    ViperUtil.inherits('MatrixImagePlugin', 'ViperImagePlugin');
     ViperImagePlugin.call(this, viper);
 
 }
@@ -30,7 +30,7 @@ MatrixImagePlugin.prototype = {
             self.pickAsset('ViperImagePlugin');
         });
 
-        dfx.insertAfter(urlField, urlRow);
+        ViperUtil.insertAfter(urlField, urlRow);
         urlRow.appendChild(urlField);
         urlRow.appendChild(assetPicker);
 
@@ -56,7 +56,7 @@ MatrixImagePlugin.prototype = {
             self.pickAsset('vitpImagePlugin');
         });
 
-        dfx.insertAfter(urlField, urlRow);
+        ViperUtil.insertAfter(urlField, urlRow);
         urlRow.appendChild(urlField);
         urlRow.appendChild(assetPicker);
 
@@ -69,7 +69,7 @@ MatrixImagePlugin.prototype = {
         }
 
         if (this._isInternalLink(url) === true) {
-            var currentUrl = dfx.baseUrl(window.location.href);
+            var currentUrl = ViperUtil.baseUrl(window.location.href);
             currentUrl     = currentUrl.replace('/_edit', '');
             currentUrl += '?a=' + url;
 
@@ -78,7 +78,7 @@ MatrixImagePlugin.prototype = {
 
         this.setPreviewContent(false, true);
         var self = this;
-        dfx.getImage(url, function(img) {
+        ViperUtil.getImage(url, function(img) {
             self.setPreviewContent(img);
         });
     },
@@ -193,10 +193,10 @@ MatrixImagePlugin.prototype = {
      */
     isPluginElement: function(element)
     {
-        var assetFinderOverlay = dfx.getId('ees_assetFinderOverlay');
+        var assetFinderOverlay = ViperUtil.getId('ees_assetFinderOverlay');
         if (element !== this._toolbar
-            && dfx.isChildOf(element, this._toolbar) === false
-            && dfx.isChildOf(element, assetFinderOverlay) === false
+            && ViperUtil.isChildOf(element, this._toolbar) === false
+            && ViperUtil.isChildOf(element, assetFinderOverlay) === false
         ) {
             return false;
         }

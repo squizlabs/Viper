@@ -16,13 +16,13 @@ MatrixCopyPastePlugin.prototype = {
         this.viper.registerCallback('ViperCopyPastePlugin:cleanPaste', 'MatrixCopyPastePlugin', function(data) {
             if (data.html) {
                 var tmp = document.createElement('div');
-                dfx.setHtml(tmp, data.html);
+                ViperUtil.setHtml(tmp, data.html);
                 var found    = false;
 
                 for (tag in tags) {
                     var attrs = tags[tag];
 
-                    var hrefTags = dfx.getTag(tag, tmp);
+                    var hrefTags = ViperUtil.getTag(tag, tmp);
                     var c        = hrefTags.length;
 
                     for (var i = 0; i < c; i++) {
@@ -44,7 +44,7 @@ MatrixCopyPastePlugin.prototype = {
                 }//end for
 
                 if (found === true) {
-                    return dfx.getHtml(tmp);
+                    return ViperUtil.getHtml(tmp);
                 }
             }
         });
