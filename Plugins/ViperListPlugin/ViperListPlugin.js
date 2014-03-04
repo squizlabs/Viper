@@ -522,7 +522,7 @@ ViperListPlugin.prototype = {
                 if (!elems[i]) {
                     continue;
                 } else if (ViperUtil.isTag(elems[i], 'li') === false && ViperUtil.isTag(elems[i], 'ol') === false && ViperUtil.isTag(elems[i], 'ul') === false) {
-                    if (elems[i].nodeType === ViperUtil.TEXT_NODE && elems[i].data.indexOf("\n ") === 0) {
+                    if (elems[i].nodeType === ViperUtil.TEXT_NODE && elems[i].data.indexOf("\n") === 0) {
                         continue;
                     }
 
