@@ -30,7 +30,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesTest extends AbstractViperListPl
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('third item');
         $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%</li><li>new item<br /><ol><li>first sub item</li><li>second sub item %2%</li></ol></li><li>second item %3%</li><li>third item</li></ul><p>Ordered List with unordered sub list:</p><ol><li>First item %4%</li><li>new item<br /><ul><li>first sub item</li><li>second sub item %5%</li></ul></li><li>second item %6%</li><li>third item</li></ol>');
-   
+
     }//end testAddingNewItemsToParentList()
 
 
@@ -52,9 +52,9 @@ class Viper_Tests_ViperListPlugin_MixedListTypesTest extends AbstractViperListPl
 		$this->sikuli->keyDown('Key.ENTER');
 		$this->type('new item');
         $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<br /><ol><li>first sub item</li><li>second sub item %2%</li><li>new item</li></ol></li><li>second item %3%</li></ul><p>Ordered List with unordered sub list:</p><ol><li>First item %4%<br /><ul><li>first sub item</li><li>second sub item %5%</li><li>new item</li></ul></li><li>second item %6%</li></ol>');
-    
+
     }//end testAddingNewItemsToSubList()
-	
+
 
 	/**
      * Test that when you indent and outdent an item in the sub list using keyboard shotcuts, it remains the sub list list type.
@@ -222,7 +222,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesTest extends AbstractViperListPl
         $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<br /><ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ul><p>Ordered List with unordered sub list:</p><ol><li>First item %4%</li><li>first sub item</li><li>second sub item %5%</li><li>second item %6%</li></ol>');
 		$this->sikuli->keyDown('Key.TAB');
         $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<br /><ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ul><p>Ordered List with unordered sub list:</p><ol><li>First item %4%<br /><ol><li>first sub item</li><li>second sub item %5%</li></ol></li><li>second item %6%</li></ol>');
-    
+
     }//end testOutdentAllSubListItemsAndThenIndentAgainUsngKeyboardShortcuts()
 
 
@@ -248,7 +248,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesTest extends AbstractViperListPl
         $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<br /><ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ul><p>Ordered List with unordered sub list:</p><ol><li>First item %4%</li><li>first sub item</li><li>second sub item %5%</li><li>second item %6%</li></ol>');
 		$this->clickInlineToolbarButton('listIndent');
         $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<br /><ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ul><p>Ordered List with unordered sub list:</p><ol><li>First item %4%<br /><ol><li>first sub item</li><li>second sub item %5%</li></ol></li><li>second item %6%</li></ol>');
-    
+
     }//end testOutdentAllSubListItemsAndThenIndentAgainUsngInlineToolbar()
 
 
@@ -268,13 +268,13 @@ class Viper_Tests_ViperListPlugin_MixedListTypesTest extends AbstractViperListPl
         $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<br /><ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ul><p>Ordered List with unordered sub list:</p><ol><li>First item %4%<br /><ul><li>first sub item</li><li>second sub item %5%</li></ul></li><li>second item %6%</li></ol>');
 
         //Test unordered sub list
-        $this->moveToKeyword(5);
+        $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(2);
         $this->clickTopToolbarButton('listOutdent');
         $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<br /><ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ul><p>Ordered List with unordered sub list:</p><ol><li>First item %4%</li><li>first sub item</li><li>second sub item %5%</li><li>second item %6%</li></ol>');
 		$this->clickTopToolbarButton('listIndent');
         $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<br /><ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ul><p>Ordered List with unordered sub list:</p><ol><li>First item %4%<br /><ol><li>first sub item</li><li>second sub item %5%</li></ol></li><li>second item %6%</li></ol>');
-    
+
     }//end testOutdentAllSubListItemsAndThenIndentAgainUsngTopToolbar()
 
 
