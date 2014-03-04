@@ -242,6 +242,78 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsTest extends AbstractVip
     }//end testRemoveSubListItemFromList()
 
 
+    /**
+     * Test removing an item from a list by pressing backspace.
+     *
+     * @return void
+     */
+    public function testRemoveItemUsingBackspace()
+    {
+        //Test unordered list
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+
+        //Test ordered list
+        $this->selectKeyword(6);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%third %6% item</li></ol>');
+
+    }//end testRemoveItemUsingBackspace()
+
+
+    /**
+     * Test removing all items in the list using backspace
+     *
+     * @return void
+     */
+    public function testRemovingAllItemUsingBackspace()
+    {
+        //Test unordered list
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first itemsecond item %2%third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Unordered List:%1% first itemsecond item %2%third %3% item</p><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+
+        //Test ordered list
+        $this->selectKeyword(6);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Unordered List:%1% first itemsecond item %2%third %3% item</p><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%third %6% item</li></ol>');
+
+        $this->selectKeyword(6);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Unordered List:%1% first itemsecond item %2%third %3% item</p><p>Ordered List:</p><ol><li>%4% first itemsecond item %5%third %6% item</li></ol>');
+
+        $this->selectKeyword(6);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Unordered List:%1% first itemsecond item %2%third %3% item</p><p>Ordered List:%4% first itemsecond item %5%third %6% item</p>');
+
+    }//end testRemovingAllItemUsingBackspace()
+
+
 }//end class
 
 ?>
