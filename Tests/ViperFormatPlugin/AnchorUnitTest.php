@@ -29,8 +29,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(6);
         $this->clickInlineToolbarButton('anchorID');
         $this->type('test');
-        $updateChanges = $this->sikuli->find('Apply Changes', NULL, TRUE);
-        $this->sikuli->click($updateChanges);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p><span id="test">%1%</span> %2% %3%</p><p id="test">sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is <span id="test">%6%</span></p>');
 
@@ -66,8 +65,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(6);
         $this->clickTopToolbarButton('anchorID');
         $this->type('test');
-        $updateChanges = $this->sikuli->find('Apply Changes', NULL, TRUE);
-        $this->sikuli->click($updateChanges);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p><span id="test">%1%</span> %2% %3%</p><p id="test">sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is <span id="test">%6%</span></p>');
 
@@ -147,8 +145,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         sleep(1);
         $this->clickInlineToolbarButton('anchorID', 'active');
         $this->clearFieldValue('ID');
-        $updateChanges = $this->sikuli->find('Apply Changes', NULL, TRUE);
-        $this->sikuli->click($updateChanges);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz %5% is %6%</p>');
 
@@ -173,8 +170,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(5);
         $this->clickTopToolbarButton('anchorID', 'active');
         $this->clearFieldValue('ID');
-        $updateChanges = $this->sikuli->find('Apply Changes', NULL, TRUE);
-        $this->sikuli->click($updateChanges);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz %5% is %6%</p>');
 
@@ -188,14 +184,14 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
      */
     public function testApplyingAnAnchorToAnImage()
     {
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->clickInlineToolbarButton('anchorID');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" id="test" /></p><p>LABS is ORSM</p>');
 
         $this->sikuli->click($this->findKeyword(1));
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->assertTrue($this->inlineToolbarButtonExists('anchorID', 'active'), 'Anchor icon in VITP should not be active.');
 
         $this->clickTopToolbarButton('anchorID', 'active');
