@@ -247,13 +247,32 @@ MatrixLinkPlugin.prototype = {
 	    var jsMap = parent.frames.sq_sidenav.JS_Asset_Map;
 	    var name =idPrefix;
 	    var safeName = idPrefix;
+	    var closeOnExit = function() {
+		    if (document.body.getAttribute('data-use-me-close-on-exit') === '1') {
+			    document.body.removeAttribute('data-use-me-close-on-exit');
+			    var resizer_frame = window.top.frames['sq_resizer'];
+			    if (resizer_frame && !resizer_frame.hidden) {
+				    resizer_frame.toggleFrame();
+			    }
+		    }
+	    };
+	    var toggleResizerFrame = function() {
+		    var resizer_frame = window.top.frames['sq_resizer'];
+		    if (resizer_frame && resizer_frame.hidden) {
+			    document.body.setAttribute('data-use-me-close-on-exit', '1');
+			    resizer_frame.toggleFrame();
+		    }
+	    };
 	    if (jsMap.isInUseMeMode(name) === true) {
 		    alert('Asset Finder In Use');
 	    } else if (jsMap.isInUseMeMode() === true) {
+		    closeOnExit();
 		    jsMap.cancelUseMeMode();
 	    } else {
+		    toggleResizerFrame();
 		    jsMap.setUseMeMode(name, safeName, undefined, false, function(data) {
 			if(typeof data.assetid !== 'undefined') {
+			    closeOnExit();
 			    tools.getItem(idPrefix + ':url').setValue(data.assetid,false);
 			}
 		    });
