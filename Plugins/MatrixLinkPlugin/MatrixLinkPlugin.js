@@ -286,7 +286,7 @@ MatrixLinkPlugin.prototype = {
      */
     isPluginElement: function(element)
     {
-        var assetFinderOverlay = ViperUtil.getId('ees_assetFinderOverlay');
+        var assetFinderOverlay = ViperUtil.getid('ees_assetFinderOverlay');
         if (element !== this._toolbar
             && ViperUtil.isChildOf(element, this._toolbar) === false
             && ViperUtil.isChildOf(element, assetFinderOverlay) === false
