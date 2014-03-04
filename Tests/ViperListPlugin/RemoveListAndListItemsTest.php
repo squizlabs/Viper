@@ -53,7 +53,7 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsTest extends AbstractVip
         //Click undo
         $this->clickTopToolbarButton('historyUndo');
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-        
+
         //Click redo
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<p>Unordered List:</p><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
@@ -71,6 +71,7 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsTest extends AbstractVip
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(1);
 
         // Check that the inline toolbar no longer appears  on the screen
         $inlineToolbarFound = true;
@@ -84,15 +85,15 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsTest extends AbstractVip
 
         $this->assertFalse($inlineToolbarFound, 'The inline toolbar was found');
 
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p>');
 
         //Click undo
         $this->clickTopToolbarButton('historyUndo');
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-        
+
         //Click redo
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>XAX first item</li><li>second item XBX</li><li>third XCX item</li></ul><p>Ordered List:</p>');
 
     }//end testRemoveAllListItemsForOrderedListAndClickUndo()
 
@@ -108,24 +109,24 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsTest extends AbstractVip
         $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-        
+
         $this->clickTopToolbarButton('historyUndo');
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
 
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-        
+
         //Test ordered list
         $this->selectKeyword(4, 5);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>third %6% item</li></ol>');
-        
+
         $this->clickTopToolbarButton('historyUndo');
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-        
+
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>third %6% item</li></ol>');
-        
+
     }//end testRemoveListItemsAndClickUndoAndRedo()
 
 

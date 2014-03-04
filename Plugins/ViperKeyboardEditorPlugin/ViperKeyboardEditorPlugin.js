@@ -903,24 +903,29 @@ ViperKeyboardEditorPlugin.prototype = {
                         var startItem = ViperUtil.getParents(startNode, 'li')[0];
                         if (startNode === range._getFirstSelectableChild(startItem)) {
                             var elements = ViperUtil.getElementsBetween(startItem, endItem);
-                            elements.push(startItem, endItem);
+                            elements.push(startItem, endItem, range.commonAncestorContainer);
 
                             // Find a new node we can put caret in.
+                            var newOffset = 0;
                             var newSelContainer = range.getNextContainer(endNode, null, true);
+                            if (!newSelContainer || this.viper.isOutOfBounds(newSelContainer) === true) {
+                                // If out of bounds of Viper try getting the previous selectable.
+                                newSelContainer = range.getPreviousContainer(startNode, null, true);
+                                if (newSelContainer) {
+                                    newOffset = newSelContainer.data.length;
+                                }
+                            }
+
                             ViperUtil.remove(elements);
 
                             if (newSelContainer) {
                                 // Set the caret location.
-                                range.setStart(newSelContainer, 0);
+                                range.setStart(newSelContainer, newOffset);
                                 range.collapse(true);
                                 ViperSelection.addRange(range);
                             }
 
-                            if (this.viper.isBrowser('chrome') === true || this.viper.isBrowser('safari') === true) {
-                                this.viper.fireNodesChanged();
-                            }
-
-                            // Prevent default action.
+                            this.viper.fireNodesChanged();
                             return false;
                         }//end if
                     }//end if
@@ -1228,8 +1233,18 @@ ViperKeyboardEditorPlugin.prototype = {
                         ViperUtil.setHtml(nodeSelection, '<br />');
                     }
                 } else {
+                    var nextSelectable = range.getNextContainer(range.endContainer, null, true);
+                    if (this.viper.isOutOfBounds(nextSelectable) === true) {
+                        nextSelectable = range.getPreviousContainer(range.startContainer, null, true);
+                        if (nextSelectable) {
+                            range.setStart(nextSelectable, nextSelectable.data.length);
+                        }
+                    } else {
+                        range.setStart(nextSelectable, 0);
+                    }
+
                     ViperUtil.remove(nodeSelection);
-                }
+                }//end if
             } else {
                 var startParent = ViperUtil.getFirstBlockParent(range.startContainer);
                 var endParent   = ViperUtil.getFirstBlockParent(range.endContainer);
@@ -1242,8 +1257,7 @@ ViperKeyboardEditorPlugin.prototype = {
                     // start parent.
                     var nextSelectable = range.getNextContainer(range.startContainer, null, true);
                     if (this.viper.isOutOfBounds(nextSelectable) === false) {
-                        var nextParent     = ViperUtil.getFirstBlockParent(nextSelectable);
-
+                        var nextParent = ViperUtil.getFirstBlockParent(nextSelectable);
                         while (nextParent.firstChild) {
                             startParent.appendChild(nextParent.firstChild);
                         }
