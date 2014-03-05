@@ -1564,7 +1564,7 @@ ViperCopyPastePlugin.prototype = {
         var newList    = true;
         var prevType   = null;
 
-        var circleCharsArray = [111, 167, 183, 223, 8721, 8226];
+        var circleCharsArray = [111, 167, 183, 216, 222, 223, 252, 8721, 8226];
         var circleChars      = [];
         for (var i = 0; i < circleCharsArray.length; i++) {
             circleChars.push(String.fromCharCode(circleCharsArray[i]));
@@ -1581,7 +1581,7 @@ ViperCopyPastePlugin.prototype = {
                 'I': ['^[IVXLCDM]+[\\.\\)](\\s|&nbsp;)+'],
                 'a': ['^[a-z]+[\\.\\)](\\s|&nbsp;)+'],
                 'A': ['^[A-Z]+[\\.\\)](\\s|&nbsp;)+'],
-                decimal: ['^(?:\\d+|[a-z]+)[\\.\\)](?:\\s|&nbsp;)+']
+                decimal: ['^((?:\\d+|[a-z]+)[\\.\\)]?)+(?:\\s|&nbsp;)+']
             }
         };
 
