@@ -541,14 +541,17 @@ ViperCopyPastePlugin.prototype = {
     _handleFormattedPasteValue: function(stripTags, pasteElement)
     {
         pasteElement = pasteElement || this.pasteElement;
-        this._removeEditableAttrs(pasteElement);
 
         // Clean paste from word document.
         var html = ViperUtil.getHtml(pasteElement);
+
+        // Generic cleanup.
+        html = this._cleanPaste(html);
+
         if (pasteElement.firstChild
-            && ViperUtil.isTag(pasteElement.firstChild, 'b') === true
-            || (ViperUtil.isTag(pasteElement.firstChild, 'meta') === true && ViperUtil.isTag(pasteElement.firstChild.nextSibling, 'b') === true)
-            || (pasteElement.firstChild.id && pasteElement.firstChild.id.indexOf('docs-internal-guid-') === 0)
+            && (ViperUtil.isTag(pasteElement.firstChild, 'b') === true
+            || ViperUtil.isTag(pasteElement.firstChild.nextSibling, 'b') === true
+            || (pasteElement.firstChild.id && pasteElement.firstChild.id.indexOf('docs-internal-guid-') === 0))
         ) {
             // Google Docs.
             html = this._cleanGoogleDocsPaste(html);
@@ -741,19 +744,9 @@ ViperCopyPastePlugin.prototype = {
 
     _cleanWordPaste: function(content)
     {
-        // Meta and link tags.
         if (!content) {
             return content;
         }
-
-        content = ViperUtil.trim(content);
-        content = content.replace(/<(meta|link)[^>]+>/gi, "");
-
-        // Comments.
-        content = content.replace(/<!--(.|\s)*?-->/gi, '');
-
-        // Remove style tags.
-        content = content.replace(/<style[\s\S]*?<\/style>/gi, '');
 
         // Convert span.Apple-converted-space to normal space (Chrome only).
         if (this.viper.isBrowser('chrome') === true) {
@@ -766,9 +759,6 @@ ViperCopyPastePlugin.prototype = {
 
         // Remove XML tags.
         content = content.replace(/<\\?\?xml[^>]*>/gi, '');
-
-        // Generic cleanup.
-        content = this._cleanPaste(content);
 
         if (this._isMSIE === true) {
             // Remove the font tags here before putting the contents in to a
@@ -1765,6 +1755,16 @@ ViperCopyPastePlugin.prototype = {
 
     _cleanPaste: function(content)
     {
+        content = ViperUtil.trim(content);
+
+        // Clean head tags.
+        content = content.replace(/<(meta|link|base)[^>]+>/gi, "");
+        content = content.replace(/<title[\s\S]*?<\/title>/gi, '');
+        content = content.replace(/<style[\s\S]*?<\/style>/gi, '');
+
+        // Comments.
+        content = content.replace(/<!--(.|\s)*?-->/gi, '');
+
         // Some generic content cleanup. Change all b/i tags to strong/em.
         content = content.replace(/<b(\s+|>)/gi, "<strong$1");
         content = content.replace(/<\/b(\s+|>)/gi, "</strong$1");
@@ -1775,21 +1775,6 @@ ViperCopyPastePlugin.prototype = {
         content = content.replace(/<strike(\s+|>)/gi, "<del$1");
         content = content.replace(/<\/strike(\s+|>)/gi, "</del$1");
         return content;
-
-    },
-
-    _removeEditableAttrs: function(container)
-    {
-        // Copying content from an editable attribute is wrapped in editable
-        // attribute. Not cool, so move the contents inside the editables out
-        // and remove the empty editable attribute node.
-        var editables = ViperUtil.getClass('editable_attribute', container);
-
-        var el = editables.length;
-        for (var i = 0; i < el; i++) {
-            this._moveChildren(editables[i]);
-            ViperUtil.remove(editables[i]);
-        }
 
     },
 
