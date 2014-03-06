@@ -305,7 +305,12 @@ ViperListPlugin.prototype = {
 
         if (bookmark.start.parentNode === bookmark.end.parentNode) {
             // The range is collapsed or is inside the same parent/element.
-            var li = this._getListItem(range.startContainer);
+            var li   = this._getListItem(range.startContainer);
+            var elem = this._getBlockParent(range.startContainer);
+            if (li !== elem) {
+                li = null;
+            }
+
             if (li !== null) {
                 var br = this._getLineBreak(bookmark.start);
                 if (br) {
@@ -337,8 +342,6 @@ ViperListPlugin.prototype = {
             if (li === null || force === true) {
                 // Create a new list.
                 var list = null;
-                var elem = this._getBlockParent(range.startContainer);
-
                 if (elem === null) {
                     elem = [range.startContainer];
                 } else {
@@ -486,55 +489,9 @@ ViperListPlugin.prototype = {
 
     tabRange: function(range, outdent, testOnly)
     {
-        range         = range || this.viper.getViperRange();
+        range = range || this.viper.getViperRange();
 
-        var startNode = range.getStartNode();
-        var endNode   = range.getEndNode();
-
-        if (!startNode && !endNode && range.startContainer) {
-            startNode = range.startContainer;
-            if (testOnly !== true && ViperUtil.isTag(startNode, 'br') === true) {
-                var textNode = document.createTextNode('');
-                ViperUtil.insertBefore(startNode, textNode);
-                range.setStart(textNode, 0);
-                range.collapse(true);
-            }
-        }
-
-        if (!endNode && startNode.nodeType === ViperUtil.ELEMENT_NODE) {
-            endNode = startNode;
-        }
-
-        var listItems = [];
-        if (startNode === endNode) {
-            if (ViperUtil.isTag(startNode, 'ul') === true || ViperUtil.isTag(startNode, 'ol') === true) {
-                listItems.push(startNode);
-            } else {
-                listItems.push(this._getListItem(startNode));
-            }
-        } else {
-            var elems = ViperUtil.getElementsBetween(startNode, endNode);
-            elems.unshift(startNode);
-            elems.push(endNode);
-
-            var c = elems.length;
-            for (var i = 0; i < c; i++) {
-                if (!elems[i]) {
-                    continue;
-                } else if (ViperUtil.isTag(elems[i], 'li') === false && ViperUtil.isTag(elems[i], 'ol') === false && ViperUtil.isTag(elems[i], 'ul') === false) {
-                    if (elems[i].nodeType === ViperUtil.TEXT_NODE && elems[i].data.indexOf("\n") === 0) {
-                        continue;
-                    }
-
-                    var li = this._getListItem(elems[i]);
-                    if (li && ViperUtil.inArray(li, listItems) === false) {
-                        listItems.push(li);
-                    }
-                } else {
-                    listItems.push(elems[i]);
-                }
-            }
-        }
+        var listItems = this._getListItemsFromRange(range, testOnly);
 
         // Bookmark.
         if (testOnly !== true) {
@@ -602,6 +559,63 @@ ViperListPlugin.prototype = {
         }
 
         return updated;
+
+    },
+
+    _getListItemsFromRange: function(range, testOnly, expand)
+    {
+        var startNode = range.getStartNode();
+        var endNode   = range.getEndNode();
+
+        if (!startNode && !endNode && range.startContainer) {
+            startNode = range.startContainer;
+            if (testOnly !== true && ViperUtil.isTag(startNode, 'br') === true) {
+                var textNode = document.createTextNode('');
+                ViperUtil.insertBefore(startNode, textNode);
+                range.setStart(textNode, 0);
+                range.collapse(true);
+            }
+        }
+
+        if (!endNode && startNode.nodeType === ViperUtil.ELEMENT_NODE) {
+            endNode = startNode;
+        }
+
+        var listItems = [];
+        if (startNode === endNode) {
+            if (ViperUtil.isTag(startNode, 'ul') === true || ViperUtil.isTag(startNode, 'ol') === true) {
+                listItems.push(startNode);
+            } else {
+                listItems.push(this._getListItem(startNode));
+            }
+        } else {
+            var elems = ViperUtil.getElementsBetween(startNode, endNode);
+            elems.unshift(startNode);
+            elems.push(endNode);
+
+            var c = elems.length;
+            for (var i = 0; i < c; i++) {
+                if (!elems[i]) {
+                    continue;
+                } else if (ViperUtil.isTag(elems[i], 'li') === false && ViperUtil.isTag(elems[i], 'ol') === false && ViperUtil.isTag(elems[i], 'ul') === false) {
+                    if (elems[i].nodeType === ViperUtil.TEXT_NODE && elems[i].data.indexOf("\n") === 0) {
+                        continue;
+                    }
+
+                    var li = this._getListItem(elems[i]);
+                    if (li && ViperUtil.inArray(li, listItems) === false) {
+                        listItems.push(li);
+                    }
+                } else {
+                    listItems.push(elems[i]);
+                    if (expand === true) {
+                        listItems = listItems.concat(ViperUtil.getTag('li', elems[i]));
+                    }
+                }
+            }
+        }
+
+        return listItems;
 
     },
 
@@ -1070,6 +1084,122 @@ ViperListPlugin.prototype = {
 
     },
 
+    convertRangeToParagraphs: function(range)
+    {
+        range = range = this.viper.getViperRange();
+
+        var listItems = this._getListItemsFromRange(range, false, true);
+        var bookmark  = this.viper.createBookmark();
+        var prevElem  = null;
+
+        for (var i = 0; i < listItems.length; i++) {
+            if (ViperUtil.isTag(listItems[i], 'li') === false) {
+                // Must be a whole list. Gell all li tags inside it.
+                var childItems = ViperUtil.getTag('li', listItems[i]);
+
+                var parent = null;
+                if (!prevElem) {
+                    parent = listItems[i].parentNode;
+                }
+
+                for (var j = 0; j < childItems.length; j++) {
+                    var p = this.convertElement(childItems[j], 'p', true);
+                    if (prevElem) {
+                        ViperUtil.insertAfter(prevElem, p);
+                    } else {
+                        ViperUtil.insertBefore(parent, p);
+                    }
+
+                    prevElem = p;
+                }
+            } else {
+                var p = this.splitListAtItem(listItems[i]);
+                if (prevElem) {
+                    ViperUtil.insertAfter(prevElem, p);
+                }
+
+                prevElem = p;
+            }//end if
+        }//end for
+
+        this.viper.selectBookmark(bookmark);
+        this.viper.fireSelectionChanged(null, true);
+        this.viper.fireNodesChanged();
+
+    },
+
+    /**
+     * Splits the item's list and converts item to a paragraph.
+     */
+    splitListAtItem: function(li)
+    {
+        var siblings = [];
+        for (var node = li.nextSibling; node; node = node.nextSibling) {
+            if (ViperUtil.isTag(node, 'li') === false) {
+                continue;
+            }
+
+            siblings.push(node);
+        }
+
+        // Create the new P tag.
+        var listElem = li.parentNode;
+        var newList  = null;
+
+        if (siblings.length > 0) {
+            // There are list items after the specified one. Move them to a new list.
+            newList = document.createElement(this.getListType(li));
+            for (var i = 0; i < siblings.length; i++) {
+                newList.appendChild(siblings[i]);
+            }
+        }
+
+        var p = this.convertElement(li, 'p', true);
+        ViperUtil.insertAfter(listElem, p);
+
+        if (newList) {
+            ViperUtil.insertAfter(p, newList);
+        }
+
+        // Move block elements inside P to after it.
+        var node = p.lastChild;
+        while (node) {
+            var prevSibling = node.previousSibling;
+            if (ViperUtil.isBlockElement(node) === true) {
+                ViperUtil.insertAfter(p, node);
+            }
+
+            node = prevSibling;
+        }
+
+        if (ViperUtil.getTag('li', listElem).length === 0) {
+            // If the old list is now empty, remove it.
+            ViperUtil.remove(listElem);
+        }
+
+        return p;
+
+    },
+
+    /**
+     * Converts given element to the specified element by creating a new element and moving its child nodes.
+     */
+    convertElement: function(elem, tagName, detached)
+    {
+        var newElem = document.createElement(tagName);
+        while (elem.firstChild) {
+            newElem.appendChild(elem.firstChild);
+        }
+
+        if (detached !== true) {
+            ViperUtil.insertBefore(elem, newElem);
+        }
+
+        ViperUtil.remove(elem);
+        return newElem;
+
+    },
+
     toggleListType: function(list)
     {
         var newListType = null;
@@ -1229,7 +1359,7 @@ ViperListPlugin.prototype = {
         range         = range || this.viper.getViperRange();
         var startNode = range.getStartNode();
         var endNode   = range.getEndNode();
-        var makeList  = false;
+        var makeList  = true;
         var indent    = false;
         var canMakeUL = false;
         var canMakeOL = false;
@@ -1254,7 +1384,16 @@ ViperListPlugin.prototype = {
         var startParent = null;
 
         var listElement = this._getListElement(startNode);
-        if (listElement && listElement === this._getListElement(endNode)) {
+        var firstBlock  = ViperUtil.getFirstBlockParent(startNode);
+
+        if (listElement
+            && firstBlock
+            && ViperUtil.isTag(firstBlock, 'li') === false
+            //&& range.collapsed === false
+        ) {
+            // Can be converted to a list.
+            makeList = true;
+        } else if (listElement && listElement === this._getListElement(endNode)) {
             if (range.collapsed === true && mainToolbar !== true) {
                 return;
             }
@@ -1318,10 +1457,13 @@ ViperListPlugin.prototype = {
         }
 
         if (makeList === true) {
-            if (ViperUtil.isTag(startNode, 'ul') === true || ViperUtil.isTag(startNode, 'ol') === true) {
-                list = startNode;
-            } else {
-                list = this._getListElement(startNode);
+            if (ViperUtil.isTag(firstBlock, 'li') === true) {
+                if (ViperUtil.isTag(startNode, 'ul') === true || ViperUtil.isTag(startNode, 'ol') === true) {
+                    list = startNode;
+                } else {
+
+                    list = this._getListElement(startNode);
+                }
             }
 
             if (!list && this.convertRangeToList(range, true) === true) {
@@ -1455,6 +1597,8 @@ ViperListPlugin.prototype = {
             this.viper.adjustRange();
             self.viper.fireSelectionChanged(null, true);
             self.viper.fireNodesChanged([self.viper.getViperElement()]);
+        } else if (currentType === listType) {
+            return this.convertRangeToParagraphs();
         } else {
             var bookmark = this.viper.createBookmark();
             if (bookmark.start.nextSibling && ViperUtil.isTag(bookmark.start.nextSibling, 'li') === true) {
