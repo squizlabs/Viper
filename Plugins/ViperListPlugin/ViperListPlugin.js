@@ -93,7 +93,8 @@ ViperListPlugin.prototype = {
                     startNode = range.getStartNode();
                 }
 
-                if (self._isListElement(startNode) === true) {
+                var firstBlock = ViperUtil.getFirstBlockParent(startNode);
+                if (ViperUtil.isTag(firstBlock, 'li') === true) {
                     if (self.tabRange(range, e.shiftKey, true) === true) {
                         self.tabRange(range, e.shiftKey);
                     } else if (ViperUtil.getParents(startNode, 'td', self.viper.getViperElement()).length > 0) {
