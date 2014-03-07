@@ -509,7 +509,7 @@ ViperDOMRange.prototype = {
      * @return The text container that range can extend to.
      * @type   {TextNode}
      */
-    getNextContainer: function(container, skippedBlockElem, skipSpaceTextNodes)
+    getNextContainer: function(container, skippedBlockElem, skipSpaceTextNodes, brIsSelectable)
     {
         if (!container) {
             return null;
@@ -518,7 +518,7 @@ ViperDOMRange.prototype = {
         while (container.nextSibling) {
             container = container.nextSibling;
             if (container.nodeType !== ViperUtil.TEXT_NODE) {
-                var child = this._getFirstSelectableChild(container);
+                var child = this._getFirstSelectableChild(container, brIsSelectable);
                 if (child !== null) {
                     return child;
                 }
@@ -543,26 +543,26 @@ ViperDOMRange.prototype = {
             skippedBlockElem.push(container);
         }
 
-        var selChild = this._getFirstSelectableChild(container);
+        var selChild = this._getFirstSelectableChild(container, brIsSelectable);
         if (selChild !== null && (skipSpaceTextNodes !== true || ViperUtil.trim(selChild.data) !== '')) {
             return selChild;
         }
 
-        return this.getNextContainer(container, skippedBlockElem, skipSpaceTextNodes);
+        return this.getNextContainer(container, skippedBlockElem, skipSpaceTextNodes, brIsSelectable);
 
     },
 
-    _getFirstSelectableChild: function(element)
+    _getFirstSelectableChild: function(element, brIsSelectable)
     {
         if (element) {
             if (element.nodeType !== ViperUtil.TEXT_NODE) {
                 var child = element.firstChild;
                 while (child) {
-                    if (this._isSelectable(child) === true) {
+                    if (this._isSelectable(child) === true || (brIsSelectable === true && ViperUtil.isTag(child, 'br') === true)) {
                         return child;
                     } else if (child.firstChild) {
                         // This node does have child nodes.
-                        var res = this._getFirstSelectableChild(child);
+                        var res = this._getFirstSelectableChild(child, brIsSelectable);
                         if (res !== null) {
                             return res;
                         } else {
@@ -592,7 +592,7 @@ ViperDOMRange.prototype = {
                         return child;
                     } else if (child.lastChild) {
                         // This node does have child nodes.
-                        var res = this._getLastSelectableChild(child);
+                        var res = this._getLastSelectableChild(child, brIsSelectable);
                         if (res !== null) {
                             return res;
                         } else {

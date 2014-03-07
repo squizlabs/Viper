@@ -1141,11 +1141,11 @@ ViperKeyboardEditorPlugin.prototype = {
             && range.collapsed === true
             && range.startContainer.nodeType === ViperUtil.TEXT_NODE
             && range.startOffset === range.startContainer.data.length
-            && !range.startContainer.nextSibling
+            && (!range.startContainer.nextSibling || ViperUtil.isStubElement(range.startContainer.nextSibling) === true)
         ) {
             // At the end of an element. Check to see if next available
             // element is a block.
-            var nextSelectable = range.getNextContainer(range.startContainer, null, true);
+            var nextSelectable = range.getNextContainer(range.startContainer, null, false, true);
             var currentParent  = ViperUtil.getFirstBlockParent(range.startContainer);
             var nextParent     = ViperUtil.getFirstBlockParent(nextSelectable);
             if (currentParent !== nextParent && this.viper.isOutOfBounds(nextSelectable) === false) {
@@ -1163,7 +1163,25 @@ ViperKeyboardEditorPlugin.prototype = {
             && range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
             && ViperUtil.isTag(range.getStartNode(), 'br') === true
         ) {
-            ViperUtil.remove(range.getStartNode());
+            var startNode = range.getStartNode();
+            var selectable = range.getNextContainer(startNode, null, true);
+            if (!selectable) {
+                selectable = range.getPreviousContainer(startNode, null, true);
+            }
+
+            var parent = range.getStartNode().parentNode;
+            ViperUtil.remove(range.getStartNode().parentNode);
+
+            if (parent.childNodes.length === 0) {
+                ViperUtil.remove(parent);
+            }
+
+            if (selectable) {
+                range.setStart(selectable, 0);
+                range.collapse(true);
+                ViperSelection.addRange(range);
+            }
+
             ViperUtil.preventDefault(e);
             this.viper.fireNodesChanged();
             return false;
