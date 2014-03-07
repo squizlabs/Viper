@@ -662,9 +662,9 @@ ViperCopyPastePlugin.prototype = {
                 }
             }
 
-            var convertBrTags = false;
+            var isPreTag = false;
             if (ViperUtil.getParents(prevBlock, 'pre', this.viper.getViperElement()).length > 0) {
-                convertBrTags = true;
+                isPreTag = true;
             }
 
             var changeid  = ViperChangeTracker.startBatchChange('textAdded');
@@ -677,23 +677,36 @@ ViperCopyPastePlugin.prototype = {
                 prevChild = fragment.lastChild;
                 var ctNode = null;
                 if (ViperUtil.isBlockElement(fragment.lastChild) === true) {
-                    ctNode = fragment.lastChild;
-                    ViperChangeTracker.addChange('textAdd', [ctNode]);
-
-                    if (convertBrTags === true) {
+                    if (isPreTag === true) {
+                        // Convert br tags to new lines.
                         var brTags = ViperUtil.getTag('br', ctNode);
                         for (var i = 0; i < brTags.length; i++) {
                             var textNode = document.createTextNode("\n");
                             ViperUtil.insertBefore(brTags[i], textNode);
                             ViperUtil.remove(brTags[i]);
                         }
+
+                        // Pre tags cannot have block element as child, remove the block element.
+                        while (fragment.lastChild.lastChild) {
+                            ViperUtil.insertAfter(prevBlock, fragment.lastChild.lastChild);
+                        }
+
+                        ViperUtil.remove(fragment.lastChild);
+                        if (fragment.lastChild) {
+                            // Insert new line after block element.
+                            ViperUtil.insertAfter(prevBlock, document.createTextNode("\n"));
+                            ViperUtil.insertAfter(prevBlock, document.createTextNode("\n"));
+                        }
+                    } else {
+                        ctNode = fragment.lastChild;
+                        ViperChangeTracker.addChange('textAdd', [ctNode]);
+                        ViperUtil.insertAfter(prevBlock, ctNode);
                     }
                 } else {
                     ctNode = ViperChangeTracker.createCTNode('ins', 'textAdd', fragment.lastChild);
                     ViperChangeTracker.addNodeToChange(changeid, ctNode);
+                    ViperUtil.insertAfter(prevBlock, ctNode);
                 }
-
-                ViperUtil.insertAfter(prevBlock, ctNode);
             }
 
             // Check that previous container is not empty.
