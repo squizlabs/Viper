@@ -4049,14 +4049,16 @@ Viper.prototype = {
 
                 return true;
             }//end if
-        } else if (e.which === 65 && (e.metaKey === true || e.ctrlKey === true)) {
-            // CMD/CTRL + A needs to fire selection changed.
+        } else if ((e.which === 65 && (e.metaKey === true || e.ctrlKey === true))
+            || ((e.which >= 37 && e.which <= 40) && (e.metaKey === true || e.ctrlKey === true) && e.shiftKey === true)
+        ) {
+            // CMD/CTRL + A, CMD + SHIF + <arrow keys> needs to fire selection changed as they do not fire key up event.
             var self = this;
             setTimeout(function() {
                 self.fireSelectionChanged();
             }, 50);
             return true;
-        }//end if
+        }
 
     },
 
