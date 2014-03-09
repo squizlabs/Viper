@@ -1601,9 +1601,11 @@ ViperListPlugin.prototype = {
 
         var self = this;
         if (currentType !== listType) {
-           this.convertRangeToParagraphs();
-           this.makeList(newType === 'ol')
-           return;
+            this.convertRangeToParagraphs();
+            this.makeList(newType === 'ol')
+            this.viper.fireSelectionChanged(null, true);
+            this.viper.fireNodesChanged([self.viper.getViperElement()]);
+            return;
         } else if (currentType !== newType) {
             self.makeList(listType === 'ol');
             this.viper.adjustRange();
