@@ -1601,11 +1601,9 @@ ViperListPlugin.prototype = {
 
         var self = this;
         if (currentType !== listType) {
-            var bookmark = this.viper.createBookmark();
-            var newList = self.toggleListType(list);
-            this.viper.selectBookmark(bookmark);
-            self.viper.fireSelectionChanged(null, true);
-            self.viper.fireNodesChanged([self.viper.getViperElement()]);
+           this.convertRangeToParagraphs();
+           this.makeList(newType === 'ol')
+           return;
         } else if (currentType !== newType) {
             self.makeList(listType === 'ol');
             this.viper.adjustRange();
