@@ -203,6 +203,14 @@ ViperListPlugin.prototype = {
         if (statuses.ul === true || statuses.ol === true) {
             data.toolbar.showButton('vitpUnorderedList', !statuses.ul);
             data.toolbar.showButton('vitpOrderedList', !statuses.ol);
+
+            if (statuses.isUL === true) {
+                tools.setButtonActive('vitpUnorderedList');
+                tools.setButtonInactive('vitpOrderedList');
+            } else if (statuses.isOL === true) {
+                tools.setButtonActive('vitpOrderedList');
+                tools.setButtonInactive('vitpUnorderedList');
+            }
         }
 
         if (statuses.increaseIndent === true || statuses.decreaseIndent === true) {
@@ -1360,10 +1368,12 @@ ViperListPlugin.prototype = {
         range         = range || this.viper.getViperRange();
         var startNode = range.getStartNode();
         var endNode   = range.getEndNode();
-        var makeList  = true;
+        var makeList  = false;
         var indent    = false;
         var canMakeUL = false;
         var canMakeOL = false;
+        var isUL      = false;
+        var isOL      = false;
         var list      = null;
 
         if (!startNode) {
@@ -1393,16 +1403,15 @@ ViperListPlugin.prototype = {
             //&& range.collapsed === false
         ) {
             // Can be converted to a list.
-            makeList = true;
+            if (mainToolbar === true) {
+                makeList = true;
+            }
         } else if (listElement && listElement === this._getListElement(endNode)) {
             if (range.collapsed === true && mainToolbar !== true) {
                 return;
             }
 
-            if (mainToolbar === true) {
-                makeList = true;
-            }
-
+            makeList = true;
             indent   = true;
         } else {
             var nodeSelection = range.getNodeSelection();
@@ -1473,9 +1482,11 @@ ViperListPlugin.prototype = {
             } else if (ViperUtil.isTag(list, 'ol') === true) {
                 canMakeUL = true;
                 canMakeOL = true;
+                isOL      = true;
             } else if (ViperUtil.isTag(list, 'ul') === true) {
                 canMakeUL = true;
                 canMakeOL = true;
+                isUL      = true;
             }
         }
 
@@ -1503,7 +1514,9 @@ ViperListPlugin.prototype = {
             ol: canMakeOL,
             increaseIndent: increaseIndent,
             decreaseIndent: decreaseIndent,
-            list: list
+            list: list,
+            isUL: isUL,
+            isOL: isOL
         };
 
         return statuses;
