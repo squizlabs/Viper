@@ -802,6 +802,11 @@ ViperCopyPastePlugin.prototype = {
         var tmp = document.createElement('div');
         ViperUtil.setHtml(tmp, content);
 
+        var docParent = ViperUtil.find(tmp, '[id^="docs-internal-guid-"]');
+        if (docParent.length === 1) {
+            tmp = docParent[0];
+        }
+
         // Remove the wrapping b tag.
         ViperUtil.setHtml(tmp, ViperUtil.getHtml(ViperUtil.getTag('b', tmp)[0]));
         content = ViperUtil.getHtml(tmp);
