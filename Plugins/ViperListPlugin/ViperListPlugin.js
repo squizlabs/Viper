@@ -95,11 +95,14 @@ ViperListPlugin.prototype = {
 
                 var firstBlock = ViperUtil.getFirstBlockParent(startNode);
                 if (ViperUtil.isTag(firstBlock, 'li') === true) {
-                    if (self.tabRange(range, e.shiftKey, true) === true) {
-                        self.tabRange(range, e.shiftKey);
-                    } else if (ViperUtil.getParents(startNode, 'td', self.viper.getViperElement()).length > 0) {
-                        // If the list is inside a TD tag then do not prevent default action.
+                    if (range.collapsed === true
+                        && ViperUtil.getParents(startNode, 'td,th', self.viper.getViperElement()).length > 0
+                    ) {
+                        // If the list is inside a TD/TH tag and range is collapsed then do not prevent default action.
+                        // This is to allow tabbing inside table cells even if the caret is in a list item.
                         return;
+                    } else if (self.tabRange(range, e.shiftKey, true) === true) {
+                        self.tabRange(range, e.shiftKey);
                     }
 
                     ViperUtil.preventDefault(e);
@@ -1504,7 +1507,6 @@ ViperListPlugin.prototype = {
         if (mainToolbar === true
             && startParent
             && ViperUtil.isTag(startParent, 'p') === true
-            && ViperUtil.getParents(startParent, 'td,th').length === 0
         ) {
             increaseIndent = true;
         }
