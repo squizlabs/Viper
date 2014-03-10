@@ -1403,13 +1403,19 @@ ViperListPlugin.prototype = {
         if (listElement
             && firstBlock
             && ViperUtil.isTag(firstBlock, 'li') === false
-            //&& range.collapsed === false
         ) {
             // Can be converted to a list.
             if (mainToolbar === true) {
                 makeList = true;
             }
         } else if (listElement && listElement === this._getListElement(endNode)) {
+            if (range.collapsed === true && mainToolbar !== true) {
+                return;
+            }
+
+            makeList = true;
+            indent   = true;
+        } else if (listElement) {
             if (range.collapsed === true && mainToolbar !== true) {
                 return;
             }
