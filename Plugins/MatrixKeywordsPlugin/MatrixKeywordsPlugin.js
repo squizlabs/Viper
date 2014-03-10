@@ -93,31 +93,28 @@ MatrixKeywordsPlugin.prototype = {
 		var editableElement = self.viper.getEditableElement();
 		
 		// get the keywords current editting div
-		var datasetKeywords = editableElement.dataset.keywords;
+		var datasetKeywords = ViperUtil.$(editableElement).data('keywords');
 		if(typeof datasetKeywords !== 'undefined' && datasetKeywords !== '') {
-		    var dataKeywords = JSON.parse(datasetKeywords);
 		    // make sure it's valid JSON assoicate array, not an array object.
-		    if(typeof dataKeywords.length === 'undefined') {
+		    if(typeof datasetKeywords.length === 'undefined') {
 			// enable button and insert those keywords as options
 			tools.enableButton('insertKeywords');
 			var selectField  = tools.getItem(prefix + ':insertKeywordSelect');
 			if(selectField.getValue() === null) {
-			    tools.getItem(prefix + ':insertKeywordSelect').setValue(dataKeywords);
+			    tools.getItem(prefix + ':insertKeywordSelect').setValue(datasetKeywords);
 			}
 		    }
 		}
 		
 		// get snippet for current div
-		var datasetSnippets = editableElement.dataset.snippets;
+		var datasetSnippets = ViperUtil.$(editableElement).data('snippets');
 		    if(typeof datasetSnippets !== 'undefined' && datasetSnippets !== '') {
-		    var dataSnippets = JSON.parse(datasetSnippets);
-		    // if empty JSON array
-		    if(typeof dataSnippets.length === 'undefined') {		
+		    if(typeof datasetSnippets.length === 'undefined') {		
 			// enable button and insert those snippets as options
 			tools.enableButton('insertSnippets');
 			var selectField  = tools.getItem(prefix + ':insertSnippetSelect');
 			if(selectField.getValue() === null) {
-			    tools.getItem(prefix + ':insertSnippetSelect').setValue(dataSnippets);
+			    tools.getItem(prefix + ':insertSnippetSelect').setValue(datasetSnippets);
 			}
 		    }
 		}
@@ -196,6 +193,7 @@ MatrixKeywordsPlugin.prototype = {
 	    element: selectionArea,
 	    input: select,
 	    getValue: function() {
+		if(select.length === 0) return null;
 		var selected = select.options[select.selectedIndex];
 		if(typeof selected === 'undefined') return null;
 		return selected.value;
