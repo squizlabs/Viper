@@ -730,6 +730,10 @@ ViperFormatPlugin.prototype = {
             };
 
             // Format button.
+            if (formatElement && nodeSelection && formatElement !== nodeSelection) {
+                nodeSelection = formatElement;
+            }
+
             if (self._canEnableFormatButtons(startNode, nodeSelection, data.range) === true) {
                 // Reset icon of the main toolbar button.
                 tools.getItem('formats').setIconClass('Viper-formats');
@@ -826,16 +830,11 @@ ViperFormatPlugin.prototype = {
                             }
                         }
                     } else if (parentTagName === 'div') {
-                        // Its a stub or an inline element and parent is DIV, enable
-                        // only the DIV button.
+                        // Its a stub or an inline element and parent is DIV. Enable all buttons.
+                        tools.enableButton('formats');
                         for (var tag in formatButtons) {
                             tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
-                            if (tag === 'div') {
-                                tools.enableButton('formats');
-                                tools.enableButton(prefix + 'formats:' + formatButtons[tag]);
-                            } else {
-                                tools.disableButton(prefix + 'formats:' + formatButtons[tag]);
-                            }
+                            tools.enableButton(prefix + 'formats:' + formatButtons[tag]);
                         }
                     }
                 } else {
@@ -1558,17 +1557,10 @@ ViperFormatPlugin.prototype = {
         }
 
         if (selectedNode
-            && (selectedNode.nodeType !== ViperUtil.ELEMENT_NODE
-            || ViperUtil.isBlockElement(selectedNode) === false
-            || ViperUtil.isStubElement(selectedNode) === true
-            )
+            && (selectedNode.nodeType !== ViperUtil.ELEMENT_NODE || ViperUtil.isStubElement(selectedNode) === true)
         ) {
-            if (ViperUtil.isBlockElement(selectedNode) === false) {
-                selectedNode = null;
-            } else {
-                // Text node, get the first block parent.
-                selectedNode = ViperUtil.getFirstBlockParent(selectedNode);
-            }
+            // Text node, get the first block parent.
+            selectedNode = ViperUtil.getFirstBlockParent(selectedNode);
         } else if (!selectedNode && (range.collapsed === true || type.match(/^h\d$/))) {
             selectedNode = ViperUtil.getFirstBlockParent(range.startContainer);
         }
@@ -1613,6 +1605,14 @@ ViperFormatPlugin.prototype = {
 
                     selectedNode.appendChild(newElem);
                     this.viper.selectBookmark(bookmark);
+                } else if (ViperUtil.isBlockElement(selectedNode) === false) {
+                    // Wrap element.
+                    var newElem = document.createElement(type);
+                    ViperUtil.insertBefore(selectedNode, newElem);
+                    newElem.appendChild(selectedNode);
+                    this.viper.selectBookmark(bookmark);
+                    range.selectNode(newElem);
+                    ViperSelection.addRange(range);
                 } else {
                     var newElem = this._convertSingleElement(selectedNode, type);
 
