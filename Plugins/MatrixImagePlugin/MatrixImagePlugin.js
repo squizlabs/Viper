@@ -78,7 +78,7 @@ MatrixImagePlugin.prototype = {
 
         this.setPreviewContent(false, true);
         var self = this;
-        ViperUtil.getImage(url, function(img) {
+        this._getImage(url, function(img) {
             self.setPreviewContent(img);
         });
     },
@@ -222,6 +222,21 @@ MatrixImagePlugin.prototype = {
 
         return true;
 
+    },
+    
+    _getImage: function(url, callback)
+    {
+        var img    = new Image();
+        img.onload = function() {
+            callback.call(this, img);
+        };
+    
+        img.onerror = function() {
+            callback.call(this, false);
+        };
+    
+        img.src = url;
+    
     }
 
 };
