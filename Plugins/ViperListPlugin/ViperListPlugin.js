@@ -1884,30 +1884,7 @@ ViperListPlugin.prototype = {
 
                 return false;
             }//end if
-        } else if (this._isKeyword() === true) {
-            // The content is a keyword insert empty list element after this one.
-            var newLi = li.cloneNode(false);
-            ViperUtil.setHtml(newLi, '&nbsp;');
-            ViperUtil.insertAfter(li, newLi);
-            var range = this.viper.getCurrentRange();
-            range.setStart(newLi.firstChild, 0);
-            range.collapse(true);
-            return false;
         }//end if
-
-        return true;
-
-    },
-
-    _isKeyword: function()
-    {
-        var keywordPlugin = this.viper.ViperPluginManager.getPlugin('ViperKeywordPlugin');
-        if (keywordPlugin) {
-            var range         = this.viper.getCurrentRange();
-            if (keywordPlugin._isKeyword(range.startContainer) === false && keywordPlugin._isKeyword(range.startContainer) === false) {
-                return false;
-            }
-        }
 
         return true;
 

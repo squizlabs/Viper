@@ -1321,6 +1321,48 @@ Viper.prototype = {
     },
 
 
+    /**
+     * Returns the element at the specified coords.
+     *
+     * @param {integer} x The x coord.
+     * @param {integer} y The y coord.
+     *
+     * @return {DOMNode}
+     */
+    getElementAtCoords: function(x, y)
+    {
+        var elem = null;
+        if (document.caretRangeFromPoint) {
+            // Webkit.
+            var range = document.caretRangeFromPoint(x, y);
+            if (range.startContainer === range.endContainer
+                && range.startOffset === range.endOffset
+            ) {
+                if (range.startContainer.nodeType !== ViperUtil.TEXT_NODE) {
+                    elem = range.startContainer.childNodes[range.startOffset];
+                } else {
+                    elem = range.startContainer;
+                }
+            }
+        } else if (document.caretPositionFromPoint) {
+            // Firefox.
+            var range = document.caretPositionFromPoint(x, y);
+            if (ViperUtil.isBlockElement(range.offsetNode) === true) {
+                var offset = range.offset;
+                if (offset >= range.offsetNode.childNodes.length) {
+                    offset = (range.offsetNode.childNodes.length - 1);
+                }
+
+                elem = range.offsetNode.childNodes[offset];
+            } else {
+                elem = range.offsetNode;
+            }
+        }
+
+        return elem;
+
+    },
+
     getDocumentOffset: function()
     {
         var doc    = Viper.document;
