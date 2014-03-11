@@ -1015,7 +1015,7 @@ ViperCoreStylesPlugin.prototype = {
                 self.viper.fireSelectionChanged();
             }, 10);
         } else {
-            if (nodeSelection && nodeSelection.parentNode) {
+            if (nodeSelection && this.viper.isOutOfBounds(nodeSelection) === false) {
                 range.selectNode(nodeSelection);
                 ViperSelection.addRange(range);
             }

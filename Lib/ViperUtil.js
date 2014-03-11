@@ -1286,15 +1286,21 @@ var ViperUtil = {
 
     removeEmptyNodes: function(parent, callback)
     {
-        var elems = ViperUtil.$(parent).find(':empty');
-        var i     = elems.length;
+        var elems   = ViperUtil.$(parent).find(':empty');
+        var i       = elems.length;
+        var removed = false;
         while (i > 0) {
             i--;
             if (ViperUtil.isStubElement(elems[i]) === false) {
                 if (!callback || callback.call(this, elems[i]) !== false) {
                     ViperUtil.remove(elems[i]);
+                    removed = true;
                 }
             }
+        }
+
+        if (removed === true) {
+            this.removeEmptyNodes(parent, callback);
         }
 
     },
