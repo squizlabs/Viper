@@ -4058,6 +4058,10 @@ Viper.prototype = {
                 self.fireSelectionChanged();
             }, 50);
             return true;
+        } else if ((e.which === 37 || e.which === 39) && (e.ctrlKey === true || e.metaKey === true)) {
+            // Prevent browser history triger.
+            ViperUtil.preventDefault(e);
+            return false;
         }
 
     },
