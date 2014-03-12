@@ -1237,6 +1237,63 @@ ViperListPlugin.prototype = {
 
     },
 
+    changeListType: function(newType, range)
+    {
+        range = range || this.viper.getViperRange();
+        var listItems = this._getListItemsFromRange(range, false, true);
+
+        var bookmark = this.viper.createBookmark();
+
+        var convertChildItems = function(list) {
+            var children = ViperUtil.find(list, '> li');
+            if (children.length === 0) {
+                return;
+            }
+
+            var newParent = null;
+            var afterList = null;
+            for (var i = 0; i < children.length; i++) {
+                if (ViperUtil.inArray(children[i], listItems) === true) {
+                    if (newParent === null) {
+                        newParent = document.createElement(newType);
+                        ViperUtil.insertAfter(list, newParent);
+                    }
+
+                    newParent.appendChild(children[i]);
+                    var subLists = ViperUtil.find(children[i], '> ul');
+                    for (var j = 0; j < subLists.length; j++) {
+                        convertChildItems(subLists[j]);
+                    }
+                } else if (newParent !== null) {
+                    // Create an after list.
+                    if (afterList === null) {
+                        afterList = document.createElement(ViperUtil.getTagName(list));
+                        ViperUtil.insertAfter(newParent, afterList);
+                    }
+
+                    afterList.appendChild(children[i]);
+                }
+            }
+
+            if (ViperUtil.getTag('li', list).length === 0) {
+                ViperUtil.remove(list);
+            }
+        };
+
+        var processedParents = [];
+        for (var i = 0; i < listItems.length; i++) {
+            if (ViperUtil.inArray(processedParents, listItems[i].parentNode) === true) {
+                continue;
+            }
+
+            processedParents.push(listItems[i].parentNode)
+            convertChildItems(listItems[i].parentNode);
+        }
+
+        this.viper.selectBookmark(bookmark);
+
+    },
+
     listToParagraphs: function(list)
     {
         var pTags = [];
@@ -1609,8 +1666,7 @@ ViperListPlugin.prototype = {
 
         var self = this;
         if (currentType !== listType) {
-            this.convertRangeToParagraphs();
-            this.makeList(newType === 'ol')
+            this.changeListType(newType)
             this.viper.fireSelectionChanged(null, true);
             this.viper.fireNodesChanged([self.viper.getViperElement()]);
             return;
