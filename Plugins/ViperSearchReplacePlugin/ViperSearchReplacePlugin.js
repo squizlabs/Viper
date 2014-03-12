@@ -25,7 +25,7 @@ ViperSearchReplacePlugin.prototype = {
     {
         this._initToolbar();
 
-        if (this.viper.isBrowser('msie') === true) {
+        if (ViperUtil.isBrowser('msie') === true) {
             var self = this;
             this.viper.registerCallback('Viper:viperElementFocused', 'ViperSearchReplacePlugin', function() {
                 if (self._finding === true) {
@@ -219,10 +219,10 @@ ViperSearchReplacePlugin.prototype = {
             viperRange = this.viper.getCurrentRange();
         }
 
-        if (this.viper.isBrowser('msie') === true) {
+        if (ViperUtil.isBrowser('msie') === true) {
             // Range search.
 
-            if (this.viper.isBrowser('msie', '>=11') === true) {
+            if (ViperUtil.isBrowser('msie', '>=11') === true) {
                 viperRange = this.viper.getViperRange();
                 viperRange.collapse(false);
                 var textRange = new ViperIERange(document.body.createTextRange());
@@ -273,7 +273,7 @@ ViperSearchReplacePlugin.prototype = {
     replace: function(replacement)
     {
         var range = null;
-        if (this.viper.isBrowser('msie') === true) {
+        if (ViperUtil.isBrowser('msie') === true) {
             range = this.viper.getViperRange();
         } else {
             range = this.viper.getCurrentRange();

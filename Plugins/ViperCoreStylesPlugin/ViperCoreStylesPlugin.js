@@ -205,7 +205,7 @@ ViperCoreStylesPlugin.prototype = {
                 return;
             }
 
-            if (self.viper.isBrowser('msie') === true) {
+            if (ViperUtil.isBrowser('msie') === true) {
                 // This block of code prevents IE moving user selection to the.
                 // button element when clicked. When the button element is removed
                 // and added back to DOM selection is not moved. Seriously, IE?
@@ -1007,7 +1007,7 @@ ViperCoreStylesPlugin.prototype = {
 
         ViperChangeTracker.endBatchChange(changeid);
 
-        if (this.viper.isBrowser('msie', '<11') === true && nodeSelection && !bookmark) {
+        if (ViperUtil.isBrowser('msie', '<11') === true && nodeSelection && !bookmark) {
             var self = this;
             setTimeout(function() {
                 ViperSelection.addRange(range);
@@ -1025,7 +1025,7 @@ ViperCoreStylesPlugin.prototype = {
 
             if (nodeSelection
                 && ViperUtil.isTag(nodeSelection, 'table') === true
-                && (this.viper.isBrowser('chrome') === true || this.viper.isBrowser('safari') === true)
+                && (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true)
             ) {
                 // Webkit seems to fail to return the correct position for table
                 // range. Update position for specific table element and not range.
@@ -1171,7 +1171,7 @@ ViperCoreStylesPlugin.prototype = {
 
         if (!endNode) {
             endNode = startNode;
-        } else if (endNode.nodeType === ViperUtil.ELEMENT_NODE && this.viper.isBrowser('msie') === true) {
+        } else if (endNode.nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isBrowser('msie') === true) {
             endNode = range._getLastSelectableChild(endNode);
             range.setEnd(endNode, endNode.data.length);
             ViperSelection.addRange(range);

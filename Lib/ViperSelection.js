@@ -107,7 +107,7 @@ var ViperSelection = {
     {
         this._selection = ViperSelection._getSelection();
 
-        if (this._viper.isBrowser('msie', '<11') === true) {
+        if (ViperUtil.isBrowser('msie', '<11') === true) {
             // IE.
             try {
                 range.rangeObj.select();

@@ -24,9 +24,9 @@ function ViperCopyPastePlugin(viper)
     this.convertTags     = null;
     this._tmpNode        = null;
     this._iframe         = null;
-    this._isFirefox      = viper.isBrowser('firefox');
-    this._isMSIE         = viper.isBrowser('msie');
-    this._isSafari       = viper.isBrowser('safari');
+    this._isFirefox      = ViperUtil.isBrowser('firefox');
+    this._isMSIE         = ViperUtil.isBrowser('msie');
+    this._isSafari       = ViperUtil.isBrowser('safari');
     this._toolbarElement = null;
 
 }
@@ -762,7 +762,7 @@ ViperCopyPastePlugin.prototype = {
         }
 
         // Convert span.Apple-converted-space to normal space (Chrome only).
-        if (this.viper.isBrowser('chrome') === true) {
+        if (ViperUtil.isBrowser('chrome') === true) {
             content = content.replace(/<span class="Apple-converted-space">&nbsp;<\/span>/g, ' ');
         }
 
@@ -1389,7 +1389,7 @@ ViperCopyPastePlugin.prototype = {
             }
         }//end for
 
-        if (this.viper.isBrowser('msie') === true) {
+        if (ViperUtil.isBrowser('msie') === true) {
             var tags = ViperUtil.find(tmp, 'strong > font > p');
             var c    = tags.length;
             for (var i = 0; i < c; i++) {
@@ -1453,7 +1453,7 @@ ViperCopyPastePlugin.prototype = {
             }
         }
 
-        if (this.viper.isBrowser('msie') === true && ViperUtil.getTag('p', tmp).length > 0) {
+        if (ViperUtil.isBrowser('msie') === true && ViperUtil.getTag('p', tmp).length > 0) {
             // Move any content that is not inside a paragraph in to a previous paragraph..
             var steps = 2;
             for (var i = 0; i < steps; i++) {

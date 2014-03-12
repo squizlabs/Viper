@@ -31,7 +31,7 @@ function ViperKeyboardEditorPlugin(viper)
 
     // When enter key is pressed at the end of these tags, the plugin will handle the
     // enter event instead of the browser.
-    this._tagList = ('p|div|h1|h2|h3|h4|h5|h6|blockquote').split('|');
+    this._tagList = ('p|div|h1|h2|h3|h4|h5|h6|blockquote|section|main|article|aside').split('|');
 
 }
 
@@ -290,7 +290,7 @@ ViperKeyboardEditorPlugin.prototype = {
                     if (ViperUtil.inArray(firstBlockTagName, this._tagList) === true) {
                         handleEnter = true;
                     } else if (firstBlockTagName === 'li'
-                        && (this.viper.isBrowser('chrome') === true || this.viper.isBrowser('safari') === true)
+                        && (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true)
                         && ViperUtil.trim(ViperUtil.getNodeTextContent(firstBlock)) === ''
                     ) {
                         handleEnter = true;
@@ -308,7 +308,7 @@ ViperKeyboardEditorPlugin.prototype = {
                         }
 
                         var content = '<br />';
-                        if (this.viper.isBrowser('msie') === true) {
+                        if (ViperUtil.isBrowser('msie') === true) {
                             content = '&nbsp;';
                         }
 
@@ -328,7 +328,7 @@ ViperKeyboardEditorPlugin.prototype = {
                             removeFirstBlock = true;
                         } else {
                             if (firstBlockTagName === 'li') {
-                                if (this.viper.isBrowser('chrome') === true || this.viper.isBrowser('safari') === true) {
+                                if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true) {
                                     var parentListItem = ViperUtil.getFirstBlockParent(firstBlock.parentNode);
                                     if (parentListItem && ViperUtil.isTag(parentListItem, 'li') === true) {
                                         newList = document.createElement('li');
@@ -381,7 +381,7 @@ ViperKeyboardEditorPlugin.prototype = {
                         }
 
                         if (p.firstChild.nodeType === ViperUtil.TEXT_NODE) {
-                            if (this.viper.isBrowser('msie') === true
+                            if (ViperUtil.isBrowser('msie') === true
                                 && p.firstChild.data === String.fromCharCode(160)
                             ) {
                                 range.setEnd(p.firstChild, 1);
@@ -400,7 +400,7 @@ ViperKeyboardEditorPlugin.prototype = {
 
                         ViperSelection.addRange(range);
 
-                        if (this.viper.isBrowser('firefox') === false) {
+                        if (ViperUtil.isBrowser('firefox') === false) {
                             this.viper.fireNodesChanged();
                         }
 
@@ -466,7 +466,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 ViperSelection.addRange(range);
 
                 return false;
-            } else if (this.viper.isBrowser('msie') === true
+            } else if (ViperUtil.isBrowser('msie') === true
                 && range.startOffset === 0
                 && range.collapsed === true
                 && ViperUtil.isTag(startNode, 'li') === true
@@ -491,7 +491,7 @@ ViperKeyboardEditorPlugin.prototype = {
             var selectedNode = range.getNodeSelection();
             var viperElem    = this.viper.getViperElement();
             if (selectedNode && selectedNode === viperElem) {
-                if (this.viper.isBrowser('msie') === true) {
+                if (ViperUtil.isBrowser('msie') === true) {
                     // Let IE do it as there is no way of telling if the caret is
                     // before or after the iframe.
                     return;
@@ -514,7 +514,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 && startNode
                 && startNode === endNode
                 && startNode.nodeType === ViperUtil.ELEMENT_NODE
-                && (this.viper.isBrowser('firefox') !== true || !(ViperUtil.isTag(startNode, 'br') === true && (!blockParent || ViperUtil.isTag(blockParent, 'li') === true)))
+                && (ViperUtil.isBrowser('firefox') !== true || !(ViperUtil.isTag(startNode, 'br') === true && (!blockParent || ViperUtil.isTag(blockParent, 'li') === true)))
                 && ViperUtil.isStubElement(startNode) === false
             ) {
                 var elem = document.createElement(defaultTagName);
@@ -546,7 +546,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 ViperSelection.addRange(range);
                 this.viper.fireSelectionChanged();
                 return false;
-            } else if (this.viper.isBrowser('firefox') === true
+            } else if (ViperUtil.isBrowser('firefox') === true
                 && startNode.nodeType === ViperUtil.TEXT_NODE
                 && endNode === startNode
                 && range.startOffset === startNode.data.length
@@ -610,7 +610,7 @@ ViperKeyboardEditorPlugin.prototype = {
                     range.collapse(true);
                     ViperSelection.addRange(range);
                     return false;
-                } else if (this.viper.isBrowser('chrome') === true) {
+                } else if (ViperUtil.isBrowser('chrome') === true) {
                     // Latest Chrome is creating DIV element with span tag when
                     // exiting a top level list (hitting enter in an empty top level list item).
                     // Create the default tag instead.
@@ -701,7 +701,7 @@ ViperKeyboardEditorPlugin.prototype = {
     {
         var range = this.viper.getViperRange();
 
-        if (this.viper.isBrowser('chrome') === true) {
+        if (ViperUtil.isBrowser('chrome') === true) {
             // Latest Chrome versions have strange issue with all content deletion, handle it in another method.
             return this._handleDeleteForChrome(e, range);
         }
@@ -758,9 +758,9 @@ ViperKeyboardEditorPlugin.prototype = {
                 ViperUtil.setHtml(viperElement, '');
                 this.viper.initEditableElement();
 
-                if (this.viper.isBrowser('chrome') === true
-                    || this.viper.isBrowser('safari') === true
-                    || this.viper.isBrowser('msie') === true
+                if (ViperUtil.isBrowser('chrome') === true
+                    || ViperUtil.isBrowser('safari') === true
+                    || ViperUtil.isBrowser('msie') === true
                 ) {
                     // Chrome, Safari and IE needs to fire nodes changed here as they do
                     // not fire keypress.
@@ -769,10 +769,10 @@ ViperKeyboardEditorPlugin.prototype = {
 
                 return false;
             }
-        } else if (this.viper.isBrowser('msie') === true) {
+        } else if (ViperUtil.isBrowser('msie') === true) {
             var rangeClone = range.cloneRange();
 
-            if (this.viper.isBrowser('msie', '>=11') === true) {
+            if (ViperUtil.isBrowser('msie', '>=11') === true) {
                 // Check if the previous sibling of a parent is HR element and then remove it if found.
                 var startNode = range.getStartNode();
                 var foundSib  = false;
@@ -860,7 +860,7 @@ ViperKeyboardEditorPlugin.prototype = {
         } else if (range.startOffset === 0
             && range.collapsed === true
             && range.startContainer.nodeType === ViperUtil.TEXT_NODE
-            && this.viper.isBrowser('firefox') === true
+            && ViperUtil.isBrowser('firefox') === true
         ) {
             var firstBlock = ViperUtil.getFirstBlockParent(range.startContainer);
             if (firstBlock
@@ -875,7 +875,7 @@ ViperKeyboardEditorPlugin.prototype = {
             }
         } else if (range.startOffset === 0
             && range.collapsed === false
-            && this.viper.isBrowser('msie') !== true
+            && ViperUtil.isBrowser('msie') !== true
         ) {
             // Chrome has issues with removing list items from lists.
             var startNode = range.getStartNode();
@@ -993,7 +993,7 @@ ViperKeyboardEditorPlugin.prototype = {
 
         if (range.startOffset === 0
             && range.collapsed === false
-            && this.viper.isBrowser('msie') !== true
+            && ViperUtil.isBrowser('msie') !== true
             && range.startContainer !== range.endContainer
             && range.startContainer.nodeType === ViperUtil.TEXT_NODE
             && range.endContainer.nodeType === ViperUtil.TEXT_NODE
@@ -1027,7 +1027,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 }
 
                 ViperSelection.addRange(range);
-                if (this.viper.isBrowser('firefox') !== true) {
+                if (ViperUtil.isBrowser('firefox') !== true) {
                     this.viper.fireNodesChanged();
                 }
 
@@ -1309,8 +1309,8 @@ ViperKeyboardEditorPlugin.prototype = {
 
         // If the range is not collapsed then remove the contents of the selection.
         if (range.collapsed !== true) {
-            if (this.viper.isBrowser('chrome') === true
-                || this.viper.isBrowser('safari') === true
+            if (ViperUtil.isBrowser('chrome') === true
+                || ViperUtil.isBrowser('safari') === true
             ) {
                 range.deleteContents();
                 ViperSelection.addRange(range);
@@ -1468,7 +1468,7 @@ ViperKeyboardEditorPlugin.prototype = {
         elem.appendChild(docFrag);
 
         // Remove DEL tags before getting the text content.
-        var elemClone = elem.cloneNode(true);
+        var elemClone = ViperUtil.cloneNode(elem);
         ViperUtil.remove(ViperUtil.getTag('del', elemClone));
 
         if (ViperUtil.isBlank(ViperUtil.getNodeTextContent(elemClone)) === true) {

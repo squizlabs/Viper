@@ -41,7 +41,7 @@ ViperTableEditorPlugin.prototype = {
         this.viper.registerCallback('Viper:editableElementChanged', 'ViperTableEditorPlugin', function() {
             self._initTable();
 
-            if (self.viper.isBrowser('firefox') === true) {
+            if (ViperUtil.isBrowser('firefox') === true) {
                 // Disable Firefox table editing.
                 Viper.document.execCommand("enableInlineTableEditing", false, false);
                 Viper.document.execCommand("enableObjectResizing", false, false);
@@ -97,7 +97,7 @@ ViperTableEditorPlugin.prototype = {
 
         // Hide the toolbar when user clicks anywhere.
         this.viper.registerCallback(['Viper:mouseDown', 'ViperHistoryManager:undo'], 'ViperTableEditorPlugin', function(data) {
-            if (self.viper.isBrowser('firefox') === true) {
+            if (ViperUtil.isBrowser('firefox') === true) {
                 // Disable Firefox table editing.
                 Viper.document.execCommand("enableInlineTableEditing", false, false);
                 Viper.document.execCommand("enableObjectResizing", false, false);
@@ -140,7 +140,7 @@ ViperTableEditorPlugin.prototype = {
             var range = self.viper.getViperRange();
             try {
                 if (range.collapsed === true
-                    && self.viper.isBrowser('msie') === true
+                    && ViperUtil.isBrowser('msie') === true
                     && range.startContainer.nodeType === ViperUtil.TEXT_NODE
                     && ViperUtil.inArray(ViperUtil.getTagName(range.startContainer.parentNode), ['td', 'th']) === true
                 ) {
@@ -263,7 +263,7 @@ ViperTableEditorPlugin.prototype = {
                     if (cell) {
                         if (self._cellTools && ViperUtil.hasClass(self._cellTools, 'Viper-topBar') === true) {
                             self.hideCellToolsIcon();
-                        } else if (self.viper.isBrowser('msie') === true) {
+                        } else if (ViperUtil.isBrowser('msie') === true) {
                             // This must be in a timeout to be able to calculate the bubbles position correctly.
                             setTimeout(function() {
                                 self.showCellToolsIcon(cell, true);
@@ -273,7 +273,7 @@ ViperTableEditorPlugin.prototype = {
                         }
                     }
                 } else {
-                    if (self.viper.isBrowser('msie') === true) {
+                    if (ViperUtil.isBrowser('msie') === true) {
                         // This must be in a timeout to be able to calculate the bubbles position correctly.
                         setTimeout(function() {
                             self.toolbarPlugin.toggleBubble('VTEP-bubble');
@@ -325,7 +325,7 @@ ViperTableEditorPlugin.prototype = {
                     self.removeHighlights();
 
                     // Show cell Tools.
-                    if (self.viper.isBrowser('msie') === true) {
+                    if (ViperUtil.isBrowser('msie') === true) {
                         setTimeout(function() {
                             showToolbar = true;
                             self.showCellToolsIcon(cell);
@@ -1096,7 +1096,7 @@ ViperTableEditorPlugin.prototype = {
                 var tfoot = ViperUtil.getTag('tfoot', table);
                 coords    = ViperUtil.getBoundingRectangle(table);
 
-                if (this.viper.isBrowser('firefox') === true) {
+                if (ViperUtil.isBrowser('firefox') === true) {
                     // Caption height fix..
                     var caption = ViperUtil.getTag('caption', table);
                     if (caption.length > 0) {
@@ -1127,7 +1127,7 @@ ViperTableEditorPlugin.prototype = {
                     var captionHeight = ViperUtil.getElementHeight(caption[0]);
                     coords.y1        += captionHeight;
 
-                    if (this.viper.isBrowser('firefox') === true) {
+                    if (ViperUtil.isBrowser('firefox') === true) {
                         // Firefox caption height fix.
                         coords.y2 += captionHeight;
                     }
@@ -3915,7 +3915,7 @@ ViperTableEditorPlugin.prototype = {
 
     _initCell: function(cell)
     {
-        if (this.viper.isBrowser('msie') === true) {
+        if (ViperUtil.isBrowser('msie') === true) {
             if (ViperUtil.trim(ViperUtil.getHtml(cell)) === '') {
                 ViperUtil.setHtml(cell, '&nbsp;');
             }

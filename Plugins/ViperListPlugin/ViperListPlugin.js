@@ -82,7 +82,7 @@ ViperListPlugin.prototype = {
                 if (startNode.nodeType === ViperUtil.TEXT_NODE
                     && range.collapsed === false
                     && startNode.data.length === range.startOffset
-                    && self.viper.isBrowser('msie') === true
+                    && ViperUtil.isBrowser('msie') === true
                 ) {
                     // IE sometimes fails with range, if multiple list elements are
                     // selected and range starts from the beginning of a list item
@@ -550,7 +550,7 @@ ViperListPlugin.prototype = {
 
         if (testOnly !== true) {
             var self = this;
-            if (this.viper.isBrowser('msie') === true) {
+            if (ViperUtil.isBrowser('msie') === true) {
                 setTimeout(function() {
                     // Yet another tiemout for IE.
                     var bookmarkParent  = bookmark.start.parentNode;
@@ -1052,7 +1052,7 @@ ViperListPlugin.prototype = {
         }
 
         // Select bookmark.
-        if (this.viper.isBrowser('msie') === true) {
+        if (ViperUtil.isBrowser('msie') === true) {
             var self = this;
             setTimeout(function() {
                 self.viper.selectBookmark(bookmark);
