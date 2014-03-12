@@ -248,6 +248,16 @@ var ViperUtil = {
             case 'h5':
             case 'h6':
             case 'img':
+            case 'header':
+            case 'nav':
+            case 'section':
+            case 'main':
+            case 'article':
+            case 'aside':
+            case 'footer':
+            case 'details':
+            case 'figure':
+            case 'dialog':
                 return true;
             break;
 
