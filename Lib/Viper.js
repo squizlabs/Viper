@@ -656,6 +656,10 @@ Viper.prototype = {
                         }
                     }//end if
                 }//end if
+            } else if (ViperUtil.isBrowser('firefox') === true) {
+                range.setStart(editableChild, 0);
+                range.collapse(true);
+                ViperSelection.addRange(range);
             }//end if
 
             this.fireCallbacks('Viper:enabled');
