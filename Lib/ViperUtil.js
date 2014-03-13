@@ -2378,7 +2378,7 @@ var ViperUtil = {
     {
         // Clone the element so we dont modify the actual contents.
         var clone = null;
-        if (ViperUtil.isBrowser('msie', '8') === true) {
+        if (ViperUtil.isBrowser('msie', '8') === true && node.nodeType !== ViperUtil.TEXT_NODE) {
             // This is to resolve the HTML5 element cloning issue in IE8.
             var clone = document.createElement('div');
             ViperUtil.setHtml(clone, ViperUtil.trim(node.outerHTML));
