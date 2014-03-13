@@ -4727,8 +4727,6 @@ Viper.prototype = {
         var clone = ViperUtil.cloneNode(elem);
         this.removeEmptyNodes(clone);
 
-        return ViperUtil.getHtml(clone);
-
         // Remove special Viper elements.
         this._removeViperElements(clone);
 
