@@ -158,6 +158,12 @@ MatrixImagePlugin.prototype = {
 			    altField.setValue(data.attributes.alt,false);
 			}
 		    });
+                    // close use me mode if user clicks anywhere
+                    this.viper.registerCallback(['Viper:mouseDown', 'ViperToolbarPlugin:disabled'], 'MatrixImagePlugin', function(data) {
+                    	if (jsMap.isInUseMeMode() === true) {
+                                jsMap.cancelUseMeMode();
+                        }
+                    });
 	    }
 	}
 	else {

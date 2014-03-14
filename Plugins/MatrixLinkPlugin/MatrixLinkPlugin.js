@@ -276,6 +276,12 @@ MatrixLinkPlugin.prototype = {
 			    tools.getItem(idPrefix + ':url').setValue(data.assetid,false);
 			}
 		    });
+		    // close use me mode if user clicks anywhere
+                    this.viper.registerCallback(['Viper:mouseDown', 'ViperToolbarPlugin:disabled'], 'MatrixLinkPlugin', function(data) {
+                        if (jsMap.isInUseMeMode() === true) {
+                                jsMap.cancelUseMeMode();
+                        }
+                    });	
 	    }
 	}
 	else {
