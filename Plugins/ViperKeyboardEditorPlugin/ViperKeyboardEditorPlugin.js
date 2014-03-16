@@ -1081,7 +1081,16 @@ ViperKeyboardEditorPlugin.prototype = {
     {
         if (range.collapsed !== true) {
             // If range is not collapsed then everything in the selection should be removed which is handled by
-            // the browser.
+            // the browser unless its the whole Viper element selection.
+            if (this._isWholeViperElementSelected(range) === true) {
+                // The whole Viper element is selected, remove all of its content
+                // and then initialise the Viper element.
+                ViperUtil.setHtml(this.viper.getViperElement(), '');
+                this.viper.initEditableElement();
+                this.viper.fireNodesChanged();
+                return false;
+            }
+
             return;
         }
 
@@ -1291,6 +1300,13 @@ ViperKeyboardEditorPlugin.prototype = {
             ViperUtil.preventDefault(e);
             range.collapse(true);
             ViperSelection.addRange(range);
+            this.viper.fireNodesChanged();
+            return false;
+        } else if (this._isWholeViperElementSelected(range) === true) {
+            // The whole Viper element is selected, remove all of its content
+            // and then initialise the Viper element.
+            ViperUtil.setHtml(this.viper.getViperElement(), '');
+            this.viper.initEditableElement();
             this.viper.fireNodesChanged();
             return false;
         }//end if
@@ -1571,6 +1587,25 @@ ViperKeyboardEditorPlugin.prototype = {
         }
 
         return !this.viper.setCaretAfterNode(node);
+
+    },
+
+    _isWholeViperElementSelected: function(range)
+    {
+        if (range.collapsed === false) {
+            var viperElement    = this.viper.getViperElement();
+            var firstSelectable = range._getFirstSelectableChild(viperElement);
+            if (firstSelectable === range.startContainer || viperElement === range.startContainer) {
+                var lastSelectable  = range._getLastSelectableChild(viperElement);
+                if (range.endContainer === viperElement
+                    || (range.endContainer === lastSelectable && range.endOffset === lastSelectable.data.length)
+                ) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
 
     },
 
