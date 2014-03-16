@@ -1054,20 +1054,20 @@ ViperTools.prototype = {
         // Set the pos to be the middle of the screen
         //var windowDim  = ViperUtil.getWindowDimensions();
         var elementDim = ViperUtil.getBoundingRectangle(popupElement);
-        var window     = ViperUtil.getWindowDimensions();
+        var windowDim  = ViperUtil.getWindowDimensions();
 
         var toolbarHieght = 36;
 
         var marginTop = (((elementDim.y2 - elementDim.y1) / 2) * -1);
 
         // If the popup is off the top of the screen then move it back down.
-        var offScreenTop = (window.height / 2) + marginTop
+        var offScreenTop = (windowDim.height / 2) + marginTop
         if (offScreenTop < toolbarHieght) {
             marginTop -= offScreenTop - toolbarHieght;
         }
 
-        if ((elementDim.y2 - elementDim.y1) > (window.height - toolbarHieght)) {
-            ViperUtil.setStyle(contentElem, 'height', (height - (elementDim.y2 - elementDim.y1 - window.height) - toolbarHieght) + 'px');
+        if ((elementDim.y2 - elementDim.y1) > (windowDim.height - toolbarHieght)) {
+            ViperUtil.setStyle(contentElem, 'height', (height - (elementDim.y2 - elementDim.y1 - windowDim.height) - toolbarHieght) + 'px');
         }
 
         ViperUtil.setStyle(popupElement, 'margin-left', (((elementDim.x2 - elementDim.x1) / 2) * -1) + 'px');

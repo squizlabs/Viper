@@ -125,7 +125,9 @@ var ViperSelection = {
             this._selection.addRange(range.rangeObj);
         }
 
-        this._viper._viperRange = range;
+        if (this._viper) {
+            this._viper._viperRange = range;
+        }
 
     },
 
