@@ -267,7 +267,7 @@ ViperKeyboardEditorPlugin.prototype = {
             if (range.collapsed === true
                 && ((endNode.nodeType === ViperUtil.TEXT_NODE && range.endOffset === endNode.data.length)
                 || endNode.nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isTag(endNode, 'br'))
-                && !endNode.nextSibling
+                && (!endNode.nextSibling || ViperUtil.isTag(endNode.nextSibling, 'br') === true && !endNode.nextSibling.nextSibling)
                 && (range._getLastSelectableChild(firstBlock, true) === endNode
                 || range._getLastSelectableChild(firstBlock, true) === null && ViperUtil.isTag(endNode, 'br') === true || (endNode.nodeType === ViperUtil.TEXT_NODE && endNode.data.length === 0))
             ) {
@@ -991,48 +991,8 @@ ViperKeyboardEditorPlugin.prototype = {
             return false;
         }
 
-        if (range.startOffset === 0
-            && range.collapsed === false
-            && ViperUtil.isBrowser('msie') !== true
-            && range.startContainer !== range.endContainer
-            && range.startContainer.nodeType === ViperUtil.TEXT_NODE
-            && range.endContainer.nodeType === ViperUtil.TEXT_NODE
-            && range.endOffset === range.endContainer.data.length
-        ) {
-            var startParent     = ViperUtil.getFirstBlockParent(range.startContainer);
-            var endParent       = ViperUtil.getFirstBlockParent(range.endContainer);
-            var firstSelectable = range._getFirstSelectableChild(startParent);
-            var lastSelectable  = range._getLastSelectableChild(endParent);
-
-            if (firstSelectable === range.startContainer
-                && lastSelectable === range.endContainer
-            ) {
-                if (defaultTagName !== '') {
-                    var p = document.createElement(defaultTagName);
-                    ViperUtil.setHtml(p, '<br />');
-                    ViperUtil.insertBefore(startParent, p);
-                    ViperUtil.remove(ViperUtil.getElementsBetween(startParent, endParent));
-                    ViperUtil.remove(startParent);
-                    ViperUtil.remove(endParent);
-                    range.setStart(p, 0);
-                    range.collapse(true);
-                } else {
-                    var br = document.createElement('br');
-                    ViperUtil.insertBefore(startParent, br);
-                    ViperUtil.remove(ViperUtil.getElementsBetween(startParent, endParent));
-                    ViperUtil.remove(startParent);
-                    ViperUtil.remove(endParent);
-                    range.setStart(br, 0);
-                    range.collapse(true);
-                }
-
-                ViperSelection.addRange(range);
-                if (ViperUtil.isBrowser('firefox') !== true) {
-                    this.viper.fireNodesChanged();
-                }
-
-                return false;
-            }
+        if (this._isStartToEndOfMultiContainerSelection(range) === true) {
+            return this._removeContentFromStartToEndOfContainers(range)
         }
 
     },
@@ -1089,6 +1049,8 @@ ViperKeyboardEditorPlugin.prototype = {
                 this.viper.initEditableElement();
                 this.viper.fireNodesChanged();
                 return false;
+            } else if (this._isStartToEndOfMultiContainerSelection(range) === true) {
+                return this._removeContentFromStartToEndOfContainers(range);
             }
 
             return;
@@ -1272,6 +1234,8 @@ ViperKeyboardEditorPlugin.prototype = {
 
                     ViperUtil.remove(nodeSelection);
                 }//end if
+            } else if (this._isStartToEndOfMultiContainerSelection(range) === true) {
+                return this._removeContentFromStartToEndOfContainers(range);
             } else {
                 var startParent = ViperUtil.getFirstBlockParent(range.startContainer);
                 var endParent   = ViperUtil.getFirstBlockParent(range.endContainer);
@@ -1605,6 +1569,65 @@ ViperKeyboardEditorPlugin.prototype = {
             }
         }
 
+        return false;
+
+    },
+
+    _isStartToEndOfMultiContainerSelection: function(range)
+    {
+        if (range.startOffset === 0
+            && range.collapsed === false
+            && ViperUtil.isBrowser('msie') !== true
+            && range.startContainer !== range.endContainer
+            && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+            && range.endContainer.nodeType === ViperUtil.TEXT_NODE
+            && range.endOffset === range.endContainer.data.length
+        ) {
+            var startParent     = ViperUtil.getFirstBlockParent(range.startContainer);
+            var endParent       = ViperUtil.getFirstBlockParent(range.endContainer);
+            var firstSelectable = range._getFirstSelectableChild(startParent);
+            var lastSelectable  = range._getLastSelectableChild(endParent);
+            if (firstSelectable === range.startContainer
+                && lastSelectable === range.endContainer
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+
+    },
+
+    _removeContentFromStartToEndOfContainers: function(range)
+    {
+        // Remove content from beginning of one container to the end of another container.
+        var startParent     = ViperUtil.getFirstBlockParent(range.startContainer);
+        var endParent       = ViperUtil.getFirstBlockParent(range.endContainer);
+        var defaultTagName  = this.viper.getDefaultBlockTag();
+
+        if (defaultTagName !== '') {
+            var p = document.createElement(defaultTagName);
+            ViperUtil.setHtml(p, '<br />');
+            ViperUtil.insertBefore(startParent, p);
+            ViperUtil.remove(ViperUtil.getElementsBetween(startParent, endParent));
+            ViperUtil.remove(startParent);
+            ViperUtil.remove(endParent);
+            range.setStart(p, 0);
+            range.collapse(true);
+        } else {
+            var br = document.createElement('br');
+            ViperUtil.insertBefore(startParent, br);
+            ViperUtil.remove(ViperUtil.getElementsBetween(startParent, endParent));
+            ViperUtil.remove(startParent);
+            ViperUtil.remove(endParent);
+            range.setStart(br, 0);
+            range.collapse(true);
+        }
+
+        ViperSelection.addRange(range);
+        this.viper.fireNodesChanged();
+
+        // Prevent default action.
         return false;
 
     },

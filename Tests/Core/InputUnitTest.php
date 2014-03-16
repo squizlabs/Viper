@@ -416,7 +416,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('123test');
         sleep(1);
-        $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><div>test123<br />123test</div>');
+        $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><div>test123</div><div>123test</div>');
 
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
