@@ -1569,7 +1569,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function selectInlineToolbarLineageItem($index)
     {
-        $rect   = $this->getBoundingRectangle('.ViperITP-lineageItem', $index);
+        $rect = $this->getBoundingRectangle('.ViperITP-lineageItem', $index);
+        if (is_array($rect) === FALSE) {
+            throw new Exception('Inline Toolbar lineage item not found!');
+        }
+
         $region = $this->sikuli->getRegionOnPage($rect);
         $this->sikuli->click($region);
         usleep(80000);

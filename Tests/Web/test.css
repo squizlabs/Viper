@@ -141,15 +141,15 @@ h1,h2,h3,h4,h5,h6 {
     border: none;
 }
 
-#content.googlechrome td {
+#content.chrome td {
     padding: 5px 4px;
 }
 
-#content.googlechrome th {
+#content.chrome th {
     padding: 0 10px;
 }
 
-#content.googlechrome th p {
+#content.chrome th p {
     margin: 0;
 }
 
