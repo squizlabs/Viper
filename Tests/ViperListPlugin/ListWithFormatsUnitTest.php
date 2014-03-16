@@ -355,7 +355,7 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
         $this->useTest(5);
 
         // Test one P inside a Div
-        $this->sikuli->click($this->findKeyword(1));
+        $this->moveToKeyword(1);
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
         $this->selectKeyword(1);
@@ -372,11 +372,9 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
         // Test two P's inside a div
-        $this->sikuli->click($this->findKeyword(2));
+        $this->moveToKeyword(2);
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
-        $this->sikuli->click($this->findKeyword(1));
-        sleep(1);
         $this->selectKeyword(2);
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
@@ -390,7 +388,7 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
-        $this->sikuli->click($this->findKeyword(3));
+        $this->moveToKeyword(3);
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
         $this->selectKeyword(3);

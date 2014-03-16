@@ -14,6 +14,8 @@ class Viper_Tests_ViperListPlugin_CopyPasteListTest extends AbstractViperListPlu
     public function testCopyAndPastePartOfList()
     {
         //Test unordered list
+        $this->useTest(1);
+
         $this->selectKeyword(2, 3);
         $this->sikuli->keyDown('Key.CMD + c');
 
@@ -21,17 +23,19 @@ class Viper_Tests_ViperListPlugin_CopyPasteListTest extends AbstractViperListPlu
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.CMD + v');
 
-        $this->assertHTMLMatch('<p>Unordered list %1%</p><ul><li>%2% 1</li><li>item 2</li><li>item 3 %3%</li></ul><p></p><ul><li>item %2% 1</li><li>item 2</li><li>item 3 %3%</li></ul><p>Ordered list %4%</p><ol><li>item %5% 1</li><li>item 2</li><li>item 3 %6%</li></ol>');
+        $this->assertHTMLMatch('<p>Unordered list %1%</p><ul><li>%2% 1</li><li>item 2</li><li>item 3 %3%</li></ul><ul><li>item %2% 1</li><li>item 2</li><li>item 3 %3%</li></ul>');
 
         //Test ordered list
-        $this->selectKeyword(5, 6);
+        $this->useTest(2);
+        $this->selectKeyword(2, 3);
         $this->sikuli->keyDown('Key.CMD + c');
 
-        $this->moveToKeyword(4, 'right');
+        $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.CMD + v');
 
-        $this->assertHTMLMatch('<p>Unordered list %1%</p><ul><li>%2% 1</li><li>item 2</li><li>item 3 %3%</li></ul><p></p><ul><li>item %2% 1</li><li>item 2</li><li>item 3 %3%</li></ul><p>Ordered list %4%</p><ol><li>%5% 1</li><li>item 2</li><li>item 3 %6%</li></ol><p></p><ol><li>item %5% 1</li><li>item 2</li><li>item 3 %6%</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered list %1%</p><ol><li>%2% 1</li><li>item 2</li><li>item 3 %3%</li></ol><ol><li>item %2% 1</li><li>item 2</li><li>item 3 %3%</li></ol>');
+
     }//end testCopyAndPastePartOfList()
 
 
@@ -40,9 +44,11 @@ class Viper_Tests_ViperListPlugin_CopyPasteListTest extends AbstractViperListPlu
      *
      * @return void
      */
-    public function testCopyAndPasteAWholeList()
+    public function testCopyAndPasteWholeList()
     {
         //Test unordered list
+        $this->useTest(1);
+
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + c');
@@ -51,20 +57,22 @@ class Viper_Tests_ViperListPlugin_CopyPasteListTest extends AbstractViperListPlu
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.CMD + v');
 
-        $this->assertHTMLMatch('<p>Unordered list %1%</p><ul><li>item %2% 1</li><li>item 2</li><li>item 3 %3%</li></ul><p></p><ul><li>item %2% 1</li><li>item 2</li><li>item 3 %3%</li></ul><p>Ordered list %4%</p><ol><li>item %5% 1</li><li>item 2</li><li>item 3 %6%</li></ol>');
+        $this->assertHTMLMatch('<p>Unordered list %1%</p><ul><li>item %2% 1</li><li>item 2</li><li>item 3 %3%</li></ul><ul><li>item %2% 1</li><li>item 2</li><li>item 3 %3%</li></ul>');
 
         //Test ordered list
-        $this->selectKeyword(5);
+        $this->useTest(2);
+
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + c');
 
-        $this->moveToKeyword(4, 'right');
+        $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.CMD + v');
 
-        $this->assertHTMLMatch('<p>Unordered list %1%</p><ul><li>item %2% 1</li><li>item 2</li><li>item 3 %3%</li></ul><p></p><ul><li>item %2% 1</li><li>item 2</li><li>item 3 %3%</li></ul><p>Ordered list %4%</p><ol><li>item %5% 1</li><li>item 2</li><li>item 3 %6%</li></ol><p></p><ol><li>item %5% 1</li><li>item 2</li><li>item 3 %6%</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered list %1%</p><ol><li>item %2% 1</li><li>item 2</li><li>item 3 %3%</li></ol><ol><li>item %2% 1</li><li>item 2</li><li>item 3 %3%</li></ol>');
     
-    }//end testCopyAndPasteAWholeList()
+    }//end testCopyAndPasteWholeList()
 
 }//end class
 
