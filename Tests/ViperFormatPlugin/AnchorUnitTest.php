@@ -29,7 +29,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(6);
         $this->clickInlineToolbarButton('anchorID');
         $this->type('test');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p><span id="test">%1%</span> %2% %3%</p><p id="test">sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is <span id="test">%6%</span></p>');
 
@@ -145,7 +145,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         sleep(1);
         $this->clickInlineToolbarButton('anchorID', 'active');
         $this->clearFieldValue('ID');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz %5% is %6%</p>');
 

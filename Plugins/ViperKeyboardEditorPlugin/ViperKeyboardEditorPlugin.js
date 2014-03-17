@@ -872,7 +872,48 @@ ViperKeyboardEditorPlugin.prototype = {
                 // very well when the previous sibling is a stub element (e.g. HR).
                 ViperUtil.remove(firstBlock.previousSibling);
                 return false;
-            }
+            } else if (e.keyCode === 8
+                && range.collapsed === true
+                && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                && (range.startOffset === 0 || (range.startOffset === 1 && range.startContainer.data.charAt(0) === ' '))
+                && (!range.startContainer.previousSibling || ViperUtil.isTag(range.startContainer.previousSibling, 'br') === true)
+            ) {
+                // At the start of an element. Check to see if the previous
+                // element is a part of another block element. If it is then
+                // join these elements.
+                var prevSelectable = range.getPreviousContainer(range.startContainer, null, true, true);
+                var currentParent  = ViperUtil.getFirstBlockParent(range.startContainer);
+                var prevParent     = ViperUtil.getFirstBlockParent(prevSelectable);
+                if (currentParent !== prevParent && this.viper.isOutOfBounds(prevSelectable) === false) {
+                    // Check if there are any other elements in between.
+                    var elemsBetween = ViperUtil.getElementsBetween(prevParent, currentParent);
+                    if (elemsBetween.length > 0) {
+                        // There is at least one non block element in between.
+                        // Remove it.
+                        ViperUtil.remove(elemsBetween[(elemsBetween.length - 1)]);
+                    } else {
+                        while (currentParent.firstChild) {
+                            prevParent.appendChild(currentParent.firstChild);
+                        }
+
+                        ViperUtil.remove(currentParent);
+
+                        if (prevSelectable.nodeType === ViperUtil.TEXT_NODE) {
+                            range.setStart(prevSelectable, prevSelectable.data.length);
+                        } else {
+                            range.setStartAfter(prevSelectable);
+                        }
+
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+                    }
+
+                    ViperUtil.preventDefault(e);
+                    this.viper.fireNodesChanged();
+
+                    return false;
+                } //end if
+            }//end if
         } else if (range.startOffset === 0
             && range.collapsed === false
             && ViperUtil.isBrowser('msie') !== true
