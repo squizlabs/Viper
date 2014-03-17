@@ -637,6 +637,11 @@ ViperFormatPlugin.prototype = {
                 }
             }
 
+            // Format button.
+            if (formatElement && nodeSelection && formatElement !== nodeSelection) {
+                nodeSelection = formatElement;
+            }
+
             // Anchor.
             var attrId = self._getAttributeValue('id', nodeSelection);
             tools.getItem(prefix + 'anchor:input').setValue(attrId);
@@ -729,11 +734,6 @@ ViperFormatPlugin.prototype = {
                 return parent;
             };
 
-            // Format button.
-            if (formatElement && nodeSelection && formatElement !== nodeSelection) {
-                nodeSelection = formatElement;
-            }
-
             if (self._canEnableFormatButtons(startNode, nodeSelection, data.range) === true) {
                 // Reset icon of the main toolbar button.
                 tools.getItem('formats').setIconClass('Viper-formats');
@@ -785,19 +785,6 @@ ViperFormatPlugin.prototype = {
                     }
 
                     var isBlockElement  = ViperUtil.isBlockElement(nodeSelection);
-                    /*var hasInlineParent = false;
-                    if (isBlockElement === true) {
-                        var node = nodeSelection.parentNode;
-                        while (node && node !== viperElement) {
-                            if (ViperUtil.isBlockElement(node) === false) {
-                                hasInlineParent = true;
-                                break;
-                            }
-
-                            node = node.parentNode;
-                        }
-                    }*/
-
                     if (isBlockElement === true) {
                         // If this is a P tag selection and P tag belongs to a
                         // blockquote and blockquote has more than one P tag then

@@ -135,7 +135,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>%3%</strong></p>');
 
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
         $this->clickField('Image is decorative');
         $this->sikuli->keyDown('Key.ENTER');
@@ -358,7 +358,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /></p><p>sit amet <strong>%3%</strong></p>');
 
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->sikuli->keyDown('Key.DELETE');
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p></p><p>sit amet <strong>%3%</strong></p>');
@@ -385,7 +385,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /></p><p>sit amet <strong>%3%</strong></p>');
 
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
         $this->clearFieldValue('URL');
         $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
@@ -420,7 +420,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /></p><p>sit amet <strong>%3%</strong></p>');
 
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
         $this->clickField('Image is decorative');
         $this->sikuli->keyDown('Key.TAB');
@@ -431,7 +431,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /></p><p>sit amet <strong>%3%</strong></p>');
 
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Abcd');
@@ -462,7 +462,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /></p><p>sit amet <strong>%3%</strong></p>');
 
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
         $this->sikuli->keyDown('Key.TAB');
         $this->sikuli->keyDown('Key.TAB');
@@ -472,7 +472,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->sikuli->click($this->findKeyword(3));
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>%3%</strong></p>');
 
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
         $this->sikuli->keyDown('Key.TAB');
         $this->sikuli->keyDown('Key.TAB');
@@ -505,7 +505,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>%3%</strong></p>');
 
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
         $this->clickField('Image is decorative');
         $this->sikuli->keyDown('Key.ENTER');
@@ -565,7 +565,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>%3%</strong></p>');
 
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->sikuli->keyDown('Key.DELETE');
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p>sit amet <strong>%3%</strong></p>');
 
@@ -605,7 +605,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" title="Title tag" /></p><p>sit amet <strong>%3%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /></strong></p>');
 
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->sikuli->keyDown('Key.DELETE');
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p>sit amet <strong>%3%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /></strong></p>');
 
@@ -646,7 +646,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->clickField('Image is decorative');
         $this->sikuli->keyDown('Key.ENTER');
 
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should be active.');
 
     }//end testFormatIconIsDisabled()
@@ -670,7 +670,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->type('Title tag');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->click($this->findKeyword(1));
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
 
         $this->findImage('ImageHandle-sw', '.Viper-image-handle-sw');
         $this->findImage('ImageHandle-se', '.Viper-image-handle-se');
@@ -695,7 +695,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /></p><p>sit amet <strong>%3%</strong></p>');
 
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->resizeImage(1, 200);
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" width="200" height="186" /></p><p>sit amet <strong>%3%</strong></p>');
@@ -721,12 +721,12 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /></p><p>sit amet <strong>%3%</strong></p>');
 
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->resizeImage(1, 100);
 
          $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>XAX XBX<img alt="Alt tag" height="93" src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" width="100" /></p><p>sit amet <strong>XCX</strong></p>');
 
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
         $this->sikuli->keyDown('Key.TAB');
         $this->sikuli->keyDown('Key.TAB');
@@ -755,7 +755,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /></p><p>sit amet <strong>%3%</strong></p>');
 
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->resizeImage(1, 300);
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" width="300" height="280" /></p><p>sit amet <strong>%3%</strong></p>');
@@ -786,7 +786,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" />%1% %2%</p><p>sit amet <strong>%3%</strong></p>');
 
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->assertTrue($this->inlineToolbarButtonExists('image', 'active'), 'Image icon should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('move'), 'Move icon should appear in the inline toolbar.');
 
@@ -810,7 +810,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /> %2%</p><p>sit amet <strong>%3%</strong></p>');
 
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->assertTrue($this->inlineToolbarButtonExists('image', 'active'), 'Image icon should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('move'), 'Move icon should appear in the inline toolbar.');
 
@@ -835,7 +835,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /></p><p>sit amet <strong>%3%</strong></p>');
 
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->assertTrue($this->inlineToolbarButtonExists('image', 'active'), 'Image icon should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('move'), 'Move icon should appear in the inline toolbar.');
 
@@ -861,7 +861,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
 
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /></p><p>sit amet <strong>%3%</strong></p>');
 
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->assertTrue($this->inlineToolbarButtonExists('image', 'active'), 'Image icon should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('move'), 'Move icon should appear in the inline toolbar.');
 
@@ -875,7 +875,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
      */
     public function testEditingTheImageUsingInlineToolbar()
     {
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->clickInlineToolbarButton('image', 'active');
         $this->clickField('Image is decorative');
         $this->sikuli->keyDown('Key.TAB');
@@ -894,7 +894,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
      */
     public function testMovingAnImage()
     {
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->clickInlineToolbarButton('move');
         $this->sikuli->mouseMove($this->findKeyword(1));
         $this->sikuli->mouseMoveOffset(15, 0);
