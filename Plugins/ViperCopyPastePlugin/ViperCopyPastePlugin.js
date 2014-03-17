@@ -1717,17 +1717,17 @@ ViperCopyPastePlugin.prototype = {
             var level      = (pEl.getAttribute('style') || '').match(/level([\d])+/mi);
             ViperUtil.setHtml(pEl, listTypeInfo.html);
 
-            if (prevType !== listType) {
-                newList = true;
-            }
-
-            prevType = listType;
-
             if (!level) {
                 level = 1;
             } else {
                 level = level[1];
             }
+
+            if (prevType !== listType && level === prevLevel) {
+                newList = true;
+            }
+
+            prevType = listType;
 
             if (!listType) {
                 listType = 'ol';
