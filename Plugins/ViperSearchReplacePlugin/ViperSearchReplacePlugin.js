@@ -215,7 +215,7 @@ ViperSearchReplacePlugin.prototype = {
                 Viper.document.activeElement.blur();
             }
 
-            viperRange = this.viper.getCurrentRange();
+            viperRange = this.viper.getCurrentRange().cloneRange();
             viperRange.setStart(viperRange._getFirstSelectableChild(element), 0);
             viperRange.collapse(true);
         } else {
