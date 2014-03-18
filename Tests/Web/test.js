@@ -345,18 +345,19 @@ function useTest(id)
 
     var win = viperTest.getWindow();
 
-    win.viper.fireCallbacks('Viper:clickedOutside');
+    viper.fireCallbacks('Viper:clickedOutside');
 
     var contentElement = win.ViperUtil.getid('content');
-    win.ViperUtil.setHtml(contentElement, testCases[id]);
+    ViperUtil.setHtml(contentElement, testCases[id]);
 
-    win.ViperUtil.setHtml(win.ViperUtil.getid('testCaseTitle'), '(Using Test #' + id + ')');
+    ViperUtil.setHtml(win.ViperUtil.getid('testCaseTitle'), '(Using Test #' + id + ')');
 
-    if (win.viper.element) {
-        win.viper.element.blur();
+    if (viper.element) {
+        viper.element.blur();
     }
 
-    win.viper.getHistoryManager().clear();
+    viper.getHistoryManager().clear();
+    viper.getHistoryManager().add();
 
 }
 
