@@ -31,7 +31,7 @@ class Viper_Tests_ViperListPlugin_ConvertListTypesTest extends AbstractViperList
         $this->clickTopToolbarButton('listUL');
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
         $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1 %1%</li><li>item 2 %2%</li><li>item 3</li><li>item 4 %3%</li></ul>');
-   
+
         //Selecting a word in the item and using the inline toolbar
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('listOL');
@@ -40,7 +40,7 @@ class Viper_Tests_ViperListPlugin_ConvertListTypesTest extends AbstractViperList
         $this->clickInlineToolbarButton('listUL');
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
         $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1 %1%</li><li>item 2 %2%</li><li>item 3</li><li>item 4 %3%</li></ul>');
-   
+
         //Selecting the whole list item and using the top toolbar.
         $this->selectInlineToolbarLineageItem(1);
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
@@ -50,7 +50,7 @@ class Viper_Tests_ViperListPlugin_ConvertListTypesTest extends AbstractViperList
         $this->clickTopToolbarButton('listUL');
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
         $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1 %1%</li><li>item 2 %2%</li><li>item 3</li><li>item 4 %3%</li></ul>');
-   
+
         //Selecting the whole list item and using inline toolbar.
         $this->useTest(1);
         $this->selectKeyword(2);
@@ -62,7 +62,7 @@ class Viper_Tests_ViperListPlugin_ConvertListTypesTest extends AbstractViperList
         $this->clickInlineToolbarButton('listUL');
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
         $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1 %1%</li><li>item 2 %2%</li><li>item 3</li><li>item 4 %3%</li></ul>');
-   
+
     }//end testConvertListItem()
 
 
@@ -85,7 +85,7 @@ class Viper_Tests_ViperListPlugin_ConvertListTypesTest extends AbstractViperList
         $this->clickTopToolbarButton('listUL');
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
         $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1 %1%</li><li>item 2 %2%</li><li>item 3</li><li>item 4 %3%</li></ul>');
-   
+
         //Using inline toolbar
         $this->clickInlineToolbarButton('listOL');
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
@@ -93,7 +93,7 @@ class Viper_Tests_ViperListPlugin_ConvertListTypesTest extends AbstractViperList
         $this->clickInlineToolbarButton('listUL');
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
         $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1 %1%</li><li>item 2 %2%</li><li>item 3</li><li>item 4 %3%</li></ul>');
-   
+
     }//end testConvertingAllItemsInAList()
 
 
@@ -115,7 +115,7 @@ class Viper_Tests_ViperListPlugin_ConvertListTypesTest extends AbstractViperList
         $this->clickTopToolbarButton('listUL');
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
         $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1 %1%</li><li>item 2 %2%</li><li>item 3</li><li>item 4 %3%</li></ul>');
-   
+
         //Using the inline toolbar
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('listOL');
@@ -124,7 +124,7 @@ class Viper_Tests_ViperListPlugin_ConvertListTypesTest extends AbstractViperList
         $this->clickInlineToolbarButton('listUL');
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
         $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1 %1%</li><li>item 2 %2%</li><li>item 3</li><li>item 4 %3%</li></ul>');
-   
+
     }//end testConvertFirstItemInList()
 
 
@@ -144,18 +144,18 @@ class Viper_Tests_ViperListPlugin_ConvertListTypesTest extends AbstractViperList
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
         $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1 %1%</li><li>item 2 %2%</li><li>item 3</li></ul><ol><li>item 4 %3%</li></ol>');
         $this->clickTopToolbarButton('listUL');
-        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
         $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1 %1%</li><li>item 2 %2%</li><li>item 3</li><li>item 4 %3%</li></ul>');
-   
+
         //Using the inline toolbar
         $this->selectKeyword(3);
         $this->clickInlineToolbarButton('listOL');
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
         $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1 %1%</li><li>item 2 %2%</li><li>item 3</li></ul><ol><li>item 4 %3%</li></ol>');
         $this->clickInlineToolbarButton('listUL');
-        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
         $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1 %1%</li><li>item 2 %2%</li><li>item 3</li><li>item 4 %3%</li></ul>');
-   
+
     }//end testConvertFirstItemInList()
 
 
@@ -177,7 +177,7 @@ class Viper_Tests_ViperListPlugin_ConvertListTypesTest extends AbstractViperList
         $this->clickTopToolbarButton('listUL');
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
         $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1<br /><ul><li>sub item 1 %1%</li></ul><ul><li>sub item 2 %2%</li></ul></li><li>item 2</li><li>item 3</li><li>item 4</li></ul>');
-   
+
         //Using inline toolbar
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('listOL');
@@ -186,7 +186,7 @@ class Viper_Tests_ViperListPlugin_ConvertListTypesTest extends AbstractViperList
         $this->clickInlineToolbarButton('listUL');
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
         $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1<br /><ul><li>sub item 1 %1%</li></ul><ul><li>sub item 2 %2%</li></ul></li><li>item 2</li><li>item 3</li><li>item 4</li></ul>');
-   
+
     }//end testConvertListFromUnorderedToOrderedWithSubList()
 
 
@@ -209,7 +209,7 @@ class Viper_Tests_ViperListPlugin_ConvertListTypesTest extends AbstractViperList
         $this->clickTopToolbarButton('listUL');
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
         $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ul></li><li>item 2</li><li>item 3</li><li>item 4</li></ul>');
-   
+
         //Using inline toolbar
         $this->clickInlineToolbarButton('listOL');
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
@@ -217,7 +217,7 @@ class Viper_Tests_ViperListPlugin_ConvertListTypesTest extends AbstractViperList
         $this->clickInlineToolbarButton('listUL');
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
         $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ul></li><li>item 2</li><li>item 3</li><li>item 4</li></ul>');
-   
+
     }//end testConvertAllItemsInASubList()
 
 
@@ -240,15 +240,15 @@ class Viper_Tests_ViperListPlugin_ConvertListTypesTest extends AbstractViperList
         $this->clickTopToolbarButton('listUL');
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, FALSE);
         $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ul></li><li>item 2</li><li>item 3</li><li>item 4</li></ul>');
-   
+
         //Using inline toolbar
         $this->clickInlineToolbarButton('listOL');
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, FALSE);
-        $this->assertHTMLMatch('<p>List convert test:</p><ol><li>item 1</li><li>item 2 %1%<br /><ol><li>sub item 1 %2%</li><li>sub item 2 %3%</li></ol></li><li>item 3</li><li>item 4</li></ol>');
+        $this->assertHTMLMatch('<p>List convert test:</p><ol><li>item 1<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ol></li><li>item 2</li><li>item 3</li><li>item 4</li></ol>');
         $this->clickInlineToolbarButton('listUL');
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, FALSE);
         $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ul></li><li>item 2</li><li>item 3</li><li>item 4</li></ul>');
-   
+
     }//end testConvertAllItemsInAListAndSubList()
 
 
@@ -266,13 +266,13 @@ class Viper_Tests_ViperListPlugin_ConvertListTypesTest extends AbstractViperList
         $this->clickTopToolbarButton('listOL');
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
         $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1 %1%</li></ul><ol><li>item 2 %2%</li></ol><ul><li>item 3</li><li>item 4 %3%</li></ul>');
-       
+
         $this->clickTopToolbarButton('historyUndo');
         $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1 %1%</li><li>item 2 %2%</li><li>item 3</li><li>item 4 %3%</li></ul>');
-   
+
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1 %1%</li></ul><ol><li>item 2 %2%</li></ol><ul><li>item 3</li><li>item 4 %3%</li></ul>');
-       
+
     }//end testConvertListItemAndClickingUndo()
 
 

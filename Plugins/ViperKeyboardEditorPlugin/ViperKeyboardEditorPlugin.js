@@ -903,7 +903,7 @@ ViperKeyboardEditorPlugin.prototype = {
                         var startItem = ViperUtil.getParents(startNode, 'li')[0];
                         if (startNode === range._getFirstSelectableChild(startItem)) {
                             var elements = ViperUtil.getElementsBetween(startItem, endItem);
-                            elements.push(startItem, endItem, range.commonAncestorContainer);
+                            elements.push(startItem, endItem);
 
                             // Find a new node we can put caret in.
                             var newOffset = 0;
