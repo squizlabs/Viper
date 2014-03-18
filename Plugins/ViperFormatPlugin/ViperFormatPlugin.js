@@ -480,7 +480,7 @@ ViperFormatPlugin.prototype = {
             } else {
                 tools.disableButton('vitpFormats');
             }
-        } else if ((!currentElement || ViperUtil.inArray(ViperUtil.getTagName(currentElement), ignoredTags) === false) && this.isWholeBlockSelection(data.range)) {
+        } else if ((!currentElement || (ViperUtil.isBlockElement(currentElement) === true && ViperUtil.inArray(ViperUtil.getTagName(currentElement), ignoredTags) === false)) && this.isWholeBlockSelection(data.range)) {
             var pOnly = this._selectionHasPTagsOnly(data.range);
 
             for (var tag in formatButtons) {
@@ -598,6 +598,14 @@ ViperFormatPlugin.prototype = {
 
         // Listen for the main toolbar update and update the statuses of the buttons.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperFormatPlugin', function(data) {
+            // Need to have a time out here so that the inline toolbar has time to update it self as we use its lineage
+            // to determine button statuses.
+            setTimeout(function() {
+                updateToolbar(data);
+            }, 10);
+        });
+
+        var updateToolbar = function(data) {
             var nodeSelection = data.range.getNodeSelection(null, true);
             var startNode = data.range.getStartNode();
             var endNode   = data.range.getEndNode();
@@ -923,7 +931,7 @@ ViperFormatPlugin.prototype = {
                     }
                 }
             }//end if
-        });
+        };
 
     },
 
