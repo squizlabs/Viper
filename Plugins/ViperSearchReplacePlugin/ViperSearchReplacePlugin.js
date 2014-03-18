@@ -166,6 +166,9 @@ ViperSearchReplacePlugin.prototype = {
         var val = tools.getItem('ViperSearchPlugin:searchInput').getValue();
         tools.getItem('ViperSearchPlugin:searchInput').setValue('');
         tools.getItem('ViperSearchPlugin:searchInput').setValue(val);
+        val = tools.getItem('ViperSearchPlugin:replaceInput').getValue();
+        tools.getItem('ViperSearchPlugin:replaceInput').setValue('');
+        tools.getItem('ViperSearchPlugin:replaceInput').setValue(val);
 
         // Select the original range.
         ViperSelection.addRange(clone);
