@@ -14,12 +14,12 @@ abstract class AbstractViperImagePluginUnitTest extends AbstractViperUnitTest
      *
      * Returns the rectangle of the image after resize.
      *
+     * @param integer $size       The new width of the image.
      * @param integer $imageIndex The image index on the page.
-     * @param integer $width      The new width of the image.
      *
      * @return array
      */
-    public function resizeImage($imageIndex, $size)
+    public function resizeImage($size, $imageIndex=0)
     {
         $selector = 'img';
 

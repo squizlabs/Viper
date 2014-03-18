@@ -6,89 +6,96 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListTest extends AbstractViper
 {
 
     /**
-     * Test that when you click inside a list item, the outdent and indent icon works.
+     * Test outdent and indent a list item works.
      *
      * @return void
      */
     public function testOutdentAndIndentListItem()
     {
-        //Test unordered list
+        //Test unordered list when clicking inside a list item
+        $this->useTest(1);
         $this->moveToKeyword(2);
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
         $this->clickTopToolbarButton('listOutdent');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li></ul><p>second item %2%</p><ul><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li></ul><p>second item %2%</p><ul><li>third %3% item</li></ul>');
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
 
-        //Test unordered list
-        $this->moveToKeyword(5);
+        //Test unordered list when selecting a word in the list item and using the top toolbar icons
+        $this->selectKeyword(2);
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+        $this->clickTopToolbarButton('listOutdent');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li></ul><p>second item %2%</p><ul><li>third %3% item</li></ul>');
+        $this->clickTopToolbarButton('listIndent');
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
+
+        //Test unordered list when selecting a word in the list item and using the inline toolbar icons
+        $this->clickInlineToolbarButton('listOutdent');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li></ul><p>second item %2%</p><ul><li>third %3% item</li></ul>');
+        $this->clickTopToolbarButton('listIndent');
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
+
+        //Test unordered list when selecting the whole list item
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+        $this->clickInlineToolbarButton('listOutdent');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li></ul><p>second item %2%</p><ul><li>third %3% item</li></ul>');
+        $this->clickTopToolbarButton('listIndent');
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
+
+        //Test unordered list using keyboard shortcuts
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li></ul><p>second item %2%</p><ul><li>third %3% item</li></ul>');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
+
+        //Test ordered list when clicking inside a list item
+        $this->useTest(2);
+        $this->moveToKeyword(2);
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
         $this->clickTopToolbarButton('listOutdent');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li></ol><p>second item %5%</p><ol><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li></ol><p>second item %2%</p><ol><li>third %3% item</li></ol>');
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ol>');
+
+        //Test ordered list with top toolbar
+        $this->selectKeyword(2);
+        $this->clickInlineToolbarButton('listOutdent');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li></ol><p>second item %2%</p><ol><li>third %3% item</li></ol>');
+        $this->clickTopToolbarButton('listIndent');
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ol>');
+
+        //Test ordered list when selecting the whole list item
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->clickInlineToolbarButton('listOutdent');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li></ol><p>second item %2%</p><ol><li>third %3% item</li></ol>');
+        $this->clickTopToolbarButton('listIndent');
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ol>');
+
+        //Test ordered list using keyboard shortcuts
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>XAX first item</li></ol><p>second item XBX</p><ol><li>third XCX item</li></ol>');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ol>');
 
     }//end testOutdentAndIndentListItem()
-
-
-	/**
-     * Test that when you select a word in a list item, the outdent and indent icon works.
-     *
-     * @return void
-     */
-    public function testOutdentAndIndentWithTextSelection()
-    {
-        //Test unordered list
-        $this->selectKeyword(2);
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li></ul><p>second item %2%</p><ul><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-
-        //Test unordered list
-        $this->selectKeyword(5);
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li></ol><p>second item %5%</p><ol><li>third %6% item</li></ol>');
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-
-    }//end testOutdentAndIndentWithTextSelection()
-
-
-    /**
-     * Test that when you select a list item, the outdent and indent icon works.
-     *
-     * @return void
-     */
-    public function testOutdentAndIndentWhenSelectingListItem()
-    {
-        //Test unordered list
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li></ul><p>second item %2%</p><ul><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-
-        //Test unordered list
-        $this->selectKeyword(5);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li></ol><p>second item %5%</p><ol><li>third %6% item</li></ol>');
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-
-    }//end testOutdentAndIndentWhenSelectingListItem()
 
 
     /**
@@ -96,193 +103,174 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListTest extends AbstractViper
      *
      * @return void
      */
-    public function testOutdentAndIndentWhenSelectingList()
+    public function testOutdentAndIndentAllItemsInAList()
     {
-        //Test unordered list
+        //Test unordered list using icons
+        $this->useTest(1);
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
         $this->clickInlineToolbarButton('listOutdent');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
-        $this->assertHTMLMatch('<p>Unordered List:</p><p>%1% first item</p><p>second item %2%</p><p>third %3% item</p><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><p>%1% first item</p><p>second item %2%</p><p>third %3% item</p>');
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
 
-        //Test unordered list
-        $this->selectKeyword(5);
+        //Test unordered list using keyboard shortcuts
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertHTMLMatch('<p>Unordered List:</p><p>%1% first item</p><p>second item %2%</p><p>third %3% item</p>');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
+
+        //Test ordered list using icons
+        $this->useTest(2);
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
         $this->clickInlineToolbarButton('listOutdent');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><p>%4% first item</p><p>second item %5%</p><p>third %6% item</p>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><p>%1% first item</p><p>second item %2%</p><p>third %3% item</p>');
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ul><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ul>');
-
-    }//end testOutdentAndIndentWhenSelectingList()
-
-
-    /**
-     * Test that when you click inside a list item, the keyboard shortcuts work to outdent and indent the item.
-     *
-     * @return void
-     */
-    public function testOutdentAndIndentListItemUsingKeyboardShorts()
-    {
-        //Test unordered list
-        $this->moveToKeyword(2);
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li></ul><p>second item %2%</p><ul><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-
-        //Test unordered list
-        $this->moveToKeyword(5);
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li></ol><p>second item %5%</p><ol><li>third %6% item</li></ol>');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-
-    }//end testOutdentAndIndentListItemUsingKeyboardShorts()
-
-
-    /**
-     * Test that when you select a word in a list item, the keyboard shortcuts work to outdent and indent the item.
-     *
-     * @return void
-     */
-    public function testOutdentAndIndentWithTextSelectionUsingKeyboardShortcuts()
-    {
-        //Test unordered list
-        $this->selectKeyword(2);
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li></ul><p>second item %2%</p><ul><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-
-        //Test unordered list
-        $this->selectKeyword(5);
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li></ol><p>second item %5%</p><ol><li>third %6% item</li></ol>');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-
-    }//end testOutdentAndIndentWithTextSelectionUsingKeyboardShortcuts()
-
-
-    /**
-     * Test that when you select a list item, the keyboard shortcuts work to outdent and indent the item.
-     *
-     * @return void
-     */
-    public function testOutdentAndIndentWhenSelectingListItemUsingKeyboardShortcuts()
-    {
-        //Test unordered list
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li></ul><p>second item %2%</p><ul><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-
-        //Test unordered list
-        $this->selectKeyword(5);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li></ol><p>second item %5%</p><ol><li>third %6% item</li></ol>');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-
-    }//end testOutdentAndIndentWhenSelectingListItemUsingKeyboardShortcuts()
-
-
-    /**
-     * Test that when you select a list, the keyboard shortcuts work to outdent and indent icon works.
-     *
-     * @return void
-     */
-    public function testOutdentAndIndentWhenSelectingListUsingKeyboardShortcuts()
-    {
-        //Test unordered list
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
-        $this->assertHTMLMatch('<p>Unordered List:</p><p>%1% first item</p><p>second item %2%</p><p>third %3% item</p><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
 
-        //Test unordered list
-        $this->selectKeyword(5);
+        //Test ordered list using keyboard shortcuts
+        $this->useTest(2);
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><p>%4% first item</p><p>second item %5%</p><p>third %6% item</p>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><p>%1% first item</p><p>second item %2%</p><p>third %3% item</p>');
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ul><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ul>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
 
-    }//end testOutdentAndIndentWhenSelectingListUsingKeyboardShortcuts()
+    }//end testOutdentAndIndentAllItemsInAList()
 
 
     /**
-     * Test that outdent and indent works for the first item in the list using the keyboard shortcut.
+     * Test that outdent and indent works for the first item in the list.
      *
      * @return void
      */
-    public function testOutdentAndIndentFirstItemUsingKeyboardShortcut()
+    public function testOutdentAndIndentFirstItemInList()
     {
-        //Test unordered list
+        //Test unordered list using keyboard shortcuts
+        $this->useTest(1);
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><p>%1% first item</p><ul><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><p>%1% first item</p><ul><li>second item %2%</li><li>third %3% item</li></ul>');
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
+
+        //Test unordered list using inline toolbar icons
+        $this->clickInlineToolbarButton('listOutdent');
+        $this->assertHTMLMatch('<p>Unordered List:</p><p>%1% first item</p><ul><li>second item %2%</li><li>third %3% item</li></ul>');
+        $this->clickTopToolbarButton('listIndent');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
+
+        //Test unordered list using top toolbar icons
+        $this->clickTopToolbarButton('listOutdent');
+        $this->assertHTMLMatch('<p>Unordered List:</p><p>%1% first item</p><ul><li>second item %2%</li><li>third %3% item</li></ul>');
+        $this->clickTopToolbarButton('listIndent');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
 
         //Test ordered list
-        $this->selectKeyword(4);
+        $this->useTest(2);
+        $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><p>%4% first item</p><ol><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><p>%1% first item</p><ol><li>second item %2%</li><li>third %3% item</li></ol>');
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ol>');
 
-    }//end testOutdentAndIndentFirstItemUsingKeyboardShortcut()
+        //Test ordered list using inline toolbar icons
+        $this->clickInlineToolbarButton('listOutdent');
+        $this->assertHTMLMatch('<p>Ordered List:</p><p>%1% first item</p><ol><li>second item %2%</li><li>third %3% item</li></ol>');
+        $this->clickTopToolbarButton('listIndent');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ol>');
+
+        //Test unordered list using top toolbar icons
+        $this->clickTopToolbarButton('listOutdent');
+        $this->assertHTMLMatch('<p>Ordered List:</p><p>%1% first item</p><ol><li>second item %2%</li><li>third %3% item</li></ol>');
+        $this->clickTopToolbarButton('listIndent');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ol>');
+
+    }//end testOutdentAndIndentFirstItemInList()
 
 
     /**
-     * Test that outdent and indent works for the last item in the list using the keyboard shortcut.
+     * Test that outdent and indent works for the last item in the list.
      *
      * @return void
      */
-    public function testOutdentAndIndentLastItemUsingKeyboardShortcut()
+    public function testOutdentAndIndentLastItem()
     {
         //Test unordered list
+        $this->useTest(1);
         $this->selectKeyword(3);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li></ul><p>third %3% item</p><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li></ul><p>third %3% item</p>');
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
 
         //Test ordered list
-        $this->selectKeyword(6);
+        $this->useTest(2);
+        $this->selectKeyword(3);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li></ol><p>third %6% item</p>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>second item %2%</li></ol><p>third %3% item</p>');
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ol>');
 
-    }//end testOutdentAndIndentLastItemUsingKeyboardShortcut()
+    }//end testOutdentAndIndentLastItem()
+
+
+    /**
+     * Test that indent creates a sub list and outdent adds it back to the master list.
+     *
+     * @return void
+     */
+    public function testIndentAndOutdentLastListItem()
+    {
+        //Test unordered list using keyboard shortcuts
+        $this->useTest(1);
+        $this->moveToKeyword(3);
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+        $this->sikuli->keyDown('Key.TAB');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%<ul><li>third %3% item</li></ul></li></ul>');
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
+
+        //Test unordered list using icons
+        $this->clickTopToolbarButton('listIndent');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%<ul><li>third %3% item</li></ul></li></ul>');
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+        $this->clickTopToolbarButton('listOutdent');
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
+
+        //Test ordered list using keyboard shortcuts
+        $this->useTest(2);
+        $this->moveToKeyword(3);
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->sikuli->keyDown('Key.TAB');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>second item %2%<ol><li>third %3% item</li></ol></li></ol>');
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ol>');
+
+        //Test ordered list using icons
+        $this->clickTopToolbarButton('listIndent');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>second item %2%<ol><li>third %3% item</li></ol></li></ol>');
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->clickTopToolbarButton('listOutdent');
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ol>');
+
+    }//end testIndentAndOutdentLastListItem()
 
 
     /**
@@ -293,32 +281,35 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListTest extends AbstractViper
     public function testOutdentAndIndentListItemsMultipleTimes()
     {
         //Test unordered list
+        $this->useTest(1);
         $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><p>%1% first item</p><p>second item %2%</p><ul><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><p>%1% first item</p><p>second item %2%</p><ul><li>third %3% item</li></ul>');
         $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
         $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><p>%1% first item</p><p>second item %2%</p><ul><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><p>%1% first item</p><p>second item %2%</p><ul><li>third %3% item</li></ul>');
         $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
 
         //Test ordered list
-        $this->selectKeyword(4, 5);
+        $this->useTest(2);
+
+        $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><p>%4% first item</p><p>second item %5%</p><ol><li>third %6% item</li></ol>');
-        $this->selectKeyword(4, 5);
+        $this->assertHTMLMatch('<p>Ordered List:</p><p>%1% first item</p><p>second item %2%</p><ol><li>third %3% item</li></ol>');
+        $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-        $this->selectKeyword(4, 5);
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ol>');
+        $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><p>%4% first item</p><p>second item %5%</p><ol><li>third %6% item</li></ol>');
-        $this->selectKeyword(4, 5);
+        $this->assertHTMLMatch('<p>Ordered List:</p><p>%1% first item</p><p>second item %2%</p><ol><li>third %3% item</li></ol>');
+        $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ol>');
 
     }//end testOutdentAndIndentListItemsMultipleTimes()
 
@@ -331,6 +322,8 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListTest extends AbstractViper
     public function testCannotIndentFirstItemInList()
     {
         //Test unordered list
+        $this->useTest(1);
+
         $this->moveToKeyword(1);
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
         // Make sure multiple tabs dont cause issues.
@@ -339,10 +332,12 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListTest extends AbstractViper
         $this->sikuli->keyDown('Key.TAB');
         $this->sikuli->keyDown('Key.TAB');
 
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
 
         //Test unordered list
-        $this->moveToKeyword(4);
+        $this->useTest(2);
+
+        $this->moveToKeyword(1);
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
         // Make sure multiple tabs dont cause issues.
         $this->sikuli->keyDown('Key.TAB');
@@ -350,65 +345,9 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListTest extends AbstractViper
         $this->sikuli->keyDown('Key.TAB');
         $this->sikuli->keyDown('Key.TAB');
 
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ol>');
 
     }//end testCannotIndentFirstItemInList()
-
-
-    /**
-     * Test that indent creates a sub list and outdent adds it back to the master list for the last item in the list.
-     *
-     * @return void
-     */
-    public function testIndentAndOutdentLastItemInTheListUsingKeyboardShortcut()
-    {
-        //Test unordered list
-        $this->moveToKeyword(3);
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%<ul><li>third %3% item</li></ul></li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-
-        //Test ordered list
-        $this->moveToKeyword(6);
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%<ol><li>third %6% item</li></ol></li></ol>');
-        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-
-    }//end testIndentLastItemInTheListUsingKeyboardShortcut()
-
-
-    /**
-     * Test that indent works for last item in the list using the indent icon.
-     *
-     * @return void
-     */
-    public function testIndentLastItemInTheListUsingIndentIcon()
-    {
-        //Test unordered list
-        $this->moveToKeyword(3);
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%<ul><li>third %3% item</li></ul></li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-
-        //Test ordered list
-        $this->moveToKeyword(6);
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%<ol><li>third %6% item</li></ol></li></ol>');
-        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-
-    }//end testIndentLastItemInTheListUsingIndentIcon()
 
 
     /**
@@ -419,22 +358,26 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListTest extends AbstractViper
     public function testIndentAndOutdentKeepsSelectionAndStylesApplied()
     {
         //Test unordered list
+        $this->useTest(1);
+
         $this->selectKeyword(2, 3);
         $this->sikuli->keyDown('Key.TAB');
         $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item<ul><li>second item <strong>%2%</strong></li><li><strong>third %3%</strong> item</li></ul></li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item<ul><li>second item <strong>%2%</strong></li><li><strong>third %3%</strong> item</li></ul></li></ul>');
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
 
         //Test ordered list
-        $this->selectKeyword(5, 6);
+        $this->useTest(2);
+
+        $this->selectKeyword(2, 3);
         $this->sikuli->keyDown('Key.TAB');
         $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item<ol><li>second item <strong>%5%</strong></li><li><strong>third %6%</strong> item</li></ol></li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item<ol><li>second item <strong>%2%</strong></li><li><strong>third %3%</strong> item</li></ol></li></ol>');
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ol>');
 
     }//end testIndentAndOutdentKeepsSelectionAndStylesApplied()
 
@@ -447,83 +390,206 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListTest extends AbstractViper
     public function testShiftTagInNonListItem()
     {
         //Test unordered list
+        $this->useTest(1);
+
         $this->moveToKeyword(1);
         $this->sikuli->keyDown('Key.UP');
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
 
         //Test ordered list
-        $this->moveToKeyword(4);
+        $this->useTest(2);
+
+        $this->moveToKeyword(1);
         $this->sikuli->keyDown('Key.UP');
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ol>');
 
     }//end testShiftTagInNonListItem()
 
 
     /**
-     * Test indenting and outdenting items in an unordered list using keyboard navigation only.
+     * Test indenting and outdenting items in a list using keyboard navigation only.
      *
      * @return void
      */
-    public function testListKeyboardNavForUnorderedList()
+    public function testListKeyboardNavForList()
     {
+        //Test unordered list
+        $this->useTest(1);
+
         $this->moveToKeyword(2);
+        $this->sikuli->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.DOWN');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item<ul><li>second item %2%</li><li>third %3% item</li></ul></li></ul>');
+
+        $this->sikuli->keyDown('Key.UP');
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%<ul><li>third %3% item</li></ul></li></ul>');
 
         $this->sikuli->keyDown('Key.TAB');
         $this->sikuli->keyDown('Key.DOWN');
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item<ul><li>second item %2%</li><li>third %3% item</li></ul></li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item<ul><li>second item %2%<ul><li>third %3% item</li></ul></li></ul></li></ul>');
 
         $this->sikuli->keyDown('Key.UP');
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%<ul><li>third %3% item</li></ul></li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%<ul><li>third %3% item</li></ul></li></ul>');
+
+        //Test ordered list
+        $this->useTest(2);
+
+        $this->moveToKeyword(2);
+        $this->sikuli->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.DOWN');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item<ol><li>second item %2%</li><li>third %3% item</li></ol></li></ol>');
+
+        $this->sikuli->keyDown('Key.UP');
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>second item %2%<ol><li>third %3% item</li></ol></li></ol>');
 
         $this->sikuli->keyDown('Key.TAB');
         $this->sikuli->keyDown('Key.DOWN');
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item<ul><li>second item %2%<ul><li>third %3% item</li></ul></li></ul></li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item<ol><li>second item %2%<ol><li>third %3% item</li></ol></li></ol></li></ol>');
 
         $this->sikuli->keyDown('Key.UP');
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%<ul><li>third %3% item</li></ul></li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>second item %2%<ol><li>third %3% item</li></ol></li></ol>');
 
-    }//end testListKeyboardNavForUnorderedList()
+    }//end testListKeyboardNavForList()
 
 
     /**
-     * Test indenting and outdenting items in an ordered list using keyboard navigation only.
+     * Test that you can outdent all items in the sub list and indent them again.
      *
      * @return void
      */
-    public function testListKeyboardNavForOrderedList()
+    public function testOutdentAllSubListItemsAndIndentAgain()
     {
-        $this->moveToKeyword(5);
-
-        $this->sikuli->keyDown('Key.TAB');
-        $this->sikuli->keyDown('Key.DOWN');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item<ol><li>second item %5%</li><li>third %6% item</li></ol></li></ol>');
-
-        $this->sikuli->keyDown('Key.UP');
+        //Test unordered list with keyboard shortcuts
+        $this->useTest(3);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(2);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%<ol><li>third %6% item</li></ol></li></ol>');
-
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item</li><li>second item</li><li>first sub item %1%</li><li>second sub item %2%</li><li>third sub item %3%</li><li>third item</li></ul>');
         $this->sikuli->keyDown('Key.TAB');
-        $this->sikuli->keyDown('Key.DOWN');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item<ol><li>second item %5%<ol><li>third %6% item</li></ol></li></ol></li></ol>');
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item</li><li>second item<br /><ul><li>first sub item %1%</li><li>second sub item %2%</li><li>third sub item %3%</li></ul></li><li>third item</li></ul>');
 
-        $this->sikuli->keyDown('Key.UP');
+        //Test unordered list with inline toolbar icons
+        $this->clickInlineToolbarButton('listOutdent');
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item</li><li>second item</li><li>first sub item %1%</li><li>second sub item %2%</li><li>third sub item %3%</li><li>third item</li></ul>');
+        $this->clickInlineToolbarButton('listIndent');
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item</li><li>second item<br /><ul><li>first sub item %1%</li><li>second sub item %2%</li><li>third sub item %3%</li></ul></li><li>third item</li></ul>');
+
+        //Test unordered list with top toolbar icons
+        $this->clickTopToolbarButton('listOutdent');
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item</li><li>second item</li><li>first sub item %1%</li><li>second sub item %2%</li><li>third sub item %3%</li><li>third item</li></ul>');
+        $this->clickTopToolbarButton('listIndent');
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item</li><li>second item<br /><ul><li>first sub item %1%</li><li>second sub item %2%</li><li>third sub item %3%</li></ul></li><li>third item</li></ul>');
+
+        //Test ordered list with keyboard shortcuts
+        $this->useTest(4);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(2);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%<ol><li>third %6% item</li></ol></li></ol>');
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item</li><li>second item</li><li>first sub item %1%</li><li>second sub item %2%</li><li>third sub item %3%</li><li>third item</li></ol>');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item</li><li>second item<br /><ol><li>first sub item %1%</li><li>second sub item %2%</li><li>third sub item %3%</li></ol></li><li>third item</li></ol>');
 
-    }//end testListKeyboardNavForOrderedList()
+        //Test ordered list with inline toolbar icons
+        $this->clickInlineToolbarButton('listOutdent');
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item</li><li>second item</li><li>first sub item %1%</li><li>second sub item %2%</li><li>third sub item %3%</li><li>third item</li></ol>');
+        $this->clickInlineToolbarButton('listIndent');
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item</li><li>second item<br /><ol><li>first sub item %1%</li><li>second sub item %2%</li><li>third sub item %3%</li></ol></li><li>third item</li></ol>');
 
+        //Test ordered list with top toolbar icons
+        $this->clickTopToolbarButton('listOutdent');
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item</li><li>second item</li><li>first sub item %1%</li><li>second sub item %2%</li><li>third sub item %3%</li><li>third item</li></ol>');
+        $this->clickTopToolbarButton('listIndent');
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item</li><li>second item<br /><ol><li>first sub item %1%</li><li>second sub item %2%</li><li>third sub item %3%</li></ol></li><li>third item</li></ol>');
+
+    }//end testOutdentAllSubListItemsAndIndentAgain()
+
+
+    /**
+     * Test outdent and indent first item in a sub lit.
+     *
+     * @return void
+     */
+    public function testOutdentAndIndentFirstItemInSubList()
+    {
+        //Test unordered list with keyboard shortcuts
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item</li><li>second item</li><li>first sub item %1%<ul><li>second sub item %2%</li><li>third sub item %3%</li></ul></li><li>third item</li></ul>');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item</li><li>second item<br /><ul><li>first sub item %1%</li><li>second sub item %2%</li><li>third sub item %3%</li></ul></li><li>third item</li></ul>');
+
+        //Test unordered list with inline toolbar icons
+        $this->clickInlineToolbarButton('listOutdent');
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item</li><li>second item</li><li>first sub item %1%<ul><li>second sub item %2%</li><li>third sub item %3%</li></ul></li><li>third item</li></ul>');
+        $this->clickInlineToolbarButton('listIndent');
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item</li><li>second item<br /><ul><li>first sub item %1%</li><li>second sub item %2%</li><li>third sub item %3%</li></ul></li><li>third item</li></ul>');
+
+        //Test unordered list with top toolbar icons
+        $this->clickTopToolbarButton('listOutdent');
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item</li><li>second item</li><li>first sub item %1%<ul><li>second sub item %2%</li><li>third sub item %3%</li></ul></li><li>third item</li></ul>');
+        $this->clickTopToolbarButton('listIndent');
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item</li><li>second item<br /><ul><li>first sub item %1%</li><li>second sub item %2%</li><li>third sub item %3%</li></ul></li><li>third item</li></ul>');
+
+        //Test ordered list with keyboard shortcuts
+        $this->useTest(4);
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item</li><li>second item</li><li>first sub item %1%<ol><li>second sub item %2%</li><li>third sub item %3%</li></ol></li><li>third item</li></ol>');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item</li><li>second item<br /><ol><li>first sub item %1%</li><li>second sub item %2%</li><li>third sub item %3%</li></ol></li><li>third item</li></ol>');
+
+        //Test ordered list with inline toolbar icons
+        $this->clickInlineToolbarButton('listOutdent');
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item</li><li>second item</li><li>first sub item %1%<ol><li>second sub item %2%</li><li>third sub item %3%</li></ol></li><li>third item</li></ol>');
+        $this->clickInlineToolbarButton('listIndent');
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item</li><li>second item<br /><ol><li>first sub item %1%</li><li>second sub item %2%</li><li>third sub item %3%</li></ol></li><li>third item</li></ol>');
+
+        //Test ordered list with top toolbar icons
+        $this->clickTopToolbarButton('listOutdent');
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item</li><li>second item</li><li>first sub item %1%<ol><li>second sub item %2%</li><li>third sub item %3%</li></ol></li><li>third item</li></ol>');
+        $this->clickTopToolbarButton('listIndent');
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item</li><li>second item<br /><ol><li>first sub item %1%</li><li>second sub item %2%</li><li>third sub item %3%</li></ol></li><li>third item</li></ol>');
+
+    }//end testOutdentAndIndentFirstItemInSubList()
 
 }//end class
 
