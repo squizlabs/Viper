@@ -1316,14 +1316,17 @@ ViperCoreStylesPlugin.prototype = {
         this.viper.ViperTools.setButtonInactive('vitpBold');
         this.viper.ViperTools.setButtonInactive('vitpItalic');
 
+        // List of tags where the bold and italic icons will not be shown if they are part or inside of the selection.
+        var ignoredTags = ['a', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
         var activeStates = {};
         for (var i = 0; i < data.lineage.length; i++) {
-            if (ViperUtil.isTag(data.lineage[i], 'a') === true) {
-                // Dont want to show style buttons for links.
+            var tagName = ViperUtil.getTagName(data.lineage[i]);
+            if (ViperUtil.inArray(tagName, ignoredTags) === true) {
+                // Dont want to show style buttons for these tags.
                 return;
-            } else if (ViperUtil.isTag(data.lineage[i], 'strong') === true) {
+            } else if (tagName === 'strong') {
                 this.viper.ViperTools.setButtonActive('vitpBold');
-            } else if (ViperUtil.isTag(data.lineage[i], 'em') === true) {
+            } else if (tagName === 'em') {
                 this.viper.ViperTools.setButtonActive('vitpItalic');
             }
         }
