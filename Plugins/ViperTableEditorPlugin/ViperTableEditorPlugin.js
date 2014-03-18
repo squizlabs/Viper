@@ -222,6 +222,8 @@ ViperTableEditorPlugin.prototype = {
                 }
 
                 self.setTableHeaders(table);
+            } else if (data.element && ViperUtil.isTag(data.element, 'table') === true) {
+                self.setTableHeaders(data.element);
             }
         });
 
