@@ -504,7 +504,12 @@ ViperListPlugin.prototype = {
         range    = range || this.viper.getViperRange();
         listType = listType || 'ul';
 
-        var firstParent = ViperUtil.getFirstBlockParent(range.getStartNode());
+        var node = range.getStartNode() || range.getNodeSelection();
+        if (!node) {
+            node = range.startContainer;
+        }
+
+        var firstParent = ViperUtil.getFirstBlockParent(node);
         var listItems   = [];
         if (!firstParent || ViperUtil.isTag(firstParent, 'li') === true) {
             listItems = this._getListItemsFromRange(range, testOnly);

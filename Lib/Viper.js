@@ -4659,9 +4659,13 @@ Viper.prototype = {
         var callback = callbacks.shift();
         if (callback) {
             var self   = this;
-            var retVal = callback.call(this, data, function(retVal) {
-                self._fireCallbacks(callbacks, data, doneCallback, retVal);
-            });
+            try {
+                var retVal = callback.call(this, data, function(retVal) {
+                    self._fireCallbacks(callbacks, data, doneCallback, retVal);
+                });
+            } catch (e) {
+                console.error(e);
+            }
 
             return this._fireCallbacks(callbacks, data, doneCallback, retVal);
         }
