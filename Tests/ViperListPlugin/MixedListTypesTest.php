@@ -195,7 +195,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesTest extends AbstractViperListPl
         $this->useTest(1);
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('listOL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
         $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<br /><ol><li>first sub item</li></ol><p>second sub item %2%</p></li><li>second item %3%</li></ul>');        
         $this->clickTopToolbarButton('listOL');
         $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<br /><ol><li>first sub item</li><li>second sub item %2%</li></ol></li><li>second item %3%</li></ul>');
@@ -203,7 +203,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesTest extends AbstractViperListPl
 
         //Test ordered sub list with inline toolbar icon
         $this->clickInlineToolbarButton('listOL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
         $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<br /><ol><li>first sub item</li></ol><p>second sub item %2%</p></li><li>second item %3%</li></ul>');
         $this->clickInlineToolbarButton('listOL');
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
@@ -213,7 +213,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesTest extends AbstractViperListPl
         $this->useTest(2);
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('listUL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
         $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<br /><ul><li>first sub item</li></ul></li><li>second sub item %2%</li><li>second item %3%</li></ol>');
         $this->clickTopToolbarButton('listUL');
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
@@ -221,7 +221,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesTest extends AbstractViperListPl
 
         //Test unordered sub list with inline toolbar icon
         $this->clickInlineToolbarButton('listUL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
         $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<br /><ul><li>first sub item</li></ul></li><li>second sub item %2%</li><li>second item %3%</li></ol>');
         $this->clickInlineToolbarButton('listUL');
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
@@ -241,7 +241,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesTest extends AbstractViperListPl
         $this->useTest(1);
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('listOL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
         $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<br /><ol><li>first sub item</li></ol><p>second sub item %2%</p></li><li>second item %3%</li></ul>');        
         $this->clickTopToolbarButton('listUL');
         $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<br /><ol><li>first sub item</li></ol><ul><li>second sub item %2%</li></ul></li><li>second item %3%</li></ul>');
@@ -251,7 +251,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesTest extends AbstractViperListPl
         $this->useTest(1);
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('listOL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
         $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<br /><ol><li>first sub item</li></ol><p>second sub item %2%</p></li><li>second item %3%</li></ul>');
         $this->clickTopToolbarButton('listUL');
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
@@ -261,7 +261,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesTest extends AbstractViperListPl
         $this->useTest(2);
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('listUL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
         $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<br /><ul><li>first sub item</li></ul><p>second sub item %2%</p></li><li>second item %3%</li></ol>');
         $this->clickTopToolbarButton('listOL');
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
@@ -271,7 +271,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesTest extends AbstractViperListPl
         $this->useTest(2);
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('listUL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
         $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<br /><ul><li>first sub item</li></ul><p>second sub item %2%</p></li><li>second item %3%</li></ol>');
         $this->clickTopToolbarButton('listOL');
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
@@ -375,18 +375,18 @@ class Viper_Tests_ViperListPlugin_MixedListTypesTest extends AbstractViperListPl
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(2);
         $this->clickInlineToolbarButton('listUL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, FALSE);
         $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<br /><p>first sub item</p><p>second sub item %2%</p></li><li>second item %3%</li></ol>');
         $this->clickInlineToolbarButton('listUL');
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
         $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<br /><ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ol>');
 
         //Test unordered sub list with top toolbar icons
         $this->clickTopToolbarButton('listUL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, FALSE);
         $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<br /><p>first sub item</p><p>second sub item %2%</p></li><li>second item %3%</li></ol>');
         $this->clickTopToolbarButton('listUL');
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
         $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<br /><ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ol>');
 
     }//end testRemoveAllSubListItemsAndAddItBackAgainUsingListIcons()
@@ -415,11 +415,11 @@ class Viper_Tests_ViperListPlugin_MixedListTypesTest extends AbstractViperListPl
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(2);
         $this->clickInlineToolbarButton('listUL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, FALSE);
         $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<br /><p>first sub item</p><p>second sub item %2%</p></li><li>second item %3%</li></ol>');
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<br /><ol><li>first sub item</li><li>second sub item %2%</li></ol></li><li>second item %3%</li></ol>');
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<br /><ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ol>');
 
     }//end testRemoveAllSubListItemsUsingListIconsAndCreatingNewSubListByPressingTab()
 

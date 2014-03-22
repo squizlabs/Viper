@@ -176,7 +176,7 @@ class Viper_Tests_ViperListPlugin_ConvertListTypesTest extends AbstractViperList
         $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1<br /><ol><li>sub item 1 %1%</li></ol><ul><li>sub item 2 %2%</li></ul></li><li>item 2</li><li>item 3</li><li>item 4</li></ul>');
         $this->clickTopToolbarButton('listUL');
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
-        $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1<br /><ul><li>sub item 1 %1%</li></ul><ul><li>sub item 2 %2%</li></ul></li><li>item 2</li><li>item 3</li><li>item 4</li></ul>');
+        $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ul></li><li>item 2</li><li>item 3</li><li>item 4</li></ul>');
 
         //Using inline toolbar
         $this->selectKeyword(1);
@@ -185,7 +185,7 @@ class Viper_Tests_ViperListPlugin_ConvertListTypesTest extends AbstractViperList
         $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1<br /><ol><li>sub item 1 %1%</li></ol><ul><li>sub item 2 %2%</li></ul></li><li>item 2</li><li>item 3</li><li>item 4</li></ul>');
         $this->clickInlineToolbarButton('listUL');
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
-        $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1<br /><ul><li>sub item 1 %1%</li></ul><ul><li>sub item 2 %2%</li></ul></li><li>item 2</li><li>item 3</li><li>item 4</li></ul>');
+        $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ul></li><li>item 2</li><li>item 3</li><li>item 4</li></ul>');
 
     }//end testConvertListFromUnorderedToOrderedWithSubList()
 
