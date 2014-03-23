@@ -529,6 +529,7 @@ ViperListPlugin.prototype = {
             }
         } else if (firstParent && outdent !==  true) {
             updated  = this.convertRangeToList(range, testOnly, listType, true);
+            return updated;
         }
 
         if (testOnly !== true) {
@@ -1030,7 +1031,9 @@ ViperListPlugin.prototype = {
         if (!listType || canJoin === true) {
             for (var node = pElems[0].previousSibling; node; node = node.previousSibling) {
                 if (node.nodeType === ViperUtil.ELEMENT_NODE) {
-                    if (ViperUtil.isTag(node, 'ol') === true || ViperUtil.isTag(node, 'ul') === true) {
+                    if ((listType && ViperUtil.isTag(node, listType) === true)
+                        || (!listType && (ViperUtil.isTag(node, 'ol') === true || ViperUtil.isTag(node, 'ul') === true))
+                    ) {
                         list  = node;
                         atEnd = true;
                     }
@@ -1044,7 +1047,9 @@ ViperListPlugin.prototype = {
                 // element after the last p element.
                 for (var node = pElems[(pElems.length - 1)].nextSibling; node; node = node.nextSibling) {
                     if (node.nodeType === ViperUtil.ELEMENT_NODE) {
-                        if (ViperUtil.isTag(node, 'ol') === true || ViperUtil.isTag(node, 'ul') === true) {
+                        if ((listType && ViperUtil.isTag(node, listType) === true)
+                            || (!listType && (ViperUtil.isTag(node, 'ol') === true || ViperUtil.isTag(node, 'ul') === true))
+                        ) {
                             list  = node;
                             atEnd = false;
                         }
@@ -1707,9 +1712,6 @@ ViperListPlugin.prototype = {
             return;
         } else if (currentType !== newType) {
             this.tabRange(null, false, false, listType);
-            this.viper.adjustRange();
-            this.viper.fireSelectionChanged(null, true);
-            this.viper.fireNodesChanged([this.viper.getViperElement()]);
         } else if (currentType === listType) {
             return this.convertRangeToParagraphs();
         } else {
