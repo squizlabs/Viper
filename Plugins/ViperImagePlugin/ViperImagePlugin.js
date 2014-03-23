@@ -254,9 +254,7 @@ ViperImagePlugin.prototype = {
             range.collapse(true);
             ViperSelection.addRange(range);
 
-            if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true) {
-                this.viper.fireNodesChanged();
-            }
+            this.viper.fireNodesChanged();
 
             return true;
         }
