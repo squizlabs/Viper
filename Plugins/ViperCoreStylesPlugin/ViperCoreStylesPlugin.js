@@ -1207,6 +1207,7 @@ ViperCoreStylesPlugin.prototype = {
             || ViperUtil.isTag(startNode, style) === true
             || (ViperUtil.getParents(startNode, style).length > 0
             && ViperUtil.getParents(endNode, style).length > 0)
+            || this._getWholeStyleSelections(endNode, [style], []).length > 0
         ) {
             // This selection is already styles, remove it.
             var changeid = ViperChangeTracker.startBatchChange('removedFormat');
@@ -1546,6 +1547,9 @@ ViperCoreStylesPlugin.prototype = {
 
                     startNode = startNode.parentNode;
                 }
+
+                // Also check first and last selectable child of endNode (nodeSelection).
+                activeStates.concat(this._getWholeStyleSelections(endNode, tagNames, activeStates));
             } else {
                 var foundTags = [];
                 while (startNode
@@ -1576,6 +1580,42 @@ ViperCoreStylesPlugin.prototype = {
         }//end if
 
         return activeStates;
+
+    },
+
+    _getWholeStyleSelections: function(parentNode, tagNames, parentStyles)
+    {
+        var range           = this.viper.getCurrentRange();
+        var firstSelectable = range._getFirstSelectableChild(parentNode);
+        var lastSelectable  = range._getFirstSelectableChild(parentNode);
+        var firstSelectableParents = [];
+        var styles = parentStyles;
+        if (firstSelectable && lastSelectable) {
+            while (firstSelectable && firstSelectable.parentNode !== parentNode) {
+                var pos = ViperUtil.arraySearch(ViperUtil.getTagName(firstSelectable.parentNode), tagNames);
+                if (pos >= 0) {
+                    firstSelectableParents.push(tagNames[pos]);
+                }
+
+                firstSelectable = firstSelectable.parentNode;
+            }
+
+            if (firstSelectableParents.length > 0) {
+                while (lastSelectable && lastSelectable.parentNode !== parentNode) {
+                    var pos = ViperUtil.arraySearch(ViperUtil.getTagName(lastSelectable.parentNode), tagNames);
+                    if (pos >= 0
+                        && ViperUtil.inArray(tagNames[pos], firstSelectableParents) === true
+                        && ViperUtil.inArray(tagNames[pos], styles) === false
+                    ) {
+                        styles.push(tagNames[pos]);
+                    }
+
+                    lastSelectable = lastSelectable.parentNode;
+                }
+            }
+        }
+
+        return styles;
 
     },
 
