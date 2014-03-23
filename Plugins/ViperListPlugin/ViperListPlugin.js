@@ -528,7 +528,7 @@ ViperListPlugin.prototype = {
                 updated = this.outdentListItems(listItems, testOnly);
             }
         } else if (firstParent && outdent !==  true) {
-            updated  = this.convertRangeToList(range, testOnly, listType);
+            updated  = this.convertRangeToList(range, testOnly, listType, true);
         }
 
         if (testOnly !== true) {
@@ -967,7 +967,7 @@ ViperListPlugin.prototype = {
 
     },
 
-    convertRangeToList: function(range, testOnly, listType)
+    convertRangeToList: function(range, testOnly, listType, canJoin)
     {
         range    = range || this.viper.getViperRange();
         testOnly = testOnly || false;
@@ -1027,7 +1027,7 @@ ViperListPlugin.prototype = {
         // Get the previous list if there is one.
         var list  = null;
         var atEnd = true;
-        if (!listType) {
+        if (!listType || canJoin === true) {
             for (var node = pElems[0].previousSibling; node; node = node.previousSibling) {
                 if (node.nodeType === ViperUtil.ELEMENT_NODE) {
                     if (ViperUtil.isTag(node, 'ol') === true || ViperUtil.isTag(node, 'ul') === true) {

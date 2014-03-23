@@ -20,7 +20,7 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListTest extends AbstractViper
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li></ul><p>second item %2%</p><ul><li>third %3% item</li></ul>');
         $this->clickTopToolbarButton('listIndent');
-        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
 
         //Test unordered list when selecting a word in the list item and using the top toolbar icons
@@ -30,7 +30,7 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListTest extends AbstractViper
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li></ul><p>second item %2%</p><ul><li>third %3% item</li></ul>');
         $this->clickTopToolbarButton('listIndent');
-        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
 
         //Test unordered list when selecting a word in the list item and using the inline toolbar icons
@@ -38,7 +38,7 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListTest extends AbstractViper
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li></ul><p>second item %2%</p><ul><li>third %3% item</li></ul>');
         $this->clickTopToolbarButton('listIndent');
-        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
 
         //Test unordered list when selecting the whole list item
@@ -48,7 +48,7 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListTest extends AbstractViper
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li></ul><p>second item %2%</p><ul><li>third %3% item</li></ul>');
         $this->clickTopToolbarButton('listIndent');
-        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
 
         //Test unordered list using keyboard shortcuts
@@ -66,7 +66,7 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListTest extends AbstractViper
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li></ol><p>second item %2%</p><ol><li>third %3% item</li></ol>');
         $this->clickTopToolbarButton('listIndent');
-        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ol>');
 
         //Test ordered list with top toolbar
@@ -75,7 +75,7 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListTest extends AbstractViper
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li></ol><p>second item %2%</p><ol><li>third %3% item</li></ol>');
         $this->clickTopToolbarButton('listIndent');
-        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ol>');
 
         //Test ordered list when selecting the whole list item
@@ -85,7 +85,7 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListTest extends AbstractViper
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li></ol><p>second item %2%</p><ol><li>third %3% item</li></ol>');
         $this->clickTopToolbarButton('listIndent');
-        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ol>');
 
         //Test ordered list using keyboard shortcuts
