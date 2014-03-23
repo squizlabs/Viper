@@ -400,12 +400,8 @@ ViperKeyboardEditorPlugin.prototype = {
 
                         ViperSelection.addRange(range);
 
-                        if (ViperUtil.isBrowser('firefox') === false) {
-                            this.viper.fireNodesChanged();
-                        }
-
+                        this.viper.fireNodesChanged();
                         this.viper.fireSelectionChanged();
-
                         return false;
                     }//end if
                 }//end if
