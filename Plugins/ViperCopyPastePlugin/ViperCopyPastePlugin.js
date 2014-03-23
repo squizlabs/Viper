@@ -1783,6 +1783,7 @@ ViperCopyPastePlugin.prototype = {
         var lc    = lists.length;
         for (var i = 0; i < lc; i++) {
             var list = lists[i];
+            ViperUtil.removeAttr(list, 'style');
             if (ViperUtil.isTag(list.parentNode, 'ul') === true
                 || ViperUtil.isTag(list.parentNode, 'ol') === true
             ) {
@@ -1805,6 +1806,7 @@ ViperCopyPastePlugin.prototype = {
         var c         = listItems.length;
         for (var i = 0; i < c; i++) {
             var li = listItems[i];
+            ViperUtil.removeAttr(li, 'style');
             if (!li.parentNode || (ViperUtil.isTag(li.parentNode, 'ul') !== true  && ViperUtil.isTag(li.parentNode, 'ol') !== true)) {
                 // This list item is not inside a list element.
                 // If there is a list before this item join to it, if not create a
