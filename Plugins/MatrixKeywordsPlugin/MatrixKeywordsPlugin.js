@@ -56,11 +56,11 @@ MatrixKeywordsPlugin.prototype = {
 	toolbar.createBubble(prefix + ':vtp:snippet', _('Insert Matrix Snippet'), insertSnippetContent, null, null);
 	
 	// Keyword Insert Selection.
-	var keywordSelect = this._createSelection(prefix + ':insertKeywordSelect', prefix + ':insertKeywordSelect', 'Keyword', null);
+	var keywordSelect = this._createSelection(prefix + ':insertKeywordSelect', prefix + ':insertKeywordSelect', _('Keyword'), null);
 	insertKeywordContent.appendChild(keywordSelect);
 	
 	// Snippet Insert Selection.
-	var snippetSelect = this._createSelection(prefix + ':insertSnippetSelect', prefix + ':insertSnippetSelect', 'Snippet', null);
+	var snippetSelect = this._createSelection(prefix + ':insertSnippetSelect', prefix + ':insertSnippetSelect', _('Snippet'), null);
 	insertSnippetContent.appendChild(snippetSelect);
 
 	
