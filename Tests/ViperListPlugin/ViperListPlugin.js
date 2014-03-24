@@ -29,7 +29,7 @@ function gListS(listElem, incContent)
                         content += child.outerHTML;
                     } else {
                         var tmp = document.createElement('div');
-                        tmp.appendChild(child.cloneNode(true));
+                        tmp.appendChild(ViperUtil.cloneNode(child));
                         content += tmp.innerHTML;
                         tmp      = null;
                     }

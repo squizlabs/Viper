@@ -283,8 +283,8 @@ Viper.prototype = {
         Viper.document.body.appendChild(holder);
 
         // Add browser type.
-        var browser = this.getBrowserType();
-        var version = this.getBrowserVersion();
+        var browser = ViperUtil.getBrowserType();
+        var version = ViperUtil.getBrowserVersion();
 
         if (browser && version) {
             ViperUtil.addClass(holder, 'Viper-browser-' + browser);
@@ -401,55 +401,6 @@ Viper.prototype = {
     },
 
     /**
-     * Checks if specified browser type is the current browser.
-     *
-     * @param {string}  browser The browser type to test.
-     * @param {string}  version The version of the browser. Example formats: 23, <10, >=11.
-     *
-     * @return {boolean}
-     */
-    isBrowser: function(browser, version)
-    {
-        if (this.getBrowserType() !== browser) {
-            return false;
-        } else if (!version) {
-            return true;
-        }
-
-        version        = version.toString();
-        var currentVer = this.getBrowserVersion().toString();
-        if (version === currentVer) {
-            return true;
-        }
-
-        var match = version.match(/^(<=|>=|<|>)([\d\.]+$)/);
-        if (!match) {
-            return false;
-        }
-
-        version = parseFloat(match[2]);
-        switch (match[1]) {
-            case '<=':
-                return (currentVer <= version);
-
-            case '>=':
-                return (currentVer >= version);
-
-            case '<':
-                return (currentVer < version);
-
-            case '>':
-                return (currentVer > version);
-
-            default:
-                return false;
-        }
-
-        return false;
-
-    },
-
-    /**
      * Returns the path to the Viper JS file directory.
      *
      * Plugins can use this to load extra JS files.
@@ -545,7 +496,7 @@ Viper.prototype = {
         this._removeEvents(elem);
         var self = this;
 
-        if (this.isBrowser('msie', '<11') === true) {
+        if (ViperUtil.isBrowser('msie', '<11') === true) {
             ViperUtil.addEvent(elem, 'mouseup.' + namespace, function(e) {
                 return self.mouseUp(e);
             });
@@ -655,7 +606,7 @@ Viper.prototype = {
             this.element.setAttribute('contentEditable', true);
             ViperUtil.setStyle(this.element, 'outline', 'none');
 
-            if (this.isBrowser('msie', '<11') === true) {
+            if (ViperUtil.isBrowser('msie', '<11') === true) {
                 try {
                     this.element.focus();
                 } catch (e) {
@@ -686,7 +637,7 @@ Viper.prototype = {
                     }
 
                     if (blockElement) {
-                        if (this.isBrowser('msie') !== true) {
+                        if (ViperUtil.isBrowser('msie') !== true) {
                             ViperUtil.setHtml(blockElement, '<br />');
                         } else {
                             blockElement.appendChild(document.createTextNode(' '));
@@ -705,6 +656,10 @@ Viper.prototype = {
                         }
                     }//end if
                 }//end if
+            } else if (ViperUtil.isBrowser('firefox') === true) {
+                range.setStart(editableChild, 0);
+                range.collapse(true);
+                ViperSelection.addRange(range);
             }//end if
 
             this.fireCallbacks('Viper:enabled');
@@ -714,7 +669,7 @@ Viper.prototype = {
             this.cleanDOM(this.element);
 
             if (ViperUtil.trim(ViperUtil.getNodeTextContent(this.element)) === '') {
-                if (this.isBrowser('msie') === true && ViperUtil.getTag('*', this.element).length === 0) {
+                if (ViperUtil.isBrowser('msie') === true && ViperUtil.getTag('*', this.element).length === 0) {
                     // This check is to prevent iframe elements stuffing up the whole browser screen in IE8 when
                     // they are the only content on the page. Makes no sense but when
                     // did IE ever make sense?
@@ -871,7 +826,7 @@ Viper.prototype = {
             return;
         }
 
-        if (this.isBrowser('msie') === true) {
+        if (ViperUtil.isBrowser('msie') === true) {
             // Find iframe elements for youtube.com videos to add wmode=opaque to query
             // string so that the video does not sit on top of the editor window in IE.
             var iframeTags = ViperUtil.getTag('iframe', elem);
@@ -1107,7 +1062,7 @@ Viper.prototype = {
      */
     getViperRange: function()
     {
-        if (this.isBrowser('msie') === false) {
+        if (ViperUtil.isBrowser('msie') === false) {
             this.highlightToSelection();
         }
 
@@ -1408,7 +1363,7 @@ Viper.prototype = {
         // If we have any nodes highlighted, then we want to delete them before
         // inserting the new text.
         if (range.collapsed !== true) {
-            if (this.isBrowser('chrome') === true
+            if (ViperUtil.isBrowser('chrome') === true
                 && range.startOffset === 0
                 && range.startContainer === range._getFirstSelectableChild(this.element)
                 && range.endOffset === (this.element.childNodes.length - 1)
@@ -1493,7 +1448,7 @@ Viper.prototype = {
             // this._document, so that we don't have document fragments within our this._document,
             // as they don't have parentNodes and are hard to work with.
             if (node.nodeType === ViperUtil.DOCUMENT_FRAGMENT_NODE) {
-                if (this.isBrowser('msie', '<11') === true) {
+                if (ViperUtil.isBrowser('msie', '<11') === true) {
                     // Insert a marker span tag to the caret positioon.
                     range.rangeObj.pasteHTML('<span id="__viperMarker"></span>');
                     var marker = ViperUtil.getid('__viperMarker');
@@ -2803,9 +2758,9 @@ Viper.prototype = {
         var endTopParent   = endParents.pop();
 
         if (startTopParent === endTopParent) {
-            var start     = startTopParent.cloneNode(true);
-            var selection = startTopParent.cloneNode(true);
-            var end       = startTopParent.cloneNode(true);
+            var start     = ViperUtil.cloneNode(startTopParent);
+            var selection = ViperUtil.cloneNode(startTopParent);
+            var end       = ViperUtil.cloneNode(startTopParent);
 
             // First remove everything from start bookmark to last child.
             var lastChild    = ViperUtil.getLastChildTextNode(start);
@@ -2884,7 +2839,7 @@ Viper.prototype = {
 
         // Start of selection is in the style tag.
         if (startTopParent) {
-            var clone = startTopParent.cloneNode(true);
+            var clone = ViperUtil.cloneNode(startTopParent);
 
             // Remove everything from bookmark to lastChild (inclusive).
             var lastChild    = ViperUtil.getLastChildTextNode(startTopParent);
@@ -2915,7 +2870,7 @@ Viper.prototype = {
 
         // End of selection is in the style tag.
         if (endTopParent) {
-            var clone = endTopParent.cloneNode(true);
+            var clone = ViperUtil.cloneNode(endTopParent);
 
             // Remove everything from firstChild to bookmark (inclusive).
             var firstChild   = ViperUtil.getFirstChildTextNode(endTopParent);
@@ -3075,7 +3030,7 @@ Viper.prototype = {
     createSpaceNode: function()
     {
         var node = null;
-        if (this.isBrowser('msie', '<11') === true) {
+        if (ViperUtil.isBrowser('msie', '<11') === true) {
             node = Viper.document.createTextNode(String.fromCharCode(160));
         } else {
             node = Viper.document.createTextNode(' ');
@@ -3345,7 +3300,7 @@ Viper.prototype = {
 
             range.collapse(true);
             ViperSelection.addRange(range);
-        } else if (this.isBrowser('firefox') === true
+        } else if (ViperUtil.isBrowser('firefox') === true
             && startContainer === endContainer
             && startOffset === 0
             && startContainer === this.getViperElement()
@@ -3418,7 +3373,7 @@ Viper.prototype = {
             }
         }
 
-        if (this.isBrowser('chrome') === true || this.isBrowser('safari') === true) {
+        if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true) {
             // Sigh.. Move the range where its suppose to be instead of Webkit deciding that it should
             // move the end of range to the begining of the next sibling -.-.
             if (!endBookmark.previousSibling) {
@@ -4016,7 +3971,7 @@ Viper.prototype = {
 
         if (e.which === ViperUtil.DOM_VK_DELETE
             && ViperChangeTracker.isTracking() === true
-            && this.isBrowser('firefox') === false
+            && ViperUtil.isBrowser('firefox') === false
         ) {
             // Handle delete OP here because some browsers (e.g. Chrome, IE) does not
             // fire keyPress when DELETE is held down.
@@ -4038,10 +3993,10 @@ Viper.prototype = {
             // Nothing special about this key let the browser handle it unless
             // the track changes is activated or no plugin is direcly modifying it.
             if (this.isSpecialKey(e) === false) {
-                if (this.isBrowser('firefox') === true) {
+                if (ViperUtil.isBrowser('firefox') === true) {
                     this._firefoxKeyDown();
                 } else if ((this.isKey(e, 'backspace') === true || this.isKey(e, 'delete') === true)
-                    && (this.isBrowser('chrome') === true || this.isBrowser('safari') === true || this.isBrowser('msie') === true)
+                    && (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true || ViperUtil.isBrowser('msie') === true)
                 ) {
                     // Webkit does not fire keypress event for delete and backspace keys..
                     this.fireNodesChanged();
@@ -4049,14 +4004,20 @@ Viper.prototype = {
 
                 return true;
             }//end if
-        } else if (e.which === 65 && (e.metaKey === true || e.ctrlKey === true)) {
-            // CMD/CTRL + A needs to fire selection changed.
+        } else if ((e.which === 65 && (e.metaKey === true || e.ctrlKey === true))
+            || ((e.which >= 37 && e.which <= 40) && (e.metaKey === true || e.ctrlKey === true) && e.shiftKey === true)
+        ) {
+            // CMD/CTRL + A, CMD + SHIF + <arrow keys> needs to fire selection changed as they do not fire key up event.
             var self = this;
             setTimeout(function() {
                 self.fireSelectionChanged();
             }, 50);
             return true;
-        }//end if
+        } else if ((e.which === 37 || e.which === 39) && (e.ctrlKey === true || e.metaKey === true)) {
+            // Prevent browser history triger.
+            ViperUtil.preventDefault(e);
+            return false;
+        }
 
     },
 
@@ -4155,7 +4116,7 @@ Viper.prototype = {
                 && range.startContainer === range._getFirstSelectableChild(this.element)
             ) {
                 resetContent = true;
-            } else if (this.isBrowser('msie') === true
+            } else if (ViperUtil.isBrowser('msie') === true
                 && range.endContainer === this.element
                 && range.endOffset === 0
                 && range.startOffset === 0
@@ -4311,7 +4272,7 @@ Viper.prototype = {
                 range = self.adjustRange();
             } catch (e) {}
 
-            if (range.collapsed === true && self.isBrowser('msie') === true) {
+            if (range.collapsed === true && ViperUtil.isBrowser('msie') === true) {
                 // If clicked inside the previous selection then IE takes a lot
                 // longer to update the caret position so if the range is collapsed
                 // wait nearly half a second to trigger the selection changed
@@ -4431,6 +4392,15 @@ Viper.prototype = {
                     ViperSelection.addRange(range);
                 }
             }
+        } else if (endNode
+            && startNode
+            && ViperUtil.isTag(startNode, 'table') === true
+            && range._getLastSelectableChild(startNode) === endNode
+        ) {
+            // IE table selection.
+            range.setStart(startNode);
+            range.collapse(true);
+            ViperSelection.addRange(range);
         }//end if
 
         return range;
@@ -4441,7 +4411,7 @@ Viper.prototype = {
     {
         if (this.element) {
             try {
-                if (this.isBrowser('msie') === true) {
+                if (ViperUtil.isBrowser('msie') === true) {
                     var range = this.getViperRange();
                     ViperSelection.addRange(range);
 
@@ -4698,9 +4668,13 @@ Viper.prototype = {
         var callback = callbacks.shift();
         if (callback) {
             var self   = this;
-            var retVal = callback.call(this, data, function(retVal) {
-                self._fireCallbacks(callbacks, data, doneCallback, retVal);
-            });
+            try {
+                var retVal = callback.call(this, data, function(retVal) {
+                    self._fireCallbacks(callbacks, data, doneCallback, retVal);
+                });
+            } catch (e) {
+                console.error(e);
+            }
 
             return this._fireCallbacks(callbacks, data, doneCallback, retVal);
         }
@@ -4763,8 +4737,7 @@ Viper.prototype = {
         }
 
         // Clone the element so we dont modify the actual contents.
-        var clone = elem.cloneNode(true);
-
+        var clone = ViperUtil.cloneNode(elem);
         this.removeEmptyNodes(clone);
 
         // Remove special Viper elements.
@@ -4814,7 +4787,7 @@ Viper.prototype = {
         elem = elem || this.element;
 
         // Clone the element so we dont modify the actual contents.
-        var clone = elem.cloneNode(true);
+        var clone = ViperUtil.cloneNode(elem);
 
         // Remove special Viper elements.
         this._removeViperElements(clone);
@@ -4824,7 +4797,7 @@ Viper.prototype = {
         this.fireCallbacks('getContents', {element: clone});
         var html = ViperUtil.getHtml(clone);
 
-        if (this.isBrowser('msie') === true) {
+        if (ViperUtil.isBrowser('msie') === true) {
             html = html.replace(/<:object /ig, '<object ');
             html = html.replace(/<\/:object>/ig, '</object>');
         }
@@ -4904,7 +4877,7 @@ Viper.prototype = {
         var self = this;
         this.fireCallbacks('setHtml', {element: clone}, function() {
             var html = ViperUtil.getHtml(clone);
-            if (self.isBrowser('msie', 8) === true) {
+            if (ViperUtil.isBrowser('msie', 8) === true) {
                 // IE8 has problems with param tags, it removes them from the content
                 // so Viper needs to change the tag name when content is being set
                 // and change it back to original when content is being retrieved.

@@ -169,7 +169,7 @@ ViperCharMapPlugin.prototype = {
         range.insertNode(newNode);
         range.setStart(newNode, 1);
 
-        if (this.viper.isBrowser('msie', '<11') === true) {
+        if (ViperUtil.isBrowser('msie', '<11') === true) {
             range.moveStart('character', 1);
         }
 

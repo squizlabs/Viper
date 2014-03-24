@@ -50,7 +50,7 @@ ViperImagePlugin.prototype = {
                 self.viper.fireSelectionChanged(range, true);
                 ViperSelection.removeAllRanges();
 
-                if (self.viper.isBrowser('msie', '<11') === true && ViperUtil.isTag(target, 'img') === true) {
+                if (ViperUtil.isBrowser('msie', '<11') === true && ViperUtil.isTag(target, 'img') === true) {
                     self._ieImageResize = target;
                     self.viper.registerCallback('Viper:mouseUp', 'ViperImagePlugin:ie', function(e) {
                        ViperSelection.removeAllRanges();
@@ -254,9 +254,7 @@ ViperImagePlugin.prototype = {
             range.collapse(true);
             ViperSelection.addRange(range);
 
-            if (this.viper.isBrowser('chrome') === true || this.viper.isBrowser('safari') === true) {
-                this.viper.fireNodesChanged();
-            }
+            this.viper.fireNodesChanged();
 
             return true;
         }
@@ -400,7 +398,7 @@ ViperImagePlugin.prototype = {
         }
 
         var image = this._resizeImage;
-        if (this.viper.isBrowser('msie', '<11') === true) {
+        if (ViperUtil.isBrowser('msie', '<11') === true) {
             image = this._ieImageResize;
         }
 

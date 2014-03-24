@@ -500,7 +500,7 @@ ViperIERange.prototype = {
         // Add the children of the div to fragment.
         var c = div.childNodes.length;
         for (var i = 0; i < c; i++) {
-            var child = div.childNodes[i].cloneNode(true);
+            var child = ViperUtil.cloneNode(div.childNodes[i]);
             fragment.appendChild(child);
         }
 
@@ -520,7 +520,7 @@ ViperIERange.prototype = {
         // Add the children of the div to fragment.
         var c = div.childNodes.length;
         for (var i = 0; i < c; i++) {
-            var child = div.childNodes[i].cloneNode(true);
+            var child = ViperUtil.cloneNode(div.childNodes[i]);
             fragment.appendChild(child);
         }
 

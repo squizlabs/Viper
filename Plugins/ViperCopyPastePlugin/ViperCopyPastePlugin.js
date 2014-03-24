@@ -24,10 +24,11 @@ function ViperCopyPastePlugin(viper)
     this.convertTags     = null;
     this._tmpNode        = null;
     this._iframe         = null;
-    this._isFirefox      = viper.isBrowser('firefox');
-    this._isMSIE         = viper.isBrowser('msie');
-    this._isSafari       = viper.isBrowser('safari');
+    this._isFirefox      = ViperUtil.isBrowser('firefox');
+    this._isMSIE         = ViperUtil.isBrowser('msie');
+    this._isSafari       = ViperUtil.isBrowser('safari');
     this._toolbarElement = null;
+    this._selectedRows   = null;
 
 }
 
@@ -126,7 +127,6 @@ ViperCopyPastePlugin.prototype = {
             };
 
         } else {
-            var toolbarCreated = false;
             elem.onpaste = function(e) {
                 var viperRange = self.viper.getViperRange();
 
@@ -348,6 +348,10 @@ ViperCopyPastePlugin.prototype = {
         range         = range || this.viper.getCurrentRange();
         this.rangeObj = range.cloneRange();
 
+        if (this._isTableSelection(range) === true) {
+            return;
+        }
+
         this._tmpNode = document.createTextNode('');
 
         try {
@@ -357,6 +361,63 @@ ViperCopyPastePlugin.prototype = {
             this.viper.insertNodeAtCaret(this._tmpNode);
         }
 
+    },
+
+    _isTableSelection: function(range)
+    {
+        this._selectedRows = null;
+        var rows = [];
+        if (ViperUtil.isBrowser('firefox') === true) {
+            // Firefox has multiple range objects for each selected table cell.
+            var range = null;
+            var i     = 0;
+            while (range = ViperSelection.getRangeAt(i)) {
+                var elem = range.getStartNode();
+                if (ViperUtil.isTag(elem, 'td') === false) {
+                    return false;
+                }
+
+                if (ViperUtil.inArray(elem.parentNode, rows) === false) {
+                    rows.push(elem.parentNode);
+                }
+
+                i++;
+            }
+
+            if (rows.length > 0) {
+                this._selectedRows = rows;
+                return true;
+            }
+        } else {
+            var startNode = range.getStartNode();
+            var endNode = range.getEndNode();
+            var elements = ViperUtil.getElementsBetween(startNode, endNode);
+            for (var i = 0; i < elements.length; i++) {
+                var row = null;
+                if (elements[i].nodeType === ViperUtil.TEXT_NODE) {
+                    continue;
+                } else if (ViperUtil.isTag(elements[i], 'td') === false) {
+                    if (ViperUtil.isTag(elements[i], 'tr') === false) {
+                        return false;
+                    } else {
+                        row = elements[i];
+                    }
+                } else {
+                    row = elements[i].parentNode;
+                }
+
+                if (ViperUtil.inArray(row, rows) === false) {
+                    rows.push(row);
+                }
+            }
+
+            if (rows.length > 0) {
+                this._selectedRows = rows;
+                return true;
+            }
+        }
+
+        return false;
     },
 
     _afterPaste: function()
@@ -541,14 +602,17 @@ ViperCopyPastePlugin.prototype = {
     _handleFormattedPasteValue: function(stripTags, pasteElement)
     {
         pasteElement = pasteElement || this.pasteElement;
-        this._removeEditableAttrs(pasteElement);
 
         // Clean paste from word document.
         var html = ViperUtil.getHtml(pasteElement);
+
+        // Generic cleanup.
+        html = this._cleanPaste(html);
+
         if (pasteElement.firstChild
-            && ViperUtil.isTag(pasteElement.firstChild, 'b') === true
-            || (ViperUtil.isTag(pasteElement.firstChild, 'meta') === true && ViperUtil.isTag(pasteElement.firstChild.nextSibling, 'b') === true)
-            || (pasteElement.firstChild.id && pasteElement.firstChild.id.indexOf('docs-internal-guid-') === 0)
+            && (ViperUtil.isTag(pasteElement.firstChild, 'b') === true
+            || ViperUtil.isTag(pasteElement.firstChild.nextSibling, 'b') === true
+            || (pasteElement.firstChild.id && pasteElement.firstChild.id.indexOf('docs-internal-guid-') === 0))
         ) {
             // Google Docs.
             html = this._cleanGoogleDocsPaste(html);
@@ -610,6 +674,51 @@ ViperCopyPastePlugin.prototype = {
             });
         }
 
+        if (this._selectedRows !== null) {
+            // Table selection paste..
+            var pastedRows = [];
+            if (fragment.firstChild && ViperUtil.isTag(fragment.firstChild, 'table') === true
+                && fragment.firstChild === fragment.lastChild
+            ) {
+                // Chrome.
+                pastedRows = ViperUtil.getTag('tr', fragment.firstChild);
+            } else if (fragment.firstElementChild && ViperUtil.isTag(fragment.firstElementChild, 'td') === true) {
+                // Firefox only has the TD elements need to split them in to rows.
+                var cellCount = ViperUtil.getTag('td', this._selectedRows[0]).length;
+                var tr = null;
+                var i  = 0;
+                var node = null;
+                while (node = fragment.firstElementChild) {
+                    if (i % cellCount === 0) {
+                        tr = document.createElement('tr');
+                        pastedRows.push(tr);
+                    }
+                    tr.appendChild(node);
+                    i++;
+                }
+            }
+
+            if (pastedRows.length > 0) {
+                // Replace selected rows with pasted rows.
+                for (var i = 0; i < pastedRows.length; i++) {
+                    ViperUtil.insertBefore(this._selectedRows[0], pastedRows[i]);
+                }
+
+                ViperUtil.remove(this._selectedRows);
+                this._updateSelection();
+                this.viper.cleanDOM();
+
+                this.viper.fireNodesChanged();
+                this.viper.fireCallbacks('ViperCopyPastePlugin:paste');
+                return;
+            } else {
+                var td = ViperUtil.getTag('td', this._selectedRows[0])[0];
+                ViperUtil.setHtml(td, ' ');
+                this._tmpNode = td.firstChild;
+            }
+
+        }
+
         // If fragment contains block level elements most likely we will need to
         // do some spliting so we do not have P tags in P tags etc.. Split the
         // container from current selection and then insert paste contents after it.
@@ -659,9 +768,9 @@ ViperCopyPastePlugin.prototype = {
                 }
             }
 
-            var convertBrTags = false;
+            var isPreTag = false;
             if (ViperUtil.getParents(prevBlock, 'pre', this.viper.getViperElement()).length > 0) {
-                convertBrTags = true;
+                isPreTag = true;
             }
 
             var changeid  = ViperChangeTracker.startBatchChange('textAdded');
@@ -674,23 +783,36 @@ ViperCopyPastePlugin.prototype = {
                 prevChild = fragment.lastChild;
                 var ctNode = null;
                 if (ViperUtil.isBlockElement(fragment.lastChild) === true) {
-                    ctNode = fragment.lastChild;
-                    ViperChangeTracker.addChange('textAdd', [ctNode]);
-
-                    if (convertBrTags === true) {
+                    if (isPreTag === true) {
+                        // Convert br tags to new lines.
                         var brTags = ViperUtil.getTag('br', ctNode);
                         for (var i = 0; i < brTags.length; i++) {
                             var textNode = document.createTextNode("\n");
                             ViperUtil.insertBefore(brTags[i], textNode);
                             ViperUtil.remove(brTags[i]);
                         }
+
+                        // Pre tags cannot have block element as child, remove the block element.
+                        while (fragment.lastChild.lastChild) {
+                            ViperUtil.insertAfter(prevBlock, fragment.lastChild.lastChild);
+                        }
+
+                        ViperUtil.remove(fragment.lastChild);
+                        if (fragment.lastChild) {
+                            // Insert new line after block element.
+                            ViperUtil.insertAfter(prevBlock, document.createTextNode("\n"));
+                            ViperUtil.insertAfter(prevBlock, document.createTextNode("\n"));
+                        }
+                    } else {
+                        ctNode = fragment.lastChild;
+                        ViperChangeTracker.addChange('textAdd', [ctNode]);
+                        ViperUtil.insertAfter(prevBlock, ctNode);
                     }
                 } else {
                     ctNode = ViperChangeTracker.createCTNode('ins', 'textAdd', fragment.lastChild);
                     ViperChangeTracker.addNodeToChange(changeid, ctNode);
+                    ViperUtil.insertAfter(prevBlock, ctNode);
                 }
-
-                ViperUtil.insertAfter(prevBlock, ctNode);
             }
 
             // Check that previous container is not empty.
@@ -741,22 +863,12 @@ ViperCopyPastePlugin.prototype = {
 
     _cleanWordPaste: function(content)
     {
-        // Meta and link tags.
         if (!content) {
             return content;
         }
 
-        content = ViperUtil.trim(content);
-        content = content.replace(/<(meta|link)[^>]+>/gi, "");
-
-        // Comments.
-        content = content.replace(/<!--(.|\s)*?-->/gi, '');
-
-        // Remove style tags.
-        content = content.replace(/<style[\s\S]*?<\/style>/gi, '');
-
         // Convert span.Apple-converted-space to normal space (Chrome only).
-        if (this.viper.isBrowser('chrome') === true) {
+        if (ViperUtil.isBrowser('chrome') === true) {
             content = content.replace(/<span class="Apple-converted-space">&nbsp;<\/span>/g, ' ');
         }
 
@@ -766,9 +878,6 @@ ViperCopyPastePlugin.prototype = {
 
         // Remove XML tags.
         content = content.replace(/<\\?\?xml[^>]*>/gi, '');
-
-        // Generic cleanup.
-        content = this._cleanPaste(content);
 
         if (this._isMSIE === true) {
             // Remove the font tags here before putting the contents in to a
@@ -798,6 +907,11 @@ ViperCopyPastePlugin.prototype = {
     {
         var tmp = document.createElement('div');
         ViperUtil.setHtml(tmp, content);
+
+        var docParent = ViperUtil.find(tmp, '[id^="docs-internal-guid-"]');
+        if (docParent.length === 1) {
+            tmp = docParent[0];
+        }
 
         // Remove the wrapping b tag.
         ViperUtil.setHtml(tmp, ViperUtil.getHtml(ViperUtil.getTag('b', tmp)[0]));
@@ -1381,7 +1495,7 @@ ViperCopyPastePlugin.prototype = {
             }
         }//end for
 
-        if (this.viper.isBrowser('msie') === true) {
+        if (ViperUtil.isBrowser('msie') === true) {
             var tags = ViperUtil.find(tmp, 'strong > font > p');
             var c    = tags.length;
             for (var i = 0; i < c; i++) {
@@ -1445,7 +1559,7 @@ ViperCopyPastePlugin.prototype = {
             }
         }
 
-        if (this.viper.isBrowser('msie') === true && ViperUtil.getTag('p', tmp).length > 0) {
+        if (ViperUtil.isBrowser('msie') === true && ViperUtil.getTag('p', tmp).length > 0) {
             // Move any content that is not inside a paragraph in to a previous paragraph..
             var steps = 2;
             for (var i = 0; i < steps; i++) {
@@ -1564,7 +1678,7 @@ ViperCopyPastePlugin.prototype = {
         var newList    = true;
         var prevType   = null;
 
-        var circleCharsArray = [111, 167, 183, 223, 8721, 8226];
+        var circleCharsArray = [111, 167, 183, 216, 222, 223, 252, 8721, 8226];
         var circleChars      = [];
         for (var i = 0; i < circleCharsArray.length; i++) {
             circleChars.push(String.fromCharCode(circleCharsArray[i]));
@@ -1581,7 +1695,7 @@ ViperCopyPastePlugin.prototype = {
                 'I': ['^[IVXLCDM]+[\\.\\)](\\s|&nbsp;)+'],
                 'a': ['^[a-z]+[\\.\\)](\\s|&nbsp;)+'],
                 'A': ['^[A-Z]+[\\.\\)](\\s|&nbsp;)+'],
-                decimal: ['^(?:\\d+|[a-z]+)[\\.\\)](?:\\s|&nbsp;)+']
+                decimal: ['^((?:\\d+|[a-z]+)[\\.\\)]?)+(?:\\s|&nbsp;)+']
             }
         };
 
@@ -1603,17 +1717,17 @@ ViperCopyPastePlugin.prototype = {
             var level      = (pEl.getAttribute('style') || '').match(/level([\d])+/mi);
             ViperUtil.setHtml(pEl, listTypeInfo.html);
 
-            if (prevType !== listType) {
-                newList = true;
-            }
-
-            prevType = listType;
-
             if (!level) {
                 level = 1;
             } else {
                 level = level[1];
             }
+
+            if (prevType !== listType && level === prevLevel) {
+                newList = true;
+            }
+
+            prevType = listType;
 
             if (!listType) {
                 listType = 'ol';
@@ -1669,6 +1783,7 @@ ViperCopyPastePlugin.prototype = {
         var lc    = lists.length;
         for (var i = 0; i < lc; i++) {
             var list = lists[i];
+            ViperUtil.removeAttr(list, 'style');
             if (ViperUtil.isTag(list.parentNode, 'ul') === true
                 || ViperUtil.isTag(list.parentNode, 'ol') === true
             ) {
@@ -1691,6 +1806,7 @@ ViperCopyPastePlugin.prototype = {
         var c         = listItems.length;
         for (var i = 0; i < c; i++) {
             var li = listItems[i];
+            ViperUtil.removeAttr(li, 'style');
             if (!li.parentNode || (ViperUtil.isTag(li.parentNode, 'ul') !== true  && ViperUtil.isTag(li.parentNode, 'ol') !== true)) {
                 // This list item is not inside a list element.
                 // If there is a list before this item join to it, if not create a
@@ -1765,6 +1881,16 @@ ViperCopyPastePlugin.prototype = {
 
     _cleanPaste: function(content)
     {
+        content = ViperUtil.trim(content);
+
+        // Clean head tags.
+        content = content.replace(/<(meta|link|base)[^>]+>/gi, "");
+        content = content.replace(/<title[\s\S]*?<\/title>/gi, '');
+        content = content.replace(/<style[\s\S]*?<\/style>/gi, '');
+
+        // Comments.
+        content = content.replace(/<!--(.|\s)*?-->/gi, '');
+
         // Some generic content cleanup. Change all b/i tags to strong/em.
         content = content.replace(/<b(\s+|>)/gi, "<strong$1");
         content = content.replace(/<\/b(\s+|>)/gi, "</strong$1");
@@ -1775,21 +1901,6 @@ ViperCopyPastePlugin.prototype = {
         content = content.replace(/<strike(\s+|>)/gi, "<del$1");
         content = content.replace(/<\/strike(\s+|>)/gi, "</del$1");
         return content;
-
-    },
-
-    _removeEditableAttrs: function(container)
-    {
-        // Copying content from an editable attribute is wrapped in editable
-        // attribute. Not cool, so move the contents inside the editables out
-        // and remove the empty editable attribute node.
-        var editables = ViperUtil.getClass('editable_attribute', container);
-
-        var el = editables.length;
-        for (var i = 0; i < el; i++) {
-            this._moveChildren(editables[i]);
-            ViperUtil.remove(editables[i]);
-        }
 
     },
 
@@ -1805,11 +1916,12 @@ ViperCopyPastePlugin.prototype = {
     _updateSelection: function()
     {
         try {
-            var range = this.viper.getCurrentRange();
-
-            range.setStart(this._tmpNode, 0);
-            range.collapse(true);
-            ViperSelection.addRange(range);
+            if (this._tmpNode !== null) {
+                var range = this.viper.getCurrentRange();
+                range.setStart(this._tmpNode, 0);
+                range.collapse(true);
+                ViperSelection.addRange(range);
+            }
 
             // Remove tmp nodes.
             ViperUtil.remove(this.pasteElement);

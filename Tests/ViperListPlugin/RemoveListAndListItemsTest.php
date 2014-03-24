@@ -7,240 +7,402 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsTest extends AbstractVip
 
 
  	/**
-     * Test that when you click the unordered or ordered list icon for one item in the list, all items in the list are removed
+     * Test revmoing and adding back the first list item.
      *
      * @return void
      */
-    public function testRemoveListWhenClickingInListItem()
+    public function testRemoveAndAddBackTheFirstListItem()
     {
-        //Test unordered list
-        $this->selectKeyword(2);
+        //Test unordered list when click inside a list item
+        $this->useTest(1);
+        $this->moveToKeyword(1);
         $this->clickTopToolbarButton('listUL', 'active');
-        $this->assertHTMLMatch('<p>Unordered List:</p><p>%1% first item</p><p>second item %2%</p><p>third %3% item</p><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><p>%1% first item</p><ul><li>%2% second item</li><li>%3% third item</li></ul>');
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>%2% second item</li><li>%3% third item</li></ul>');
 
-        //Test unordered list
-        $this->selectKeyword(5);
+        //Test unordered list when select a word in the list item
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('listUL', 'active');
+        $this->assertHTMLMatch('<p>Unordered List:</p><p>%1% first item</p><ul><li>%2% second item</li><li>%3% third item</li></ul>');
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>%2% second item</li><li>%3% third item</li></ul>');
+
+        //Test unordered list when select the whole list item
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickInlineToolbarButton('listUL', 'active');
+        $this->assertHTMLMatch('<p>Unordered List:</p><p>%1% first item</p><ul><li>%2% second item</li><li>%3% third item</li></ul>');
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>%2% second item</li><li>%3% third item</li></ul>');
+
+        //Test ordered list when click inside a list item
+        $this->useTest(2);
+        $this->moveToKeyword(1);
         $this->clickTopToolbarButton('listOL', 'active');
-        $this->assertHTMLMatch('<p>Unordered List:</p><p>%1% first item</p><p>second item %2%</p><p>third %3% item</p><p>Ordered List:</p><p>%4% first item</p><p>second item %5%</p><p>third %6% item</p>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><p>%1% first item</p><ol><li>%2% second item</li><li>%3% third item</li></ol>');
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>%2% second item</li><li>%3% third item</li></ol>');
 
-    }//end testRemoveListWhenClickingInListItem()
+        //Test ordered list when select a word in the list item
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('listOL', 'active');
+        $this->assertHTMLMatch('<p>Ordered List:</p><p>%1% first item</p><ol><li>%2% second item</li><li>%3% third item</li></ol>');
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>%2% second item</li><li>%3% third item</li></ol>');
+
+        //Test ordered list when select the whole list item
+        $this->clickTopToolbarButton('listOL', 'active');
+        $this->assertHTMLMatch('<p>Ordered List:</p><p>%1% first item</p><ol><li>%2% second item</li><li>%3% third item</li></ol>');
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>%2% second item</li><li>%3% third item</li></ol>');
+
+    }//end testRemoveAndAddBackTheFirstListItem()
 
 
     /**
-     * Test remove list items for an unordered list and then click undo and redo.
+     * Test removing and adding back in the middle list item.
      *
      * @return void
      */
-    public function testRemoveAllListItemsForUnorderedListAndClickUndo()
+    public function testRemoveAndAddBackTheMidlleListItem()
     {
+        //Test unordered list when click inside a list item
+        $this->useTest(1);
+        $this->moveToKeyword(2);
+        $this->clickTopToolbarButton('listUL', 'active');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li></ul><p>%2% second item</p><ul><li>%3% third item</li></ul>');
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>%2% second item</li><li>%3% third item</li></ul>');
+
+        //Test unordered list when select a word in the list item
+        $this->selectKeyword(2);
+        $this->clickInlineToolbarButton('listUL', 'active');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li></ul><p>%2% second item</p><ul><li>%3% third item</li></ul>');
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>%2% second item</li><li>%3% third item</li></ul>');
+
+        //Test unordered list when select the whole list item
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickInlineToolbarButton('listUL', 'active');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li></ul><p>%2% second item</p><ul><li>%3% third item</li></ul>');
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>%2% second item</li><li>%3% third item</li></ul>');
+
+        //Test ordered list when click inside a list item
+        $this->useTest(2);
+        $this->moveToKeyword(2);
+        $this->clickTopToolbarButton('listOL', 'active');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li></ol><p>%2% second item</p><ol><li>%3% third item</li></ol>');
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>%2% second item</li><li>%3% third item</li></ol>');
+
+        //Test ordered list when select a word in the list item
+        $this->selectKeyword(2);
+        $this->clickInlineToolbarButton('listOL', 'active');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li></ol><p>%2% second item</p><ol><li>%3% third item</li></ol>');
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>%2% second item</li><li>%3% third item</li></ol>');
+
+        //Test ordered list when select the whole list item
+        $this->clickTopToolbarButton('listOL', 'active');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li></ol><p>%2% second item</p><ol><li>%3% third item</li></ol>');
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>%2% second item</li><li>%3% third item</li></ol>');
+
+    }//end testRemoveAndAddBackTheMidlleListItem()
+
+
+    /**
+     * Test removing and adding back in the last list item.
+     *
+     * @return void
+     */
+    public function testRemoveAndAddBackTheLastListItem()
+    {
+        //Test unordered list when click inside a list item
+        $this->useTest(1);
+        $this->moveToKeyword(3);
+        $this->clickTopToolbarButton('listUL', 'active');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>%2% second item</li></ul><p>%3% third item</p>');
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>%2% second item</li><li>%3% third item</li></ul>');
+
+        //Test unordered list when select a word in the list item
+        $this->selectKeyword(3);
+        $this->clickInlineToolbarButton('listUL', 'active');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>%2% second item</li></ul><p>%3% third item</p>');
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>%2% second item</li><li>%3% third item</li></ul>');
+
+        //Test unordered list when select the whole list item
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickInlineToolbarButton('listUL', 'active');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>%2% second item</li></ul><p>%3% third item</p>');
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>%2% second item</li><li>%3% third item</li></ul>');
+
+        //Test ordered list when click inside a list item
+        $this->useTest(2);
+        $this->moveToKeyword(3);
+        $this->clickTopToolbarButton('listOL', 'active');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>%2% second item</li></ol><p>%3% third item</p>');
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>%2% second item</li><li>%3% third item</li></ol>');
+
+        //Test ordered list when select a word in the list item
+        $this->selectKeyword(3);
+        $this->clickInlineToolbarButton('listOL', 'active');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>%2% second item</li></ol><p>%3% third item</p>');
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>%2% second item</li><li>%3% third item</li></ol>');
+
+        //Test ordered list when select the whole list item
+        $this->clickTopToolbarButton('listOL', 'active');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>%2% second item</li></ol><p>%3% third item</p>');
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>%2% second item</li><li>%3% third item</li></ol>');
+
+    }//end testRemoveAndAddBackTheLastListItem()
+
+
+    /**
+     * Test list is removed when you click the list icon
+     *
+     * @return void
+     */
+    public function testRemoveListUsingListIcon()
+    {
+        //Test unordered list using top toolbar icons
+        $this->useTest(1);
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
-        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->clickTopToolbarButton('listUL', 'active');
+        $this->assertHTMLMatch('<p>Unordered List:</p><p>%1% first item</p><p>%2% second item</p><p>%3% third item</p>');
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>%2% second item</li><li>%3% third item</li></ul>');
 
-        // Check that the inline toolbar no longer appears  on the screen
-        $inlineToolbarFound = true;
-        try
-        {
-            $this->getInlineToolbar();
-        }
-        catch  (Exception $e) {
-            $inlineToolbarFound = false;
-        }
+        //Test unordered list using inline toolbar icons
+        $this->clickInlineToolbarButton('listUL', 'active');
+        $this->assertHTMLMatch('<p>Unordered List:</p><p>%1% first item</p><p>%2% second item</p><p>%3% third item</p>');
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>%2% second item</li><li>%3% third item</li></ul>');
 
-        $this->assertFalse($inlineToolbarFound, 'The inline toolbar was found');
-        $this->assertHTMLMatch('<p>Unordered List:</p><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-
-        //Click undo
-        $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-        
-        //Click redo
-        $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<p>Unordered List:</p><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-
-    }//end testRemoveAllListItemsForUnorderedListAndClickUndo()
-
-
-    /**
-     * Test remove list items for an ordered list and then click undo and redo.
-     *
-     * @return void
-     */
-    public function testRemoveAllListItemsForOrderedListAndClickUndo()
-    {
-        $this->selectKeyword(5);
+        //Test ordered list using top toolbar icons
+        $this->useTest(2);
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
-        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->clickTopToolbarButton('listOL', 'active');
+        $this->assertHTMLMatch('<p>Ordered List:</p><p>%1% first item</p><p>%2% second item</p><p>%3% third item</p>');
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>%2% second item</li><li>%3% third item</li></ol>');
 
-        // Check that the inline toolbar no longer appears  on the screen
-        $inlineToolbarFound = true;
-        try
-        {
-            $this->getInlineToolbar();
-        }
-        catch  (Exception $e) {
-            $inlineToolbarFound = false;
-        }
+        //Test ordered list using inline toolbar icons
+        $this->clickInlineToolbarButton('listOL', 'active');
+        $this->assertHTMLMatch('<p>Ordered List:</p><p>%1% first item</p><p>%2% second item</p><p>%3% third item</p>');
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>%2% second item</li><li>%3% third item</li></ol>');
 
-        $this->assertFalse($inlineToolbarFound, 'The inline toolbar was found');
-
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-
-        //Click undo
-        $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-        
-        //Click redo
-        $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-
-    }//end testRemoveAllListItemsForOrderedListAndClickUndo()
+    }//end testRemoveListUsingListIcon()
 
 
     /**
-     * Test remove list items and then click undo.
+     * Test revmoing and adding back the first list item in a sub list.
      *
      * @return void
      */
-    public function testRemoveListItemsAndClickUndoAndRedo()
+    public function testRemoveAndAddBackTheFirstItemInASubList()
     {
-        //Test Unordered list
-        $this->selectKeyword(1, 2);
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-        
-        $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        //Test unordered list when click inside a list item
+        $this->useTest(3);
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('listUL', 'active');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><p>sub item 1 %1%</p><ul><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
 
-        $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-        
-        //Test ordered list
-        $this->selectKeyword(4, 5);
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>third %6% item</li></ol>');
-        
-        $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-        
-        $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>third %6% item</li></ol>');
-        
-    }//end testRemoveListItemsAndClickUndoAndRedo()
+        //Test unordered list when select a word in the list item
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('listUL', 'active');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><p>sub item 1 %1%</p><ul><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+
+        //Test unordered list when select the whole list item
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickInlineToolbarButton('listUL', 'active');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><p>sub item 1 %1%</p><ul><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+
+        //Test ordered list when click inside a list item
+        $this->useTest(4);
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('listOL', 'active');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><p>sub item 1 %1%</p><ol><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
+
+        //Test ordered list when select a word in the list item
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('listOL', 'active');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><p>sub item 1 %1%</p><ol><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
+
+        //Test ordered list when select the whole list item
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickTopToolbarButton('listOL', 'active');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><p>sub item 1 %1%</p><ol><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
+
+    }//end testRemoveAndAddBackTheFirstItemInASubList()
 
 
-	/**
-     * Test that an item can be removed from the list.
+    /**
+     * Test revmoing and adding back the middle list item in a sub list.
      *
      * @return void
      */
-    public function testRemoveAnItemFromList()
+    public function testRemoveAndAddBackTheMiddleItemInASubList()
     {
-        //Test unordered list
+        //Test unordered list when click inside a list item
+        $this->useTest(3);
+        $this->moveToKeyword(2);
+        $this->clickTopToolbarButton('listUL', 'active');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li></ul><p>sub item 2 %2%</p><ul><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+
+        //Test unordered list when select a word in the list item
         $this->selectKeyword(2);
+        $this->clickInlineToolbarButton('listUL', 'active');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li></ul><p>sub item 2 %2%</p><ul><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+
+        //Test unordered list when select the whole list item
         $this->selectInlineToolbarLineageItem(1);
+        $this->clickInlineToolbarButton('listUL', 'active');
+        $this->assertHTMLMatch('<p>Unordered List:</p><p>first item</p><p>sub item 1 XAX</p><p>sub item 2 XBX</p><p>sub item 3 XCX</p><ul><li>second item</li></ul>');
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item</li><li>sub item 1 XAX</li><li>sub item 2 XBX</li><li>sub item 3 XCX</li><li>second item</li></ul>');
 
-        // Remove whole item.
-        $this->sikuli->keyDown('Key.BACKSPACE');
+        //Test ordered list when click inside a list item
+        $this->useTest(4);
+        $this->moveToKeyword(2);
+        $this->clickTopToolbarButton('listOL', 'active');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li></ol><p>sub item 2 %2%</p><ol><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
 
-        // Remove the item element.
-        $this->sikuli->keyDown('Key.BACKSPACE');
+        //Test ordered list when select a word in the list item
+        $this->selectKeyword(2);
+        $this->clickInlineToolbarButton('listOL', 'active');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li></ol><p>sub item 2 %2%</p><ol><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
 
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        //Test ordered list when select the whole list item
+        $this->clickTopToolbarButton('listOL', 'active');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li></ol><p>sub item 2 %2%</p><ol><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
 
-        //Test ordered list
-        $this->selectKeyword(5);
+    }//end testRemoveAndAddBackTheMiddleItemInASubList()
+
+
+    /**
+     * Test revmoing and adding back the last list item in a sub list.
+     *
+     * @return void
+     */
+    public function testRemoveAndAddBackTheLastItemInASubList()
+    {
+        //Test unordered list when click inside a list item
+        $this->useTest(3);
+        $this->moveToKeyword(3);
+        $this->clickTopToolbarButton('listUL', 'active');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ul><p>sub item 3 %3%</p></li><li>second item</li></ul>');
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+
+        //Test unordered list when select a word in the list item
+        $this->selectKeyword(3);
+        $this->clickInlineToolbarButton('listUL', 'active');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ul><p>sub item 3 %3%</p></li><li>second item</li></ul>');
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+
+        //Test unordered list when select the whole list item
         $this->selectInlineToolbarLineageItem(1);
+        $this->clickInlineToolbarButton('listUL', 'active');
+        $this->assertHTMLMatch('<p>Unordered List:</p><p>first item</p><p>sub item 1 XAX</p><p>sub item 2 XBX</p><p>sub item 3 XCX</p><ul><li>second item</li></ul>');
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item</li><li>sub item 1 XAX</li><li>sub item 2 XBX</li><li>sub item 3 XCX</li><li>second item</li></ul>');
 
-        // Remove whole item.
-        $this->sikuli->keyDown('Key.BACKSPACE');
+        //Test ordered list when click inside a list item
+        $this->useTest(4);
+        $this->moveToKeyword(3);
+        $this->clickTopToolbarButton('listOL', 'active');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ol><p>sub item 3 %3%</p></li><li>second item</li></ol>');
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
 
-        // Remove the item element.
-        $this->sikuli->keyDown('Key.BACKSPACE');
+        //Test ordered list when select a word in the list item
+        $this->selectKeyword(3);
+        $this->clickInlineToolbarButton('listOL', 'active');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ol><p>sub item 3 %3%</p></li><li>second item</li></ol>');
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
 
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>third %6% item</li></ol>');
+        //Test ordered list when select the whole list item
+        $this->clickTopToolbarButton('listOL', 'active');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ol><p>sub item 3 %3%</p></li><li>second item</li></ol>');
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
 
-    }//end testRemoveItemFromList()
-
-
-    /**
-     * Test that a sub list with single item is removed from the main list.
-     *
-     * @return void
-     */
-    public function testRemoveSubListFromList()
-    {
-        //Test unordered list
-        $this->selectKeyword(2);
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item<ul><li>second item %2%</li></ul></li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-
-        $this->selectInlineToolbarLineageItem(3);
-
-        // Remove whole item.
-        $this->sikuli->keyDown('Key.BACKSPACE');
-
-        // Remove the item element.
-        $this->sikuli->keyDown('Key.BACKSPACE');
-
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-
-        //Test ordered list
-        $this->selectKeyword(5);
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item<ol><li>second item %5%</li></ol></li><li>third %6% item</li></ol>');
-
-        $this->selectInlineToolbarLineageItem(3);
-
-        // Remove whole item.
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        sleep(1);
-
-        // Remove the item element.
-        $this->sikuli->keyDown('Key.BACKSPACE');
-
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>third %6% item</li></ol>');
-
-    }//end testRemoveSubListFromList()
+    }//end testRemoveAndAddBackTheLastItemInASubList()
 
 
     /**
-     * Test removing one item from a sub list.
+     * Test sub list is removed when you click the list icon
      *
      * @return void
      */
-    public function testRemoveOneItemFromASubList()
+    public function testRemoveSubListUsingListIcon()
     {
-        //Test unordered list
-        $this->selectKeyword(2, 3);
-        $this->sikuli->keyDown('Key.TAB');
+        //Test unordered list using top toolbar icons
+        $this->useTest(3);
         $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(3);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickTopToolbarButton('listUL', 'active');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><p>sub item 1 %1%</p><p>sub item 2 %2%</p><p>sub item 3 %3%</p></li><li>second item</li></ul>');
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
 
-        // Remove whole item.
-        $this->sikuli->keyDown('Key.BACKSPACE');
+        //Test unordered list using inline toolbar icons
+        $this->clickInlineToolbarButton('listUL', 'active');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><p>sub item 1 %1%</p><p>sub item 2 %2%</p><p>sub item 3 %3%</p></li><li>second item</li></ul>');
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
 
-        // Remove the item element.
-        $this->sikuli->keyDown('Key.BACKSPACE');
+        //Test ordered list using top toolbar icons
+        $this->useTest(4);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickTopToolbarButton('listOL', 'active');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><p>sub item 1 %1%</p><p>sub item 2 %2%</p><p>sub item 3 %3%</p></li><li>second item</li></ol>');
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
 
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item<ul><li>third %3% item</li></ul></li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        //Test ordered list using the inline toolbar icons
+        $this->clickInlineToolbarButton('listOL', 'active');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><p>sub item 1 %1%</p><p>sub item 2 %2%</p><p>sub item 3 %3%</p></li><li>second item</li></ol>');
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
 
-        //Test ordered list
-        $this->selectKeyword(5, 6);
-        $this->sikuli->keyDown('Key.TAB');
-        $this->selectKeyword(6);
-        $this->selectInlineToolbarLineageItem(3);
-
-        // Remove whole item.
-        $this->sikuli->keyDown('Key.BACKSPACE');
-
-        // Remove the item element.
-        $this->sikuli->keyDown('Key.BACKSPACE');
-
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item<ul><li>third %3% item</li></ul></li></ul><p>Ordered List:</p><ol><li>%4% first item<ol><li>second item %5%</li></ol></li></ol>');
-
-    }//end testRemoveSubListItemFromList()
-
+    }//end testRemoveListUsingListIcon()
 
     /**
      * Test removing an item from a list by pressing backspace.
@@ -250,18 +412,21 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsTest extends AbstractVip
     public function testRemoveItemUsingBackspace()
     {
         //Test unordered list
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->sikuli->keyDown('Key.LEFT');
+        $this->useTest(1);
+        $this->moveToKeyword(3, 'left');
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
-
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>%2% second item%3% third item</li></ul>');
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item%2% second item%3% third item</li></ul>');
         //Test ordered list
-        $this->selectKeyword(6);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->sikuli->keyDown('Key.LEFT');
+        $this->useTest(2);
+        $this->moveToKeyword(3, 'left');
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>%2% second item%3% third item</li></ol>');
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item%2% second item%3% third item</li></ol>');
 
     }//end testRemoveItemUsingBackspace()
 
@@ -274,45 +439,36 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsTest extends AbstractVip
     public function testRemovingAllItemUsingBackspace()
     {
         //Test unordered list
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->sikuli->keyDown('Key.LEFT');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->useTest(1);
 
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->sikuli->keyDown('Key.LEFT');
+        $this->moveToKeyword(3, 'left');
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first itemsecond item %2%third %3% item</li></ul><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>%2% second item%3% third item</li></ul>');
 
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->sikuli->keyDown('Key.LEFT');
+        $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>Unordered List:%1% first itemsecond item %2%third %3% item</p><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%</li><li>third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item%2% second item%3% third item</li></ul>');
+
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Unordered List:%1% first item%2% second item%3% third item</p>');
 
         //Test ordered list
-        $this->selectKeyword(6);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->sikuli->keyDown('Key.LEFT');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>Unordered List:%1% first itemsecond item %2%third %3% item</p><p>Ordered List:</p><ol><li>%4% first item</li><li>second item %5%third %6% item</li></ol>');
+        $this->useTest(2);
 
-        $this->selectKeyword(6);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->sikuli->keyDown('Key.LEFT');
+        $this->moveToKeyword(3, 'left');
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>Unordered List:%1% first itemsecond item %2%third %3% item</p><p>Ordered List:</p><ol><li>%4% first itemsecond item %5%third %6% item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>%2% second item%3% third item</li></ol>');
 
-        $this->selectKeyword(6);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->sikuli->keyDown('Key.LEFT');
+        $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>Unordered List:%1% first itemsecond item %2%third %3% item</p><p>Ordered List:%4% first itemsecond item %5%third %6% item</p>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item%2% second item%3% third item</li></ol>');
+
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Ordered List:%1% first item%2% second item%3% third item</p>');
 
     }//end testRemovingAllItemUsingBackspace()
-
 
 }//end class
 

@@ -711,7 +711,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testApplyingAClassToAnImage()
     {
-        $this->clickElement('img', 1);
+        $this->clickElement('img');
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
@@ -720,7 +720,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should not be active.');
 
-        $this->clickElement('img', 1);
+        $this->clickElement('img');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should not be active.');
 
         $this->clickTopToolbarButton('cssClass', 'active');

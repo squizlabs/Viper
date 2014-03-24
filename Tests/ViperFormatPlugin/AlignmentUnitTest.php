@@ -451,7 +451,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testAligningAnImage()
     {
-        $this->clickElement('img', 1);
+        $this->clickElement('img', 0);
         $this->clickTopToolbarButton('justifyLeft');
 
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Left justify icon does not appear in the top toolbar');

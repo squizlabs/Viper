@@ -150,7 +150,7 @@ ViperAccessibilityPlugin.prototype = {
                 var contents = sourceViewPlugin.getContents();
                 ViperUtil.remove(tmpText);
                 sourceViewPlugin.showSourceView(contents, function() {
-                    if (self.viper.isBrowser('msie') === true) {
+                    if (ViperUtil.isBrowser('msie') === true) {
                         sourceViewPlugin.scrollToText('__STH__');
                         sourceViewPlugin.replaceSelection('');
                         sourceViewPlugin.updateOriginalSourceValue();

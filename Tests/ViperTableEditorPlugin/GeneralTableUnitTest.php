@@ -915,6 +915,30 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
     }//end testClickingInsideEmptyTableInDiv()
 
 
+    /**
+     * Test that removing content on page with table element as last element.
+     *
+     * @return void
+     */
+    public function testDeleteContentLastElementTable()
+    {
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>test</p>');
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->sikuli->keyDown('Key.CMD + z');
+
+        $this->selectKeyword(1, 3);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>test</p>');
+        $this->sikuli->keyDown('Key.CMD + z');
+
+    }//end testDeleteContentLastElementTable()
+
+
 }//end class
 
 ?>
