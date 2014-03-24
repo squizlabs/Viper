@@ -737,6 +737,13 @@ ViperKeyboardEditorPlugin.prototype = {
                             range.collapse(true);
                             ViperSelection.addRange(range);
                         }
+                    } else if (startNode.nodeType === ViperUtil.TEXT_NODE
+                        && ViperUtil.isTag(startNode.parentNode, 'li') === true
+                        && ViperUtil.getTag('li', startNode.parentNode.parentNode).length === 1
+                    ) {
+                        // If the list item is the first container in the content and its being removed and its the
+                        // only list item then remove the list element.
+                        ViperUtil.remove(startNode.parentNode.parentNode);
                     }
 
                     return false;
