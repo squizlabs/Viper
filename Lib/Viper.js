@@ -4392,6 +4392,15 @@ Viper.prototype = {
                     ViperSelection.addRange(range);
                 }
             }
+        } else if (endNode
+            && startNode
+            && ViperUtil.isTag(startNode, 'table') === true
+            && range._getLastSelectableChild(startNode) === endNode
+        ) {
+            // IE table selection.
+            range.setStart(startNode);
+            range.collapse(true);
+            ViperSelection.addRange(range);
         }//end if
 
         return range;
