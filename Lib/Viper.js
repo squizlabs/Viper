@@ -879,6 +879,7 @@ Viper.prototype = {
                 }
 
                 try {
+                    range.setStart(elem.firstChild, 0);
                     range.setEnd(elem.firstChild, 0);
                     range.collapse(false);
                     ViperSelection.addRange(range);

@@ -753,16 +753,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 // and then initialise the Viper element.
                 ViperUtil.setHtml(viperElement, '');
                 this.viper.initEditableElement();
-
-                if (ViperUtil.isBrowser('chrome') === true
-                    || ViperUtil.isBrowser('safari') === true
-                    || ViperUtil.isBrowser('msie') === true
-                ) {
-                    // Chrome, Safari and IE needs to fire nodes changed here as they do
-                    // not fire keypress.
-                    this.viper.fireNodesChanged();
-                }
-
+                this.viper.fireNodesChanged();
                 return false;
             }
         } else if (ViperUtil.isBrowser('msie') === true) {
@@ -1252,9 +1243,10 @@ ViperKeyboardEditorPlugin.prototype = {
                     var defaultTagName = this.viper.getDefaultBlockTag();
                     if (defaultTagName !== '') {
                         var defTag = document.createElement(defaultTagName);
-                        ViperUtil.setHtml(defTag, '&nbsp;');
+                        ViperUtil.setHtml(defTag, '<br/>');
                         ViperUtil.setHtml(nodeSelection, '');
                         nodeSelection.appendChild(defTag);
+                        range.setStart(defTag, 0);
                     } else {
                         ViperUtil.setHtml(nodeSelection, '<br />');
                     }
