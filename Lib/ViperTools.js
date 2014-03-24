@@ -468,11 +468,9 @@ ViperTools.prototype = {
             }
 
             if (ViperUtil.isBrowser('firefox') === true) {
-                if (ViperUtil.isTag(e.originalEvent.explicitOriginalTarget, 'input') === false) {
-                    setTimeout(function() {
-                        input.selectionStart = input.value.length;
-                    }, 2);
-                }
+                setTimeout(function() {
+                    input.selectionStart = input.value.length;
+                }, 2);
             }
         });
 
