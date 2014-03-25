@@ -751,18 +751,13 @@ ViperKeyboardEditorPlugin.prototype = {
             }
         }
 
-        if (firstSelectable === range.startContainer || viperElement === range.startContainer) {
-            var lastSelectable  = range._getLastSelectableChild(viperElement);
-            if ((range.endContainer === viperElement && range.startContainer === viperElement)
-                || (range.endContainer === lastSelectable && range.endOffset === lastSelectable.data.length)
-            ) {
-                // The whole Viper element is selected, remove all of its content
-                // and then initialise the Viper element.
-                ViperUtil.setHtml(viperElement, '');
-                this.viper.initEditableElement();
-                this.viper.fireNodesChanged();
-                return false;
-            }
+        if (this._isWholeViperElementSelected(range) === true) {
+            // The whole Viper element is selected, remove all of its content
+            // and then initialise the Viper element.
+            ViperUtil.setHtml(viperElement, '');
+            this.viper.initEditableElement();
+            this.viper.fireNodesChanged();
+            return false;
         } else if (ViperUtil.isBrowser('msie') === true) {
             var rangeClone = range.cloneRange();
 
@@ -1020,6 +1015,49 @@ ViperKeyboardEditorPlugin.prototype = {
             }
 
             return false;
+        }
+
+        if (range.collapsed === false) {
+            var nodeSelection = range.getNodeSelection();
+            if (nodeSelection) {console.info(111)
+                // A whole container is selected at the start of the editable container.
+                // Find good container to place the caret.
+                var next       = true;
+                var selectable = range.getNextContainer(nodeSelection, null, false, true);
+                if (!selectable) {
+                    next       = false;
+                    selectable = range.getPreviousContainer(nodeSelection, null, true, true);
+                }
+
+                if (!selectable) {
+                    // Create a new default container.
+                    var defaultTagName = this.viper.getDefaultBlockTag();
+                    var defTag = null;
+                    if (defaultTagName !== '') {
+                        defTag = document.createElement(defaultTagName);
+                        ViperUtil.setHtml(defTag, '<br/>');
+                    } else {
+                        defTag = document.createTextNode(' ');
+                    }
+
+                    ViperUtil.insertAfter(nodeSelection, defTag);
+                    ViperUtil.remove(nodeSelection);
+                    range.setStart(defTag, 0);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                    return false;
+                } else if (next === true) {
+                    range.setStart(selectable, 0);
+                    range.collapse(true);
+                } else {
+                    range.setStart(selectable, selectable.data.length);
+                    range.collapse(true);
+                }
+
+                ViperUtil.remove(nodeSelection);
+                ViperSelection.addRange(range);
+                return false;
+            }
         }//end if
 
         if (this._handleBackspaceAtStartOfLi(e, range) === false) {
@@ -1602,9 +1640,9 @@ ViperKeyboardEditorPlugin.prototype = {
         if (range.collapsed === false) {
             var viperElement    = this.viper.getViperElement();
             var firstSelectable = range._getFirstSelectableChild(viperElement);
-            if (firstSelectable === range.startContainer || viperElement === range.startContainer) {
+            if (firstSelectable === range.startContainer || (viperElement === range.startContainer && range.startOffset === 0)) {
                 var lastSelectable  = range._getLastSelectableChild(viperElement);
-                if (range.endContainer === viperElement
+                if ((range.endContainer === viperElement && range.endOffset >= viperElement.childNodes.length)
                     || (range.endContainer === lastSelectable && range.endOffset === lastSelectable.data.length)
                 ) {
                     return true;
