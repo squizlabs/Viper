@@ -622,6 +622,8 @@ ViperCopyPastePlugin.prototype = {
             html = this._updateElements(html);
         }
 
+        html = this._removeSpansWithNoAttributes(html);
+
         var self = this;
         this.viper.fireCallbacks('ViperCopyPastePlugin:cleanPaste', {html: html, stripTags: stripTags}, function(obj, newHTML) {
             if (newHTML) {
@@ -646,7 +648,7 @@ ViperCopyPastePlugin.prototype = {
 
         if (html) {
             html = ViperUtil.trim(html);
-            html = this.viper.cleanHTML(html, ['dir', 'class', 'lang', 'align']);
+            html = this.viper.cleanHTML(html, ['align', 'class']);
         }
 
         if (!html) {
@@ -873,7 +875,6 @@ ViperCopyPastePlugin.prototype = {
         }
 
         // Remove span and o:p etc. tags.
-        content = content.replace(/<\/?span[^>]*>/gi, "");
         content = content.replace(/<\/?\w+:[^>]*>/gi, '' );
 
         // Remove XML tags.
@@ -1030,6 +1031,27 @@ ViperCopyPastePlugin.prototype = {
             // Remove this span tag.
             ViperUtil.remove(span);
         }//end for
+
+    },
+
+    _removeSpansWithNoAttributes: function(content)
+    {
+        var tmp = document.createElement('div');
+        ViperUtil.setHtml(tmp, content);
+
+        var spans = ViperUtil.getTag('span', tmp);
+        for (var i = 0; i < spans.length; i++) {
+            if (ViperUtil.hasAttribute(spans[i], 'lang') === false
+                && ViperUtil.hasAttribute(spans[i], 'dir') === false
+                && ViperUtil.hasAttribute(spans[i], 'style') === false
+            ) {
+                this._moveChildren(spans[i]);
+                ViperUtil.remove(spans[i]);
+            }
+        }
+
+        content = ViperUtil.getHtml(tmp);
+        return content;
 
     },
 
