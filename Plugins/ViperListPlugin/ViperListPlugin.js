@@ -502,7 +502,6 @@ ViperListPlugin.prototype = {
     tabRange: function(range, outdent, testOnly, listType)
     {
         range    = range || this.viper.getViperRange();
-        listType = listType || 'ul';
 
         var node = range.getStartNode() || range.getNodeSelection();
         if (!node) {
