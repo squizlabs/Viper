@@ -753,7 +753,7 @@ ViperKeyboardEditorPlugin.prototype = {
 
         if (firstSelectable === range.startContainer || viperElement === range.startContainer) {
             var lastSelectable  = range._getLastSelectableChild(viperElement);
-            if (range.endContainer === viperElement
+            if ((range.endContainer === viperElement && range.startContainer === viperElement)
                 || (range.endContainer === lastSelectable && range.endOffset === lastSelectable.data.length)
             ) {
                 // The whole Viper element is selected, remove all of its content
@@ -1280,16 +1280,23 @@ ViperKeyboardEditorPlugin.prototype = {
                     // First remove all elements in between.
                     range.deleteContents();
 
-                    // Now bring the contents of the next selectable to the
-                    // start parent.
-                    var nextSelectable = range.getNextContainer(range.startContainer, null, true);
-                    if (this.viper.isOutOfBounds(nextSelectable) === false) {
-                        var nextParent = ViperUtil.getFirstBlockParent(nextSelectable);
-                        while (nextParent.firstChild) {
-                            startParent.appendChild(nextParent.firstChild);
-                        }
+                    // If the startParent is empty remove it if the endParent is the viperElement.
+                    if (ViperUtil.isBlank(ViperUtil.trim(ViperUtil.getHtml(startParent))) !== true
+                        || endParent != this.viper.getViperElement()
+                    ) {
+                        // Now bring the contents of the next selectable to the
+                        // start parent.
+                        var nextSelectable = range.getNextContainer(range.startContainer, null, true);
+                        if (this.viper.isOutOfBounds(nextSelectable) === false) {
+                            var nextParent = ViperUtil.getFirstBlockParent(nextSelectable);
+                            while (nextParent.firstChild) {
+                                startParent.appendChild(nextParent.firstChild);
+                            }
 
-                        ViperUtil.remove(nextParent);
+                            ViperUtil.remove(nextParent);
+                        }
+                    } else {
+                        ViperUtil.remove(startParent);
                     }
                 } else {
                     // Same container just remove contents.
