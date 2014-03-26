@@ -1019,7 +1019,7 @@ ViperKeyboardEditorPlugin.prototype = {
 
         if (range.collapsed === false) {
             var nodeSelection = range.getNodeSelection();
-            if (nodeSelection) {console.info(111)
+            if (nodeSelection) {
                 // A whole container is selected at the start of the editable container.
                 // Find good container to place the caret.
                 var next       = true;
@@ -1296,7 +1296,7 @@ ViperKeyboardEditorPlugin.prototype = {
                         ViperUtil.setHtml(nodeSelection, '<br />');
                     }
                 } else {
-                    var nextSelectable = range.getNextContainer(range.endContainer, null, true);
+                    var nextSelectable = range.getNextContainer(nodeSelection, null, true);
                     if (this.viper.isOutOfBounds(nextSelectable) === true) {
                         nextSelectable = range.getPreviousContainer(range.startContainer, null, true);
                         if (nextSelectable) {
