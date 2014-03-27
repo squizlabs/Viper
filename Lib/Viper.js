@@ -4130,6 +4130,20 @@ Viper.prototype = {
                 && range.startContainer === range._getFirstSelectableChild(this.element)
             ) {
                 resetContent = true;
+            } else if (range.startOffset === 0
+                && range.startContainer === range.endContainer
+                && range.startContainer === this.element
+                && range.endOffset >= this.element.childNodes.length
+            ) {
+                resetContent = true;
+            }
+
+            var nodeSelection = null;
+            if (resetContent !== true) {
+                nodeSelection = range.getNodeSelection(range, true);
+                if (nodeSelection && nodeSelection === this.element) {
+                    resetContent = true;
+                }
             }
 
             if (resetContent === true) {
@@ -4152,7 +4166,6 @@ Viper.prototype = {
                 range.collapse(true);
                 ViperSelection.addRange(range);
             } else {
-                var nodeSelection = range.getNodeSelection(range, true);
                 if (nodeSelection && ViperUtil.isBlockElement(nodeSelection) === true && String.fromCharCode(e.which) !== '') {
 
                     switch (ViperUtil.getTagName(nodeSelection)) {
