@@ -1546,7 +1546,7 @@ ViperFormatPlugin.prototype = {
 
         if (selectedNode === viperElement) {
             selectedNode = null;
-        } else if (ViperUtil.isBlockElement(selectedNode) === false) {
+        } else if (selectedNode && ViperUtil.isBlockElement(selectedNode) === false) {
             // Not a block element selection, check if its being wrapped with
             // block elements e.g. <p><strong>text</strong></p>.
             var surroundingBlockElems = ViperUtil.getSurroundingParents(selectedNode, null, true);
@@ -1735,15 +1735,20 @@ ViperFormatPlugin.prototype = {
                 var removeType = false;
 
                 if (ViperUtil.isTag(commonElem, type) === true && commonElem !== viperElement) {
-                    var lastSelectableParent = range._getLastSelectableChild(commonElem).parentNode;
+                    // Check if we are removing the type. If first parent and last parent are the whole selection
+                    // then remove the common type.
+                    var firstSelectableParent = ViperUtil.getFirstBlockParent(range._getFirstSelectableChild(commonElem));
+                    var lastSelectableParent  = ViperUtil.getFirstBlockParent(range._getLastSelectableChild(commonElem));
                     var lastParent = newParents[(newParents.length - 1)];
-                    while (lastSelectableParent !== commonElem) {
-                        if (lastSelectableParent === lastParent) {
-                            removeType = true;
-                            break;
-                        }
+                    if (firstSelectableParent === newParents[0]) {
+                        while (lastSelectableParent !== commonElem) {
+                            if (lastSelectableParent === lastParent) {
+                                removeType = true;
+                                break;
+                            }
 
-                        lastSelectableParent = lastSelectableParent.parentNode;
+                            lastSelectableParent = lastSelectableParent.parentNode;
+                        }
                     }
                 }
 
@@ -1805,7 +1810,12 @@ ViperFormatPlugin.prototype = {
                         var parentElem = null;
                         while (element.firstChild) {
                             if (ViperUtil.isBlockElement(element.firstChild) === false) {
-                                if (!parentElem) {
+                                if (element.firstChild.nodeType === ViperUtil.TEXT_NODE
+                                    && ViperUtil.isBlank(ViperUtil.trim(element.firstChild.data)) === true
+                                ) {
+                                    ViperUtil.remove(element.firstChild);
+                                    continue;
+                                } else if (!parentElem) {
                                     parentElem = document.createElement(this.viper.getDefaultBlockTag());
                                     ViperUtil.insertBefore(element, parentElem);
                                 }
