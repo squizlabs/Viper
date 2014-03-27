@@ -205,7 +205,12 @@ ViperFormatPlugin.prototype = {
     {
         node = this.getNodeWithAttributeFromRange(attribute, node);
         if (node) {
-            return node.getAttribute(attribute);
+            var value = node.getAttribute(attribute);
+            if (attribute === 'class') {
+                value = this._removeViperHighlightClass(value);
+            }
+
+            return value;
         }
 
         return '';
@@ -250,6 +255,12 @@ ViperFormatPlugin.prototype = {
         }
 
         return null;
+
+    },
+
+    _removeViperHighlightClass: function(className)
+    {
+        return className.replace(/\s*(__viper_selHighlight|__viper_cleanOnly)/gi, '');
 
     },
 
