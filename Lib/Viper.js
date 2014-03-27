@@ -4186,6 +4186,14 @@ Viper.prototype = {
                         default:
                             // Set the content of the existing tag.
                             ViperUtil.setHtml(nodeSelection, '');
+
+                            if (ViperUtil.isTag(nodeSelection, 'blockquote') === true) {
+                                // Blockquote must have at least one P tag.
+                                var quoteP = document.createElement('p');
+                                nodeSelection.appendChild(quoteP);
+                                nodeSelection = quoteP;
+                            }
+
                             var textNode = document.createTextNode(String.fromCharCode(e.which));
                             nodeSelection.appendChild(textNode);
 
