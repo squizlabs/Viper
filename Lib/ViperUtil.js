@@ -2392,3 +2392,9 @@ var ViperUtil = {
     }
 
 };
+
+if (!window.console) {
+    window.console = {
+        info: function(){}
+    }
+};
