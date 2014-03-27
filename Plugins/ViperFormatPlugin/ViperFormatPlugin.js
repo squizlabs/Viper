@@ -613,6 +613,10 @@ ViperFormatPlugin.prototype = {
                 endNode = startNode;
             }
 
+            if (!endNode) {
+                return;
+            }
+
             if ((!nodeSelection || nodeSelection.nodeType !== ViperUtil.ELEMENT_NODE || nodeSelection === self.viper.getViperElement())
                 && (data.range.collapsed === true || ViperUtil.getFirstBlockParent(startNode) !== ViperUtil.getFirstBlockParent(endNode))
             ) {
