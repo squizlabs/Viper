@@ -107,7 +107,7 @@ var ViperSelection = {
     {
         this._selection = ViperSelection._getSelection();
 
-        if (this._viper.isBrowser('msie', '<11') === true) {
+        if (ViperUtil.isBrowser('msie', '<11') === true) {
             // IE.
             try {
                 range.rangeObj.select();
@@ -125,7 +125,9 @@ var ViperSelection = {
             this._selection.addRange(range.rangeObj);
         }
 
-        this._viper._viperRange = range;
+        if (this._viper) {
+            this._viper._viperRange = range;
+        }
 
     },
 

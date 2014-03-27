@@ -264,7 +264,7 @@ ViperSourceViewPlugin.prototype = {
         var popupBottom = document.createElement('div');
         ViperUtil.addClass(popupBottom, 'VSVP-bottomPanel');
 
-        if (this.viper.isBrowser('msie', '<10') === false && (this.viper.getViperPath() || this.getViperURL())) {
+        if (ViperUtil.isBrowser('msie', '<10') === false && (this.viper.getViperPath() || this.getViperURL())) {
             var newWindowButton = tools.createButton('VSVP:newWindow', '', _('Open In new window'), 'VSVP-bottomPanel-newWindow Viper-sourceNewWindow', function() {
                 self.openInNewWindow();
             });
@@ -312,7 +312,7 @@ ViperSourceViewPlugin.prototype = {
             }
         );
 
-        if (this.viper.isBrowser('msie', '<9') === true) {
+        if (ViperUtil.isBrowser('msie', '<9') === true) {
             this._includeStyleHTML(function() {
                 var editor = document.createElement('textarea');
                 self._textEditor = editor;

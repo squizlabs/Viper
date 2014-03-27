@@ -205,7 +205,7 @@ ViperCoreStylesPlugin.prototype = {
                 return;
             }
 
-            if (self.viper.isBrowser('msie') === true) {
+            if (ViperUtil.isBrowser('msie') === true) {
                 // This block of code prevents IE moving user selection to the.
                 // button element when clicked. When the button element is removed
                 // and added back to DOM selection is not moved. Seriously, IE?
@@ -1007,7 +1007,7 @@ ViperCoreStylesPlugin.prototype = {
 
         ViperChangeTracker.endBatchChange(changeid);
 
-        if (this.viper.isBrowser('msie', '<11') === true && nodeSelection && !bookmark) {
+        if (ViperUtil.isBrowser('msie', '<11') === true && nodeSelection && !bookmark) {
             var self = this;
             setTimeout(function() {
                 ViperSelection.addRange(range);
@@ -1015,7 +1015,7 @@ ViperCoreStylesPlugin.prototype = {
                 self.viper.fireSelectionChanged();
             }, 10);
         } else {
-            if (nodeSelection && nodeSelection.parentNode) {
+            if (nodeSelection && this.viper.isOutOfBounds(nodeSelection) === false) {
                 range.selectNode(nodeSelection);
                 ViperSelection.addRange(range);
             }
@@ -1025,7 +1025,7 @@ ViperCoreStylesPlugin.prototype = {
 
             if (nodeSelection
                 && ViperUtil.isTag(nodeSelection, 'table') === true
-                && (this.viper.isBrowser('chrome') === true || this.viper.isBrowser('safari') === true)
+                && (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true)
             ) {
                 // Webkit seems to fail to return the correct position for table
                 // range. Update position for specific table element and not range.
@@ -1171,7 +1171,7 @@ ViperCoreStylesPlugin.prototype = {
 
         if (!endNode) {
             endNode = startNode;
-        } else if (endNode.nodeType === ViperUtil.ELEMENT_NODE && this.viper.isBrowser('msie') === true) {
+        } else if (endNode.nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isBrowser('msie') === true) {
             endNode = range._getLastSelectableChild(endNode);
             range.setEnd(endNode, endNode.data.length);
             ViperSelection.addRange(range);
@@ -1207,6 +1207,7 @@ ViperCoreStylesPlugin.prototype = {
             || ViperUtil.isTag(startNode, style) === true
             || (ViperUtil.getParents(startNode, style).length > 0
             && ViperUtil.getParents(endNode, style).length > 0)
+            || this._getWholeStyleSelections(endNode, [style], []).length > 0
         ) {
             // This selection is already styles, remove it.
             var changeid = ViperChangeTracker.startBatchChange('removedFormat');
@@ -1316,14 +1317,17 @@ ViperCoreStylesPlugin.prototype = {
         this.viper.ViperTools.setButtonInactive('vitpBold');
         this.viper.ViperTools.setButtonInactive('vitpItalic');
 
+        // List of tags where the bold and italic icons will not be shown if they are part or inside of the selection.
+        var ignoredTags = ['a', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
         var activeStates = {};
         for (var i = 0; i < data.lineage.length; i++) {
-            if (ViperUtil.isTag(data.lineage[i], 'a') === true) {
-                // Dont want to show style buttons for links.
+            var tagName = ViperUtil.getTagName(data.lineage[i]);
+            if (ViperUtil.inArray(tagName, ignoredTags) === true) {
+                // Dont want to show style buttons for these tags.
                 return;
-            } else if (ViperUtil.isTag(data.lineage[i], 'strong') === true) {
+            } else if (tagName === 'strong') {
                 this.viper.ViperTools.setButtonActive('vitpBold');
-            } else if (ViperUtil.isTag(data.lineage[i], 'em') === true) {
+            } else if (tagName === 'em') {
                 this.viper.ViperTools.setButtonActive('vitpItalic');
             }
         }
@@ -1543,6 +1547,9 @@ ViperCoreStylesPlugin.prototype = {
 
                     startNode = startNode.parentNode;
                 }
+
+                // Also check first and last selectable child of endNode (nodeSelection).
+                activeStates.concat(this._getWholeStyleSelections(endNode, tagNames, activeStates));
             } else {
                 var foundTags = [];
                 while (startNode
@@ -1573,6 +1580,42 @@ ViperCoreStylesPlugin.prototype = {
         }//end if
 
         return activeStates;
+
+    },
+
+    _getWholeStyleSelections: function(parentNode, tagNames, parentStyles)
+    {
+        var range           = this.viper.getCurrentRange();
+        var firstSelectable = range._getFirstSelectableChild(parentNode);
+        var lastSelectable  = range._getFirstSelectableChild(parentNode);
+        var firstSelectableParents = [];
+        var styles = parentStyles;
+        if (firstSelectable && lastSelectable) {
+            while (firstSelectable && firstSelectable.parentNode !== parentNode) {
+                var pos = ViperUtil.arraySearch(ViperUtil.getTagName(firstSelectable.parentNode), tagNames);
+                if (pos >= 0) {
+                    firstSelectableParents.push(tagNames[pos]);
+                }
+
+                firstSelectable = firstSelectable.parentNode;
+            }
+
+            if (firstSelectableParents.length > 0) {
+                while (lastSelectable && lastSelectable.parentNode !== parentNode) {
+                    var pos = ViperUtil.arraySearch(ViperUtil.getTagName(lastSelectable.parentNode), tagNames);
+                    if (pos >= 0
+                        && ViperUtil.inArray(tagNames[pos], firstSelectableParents) === true
+                        && ViperUtil.inArray(tagNames[pos], styles) === false
+                    ) {
+                        styles.push(tagNames[pos]);
+                    }
+
+                    lastSelectable = lastSelectable.parentNode;
+                }
+            }
+        }
+
+        return styles;
 
     },
 

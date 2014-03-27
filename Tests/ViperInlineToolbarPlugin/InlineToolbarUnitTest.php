@@ -108,6 +108,9 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
 
         $this->assertFalse($toolbarExists, 'There should be no inline toolbar when you right click.');
 
+        // Close right click menu.
+        $this->sikuli->keyDown('Key.ESC');
+
     }//end testNoToolbarWhenRightClick()
 
 

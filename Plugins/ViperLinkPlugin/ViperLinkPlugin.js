@@ -147,7 +147,7 @@ ViperLinkPlugin.prototype = {
             }
         }
 
-        if (this.viper.isBrowser('msie') === true) {
+        if (ViperUtil.isBrowser('msie') === true) {
             // IE for whatever reason, changed the content of the link to be the href
             // when its a mailto link.....
             var linkContent = ViperUtil.getHtml(link);
@@ -206,7 +206,7 @@ ViperLinkPlugin.prototype = {
         var node  = range.getNodeSelection();
         var a     = document.createElement('a');
 
-        if (!node && this.viper.isBrowser('msie') === true) {
+        if (!node && ViperUtil.isBrowser('msie') === true) {
             // IE fix for Img selections.
             var prevSibling = range.startContainer.previousSibling;
             if (prevSibling
@@ -356,7 +356,7 @@ ViperLinkPlugin.prototype = {
 
         var selectedNode = range.getNodeSelection();
         var common       = range.getCommonElement();
-        if (!selectedNode && this.viper.isBrowser('msie') === true) {
+        if (!selectedNode && ViperUtil.isBrowser('msie') === true) {
             if (range.startContainer === range.endContainer
                 && range.startOffset === 0
                 && range.endOffset === 0

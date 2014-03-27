@@ -47,13 +47,13 @@
 }
 
 #ViperSourceViewPlugin-window .Viper-popup {
-    background: url(../Images/bgTexture-dark1.gif) repeat 0 0 #54535A;
+    background: url(../../Images/bgTexture-dark1.gif) repeat 0 0 #54535A;
 }
 
 .VSVP-confirmPanel {
     display: none;
     text-align: right;
-    background: url(../Images/bgTexture-dark1.gif) repeat 0 0 #54535A;
+    background: url(../../Images/bgTexture-dark1.gif) repeat 0 0 #54535A;
     padding: 0.8em 0.8em 0;
 }
 

@@ -161,29 +161,22 @@ ViperTools.prototype = {
         var self           = this;
         if (clickAction) {
             ViperUtil.addEvent(button, 'mousedown.' + this.viper.getEventNamespace(), function(e) {
-                if (self.viper.isBrowser('msie', '<11') === true) {
+                if (ViperUtil.isBrowser('msie', '<11') === true) {
                     // This block of code prevents IE moving user selection to the.
                     // button element when clicked. When the button element is removed
                     // and added back to DOM selection is not moved. Seriously, IE?
                     if (button.previousSibling) {
                         var sibling = button.previousSibling;
                         button.parentNode.removeChild(button);
-                        setTimeout(function() {
-                            ViperUtil.insertAfter(sibling, button);
-                        }, 1);
+                        ViperUtil.insertAfter(sibling, button);
                     } else if (button.nextSibling) {
                         var sibling = button.nextSibling;
                         button.parentNode.removeChild(button);
-                        setTimeout(function() {
-                            ViperUtil.insertBefore(sibling, button);
-                        }, 1);
-
+                        ViperUtil.insertBefore(sibling, button);
                     } else {
                         var parent = button.parentNode;
                         button.parentNode.removeChild(button);
-                        setTimeout(function() {
-                            parent.appendChild(button);
-                        }, 1);
+                        parent.appendChild(button);
                     }
                 }//end if
 
@@ -436,7 +429,7 @@ ViperTools.prototype = {
         }
 
         var moveCaretToEnd = true;
-        if (this.viper.isBrowser('msie') === true) {
+        if (ViperUtil.isBrowser('msie') === true) {
             // Need to add this mouseDown event for IE to disable the caret moving
             // to the end of the text in the input field. When the mouse is clicked
             // the caret is placed to the start of the field instead of the end,
@@ -452,7 +445,7 @@ ViperTools.prototype = {
             ViperUtil.addClass(textBox, 'Viper-focused');
             self.viper.highlightSelection();
 
-            if (self.viper.isBrowser('msie') === true) {
+            if (ViperUtil.isBrowser('msie') === true) {
                 if (moveCaretToEnd === true) {
                     setTimeout(function() {
                         input.focus();
@@ -467,12 +460,10 @@ ViperTools.prototype = {
                 input.value = input.value;
             }
 
-            if (self.viper.isBrowser('firefox') === true) {
-                if (ViperUtil.isTag(e.originalEvent.explicitOriginalTarget, 'input') === false) {
-                    setTimeout(function() {
-                        input.selectionStart = input.value.length;
-                    }, 2);
-                }
+            if (ViperUtil.isBrowser('firefox') === true) {
+                setTimeout(function() {
+                    input.selectionStart = input.value.length;
+                }, 2);
             }
         });
 
@@ -570,7 +561,7 @@ ViperTools.prototype = {
             if (action && e.which === 13) {
                 self.viper.focus();
                 action.call(input, input.value);
-            } else if (!action && e.which === 13 && isTextArea !== true && (self.viper.isBrowser('chrome') || self.viper.isBrowser('safari'))) {
+            } else if (!action && e.which === 13 && isTextArea !== true && (ViperUtil.isBrowser('chrome') || ViperUtil.isBrowser('safari'))) {
                 var forms = ViperUtil.getParents(main, 'form', self.viper.getViperElement());
                 if (forms.length > 0 && ViperUtil.getTag('input', forms[0]).length > 2) {
                     return forms[0].onsubmit();
@@ -763,7 +754,7 @@ ViperTools.prototype = {
 
         var self = this;
 
-        if (this.viper.isBrowser('msie', '<11') === true) {
+        if (ViperUtil.isBrowser('msie', '<11') === true) {
             // IE does not trigger the click event for input when the label
             // element is clicked, so add the click event to label element and change
             // the checkbox state.
@@ -1054,20 +1045,20 @@ ViperTools.prototype = {
         // Set the pos to be the middle of the screen
         //var windowDim  = ViperUtil.getWindowDimensions();
         var elementDim = ViperUtil.getBoundingRectangle(popupElement);
-        var window     = ViperUtil.getWindowDimensions();
+        var windowDim  = ViperUtil.getWindowDimensions();
 
         var toolbarHieght = 36;
 
         var marginTop = (((elementDim.y2 - elementDim.y1) / 2) * -1);
 
         // If the popup is off the top of the screen then move it back down.
-        var offScreenTop = (window.height / 2) + marginTop
+        var offScreenTop = (windowDim.height / 2) + marginTop
         if (offScreenTop < toolbarHieght) {
             marginTop -= offScreenTop - toolbarHieght;
         }
 
-        if ((elementDim.y2 - elementDim.y1) > (window.height - toolbarHieght)) {
-            ViperUtil.setStyle(contentElem, 'height', (height - (elementDim.y2 - elementDim.y1 - window.height) - toolbarHieght) + 'px');
+        if ((elementDim.y2 - elementDim.y1) > (windowDim.height - toolbarHieght)) {
+            ViperUtil.setStyle(contentElem, 'height', (height - (elementDim.y2 - elementDim.y1 - windowDim.height) - toolbarHieght) + 'px');
         }
 
         ViperUtil.setStyle(popupElement, 'margin-left', (((elementDim.x2 - elementDim.x1) / 2) * -1) + 'px');
@@ -1453,7 +1444,7 @@ ViperTools.prototype = {
 
                 ViperUtil.removeEvent(button, 'mousedown');
                 ViperUtil.addEvent(button, 'mousedown', function(e) {
-                    if (viper.isBrowser('msie', '<11') === true) {
+                    if (ViperUtil.isBrowser('msie', '<11') === true) {
                         // This block of code prevents IE moving user selection to the.
                         // button element when clicked. When the button element is removed
                         // and added back to DOM selection is not moved. Seriously, IE?
@@ -1550,7 +1541,7 @@ ViperTools.prototype = {
                         inputElements[0].focus();
                         ViperUtil.removeClass(inputElements[0].parentNode.parentNode.parentNode, 'Viper-active');
 
-                        if (self.viper.isBrowser('msie') === false) {
+                        if (ViperUtil.isBrowser('msie') === false) {
                             tools.viper.highlightSelection();
                         } else {
                             setTimeout(function() {
@@ -1620,7 +1611,7 @@ ViperTools.prototype = {
 
                     tools.viper.focus();
 
-                    if (tools.viper.isBrowser('msie') === false) {
+                    if (ViperUtil.isBrowser('msie') === false) {
                         try {
                             action.call(this);
                         } catch (e) {
@@ -1766,7 +1757,7 @@ ViperTools.prototype = {
                     rangeCoords = range.rangeObj.getBoundingClientRect();
                 }
 
-                if (!rangeCoords || (rangeCoords.left === 0 && rangeCoords.top === 0 && tools.viper.isBrowser('firefox') === true)) {
+                if (!rangeCoords || (rangeCoords.left === 0 && rangeCoords.top === 0 && ViperUtil.isBrowser('firefox') === true)) {
                     if (range.collapsed === true) {
                         var span = document.createElement('span');
                         tools.viper.insertNodeAtCaret(span);
@@ -1796,7 +1787,7 @@ ViperTools.prototype = {
                 }
 
                 if (!rangeCoords || (rangeCoords.bottom === 0 && rangeCoords.height === 0 && rangeCoords.left === 0)) {
-                    if (tools.viper.isBrowser('chrome') === true || tools.viper.isBrowser('safari') === true) {
+                    if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true) {
                         // Webkit bug workaround. https://bugs.webkit.org/show_bug.cgi?id=65324.
                         // OK.. Yet another fix. With the latest Google Chrome (17.0.963.46)
                         // the !rangeCoords check started to fail because its no longer

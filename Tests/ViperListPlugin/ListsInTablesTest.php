@@ -7,35 +7,32 @@ class Viper_Tests_ViperListPlugin_ListsInTablesTest extends AbstractViperListPlu
 
 
     /**
-     * Test a list can be created and removed from inside a table cell and by clicking the list icon
+     * Test a list can be created and removed inside a table cell
      *
      * @return void
      */
     public function testCreatingAListInACellAndRemovingIt()
     {
+
         $this->useTest(1);
 
-        //Test unordered list
-        $this->selectKeyword(1);
-
-        $this->clickTopToolbarButton('listUL');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><ul><li>Cell 1 %1%</li></ul></td><td>Cell 2</td><td><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
-        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
-
-        $this->clickTopToolbarButton('listUL', 'active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
+        //Test unordered list with list icon
+        $this->moveToKeyword(1);
         $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><ul><li>Cell 1 %1%</li></ul></td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+        $this->clickTopToolbarButton('listUL', 'active');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><p>Cell 1 %1%</p></td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
 
         //Test creating ordered list
-        $this->selectKeyword(4);
-
         $this->clickTopToolbarButton('listOL');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td><ol><li>Cell 5 %4%</li></ol></td><td>Cell 6</td></tr></tbody></table>');
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
-
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><ol><li>Cell 1 %1%</li></ol></td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
         $this->clickTopToolbarButton('listOL', 'active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><p>Cell 1 %1%</p></td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
 
     }//end testCreatingAListInACellAndRemovingIt()
 
@@ -47,248 +44,300 @@ class Viper_Tests_ViperListPlugin_ListsInTablesTest extends AbstractViperListPlu
      */
     public function testCreateListAndClickingUndo()
     {
-        $this->useTest(1);
 
         //Test unordered list
+        $this->useTest(1);
+
         $this->moveToKeyword(1);
-
         $this->clickTopToolbarButton('listUL');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><ul><li>Cell 1 %1%</li></ul></td><td>Cell 2</td><td><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><ul><li>Cell 1 %1%</li></ul></td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
-
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
-
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><ul><li>Cell 1 %1%</li></ul></td><td>Cell 2</td><td><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><ul><li>Cell 1 %1%</li></ul></td><td>Cell 2</td><td>Cell 3<br /> <ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
         
         //Test ordered list
-        $this->selectKeyword(4);
+        $this->useTest(2);
 
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('listOL');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><ul><li>Cell 1 %1%</li></ul></td><td>Cell 2</td><td><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td><ol><li>Cell 5 %4%</li></ol></td><td>Cell 6</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><ol><li>Cell 1 %1%</li></ol></td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1</li><li>item 2 %2%</li></ol></td></tr></tbody></table>');
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
-
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><ul><li>Cell 1 %1%</li></ul></td><td>Cell 2</td><td><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
-
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1</li><li>item 2 %2%</li></ol></td></tr></tbody></table>');      
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><ul><li>Cell 1 %1%</li></ul></td><td>Cell 2</td><td><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td><ol><li>Cell 5 %4%</li></ol></td><td>Cell 6</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><ol><li>Cell 1 %1%</li></ol></td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1</li><li>item 2 %2%</li></ol></td></tr></tbody></table>');
         
     }//end testCreateListAndClickingUndo()
 
 
     /**
-     * Test a list can be indented and outdented using the top toolbar icons.
+     * Test indenting and outdenting a list item
      *
      * @return void
      */
-    public function testIndentingAndOutdentingAListItemUsingTopToolbar()
+    public function testIndentingAndOutdentingListItem()
     {
+        //Test unordered list using the icons in the top toolbar
         $this->useTest(1);
-
-        //Test unordered list
         $this->selectKeyword(2);
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><ul><li>item 1<ul><li>item 2 %2%</li></ul></li></ul></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1<ul><li>item 2 %2%</li></ul></li></ul></td></tr></tbody></table>');
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
-
         $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-
         $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><ul><li>item 1</li></ul><p>item 2 %2%</p></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
-
-        //Test ordered list
-        $this->selectKeyword(3);
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li></ul><p>item 2 %2%</p></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><ul><li>item 1</li></ul><p>item 2 %2%</p></td></tr><tr><td><ol><li>item 1<ol><li>item 2 %3%</li></ol></li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
-        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+        
 
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><ul><li>item 1</li></ul><p>item 2 %2%</p></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><ul><li>item 1</li></ul><p>item 2 %2%</p></td></tr><tr><td><ol><li>item 1</li></ol><p>item 2 %3%</p></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
-
-    }//end testIndentingAndOutdentingAListItemUsingTopToolbar()
-
-
-    /**
-     * Test a list can be indented and outdented using the inline toolbar icons.
-     *
-     * @return void
-     */
-    public function testIndentingAndOutdentingAListItemUsingInlineToolbar()
-    {
+        //Test unordered list using the inline toolbar
         $this->useTest(1);
-
-        //Test unordered list
         $this->selectKeyword(2);
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-
         $this->clickInlineToolbarButton('listIndent');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><ul><li>item 1<ul><li>item 2 %2%</li></ul></li></ul></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1<ul><li>item 2 %2%</li></ul></li></ul></td></tr></tbody></table>');
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
-
         $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-
         $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><ul><li>item 1</li></ul><p>item 2 %2%</p></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li></ul><p>item 2 %2%</p></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+        $this->clickTopToolbarButton('listIndent');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+       
 
-        //Test ordered list
-        $this->selectKeyword(3);
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-
-        $this->clickInlineToolbarButton('listIndent');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><ul><li>item 1</li></ul><p>item 2 %2%</p></td></tr><tr><td><ol><li>item 1<ol><li>item 2 %3%</li></ol></li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
-        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
-
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><ul><li>item 1</li></ul><p>item 2 %2%</p></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><ul><li>item 1</li></ul><p>item 2 %2%</p></td></tr><tr><td><ol><li>item 1</li></ol><p>item 2 %3%</p></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
-
-    }//end testIndentingAndOutdentingAListItemUsingInlineToolbar()
-
-
-    /**
-     * Test a list can be indented and outdented using keyboard shortcuts.
-     *
-     * @return void
-     */
-    public function testIndentingAndOutdentingAListItemUsingShortcuts()
-    {
-
+        //Test unordered list with keyboard shortcuts
         $this->useTest(1);
-
-        //Test unordered list
         $this->selectKeyword(2);
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><ul><li>item 1<ul><li>item 2 %2%</li></ul></li></ul></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1<ul><li>item 2 %2%</li></ul></li></ul></td></tr></tbody></table>');
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
-
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><ul><li>item 1</li></ul><p>item 2 %2%</p></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li></ul><p>item 2 %2%</p></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
 
-        //Test ordered list
-        $this->selectKeyword(3);
+        //Test ordered list using the icons in the top toolbar
+        $this->useTest(2);
+        $this->selectKeyword(2);
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><ul><li>item 1</li></ul><p>item 2 %2%</p></td></tr><tr><td><ol><li>item 1<ol><li>item 2 %3%</li></ol></li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
+        $this->clickTopToolbarButton('listIndent');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1<ol><li>item 2 %2%</li></ol></li></ol></td></tr></tbody></table>');
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
-
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><ul><li>item 1</li></ul><p>item 2 %2%</p></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
+        $this->clickTopToolbarButton('listOutdent');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1</li><li>item 2 %2%</li></ol></td></tr></tbody></table>');      
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->clickTopToolbarButton('listOutdent');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1</li></ol><p>item 2 %2%</p></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+        $this->clickTopToolbarButton('listIndent');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1</li><li>item 2 %2%</li></ol></td></tr></tbody></table>');      
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        
 
+        //Test ordered list using the icons in the inline toolbar
+        $this->useTest(2);
+        $this->selectKeyword(2);
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->clickInlineToolbarButton('listIndent');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1<ol><li>item 2 %2%</li></ol></li></ol></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->clickInlineToolbarButton('listOutdent');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1</li><li>item 2 %2%</li></ol></td></tr></tbody></table>');      
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->clickInlineToolbarButton('listOutdent');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1</li></ol><p>item 2 %2%</p></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+        $this->clickTopToolbarButton('listIndent');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1</li><li>item 2 %2%</li></ol></td></tr></tbody></table>');      
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        
+
+        //Test ordered list using the keyboard shortcuts
+        $this->useTest(2);
+        $this->selectKeyword(2);
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->sikuli->keyDown('Key.TAB');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1<ol><li>item 2 %2%</li></ol></li></ol></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><ul><li>item 1</li></ul><p>item 2 %2%</p></td></tr><tr><td><ol><li>item 1</li></ol><p>item 2 %3%</p></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1</li><li>item 2 %2%</li></ol></td></tr></tbody></table>');      
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1</li></ol><p>item 2 %2%</p></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
 
-    }//end testIndentingAndOutdentingAListItemUsingShortcuts()
+
+    }//end testIndentingAndOutdentingListItem()
 
 
     /**
-     * Test a list item is removed when using the list icons.
+     * Test outdenting all items in the list
      *
      * @return void
      */
-    public function testRemovingAListTemUsingTheListIcons()
+    public function testOutdentAllItemsInList()
     {
-        $this->useTest(1);
 
-        //Test unordered list
+        //Test unordered list using top toolbar icon
+        $this->useTest(1);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(4);
+        $this->clickTopToolbarButton('listOutdent');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><p>item 1</p><p>item 2 %2%</p></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+
+        //Test unordered list using inline toolbar icon
+        $this->useTest(1);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(4);
+        $this->clickInlineToolbarButton('listOutdent');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><p>item 1</p><p>item 2 %2%</p></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+
+        //Test ordered list using top toolbar icon
+        $this->useTest(2);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(4);
+        $this->clickTopToolbarButton('listOutdent');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><p>item 1</p><p>item 2 %2%</p></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+
+        //Test ordered list using inline toolbar icon
+        $this->useTest(2);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(4);
+        $this->clickInlineToolbarButton('listOutdent');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><p>item 1</p><p>item 2 %2%</p></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+
+    }//end testOutdentAllItemsInList()
+
+
+    /**
+     * Test a list item can be removed and added back in using the list icons.
+     *
+     * @return void
+     */
+    public function testRemovingAndAddingBackListItemUsingTheListIcons()
+    {
+
+        //Test unordered list using the top toolbar icons
+        $this->useTest(1);
         $this->moveToKeyword(2);
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
         $this->clickTopToolbarButton('listUL', 'active');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li></ul><p>item 2 %2%</p></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
 
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><p>item 1</p><p>item 2 %2%</p></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
+        //Test unordered list using the inline toolbar icons
+        $this->useTest(1);
+        $this->selectKeyword(2);
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+        $this->clickInlineToolbarButton('listUL', 'active');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li></ul><p>item 2 %2%</p></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
 
-        //Test ordered list
-        $this->moveToKeyword(3);
+        //Test ordered list using the top toolbar
+        $this->useTest(2);
+        $this->moveToKeyword(2);
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
         $this->clickTopToolbarButton('listOL', 'active');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1</li></ol><p>item 2 %2%</p></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1</li><li>item 2 %2%</li></ol></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><p>item 1</p><p>item 2 %2%</p></td></tr><tr><td><p>item 1</p><p>item 2 %3%</p></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
+        //Test ordered list using the inline toolbar
+        $this->useTest(2);
+        $this->selectKeyword(2);
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->clickInlineToolbarButton('listOL', 'active');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1</li></ol><p>item 2 %2%</p></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1</li><li>item 2 %2%</li></ol></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
-    }//end testRemovingAListTemUsingTheListIcons()
+    }//end testRemovingAndAddingBackListItemUsingTheListIcons()
 
 
     /**
-     * Test a list is removed using the outdent icon in the inline toolbar
+     * Test removing all list items using the list icons and then adding the list back again.
      *
      * @return void
      */
-    public function testRemovingListUsingOutdentIconInInlineToolbar()
+    public function testRemovingAllListItemsAndCreatingListAgain()
     {
-        $this->useTest(1);
 
-        //Test unordered list
+        //Test unordered list using the top toolbar icons
+        $this->useTest(1);
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(4);
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><p>item 1</p><p>item 2 %2%</p></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+        $this->clickTopToolbarButton('listUL', 'active');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><p>item 1</p><p>item 2 %2%</p></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
 
-        //Test ordered list
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(4);
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><p>item 1</p><p>item 2 %2%</p></td></tr><tr><td><p>item 1</p><p>item 2 %3%</p></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
-
-    }//end testRemovingListUsingOutdentIconInInlineToolbar()
-
-
-    /**
-     * Test a list is removed using the outdent icon in the top toolbar.
-     *
-     * @return void
-     */
-    public function testRemovingListUsingOutdentIconInTopToolbar()
-    {
+        //Test unordered list using the inline toolbar icons
         $this->useTest(1);
-
-        //Test unordered list
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(4);
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><p>item 1</p><p>item 2 %2%</p></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+        $this->clickInlineToolbarButton('listUL', 'active');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><p>item 1</p><p>item 2 %2%</p></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+        $this->clickInlineToolbarButton('listUL');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
 
-        //Test ordered list
-        $this->selectKeyword(3);
+        //Test ordered list using the top toolbar
+        $this->useTest(2);
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(4);
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><p>item 1</p><p>item 2 %2%</p></td></tr><tr><td><p>item 1</p><p>item 2 %3%</p></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->clickTopToolbarButton('listOL', 'active');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><p>item 1</p><p>item 2 %2%</p></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1</li><li>item 2 %2%</li></ol></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
 
-    }//end testRemovingListUsingOutdentIconInTopToolbar()
+        //Test ordered list using the inline toolbar
+        $this->useTest(2);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(4);
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->clickInlineToolbarButton('listOL', 'active');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><p>item 1</p><p>item 2 %2%</p></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+        $this->clickInlineToolbarButton('listOL');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1</li><li>item 2 %2%</li></ol></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+
+    }//end testRemovingAllListItemsAndCreatingListAgain()
 
 
     /**
@@ -298,35 +347,112 @@ class Viper_Tests_ViperListPlugin_ListsInTablesTest extends AbstractViperListPlu
      */
     public function testRemovingListAndClickingUndo()
     {
-        $this->useTest(1);
 
         //Test unordered list
+        $this->useTest(1);
         $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(5);
-
+        $this->selectInlineToolbarLineageItem(4);
         $this->clickTopToolbarButton('listUL', 'active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><p>item 1</p><p>item 2 %2%</p></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
-
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><p>item 1</p><p>item 2 %2%</p></td></tr></tbody></table>');
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
-
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><p>item 1</p><p>item 2 %2%</p></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
-
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><p>item 1</p><p>item 2 %2%</p></td></tr></tbody></table>');
+        
         //Test ordered list
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(5);
-
+        $this->useTest(2);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(4);
         $this->clickTopToolbarButton('listOL', 'active');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><p>item 1</p><p>item 2 %2%</p></td></tr><tr><td><p>item 1</p><p>item 2 %3%</p></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
-
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><p>item 1</p><p>item 2 %2%</p></td></tr></tbody></table>');
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><p>item 1</p><p>item 2 %2%</p></td></tr><tr><td><ol><li>item 1</li><li>item 2 %3%</li></ol></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
-
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1</li><li>item 2 %2%</li></ol></td></tr></tbody></table>');
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td><p>item 1</p><p>item 2 %2%</p></td></tr><tr><td><p>item 1</p><p>item 2 %3%</p></td><td>Cell 5 %4%</td><td>Cell 6</td></tr></tbody></table>');
-    
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><p>item 1</p><p>item 2 %2%</p></td></tr></tbody></table>');
+        
     }//end testRemovingListAndClickingUndo()
+
+
+    /**
+     * Test chagning the list type for a list item
+     *
+     * @return void
+     */
+    public function testChangeListTypeForListItem()
+    {
+
+        //Test unordered list using top toolbar icon
+        $this->useTest(1);
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li></ul><ol><li>item 2 %2%</li></ol></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+
+        //Test unordered list using inline toolbar icon
+        $this->useTest(1);
+        $this->selectKeyword(2);
+        $this->clickInlineToolbarButton('listOL');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li></ul><ol><li>item 2 %2%</li></ol></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+
+        //Test ordered list using top toolbar icon
+        $this->useTest(2);
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1</li></ol><ul><li>item 2 %2%</li></ul></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+
+        //Test ordered list using inline toolbar icon
+        $this->useTest(2);
+        $this->selectKeyword(2);
+        $this->clickInlineToolbarButton('listUL');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1</li></ol><ul><li>item 2 %2%</li></ul></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+
+    }//end testChangeListTypeForListItem()
+
+
+    /**
+     * Test changing the list type for all items in the list
+     *
+     * @return void
+     */
+    public function testChangeingListType()
+    {
+
+        //Test unordered list using top toolbar icon
+        $this->useTest(1);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(4);
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1</li><li>item 2 %2%</li></ol></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+
+        //Test unordered list using inline toolbar icon
+        $this->useTest(1);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(4);
+        $this->clickInlineToolbarButton('listOL');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1</li><li>item 2 %2%</li></ol></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+
+        //Test ordered list using top toolbar icon
+        $this->useTest(2);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(4);
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+
+        //Test ordered list using inline toolbar icon
+        $this->useTest(2);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(4);
+        $this->clickInlineToolbarButton('listUL');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+
+    }//end testChangeListTypeForListItem()
 
 
     /**
@@ -336,7 +462,7 @@ class Viper_Tests_ViperListPlugin_ListsInTablesTest extends AbstractViperListPlu
     */
     public function testListToolsIconsInATable()
     {
-        $this->useTest(2);
+        $this->useTest(3);
 
         // Test in a caption
         $this->sikuli->click($this->findKeyword(1));

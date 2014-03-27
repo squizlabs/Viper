@@ -928,6 +928,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->type('test');
         $this->assertHTMLMatch('<p>test</p>');
         $this->sikuli->keyDown('Key.CMD + z');
+        $this->sikuli->keyDown('Key.CMD + z');
 
         $this->selectKeyword(1, 3);
         $this->sikuli->keyDown('Key.DELETE');

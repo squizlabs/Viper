@@ -82,7 +82,7 @@ ViperListPlugin.prototype = {
                 if (startNode.nodeType === ViperUtil.TEXT_NODE
                     && range.collapsed === false
                     && startNode.data.length === range.startOffset
-                    && self.viper.isBrowser('msie') === true
+                    && ViperUtil.isBrowser('msie') === true
                 ) {
                     // IE sometimes fails with range, if multiple list elements are
                     // selected and range starts from the beginning of a list item
@@ -93,12 +93,16 @@ ViperListPlugin.prototype = {
                     startNode = range.getStartNode();
                 }
 
-                if (self._isListElement(startNode) === true) {
-                    if (self.tabRange(range, e.shiftKey, true) === true) {
-                        self.tabRange(range, e.shiftKey);
-                    } else if (ViperUtil.getParents(startNode, 'td', self.viper.getViperElement()).length > 0) {
-                        // If the list is inside a TD tag then do not prevent default action.
+                var firstBlock = ViperUtil.getFirstBlockParent(startNode);
+                if (ViperUtil.isTag(firstBlock, 'li') === true) {
+                    if (range.collapsed === true
+                        && ViperUtil.getParents(startNode, 'td,th', self.viper.getViperElement()).length > 0
+                    ) {
+                        // If the list is inside a TD/TH tag and range is collapsed then do not prevent default action.
+                        // This is to allow tabbing inside table cells even if the caret is in a list item.
                         return;
+                    } else if (self.tabRange(range, e.shiftKey, true) === true) {
+                        self.tabRange(range, e.shiftKey);
                     }
 
                     ViperUtil.preventDefault(e);
@@ -202,6 +206,14 @@ ViperListPlugin.prototype = {
         if (statuses.ul === true || statuses.ol === true) {
             data.toolbar.showButton('vitpUnorderedList', !statuses.ul);
             data.toolbar.showButton('vitpOrderedList', !statuses.ol);
+
+            if (statuses.isUL === true) {
+                tools.setButtonActive('vitpUnorderedList');
+                tools.setButtonInactive('vitpOrderedList');
+            } else if (statuses.isOL === true) {
+                tools.setButtonActive('vitpOrderedList');
+                tools.setButtonInactive('vitpUnorderedList');
+            }
         }
 
         if (statuses.increaseIndent === true || statuses.decreaseIndent === true) {
@@ -305,7 +317,12 @@ ViperListPlugin.prototype = {
 
         if (bookmark.start.parentNode === bookmark.end.parentNode) {
             // The range is collapsed or is inside the same parent/element.
-            var li = this._getListItem(range.startContainer);
+            var li   = this._getListItem(range.startContainer);
+            var elem = this._getBlockParent(range.startContainer);
+            if (li !== elem) {
+                li = null;
+            }
+
             if (li !== null) {
                 var br = this._getLineBreak(bookmark.start);
                 if (br) {
@@ -337,8 +354,6 @@ ViperListPlugin.prototype = {
             if (li === null || force === true) {
                 // Create a new list.
                 var list = null;
-                var elem = this._getBlockParent(range.startContainer);
-
                 if (elem === null) {
                     elem = [range.startContainer];
                 } else {
@@ -484,10 +499,100 @@ ViperListPlugin.prototype = {
 
     },
 
-    tabRange: function(range, outdent, testOnly)
+    tabRange: function(range, outdent, testOnly, listType)
     {
-        range         = range || this.viper.getViperRange();
+        range    = range || this.viper.getViperRange();
 
+        var node = range.getStartNode() || range.getNodeSelection();
+        if (!node) {
+            node = range.startContainer;
+        }
+
+        var firstParent = ViperUtil.getFirstBlockParent(node);
+        var listItems   = [];
+        if (!firstParent || ViperUtil.isTag(firstParent, 'li') === true) {
+            listItems = this._getListItemsFromRange(range, testOnly);
+        }
+
+        var bookmark = null;
+        var updated  = false;
+        if (listItems.length > 0) {
+            if (testOnly !== true) {
+                bookmark = this.viper.createBookmark();
+            }
+
+            if (outdent !== true) {
+                updated = this.indentListItems(listItems, testOnly);
+            } else {
+                updated = this.outdentListItems(listItems, testOnly);
+            }
+        } else if (firstParent && outdent !==  true) {
+            updated  = this.convertRangeToList(range, testOnly, listType, true);
+            return updated;
+        }
+
+        if (testOnly !== true) {
+            var self = this;
+            if (ViperUtil.isBrowser('msie') === true) {
+                setTimeout(function() {
+                    // Yet another tiemout for IE.
+                    var bookmarkParent  = bookmark.start.parentNode;
+
+                    self.viper.selectBookmark(bookmark);
+                    self.viper.adjustRange();
+
+                    var range    = self.viper.getCurrentRange();
+                    var nextItem = self.getNextItem(range.startContainer.parentNode);
+                    if (range.startOffset === range.startContainer.data.length
+                        && range.collapsed === true
+                        && range.startContainer.parentNode !== bookmarkParent
+                        && (!nextItem || nextItem === bookmarkParent)
+                    ) {
+                        if (bookmarkParent.firstChild.data === '') {
+                            bookmarkParent.firstChild.data = ' ';
+                            range.moveStart(ViperDOMRange.CHARACTER_UNIT, 1);
+                            range.collapse(true);
+                            ViperSelection.addRange(range);
+                        }
+                    }
+
+                    range = self.viper.getCurrentRange();
+                    if (range.startOffset === range.startContainer.data.length
+                        && range.collapsed === true
+                        && range.startContainer.parentNode !== bookmarkParent
+                        && (!nextItem || nextItem === bookmarkParent)
+                    ) {
+                        range.moveEnd(ViperDOMRange.CHARACTER_UNIT, 1);
+                        range.moveEnd(ViperDOMRange.CHARACTER_UNIT, -1);
+                        range.collapse(false);
+                        ViperSelection.addRange(range);
+                    }
+
+                    if (updated === true) {
+                        self.viper.fireNodesChanged([range.getCommonElement()]);
+                        self.viper.fireSelectionChanged(null, true);
+                    }
+                }, 5);
+            } else {
+                if (bookmark) {
+                    this.viper.selectBookmark(bookmark);
+                }
+
+                this.viper.adjustRange();
+
+                if (updated === true) {
+                    this.viper.fireNodesChanged([range.getCommonElement()]);
+                    this.viper.fireSelectionChanged(null, true);
+                }
+            }
+        }
+
+        return updated;
+
+    },
+
+    _getListItemsFromRange: function(range, testOnly, expand)
+    {
         var startNode = range.getStartNode();
         var endNode   = range.getEndNode();
 
@@ -532,76 +637,14 @@ ViperListPlugin.prototype = {
                     }
                 } else {
                     listItems.push(elems[i]);
+                    if (expand === true) {
+                        listItems = listItems.concat(ViperUtil.getTag('li', elems[i]));
+                    }
                 }
             }
         }
 
-        // Bookmark.
-        if (testOnly !== true) {
-            var bookmark = this.viper.createBookmark();
-        }
-
-        var updated = false;
-        if (outdent !== true) {
-            updated = this.indentListItems(listItems, testOnly);
-        } else {
-            updated = this.outdentListItems(listItems, testOnly);
-        }
-
-        if (testOnly !== true) {
-            var self = this;
-            if (this.viper.isBrowser('msie') === true) {
-                setTimeout(function() {
-                    // Yet another tiemout for IE.
-                    var bookmarkParent  = bookmark.start.parentNode;
-
-                    self.viper.selectBookmark(bookmark);
-                    self.viper.adjustRange();
-
-                    var range    = self.viper.getCurrentRange();
-                    var nextItem = self.getNextItem(range.startContainer.parentNode);
-                    if (range.startOffset === range.startContainer.data.length
-                        && range.collapsed === true
-                        && range.startContainer.parentNode !== bookmarkParent
-                        && (!nextItem || nextItem === bookmarkParent)
-                    ) {
-                        if (bookmarkParent.firstChild.data === '') {
-                            bookmarkParent.firstChild.data = ' ';
-                            range.moveStart(ViperDOMRange.CHARACTER_UNIT, 1);
-                            range.collapse(true);
-                            ViperSelection.addRange(range);
-                        }
-                    }
-
-                    range = self.viper.getCurrentRange();
-                    if (range.startOffset === range.startContainer.data.length
-                        && range.collapsed === true
-                        && range.startContainer.parentNode !== bookmarkParent
-                        && (!nextItem || nextItem === bookmarkParent)
-                    ) {
-                        range.moveEnd(ViperDOMRange.CHARACTER_UNIT, 1);
-                        range.moveEnd(ViperDOMRange.CHARACTER_UNIT, -1);
-                        range.collapse(false);
-                        ViperSelection.addRange(range);
-                    }
-
-                    if (updated === true) {
-                        self.viper.fireNodesChanged([range.getCommonElement()]);
-                        self.viper.fireSelectionChanged(null, true);
-                    }
-                }, 5);
-            } else {
-                this.viper.selectBookmark(bookmark);
-                this.viper.adjustRange();
-
-                if (updated === true) {
-                    this.viper.fireNodesChanged([range.getCommonElement()]);
-                    this.viper.fireSelectionChanged(null, true);
-                }
-            }
-        }
-
-        return updated;
+        return listItems;
 
     },
 
@@ -924,9 +967,11 @@ ViperListPlugin.prototype = {
 
     },
 
-    convertRangeToList: function(range, testOnly)
+    convertRangeToList: function(range, testOnly, listType, canJoin)
     {
-        range = range = this.viper.getViperRange();
+        range    = range || this.viper.getViperRange();
+        testOnly = testOnly || false;
+        listType = listType || null;
 
         var startNode = range.getStartNode();
         var endNode   = range.getEndNode();
@@ -938,10 +983,21 @@ ViperListPlugin.prototype = {
 
         var pElems = [];
         if (startNode === endNode) {
+            var validParent = null;
             if (bookmark && bookmark.start) {
-                pElems.push(this._getValidParentElement(bookmark.start));
+                validParent = this._getValidParentElement(bookmark.start);
             } else {
-                pElems.push(this._getValidParentElement(startNode));
+                validParent = this._getValidParentElement(startNode);
+            }
+
+            if (validParent) {
+                if (testOnly !== true
+                    && (ViperUtil.isTag(validParent, 'td') === true || ViperUtil.isTag(validParent, 'th') === true)
+                ) {
+                    return this.makeList(listType === 'ol');
+                } else {
+                    pElems.push(validParent);
+                }
             }
         } else {
             var elems = null;
@@ -971,35 +1027,41 @@ ViperListPlugin.prototype = {
         // Get the previous list if there is one.
         var list  = null;
         var atEnd = true;
-        for (var node = pElems[0].previousSibling; node; node = node.previousSibling) {
-            if (node.nodeType === ViperUtil.ELEMENT_NODE) {
-                if (ViperUtil.isTag(node, 'ol') === true || ViperUtil.isTag(node, 'ul') === true) {
-                    list  = node;
-                    atEnd = true;
-                }
-
-                break;
-            }
-        }
-
-        if (list === null) {
-            // There was no list before the first element. Check if there is a list
-            // element after the last p element.
-            for (var node = pElems[(pElems.length - 1)].nextSibling; node; node = node.nextSibling) {
+        if (!listType || canJoin === true) {
+            for (var node = pElems[0].previousSibling; node; node = node.previousSibling) {
                 if (node.nodeType === ViperUtil.ELEMENT_NODE) {
-                    if (ViperUtil.isTag(node, 'ol') === true || ViperUtil.isTag(node, 'ul') === true) {
+                    if ((listType && ViperUtil.isTag(node, listType) === true)
+                        || (!listType && (ViperUtil.isTag(node, 'ol') === true || ViperUtil.isTag(node, 'ul') === true))
+                    ) {
                         list  = node;
-                        atEnd = false;
+                        atEnd = true;
                     }
 
                     break;
+                }
+            }
+
+            if (list === null) {
+                // There was no list before the first element. Check if there is a list
+                // element after the last p element.
+                for (var node = pElems[(pElems.length - 1)].nextSibling; node; node = node.nextSibling) {
+                    if (node.nodeType === ViperUtil.ELEMENT_NODE) {
+                        if ((listType && ViperUtil.isTag(node, listType) === true)
+                            || (!listType && (ViperUtil.isTag(node, 'ol') === true || ViperUtil.isTag(node, 'ul') === true))
+                        ) {
+                            list  = node;
+                            atEnd = false;
+                        }
+
+                        break;
+                    }
                 }
             }
         }
 
         if (list === null) {
             // No list found, create a new list.
-            list = document.createElement('ul');
+            list = document.createElement(listType || 'ul');
             ViperUtil.insertBefore(pElems[0], list);
             atEnd = true;
         }
@@ -1052,7 +1114,7 @@ ViperListPlugin.prototype = {
         }
 
         // Select bookmark.
-        if (this.viper.isBrowser('msie') === true) {
+        if (ViperUtil.isBrowser('msie') === true) {
             var self = this;
             setTimeout(function() {
                 self.viper.selectBookmark(bookmark);
@@ -1067,6 +1129,122 @@ ViperListPlugin.prototype = {
         }
 
         return true;
+
+    },
+
+    convertRangeToParagraphs: function(range)
+    {
+        range = range = this.viper.getViperRange();
+
+        var listItems = this._getListItemsFromRange(range, false, true);
+        var bookmark  = this.viper.createBookmark();
+        var prevElem  = null;
+
+        for (var i = 0; i < listItems.length; i++) {
+            if (ViperUtil.isTag(listItems[i], 'li') === false) {
+                // Must be a whole list. Gell all li tags inside it.
+                var childItems = ViperUtil.getTag('li', listItems[i]);
+
+                var parent = null;
+                if (!prevElem) {
+                    parent = listItems[i].parentNode;
+                }
+
+                for (var j = 0; j < childItems.length; j++) {
+                    var p = this.convertElement(childItems[j], 'p', true);
+                    if (prevElem) {
+                        ViperUtil.insertAfter(prevElem, p);
+                    } else {
+                        ViperUtil.insertBefore(parent, p);
+                    }
+
+                    prevElem = p;
+                }
+            } else {
+                var p = this.splitListAtItem(listItems[i]);
+                if (prevElem) {
+                    ViperUtil.insertAfter(prevElem, p);
+                }
+
+                prevElem = p;
+            }//end if
+        }//end for
+
+        this.viper.selectBookmark(bookmark);
+        this.viper.fireSelectionChanged(null, true);
+        this.viper.fireNodesChanged();
+
+    },
+
+    /**
+     * Splits the item's list and converts item to a paragraph.
+     */
+    splitListAtItem: function(li)
+    {
+        var siblings = [];
+        for (var node = li.nextSibling; node; node = node.nextSibling) {
+            if (ViperUtil.isTag(node, 'li') === false) {
+                continue;
+            }
+
+            siblings.push(node);
+        }
+
+        // Create the new P tag.
+        var listElem = li.parentNode;
+        var newList  = null;
+
+        if (siblings.length > 0) {
+            // There are list items after the specified one. Move them to a new list.
+            newList = document.createElement(this.getListType(li));
+            for (var i = 0; i < siblings.length; i++) {
+                newList.appendChild(siblings[i]);
+            }
+        }
+
+        var p = this.convertElement(li, 'p', true);
+        ViperUtil.insertAfter(listElem, p);
+
+        if (newList) {
+            ViperUtil.insertAfter(p, newList);
+        }
+
+        // Move block elements inside P to after it.
+        var node = p.lastChild;
+        while (node) {
+            var prevSibling = node.previousSibling;
+            if (ViperUtil.isBlockElement(node) === true) {
+                ViperUtil.insertAfter(p, node);
+            }
+
+            node = prevSibling;
+        }
+
+        if (ViperUtil.getTag('li', listElem).length === 0) {
+            // If the old list is now empty, remove it.
+            ViperUtil.remove(listElem);
+        }
+
+        return p;
+
+    },
+
+    /**
+     * Converts given element to the specified element by creating a new element and moving its child nodes.
+     */
+    convertElement: function(elem, tagName, detached)
+    {
+        var newElem = document.createElement(tagName);
+        while (elem.firstChild) {
+            newElem.appendChild(elem.firstChild);
+        }
+
+        if (detached !== true) {
+            ViperUtil.insertBefore(elem, newElem);
+        }
+
+        ViperUtil.remove(elem);
+        return newElem;
 
     },
 
@@ -1092,6 +1270,65 @@ ViperListPlugin.prototype = {
         ViperUtil.remove(list);
 
         return newList;
+
+    },
+
+    changeListType: function(newType, range)
+    {
+        range = range || this.viper.getViperRange();
+        var listItems = this._getListItemsFromRange(range, false, true);
+
+        var bookmark = this.viper.createBookmark();
+        var self     = this;
+
+        var convertChildItems = function(list) {
+            var children = ViperUtil.find(list, '> li');
+            if (children.length === 0) {
+                return;
+            }
+
+            var newParent = null;
+            var afterList = null;
+            for (var i = 0; i < children.length; i++) {
+                if (ViperUtil.inArray(children[i], listItems) === true) {
+                    if (newParent === null) {
+                        newParent = document.createElement(newType);
+                        ViperUtil.insertAfter(list, newParent);
+                    }
+
+                    newParent.appendChild(children[i]);
+                    var subLists = ViperUtil.find(children[i], '> ul');
+                    for (var j = 0; j < subLists.length; j++) {
+                        convertChildItems(subLists[j]);
+                    }
+                } else if (newParent !== null) {
+                    // Create an after list.
+                    if (afterList === null) {
+                        afterList = document.createElement(ViperUtil.getTagName(list));
+                        ViperUtil.insertAfter(newParent, afterList);
+                    }
+
+                    afterList.appendChild(children[i]);
+                }
+            }
+
+            if (ViperUtil.getTag('li', list).length === 0) {
+                ViperUtil.remove(list);
+                self.joinSiblingLists(newParent);
+            }
+        };
+
+        var processedParents = [];
+        for (var i = 0; i < listItems.length; i++) {
+            if (!listItems[i].parentNode || ViperUtil.inArray(processedParents, listItems[i].parentNode) === true) {
+                continue;
+            }
+
+            processedParents.push(listItems[i].parentNode)
+            convertChildItems(listItems[i].parentNode);
+        }
+
+        this.viper.selectBookmark(bookmark);
 
     },
 
@@ -1233,6 +1470,8 @@ ViperListPlugin.prototype = {
         var indent    = false;
         var canMakeUL = false;
         var canMakeOL = false;
+        var isUL      = false;
+        var isOL      = false;
         var list      = null;
 
         if (!startNode) {
@@ -1254,15 +1493,31 @@ ViperListPlugin.prototype = {
         var startParent = null;
 
         var listElement = this._getListElement(startNode);
-        if (listElement && listElement === this._getListElement(endNode)) {
+        var firstBlock  = ViperUtil.getFirstBlockParent(startNode);
+
+        if (listElement
+            && firstBlock
+            && ViperUtil.isTag(firstBlock, 'li') === false
+        ) {
+            // Can be converted to a list.
+            makeList = true;
+
+            if (mainToolbar === true) {
+                indent   = true;
+            }
+        } else if (listElement && listElement === this._getListElement(endNode)) {
             if (range.collapsed === true && mainToolbar !== true) {
                 return;
             }
 
-            if (mainToolbar === true) {
-                makeList = true;
+            makeList = true;
+            indent   = true;
+        } else if (listElement) {
+            if (range.collapsed === true && mainToolbar !== true) {
+                return;
             }
 
+            makeList = true;
             indent   = true;
         } else {
             var nodeSelection = range.getNodeSelection();
@@ -1318,10 +1573,13 @@ ViperListPlugin.prototype = {
         }
 
         if (makeList === true) {
-            if (ViperUtil.isTag(startNode, 'ul') === true || ViperUtil.isTag(startNode, 'ol') === true) {
-                list = startNode;
-            } else {
-                list = this._getListElement(startNode);
+            if (ViperUtil.isTag(firstBlock, 'li') === true) {
+                if (ViperUtil.isTag(startNode, 'ul') === true || ViperUtil.isTag(startNode, 'ol') === true) {
+                    list = startNode;
+                } else {
+
+                    list = this._getListElement(startNode);
+                }
             }
 
             if (!list && this.convertRangeToList(range, true) === true) {
@@ -1330,9 +1588,11 @@ ViperListPlugin.prototype = {
             } else if (ViperUtil.isTag(list, 'ol') === true) {
                 canMakeUL = true;
                 canMakeOL = true;
+                isOL      = true;
             } else if (ViperUtil.isTag(list, 'ul') === true) {
                 canMakeUL = true;
                 canMakeOL = true;
+                isUL      = true;
             }
         }
 
@@ -1350,7 +1610,6 @@ ViperListPlugin.prototype = {
         if (mainToolbar === true
             && startParent
             && ViperUtil.isTag(startParent, 'p') === true
-            && ViperUtil.getParents(startParent, 'td,th').length === 0
         ) {
             increaseIndent = true;
         }
@@ -1360,7 +1619,9 @@ ViperListPlugin.prototype = {
             ol: canMakeOL,
             increaseIndent: increaseIndent,
             decreaseIndent: decreaseIndent,
-            list: list
+            list: list,
+            isUL: isUL,
+            isOL: isOL
         };
 
         return statuses;
@@ -1443,18 +1704,15 @@ ViperListPlugin.prototype = {
             }
         }
 
-        var self = this;
         if (currentType !== listType) {
-            var bookmark = this.viper.createBookmark();
-            var newList = self.toggleListType(list);
-            this.viper.selectBookmark(bookmark);
-            self.viper.fireSelectionChanged(null, true);
-            self.viper.fireNodesChanged([self.viper.getViperElement()]);
+            this.changeListType(newType)
+            this.viper.fireSelectionChanged(null, true);
+            this.viper.fireNodesChanged([this.viper.getViperElement()]);
+            return;
         } else if (currentType !== newType) {
-            self.makeList(listType === 'ol');
-            this.viper.adjustRange();
-            self.viper.fireSelectionChanged(null, true);
-            self.viper.fireNodesChanged([self.viper.getViperElement()]);
+            this.tabRange(null, false, false, listType);
+        } else if (currentType === listType) {
+            return this.convertRangeToParagraphs();
         } else {
             var bookmark = this.viper.createBookmark();
             if (bookmark.start.nextSibling && ViperUtil.isTag(bookmark.start.nextSibling, 'li') === true) {
@@ -1465,10 +1723,10 @@ ViperListPlugin.prototype = {
                 bookmark.end.previousSibling.appendChild(bookmark.end);
             }
 
-            var pTags = self.listToParagraphs(list);
+            var pTags = this.listToParagraphs(list);
             this.viper.selectBookmark(bookmark);
-            self.viper.fireSelectionChanged(null, true);
-            self.viper.fireNodesChanged([self.viper.getViperElement()]);
+            this.viper.fireSelectionChanged(null, true);
+            this.viper.fireNodesChanged([this.viper.getViperElement()]);
         }
 
     },
@@ -1494,6 +1752,47 @@ ViperListPlugin.prototype = {
                 }
             }
         });
+
+    },
+
+    joinSiblingLists: function(list)
+    {
+        var listType = ViperUtil.getTagName(list);
+
+        // Check if there is a same type list before this.
+        for (var node = list.previousSibling; node; node = node.previousSibling) {
+            if (node.nodeType === ViperUtil.TEXT_NODE && ViperUtil.isBlank(ViperUtil.trim(node.data)) === true) {
+                continue;
+            } else if (ViperUtil.isTag(node, listType) === false) {
+                break;
+            }
+
+            // Found a previous list. Move its children to previous list.
+            while (list.firstChild) {
+                node.appendChild(list.firstChild);
+            }
+
+            // Remove the original list element.
+            ViperUtil.remove(list);
+            list = node;
+        }
+
+        // Check if there is a list after this list.
+        for (var node = list.nextSibling; node; node = node.nextSibling) {
+            if (node.nodeType === ViperUtil.TEXT_NODE && ViperUtil.isBlank(ViperUtil.trim(node.data)) === true) {
+                continue;
+            } else if (ViperUtil.isTag(node, listType) === false) {
+                break;
+            }
+
+            // Found a list. Move all the children of found list to the current list.
+            while (node.firstChild) {
+                list.appendChild(node.firstChild);
+            }
+
+            // Remove the found list.
+            ViperUtil.remove(node);
+        }
 
     },
 

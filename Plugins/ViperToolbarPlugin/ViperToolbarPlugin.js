@@ -26,7 +26,7 @@ function ViperToolbarPlugin(viper)
     this.createToolbar();
 
     var self           = this;
-    var clickedOutside = true;
+    var clickedOutside = false;
     this.viper.registerCallback('Viper:selectionChanged', 'ViperToolbarPlugin', function(range) {
         if (clickedOutside === true || self.viper.rangeInViperBounds(range) === false) {
             return;
@@ -371,7 +371,7 @@ ViperToolbarPlugin.prototype = {
                     tools.disableButton(subSectionid + '-applyButton');
 
                     // IE needs this timeout so focus works <3..
-                    if (self.viper.isBrowser('msie') === false) {
+                    if (ViperUtil.isBrowser('msie') === false) {
                         try {
                             action.call(this);
                         } catch (e) {
@@ -503,7 +503,7 @@ ViperToolbarPlugin.prototype = {
         if (useCustomToggler !== true) {
             ViperUtil.removeEvent(button, 'mousedown');
             ViperUtil.addEvent(button, 'mousedown', function(e) {
-                if (self.viper.isBrowser('msie', '<11') === true) {
+                if (ViperUtil.isBrowser('msie', '<11') === true) {
                     // This block of code prevents IE moving user selection to the.
                     // button element when clicked. When the button element is removed
                     // and added back to DOM selection is not moved. Seriously, IE?
@@ -623,7 +623,7 @@ ViperToolbarPlugin.prototype = {
         if (inputElements.length > 0) {
             try {
                 inputElements[0].focus();
-                if (this.viper.isBrowser('msie') === true) {
+                if (ViperUtil.isBrowser('msie') === true) {
                     setTimeout(function() {
                         inputElements[0].focus();
                     }, 10);
@@ -807,7 +807,7 @@ ViperToolbarPlugin.prototype = {
             return;
         }
 
-        if (this.viper.isBrowser('msie', '<11') === true) {
+        if (ViperUtil.isBrowser('msie', '<11') === true) {
             // IE fix.. When a toolbar button is clicked IE moves the selection to that
             // button unless the button no longer exists... So we remove the toolbar
             // here to prevent selection changing......
@@ -819,7 +819,7 @@ ViperToolbarPlugin.prototype = {
 
         this.viper.fireCallbacks('ViperToolbarPlugin:updateToolbar', {range: range});
 
-        if (this.viper.isBrowser('msie', '<11') === true) {
+        if (ViperUtil.isBrowser('msie', '<11') === true) {
             parent.appendChild(this._toolbar);
         }
 

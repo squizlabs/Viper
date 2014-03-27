@@ -226,8 +226,7 @@ ViperHistoryManager.prototype = {
      */
     clear: function()
     {
-        var lastUndo = this.undoHistory.pop();
-        this.undoHistory = [lastUndo];
+        this.undoHistory = [];
         this.redoHistory = [];
         this.batchCount  = 0;
         this.batchTask   = null;

@@ -19,6 +19,8 @@ var ViperUtil = {
     DOM_VK_DOWN: 40,
     DOM_VK_ENTER: 13,
     DOM_VK_BACKSPACE: 46,
+    _browserType: null,
+    _browserVersion: null,
 
     isTag: function(node, tag)
     {
@@ -248,6 +250,16 @@ var ViperUtil = {
             case 'h5':
             case 'h6':
             case 'img':
+            case 'header':
+            case 'nav':
+            case 'section':
+            case 'main':
+            case 'article':
+            case 'aside':
+            case 'footer':
+            case 'details':
+            case 'figure':
+            case 'dialog':
                 return true;
             break;
 
@@ -1286,15 +1298,21 @@ var ViperUtil = {
 
     removeEmptyNodes: function(parent, callback)
     {
-        var elems = ViperUtil.$(parent).find(':empty');
-        var i     = elems.length;
+        var elems   = ViperUtil.$(parent).find(':empty');
+        var i       = elems.length;
+        var removed = false;
         while (i > 0) {
             i--;
             if (ViperUtil.isStubElement(elems[i]) === false) {
                 if (!callback || callback.call(this, elems[i]) !== false) {
                     ViperUtil.remove(elems[i]);
+                    removed = true;
                 }
             }
+        }
+
+        if (removed === true) {
+            this.removeEmptyNodes(parent, callback);
         }
 
     },
@@ -2221,6 +2239,162 @@ var ViperUtil = {
 
         return property;
 
+    },
+
+    /**
+     * Returns the current browser type.
+     *
+     * @return {string}
+     */
+    getBrowserType: function()
+    {
+        if (ViperUtil._browserType === null) {
+            var tests = ['trident', 'msie', 'firefox', 'chrome', 'safari'];
+            var tln   = tests.length;
+            for (var i = 0; i < tln; i++) {
+                var r = new RegExp(tests[i], 'i');
+                if (r.test(navigator.userAgent) === true) {
+                    if (tests[i] === 'trident') {
+                        // No MSIE token for IE11+.
+                        ViperUtil._browserType = 'msie';
+                    } else {
+                        ViperUtil._browserType = tests[i];
+                    }
+                    return ViperUtil._browserType;
+                }
+            }
+
+            ViperUtil._browserType = 'other';
+        }
+
+        return ViperUtil._browserType;
+
+    },
+
+    /**
+     * Returns the version of the current browser.
+     *
+     * @return {integer}
+     */
+    getBrowserVersion: function()
+    {
+        if (ViperUtil._browserVersion !== null) {
+            return ViperUtil._browserVersion;
+        }
+
+        var browsers = ['MSIE', 'Trident', 'Chrome', 'Safari', 'Firefox'];
+        var c        = browsers.length;
+        var uAgent   = navigator.userAgent;
+
+        var browserName = null;
+        for (var i = 0; i < c; i++) {
+            var nameIndex = uAgent.indexOf(browsers[i]);
+            if (nameIndex >= 0) {
+                browserName = browsers[i];
+                break;
+            }
+        }
+
+        if (!browserName) {
+            return null;
+        }
+
+        if (browserName === 'Safari') {
+            browserName = 'Version';
+        }
+
+        var re = null;
+        if (browserName === 'MSIE') {
+            re = new RegExp('MSIE (\\d+)');
+        } else if (browserName === 'Trident') {
+            re = new RegExp('rv:(\\d+)');
+        } else {
+            re = new RegExp(browserName + '/(\\d+)');
+        }
+
+        var matches = re.exec(uAgent);
+        if (!matches) {
+            return null;
+        }
+
+        ViperUtil._browserVersion = parseInt(matches[1]);
+        return ViperUtil._browserVersion;
+
+    },
+
+    /**
+     * Checks if specified browser type is the current browser.
+     *
+     * @param {string}  browser The browser type to test.
+     * @param {string}  version The version of the browser. Example formats: 23, <10, >=11.
+     *
+     * @return {boolean}
+     */
+    isBrowser: function(browser, version)
+    {
+        if (ViperUtil.getBrowserType() !== browser) {
+            return false;
+        } else if (!version) {
+            return true;
+        }
+
+        version        = version.toString();
+        var currentVer = ViperUtil.getBrowserVersion().toString();
+        if (version === currentVer) {
+            return true;
+        }
+
+        var match = version.match(/^(<=|>=|<|>)([\d\.]+$)/);
+        if (!match) {
+            return false;
+        }
+
+        version = parseFloat(match[2]);
+        switch (match[1]) {
+            case '<=':
+                return (currentVer <= version);
+
+            case '>=':
+                return (currentVer >= version);
+
+            case '<':
+                return (currentVer < version);
+
+            case '>':
+                return (currentVer > version);
+
+            default:
+                return false;
+        }
+
+        return false;
+
+    },
+
+    /**
+     * Clones given node and its children.
+     */
+    cloneNode: function(node)
+    {
+        // Clone the element so we dont modify the actual contents.
+        var clone = null;
+        if (ViperUtil.isBrowser('msie', '8') === true && node.nodeType !== ViperUtil.TEXT_NODE) {
+            // This is to resolve the HTML5 element cloning issue in IE8.
+            var clone = document.createElement('div');
+            ViperUtil.setHtml(clone, ViperUtil.trim(node.outerHTML));
+            clone = clone.firstChild;
+        } else {
+            clone = node.cloneNode(true);
+        }
+
+        return clone;
+
     }
 
+};
+
+if (!window.console) {
+    window.console = {
+        info: function(){}
+    }
 };

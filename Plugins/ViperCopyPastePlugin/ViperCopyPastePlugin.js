@@ -24,10 +24,11 @@ function ViperCopyPastePlugin(viper)
     this.convertTags     = null;
     this._tmpNode        = null;
     this._iframe         = null;
-    this._isFirefox      = viper.isBrowser('firefox');
-    this._isMSIE         = viper.isBrowser('msie');
-    this._isSafari       = viper.isBrowser('safari');
+    this._isFirefox      = ViperUtil.isBrowser('firefox');
+    this._isMSIE         = ViperUtil.isBrowser('msie');
+    this._isSafari       = ViperUtil.isBrowser('safari');
     this._toolbarElement = null;
+    this._selectedRows   = null;
 
 }
 
@@ -126,7 +127,6 @@ ViperCopyPastePlugin.prototype = {
             };
 
         } else {
-            var toolbarCreated = false;
             elem.onpaste = function(e) {
                 var viperRange = self.viper.getViperRange();
 
@@ -348,6 +348,10 @@ ViperCopyPastePlugin.prototype = {
         range         = range || this.viper.getCurrentRange();
         this.rangeObj = range.cloneRange();
 
+        if (this._isTableSelection(range) === true) {
+            return;
+        }
+
         this._tmpNode = document.createTextNode('');
 
         try {
@@ -357,6 +361,63 @@ ViperCopyPastePlugin.prototype = {
             this.viper.insertNodeAtCaret(this._tmpNode);
         }
 
+    },
+
+    _isTableSelection: function(range)
+    {
+        this._selectedRows = null;
+        var rows = [];
+        if (ViperUtil.isBrowser('firefox') === true) {
+            // Firefox has multiple range objects for each selected table cell.
+            var range = null;
+            var i     = 0;
+            while (range = ViperSelection.getRangeAt(i)) {
+                var elem = range.getStartNode();
+                if (ViperUtil.isTag(elem, 'td') === false) {
+                    return false;
+                }
+
+                if (ViperUtil.inArray(elem.parentNode, rows) === false) {
+                    rows.push(elem.parentNode);
+                }
+
+                i++;
+            }
+
+            if (rows.length > 0) {
+                this._selectedRows = rows;
+                return true;
+            }
+        } else {
+            var startNode = range.getStartNode();
+            var endNode = range.getEndNode();
+            var elements = ViperUtil.getElementsBetween(startNode, endNode);
+            for (var i = 0; i < elements.length; i++) {
+                var row = null;
+                if (elements[i].nodeType === ViperUtil.TEXT_NODE) {
+                    continue;
+                } else if (ViperUtil.isTag(elements[i], 'td') === false) {
+                    if (ViperUtil.isTag(elements[i], 'tr') === false) {
+                        return false;
+                    } else {
+                        row = elements[i];
+                    }
+                } else {
+                    row = elements[i].parentNode;
+                }
+
+                if (ViperUtil.inArray(row, rows) === false) {
+                    rows.push(row);
+                }
+            }
+
+            if (rows.length > 0) {
+                this._selectedRows = rows;
+                return true;
+            }
+        }
+
+        return false;
     },
 
     _afterPaste: function()
@@ -561,6 +622,8 @@ ViperCopyPastePlugin.prototype = {
             html = this._updateElements(html);
         }
 
+        html = this._removeSpansWithNoAttributes(html);
+
         var self = this;
         this.viper.fireCallbacks('ViperCopyPastePlugin:cleanPaste', {html: html, stripTags: stripTags}, function(obj, newHTML) {
             if (newHTML) {
@@ -585,7 +648,7 @@ ViperCopyPastePlugin.prototype = {
 
         if (html) {
             html = ViperUtil.trim(html);
-            html = this.viper.cleanHTML(html, ['dir', 'class', 'lang', 'align']);
+            html = this.viper.cleanHTML(html, ['align', 'class']);
         }
 
         if (!html) {
@@ -611,6 +674,51 @@ ViperCopyPastePlugin.prototype = {
                     ViperUtil.remove(elems[i]);
                 }
             });
+        }
+
+        if (this._selectedRows !== null) {
+            // Table selection paste..
+            var pastedRows = [];
+            if (fragment.firstChild && ViperUtil.isTag(fragment.firstChild, 'table') === true
+                && fragment.firstChild === fragment.lastChild
+            ) {
+                // Chrome.
+                pastedRows = ViperUtil.getTag('tr', fragment.firstChild);
+            } else if (fragment.firstElementChild && ViperUtil.isTag(fragment.firstElementChild, 'td') === true) {
+                // Firefox only has the TD elements need to split them in to rows.
+                var cellCount = ViperUtil.getTag('td', this._selectedRows[0]).length;
+                var tr = null;
+                var i  = 0;
+                var node = null;
+                while (node = fragment.firstElementChild) {
+                    if (i % cellCount === 0) {
+                        tr = document.createElement('tr');
+                        pastedRows.push(tr);
+                    }
+                    tr.appendChild(node);
+                    i++;
+                }
+            }
+
+            if (pastedRows.length > 0) {
+                // Replace selected rows with pasted rows.
+                for (var i = 0; i < pastedRows.length; i++) {
+                    ViperUtil.insertBefore(this._selectedRows[0], pastedRows[i]);
+                }
+
+                ViperUtil.remove(this._selectedRows);
+                this._updateSelection();
+                this.viper.cleanDOM();
+
+                this.viper.fireNodesChanged();
+                this.viper.fireCallbacks('ViperCopyPastePlugin:paste');
+                return;
+            } else {
+                var td = ViperUtil.getTag('td', this._selectedRows[0])[0];
+                ViperUtil.setHtml(td, ' ');
+                this._tmpNode = td.firstChild;
+            }
+
         }
 
         // If fragment contains block level elements most likely we will need to
@@ -762,12 +870,11 @@ ViperCopyPastePlugin.prototype = {
         }
 
         // Convert span.Apple-converted-space to normal space (Chrome only).
-        if (this.viper.isBrowser('chrome') === true) {
+        if (ViperUtil.isBrowser('chrome') === true) {
             content = content.replace(/<span class="Apple-converted-space">&nbsp;<\/span>/g, ' ');
         }
 
         // Remove span and o:p etc. tags.
-        content = content.replace(/<\/?span[^>]*>/gi, "");
         content = content.replace(/<\/?\w+:[^>]*>/gi, '' );
 
         // Remove XML tags.
@@ -924,6 +1031,27 @@ ViperCopyPastePlugin.prototype = {
             // Remove this span tag.
             ViperUtil.remove(span);
         }//end for
+
+    },
+
+    _removeSpansWithNoAttributes: function(content)
+    {
+        var tmp = document.createElement('div');
+        ViperUtil.setHtml(tmp, content);
+
+        var spans = ViperUtil.getTag('span', tmp);
+        for (var i = 0; i < spans.length; i++) {
+            if (ViperUtil.hasAttribute(spans[i], 'lang') === false
+                && ViperUtil.hasAttribute(spans[i], 'dir') === false
+                && ViperUtil.hasAttribute(spans[i], 'style') === false
+            ) {
+                this._moveChildren(spans[i]);
+                ViperUtil.remove(spans[i]);
+            }
+        }
+
+        content = ViperUtil.getHtml(tmp);
+        return content;
 
     },
 
@@ -1389,7 +1517,7 @@ ViperCopyPastePlugin.prototype = {
             }
         }//end for
 
-        if (this.viper.isBrowser('msie') === true) {
+        if (ViperUtil.isBrowser('msie') === true) {
             var tags = ViperUtil.find(tmp, 'strong > font > p');
             var c    = tags.length;
             for (var i = 0; i < c; i++) {
@@ -1453,7 +1581,7 @@ ViperCopyPastePlugin.prototype = {
             }
         }
 
-        if (this.viper.isBrowser('msie') === true && ViperUtil.getTag('p', tmp).length > 0) {
+        if (ViperUtil.isBrowser('msie') === true && ViperUtil.getTag('p', tmp).length > 0) {
             // Move any content that is not inside a paragraph in to a previous paragraph..
             var steps = 2;
             for (var i = 0; i < steps; i++) {
@@ -1611,17 +1739,17 @@ ViperCopyPastePlugin.prototype = {
             var level      = (pEl.getAttribute('style') || '').match(/level([\d])+/mi);
             ViperUtil.setHtml(pEl, listTypeInfo.html);
 
-            if (prevType !== listType) {
-                newList = true;
-            }
-
-            prevType = listType;
-
             if (!level) {
                 level = 1;
             } else {
                 level = level[1];
             }
+
+            if (prevType !== listType && level === prevLevel) {
+                newList = true;
+            }
+
+            prevType = listType;
 
             if (!listType) {
                 listType = 'ol';
@@ -1677,6 +1805,7 @@ ViperCopyPastePlugin.prototype = {
         var lc    = lists.length;
         for (var i = 0; i < lc; i++) {
             var list = lists[i];
+            ViperUtil.removeAttr(list, 'style');
             if (ViperUtil.isTag(list.parentNode, 'ul') === true
                 || ViperUtil.isTag(list.parentNode, 'ol') === true
             ) {
@@ -1699,6 +1828,7 @@ ViperCopyPastePlugin.prototype = {
         var c         = listItems.length;
         for (var i = 0; i < c; i++) {
             var li = listItems[i];
+            ViperUtil.removeAttr(li, 'style');
             if (!li.parentNode || (ViperUtil.isTag(li.parentNode, 'ul') !== true  && ViperUtil.isTag(li.parentNode, 'ol') !== true)) {
                 // This list item is not inside a list element.
                 // If there is a list before this item join to it, if not create a
@@ -1808,11 +1938,12 @@ ViperCopyPastePlugin.prototype = {
     _updateSelection: function()
     {
         try {
-            var range = this.viper.getCurrentRange();
-
-            range.setStart(this._tmpNode, 0);
-            range.collapse(true);
-            ViperSelection.addRange(range);
+            if (this._tmpNode !== null) {
+                var range = this.viper.getCurrentRange();
+                range.setStart(this._tmpNode, 0);
+                range.collapse(true);
+                ViperSelection.addRange(range);
+            }
 
             // Remove tmp nodes.
             ViperUtil.remove(this.pasteElement);
