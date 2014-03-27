@@ -879,6 +879,7 @@ Viper.prototype = {
                 }
 
                 try {
+                    range.setStart(elem.firstChild, 0);
                     range.setEnd(elem.firstChild, 0);
                     range.collapse(false);
                     ViperSelection.addRange(range);
@@ -4027,7 +4028,7 @@ Viper.prototype = {
         var elem  = this.getViperElement();
         if (elem.childNodes.length === 0
             || (elem.childNodes.length === 1 && ViperUtil.isTag(elem.childNodes[0], 'br') === true)
-            || (elem === range.startContainer && elem === range.endContainer && range.startOffset === 0)
+            || (elem === range.startContainer && elem === range.endContainer && range.startOffset === 0 && range.endOffset >= range.endContainer.childNodes.length)
         ) {
             var tagName = this.getDefaultBlockTag();
             if (elem.childNodes.length === 1 && ViperUtil.isBlockElement(elem.childNodes[0]) === true) {
@@ -4150,6 +4151,61 @@ Viper.prototype = {
 
                 range.collapse(true);
                 ViperSelection.addRange(range);
+            } else {
+                var nodeSelection = range.getNodeSelection(range, true);
+                if (nodeSelection && ViperUtil.isBlockElement(nodeSelection) === true && String.fromCharCode(e.which) !== '') {
+
+                    switch (ViperUtil.getTagName(nodeSelection)) {
+                        case 'table':
+                        case 'ul':
+                        case 'ol':
+                            // Must create a new tag before setting the content.
+                            var defaultTagName = this.getDefaultBlockTag();
+                            var defTag = null;
+                            if (defaultTagName !== '') {
+                                defTag = document.createElement(defaultTagName);
+                                ViperUtil.setHtml(defTag, String.fromCharCode(e.which));
+                            } else {
+                                defTag = document.createTextNode(String.fromCharCode(e.which));
+                            }
+
+                            ViperUtil.insertAfter(nodeSelection, defTag);
+                            ViperUtil.remove(nodeSelection);
+                            range.setStart(defTag, 1);
+                            range.collapse(true);
+                        break;
+
+                        case 'tfooter':
+                        case 'tbody':
+                        case 'thead':
+                        case 'tr':
+                            // Tags that can be handled by browser.
+                            return true;
+                        break;
+
+                        default:
+                            // Set the content of the existing tag.
+                            ViperUtil.setHtml(nodeSelection, '');
+
+                            if (ViperUtil.isTag(nodeSelection, 'blockquote') === true) {
+                                // Blockquote must have at least one P tag.
+                                var quoteP = document.createElement('p');
+                                nodeSelection.appendChild(quoteP);
+                                nodeSelection = quoteP;
+                            }
+
+                            var textNode = document.createTextNode(String.fromCharCode(e.which));
+                            nodeSelection.appendChild(textNode);
+
+                            range.setStart(textNode, 1);
+                            range.collapse(true);
+                        break;
+                    }//end switch
+
+                    ViperSelection.addRange(range);
+                    this.fireNodesChanged([range.getStartNode()]);
+                    return false;
+                }
             }
 
             this.fireNodesChanged([range.getStartNode()]);

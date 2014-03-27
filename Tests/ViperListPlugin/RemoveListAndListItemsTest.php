@@ -104,6 +104,7 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsTest extends AbstractVip
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>%2% second item</li><li>%3% third item</li></ol>');
 
         //Test ordered list when select the whole list item
+        $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('listOL', 'active');
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li></ol><p>%2% second item</p><ol><li>%3% third item</li></ol>');
         $this->clickTopToolbarButton('listOL');
@@ -157,6 +158,7 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsTest extends AbstractVip
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>%2% second item</li><li>%3% third item</li></ol>');
 
         //Test ordered list when select the whole list item
+        $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('listOL', 'active');
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>%2% second item</li></ol><p>%3% third item</p>');
         $this->clickTopToolbarButton('listOL');
@@ -278,15 +280,15 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsTest extends AbstractVip
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('listUL', 'active');
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li></ul><p>sub item 2 %2%</p><ul><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
-        $this->clickTopToolbarButton('listUL');
+        $this->clickInlineToolbarButton('listUL');
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
 
         //Test unordered list when select the whole list item
-        $this->selectInlineToolbarLineageItem(1);
+        $this->selectInlineToolbarLineageItem(3);
         $this->clickInlineToolbarButton('listUL', 'active');
-        $this->assertHTMLMatch('<p>Unordered List:</p><p>first item</p><p>sub item 1 XAX</p><p>sub item 2 XBX</p><p>sub item 3 XCX</p><ul><li>second item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li></ul><p>sub item 2 %2%</p><ul><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
         $this->clickTopToolbarButton('listUL');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item</li><li>sub item 1 XAX</li><li>sub item 2 XBX</li><li>sub item 3 XCX</li><li>second item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
 
         //Test ordered list when click inside a list item
         $this->useTest(4);
@@ -300,10 +302,11 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsTest extends AbstractVip
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('listOL', 'active');
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li></ol><p>sub item 2 %2%</p><ol><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
-        $this->clickTopToolbarButton('listOL');
+        $this->clickInlineToolbarButton('listOL');
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
 
         //Test ordered list when select the whole list item
+        $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('listOL', 'active');
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li></ol><p>sub item 2 %2%</p><ol><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
         $this->clickTopToolbarButton('listOL');
@@ -335,11 +338,11 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsTest extends AbstractVip
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
 
         //Test unordered list when select the whole list item
-        $this->selectInlineToolbarLineageItem(1);
+        $this->selectInlineToolbarLineageItem(3);
         $this->clickInlineToolbarButton('listUL', 'active');
-        $this->assertHTMLMatch('<p>Unordered List:</p><p>first item</p><p>sub item 1 XAX</p><p>sub item 2 XBX</p><p>sub item 3 XCX</p><ul><li>second item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ul><p>sub item 3 %3%</p></li><li>second item</li></ul>');
         $this->clickTopToolbarButton('listUL');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item</li><li>sub item 1 XAX</li><li>sub item 2 XBX</li><li>sub item 3 XCX</li><li>second item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
 
         //Test ordered list when click inside a list item
         $this->useTest(4);
@@ -357,6 +360,7 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsTest extends AbstractVip
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
 
         //Test ordered list when select the whole list item
+        $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('listOL', 'active');
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ol><p>sub item 3 %3%</p></li><li>second item</li></ol>');
         $this->clickTopToolbarButton('listOL');

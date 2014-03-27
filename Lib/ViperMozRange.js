@@ -343,14 +343,16 @@ ViperMozRange.prototype = {
         // we have to explicitly set the start container and offset, as using
         // then from the rangeObj will reference an element and childNode offset.
         // Normalise.
-        var nextSibling = startContainer.nextSibling;
-        while (nextSibling) {
-            if (nextSibling && nextSibling.nodeType === ViperUtil.TEXT_NODE) {
-                startContainer.data += nextSibling.data;
-                ViperUtil.remove(nextSibling);
-                nextSibling = startContainer.nextSibling;
-            } else {
-                break;
+        if (startContainer.nodeType === ViperUtil.TEXT_NODE) {
+            var nextSibling = startContainer.nextSibling;
+            while (nextSibling) {
+                if (nextSibling && nextSibling.nodeType === ViperUtil.TEXT_NODE) {
+                    startContainer.data += nextSibling.data;
+                    ViperUtil.remove(nextSibling);
+                    nextSibling = startContainer.nextSibling;
+                } else {
+                    break;
+                }
             }
         }
 

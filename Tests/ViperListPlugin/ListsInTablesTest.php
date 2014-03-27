@@ -252,7 +252,7 @@ class Viper_Tests_ViperListPlugin_ListsInTablesTest extends AbstractViperListPlu
         $this->clickInlineToolbarButton('listUL', 'active');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li></ul><p>item 2 %2%</p></td></tr></tbody></table>');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-        $this->clickInlineToolbarButton('listUL');
+        $this->clickTopToolbarButton('listUL');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
 
@@ -274,7 +274,7 @@ class Viper_Tests_ViperListPlugin_ListsInTablesTest extends AbstractViperListPlu
         $this->clickInlineToolbarButton('listOL', 'active');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1</li></ol><p>item 2 %2%</p></td></tr></tbody></table>');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-        $this->clickInlineToolbarButton('listOL');
+        $this->clickTopToolbarButton('listOL');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with ordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ol><li>item 1</li><li>item 2 %2%</li></ol></td></tr></tbody></table>');
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 

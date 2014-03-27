@@ -854,6 +854,17 @@ ViperDOMRange.prototype = {
         ) {
             this._nodeSel.node = common;
             return common;
+        } else if (ViperUtil.isBrowser('chrome') === true
+            && startNode.nodeType === ViperUtil.TEXT_NODE
+            && range.startOffset === 0
+            && range.endOffset === 0
+            && range.endContainer.nodeType === ViperUtil.ELEMENT_NODE
+            && ViperUtil.isBlockElement(range.endContainer) === true
+            && this._getFirstSelectableChild(ViperUtil.getFirstBlockParent(startNode)) === startNode
+            && this.getNextContainer(ViperUtil.getFirstBlockParent(startNode), null, false, true) === range._getFirstSelectableChild(range.endContainer)
+        ) {
+            this._nodeSel.node = ViperUtil.getFirstBlockParent(startNode);
+            return this._nodeSel.node;
         }
 
         // We may need to adjust the "startNode" depending on its offset.
