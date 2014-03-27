@@ -2395,6 +2395,7 @@ var ViperUtil = {
 
 if (!window.console) {
     window.console = {
-        info: function(){}
+        info: function(){},
+        error: function(){}
     }
 };
