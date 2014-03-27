@@ -1,0 +1,8 @@
+.ViperCursorAssistPlugin {
+    position: absolute;
+    height: 0;
+    padding: 10px;
+    z-index: 1000;
+    cursor: pointer;
+    border-top: 1px solid #ff0000;
+}
