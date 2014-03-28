@@ -171,6 +171,16 @@ ViperIERange.prototype = {
 
         this.startContainer = node;
         this.startOffset    = offset;
+
+        try {
+            // Do a retarded invalid argument check. If parentNode is 'invalid argument' then execption will be thrown
+            // meaning the node is no longer valid so set it to null.
+            this.endContainer && this.endContainer.parentNode;
+        } catch (e) {
+            this.endContainer = null;
+            this.endOffset = null;
+        }
+
         if (this.endContainer === null && this.endOffset === null) {
             this.endContainer = node;
             this.endOffset    = offset;
@@ -212,6 +222,15 @@ ViperIERange.prototype = {
 
         this.endContainer = node;
         this.endOffset    = offset;
+
+        try {
+            // Do a retarded invalid argument check. If parentNode is 'invalid argument' then execption will be thrown
+            // meaning the node is no longer valid so set it to null.
+            this.startContainer && this.startContainer.parentNode;
+        } catch (e) {
+            this.startContainer = null;
+            this.startOffset = null;
+        }
 
         if (this.startContainer === null && this.startOffset === null) {
             this.startContainer = node;

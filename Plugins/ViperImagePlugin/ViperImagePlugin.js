@@ -673,14 +673,18 @@ ViperImagePlugin.prototype = {
             var maxHeight = 185;
             if (height > maxHeight && width > maxWidth) {
                 if (height > width) {
-                    img.setAttribute('height', maxHeight + 'px');
+                    ViperUtil.setStyle(img, 'height', maxHeight + 'px');
+                    ViperUtil.setStyle(img, 'width', 'auto');
                 } else {
-                    img.setAttribute('width', maxWidth + 'px');
+                    ViperUtil.setStyle(img, 'width', maxWidth + 'px');
+                    ViperUtil.setStyle(img, 'height', 'auto');
                 }
             } else if (width > maxWidth) {
-                img.setAttribute('width', maxWidth + 'px');
+                ViperUtil.setStyle(img, 'width', maxWidth + 'px');
+                ViperUtil.setStyle(img, 'height', 'auto');
             } else if (height > maxHeight) {
-                img.setAttribute('height', maxHeight + 'px');
+                ViperUtil.setStyle(img, 'height', maxHeight + 'px');
+                ViperUtil.setStyle(img, 'width', 'auto');
             }
 
             ViperUtil.empty(previewBox);

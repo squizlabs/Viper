@@ -737,6 +737,13 @@ ViperKeyboardEditorPlugin.prototype = {
                             range.collapse(true);
                             ViperSelection.addRange(range);
                         }
+                    } else if (startNode.nodeType === ViperUtil.TEXT_NODE
+                        && ViperUtil.isTag(startNode.parentNode, 'li') === true
+                        && ViperUtil.getTag('li', startNode.parentNode.parentNode).length === 1
+                    ) {
+                        // If the list item is the first container in the content and its being removed and its the
+                        // only list item then remove the list element.
+                        ViperUtil.remove(startNode.parentNode.parentNode);
                     }
 
                     return false;
@@ -744,27 +751,13 @@ ViperKeyboardEditorPlugin.prototype = {
             }
         }
 
-        if (firstSelectable === range.startContainer || viperElement === range.startContainer) {
-            var lastSelectable  = range._getLastSelectableChild(viperElement);
-            if (range.endContainer === viperElement
-                || (range.endContainer === lastSelectable && range.endOffset === lastSelectable.data.length)
-            ) {
-                // The whole Viper element is selected, remove all of its content
-                // and then initialise the Viper element.
-                ViperUtil.setHtml(viperElement, '');
-                this.viper.initEditableElement();
-
-                if (ViperUtil.isBrowser('chrome') === true
-                    || ViperUtil.isBrowser('safari') === true
-                    || ViperUtil.isBrowser('msie') === true
-                ) {
-                    // Chrome, Safari and IE needs to fire nodes changed here as they do
-                    // not fire keypress.
-                    this.viper.fireNodesChanged();
-                }
-
-                return false;
-            }
+        if (this._isWholeViperElementSelected(range) === true) {
+            // The whole Viper element is selected, remove all of its content
+            // and then initialise the Viper element.
+            ViperUtil.setHtml(viperElement, '');
+            this.viper.initEditableElement();
+            this.viper.fireNodesChanged();
+            return false;
         } else if (ViperUtil.isBrowser('msie') === true) {
             var rangeClone = range.cloneRange();
 
@@ -1022,6 +1015,49 @@ ViperKeyboardEditorPlugin.prototype = {
             }
 
             return false;
+        }
+
+        if (range.collapsed === false) {
+            var nodeSelection = range.getNodeSelection();
+            if (nodeSelection) {
+                // A whole container is selected at the start of the editable container.
+                // Find good container to place the caret.
+                var next       = true;
+                var selectable = range.getNextContainer(nodeSelection, null, false, true);
+                if (!selectable) {
+                    next       = false;
+                    selectable = range.getPreviousContainer(nodeSelection, null, true, true);
+                }
+
+                if (!selectable) {
+                    // Create a new default container.
+                    var defaultTagName = this.viper.getDefaultBlockTag();
+                    var defTag = null;
+                    if (defaultTagName !== '') {
+                        defTag = document.createElement(defaultTagName);
+                        ViperUtil.setHtml(defTag, '<br/>');
+                    } else {
+                        defTag = document.createTextNode(' ');
+                    }
+
+                    ViperUtil.insertAfter(nodeSelection, defTag);
+                    ViperUtil.remove(nodeSelection);
+                    range.setStart(defTag, 0);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                    return false;
+                } else if (next === true) {
+                    range.setStart(selectable, 0);
+                    range.collapse(true);
+                } else {
+                    range.setStart(selectable, selectable.data.length);
+                    range.collapse(true);
+                }
+
+                ViperUtil.remove(nodeSelection);
+                ViperSelection.addRange(range);
+                return false;
+            }
         }//end if
 
         if (this._handleBackspaceAtStartOfLi(e, range) === false) {
@@ -1252,14 +1288,15 @@ ViperKeyboardEditorPlugin.prototype = {
                     var defaultTagName = this.viper.getDefaultBlockTag();
                     if (defaultTagName !== '') {
                         var defTag = document.createElement(defaultTagName);
-                        ViperUtil.setHtml(defTag, '&nbsp;');
+                        ViperUtil.setHtml(defTag, '<br/>');
                         ViperUtil.setHtml(nodeSelection, '');
                         nodeSelection.appendChild(defTag);
+                        range.setStart(defTag, 0);
                     } else {
                         ViperUtil.setHtml(nodeSelection, '<br />');
                     }
                 } else {
-                    var nextSelectable = range.getNextContainer(range.endContainer, null, true);
+                    var nextSelectable = range.getNextContainer(nodeSelection, null, true);
                     if (this.viper.isOutOfBounds(nextSelectable) === true) {
                         nextSelectable = range.getPreviousContainer(range.startContainer, null, true);
                         if (nextSelectable) {
@@ -1281,16 +1318,23 @@ ViperKeyboardEditorPlugin.prototype = {
                     // First remove all elements in between.
                     range.deleteContents();
 
-                    // Now bring the contents of the next selectable to the
-                    // start parent.
-                    var nextSelectable = range.getNextContainer(range.startContainer, null, true);
-                    if (this.viper.isOutOfBounds(nextSelectable) === false) {
-                        var nextParent = ViperUtil.getFirstBlockParent(nextSelectable);
-                        while (nextParent.firstChild) {
-                            startParent.appendChild(nextParent.firstChild);
-                        }
+                    // If the startParent is empty remove it if the endParent is the viperElement.
+                    if (ViperUtil.isBlank(ViperUtil.trim(ViperUtil.getHtml(startParent))) !== true
+                        || endParent != this.viper.getViperElement()
+                    ) {
+                        // Now bring the contents of the next selectable to the
+                        // start parent.
+                        var nextSelectable = range.getNextContainer(range.startContainer, null, true);
+                        if (this.viper.isOutOfBounds(nextSelectable) === false) {
+                            var nextParent = ViperUtil.getFirstBlockParent(nextSelectable);
+                            while (nextParent.firstChild) {
+                                startParent.appendChild(nextParent.firstChild);
+                            }
 
-                        ViperUtil.remove(nextParent);
+                            ViperUtil.remove(nextParent);
+                        }
+                    } else {
+                        ViperUtil.remove(startParent);
                     }
                 } else {
                     // Same container just remove contents.
@@ -1596,9 +1640,9 @@ ViperKeyboardEditorPlugin.prototype = {
         if (range.collapsed === false) {
             var viperElement    = this.viper.getViperElement();
             var firstSelectable = range._getFirstSelectableChild(viperElement);
-            if (firstSelectable === range.startContainer || viperElement === range.startContainer) {
+            if (firstSelectable === range.startContainer || (viperElement === range.startContainer && range.startOffset === 0)) {
                 var lastSelectable  = range._getLastSelectableChild(viperElement);
-                if (range.endContainer === viperElement
+                if ((range.endContainer === viperElement && range.endOffset >= viperElement.childNodes.length)
                     || (range.endContainer === lastSelectable && range.endOffset === lastSelectable.data.length)
                 ) {
                     return true;

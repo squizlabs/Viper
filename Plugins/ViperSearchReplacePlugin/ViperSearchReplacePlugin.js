@@ -29,6 +29,7 @@ ViperSearchReplacePlugin.prototype = {
             var self = this;
             this.viper.registerCallback('Viper:viperElementFocused', 'ViperSearchReplacePlugin', function() {
                 if (self._finding === true) {
+                    self.viper.removeHighlights();
                     // Prevent focus events firing as it causes the selection to be
                     // lost during searching (IE only)...
                     return false;
@@ -204,7 +205,7 @@ ViperSearchReplacePlugin.prototype = {
         var viperRange = null;
         if (fromStart === true) {
             if (Viper.document.activeElement
-                && Viper.document.activeElement !== this.element
+                && Viper.document.activeElement !== this.viper.getViperElement()
                 && Viper.document.activeElement.blur
                 && Viper.document.activeElement !== document.body
             ) {
@@ -219,15 +220,23 @@ ViperSearchReplacePlugin.prototype = {
             viperRange.setStart(viperRange._getFirstSelectableChild(element), 0);
             viperRange.collapse(true);
         } else {
+            if (ViperUtil.isBrowser('msie') === true && this._finding === true) {
+                try {
+                    this.viper.highlightToSelection();
+                } catch (e) {}
+            }
+
             viperRange = this.viper.getCurrentRange();
         }
 
         if (ViperUtil.isBrowser('msie') === true) {
             // Range search.
-
             if (ViperUtil.isBrowser('msie', '>=11') === true) {
-                viperRange = this.viper.getViperRange();
-                viperRange.collapse(false);
+                if (fromStart !== true) {
+                    viperRange = this.viper.getViperRange();
+                    viperRange.collapse(false);
+                }
+
                 var textRange = new ViperIERange(document.body.createTextRange());
                 textRange.setStart(viperRange.startContainer, viperRange.startOffset);
                 textRange.setEnd(viperRange.endContainer, viperRange.endOffset);
