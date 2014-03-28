@@ -1072,7 +1072,7 @@ ViperKeyboardEditorPlugin.prototype = {
 
     _handleBackspaceAtStartOfLi: function(e, range)
     {
-        if (e.which === 46 && range.startOffset !== 0) {
+        if (e.which === 46 || range.startOffset !== 0) {
             return;
         }
 
@@ -1354,7 +1354,56 @@ ViperKeyboardEditorPlugin.prototype = {
             this.viper.initEditableElement();
             this.viper.fireNodesChanged();
             return false;
+        } else if (range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
+            && range.startContainer === range.endContainer
+            && range.startOffset === range.endOffset
+            && range.startOffset === 0
+        ) {
+            if (ViperUtil.isTag(range.startContainer, 'li') === true
+                && ViperUtil.getTag('li', range.startContainer.parentNode).length === 1
+            ) {
+                // Single empty list item being removed. Remove the whole list.
+                this._placeCaretToValidPosition(range.startContainer.parentNode, range.startContainer.parentNode);
+                ViperUtil.remove(range.startContainer.parentNode);
+                this.viper.fireNodesChanged();
+                this.viper.fireSelectionChanged(null, true);
+                return false;
+            }
         }//end if
+
+    },
+
+    _placeCaretToValidPosition: function(startNode, endNode)
+    {
+        // Find a new node we can put caret in.
+        var range     = this.viper.getCurrentRange();
+        var newOffset = 0;
+        var newSelContainer = range.getNextContainer(endNode, null, true);
+        if (!newSelContainer || this.viper.isOutOfBounds(newSelContainer) === true) {
+            // If out of bounds of Viper try getting the previous selectable.
+            newSelContainer = range.getPreviousContainer(startNode, null, true);
+            if (!newSelContainer || this.viper.isOutOfBounds(newSelContainer) === true) {
+                // No valid location. Create a new default block tag.
+                var defaultTagName = this.viper.getDefaultBlockTag();
+                newSelContainer = document.createElement('br');
+                if (defaultTagName === '') {
+                    ViperUtil.insertAfter(endNode, newSelContainer);
+                } else {
+                    var newElem = document.createElement(defaultTagName);
+                    newElem.appendChild(newSelContainer);
+                    ViperUtil.insertAfter(endNode, newElem);
+                }
+            } else {
+                newOffset = newSelContainer.data.length;
+            }
+        }
+
+        if (newSelContainer) {
+            // Set the caret location.
+            range.setStart(newSelContainer, newOffset);
+            range.collapse(true);
+            ViperSelection.addRange(range);
+        }
 
     },
 

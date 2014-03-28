@@ -981,6 +981,11 @@ ViperListPlugin.prototype = {
             bookmark  = this.viper.createBookmark();
         }
 
+        if (!startNode && !endNode) {
+            startNode = range.startContainer;
+            endNode   = startNode;
+        }
+
         var pElems = [];
         if (startNode === endNode) {
             var validParent = null;
