@@ -630,6 +630,8 @@ ViperFormatPlugin.prototype = {
 
             if ((!nodeSelection || nodeSelection.nodeType !== ViperUtil.ELEMENT_NODE || nodeSelection === self.viper.getViperElement())
                 && (data.range.collapsed === true || ViperUtil.getFirstBlockParent(startNode) !== ViperUtil.getFirstBlockParent(endNode))
+                || (startNode === endNode && ViperUtil.isTag(startNode, 'br') === true && data.range.collapsed === true)
+                || (ViperUtil.isBrowser('msie', '8') === true && data.range.collapsed === true && nodeSelection && ViperUtil.getHtml(nodeSelection) === '')
             ) {
                 tools.disableButton('anchor');
                 tools.disableButton('class');

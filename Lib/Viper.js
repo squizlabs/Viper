@@ -4225,6 +4225,17 @@ Viper.prototype = {
                     ViperSelection.addRange(range);
                     this.fireNodesChanged([range.getStartNode()]);
                     return false;
+                } else if (range.startContainer === range.endContainer
+                    && ViperUtil.isTag(range.startContainer, 'br')  === true
+                    && range.collapsed === true
+                    && range.startOffset === 0
+                ) {
+                    // IE text insert when BR tag is selected.
+                    var textNode = document.createTextNode('');
+                    ViperUtil.insertBefore(range.startContainer, textNode);
+                    ViperUtil.remove(range.startContainer);
+                    range.setStart(textNode, 0);
+                    range.collapse(true);
                 }
             }
 

@@ -662,6 +662,26 @@ ViperKeyboardEditorPlugin.prototype = {
                 range.setStart(startNode, range.startOffset);
                 range.collapse(true);
                 ViperSelection.addRange(range);
+            } else if (ViperUtil.isBrowser('msie')
+                && range.startOffset === 0
+                && range.collapsed === true
+                && startNode.nodeType === ViperUtil.TEXT_NODE
+                && startNode === range._getFirstSelectableChild(ViperUtil.getFirstBlockParent(startNode))
+            ) {
+                // IE11 seems to have an issue with creating a new paragraph before the caret. If the caret is at the
+                // start of a paragraph and enter is pressed a new paragraph is added before the original P tag.
+                // However, in IE11, the innerHTML is '<br>' but firstChild of the paragraph is null..
+                // We handle the creation here to prevent issues with toolbar button statuses etc.
+                var parent = ViperUtil.getFirstBlockParent(startNode);
+                var newEl = document.createElement(ViperUtil.getTagName(parent));
+                newEl.appendChild(document.createElement('br'));
+
+                if (ViperUtil.isBrowser('msie', '8') === true) {
+                    ViperUtil.setStyle(newEl.firstChild, 'display', 'none');
+                }
+
+                ViperUtil.insertBefore(parent, newEl);
+                return false;
             }//end if
 
             setTimeout(function() {
