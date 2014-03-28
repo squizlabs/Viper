@@ -747,8 +747,8 @@ ViperCopyPastePlugin.prototype = {
                 } catch (e) {
                     // Guess which browser this try/catch block is for....
                     this._tmpNode = document.createTextNode('');
-                    if (prevBlock.firstChild) {
-                        ViperUtil.insertBefore(prevBlock.firstChild, this._tmpNode);
+                    if (prevBlock.lastChild) {
+                        ViperUtil.insertAfter(prevBlock.lastChild, this._tmpNode);
                     } else {
                         prevBlock.appendChild(this._tmpNode);
                     }
@@ -856,7 +856,10 @@ ViperCopyPastePlugin.prototype = {
         }//end if
 
         this._updateSelection();
-        this.viper.cleanDOM();
+
+        if (ViperUtil.isBrowser('msie', '8') !== true) {
+            this.viper.cleanDOM();
+        }
 
         this.viper.fireNodesChanged();
         this.viper.fireCallbacks('ViperCopyPastePlugin:paste');
@@ -1940,6 +1943,7 @@ ViperCopyPastePlugin.prototype = {
         try {
             if (this._tmpNode !== null) {
                 var range = this.viper.getCurrentRange();
+                range.setEnd(this._tmpNode, 0);
                 range.setStart(this._tmpNode, 0);
                 range.collapse(true);
                 ViperSelection.addRange(range);
