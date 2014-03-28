@@ -4411,7 +4411,7 @@ Viper.prototype = {
     {
         if (this.element) {
             try {
-                if (ViperUtil.isBrowser('msie') === true) {
+                if (ViperUtil.isBrowser('msie', '<11') === true) {
                     var range = this.getViperRange();
                     ViperSelection.addRange(range);
 
