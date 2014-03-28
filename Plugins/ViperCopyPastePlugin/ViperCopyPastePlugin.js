@@ -23,6 +23,7 @@ function ViperCopyPastePlugin(viper)
     this.allowedTags     = 'table|tr|td|th|ul|li|ol|br|p|a|img|form|input|select|option';
     this.convertTags     = null;
     this._tmpNode        = null;
+    this._tmpNodeOffset  = 0;
     this._iframe         = null;
     this._isFirefox      = ViperUtil.isBrowser('firefox');
     this._isMSIE         = ViperUtil.isBrowser('msie');
@@ -353,6 +354,7 @@ ViperCopyPastePlugin.prototype = {
         }
 
         this._tmpNode = document.createTextNode('');
+        this._tmpNodeOffset = 0;
 
         try {
             this.viper.insertNodeAtCaret(this._tmpNode);
@@ -821,6 +823,12 @@ ViperCopyPastePlugin.prototype = {
             if (prevBlock) {
                 prevCheckCont = ViperUtil.trim(ViperUtil.getNodeTextContent(prevBlock));
                 if (prevCheckCont === '' || (prevCheckCont.length === 1 && prevCheckCont.charCodeAt(0) === 160)) {
+                    if (ViperUtil.isChildOf(this._tmpNode, prevBlock) === true) {
+                        // Tmp node could be the child of this element (when paste is made in a new P tag for exammple).
+                        this._tmpNode = range._getLastSelectableChild(prevBlock.nextSibling);
+                        this._tmpNodeOffset = this._tmpNode.data.length;
+                    }
+
                     ViperUtil.remove(prevBlock);
                 }
             }
@@ -1943,8 +1951,8 @@ ViperCopyPastePlugin.prototype = {
         try {
             if (this._tmpNode !== null) {
                 var range = this.viper.getCurrentRange();
-                range.setEnd(this._tmpNode, 0);
-                range.setStart(this._tmpNode, 0);
+                range.setEnd(this._tmpNode, this._tmpNodeOffset);
+                range.setStart(this._tmpNode, this._tmpNodeOffset);
                 range.collapse(true);
                 ViperSelection.addRange(range);
             }
