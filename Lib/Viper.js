@@ -1075,9 +1075,10 @@ Viper.prototype = {
 
     },
 
-    resetViperRange: function()
+    resetViperRange: function(range)
     {
-        this._viperRange = null;
+        range = range || null;
+        this._viperRange = range;
 
     },
 
@@ -1153,7 +1154,7 @@ Viper.prototype = {
                     range.setStart(firstSelectable, 0);
                     range.setEnd(lastSelectable, lastSelectable.data.length);
                     ViperSelection.addRange(range);
-                    this.resetViperRange();
+                    this.resetViperRange(range);
                 }
             }
 

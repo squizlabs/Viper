@@ -635,6 +635,7 @@ ViperFormatPlugin.prototype = {
             var nodeSelection = data.range.getNodeSelection(null, true);
             var startNode = data.range.getStartNode();
             var endNode   = data.range.getEndNode();
+
             if (!endNode) {
                 endNode = startNode;
             }

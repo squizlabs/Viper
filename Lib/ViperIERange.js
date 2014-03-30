@@ -1080,7 +1080,7 @@ ViperIERange.prototype = {
         var endParent = clone.parentElement();
 
         var container = startParent;
-        if (startParent === endParent) {
+        if (startParent !== endParent) {
             container = ViperUtil.getCommonAncestor(startParent, endParent);
         }
 

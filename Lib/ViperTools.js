@@ -1518,7 +1518,10 @@ ViperTools.prototype = {
                 this._activeSection = subSectionid;
                 this._updateSubSectionArrowPos();
 
-                this.focusSubSection();
+                var self = this;
+                setTimeout(function() {
+                    self.focusSubSection();
+                }, 50);
 
                 this._subSectionShown = true;
 
