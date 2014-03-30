@@ -19,8 +19,6 @@ function ViperIERange(rangeObj)
     this._initContainerInfo();
     this._setCollapsed();
 
-  //  this.shy            = Viper.document.createElement('span');
-  //  this.shy.innerHTML  = '&nbsp;';
     this._prevHeight    = null;
     this._prevContainer = null;
 
@@ -81,12 +79,21 @@ ViperIERange.prototype = {
         var clone  = this.rangeObj.duplicate();
 
         if (ViperIERange._prevRange.range !== null) {
-            if (clone.isEqual(ViperIERange._prevRange.range) === true) {
-                this.startContainer = ViperIERange._prevRange.startContainer;
-                this.endContainer   = ViperIERange._prevRange.endContainer;
-                this.startOffset    = ViperIERange._prevRange.startOffset;
-                this.endOffset      = ViperIERange._prevRange.endOffset;
-                return;
+            // IE check..
+            try {
+                // Check if start or end container throws invalid pointer exception (IE8..).
+                ViperIERange._prevRange.startContainer.parentNode;
+                ViperIERange._prevRange.endContainer.parentNode;
+
+                if (clone.isEqual(ViperIERange._prevRange.range) === true) {
+                    this.startContainer = ViperIERange._prevRange.startContainer;
+                    this.endContainer   = ViperIERange._prevRange.endContainer;
+                    this.startOffset    = ViperIERange._prevRange.startOffset;
+                    this.endOffset      = ViperIERange._prevRange.endOffset;
+                    return;
+                }
+            } catch(e) {
+                ViperIERange._prevRange.range = null;
             }
         }
 

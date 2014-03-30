@@ -617,6 +617,21 @@ ViperFormatPlugin.prototype = {
         });
 
         var updateToolbar = function(data) {
+            // Make sure passed in range is still valud.
+            try {
+                if (data.range) {
+                    if (data.range.startContainer) {
+                        data.range.startContainer.parentNode;
+                    }
+
+                    if (data.range.endContainer) {
+                        data.range.endContainer.parentNode;
+                    }
+                }
+            } catch(e) {
+                data.range = self.viper.getCurrentRange();
+            }
+
             var nodeSelection = data.range.getNodeSelection(null, true);
             var startNode = data.range.getStartNode();
             var endNode   = data.range.getEndNode();
