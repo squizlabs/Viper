@@ -1068,7 +1068,28 @@ ViperIERange.prototype = {
      */
     getCommonElement: function()
     {
-        return this.rangeObj.parentElement();
+        var parentEl = this.rangeObj.parentElement();
+
+        var clone = this.rangeObj.duplicate();
+        clone.collapse(true);
+
+        var startParent = clone.parentElement();
+
+        clone = this.rangeObj.duplicate();
+        clone.collapse(false);
+        var endParent = clone.parentElement();
+
+        var container = startParent;
+        if (startParent === endParent) {
+            container = ViperUtil.getCommonAncestor(startParent, endParent);
+        }
+
+        var common = container;
+        if (container !== parentEl) {
+            common = ViperUtil.getCommonAncestor(parentEl, container);
+        }
+
+        return common;
 
     },
 
