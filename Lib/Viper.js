@@ -4200,6 +4200,7 @@ Viper.prototype = {
                         case 'tbody':
                         case 'thead':
                         case 'tr':
+                        case 'li':
                             // Tags that can be handled by browser.
                             return true;
                         break;
