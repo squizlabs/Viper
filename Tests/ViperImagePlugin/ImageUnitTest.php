@@ -1060,7 +1060,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->clickField('Image is decorative');
         $this->sikuli->keyDown('Key.ENTER');
         $this->clickTopToolbarButton('image', 'selected');
-        $this->assertHTMLMatch('<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /><p></p>');
+        $this->assertHTMLMatch('<p><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /></p>');
 
         // Edit the source code
         $this->clickElement('img', 0);
