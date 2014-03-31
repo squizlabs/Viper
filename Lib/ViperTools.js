@@ -1326,7 +1326,7 @@ ViperTools.prototype = {
                     }
                 }
 
-                updateCallback.call(this, range, selectedNode);
+                updateCallback.call(this, range, selectedNode, activeSection !== null);
 
                 var buttonsToRemove = ViperUtil.getClass('ViperITP-button-hidden', toolsContainer);
                 for (var i = 0; i < buttonsToRemove.length; i++) {
