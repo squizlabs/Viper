@@ -1221,7 +1221,7 @@ ViperCoreStylesPlugin.prototype = {
             || ViperUtil.isTag(startNode, style) === true
             || (ViperUtil.getParents(startNode, style).length > 0
             && ViperUtil.getParents(endNode, style).length > 0)
-            || this._getWholeStyleSelections(endNode, [style], []).length > 0
+            || (selectedNode && this._getWholeStyleSelections(selectedNode, [style], []).length > 0)
         ) {
             // This selection is already styles, remove it.
             var changeid = ViperChangeTracker.startBatchChange('removedFormat');
