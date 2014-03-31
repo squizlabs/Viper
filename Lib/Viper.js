@@ -2269,7 +2269,7 @@ Viper.prototype = {
 
                 if (keepSelection !== true) {
                     range.setStart(node.firstChild, 0);
-                    range.setEnd(node.firstChild, node.firstChild.length);
+                    range.setEnd(node.firstChild, node.firstChild.data.length);
                     ViperSelection.addRange(range);
                 }
 
