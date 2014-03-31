@@ -1053,10 +1053,15 @@ ViperKeyboardEditorPlugin.prototype = {
         if (range.collapsed === false) {
             var nodeSelection = range.getNodeSelection();
             if (nodeSelection) {
+                var parents = ViperUtil.getSurroundingParents(nodeSelection);
+                if (parents.length > 0) {
+                    nodeSelection = parents.pop();
+                }
+
                 // A whole container is selected at the start of the editable container.
                 // Find good container to place the caret.
                 var next       = true;
-                var selectable = range.getNextContainer(nodeSelection, null, false, true);
+                var selectable = range.getNextContainer(nodeSelection, null, true, true);
                 if (!selectable) {
                     next       = false;
                     selectable = range.getPreviousContainer(nodeSelection, null, true, true);
