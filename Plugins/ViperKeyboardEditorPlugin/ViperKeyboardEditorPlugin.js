@@ -820,11 +820,15 @@ ViperKeyboardEditorPlugin.prototype = {
                 && rangeClone.endOffset === 0
                 && rangeClone.endContainer.innerHTML === ''
             ) {
-                var nextNode = rangeClone.getNextContainer(rangeClone.startContainer, null, true);
-                ViperUtil.remove(rangeClone.endContainer);
-                rangeClone.setEnd(nextNode, 0);
-                rangeClone.collapse(false);
-                ViperSelection.addRange(rangeClone);
+                if (ViperUtil.isTag(rangeClone.endContainer, 'td') === false
+                    && ViperUtil.isTag(rangeClone.endContainer, 'th') === false
+                ) {
+                    var nextNode = rangeClone.getNextContainer(rangeClone.startContainer, null, true);
+                    ViperUtil.remove(rangeClone.endContainer);
+                    rangeClone.setEnd(nextNode, 0);
+                    rangeClone.collapse(false);
+                    ViperSelection.addRange(rangeClone);
+                }
 
                 return false;
             } else if (range.startContainer
@@ -987,54 +991,63 @@ ViperKeyboardEditorPlugin.prototype = {
             && e.keyCode === 8
             && (this.viper.elementIsEmpty(range.startContainer) === true || ViperUtil.getHtml(range.startContainer) === '<br>')
         ) {
-            var skippedBlockElem = [];
-            var endCont = range.endContainer;
-            var node    = range.getPreviousContainer(range.startContainer, skippedBlockElem, true, true);
+            if ((ViperUtil.isTag(range.startContainer, 'br') !== true
+                || (ViperUtil.isTag(range.startContainer.parentNode, 'td') === false
+                && ViperUtil.isTag(range.startContainer.parentNode, 'th') === false))
+                && (ViperUtil.isTag(range.startContainer, 'td') === false
+                    && ViperUtil.isTag(range.startContainer, 'th') === false)
+            ) {
+                var skippedBlockElem = [];
+                var endCont = range.endContainer;
+                var node    = range.getPreviousContainer(range.startContainer, skippedBlockElem, true, true);
 
-            var startOffset = 0;
-            if (!node || ViperUtil.isChildOf(node, this.viper.element) === false) {
-                if (skippedBlockElem.length > 0) {
-                    for (var i = 0; i < skippedBlockElem.length; i++) {
-                        if (ViperUtil.isTag(skippedBlockElem[i], 'p') === true) {
-                            ViperUtil.remove(skippedBlockElem[i]);
+                var startOffset = 0;
+                if (!node || ViperUtil.isChildOf(node, this.viper.element) === false) {
+                    if (skippedBlockElem.length > 0) {
+                        for (var i = 0; i < skippedBlockElem.length; i++) {
+                            if (ViperUtil.isTag(skippedBlockElem[i], 'p') === true) {
+                                ViperUtil.remove(skippedBlockElem[i]);
+                            }
                         }
                     }
+
+                    return false;
+
+                    node = range.getNextContainer(endCont, null, true);
+                    if (this.viper.isOutOfBounds(node) === true) {
+                        node = endCont;
+                    }
+                } else if (node.nodeType === ViperUtil.TEXT_NODE) {
+                    startOffset = node.data.length;
+                }
+
+                range.setEnd(node, startOffset);
+                range.collapse(false);
+                ViperSelection.addRange(range);
+
+                if (endCont
+                    && endCont.nodeType === ViperUtil.ELEMENT_NODE
+                    && (ViperUtil.isTag(endCont, 'td') === true || ViperUtil.isTag(endCont, 'th') === true)
+                ) {
+                    return;
+                }
+
+                var parent = endCont.parentNode;
+                ViperUtil.remove(endCont);
+                while (parent.childNodes.length === 0) {
+                    if (parent === viperElement) {
+                        break;
+                    }
+
+                    var remove = parent;
+                    parent = parent.parentNode;
+                    ViperUtil.remove(remove);
                 }
 
                 return false;
-
-                node = range.getNextContainer(endCont, null, true);
-                if (this.viper.isOutOfBounds(node) === true) {
-                    node = endCont;
-                }
-            } else if (node.nodeType === ViperUtil.TEXT_NODE) {
-                startOffset = node.data.length;
+            } else if (!range.startContainer.previousSibling) {
+                return false;
             }
-
-            range.setEnd(node, startOffset);
-            range.collapse(false);
-            ViperSelection.addRange(range);
-
-            if (endCont
-                && endCont.nodeType === ViperUtil.ELEMENT_NODE
-                && (ViperUtil.isTag(endCont, 'td') === true || ViperUtil.isTag(endCont, 'th') === true)
-            ) {
-                return;
-            }
-
-            var parent = endCont.parentNode;
-            ViperUtil.remove(endCont);
-            while (parent.childNodes.length === 0) {
-                if (parent === viperElement) {
-                    break;
-                }
-
-                var remove = parent;
-                parent = parent.parentNode;
-                ViperUtil.remove(remove);
-            }
-
-            return false;
         }
 
         if (range.collapsed === false) {
@@ -1191,6 +1204,13 @@ ViperKeyboardEditorPlugin.prototype = {
             }//end if
         }//end if
 
+        if (ViperUtil.isTag(startNode, 'br') === true
+            && (ViperUtil.isTag(startNode.parentNode, 'td') === true
+            || ViperUtil.isTag(startNode.parentNode, 'th') === true)
+        ) {
+            return false;
+        }
+
     },
 
     _handleDeleteForChrome: function(e, range)
@@ -1228,6 +1248,10 @@ ViperKeyboardEditorPlugin.prototype = {
             && ViperUtil.isTag(range.getStartNode(), 'br') === true
         ) {
             var startNode = range.getStartNode();
+            if (ViperUtil.isTag(startNode.parentNode, 'td') === true || ViperUtil.isTag(startNode.parentNode, 'th') === true) {
+                return false;
+            }
+
             var selectable = range.getNextContainer(startNode, null, true);
             if (!selectable) {
                 selectable = range.getPreviousContainer(startNode, null, true);
