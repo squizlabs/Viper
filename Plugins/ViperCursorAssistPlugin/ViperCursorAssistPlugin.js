@@ -104,7 +104,7 @@ ViperCursorAssistPlugin.prototype = {
                         line    = document.createElement('div');
                         line.id = self.viper.getId() + '-cursorAssist';
                         ViperUtil.addClass(line, 'ViperCursorAssistPlugin');
-                        ViperUtil.setHtml(line, '<span class="ViperCursorAssistPlugin-cursorText"></span><span class="ViperCursorAssistPlugin-cursorLine"></span>');
+                        ViperUtil.setHtml(line, '<span class="ViperCursorAssistPlugin-cursorText">Add Content Here</span><span class="ViperCursorAssistPlugin-cursorLine"></span>');
 
                         ViperUtil.addEvent(line, 'click', function() {
                             ViperUtil.remove(line);
@@ -149,7 +149,7 @@ ViperCursorAssistPlugin.prototype = {
 
                     self.viper.fireSelectionChanged();
                     self.viper.fireNodesChanged();
-                }, 250);
+                }, 100);
             });
         });
     },

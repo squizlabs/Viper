@@ -1,8 +1,115 @@
+@-moz-keyframes CAP-fade {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@-webkit-keyframes CAP-fade {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@-moz-keyframes CAP-rotate {
+  0%   { -moz-transform: rotateX(90deg); }
+  100% { -moz-transform: rotateX(0deg); }
+}
+
+@-webkit-keyframes CAP-rotate {
+  0%   { -webkit-transform: rotateX(90deg); }
+  100% { -webkit-transform: rotateX(0deg); }
+}
+
+/*
+@-moz-keyframes CAP-slider-l {
+  0%   { left: 50%; }
+  100% { left: 0; }
+}
+
+@-webkit-keyframes CAP-slider-l {
+  0%   { left: 50%; }
+  100% { left: 0; }
+}
+
+@-moz-keyframes CAP-slider-r {
+  0%   { right: 50%; }
+  100% { right: 0; }
+}
+
+@-webkit-keyframes CAP-slider-r {
+  0%   { right: 50%; }
+  100% { right: 0; }
+}
+*/
+
 .ViperCursorAssistPlugin {
+    -webkit-animation: CAP-fade 0.2s 1, CAP-rotate 0.2s 1;
+    -moz-animation: CAP-fade 0.2s 1, CAP-rotate 0.2s 1;
     position: absolute;
     height: 0;
-    padding: 10px;
+    padding: 10px 0;
     z-index: 1000;
     cursor: pointer;
-    border-top: 1px solid #ff0000;
+    text-align: center;
+    font-size: 10px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+}
+
+.ViperCursorAssistPlugin:before,
+.ViperCursorAssistPlugin:after {
+    background-color: #BBB;
+    border-radius: 3px;
+    content: "";
+    height: 6px;
+    margin-top: -3px;
+    position: absolute;
+    top: 50%;
+    width: 6px;
+    z-index: 1001;
+    -webkit-transition: left 0.1s ease-in;
+    -moz-transition: left 0.1s ease-in;
+}
+
+.ViperCursorAssistPlugin:before {
+/*     -webkit-animation: CAP-slider-l 0.2s 1; */
+/*     -moz-animation: CAP-slider-l 0.2s 1; */
+    left: 0;
+}
+
+.ViperCursorAssistPlugin:after {
+/*     -webkit-animation: CAP-slider-r 0.2s 1; */
+/*     -moz-animation: CAP-slider-r 0.2s 1; */
+    right: 0;
+}
+
+.ViperCursorAssistPlugin-cursorText {
+    background-color: #FFF;
+    border: 1px solid #CFCFCF;
+    border-radius: 0.4em;
+    color: #989898;
+    display: inline-block;
+    padding: 0.1em 0.9em;
+    position: relative;
+    top: -9px;
+    z-index: 1001;
+}
+
+.ViperCursorAssistPlugin-cursorLine {
+    height: 2px;
+    left: 0;
+    margin-top: -1px;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    background: #C8C8C8 url(images/dash-bg.png) 0 0 repeat-x;
+}
+
+.ViperCursorAssistPlugin:hover .ViperCursorAssistPlugin-cursorText,
+.ViperCursorAssistPlugin:hover .ViperCursorAssistPlugin-cursorLine,
+.ViperCursorAssistPlugin:hover:before,
+.ViperCursorAssistPlugin:hover:after {
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    background-color: #2b7ce0;
+    border-color: #2b7ce0;
+    color: #FFF;
 }
