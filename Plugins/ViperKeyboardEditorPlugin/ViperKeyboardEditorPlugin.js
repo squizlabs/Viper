@@ -555,7 +555,11 @@ ViperKeyboardEditorPlugin.prototype = {
                 // but the caret is placed to the start of the sub list items and
                 // its not possible to move the caret to the new main list item.
                 var li = document.createElement('li');
-                li.appendChild(document.createElement('br'));
+                if (!startNode.nextSibling || ViperUtil.isTag(startNode.nextSibling, 'br') === false) {
+                    // Do not add extra BR tag.
+                    li.appendChild(document.createElement('br'));
+                }
+
                 while (startNode.nextSibling) {
                     li.appendChild(startNode.nextSibling);
                 }
