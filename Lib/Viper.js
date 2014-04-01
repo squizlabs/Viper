@@ -1075,6 +1075,13 @@ Viper.prototype = {
 
     },
 
+    resetViperRange: function(range)
+    {
+        range = range || null;
+        this._viperRange = range;
+
+    },
+
     /**
      * Selects the specified element.
      *
@@ -1147,6 +1154,7 @@ Viper.prototype = {
                     range.setStart(firstSelectable, 0);
                     range.setEnd(lastSelectable, lastSelectable.data.length);
                     ViperSelection.addRange(range);
+                    this.resetViperRange(range);
                 }
             }
 
@@ -2261,7 +2269,7 @@ Viper.prototype = {
 
                 if (keepSelection !== true) {
                     range.setStart(node.firstChild, 0);
-                    range.setEnd(node.firstChild, node.firstChild.length);
+                    range.setEnd(node.firstChild, node.firstChild.data.length);
                     ViperSelection.addRange(range);
                 }
 
@@ -4130,6 +4138,20 @@ Viper.prototype = {
                 && range.startContainer === range._getFirstSelectableChild(this.element)
             ) {
                 resetContent = true;
+            } else if (range.startOffset === 0
+                && range.startContainer === range.endContainer
+                && range.startContainer === this.element
+                && range.endOffset >= this.element.childNodes.length
+            ) {
+                resetContent = true;
+            }
+
+            var nodeSelection = null;
+            if (resetContent !== true) {
+                nodeSelection = range.getNodeSelection(range, true);
+                if (nodeSelection && nodeSelection === this.element) {
+                    resetContent = true;
+                }
             }
 
             if (resetContent === true) {
@@ -4152,7 +4174,6 @@ Viper.prototype = {
                 range.collapse(true);
                 ViperSelection.addRange(range);
             } else {
-                var nodeSelection = range.getNodeSelection(range, true);
                 if (nodeSelection && ViperUtil.isBlockElement(nodeSelection) === true && String.fromCharCode(e.which) !== '') {
 
                     switch (ViperUtil.getTagName(nodeSelection)) {
@@ -4179,6 +4200,7 @@ Viper.prototype = {
                         case 'tbody':
                         case 'thead':
                         case 'tr':
+                        case 'li':
                             // Tags that can be handled by browser.
                             return true;
                         break;
@@ -4205,6 +4227,17 @@ Viper.prototype = {
                     ViperSelection.addRange(range);
                     this.fireNodesChanged([range.getStartNode()]);
                     return false;
+                } else if (range.startContainer === range.endContainer
+                    && ViperUtil.isTag(range.startContainer, 'br')  === true
+                    && range.collapsed === true
+                    && range.startOffset === 0
+                ) {
+                    // IE text insert when BR tag is selected.
+                    var textNode = document.createTextNode('');
+                    ViperUtil.insertBefore(range.startContainer, textNode);
+                    ViperUtil.remove(range.startContainer);
+                    range.setStart(textNode, 0);
+                    range.collapse(true);
                 }
             }
 

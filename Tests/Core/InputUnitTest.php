@@ -13,6 +13,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testTextType()
     {
+        $this->useTest(1);
         $text = $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.DELETE');
 
@@ -38,10 +39,9 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testTextTypeReplaceSelection()
     {
+        $this->useTest(1);
         $this->selectKeyword(1);
-
         $this->type('Testing input');
-
         $this->assertHTMLMatch('<p>Testing input</p><p>EIB MOZ</p>');
 
     }//end testTextTypeReplaceSelection()
@@ -54,11 +54,12 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testCreatingANewParagraph()
     {
+        $this->useTest(1);
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('Testing input');
 
-        $this->assertHTMLMatch('<p>%1%</p><p>Testing input</p>');
+        $this->assertHTMLMatch('<p>%1%</p><p>Testing input</p><p>EIB MOZ</p>');
 
     }//end testCreatingANewParagraph()
 
@@ -70,6 +71,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testKeyboradNavigation()
     {
+        $this->useTest(1);
         $text = $this->selectKeyword(1);
         $this->type('Testing input');
 
@@ -109,6 +111,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testBackspace()
     {
+        $this->useTest(1);
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.CMD + b');
         $this->type('test');
@@ -129,12 +132,34 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
+     * Test that command left and right does nothing in the browser.
+     *
+     * @return void
+     */
+    public function testCommandLeftAndCommandRight()
+    {
+        $this->useTest(1);
+        $this->moveToKeyword(1, 'right');
+        sleep(1);
+        $this->sikuli->keyDown('Key.CMD + Key.LEFT');
+        $this->type(' test');
+        $this->assertHTMLMatch('<p>%1% test</p><p>EIB MOZ</p>');
+
+        $this->sikuli->keyDown('Key.CMD + Key.RIGHT');
+        $this->type(' test');
+        $this->assertHTMLMatch('<p>%1% test test</p><p>EIB MOZ</p>');
+
+    }//end testCommandLeftAndCommandRight()
+
+
+    /**
      * Test that removing characters using DELETE works.
      *
      * @return void
      */
     public function testDelete()
     {
+        $this->useTest(1);
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.CMD + b');
         $this->type('test');
@@ -163,6 +188,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testRightKeyboardSelection()
     {
+        $this->useTest(1);
         $text = $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
@@ -180,6 +206,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testLeftKeyboardSelection()
     {
+        $this->useTest(1);
         $text = $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
@@ -199,6 +226,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testSelectAllAndRemove()
     {
+        $this->useTest(1);
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + a');
         $this->sikuli->keyDown('Key.DELETE');
@@ -216,6 +244,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testSelectAllAndReplace()
     {
+        $this->useTest(1);
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + a');
 
@@ -227,170 +256,13 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test undo and redo icons.
-     *
-     * @return void
-     */
-    public function testUndoAndRedoIcons()
-    {
-
-        $this->findKeyword(1);
-        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
-        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
-
-        $this->selectKeyword(1);
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('New content');
-        $this->assertHTMLMatch('<p>%1%</p><p>New content</p><p>EIB MOZ</p>');
-        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
-        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
-
-        $this->clickTopToolbarButton('historyUndo');
-        $this->clickTopToolbarButton('historyUndo');
-        $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
-        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
-        $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
-
-        $this->clickTopToolbarButton('historyRedo');
-        $this->clickTopToolbarButton('historyRedo');
-        $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<p>%1%</p><p>New content</p><p>EIB MOZ</p>');
-        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
-        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
-
-        $this->clickTopToolbarButton('historyUndo');
-        $this->clickTopToolbarButton('historyUndo');
-        $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
-        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
-        $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
-
-    }//end testUndoAndRedoIcons()
-
-
-    /**
-     * Test that you can delete all content and then undo the changes using the keyboard shortcuts.
-     *
-     * @return void
-     */
-    public function testtestUndoAndRedoUsingShortcuts()
-    {
-
-        $this->findKeyword(1);
-        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
-        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
-
-        $this->selectKeyword(1);
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('New content');
-        $this->assertHTMLMatch('<p>%1%</p><p>New content</p><p>EIB MOZ</p>');
-        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
-        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
-
-        $this->sikuli->keyDown('Key.CMD + z');
-        $this->sikuli->keyDown('Key.CMD + z');
-        $this->sikuli->keyDown('Key.CMD + z');
-        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
-        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
-        $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
-
-        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        $this->assertHTMLMatch('<p>%1%</p><p>New content</p><p>EIB MOZ</p>');
-        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
-        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
-
-        $this->sikuli->keyDown('Key.CMD + z');
-        $this->sikuli->keyDown('Key.CMD + z');
-        $this->sikuli->keyDown('Key.CMD + z');
-        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
-        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
-        $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
-
-    }//end testtestUndoAndRedoUsingShortcuts()
-
-
-    /**
-     * Test that you can delete all content and then undo the changes.
-     *
-     * @return void
-     */
-    public function testDeleteAllClickUndoAndClickRedo()
-    {
-
-        $this->selectKeyword(1);
-        $this->sikuli->keyDown('Key.CMD + a');
-        $this->sikuli->keyDown('Key.DELETE');
-        sleep(2);
-        $this->assertHTMLMatch('<p></p>');
-        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
-        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
-
-        $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
-        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
-        $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
-
-        $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<p></p>');
-        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
-        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
-
-        $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
-        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
-        $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
-
-    }//end testDeleteAllClickUndoAndClickRedo()
-
-
-    /**
-     * Test that you can delete all content and then undo the changes using the keyboard shortcuts.
-     *
-     * @return void
-     */
-    public function testDeleteAllClickUndoAndClickRedoUsingShortcuts()
-    {
-
-        $this->selectKeyword(1);
-        $this->sikuli->keyDown('Key.CMD + a');
-        $this->sikuli->keyDown('Key.DELETE');
-        sleep(1);
-        $this->assertHTMLMatch('<p></p>');
-        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
-        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
-
-        $this->sikuli->keyDown('Key.CMD + z');
-        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
-        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
-        $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
-
-        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        $this->assertHTMLMatch('<p></p>');
-        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
-        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
-
-        $this->sikuli->keyDown('Key.CMD + z');
-        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
-        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
-        $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
-
-
-    }//end testDeleteAllClickUndoAndClickRedo()
-
-
-    /**
      * Tests changing the defailt block tags and entering content.
      *
      * @return void
      */
     public function testDifferentDefaultBlockTags()
     {
-        $this->useTest(1);
+        $this->useTest(2);
         $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.DELETE');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be enabled');
@@ -403,7 +275,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         sleep(1);
         $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><p>test123</p><p>123test</p>');
 
-        $this->useTest(1);
+        $this->useTest(2);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "div")');
 
         $this->selectKeyword(1, 2);
@@ -418,7 +290,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         sleep(1);
         $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><div>test123</div><div>123test</div>');
 
-        $this->useTest(1);
+        $this->useTest(2);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
 
         $this->selectKeyword(1, 2);
@@ -485,24 +357,25 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testNoBaseTagInput()
     {
+        $this->useTest(3);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
 
         // Test that typing characters in a node with no block parent does not cause
         // it to be wrapped with a block tag.
-        $this->useTest(1);
+        $this->useTest(3);
         $this->moveToKeyword(1, 'right');
         $this->type(' test');
         $this->assertHTMLMatch('%1% test');
 
         // Test that enter key inside a paragraph still splits the container.
-        $this->useTest(2);
+        $this->useTest(4);
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>%1%</p><p> %2%</p>test');
 
         // Test that enter key creates a BR tag instead of creating block elements
         // if the text has no wrapping block elements.
-        $this->useTest(3);
+        $this->useTest(5);
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.ENTER');
@@ -510,7 +383,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
         // Test that removing whole content and typing does not wrap text in a block
         // element.
-        $this->useTest(1);
+        $this->useTest(3);
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('test');
@@ -518,19 +391,19 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
         // Test that removing whole content by selecting all and typing characters
         // does not wrap text in a block element if there is no block element already.
-        $this->useTest(1);
+        $this->useTest(3);
         $this->selectKeyword(1);
         $this->type('test');
         $this->assertHTMLMatch('test');
 
         // Test that removing whole content by selecting all and typing characters
         // uses the available block tag.
-        $this->useTest(4);
+        $this->useTest(6);
         $this->selectKeyword(1);
         $this->type('test');
         $this->assertHTMLMatch('<p>test</p>');
 
-        $this->useTest(4);
+        $this->useTest(6);
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('test');
@@ -546,6 +419,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testTabInToViper()
     {
+        $this->useTest(1);
         $this->moveToKeyword(1, 'right');
 
         $this->sikuli->execJS('(function(){var input = document.createElement("input");ViperUtil.insertBefore(document.body.firstChild, input);input.focus();return true;})()');
@@ -565,6 +439,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testTabInToViperWithNoContent()
     {
+        $this->useTest(1);
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + a');
         $this->sikuli->keyDown('Key.DELETE');
@@ -586,6 +461,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testEmbeddingVideo()
     {
+        $this->useTest(1);
         $this->sikuli->click($this->findKeyword(1));
         $this->clickTopToolbarButton('sourceView');
 

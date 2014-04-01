@@ -205,7 +205,12 @@ ViperFormatPlugin.prototype = {
     {
         node = this.getNodeWithAttributeFromRange(attribute, node);
         if (node) {
-            return node.getAttribute(attribute);
+            var value = node.getAttribute(attribute);
+            if (attribute === 'class') {
+                value = this._removeViperHighlightClass(value);
+            }
+
+            return value;
         }
 
         return '';
@@ -250,6 +255,12 @@ ViperFormatPlugin.prototype = {
         }
 
         return null;
+
+    },
+
+    _removeViperHighlightClass: function(className)
+    {
+        return className.replace(/\s*(__viper_selHighlight|__viper_cleanOnly)/gi, '');
 
     },
 
@@ -480,7 +491,7 @@ ViperFormatPlugin.prototype = {
             } else {
                 tools.disableButton('vitpFormats');
             }
-        } else if ((!currentElement || (ViperUtil.isBlockElement(currentElement) === true && ViperUtil.inArray(ViperUtil.getTagName(currentElement), ignoredTags) === false)) && this.isWholeBlockSelection(data.range)) {
+        } else if ((!currentElement || currentElement.nodeType === ViperUtil.TEXT_NODE || (ViperUtil.isBlockElement(currentElement) === true && ViperUtil.inArray(ViperUtil.getTagName(currentElement), ignoredTags) === false)) && this.isWholeBlockSelection(data.range)) {
             var pOnly = this._selectionHasPTagsOnly(data.range);
 
             for (var tag in formatButtons) {
@@ -606,9 +617,25 @@ ViperFormatPlugin.prototype = {
         });
 
         var updateToolbar = function(data) {
+            data.range = self.viper.getCurrentRange();
+            // Make sure passed in range is still valud.
+            try {
+                if (data.range) {
+                    if (data.range.startContainer) {
+                        data.range.startContainer.parentNode;
+                    }
+
+                    if (data.range.endContainer) {
+                        data.range.endContainer.parentNode;
+                    }
+                }
+            } catch(e) {
+            }
+
             var nodeSelection = data.range.getNodeSelection(null, true);
             var startNode = data.range.getStartNode();
             var endNode   = data.range.getEndNode();
+
             if (!endNode) {
                 endNode = startNode;
             }
@@ -619,6 +646,8 @@ ViperFormatPlugin.prototype = {
 
             if ((!nodeSelection || nodeSelection.nodeType !== ViperUtil.ELEMENT_NODE || nodeSelection === self.viper.getViperElement())
                 && (data.range.collapsed === true || ViperUtil.getFirstBlockParent(startNode) !== ViperUtil.getFirstBlockParent(endNode))
+                || (startNode === endNode && ViperUtil.isTag(startNode, 'br') === true && data.range.collapsed === true)
+                || (ViperUtil.isBrowser('msie', '8') === true && data.range.collapsed === true && nodeSelection && ViperUtil.getHtml(nodeSelection) === '')
             ) {
                 tools.disableButton('anchor');
                 tools.disableButton('class');
@@ -654,23 +683,28 @@ ViperFormatPlugin.prototype = {
                 nodeSelection = formatElement;
             }
 
-            // Anchor.
-            var attrId = self._getAttributeValue('id', nodeSelection);
-            tools.getItem(prefix + 'anchor:input').setValue(attrId);
-            if (attrId) {
-                tools.setButtonActive('anchor');
-            } else {
-                tools.setButtonInactive('anchor');
-            }
+            if (data.range.collapsed === false
+                || (ViperUtil.isTag(startNode, 'br') === false
+                && (startNode.nodeType === ViperUtil.TEXT_NODE && ViperUtil.trim(startNode.data) === '') === false)
+            ) {
+                // Anchor.
+                var attrId = self._getAttributeValue('id', nodeSelection);
+                tools.getItem(prefix + 'anchor:input').setValue(attrId);
+                if (attrId) {
+                    tools.setButtonActive('anchor');
+                } else {
+                    tools.setButtonInactive('anchor');
+                }
 
-            // Class.
-            var attrClass = self._getAttributeValue('class', nodeSelection);
-            tools.getItem(prefix + 'class:input').setValue(attrClass);
-            if (attrClass) {
-                tools.setButtonActive('class');
-            } else {
-                tools.setButtonInactive('class');
-            }
+                // Class.
+                var attrClass = self._getAttributeValue('class', nodeSelection);
+                tools.getItem(prefix + 'class:input').setValue(attrClass);
+                if (attrClass) {
+                    tools.setButtonActive('class');
+                } else {
+                    tools.setButtonInactive('class');
+                }
+            }//end if
 
             // Format and Heading.
             tools.disableButton('headings');
@@ -1107,11 +1141,13 @@ ViperFormatPlugin.prototype = {
                 var attributes = {attributes: {}};
                 attributes.attributes[attr] = value;
                 this.viper.surroundContents('span', attributes, range);
+                range = this.viper.getViperRange();
 
                 this.viper.removeBookmarks();
             }//end if
 
             ViperSelection.addRange(range);
+
             this.viper.adjustRange();
 
             this.viper.fireSelectionChanged(range, true);

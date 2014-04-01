@@ -38,6 +38,7 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
      */
     public function testOnLoadButtonsDisabled()
     {
+        $this->useTest(1);
         $this->topToolbarButtonExists('historyUndo', 'disabled');
         $this->topToolbarButtonExists('historyRedo', 'disabled');
 
@@ -51,6 +52,7 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
      */
     public function testUndoUsingKeyboardShortcut()
     {
+        $this->useTest(1);
         $this->moveToKeyword(1, 'right');
         $this->type(' test');
 
@@ -78,6 +80,7 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
      */
     public function testUndoUsingTopToolbar()
     {
+        $this->useTest(1);
         $this->moveToKeyword(1, 'right');
         $this->type(' test');
 
@@ -100,6 +103,7 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
      */
     public function testRedoUsingKeyboardShort()
     {
+        $this->useTest(1);
         $this->moveToKeyword(1, 'right');
         $this->type(' test');
 
@@ -125,6 +129,7 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
      */
     public function testRedoUsingTopToolbar()
     {
+        $this->useTest(1);
         $this->moveToKeyword(1, 'right');
         $this->type(' test');
 
@@ -149,6 +154,7 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
      */
     public function testMaxCharlimit()
     {
+        $this->useTest(1);
         $this->moveToKeyword(1, 'right');
 
         $chars = '';
@@ -176,6 +182,160 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
 
     }//end testMaxCharlimit()
 
+
+    /**
+     * Test undo and redo icons.
+     *
+     * @return void
+     */
+    public function testUndoAndRedoIcons()
+    {
+        $this->useTest(1);
+        $this->findKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
+
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('New content');
+        $this->assertHTMLMatch('<p>%1%</p><p>New content</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
+
+        //Undo the new content
+        $this->clickTopToolbarButton('historyUndo');
+        //Undo the new paragraph
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>%1%</p><p>New content</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
+
+    }//end testUndoAndRedoIcons()
+
+
+    /**
+     * Test that you can delete all content and then undo the changes using the keyboard shortcuts.
+     *
+     * @return void
+     */
+    public function testUndoAndRedoUsingShortcuts()
+    {
+        $this->useTest(1);
+        $this->findKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
+
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('New content');
+        $this->assertHTMLMatch('<p>%1%</p><p>New content</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
+
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
+
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>%1%</p><p>New content</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
+
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
+
+    }//end testUndoAndRedoUsingShortcuts()
+
+
+    /**
+     * Test that you can delete all content and then undo the changes.
+     *
+     * @return void
+     */
+    public function testDeleteAllClickUndoAndClickRedo()
+    {
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        sleep(2);
+        $this->assertHTMLMatch('');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
+
+    }//end testDeleteAllClickUndoAndClickRedo()
+
+
+    /**
+     * Test that you can delete all content and then undo the changes using the keyboard shortcuts.
+     *
+     * @return void
+     */
+    public function testDeleteAllClickUndoAndClickRedoUsingShortcuts()
+    {
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        sleep(1);
+        $this->assertHTMLMatch('');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
+
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
+
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
+
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
+
+    }//end testDeleteAllClickUndoAndClickRedo()
 
 }//end class
 
