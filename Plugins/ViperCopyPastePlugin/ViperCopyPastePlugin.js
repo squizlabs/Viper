@@ -846,7 +846,7 @@ ViperCopyPastePlugin.prototype = {
 
         this._updateSelection();
 
-        if (ViperUtil.isBrowser('msie', '8') !== true) {
+        if (ViperUtil.isBrowser('msie') !== true) {
             this.viper.cleanDOM();
         }
 
@@ -1944,7 +1944,6 @@ ViperCopyPastePlugin.prototype = {
             this._tmpNode     = null;
             this.pasteElement = null;
         } catch (e) {
-
         }
 
     }
