@@ -624,8 +624,6 @@ ViperCopyPastePlugin.prototype = {
             html = this._updateElements(html);
         }
 
-        html = this._removeSpansWithNoAttributes(html);
-
         var self = this;
         this.viper.fireCallbacks('ViperCopyPastePlugin:cleanPaste', {html: html, stripTags: stripTags}, function(obj, newHTML) {
             if (newHTML) {
@@ -650,7 +648,7 @@ ViperCopyPastePlugin.prototype = {
 
         if (html) {
             html = ViperUtil.trim(html);
-            html = this.viper.cleanHTML(html, ['align', 'class']);
+            html = this.viper.cleanHTML(html, ['dir', 'class', 'lang', 'align']);
         }
 
         if (!html) {
@@ -886,6 +884,7 @@ ViperCopyPastePlugin.prototype = {
         }
 
         // Remove span and o:p etc. tags.
+        content = content.replace(/<\/?span[^>]*>/gi, "");
         content = content.replace(/<\/?\w+:[^>]*>/gi, '' );
 
         // Remove XML tags.
