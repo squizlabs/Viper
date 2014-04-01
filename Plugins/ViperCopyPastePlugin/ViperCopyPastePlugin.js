@@ -186,6 +186,7 @@ ViperCopyPastePlugin.prototype = {
                         var node = pasteArea;
                         toolbar.hide();
 
+                        self.viper.blurActiveElement();
                         self._handleFormattedPasteValue(false, node);
                         self._afterPaste();
                     }, 10);
@@ -193,32 +194,14 @@ ViperCopyPastePlugin.prototype = {
 
                 setTimeout(function() {
                     ViperSelection.addRange(viperRange);
-
-                    if (self._isMSIE === true) {
-                        // The selection changed event fires after 500ms due to
-                        // another workaround, which causes the toolbar to close
-                        // as soon as it opens. So the first onclose callback
-                        // needs to prevent toolbar closing.
-                        var ignore = true;
-                        toolbar.setOnHideCallback(function() {
-                            if (ignore === true) {
-                                ignore = false;
-                                // Do not close the inline paste toolbar.
-                                return false;
-                            }
-
-                            // Close the inline paste toolbar.
-                            ViperUtil.remove(self._toolbarElement);
-                            ignore = true;
-                            return true;
-                        });
-                    } else {
-                        toolbar.setOnHideCallback(function() {
-                            ViperUtil.remove(self._toolbarElement);
-                        });
-                    }
+                    toolbar.setOnHideCallback(function() {
+                        ViperUtil.remove(self._toolbarElement);
+                    });
 
                     toolbar.update();
+                    setTimeout(function() {
+                        pasteArea.focus();
+                    }, 200);
                 }, 10);
 
                 return false;
