@@ -617,6 +617,7 @@ ViperFormatPlugin.prototype = {
         });
 
         var updateToolbar = function(data) {
+            data.range = self.viper.getCurrentRange();
             // Make sure passed in range is still valud.
             try {
                 if (data.range) {
@@ -629,7 +630,6 @@ ViperFormatPlugin.prototype = {
                     }
                 }
             } catch(e) {
-                data.range = self.viper.getCurrentRange();
             }
 
             var nodeSelection = data.range.getNodeSelection(null, true);
