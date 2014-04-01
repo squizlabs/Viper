@@ -683,23 +683,28 @@ ViperFormatPlugin.prototype = {
                 nodeSelection = formatElement;
             }
 
-            // Anchor.
-            var attrId = self._getAttributeValue('id', nodeSelection);
-            tools.getItem(prefix + 'anchor:input').setValue(attrId);
-            if (attrId) {
-                tools.setButtonActive('anchor');
-            } else {
-                tools.setButtonInactive('anchor');
-            }
+            if (data.range.collapsed === false
+                || (ViperUtil.isTag(startNode, 'br') === false
+                && (startNode.nodeType === ViperUtil.TEXT_NODE && ViperUtil.trim(startNode.data) === '') === false)
+            ) {
+                // Anchor.
+                var attrId = self._getAttributeValue('id', nodeSelection);
+                tools.getItem(prefix + 'anchor:input').setValue(attrId);
+                if (attrId) {
+                    tools.setButtonActive('anchor');
+                } else {
+                    tools.setButtonInactive('anchor');
+                }
 
-            // Class.
-            var attrClass = self._getAttributeValue('class', nodeSelection);
-            tools.getItem(prefix + 'class:input').setValue(attrClass);
-            if (attrClass) {
-                tools.setButtonActive('class');
-            } else {
-                tools.setButtonInactive('class');
-            }
+                // Class.
+                var attrClass = self._getAttributeValue('class', nodeSelection);
+                tools.getItem(prefix + 'class:input').setValue(attrClass);
+                if (attrClass) {
+                    tools.setButtonActive('class');
+                } else {
+                    tools.setButtonInactive('class');
+                }
+            }//end if
 
             // Format and Heading.
             tools.disableButton('headings');
