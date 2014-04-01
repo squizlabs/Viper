@@ -555,7 +555,11 @@ ViperKeyboardEditorPlugin.prototype = {
                 // but the caret is placed to the start of the sub list items and
                 // its not possible to move the caret to the new main list item.
                 var li = document.createElement('li');
-                li.appendChild(document.createElement('br'));
+                if (!startNode.nextSibling || ViperUtil.isTag(startNode.nextSibling, 'br') === false) {
+                    // Do not add extra BR tag.
+                    li.appendChild(document.createElement('br'));
+                }
+
                 while (startNode.nextSibling) {
                     li.appendChild(startNode.nextSibling);
                 }
@@ -662,6 +666,26 @@ ViperKeyboardEditorPlugin.prototype = {
                 range.setStart(startNode, range.startOffset);
                 range.collapse(true);
                 ViperSelection.addRange(range);
+            } else if (ViperUtil.isBrowser('msie')
+                && range.startOffset === 0
+                && range.collapsed === true
+                && startNode.nodeType === ViperUtil.TEXT_NODE
+                && startNode === range._getFirstSelectableChild(ViperUtil.getFirstBlockParent(startNode))
+            ) {
+                // IE11 seems to have an issue with creating a new paragraph before the caret. If the caret is at the
+                // start of a paragraph and enter is pressed a new paragraph is added before the original P tag.
+                // However, in IE11, the innerHTML is '<br>' but firstChild of the paragraph is null..
+                // We handle the creation here to prevent issues with toolbar button statuses etc.
+                var parent = ViperUtil.getFirstBlockParent(startNode);
+                var newEl = document.createElement(ViperUtil.getTagName(parent));
+                newEl.appendChild(document.createElement('br'));
+
+                if (ViperUtil.isBrowser('msie', '8') === true) {
+                    ViperUtil.setStyle(newEl.firstChild, 'display', 'none');
+                }
+
+                ViperUtil.insertBefore(parent, newEl);
+                return false;
             }//end if
 
             setTimeout(function() {
@@ -737,7 +761,9 @@ ViperKeyboardEditorPlugin.prototype = {
                             range.collapse(true);
                             ViperSelection.addRange(range);
                         }
-                    } else if (startNode.nodeType === ViperUtil.TEXT_NODE
+                    }
+
+                    if (startNode.nodeType === ViperUtil.TEXT_NODE
                         && ViperUtil.isTag(startNode.parentNode, 'li') === true
                         && ViperUtil.getTag('li', startNode.parentNode.parentNode).length === 1
                     ) {
@@ -800,11 +826,20 @@ ViperKeyboardEditorPlugin.prototype = {
                 && rangeClone.endOffset === 0
                 && rangeClone.endContainer.innerHTML === ''
             ) {
-                var nextNode = rangeClone.getNextContainer(rangeClone.startContainer, null, true);
-                ViperUtil.remove(rangeClone.endContainer);
-                rangeClone.setEnd(nextNode, 0);
-                rangeClone.collapse(false);
-                ViperSelection.addRange(rangeClone);
+                if (ViperUtil.isTag(rangeClone.endContainer, 'td') === false
+                    && ViperUtil.isTag(rangeClone.endContainer, 'th') === false
+                ) {
+                    var nextNode = rangeClone.getNextContainer(rangeClone.startContainer, null, true);
+                    if (nextNode && this.viper.isOutOfBounds(nextNode) === false) {
+                        ViperUtil.remove(rangeClone.endContainer);
+                        rangeClone.setEnd(nextNode, 0);
+                        rangeClone.collapse(false);
+                        ViperSelection.addRange(rangeClone);
+                    }
+                }
+
+                // Incase we are in a list.
+                this._handleBackspaceAtStartOfLi(e, range);
 
                 return false;
             } else if (range.startContainer
@@ -967,63 +1002,75 @@ ViperKeyboardEditorPlugin.prototype = {
             && e.keyCode === 8
             && (this.viper.elementIsEmpty(range.startContainer) === true || ViperUtil.getHtml(range.startContainer) === '<br>')
         ) {
-            var skippedBlockElem = [];
-            var endCont = range.endContainer;
-            var node    = range.getPreviousContainer(range.startContainer, skippedBlockElem, true, true);
+            if ((ViperUtil.isTag(range.startContainer, 'br') !== true
+                || (ViperUtil.isTag(range.startContainer.parentNode, 'td') === false
+                && ViperUtil.isTag(range.startContainer.parentNode, 'th') === false))
+                && (ViperUtil.isTag(range.startContainer, 'td') === false
+                    && ViperUtil.isTag(range.startContainer, 'th') === false)
+            ) {
+                var skippedBlockElem = [];
+                var endCont = range.endContainer;
+                var node    = range.getPreviousContainer(range.startContainer, skippedBlockElem, true, true);
 
-            var startOffset = 0;
-            if (!node || ViperUtil.isChildOf(node, this.viper.element) === false) {
-                if (skippedBlockElem.length > 0) {
-                    for (var i = 0; i < skippedBlockElem.length; i++) {
-                        if (ViperUtil.isTag(skippedBlockElem[i], 'p') === true) {
-                            ViperUtil.remove(skippedBlockElem[i]);
+                var startOffset = 0;
+                if (!node || ViperUtil.isChildOf(node, this.viper.element) === false) {
+                    if (skippedBlockElem.length > 0) {
+                        for (var i = 0; i < skippedBlockElem.length; i++) {
+                            if (ViperUtil.isTag(skippedBlockElem[i], 'p') === true) {
+                                ViperUtil.remove(skippedBlockElem[i]);
+                            }
                         }
                     }
+
+                    node = range.getNextContainer(endCont, null, true);
+                    if (this.viper.isOutOfBounds(node) === true) {
+                        node = endCont;
+                    }
+                } else if (node.nodeType === ViperUtil.TEXT_NODE) {
+                    startOffset = node.data.length;
+                }
+
+                range.setEnd(node, startOffset);
+                range.collapse(false);
+                ViperSelection.addRange(range);
+
+                if (endCont
+                    && endCont.nodeType === ViperUtil.ELEMENT_NODE
+                    && (ViperUtil.isTag(endCont, 'td') === true || ViperUtil.isTag(endCont, 'th') === true)
+                ) {
+                    return;
+                }
+
+                var parent = endCont.parentNode;
+                ViperUtil.remove(endCont);
+                while (parent.childNodes.length === 0) {
+                    if (parent === viperElement) {
+                        break;
+                    }
+
+                    var remove = parent;
+                    parent = parent.parentNode;
+                    ViperUtil.remove(remove);
                 }
 
                 return false;
-
-                node = range.getNextContainer(endCont, null, true);
-                if (this.viper.isOutOfBounds(node) === true) {
-                    node = endCont;
-                }
-            } else if (node.nodeType === ViperUtil.TEXT_NODE) {
-                startOffset = node.data.length;
+            } else if (!range.startContainer.previousSibling) {
+                return false;
             }
-
-            range.setEnd(node, startOffset);
-            range.collapse(false);
-            ViperSelection.addRange(range);
-
-            if (endCont
-                && endCont.nodeType === ViperUtil.ELEMENT_NODE
-                && (ViperUtil.isTag(endCont, 'td') === true || ViperUtil.isTag(endCont, 'th') === true)
-            ) {
-                return;
-            }
-
-            var parent = endCont.parentNode;
-            ViperUtil.remove(endCont);
-            while (parent.childNodes.length === 0) {
-                if (parent === viperElement) {
-                    break;
-                }
-
-                var remove = parent;
-                parent = parent.parentNode;
-                ViperUtil.remove(remove);
-            }
-
-            return false;
         }
 
         if (range.collapsed === false) {
             var nodeSelection = range.getNodeSelection();
             if (nodeSelection) {
+                var parents = ViperUtil.getSurroundingParents(nodeSelection);
+                if (parents.length > 0) {
+                    nodeSelection = parents.pop();
+                }
+
                 // A whole container is selected at the start of the editable container.
                 // Find good container to place the caret.
                 var next       = true;
-                var selectable = range.getNextContainer(nodeSelection, null, false, true);
+                var selectable = range.getNextContainer(nodeSelection, null, true, true);
                 if (!selectable) {
                     next       = false;
                     selectable = range.getPreviousContainer(nodeSelection, null, true, true);
@@ -1106,6 +1153,53 @@ ViperKeyboardEditorPlugin.prototype = {
                     return false;
                 }
             }//end if
+        } else if (range.collapsed === true
+            && ViperUtil.isTag(range.startContainer, 'li') === true
+            && ViperUtil.getHtml(range.startContainer) === ''
+        ) {
+            // Happens in IE8, when the list item is empty.
+
+            var offset     = 0;
+            var next       = false;
+            var li         = range.startContainer;
+            var list       = li.parentNode;
+            var selectable = range.getPreviousContainer(li, null, true, true);
+
+            if (!selectable || this.viper.isOutOfBounds(selectable) === true) {
+                selectable = range.getNextContainer(li, null, true, true);
+                next       = true;
+                if (!selectable || this.viper.isOutOfBounds(selectable) === true) {
+                    // Create a new container.
+                    var defaultTagName = this.viper.getDefaultBlockTag();
+                    if (defaultTagName !== '') {
+                        selectable = document.createElement(defaultTagName);
+                        ViperUtil.setHtml(selectable, '&nbsp;');
+                    } else {
+                        selectable = document.createTextNode(' ');
+                    }
+
+                    ViperUtil.insertAfter(list, selectable);
+                }
+            } else {
+                offset = selectable.data.length;
+            }
+
+            if (selectable) {
+                range.setStart(selectable, offset);
+                range.collapse(true);
+                ViperSelection.addRange(range);
+            }
+
+            ViperUtil.remove(li);
+
+            // Check if we need to remove the whole list element.
+            if (ViperUtil.getTag('li', list).length === 0) {
+                ViperUtil.remove(list);
+            }
+
+            this.viper.fireSelectionChanged(range, true);
+            this.viper.fireNodesChanged();
+            return false;
         }//end if
 
     },
@@ -1171,6 +1265,17 @@ ViperKeyboardEditorPlugin.prototype = {
             }//end if
         }//end if
 
+        if (ViperUtil.isTag(startNode, 'br') === true
+            && (ViperUtil.isTag(startNode.parentNode, 'td') === true
+            || ViperUtil.isTag(startNode.parentNode, 'th') === true)
+        ) {
+            return false;
+        } else if (ViperUtil.isTag(startNode.parentNode, 'li') === true
+            && ViperUtil.getHtml(startNode.parentNode) === '<br>'
+        ) {
+            return false;
+        }
+
     },
 
     _handleDeleteForChrome: function(e, range)
@@ -1208,9 +1313,17 @@ ViperKeyboardEditorPlugin.prototype = {
             && ViperUtil.isTag(range.getStartNode(), 'br') === true
         ) {
             var startNode = range.getStartNode();
+            if (ViperUtil.isTag(startNode.parentNode, 'td') === true || ViperUtil.isTag(startNode.parentNode, 'th') === true) {
+                return false;
+            }
+
             var selectable = range.getNextContainer(startNode, null, true);
-            if (!selectable) {
+            if (!selectable || this.viper.isOutOfBounds(selectable) === true) {
                 selectable = range.getPreviousContainer(startNode, null, true);
+                if (!selectable || this.viper.isOutOfBounds(selectable) === true) {
+                    // Cant remove anything.
+                    return false;
+                }
             }
 
             var parent = range.getStartNode().parentNode;
@@ -1693,6 +1806,13 @@ ViperKeyboardEditorPlugin.prototype = {
                 var lastSelectable  = range._getLastSelectableChild(viperElement);
                 if ((range.endContainer === viperElement && range.endOffset >= viperElement.childNodes.length)
                     || (range.endContainer === lastSelectable && range.endOffset === lastSelectable.data.length)
+                ) {
+                    return true;
+                } else if (ViperUtil.isBrowser('msie', '8') === true
+                    && range.endContainer === viperElement
+                    && range.startContainer === firstSelectable
+                    && range.startOffset === 0
+                    && range.endOffset === 0
                 ) {
                     return true;
                 }

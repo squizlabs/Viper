@@ -1075,9 +1075,10 @@ Viper.prototype = {
 
     },
 
-    resetViperRange: function()
+    resetViperRange: function(range)
     {
-        this._viperRange = null;
+        range = range || null;
+        this._viperRange = range;
 
     },
 
@@ -1153,7 +1154,7 @@ Viper.prototype = {
                     range.setStart(firstSelectable, 0);
                     range.setEnd(lastSelectable, lastSelectable.data.length);
                     ViperSelection.addRange(range);
-                    this.resetViperRange();
+                    this.resetViperRange(range);
                 }
             }
 
@@ -2268,7 +2269,7 @@ Viper.prototype = {
 
                 if (keepSelection !== true) {
                     range.setStart(node.firstChild, 0);
-                    range.setEnd(node.firstChild, node.firstChild.length);
+                    range.setEnd(node.firstChild, node.firstChild.data.length);
                     ViperSelection.addRange(range);
                 }
 
@@ -4199,6 +4200,7 @@ Viper.prototype = {
                         case 'tbody':
                         case 'thead':
                         case 'tr':
+                        case 'li':
                             // Tags that can be handled by browser.
                             return true;
                         break;
@@ -4225,6 +4227,17 @@ Viper.prototype = {
                     ViperSelection.addRange(range);
                     this.fireNodesChanged([range.getStartNode()]);
                     return false;
+                } else if (range.startContainer === range.endContainer
+                    && ViperUtil.isTag(range.startContainer, 'br')  === true
+                    && range.collapsed === true
+                    && range.startOffset === 0
+                ) {
+                    // IE text insert when BR tag is selected.
+                    var textNode = document.createTextNode('');
+                    ViperUtil.insertBefore(range.startContainer, textNode);
+                    ViperUtil.remove(range.startContainer);
+                    range.setStart(textNode, 0);
+                    range.collapse(true);
                 }
             }
 

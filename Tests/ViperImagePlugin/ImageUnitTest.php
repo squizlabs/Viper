@@ -254,7 +254,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->sikuli->click($this->findKeyword(2));
         $this->selectKeyword(3);
         $this->type('Key.LEFT');
-
+        $this->type('Key.LEFT');
         $this->clickTopToolbarButton('image');
         $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
         $this->sikuli->keyDown('Key.TAB');
@@ -1060,7 +1060,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->clickField('Image is decorative');
         $this->sikuli->keyDown('Key.ENTER');
         $this->clickTopToolbarButton('image', 'selected');
-        $this->assertHTMLMatch('<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /><p></p>');
+        $this->assertHTMLMatch('<p><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /></p>');
 
         // Edit the source code
         $this->clickElement('img', 0);

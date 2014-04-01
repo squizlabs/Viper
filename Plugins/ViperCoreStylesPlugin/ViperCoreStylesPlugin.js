@@ -825,8 +825,19 @@ ViperCoreStylesPlugin.prototype = {
             range = this.viper.getViperRange();
         }
 
-        var keyboardEditorPlugin = this.viper.ViperPluginManager.getPlugin('ViperKeyboardEditorPlugin');
-        var prev = keyboardEditorPlugin.splitAtRange(true, null);
+        if (ViperUtil.isBrowser('msie') === true
+            && range.startContainer
+            && range.collapsed === true
+            && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+            && (ViperUtil.getHtml(range.startContainer.parentNode) === ''
+                || ViperUtil.getHtml(range.startContainer.parentNode) === '&nbsp;')
+        ) {
+            var prev = range.startContainer.parentNode;
+        } else {
+            var keyboardEditorPlugin = this.viper.ViperPluginManager.getPlugin('ViperKeyboardEditorPlugin');
+            var prev = keyboardEditorPlugin.splitAtRange(true, null);
+        }
+
         var nextSibling = prev.nextSibling;
 
         ViperUtil.insertAfter(prev, hr);
@@ -856,7 +867,10 @@ ViperCoreStylesPlugin.prototype = {
 
                     nextEmptyElem = nextEmptyElem.nextSibling;
                 }
-            } else if (range.startOffset === 0 && ViperUtil.trim(ViperUtil.getNodeTextContent(prev)) === '') {
+            } else if (range.startOffset === 0
+                && (ViperUtil.trim(ViperUtil.getNodeTextContent(prev)) === ''
+                ||  ViperUtil.getHtml(prev) === '&nbsp;')
+            ) {
                 ViperUtil.remove(prev);
             }
         }//end if
@@ -1207,7 +1221,7 @@ ViperCoreStylesPlugin.prototype = {
             || ViperUtil.isTag(startNode, style) === true
             || (ViperUtil.getParents(startNode, style).length > 0
             && ViperUtil.getParents(endNode, style).length > 0)
-            || this._getWholeStyleSelections(endNode, [style], []).length > 0
+            || (selectedNode && this._getWholeStyleSelections(selectedNode, [style], []).length > 0)
         ) {
             // This selection is already styles, remove it.
             var changeid = ViperChangeTracker.startBatchChange('removedFormat');

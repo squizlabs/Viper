@@ -80,7 +80,7 @@ ViperImagePlugin.prototype = {
                 return false;
             } else {
                 self._updateToolbars();
-                return self.hideImageResizeHandles(target);
+                return self.hideImageResizeHandles();
             }
         });
 
@@ -118,7 +118,7 @@ ViperImagePlugin.prototype = {
                 var parent = tags[i].parentNode;
                 ViperUtil.removeClass(tags[i], 'ui-resizable');
                 ViperUtil.insertBefore(parent, tags[i]);
-                self.hideImageResizeHandles(tags[i]);
+                self.hideImageResizeHandles();
                 ViperUtil.remove(parent);
 
                 // Remove empty style and class attributes.
@@ -696,7 +696,7 @@ ViperImagePlugin.prototype = {
 
     showImageResizeHandles: function(image)
     {
-        this.hideImageResizeHandles();
+        this.hideImageResizeHandles(true);
 
         var seHandle = document.createElement('div');
         ViperUtil.addClass(seHandle, 'Viper-image-handle Viper-image-handle-se');
@@ -810,13 +810,16 @@ ViperImagePlugin.prototype = {
 
     },
 
-    hideImageResizeHandles: function(elem)
+    hideImageResizeHandles: function(noUpdate)
     {
         if (this._resizeHandles) {
             ViperUtil.remove(this._resizeHandles);
             this._resizeHandles = null;
-            this._inlineToolbar.hide();
-            this._updateToolbars();
+
+            if (noUpdate !== true) {
+                this._inlineToolbar.hide();
+                this._updateToolbars();
+            }
         }
 
         this._resizeImage = null;
