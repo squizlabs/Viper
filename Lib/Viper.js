@@ -1256,6 +1256,18 @@ Viper.prototype = {
 
     },
 
+    /**
+     * Find the next good position for the caret outside of the sourceElement.
+     *
+     * This method should be used when removing an element where caret is in.
+     * If no valid elements found a new element will be created using the defaultBlockTag setting.
+     */
+    moveCaretAway: function(sourceElement)
+    {
+       return range.moveCaretAway(sourceElement, this.viper.getViperElement(), this.getDefaultBlockTag());
+
+    },
+
 
     /**
      * Returns the caret coords.

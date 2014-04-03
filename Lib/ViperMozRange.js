@@ -318,7 +318,7 @@ ViperMozRange.prototype = {
      * @return void
      * @throws DOMException
      */
-    deleteContents: function()
+    deleteContents: function(viperElem, defaultTagName)
     {
         var startContainer = this.startContainer;
         var startOffset    = this.startOffset;
@@ -335,6 +335,14 @@ ViperMozRange.prototype = {
             var before = this.startContainer.data.substring(0, this.startOffset);
             var after  = this.startContainer.data.substring(this.endOffset);
             this.startContainer.data = before + after;
+        } else if (startContainer === this.endContainer
+            && startOffset === this.endOffset
+            && ViperUtil.isBrowser('msie', '11') === true
+        ) {
+            // Move caret.
+            this.moveCaretAway(startContainer, viperElem, defaultTagName)
+            ViperUtil.remove(startContainer);
+            return;
         } else {
             this.rangeObj.deleteContents();
         }
@@ -1041,7 +1049,24 @@ ViperMozRange.prototype = {
 
     getHTMLContents: function(clonedSelection)
     {
-        if (!clonedSelection) {
+        if (this.startContainer === this.endContainer
+            && this.startOffset === 0
+            && this.endOffset === 0
+            && this.startContainer.nodeType !== ViperUtil.TEXT_NODE
+            && this.collapsed === true
+            && ViperUtil.isBrowser('msie', '11') === true
+            && ViperUtil.isStubElement(this.startContainer) === false
+        ) {
+            var clone = this.rangeObj.cloneRange();
+            var firstSel = this._getFirstSelectableChild(clone.startContainer);
+            var lastSel  = this._getLastSelectableChild(clone.startContainer);
+            if (firstSel && lastSel) {
+                clone.setStart(firstSel, 0);
+                clone.setEnd(lastSel, lastSel.data.length);
+                clonedSelection = clone.cloneContents();
+            }
+
+        } else if (!clonedSelection) {
             clonedSelection = this.rangeObj.cloneContents();
         }
 

@@ -614,6 +614,43 @@ ViperDOMRange.prototype = {
 
     },
 
+    moveCaretAway: function(sourceElement, parentElement, defaultTagName)
+    {
+        var next       = true;
+        var selectable = this.getNextContainer(sourceElement, null, true, true);
+        if (!selectable || (selectable !== parentElement && ViperUtil.isChildOf(selectable, parentElement) === false) === true) {
+            next       = false;
+            selectable = this.getPreviousContainer(sourceElement, null, true, true);
+        }
+
+        if (!selectable || (selectable !== parentElement && ViperUtil.isChildOf(selectable, parentElement) === false) === true) {
+            // Create a new default container.
+            var defTag = null;
+            if (defaultTagName !== '') {
+                defTag = document.createElement(defaultTagName);
+                ViperUtil.setHtml(defTag, '<br/>');
+            } else {
+                defTag = document.createTextNode(' ');
+            }
+
+            ViperUtil.insertAfter(sourceElement, defTag);
+            this.setStart(defTag, 0);
+            this.collapse(true);
+            ViperSelection.addRange(this);
+            return false;
+        } else if (next === true) {
+            this.setStart(selectable, 0);
+            this.collapse(true);
+        } else {
+            this.setStart(selectable, selectable.data.length);
+            this.collapse(true);
+        }
+
+        ViperSelection.addRange(this);
+        return this;
+
+    },
+
     _normalizeNode: function(node)
     {
         // Joins all sibling text elements.

@@ -32,3 +32,9 @@
 .ViperCopyPastePlugin-pasteWrapper {
     width: 230px;
 }
+
+.Viper-copyDiv {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}

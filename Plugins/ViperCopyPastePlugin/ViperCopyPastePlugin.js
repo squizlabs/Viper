@@ -102,7 +102,6 @@ ViperCopyPastePlugin.prototype = {
                     }
 
                     self.pasteElement = self._createPasteDiv();
-
                     var pasteContent = e.clipboardData.getData(dataType);
                     if (dataType === 'text/plain') {
                         pasteContent = pasteContent.replace(/\r\n/g, '<br />');
@@ -120,8 +119,6 @@ ViperCopyPastePlugin.prototype = {
 
                     self._handleRawPasteValue(e.clipboardData.getData(dataType));
                 }
-
-                self._afterPaste();
 
                 ViperUtil.preventDefault(e);
                 return false;
@@ -188,7 +185,6 @@ ViperCopyPastePlugin.prototype = {
 
                         self.viper.blurActiveElement();
                         self._handleFormattedPasteValue(false, node);
-                        self._afterPaste();
                     }, 10);
                 };
 
@@ -208,9 +204,170 @@ ViperCopyPastePlugin.prototype = {
             };
         }//end if
 
-        elem.oncut = function(e) {
-            self.viper.fireNodesChanged();
+        elem.oncopy = function(e) {
+            var yCoord = null;
+            if (ViperUtil.isBrowser('msie', '<11') === true) {
+                yCoord = self.viper.getCaretCoords().y;
+            }
+
+            var range = self.viper.getViperRange();
+
+            // Create a clone of the current range as we are going to modify it.
+            var rangeClone = range.cloneRange();
+
+            // Get the contents of the current selection and add Viper element so that it can be cleaned up in paste.
+            var selectedContent = range.getHTMLContents();
+            selectedContent     = '<b class="__viper_copy"> </b>' + selectedContent;
+
+            // IE needs space before B tag otherwise it gets stripped out..
+            if (ViperUtil.isBrowser('msie', '<11') === true) {
+                selectedContent = '  ' + selectedContent;
+            } else if (ViperUtil.isBrowser('msie', '>=11') === true) {
+                selectedContent = '&nbsp;' + selectedContent;
+            }
+
+            // Chrome adds style information for the copied selection -.- To prevent this, use clipboardData.setData
+            // method to set the modified content and prevent the default copy action.
+            if (ViperUtil.isBrowser('chrome') === true) {
+                e.clipboardData.setData('text/html', selectedContent);
+                ViperUtil.preventDefault(e);
+                return false;
+            }
+
+            // Create a temp element and set the content as the selection content.
+            var tmp = document.createElement('div');
+            tmp.setAttribute('contenteditable', 'true');
+            ViperUtil.addClass(tmp, 'Viper-copyDiv');
+            document.body.appendChild(tmp);
+            ViperUtil.setHtml(tmp, selectedContent);
+
+            if (yCoord !== null) {
+                ViperUtil.setStyle(tmp, 'top', yCoord + 'px');
+            }
+
+            // Select the contents of the temp element.
+            var firstChild = range._getFirstSelectableChild(tmp);
+            var lastChild = range._getLastSelectableChild(tmp);
+            range.setEnd(lastChild, lastChild.data.length);
+
+            // WORKING ON IE8
+            if (ViperUtil.isBrowser('msie', '<11') === true) {
+                range.setStart(firstChild, 1);
+            } else {
+                range.setStart(firstChild, 0);
+            }
+
+            ViperSelection.addRange(range);
+
+            // Browser's copy action will kick in and copy the selected contents in temp element.
+            // After a time out remove the temp element and put the range back to original selection.
+            setTimeout(function() {
+                ViperUtil.remove(tmp);
+                ViperSelection.addRange(rangeClone);
+            }, 0);
         };
+
+        // Handle cut event for Chrome.
+        if (ViperUtil.isBrowser('chrome') === true) {
+            elem.oncut = function(e) {
+                var range = self.viper.getCurrentRange();
+                var selectedContent = range.getHTMLContents();
+                selectedContent = '&nbsp;<b class="__viper_copy"> </b>' + selectedContent;
+                e.clipboardData.setData('text/html', selectedContent);
+
+                var keyboardEditor = self.viper.ViperPluginManager.getPlugin('ViperKeyboardEditorPlugin');
+                var fakeEvent      = self._getFakeKeyboardEvent();
+
+                if (keyboardEditor.handleDelete(fakeEvent) !== false || fakeEvent.prevent !== true) {
+                    range.deleteContents(self.viper.getViperElement(), self.viper.getDefaultBlockTag());
+                    ViperSelection.addRange(range);
+                }
+
+                ViperUtil.preventDefault(e);
+                return false;
+            }
+        }
+
+    },
+
+    _getFakeKeyboardEvent: function()
+    {
+        var fakeEvent = {
+            prevent: false,
+            keyCode: 8,
+            which: 8,
+            preventDefault: function() {this.prevent = true;},
+            stopPropagation: function() {}
+        };
+
+        return fakeEvent;
+    },
+
+    _beforeCut: function(e)
+    {
+        // Get the coordinates of the caret. The temp div needs to be placed at same Y coords as the caret so that
+        // when the focus is moved to this element there is no 'screen jump'.
+        var yCoord = null;
+        if (ViperUtil.isBrowser('msie', '<11') === true) {
+            yCoord = this.viper.getCaretCoords().y;
+        }
+
+        var self       = this;
+        var range      = self.viper.getViperRange();
+        var rangeClone = range.cloneRange();
+
+        if (ViperUtil.isBrowser('msie', '>=11') === true) {
+            yCoord = window.pageYOffset;
+        }
+
+        // Get the contents of the selection and add the Viper element.
+        var selectedContent = range.getHTMLContents();
+        selectedContent = '&nbsp;<b class="__viper_copy"> </b>' + selectedContent;
+
+        // Need to make the temp element content editable so that cut event works.
+        var tmp = document.createElement('div');
+        tmp.setAttribute('contenteditable', 'true');
+        ViperUtil.addClass(tmp, 'Viper-copyDiv');
+
+        if (yCoord !== null) {
+            ViperUtil.setStyle(tmp, 'top', yCoord + 'px');
+        }
+
+        tmp.oncut = function() {
+            setTimeout(function() {
+                // Remove the temp element.
+                ViperUtil.remove(tmp);
+
+                // Move the range back to original selection.
+                ViperSelection.addRange(rangeClone);
+
+                // Use the ViperKeyboardEditorPlugin to remove the selected contents, if it did not prevent default
+                // use browsers deleteContents() method.
+                var keyboardEditor = self.viper.ViperPluginManager.getPlugin('ViperKeyboardEditorPlugin');
+                if (keyboardEditor.handleDelete({keyCode: 8, which: 8}) !== false) {
+                    rangeClone = self.viper.getViperRange();
+                    rangeClone.deleteContents(self.viper.getViperElement(), self.viper.getDefaultBlockTag());
+                    if (ViperUtil.isBrowser('msie') === true) {
+                        rangeClone = self.viper.getCurrentRange();
+                        ViperSelection.addRange(rangeClone);
+                    }
+                } else {
+                    ViperSelection.addRange(rangeClone);
+                }
+            }, 0);
+        }
+
+        // Add the temp element to Viper element so that we do not need to change focus.
+        this.viper.element.appendChild(tmp);
+        ViperUtil.setHtml(tmp, selectedContent);
+
+        // Select the contents of the temp element.
+        var firstChild = range._getFirstSelectableChild(tmp);
+        var lastChild = range._getLastSelectableChild(tmp);
+        range.setEnd(lastChild, lastChild.data.length);
+        range.setStart(firstChild, 0);
+        ViperSelection.addRange(range);
+
     },
 
     keyDown: function (e)
@@ -218,112 +375,16 @@ ViperCopyPastePlugin.prototype = {
         if (this._isMSIE === true || this._isFirefox === true || this._isSafari === true) {
             if (e.metaKey === true || e.ctrlKey === true) {
                 if (e.keyCode === 86) {
+                    // CTRL/CMD + V.
                     return this._fakePaste(e);
+                } else if (e.keyCode === 88) {
+                    // CTRL/CMD + X.
+                    return this._beforeCut(e);
                 }
             }
         }
 
         return true;
-
-    },
-
-    handleCut: function(e)
-    {
-        if (this.cutType === 'formatted') {
-            return this.handleFormattedCut();
-        }
-
-        var range = this.viper.getCurrentRange();
-        if (range.collapsed === true) {
-            return false;
-        }
-
-        var startCont   = range.startContainer;
-        var startOffset = range.startOffset;
-
-        // Bookmark current range position.
-        var bookmark = this.viper.createBookmark();
-
-        // Create a text box then put the range contents in there.
-        var textInput = document.createElement('input');
-        ViperUtil.setStyle(textInput, 'top', '100px');
-        ViperUtil.setStyle(textInput, 'left', '100px');
-        ViperUtil.setStyle(textInput, 'position', 'fixed');
-        ViperUtil.setStyle(textInput, 'width', '0px');
-        ViperUtil.setStyle(textInput, 'height', '0px');
-        ViperUtil.setStyle(textInput, 'border', '0px');
-
-        // Set the value of the textbox to range contents.
-        textInput.value = range.toString();
-
-        // Delete the contents of the range.
-        this.viper.deleteContents();
-        this.viper.addElement(textInput);
-
-        // Set the focus to textbox.
-        textInput.focus();
-
-        // Select the contents of the text box.
-        textInput.select();
-
-        // Select the bookmark and update caret position.
-        this.viper.selectBookmark(bookmark);
-        this.viper.fireNodesChanged();
-
-        // Important: Bubble up so that browser can cut the contents of the selection.
-        return false;
-
-    },
-
-
-    handleFormattedCut: function()
-    {
-        var range = this.viper.getCurrentRange();
-        if (range.collapsed === true) {
-            return false;
-        }
-
-        var contents = range.getHTMLContents();
-        this.viper.deleteContents();
-
-        // Bookmark position.
-        var bookmark = this.viper.createBookmark();
-
-        var div = document.createElement('div');
-        div.setAttribute('class', 'editable_attribute');
-        div.setAttribute('contentEditable', true);
-        ViperUtil.setStyle(div, 'width', '0px');
-        ViperUtil.setStyle(div, 'height', '0px');
-        ViperUtil.setStyle(div, 'overflow', 'hidden');
-
-        // Use position fixed to prevent page scrolling
-        // when the div is appended to body.
-        ViperUtil.setStyle(div, 'position', 'fixed');
-        ViperUtil.setStyle(div, 'top', '90px');
-        ViperUtil.setStyle(div, 'left', '50px');
-        this.viper.addElement(div);
-
-        ViperUtil.setHtml(div, contents);
-
-        // Let the div have the focus.
-        div.focus();
-
-        // Select the div contents.
-        range.selectNode(div);
-
-        // Add range so that it can be copied by browser.
-        ViperSelection.addRange(range);
-
-        // Select the bookmark and update caret position.
-        this.viper.selectBookmark(bookmark);
-
-        setTimeout(function() {
-            ViperUtil.remove(div);
-        }, 100);
-
-        this.viper.fireNodesChanged();
-
-        return false;
 
     },
 
@@ -405,11 +466,6 @@ ViperCopyPastePlugin.prototype = {
         return false;
     },
 
-    _afterPaste: function()
-    {
-        //this.viper.setAllowCleanDOM(true);
-    },
-
     _fakePaste: function(e)
     {
         this._beforePaste();
@@ -427,7 +483,6 @@ ViperCopyPastePlugin.prototype = {
             break;
         }
 
-        this._afterPaste();
         return true;
 
     },
@@ -588,13 +643,29 @@ ViperCopyPastePlugin.prototype = {
     {
         pasteElement = pasteElement || this.pasteElement;
 
-        // Clean paste from word document.
+        // Check if the content was copied from Viper element.
+        var isViperContent = false;
+        var viperCopyElems = ViperUtil.getClass('__viper_copy', pasteElement);
+        if (viperCopyElems.length === 1) {
+            isViperContent = true;
+            if (viperCopyElems[0].previousSibling) {
+                // Remove white space before the B tag.
+                ViperUtil.remove(viperCopyElems[0].previousSibling);
+            }
+
+            // Remove the B tag that was added by Viper during copy/cut.
+            ViperUtil.remove(viperCopyElems[0]);
+        }
+
         var html = ViperUtil.getHtml(pasteElement);
 
         // Generic cleanup.
         html = this._cleanPaste(html);
 
-        if (pasteElement.firstChild
+        if (isViperContent === true) {
+            // Content copied from Viper.
+            html = this._cleanViperPaste(html);
+        } else if (pasteElement.firstChild
             && (ViperUtil.isTag(pasteElement.firstChild, 'b') === true
             || ViperUtil.isTag(pasteElement.firstChild.nextSibling, 'b') === true
             || (pasteElement.firstChild.id && pasteElement.firstChild.id.indexOf('docs-internal-guid-') === 0))
@@ -602,6 +673,7 @@ ViperCopyPastePlugin.prototype = {
             // Google Docs.
             html = this._cleanGoogleDocsPaste(html);
         } else {
+            // Word etc..
             html = this._cleanWordPaste(html);
             html = this._removeAttributes(html);
             html = this._updateElements(html);
@@ -613,12 +685,12 @@ ViperCopyPastePlugin.prototype = {
                 html = newHTML;
             }
 
-            self._pasteContent(html, stripTags);
+            self._pasteContent(html, stripTags, isViperContent);
         });
 
     },
 
-    _pasteContent: function(html, stripTags)
+    _pasteContent: function(html, stripTags, isViperContent)
     {
         if (this._iframe) {
             ViperUtil.remove(this._iframe);
@@ -631,7 +703,10 @@ ViperCopyPastePlugin.prototype = {
 
         if (html) {
             html = ViperUtil.trim(html);
-            html = this.viper.cleanHTML(html, ['dir', 'class', 'lang', 'align']);
+
+            if (isViperContent !== true) {
+                html = this.viper.cleanHTML(html, ['dir', 'class', 'lang', 'align']);
+            }
         }
 
         if (!html) {
@@ -893,6 +968,12 @@ ViperCopyPastePlugin.prototype = {
         content = this._removeWordTags(content);
         content = this._convertTags(content);
 
+        return content;
+
+    },
+
+    _cleanViperPaste: function(content)
+    {
         return content;
 
     },
