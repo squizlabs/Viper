@@ -236,7 +236,7 @@ MatrixKeywordsPlugin.prototype = {
 	range.insertNode(newNode);
 	range.setStart(newNode, keyword.length);
 
-	if (this.viper.isBrowser('msie') === true) {
+	if (ViperUtil.isBrowser('msie') === true) {
 	    range.moveStart('character', keyword.length);
 	}
 
