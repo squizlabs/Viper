@@ -193,7 +193,7 @@ ViperInlineToolbarPlugin.prototype = {
             return;
         }
 
-        if (this._currentLineageIndex === null || this._currentLineageIndex > lineage.length) {
+        if (this._currentLineageIndex === null || this._currentLineageIndex >= lineage.length) {
             this._setCurrentLineageIndex(lineage.length - 1);
         }
 

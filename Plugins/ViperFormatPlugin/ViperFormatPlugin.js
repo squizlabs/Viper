@@ -516,9 +516,11 @@ ViperFormatPlugin.prototype = {
         if (!endNode) {
             endNode = startNode;
         }
-         // Anchor and Class.
-        if (selectedNode.nodeType === ViperUtil.ELEMENT_NODE
-            || ViperUtil.getFirstBlockParent(startNode) === ViperUtil.getFirstBlockParent(endNode)
+
+        // Anchor and Class.
+        if (selectedNode
+            && (selectedNode.nodeType === ViperUtil.ELEMENT_NODE
+            || ViperUtil.getFirstBlockParent(startNode) === ViperUtil.getFirstBlockParent(endNode))
         ) {
             var attrId = this._getAttributeValue('id', selectedNode);
             if (attrId) {
