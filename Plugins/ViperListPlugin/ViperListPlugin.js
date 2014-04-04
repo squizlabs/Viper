@@ -1913,9 +1913,11 @@ ViperListPlugin.prototype = {
                     listItems.push(child);
                 } else if (listItems.length > 0) {
                     var listItem = this._createListItem(listItems.shift());
-                    list.appendChild(listItem);
-                    while (listElem = listItems.shift()) {
-                        listItem.appendChild(listElem);
+                    if (listItem) {
+                        list.appendChild(listItem);
+                        while (listElem = listItems.shift()) {
+                            listItem.appendChild(listElem);
+                        }
                     }
                 }
 
