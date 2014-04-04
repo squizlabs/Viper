@@ -385,6 +385,7 @@ ViperListPlugin.prototype = {
                 }
 
                 this.viper.selectBookmark(bookmark);
+                return true;
             } else {
                 // Remove item from its list.
                 var listElement = this._getListElement(li);
@@ -528,6 +529,11 @@ ViperListPlugin.prototype = {
             }
         } else if (firstParent && outdent !==  true) {
             updated  = this.convertRangeToList(range, testOnly, listType, true);
+            if (updated === true) {
+                this.viper.fireNodesChanged([range.getCommonElement()]);
+                this.viper.fireSelectionChanged(null, true);
+            }
+
             return updated;
         }
 
