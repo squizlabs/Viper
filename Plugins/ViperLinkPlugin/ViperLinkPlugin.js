@@ -660,6 +660,7 @@ ViperLinkPlugin.prototype = {
 
             var selectionHasLinks = self.selectionHasLinks(range);
             if (selectionHasLinks === true) {
+                tools.setButtonInactive('insertLink');
                 tools.disableButton('insertLink');
                 tools.enableButton('removeLink');
                 return;
