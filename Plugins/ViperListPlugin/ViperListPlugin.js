@@ -376,7 +376,6 @@ ViperListPlugin.prototype = {
                     }
 
                     elem = [p];
-
                     list = this._makeList(tag, elem);
                     td.appendChild(list);
                 } else {
@@ -1944,7 +1943,7 @@ ViperListPlugin.prototype = {
 
     _createListItem: function(element)
     {
-        if (!element || (element.nodeType === ViperUtil.TEXT_NODE && element.data.indexOf("\n") === 0)) {
+        if (!element || (element.nodeType === ViperUtil.TEXT_NODE && element.data.indexOf("\n") === 0 && ViperUtil.trim(element.data).length === 0)) {
             return null;
         }
 
