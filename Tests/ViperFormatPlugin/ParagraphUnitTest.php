@@ -78,6 +78,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
 
         // Check the state of the format icon after we have changed to a paragraph
+        $this->sikuli->click($this->findKeyword(2));
         $this->selectKeyword(4);
         $this->assertTrue($this->topToolbarButtonExists('formats-p', 'disabled'), 'Formats icon should disabled in the top toolbar');
 
