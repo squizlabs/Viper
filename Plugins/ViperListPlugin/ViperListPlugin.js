@@ -510,9 +510,9 @@ ViperListPlugin.prototype = {
 
         var firstParent = null;
         if (ViperUtil.isBlockElement(node) === true) {
-            firstBlock = node;
+            firstParent = node;
         } else {
-            firstBlock = ViperUtil.getFirstBlockParent(node);
+            firstParent = ViperUtil.getFirstBlockParent(node);
         }
 
         var listItems   = [];
@@ -535,7 +535,7 @@ ViperListPlugin.prototype = {
         } else if (firstParent && outdent !==  true) {
             updated  = this.convertRangeToList(range, testOnly, listType, true);
             if (updated === true) {
-                this.viper.fireNodesChanged([range.getCommonElement()]);
+                this.viper.fireNodesChanged();
                 this.viper.fireSelectionChanged(null, true);
             }
 
@@ -1146,6 +1146,12 @@ ViperListPlugin.prototype = {
 
             this.viper.fireSelectionChanged(null, true);
             this.viper.fireNodesChanged(this.viper.getViperElement());
+        }
+
+        // TODO: Properly fix fireNodesChanged event firing as this method maybe called by other create list method
+        // which also fire nodesChanged event causing multiple history entries.
+        if (canJoin === true) {
+            return false;
         }
 
         return true;
