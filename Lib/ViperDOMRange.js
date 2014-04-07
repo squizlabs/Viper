@@ -834,6 +834,14 @@ ViperDOMRange.prototype = {
             && range.startOffset === startNode.data.length
             && range.collapsed === true
         ) {
+            if (ViperUtil.isBrowser('msie', '<11') === true
+                && startNode.previousSibling
+                && ViperUtil.isTag(startNode.previousSibling, 'img') === true
+            ) {
+                this._nodeSel.node = startNode.previousSibling;
+                return this._nodeSel.node;
+            }
+
             this._nodeSel.node = null;
             return null;
         } else if (startNode.nodeType === ViperUtil.ELEMENT_NODE
