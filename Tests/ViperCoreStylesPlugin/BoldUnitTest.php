@@ -459,6 +459,8 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     {
         $this->sikuli->click($this->findKeyword(2));
         $this->sikuli->keyDown('Key.CMD + a');
+        sleep(1);
+        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar should not be active');
         $this->clickTopToolbarButton('bold');
         $this->assertHTMLMatch('<p><strong>%1% %2% %3%</strong></p><p><strong>sit <em>%4%</em> %5%</strong></p>');
 
