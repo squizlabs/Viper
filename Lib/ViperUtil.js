@@ -2412,7 +2412,7 @@ var ViperUtil = {
             debugger;
         }
 
-        return ViperUtil._dcall;
+        console.info(ViperUtil._dcall);
     }
 
 };
