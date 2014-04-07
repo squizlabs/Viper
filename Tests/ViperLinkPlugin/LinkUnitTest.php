@@ -1260,8 +1260,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('Third link http://www.squizlabs.com');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->type('Fourth link www.example.com');
-        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('Fourth link www.example.com ');
         $this->assertHTMLMatch('<p>%1% link test test %2%</p><p>Some text <a href="http://www.squizlabs.com">http://www.squizlabs.com</a> some text <a href="http://www.example.com">www.example.com</a></p><p>Third link <a href="http://www.squizlabs.com">http://www.squizlabs.com</a></p><p>Fourth link <a href="http://www.example.com">www.example.com</a></p>');
 
     }//end testAutoCreatingLinks()
