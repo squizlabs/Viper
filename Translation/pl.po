@@ -1,18 +1,34 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Polish translation for Viper\n"
-"POT-Creation-Date: 2013-10-03 10:32+0100\n"
-"PO-Revision-Date: 2013-10-03 14:16+0100\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2014-03-26 14:55+1000\n"
+"PO-Revision-Date: 2014-04-03 12:03+0100\n"
+"Last-Translator: Luke Wright <lwright@squiz.com.au>\n"
 "Language-Team: \n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.7\n"
+"X-Generator: Poedit 1.6.4\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
 "X-Poedit-Basepath: ../\n"
 "X-Poedit-SearchPath-0: ./Plugins\n"
 "X-Poedit-SearchPath-1: ./Lib\n"
+
+msgid "Insert Matrix Keywords"
+msgstr "Wstaw słowa kluczowe Matrix"
+
+msgid "Insert Matrix Snippet"
+msgstr "Wstaw snippet Matrix"
+
+msgid "Keyword"
+msgstr "Słowo kluczowe"
+
+msgid "Snippet"
+msgstr "Snippet"
+
+msgid "Insert"
+msgstr "Wstaw"
 
 msgid "Locate Element"
 msgstr "Znajdź element"
@@ -54,7 +70,8 @@ msgid ""
 "Paste your content into the box below and it will be automatically inserted "
 "and cleaned up."
 msgstr ""
-"Wklej treść w poniższe okienko, aby wstawić ją automatycznie i uporządkować."
+"Wklej treść w poniższe okienko. Zostanie ona automatycznie wstawiona i "
+"uporządkowana."
 
 msgid "Avoid this step for future pastes using the keyboard shortcut %s."
 msgstr ""
@@ -83,7 +100,7 @@ msgid "Left Justify"
 msgstr "Wyrównaj do lewej"
 
 msgid "Center Justify"
-msgstr "Do środka"
+msgstr "Wyrównaj centralnie"
 
 msgid "Right Justify"
 msgstr "Wyrównaj do prawej"
@@ -170,19 +187,19 @@ msgid "Redo"
 msgstr "Wykonaj ponownie"
 
 msgid "Insert Image"
-msgstr "Wstaw obraz"
+msgstr "Wstaw obrazek"
 
 msgid "Toggle Image Options"
 msgstr "Przełączaj opcje obrazów"
 
 msgid "URL"
-msgstr "URL"
+msgstr "Adres URL"
 
 msgid "Image is decorative"
 msgstr "Obraz dekoracyjny"
 
 msgid "Alt"
-msgstr "Alt"
+msgstr "Alternatywny"
 
 msgid "Title"
 msgstr "Tytuł"
@@ -195,19 +212,19 @@ msgstr ""
 "Aby anulować, ponownie naciśnij ikonę Przenieś lub ESC."
 
 msgid "Move Image"
-msgstr "Przenieś obraz"
+msgstr "Przenieś obrazek"
 
 msgid "Loading preview"
 msgstr "Ładowanie podglądu"
 
 msgid "Failed to load image"
-msgstr "Błąd wczytywania obrazu"
+msgstr "Błąd wczytywania obrazka"
 
 msgid "Underline"
 msgstr "Podkreślenie"
 
 msgid "Item"
-msgstr "Punkt"
+msgstr "Obiekt"
 
 msgid "List"
 msgstr "Lista"
@@ -222,10 +239,10 @@ msgid "Header"
 msgstr "Nagłówek"
 
 msgid "Link"
-msgstr "Link"
+msgstr "Łącze"
 
 msgid "Image"
-msgstr "Obraz"
+msgstr "Obrazek"
 
 msgid "Selection"
 msgstr "Wybór"
@@ -261,13 +278,13 @@ msgid "Open a New Window"
 msgstr "Otwórz nowe okno"
 
 msgid "Toggle Link Options"
-msgstr "Przełączaj opcje linków"
+msgstr "Przełączaj opcje łączy"
 
 msgid "Remove Link"
-msgstr "Usuń link"
+msgstr "Usuń łącze"
 
 msgid "Insert Link"
-msgstr "Wstaw link"
+msgstr "Wstaw łącze"
 
 msgid "Make Unordered List"
 msgstr "Utwórz listę wypunktowaną "
@@ -335,6 +352,10 @@ msgstr "Zamknij widok kodu źródłowego"
 
 msgid "Close Window"
 msgstr "Zamknij okno"
+
+# a cóż to może być? jakiś kontekst?
+msgid "commmandKeyBinding"
+msgstr "commmandKeyBinding"
 
 msgid "Insert Table"
 msgstr "Wstaw tabelę"
@@ -444,14 +465,14 @@ msgstr "Nagłówki"
 msgid "Size"
 msgstr "Rozmiar"
 
-msgid "Viper by Squiz"
-msgstr "Viper firmy Squiz"
-
-msgid "Update Changes"
-msgstr "Aktualizuj zmiany"
-
 msgid "Not available"
 msgstr "Niedostępne"
 
 msgid "required"
 msgstr "wymagane"
+
+#~ msgid "Viper by Squiz"
+#~ msgstr "Viper firmy Squiz"
+
+#~ msgid "Update Changes"
+#~ msgstr "Aktualizuj zmiany"
