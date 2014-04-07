@@ -134,7 +134,7 @@ ViperLinkPlugin.prototype = {
     updateLinkAttributes: function(link, idPrefix)
     {
          // Get the current values.
-        var url       = this.viper.ViperTools.getItem(idPrefix + ':url').getValue();
+        var url       = ViperUtil.trim(this.viper.ViperTools.getItem(idPrefix + ':url').getValue());
         var title     = this.viper.ViperTools.getItem(idPrefix + ':title').getValue();
         var newWindow = this.viper.ViperTools.getItem(idPrefix + ':newWindow').getValue();
 
@@ -447,7 +447,7 @@ ViperLinkPlugin.prototype = {
         // URL field changed event, when the url field is changed if the url is an
         // email address then show the email address related fields.
         this.viper.registerCallback('ViperTools:changed:' + idPrefix + ':url', 'ViperLinkPlugin', function() {
-            var urlValue = tools.getItem(idPrefix + ':url').getValue();
+            var urlValue = ViperUtil.trim(tools.getItem(idPrefix + ':url').getValue());
             if (urlValue.toLowerCase().indexOf('mailto:') === 0 || self.isEmail(urlValue) === true) {
                 // Show the subject field and hide the title field.
                 ViperUtil.removeClass(subSectionElem, 'Viper-externalLink');
