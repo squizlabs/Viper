@@ -18,28 +18,6 @@
   100% { -webkit-transform: rotateX(0deg); }
 }
 
-/*
-@-moz-keyframes CAP-slider-l {
-  0%   { left: 50%; }
-  100% { left: 0; }
-}
-
-@-webkit-keyframes CAP-slider-l {
-  0%   { left: 50%; }
-  100% { left: 0; }
-}
-
-@-moz-keyframes CAP-slider-r {
-  0%   { right: 50%; }
-  100% { right: 0; }
-}
-
-@-webkit-keyframes CAP-slider-r {
-  0%   { right: 50%; }
-  100% { right: 0; }
-}
-*/
-
 .ViperCursorAssistPlugin {
     -webkit-animation: CAP-fade 0.2s 1, CAP-rotate 0.2s 1;
     -moz-animation: CAP-fade 0.2s 1, CAP-rotate 0.2s 1;
@@ -49,48 +27,87 @@
     z-index: 1000;
     cursor: pointer;
     text-align: center;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: bold;
     font-family: Arial, sans-serif;
 }
 
 .ViperCursorAssistPlugin:before,
 .ViperCursorAssistPlugin:after {
-    background-color: #BBB;
-    border-radius: 3px;
     content: "";
-    height: 6px;
-    margin-top: -3px;
+    height: 0px;
+    margin-top: -5px;
     position: absolute;
     top: 50%;
-    width: 6px;
+    width: 3px;
     z-index: 1001;
-    -webkit-transition: left 0.1s ease-in;
-    -moz-transition: left 0.1s ease-in;
+    transition: all 0.2s ease;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    border: 4px solid transparent;
 }
 
 .ViperCursorAssistPlugin:before {
-/*     -webkit-animation: CAP-slider-l 0.2s 1; */
-/*     -moz-animation: CAP-slider-l 0.2s 1; */
-    left: 0;
+    left: -15px;
+    border-left-color: #919097;
 }
 
 .ViperCursorAssistPlugin:after {
-/*     -webkit-animation: CAP-slider-r 0.2s 1; */
-/*     -moz-animation: CAP-slider-r 0.2s 1; */
-    right: 0;
+    right: -15px;
+    border-right-color: #919097;
+}
+
+.ViperCursorAssistPlugin:hover:before {
+    border-left-color: #2b2b2b;
+    left: -8px;
+}
+
+.ViperCursorAssistPlugin:hover:after {
+    border-right-color: #2b2b2b;
+    right: -8px;
 }
 
 .ViperCursorAssistPlugin-cursorText {
     background-color: #FFF;
-    border: 1px solid #CFCFCF;
-    border-radius: 0.4em;
-    color: #989898;
+    border-radius: 3px;
+    color: #919097;
     display: inline-block;
-    padding: 0.1em 0.9em;
+    padding: 0.0em 0.9em 0.0em 17px;
     position: relative;
-    top: -9px;
+    top: -8px;
     z-index: 1001;
+    height: 14px;
+    transition: all 0.2s ease;
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+}
+
+.ViperCursorAssistPlugin:hover .ViperCursorAssistPlugin-cursorText {
+    color: #3E3E3E;
+}
+
+.ViperCursorAssistPlugin-cursorText:before,
+.ViperCursorAssistPlugin-cursorText:after {
+    content: "";
+    background-color: #919097;
+    width: 6px;
+    height: 2px;
+    position: absolute;
+    left: 6px;
+    top: 50%;
+    margin-top: -1px;
+}
+
+.ViperCursorAssistPlugin-cursorText:after {
+    width: 2px;
+    height: 6px;
+    left: 8px;
+    margin-top: -3px;
+}
+
+.ViperCursorAssistPlugin:hover .ViperCursorAssistPlugin-cursorText:before,
+.ViperCursorAssistPlugin:hover .ViperCursorAssistPlugin-cursorText:after {
+    background-color: #3E3E3E;
 }
 
 .ViperCursorAssistPlugin-cursorLine {
@@ -100,16 +117,9 @@
     position: absolute;
     top: 50%;
     width: 100%;
-    background: #C8C8C8 url(images/dash-bg.png) 0 0 repeat-x;
+    background: #919097 url(images/dash-bg.png) 0 0 repeat;
 }
 
-.ViperCursorAssistPlugin:hover .ViperCursorAssistPlugin-cursorText,
-.ViperCursorAssistPlugin:hover .ViperCursorAssistPlugin-cursorLine,
-.ViperCursorAssistPlugin:hover:before,
-.ViperCursorAssistPlugin:hover:after {
-    -webkit-transition: all 0.2s ease;
-    -moz-transition: all 0.2s ease;
-    background-color: #2b7ce0;
-    border-color: #2b7ce0;
-    color: #FFF;
+.ViperCursorAssistPlugin:hover .ViperCursorAssistPlugin-cursorLine {
+    background-image: none;
 }
