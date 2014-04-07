@@ -686,6 +686,25 @@ ViperKeyboardEditorPlugin.prototype = {
 
                 ViperUtil.insertBefore(parent, newEl);
                 return false;
+            } else if (ViperUtil.isBrowser('msie', '>=11') === true
+                && startNode === endNode
+                && range.collapsed === true
+                && startNode.nodeType === ViperUtil.TEXT_NODE
+                && startNode.nextSibling === null
+                && range.startOffset === startNode.data.length
+                && ViperUtil.isTag(ViperUtil.getFirstBlockParent(startNode), 'li') === true
+            ) {
+                // End of a list item. Create a new list item.
+                var li = document.createElement('li');
+                ViperUtil.setHtml(li, '<br/>');
+                var parentItem = ViperUtil.getFirstBlockParent(startNode);
+                ViperUtil.insertAfter(parentItem, li);
+                range.selectNode(li.firstChild);
+                range.collapse(true);
+                ViperSelection.addRange(range);
+                self.viper.fireSelectionChanged(null, true);
+                this.viper.fireNodesChanged();
+                return false;
             }//end if
 
             setTimeout(function() {

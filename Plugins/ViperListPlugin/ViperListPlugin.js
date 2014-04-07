@@ -508,7 +508,13 @@ ViperListPlugin.prototype = {
             node = range.startContainer;
         }
 
-        var firstParent = ViperUtil.getFirstBlockParent(node);
+        var firstParent = null;
+        if (ViperUtil.isBlockElement(node) === true) {
+            firstBlock = node;
+        } else {
+            firstBlock = ViperUtil.getFirstBlockParent(node);
+        }
+
         var listItems   = [];
         if (!firstParent || ViperUtil.isTag(firstParent, 'li') === true) {
             listItems = this._getListItemsFromRange(range, testOnly);
@@ -548,7 +554,8 @@ ViperListPlugin.prototype = {
 
                     var range    = self.viper.getCurrentRange();
                     var nextItem = self.getNextItem(range.startContainer.parentNode);
-                    if (range.startOffset === range.startContainer.data.length
+                    if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                        && range.startOffset === range.startContainer.data.length
                         && range.collapsed === true
                         && range.startContainer.parentNode !== bookmarkParent
                         && (!nextItem || nextItem === bookmarkParent)
@@ -562,7 +569,8 @@ ViperListPlugin.prototype = {
                     }
 
                     range = self.viper.getCurrentRange();
-                    if (range.startOffset === range.startContainer.data.length
+                    if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                        && range.startOffset === range.startContainer.data.length
                         && range.collapsed === true
                         && range.startContainer.parentNode !== bookmarkParent
                         && (!nextItem || nextItem === bookmarkParent)
@@ -1489,7 +1497,7 @@ ViperListPlugin.prototype = {
         if (!startNode) {
             if (!range.startContainer
                 || range.startContainer !== range.endContainer
-                || ViperUtil.isStubElement(range.startContainer) !== true
+                || (ViperUtil.isStubElement(range.startContainer) !== true && ViperUtil.isTag(range.startContainer, 'li') === false)
             ) {
                 return;
             } else {
@@ -1505,7 +1513,11 @@ ViperListPlugin.prototype = {
         var startParent = null;
 
         var listElement = this._getListElement(startNode);
-        var firstBlock  = ViperUtil.getFirstBlockParent(startNode);
+        var firstBlock  = startNode;
+
+        if (ViperUtil.isBlockElement(startNode) === false) {
+            firstBlock  = ViperUtil.getFirstBlockParent(startNode);
+        }
 
         if (listElement
             && firstBlock
