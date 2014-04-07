@@ -1264,7 +1264,8 @@ Viper.prototype = {
      */
     moveCaretAway: function(sourceElement)
     {
-       return range.moveCaretAway(sourceElement, this.viper.getViperElement(), this.getDefaultBlockTag());
+        var range = this.getViperRange();
+        return range.moveCaretAway(sourceElement, this.getViperElement(), this.getDefaultBlockTag());
 
     },
 
