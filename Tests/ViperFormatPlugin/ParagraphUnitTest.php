@@ -239,14 +239,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
-        $this->type('New content');
-        sleep(1);
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        sleep(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->sikuli->keyDown('Key.RIGHT');
-        sleep(1);
-        $this->type(' on the page');
+        $this->type('New content on the page');
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->type('More new content');
