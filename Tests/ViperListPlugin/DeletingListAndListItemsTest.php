@@ -196,8 +196,6 @@ class Viper_Tests_ViperListPlugin_DeletingListAndListItemsTest extends AbstractV
         $this->selectInlineToolbarLineageItem(3);
         // Remove whole item.
         $this->sikuli->keyDown('Key.BACKSPACE');
-        // Remove the item element.
-        $this->sikuli->keyDown('Key.BACKSPACE');
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub list item 1</li><li>sub list item 3</li></ul></li><li>second item</li><li>third item</li></ul>');
 
         //Test ordered list
@@ -206,8 +204,6 @@ class Viper_Tests_ViperListPlugin_DeletingListAndListItemsTest extends AbstractV
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(3);
         // Remove whole item.
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        // Remove the item element.
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub list item 1</li><li>sub list item 3</li></ol></li><li>second item</li><li>third item</li></ol>');
 
