@@ -1534,7 +1534,7 @@ ViperCoreStylesPlugin.prototype = {
                 var c         = elems.length;
                 for (var i = 0; i < c; i++) {
                     if (elems[i].nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isBlockElement(elems[i]) === true) {
-                        var alignment = ViperUtil.getStyle(elems[i], 'text-align');
+                        var alignment = elems[i].style.textAlign;
                         if (activeStates.alignment !== null && alignment !== activeStates.alignment) {
                             activeStates.alignment = null;
                             break;
