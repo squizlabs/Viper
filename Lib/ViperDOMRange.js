@@ -810,6 +810,12 @@ ViperDOMRange.prototype = {
                     this._nodeSel.node = null;
                     return null;
                 }
+            } else if (startNode.nodeType === ViperUtil.ELEMENT_NODE
+                && this.endContainer === this.startContainer
+                && this.startOffset === 0
+                && this.endOffset >= this.endContainer.childNodes.length
+            ) {
+                startNode = this.endContainer;
             }
 
             this._nodeSel.node = startNode;
@@ -909,6 +915,16 @@ ViperDOMRange.prototype = {
             && this.getNextContainer(ViperUtil.getFirstBlockParent(startNode), null, false, true) === range._getFirstSelectableChild(range.endContainer)
         ) {
             this._nodeSel.node = ViperUtil.getFirstBlockParent(startNode);
+            return this._nodeSel.node;
+        } else if (startNode !== endNode
+            && startNode.nodeType === ViperUtil.TEXT_NODE
+            && endNode.nodeType === ViperUtil.ELEMENT_NODE
+            && this.endOffset === 0
+            && this.endContainer.nodeType === ViperUtil.ELEMENT_NODE
+            && this._getFirstSelectableChild(this.endContainer) === startNode
+            && ViperUtil.isBrowser('msie', '<11') === true
+        ) {
+            this._nodeSel.node = this.endContainer;
             return this._nodeSel.node;
         }
 
