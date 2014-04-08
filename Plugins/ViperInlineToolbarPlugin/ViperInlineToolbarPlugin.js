@@ -548,10 +548,23 @@ ViperInlineToolbarPlugin.prototype = {
             }
 
             if (startNode.nodeType !== ViperUtil.TEXT_NODE || ViperUtil.isBlank(startNode.data) !== true) {
-                if (startNode !== ViperUtil.TEXT_NODE && startNode !== range.getEndNode()) {
+                if (startNode.nodeType !== ViperUtil.TEXT_NODE && startNode !== range.getEndNode()) {
                     lineage.push(range.getEndNode());
                 } else {
                     lineage.push(startNode);
+
+                    if (ViperUtil.isBrowser('msie') === true
+                        && startNode.nodeType === ViperUtil.TEXT_NODE
+                        && !range.getEndNode()
+                        && range.endContainer.nodeType === ViperUtil.ELEMENT_NODE
+                        && range.endOffset >= range.endContainer.childNodes.length
+                        && ViperUtil.isChildOf(startNode, range.endContainer.childNodes[(range.endContainer.childNodes.length - 1)]) === true
+                    ) {
+                        // When an inline tag is the last element in a block element and only last few characters of the
+                        // tag is selected IE thinks this is not inside the tag but in common parent.
+                        // Add the parent of startNode to lineage here.
+                        lineage.push(range.endContainer.childNodes[(range.endContainer.childNodes.length - 1)]);
+                    }
                 }
             }
         }

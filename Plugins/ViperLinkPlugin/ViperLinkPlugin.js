@@ -357,6 +357,7 @@ ViperLinkPlugin.prototype = {
         var selectedNode = range.getNodeSelection();
         var common       = range.getCommonElement();
         if (!selectedNode && ViperUtil.isBrowser('msie') === true) {
+            var startNode = range.getStartNode();
             if (range.startContainer === range.endContainer
                 && range.startOffset === 0
                 && range.endOffset === 0
@@ -368,6 +369,22 @@ ViperLinkPlugin.prototype = {
                 common    = startNode.parentNode;
                 range.selectNode(startNode);
                 ViperSelection.addRange(range);
+            } else if (ViperUtil.isBrowser('msie') === true
+                && startNode
+                && startNode.nodeType === ViperUtil.TEXT_NODE
+                && !range.getEndNode()
+                && range.endContainer.nodeType === ViperUtil.ELEMENT_NODE
+                && range.endOffset >= range.endContainer.childNodes.length
+            ) {
+                // When the A tag is the last element in a P tag and only last few characters of the link is selected
+                // IE thinks this is not inside the link tag.
+                var lastChild = range.endContainer.childNodes[(range.endContainer.childNodes.length - 1)];
+                if (lastChild
+                    && ViperUtil.isTag(lastChild, 'a') === true
+                    && ViperUtil.isChildOf(startNode, lastChild) === true
+                ) {
+                    return lastChild;
+                }
             }
         }
 
@@ -407,6 +424,22 @@ ViperLinkPlugin.prototype = {
 
         var contents = range.getHTMLContents();
         if (contents.toLowerCase().indexOf('<a ') >= 0) {
+            if (ViperUtil.isBrowser('msie') === true) {
+                var startNode = range.getStartNode();
+                var endNode   = range.getEndNode();
+                if (startNode
+                    && !endNode
+                    && startNode.nodeType === ViperUtil.TEXT_NODE
+                    && range.endContainer.nodeType === ViperUtil.ELEMENT_NODE
+                    && range.endOffset >= range.endContainer.childNodes.length
+                    && ViperUtil.isChildOf(startNode, range.endContainer.childNodes[(range.endContainer.childNodes.length - 1)]) === true
+                ) {
+                    // When the A tag is the last element in a P tag and only last few characters of the link is selected
+                    // IE thinks this is not inside the link tag.
+                    return false;
+                }
+            }
+
             return true;
         }
 
@@ -659,6 +692,7 @@ ViperLinkPlugin.prototype = {
             }
 
             var selectionHasLinks = self.selectionHasLinks(range);
+
             if (selectionHasLinks === true) {
                 tools.setButtonInactive('insertLink');
                 tools.disableButton('insertLink');
