@@ -211,7 +211,7 @@ Viper.prototype = {
         }
 
         if (!src) {
-            src  = this.getViperPath().replace(/\/build$/, '') + '/build/Translation/' + code + '.js';
+            src  = this.getViperPath().replace(/\/build$/, '') + '/Translation/' + code + '.js';
         }
 
         if (ViperTranslation.isLoaded(code) === false && src) {
