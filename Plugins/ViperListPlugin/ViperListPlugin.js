@@ -534,7 +534,7 @@ ViperListPlugin.prototype = {
             }
         } else if (firstParent && outdent !==  true) {
             updated  = this.convertRangeToList(range, testOnly, listType, true);
-            if (updated === true) {
+            if (updated === true && testOnly !== true) {
                 this.viper.fireNodesChanged();
                 this.viper.fireSelectionChanged(null, true);
             }
