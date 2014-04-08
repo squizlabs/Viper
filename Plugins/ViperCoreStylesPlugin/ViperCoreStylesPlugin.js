@@ -1548,7 +1548,7 @@ ViperCoreStylesPlugin.prototype = {
             }//end if
 
             if (startNode === endNode
-                || range.getNodeSelection()
+                || (selectedNode && selectedNode !== viperElement)
             ) {
                 while (startNode
                     && ViperUtil.isBlockElement(startNode) !== true
