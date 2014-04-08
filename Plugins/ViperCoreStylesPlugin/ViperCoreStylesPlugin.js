@@ -1601,7 +1601,7 @@ ViperCoreStylesPlugin.prototype = {
     {
         var range           = this.viper.getCurrentRange();
         var firstSelectable = range._getFirstSelectableChild(parentNode);
-        var lastSelectable  = range._getFirstSelectableChild(parentNode);
+        var lastSelectable  = range._getLastSelectableChild(parentNode);
         var firstSelectableParents = [];
         var styles = parentStyles;
         if (firstSelectable && lastSelectable) {
