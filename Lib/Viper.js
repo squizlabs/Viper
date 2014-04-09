@@ -3322,7 +3322,7 @@ Viper.prototype = {
 
             range.collapse(true);
             ViperSelection.addRange(range);
-        } else if (ViperUtil.isBrowser('firefox') === true
+        } else if ((ViperUtil.isBrowser('firefox') === true || ViperUtil.isBrowser('msie') === true)
             && startContainer === endContainer
             && startOffset === 0
             && startContainer === this.getViperElement()
