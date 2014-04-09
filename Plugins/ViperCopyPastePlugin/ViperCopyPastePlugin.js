@@ -159,8 +159,6 @@ ViperCopyPastePlugin.prototype = {
                 var pasteArea = frameDoc.getElementById('ViperPasteIframeDiv');
 
                 pasteArea.onpaste = function(e) {
-                    ViperSelection.addRange(viperRange);
-                    self._beforePaste(viperRange);
                     if (self._isSafari === true
                         && e.clipboardData
                         && e.clipboardData.types
@@ -184,6 +182,9 @@ ViperCopyPastePlugin.prototype = {
                         toolbar.hide();
 
                         self.viper.blurActiveElement();
+                        ViperSelection.addRange(viperRange);
+                        self._beforePaste(viperRange);
+
                         self._handleFormattedPasteValue(false, node);
                     }, 10);
                 };
@@ -198,7 +199,7 @@ ViperCopyPastePlugin.prototype = {
                     setTimeout(function() {
                         pasteArea.focus();
                     }, 200);
-                }, 10);
+                }, 220);
 
                 return false;
             };
