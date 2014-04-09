@@ -815,7 +815,12 @@ ViperDOMRange.prototype = {
                 && this.startOffset === 0
                 && this.endOffset >= this.endContainer.childNodes.length
             ) {
-                startNode = this.endContainer;
+                if (this.endOffset === 1 && this.endContainer.childNodes.length === 1) {
+                    // Singe element exists in the container.
+                    startNode = this.endContainer.childNodes[0];
+                } else {
+                    startNode = this.endContainer;
+                }
             }
 
             this._nodeSel.node = startNode;
