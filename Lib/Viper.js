@@ -2757,6 +2757,10 @@ Viper.prototype = {
             // Firefox sets the first child to be a textNode with \n as its content
             // if whole content is selected. Get the first selectable child.
             startNode = range._getFirstSelectableChild(viperElement);
+
+            if (ViperUtil.isBrowser('msie') === true) {
+                range.setStart(startNode, 0);
+            }
         }
 
         if (!endNode) {
@@ -2773,6 +2777,7 @@ Viper.prototype = {
             ViperSelection.addRange(range);
             return;
         }
+
 
         // Bookmark and get the top style parents.
         var bookmark       = this.createBookmark(range);

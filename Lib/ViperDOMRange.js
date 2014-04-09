@@ -783,9 +783,17 @@ ViperDOMRange.prototype = {
             return null;
         } else if (startNode && !endNode) {
             if (startNode.nodeType === ViperUtil.TEXT_NODE) {
-                if (ViperUtil.trim(startNode.data) === '') {
-                    this._nodeSel.node = null;
-                    return null;
+                if (range.endContainer.nodeType === ViperUtil.ELEMENT_NODE
+                    && range.endOffset >= range.endContainer.childNodes.length
+                    && startNode.nodeType === ViperUtil.TEXT_NODE
+                    && range.startOffset === 0
+                    && range.endContainer === range.commonAncestorContainer
+                    && (common.firstChild === startNode || this._getFirstSelectableChild(common) === startNode)
+                ) {
+                    // Selection starts from the start of the first editable element to the end of the
+                    // common element, make the selected node as the common element.
+                    this._nodeSel.node = range.commonAncestorContainer;
+                    return this._nodeSel.node;
                 } else if (this._nodeSel.startOffset === startNode.data.length
                     && startNode.nextSibling
                     && startNode.nextSibling.nodeType === ViperUtil.ELEMENT_NODE
@@ -795,17 +803,9 @@ ViperDOMRange.prototype = {
                     // Inline element selection at the end of a block element (IE).
                     this._nodeSel.node = startNode.nextSibling;
                     return this._nodeSel.node;
-                } else if (range.endContainer.nodeType === ViperUtil.ELEMENT_NODE
-                    && range.endOffset >= range.endContainer.childNodes.length
-                    && startNode.nodeType === ViperUtil.TEXT_NODE
-                    && range.startOffset === 0
-                    && range.endContainer === range.commonAncestorContainer
-                    && this._getFirstSelectableChild(common) === startNode
-                ) {
-                    // Selection starts from the start of the first editable element to the end of the
-                    // common element, make the selected node as the common element.
-                    this._nodeSel.node = range.commonAncestorContainer;
-                    return this._nodeSel.node;
+                } else if (ViperUtil.trim(startNode.data) === '') {
+                    this._nodeSel.node = null;
+                    return null;
                 } else {
                     this._nodeSel.node = null;
                     return null;

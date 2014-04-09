@@ -1493,7 +1493,7 @@ ViperCoreStylesPlugin.prototype = {
     _getActiveStates: function(range, tagNames)
     {
         var activeStates = [];
-        var selectedNode = range.getNodeSelection();
+        var selectedNode = range.getNodeSelection(null, true);
         var startNode    = null;
         var endNode      = null;
 
