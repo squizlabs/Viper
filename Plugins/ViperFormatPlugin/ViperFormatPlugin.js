@@ -701,7 +701,7 @@ ViperFormatPlugin.prototype = {
                     tools.disableButton('class');
                     tools.setButtonInactive('anchor');
                     tools.setButtonInactive('class');
-                } else {
+                } else if (nodeSelection) {
                     tools.enableButton('anchor');
                     tools.enableButton('class');
 
