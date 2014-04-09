@@ -218,7 +218,9 @@ ViperCopyPastePlugin.prototype = {
 
             // Get the contents of the current selection and add Viper element so that it can be cleaned up in paste.
             var selectedContent = range.getHTMLContents();
-            selectedContent     = '<b class="__viper_copy"> </b>' + selectedContent;
+
+            selectedContent = self._fixPartialSelection(selectedContent, range);
+            selectedContent = '<b class="__viper_copy"> </b>' + selectedContent;
 
             // IE needs space before B tag otherwise it gets stripped out..
             if (ViperUtil.isBrowser('msie', '<11') === true) {
@@ -369,6 +371,36 @@ ViperCopyPastePlugin.prototype = {
         range.setEnd(lastChild, lastChild.data.length);
         range.setStart(firstChild, 0);
         ViperSelection.addRange(range);
+
+    },
+
+    _fixPartialSelection: function(selectedContent, range)
+    {
+        if (selectedContent.indexOf('<li>') === 0) {
+            // Selection is inside a list.
+            // Get list type from selection.
+            var parents = ViperUtil.getParents(range.startContainer, 'ul,ol');
+            if (parents.length > 0) {
+                var listType = ViperUtil.getTagName(parents[0]);
+                selectedContent = '<' + listType + '>' + selectedContent + '</' + listType + '>';
+            }
+        } else {
+            // Check for partial table selection.
+            var tableMatch = selectedContent.match(/^<(caption|tr|td|tbody|th|tfoot|thead)/);
+            if (tableMatch) {
+                // Add required wrapping table tags for the selected section.
+                switch (tableMatch[1]) {
+                    case 'td':
+                        selectedContent = '<tr>' + selectedContent + '</tr>';
+
+                    default:
+                        selectedContent = '<table border="1" style="width: 100%;">' + selectedContent + '</table>';
+                    break;
+                }
+            }
+        }
+
+        return selectedContent;
 
     },
 
