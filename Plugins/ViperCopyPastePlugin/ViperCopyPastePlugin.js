@@ -229,6 +229,7 @@ ViperCopyPastePlugin.prototype = {
             // Chrome adds style information for the copied selection -.- To prevent this, use clipboardData.setData
             // method to set the modified content and prevent the default copy action.
             if (ViperUtil.isBrowser('chrome') === true) {
+                e.clipboardData.setData('text', range.rangeObj.toString());
                 e.clipboardData.setData('text/html', selectedContent);
                 ViperUtil.preventDefault(e);
                 return false;
