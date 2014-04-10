@@ -1334,6 +1334,14 @@ Viper.prototype = {
             } else {
                 elem = range.offsetNode;
             }
+        } else if (document.body.createTextRange) {
+            // IE.
+            range = document.body.createTextRange();
+            try {
+                range.moveToPoint(x, y);
+            } catch (e) {}
+
+            elem = range.parentElement();
         }
 
         return elem;
