@@ -13,6 +13,7 @@
 function ViperCursorAssistPlugin(viper)
 {
     this.viper = viper;
+    this._dist = 30;
 
 }
 
@@ -24,16 +25,25 @@ ViperCursorAssistPlugin.prototype = {
         var t    = null;
         var validElems      = 'table,hr,img,object,ul,ol';
         var validElemsArray = validElems.split(',');
+        var prevElement = null;
+        var prevPos     = null;
         this.viper.registerCallback('Viper:editableElementChanged', 'ViperCursorAssitPlugin', function() {
             ViperUtil.addEvent(self.viper.getViperElement(), 'mousemove', function(e) {
                 clearTimeout(t);
                 t = setTimeout(function() {
                     var line = ViperUtil.getid(self.viper.getId() + '-cursorAssist');
                     var hoverElem = self.viper.getElementAtCoords(e.clientX, e.clientY);
+                    if (hoverElem && hoverElem === line) {
+                        return;
+                    }
+
                     if (!hoverElem || self.viper.isOutOfBounds(hoverElem) === true) {
                         if (line) {
                             ViperUtil.remove(line);
                         }
+
+                        prevElement = null;
+                        prevPos     = null;
 
                         return;
                     }
@@ -44,6 +54,9 @@ ViperCursorAssistPlugin.prototype = {
                             if (line) {
                                 ViperUtil.remove(line);
                             }
+
+                            prevElement = null;
+                            prevPos     = null;
 
                             return;
                         } else {
@@ -56,7 +69,7 @@ ViperCursorAssistPlugin.prototype = {
                     var elemRect = ViperUtil.getBoundingRectangle(hoverElem);
                     var sibling  = '';
                     var height   = (elemRect.y2 - elemRect.y1);
-                    var dist     = 10;
+                    var dist     = self._dist;
                     if (height < 40) {
                         dist = (height / 2);
                     }
@@ -70,8 +83,18 @@ ViperCursorAssistPlugin.prototype = {
                             ViperUtil.remove(line);
                         }
 
+                        prevElement = null;
+                        prevPos = null;
+
                         return;
                     }
+
+                    if (prevElement === hoverElem && prevPos === sibling) {
+                        return;
+                    }
+
+                    prevElement = hoverElem;
+                    prevPos = sibling;
 
                     var canShowLine = function(siblingType) {
                         // Check if the element after hoverElem is one of the valid elements or no next sibling.
@@ -127,20 +150,14 @@ ViperCursorAssistPlugin.prototype = {
                         });
                     }//end if
 
-                    /*if (sibling === 'previousSibling') {
-                        ViperUtil.setStyle(line, 'margin-top', '0px');
-                        ViperUtil.setStyle(line, 'border-top', '1px dotted red');
-                        ViperUtil.setStyle(line, 'border-bottom', 'none');
-                    } else {
-                        ViperUtil.setStyle(line, 'margin-top', '-15px');
-                        ViperUtil.setStyle(line, 'border-bottom', '1px dotted red');
-                        ViperUtil.setStyle(line, 'border-top', 'none');
-                    }*/
-
                     if (sibling === 'previousSibling') {
-                        ViperUtil.setStyle(line, 'top', elemRect.y1 - 5 + 'px');
+                        ViperUtil.setStyle(line, 'top', elemRect.y1 + 'px');
+                        ViperUtil.addClass(line, 'insertBefore');
+                        ViperUtil.removeClass(line, 'insertAfter');
                     } else {
                         ViperUtil.setStyle(line, 'top', elemRect.y2 + 'px');
+                        ViperUtil.addClass(line, 'insertAfter');
+                        ViperUtil.removeClass(line, 'insertBefore');
                     }
 
                     ViperUtil.setStyle(line, 'left', elemRect.x1 + 'px');
@@ -149,7 +166,7 @@ ViperCursorAssistPlugin.prototype = {
 
                     self.viper.fireSelectionChanged();
                     self.viper.fireNodesChanged();
-                }, 100);
+                }, 200);
             });
         });
     },

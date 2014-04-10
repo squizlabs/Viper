@@ -123,3 +123,7 @@
 .ViperCursorAssistPlugin:hover .ViperCursorAssistPlugin-cursorLine {
     background-image: none;
 }
+
+.ViperCursorAssistPlugin.insertBefore {
+    margin-top: -16px;
+}
