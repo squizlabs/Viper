@@ -153,7 +153,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
     {
         $this->selectKeyword(1);
         $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/CopyPasteFiles/LibreOfficeDoc.txt'));
-        $this->assertHTMLMatch('<h1>Heading 1</h1><p>This is a document that has been created using LibreOffice</p><h2>Heading 2</h2><p>More text under heading two.</p><p>Numbered list:</p><ol><li><p>One</p></li><li><p>Two</p></li><li><p>Three</p></li></ol><p>Ordered List:</p><ul><li><p>One</p></li><li><p>Two</p></li><li><p>Three</p></li></ul>');
+        $this->assertHTMLMatch('<h1>Heading 1</h1><p>This is a document that has been created using LibreOffice</p><h2>Heading 2</h2><p>More text under heading two.</p><p>Numbered list:</p><ol><li>One</li><li>Two</li><li>Three</li></ol><p>Ordered List:</p><ul><li>One</li><li>Two</li><li>Three</li></ul>');
 
     }//end testCopyPasteLibreOfficeDoc()
 

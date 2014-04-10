@@ -825,8 +825,19 @@ ViperCoreStylesPlugin.prototype = {
             range = this.viper.getViperRange();
         }
 
-        var keyboardEditorPlugin = this.viper.ViperPluginManager.getPlugin('ViperKeyboardEditorPlugin');
-        var prev = keyboardEditorPlugin.splitAtRange(true, null);
+        if (ViperUtil.isBrowser('msie') === true
+            && range.startContainer
+            && range.collapsed === true
+            && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+            && (ViperUtil.getHtml(range.startContainer.parentNode) === ''
+                || ViperUtil.getHtml(range.startContainer.parentNode) === '&nbsp;')
+        ) {
+            var prev = range.startContainer.parentNode;
+        } else {
+            var keyboardEditorPlugin = this.viper.ViperPluginManager.getPlugin('ViperKeyboardEditorPlugin');
+            var prev = keyboardEditorPlugin.splitAtRange(true, null);
+        }
+
         var nextSibling = prev.nextSibling;
 
         ViperUtil.insertAfter(prev, hr);
@@ -856,7 +867,10 @@ ViperCoreStylesPlugin.prototype = {
 
                     nextEmptyElem = nextEmptyElem.nextSibling;
                 }
-            } else if (range.startOffset === 0 && ViperUtil.trim(ViperUtil.getNodeTextContent(prev)) === '') {
+            } else if (range.startOffset === 0
+                && (ViperUtil.trim(ViperUtil.getNodeTextContent(prev)) === ''
+                ||  ViperUtil.getHtml(prev) === '&nbsp;')
+            ) {
                 ViperUtil.remove(prev);
             }
         }//end if
@@ -1207,7 +1221,7 @@ ViperCoreStylesPlugin.prototype = {
             || ViperUtil.isTag(startNode, style) === true
             || (ViperUtil.getParents(startNode, style).length > 0
             && ViperUtil.getParents(endNode, style).length > 0)
-            || this._getWholeStyleSelections(endNode, [style], []).length > 0
+            || (selectedNode && this._getWholeStyleSelections(selectedNode, [style], []).length > 0)
         ) {
             // This selection is already styles, remove it.
             var changeid = ViperChangeTracker.startBatchChange('removedFormat');
@@ -1479,7 +1493,7 @@ ViperCoreStylesPlugin.prototype = {
     _getActiveStates: function(range, tagNames)
     {
         var activeStates = [];
-        var selectedNode = range.getNodeSelection();
+        var selectedNode = range.getNodeSelection(null, true);
         var startNode    = null;
         var endNode      = null;
 
@@ -1520,7 +1534,7 @@ ViperCoreStylesPlugin.prototype = {
                 var c         = elems.length;
                 for (var i = 0; i < c; i++) {
                     if (elems[i].nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isBlockElement(elems[i]) === true) {
-                        var alignment = ViperUtil.getStyle(elems[i], 'text-align');
+                        var alignment = elems[i].style.textAlign;
                         if (activeStates.alignment !== null && alignment !== activeStates.alignment) {
                             activeStates.alignment = null;
                             break;
@@ -1534,7 +1548,7 @@ ViperCoreStylesPlugin.prototype = {
             }//end if
 
             if (startNode === endNode
-                || range.getNodeSelection()
+                || (selectedNode && selectedNode !== viperElement)
             ) {
                 while (startNode
                     && ViperUtil.isBlockElement(startNode) !== true
@@ -1587,7 +1601,7 @@ ViperCoreStylesPlugin.prototype = {
     {
         var range           = this.viper.getCurrentRange();
         var firstSelectable = range._getFirstSelectableChild(parentNode);
-        var lastSelectable  = range._getFirstSelectableChild(parentNode);
+        var lastSelectable  = range._getLastSelectableChild(parentNode);
         var firstSelectableParents = [];
         var styles = parentStyles;
         if (firstSelectable && lastSelectable) {

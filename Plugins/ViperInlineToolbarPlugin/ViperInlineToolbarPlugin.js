@@ -93,8 +93,8 @@ ViperInlineToolbarPlugin.prototype = {
         var tools       = this.viper.ViperTools;
         var toolbarid   = 'ViperInlineToolbar';
         var self        = this;
-        var toolbarElem = tools.createInlineToolbar(toolbarid, false, null, function(range, nodeSelection) {
-            self.updateToolbar(range, nodeSelection);
+        var toolbarElem = tools.createInlineToolbar(toolbarid, false, null, function(range, nodeSelection, hasActiveSection) {
+            self.updateToolbar(range, nodeSelection, hasActiveSection);
         });
 
         this._toolbarWidget = tools.getItem(toolbarid);
@@ -125,7 +125,7 @@ ViperInlineToolbarPlugin.prototype = {
      *
      * @param {DOMRange} range The DOMRange object.
      */
-    updateToolbar: function(range, nodeSelection)
+    updateToolbar: function(range, nodeSelection, hasActiveSection)
     {
         if (this._lineageClicked !== true) {
             // Not selection change due to a lineage click so update the range object.
@@ -142,8 +142,7 @@ ViperInlineToolbarPlugin.prototype = {
         }
 
         this._lineageItemSelected = false;
-
-        if (this._lineageClicked !== true) {
+        if (this._lineageClicked !== true && hasActiveSection !== true) {
             this._setCurrentLineageIndex(null);
         }
 
@@ -167,7 +166,13 @@ ViperInlineToolbarPlugin.prototype = {
             return false;
         }
 
-        this._updateLineage(lineage);
+        var selIndex = null;
+        if (hasActiveSection === true) {
+            selIndex = this.getCurrentLineageIndex();
+        }
+
+        this._updateLineage(lineage, selIndex);
+
     },
 
     hideToolbar: function()
@@ -188,7 +193,7 @@ ViperInlineToolbarPlugin.prototype = {
             return;
         }
 
-        if (this._currentLineageIndex === null || this._currentLineageIndex > lineage.length) {
+        if (this._currentLineageIndex === null || this._currentLineageIndex >= lineage.length) {
             this._setCurrentLineageIndex(lineage.length - 1);
         }
 
@@ -318,7 +323,7 @@ ViperInlineToolbarPlugin.prototype = {
      *
      * @param {array} lineage The lineage array.
      */
-    _updateLineage: function(lineage)
+    _updateLineage: function(lineage, selIndex)
     {
         // Remove the contents of the lineage container.
         ViperUtil.empty(this._lineage);
@@ -327,6 +332,7 @@ ViperInlineToolbarPlugin.prototype = {
         var c        = lineage.length;
         var self     = this;
         var linElems = [];
+        selIndex     = selIndex || null;
 
         // Create lineage items.
         for (var i = 0; i < c; i++) {
@@ -338,7 +344,7 @@ ViperInlineToolbarPlugin.prototype = {
             var parent  = document.createElement('li');
             ViperUtil.addClass(parent, 'ViperITP-lineageItem');
 
-            if (i === (c - 1)) {
+            if ((i === (c - 1) && selIndex === null) || (selIndex !== null && i === selIndex)) {
                 ViperUtil.addClass(parent, 'Viper-selected');
             }
 
@@ -542,10 +548,23 @@ ViperInlineToolbarPlugin.prototype = {
             }
 
             if (startNode.nodeType !== ViperUtil.TEXT_NODE || ViperUtil.isBlank(startNode.data) !== true) {
-                if (startNode !== ViperUtil.TEXT_NODE && startNode !== range.getEndNode()) {
+                if (startNode.nodeType !== ViperUtil.TEXT_NODE && startNode !== range.getEndNode()) {
                     lineage.push(range.getEndNode());
                 } else {
                     lineage.push(startNode);
+
+                    if (ViperUtil.isBrowser('msie') === true
+                        && startNode.nodeType === ViperUtil.TEXT_NODE
+                        && !range.getEndNode()
+                        && range.endContainer.nodeType === ViperUtil.ELEMENT_NODE
+                        && range.endOffset >= range.endContainer.childNodes.length
+                        && ViperUtil.isChildOf(startNode, range.endContainer.childNodes[(range.endContainer.childNodes.length - 1)]) === true
+                    ) {
+                        // When an inline tag is the last element in a block element and only last few characters of the
+                        // tag is selected IE thinks this is not inside the tag but in common parent.
+                        // Add the parent of startNode to lineage here.
+                        lineage.push(range.endContainer.childNodes[(range.endContainer.childNodes.length - 1)]);
+                    }
                 }
             }
         }
@@ -558,6 +577,9 @@ ViperInlineToolbarPlugin.prototype = {
                 parent = startNode.parentNode;
             } else {
                 parent = range.getCommonElement();
+                if (this.viper.isOutOfBounds(parent) === true) {
+                    parent = viperElement;
+                }
             }
         }
 

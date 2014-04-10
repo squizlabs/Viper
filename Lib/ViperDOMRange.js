@@ -614,6 +614,43 @@ ViperDOMRange.prototype = {
 
     },
 
+    moveCaretAway: function(sourceElement, parentElement, defaultTagName)
+    {
+        var next       = true;
+        var selectable = this.getNextContainer(sourceElement, null, true, true);
+        if (!selectable || (selectable !== parentElement && ViperUtil.isChildOf(selectable, parentElement) === false) === true) {
+            next       = false;
+            selectable = this.getPreviousContainer(sourceElement, null, true, true);
+        }
+
+        if (!selectable || (selectable !== parentElement && ViperUtil.isChildOf(selectable, parentElement) === false) === true) {
+            // Create a new default container.
+            var defTag = null;
+            if (defaultTagName !== '') {
+                defTag = document.createElement(defaultTagName);
+                ViperUtil.setHtml(defTag, '<br/>');
+            } else {
+                defTag = document.createTextNode(' ');
+            }
+
+            ViperUtil.insertAfter(sourceElement, defTag);
+            this.setStart(defTag, 0);
+            this.collapse(true);
+            ViperSelection.addRange(this);
+            return false;
+        } else if (next === true) {
+            this.setStart(selectable, 0);
+            this.collapse(true);
+        } else {
+            this.setStart(selectable, selectable.data.length);
+            this.collapse(true);
+        }
+
+        ViperSelection.addRange(this);
+        return this;
+
+    },
+
     _normalizeNode: function(node)
     {
         // Joins all sibling text elements.
@@ -746,9 +783,17 @@ ViperDOMRange.prototype = {
             return null;
         } else if (startNode && !endNode) {
             if (startNode.nodeType === ViperUtil.TEXT_NODE) {
-                if (ViperUtil.trim(startNode.data) === '') {
-                    this._nodeSel.node = null;
-                    return null;
+                if (range.endContainer.nodeType === ViperUtil.ELEMENT_NODE
+                    && range.endOffset >= range.endContainer.childNodes.length
+                    && startNode.nodeType === ViperUtil.TEXT_NODE
+                    && range.startOffset === 0
+                    && range.endContainer === range.commonAncestorContainer
+                    && (common.firstChild === startNode || this._getFirstSelectableChild(common) === startNode)
+                ) {
+                    // Selection starts from the start of the first editable element to the end of the
+                    // common element, make the selected node as the common element.
+                    this._nodeSel.node = range.commonAncestorContainer;
+                    return this._nodeSel.node;
                 } else if (this._nodeSel.startOffset === startNode.data.length
                     && startNode.nextSibling
                     && startNode.nextSibling.nodeType === ViperUtil.ELEMENT_NODE
@@ -758,20 +803,23 @@ ViperDOMRange.prototype = {
                     // Inline element selection at the end of a block element (IE).
                     this._nodeSel.node = startNode.nextSibling;
                     return this._nodeSel.node;
-                } else if (range.endContainer.nodeType === ViperUtil.ELEMENT_NODE
-                    && range.endOffset >= range.endContainer.childNodes.length
-                    && startNode.nodeType === ViperUtil.TEXT_NODE
-                    && range.startOffset === 0
-                    && range.endContainer === range.commonAncestorContainer
-                    && this._getFirstSelectableChild(common) === startNode
-                ) {
-                    // Selection starts from the start of the first editable element to the end of the
-                    // common element, make the selected node as the common element.
-                    this._nodeSel.node = range.commonAncestorContainer;
-                    return this._nodeSel.node;
+                } else if (ViperUtil.trim(startNode.data) === '') {
+                    this._nodeSel.node = null;
+                    return null;
                 } else {
                     this._nodeSel.node = null;
                     return null;
+                }
+            } else if (startNode.nodeType === ViperUtil.ELEMENT_NODE
+                && this.endContainer === this.startContainer
+                && this.startOffset === 0
+                && this.endOffset >= this.endContainer.childNodes.length
+            ) {
+                if (this.endOffset === 1 && this.endContainer.childNodes.length === 1) {
+                    // Singe element exists in the container.
+                    startNode = this.endContainer.childNodes[0];
+                } else {
+                    startNode = this.endContainer;
                 }
             }
 
@@ -797,6 +845,14 @@ ViperDOMRange.prototype = {
             && range.startOffset === startNode.data.length
             && range.collapsed === true
         ) {
+            if (ViperUtil.isBrowser('msie', '<11') === true
+                && startNode.previousSibling
+                && ViperUtil.isTag(startNode.previousSibling, 'img') === true
+            ) {
+                this._nodeSel.node = startNode.previousSibling;
+                return this._nodeSel.node;
+            }
+
             this._nodeSel.node = null;
             return null;
         } else if (startNode.nodeType === ViperUtil.ELEMENT_NODE
@@ -864,6 +920,16 @@ ViperDOMRange.prototype = {
             && this.getNextContainer(ViperUtil.getFirstBlockParent(startNode), null, false, true) === range._getFirstSelectableChild(range.endContainer)
         ) {
             this._nodeSel.node = ViperUtil.getFirstBlockParent(startNode);
+            return this._nodeSel.node;
+        } else if (startNode !== endNode
+            && startNode.nodeType === ViperUtil.TEXT_NODE
+            && endNode.nodeType === ViperUtil.ELEMENT_NODE
+            && this.endOffset === 0
+            && this.endContainer.nodeType === ViperUtil.ELEMENT_NODE
+            && this._getFirstSelectableChild(this.endContainer) === startNode
+            && ViperUtil.isBrowser('msie', '<11') === true
+        ) {
+            this._nodeSel.node = this.endContainer;
             return this._nodeSel.node;
         }
 

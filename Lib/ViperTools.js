@@ -448,9 +448,15 @@ ViperTools.prototype = {
             if (ViperUtil.isBrowser('msie') === true) {
                 if (moveCaretToEnd === true) {
                     setTimeout(function() {
-                        input.focus();
-                        // Set the caret to the end of the textfield.
-                        input.value = input.value;
+                        if (ViperUtil.isBrowser('msie', '>=11') === true) {
+                            var textRange = input.createTextRange();
+                            textRange.move('character', input.value.length)
+                            textRange.select();
+                        } else {
+                            input.focus();
+                            // Set the caret to the end of the textfield.
+                            input.value = input.value;
+                        }
                     }, 10);
                 }
 
@@ -1326,7 +1332,7 @@ ViperTools.prototype = {
                     }
                 }
 
-                updateCallback.call(this, range, selectedNode);
+                updateCallback.call(this, range, selectedNode, activeSection !== null);
 
                 var buttonsToRemove = ViperUtil.getClass('ViperITP-button-hidden', toolsContainer);
                 for (var i = 0; i < buttonsToRemove.length; i++) {
@@ -1518,7 +1524,10 @@ ViperTools.prototype = {
                 this._activeSection = subSectionid;
                 this._updateSubSectionArrowPos();
 
-                this.focusSubSection();
+                var self = this;
+                setTimeout(function() {
+                    self.focusSubSection();
+                }, 50);
 
                 this._subSectionShown = true;
 

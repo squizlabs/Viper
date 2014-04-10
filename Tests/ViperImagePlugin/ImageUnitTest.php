@@ -254,7 +254,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->sikuli->click($this->findKeyword(2));
         $this->selectKeyword(3);
         $this->type('Key.LEFT');
-
+        $this->type('Key.LEFT');
         $this->clickTopToolbarButton('image');
         $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
         $this->sikuli->keyDown('Key.TAB');
@@ -412,7 +412,6 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         // Check that image is not inserted without alt
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p>sit amet <strong>%3%</strong></p>');
-
         $this->clickField('Alt');
         $this->clickField('Image is decorative');
         $this->sikuli->keyDown('Key.ENTER');
@@ -476,6 +475,13 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->clickTopToolbarButton('image', 'active');
         $this->sikuli->keyDown('Key.TAB');
         $this->sikuli->keyDown('Key.TAB');
+
+        // use backspace to delete the content for IE and Firefox
+        for ($i = 1; $i <= 10; $i++) {
+            $this->sikuli->keyDown('Key.BACKSPACE');
+        }
+
+        
         $this->type('Abcd');
         $this->sikuli->keyDown('Key.ENTER');
         $this->clickTopToolbarButton('image', 'selected');
@@ -1060,7 +1066,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->clickField('Image is decorative');
         $this->sikuli->keyDown('Key.ENTER');
         $this->clickTopToolbarButton('image', 'selected');
-        $this->assertHTMLMatch('<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /><p></p>');
+        $this->assertHTMLMatch('<p><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /></p>');
 
         // Edit the source code
         $this->clickElement('img', 0);
