@@ -448,9 +448,15 @@ ViperTools.prototype = {
             if (ViperUtil.isBrowser('msie') === true) {
                 if (moveCaretToEnd === true) {
                     setTimeout(function() {
-                        input.focus();
-                        // Set the caret to the end of the textfield.
-                        input.value = input.value;
+                        if (ViperUtil.isBrowser('msie', '>=11') === true) {
+                            var textRange = input.createTextRange();
+                            textRange.move('character', input.value.length)
+                            textRange.select();
+                        } else {
+                            input.focus();
+                            // Set the caret to the end of the textfield.
+                            input.value = input.value;
+                        }
                     }, 10);
                 }
 
