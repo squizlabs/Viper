@@ -64,12 +64,25 @@ ViperCursorAssistPlugin.prototype = {
                         }
                     }
 
+                    var sibling  = '';
                     var scroll   = ViperUtil.getScrollCoords();
                     var mousePos = (e.clientY + scroll.y);
                     var elemRect = ViperUtil.getBoundingRectangle(hoverElem);
-                    var sibling  = '';
-                    var height   = (elemRect.y2 - elemRect.y1);
                     var dist     = self._dist;
+
+                    if (ViperUtil.isTag(hoverElem, 'table') === true
+                        && ViperUtil.isBrowser('firefox') === true
+                    ) {
+                        // Firefox does not include the caption element's height as part of the table.
+                        // Need to add it here.
+                        var caption = ViperUtil.getTag('caption', hoverElem);
+                        if (caption) {
+                            elemRect.y2 += ViperUtil.$(caption[0]).outerHeight(true);
+                        }
+                    }
+
+                    var height = (elemRect.y2 - elemRect.y1);
+
                     if (height < 40) {
                         dist = (height / 2);
                     }
