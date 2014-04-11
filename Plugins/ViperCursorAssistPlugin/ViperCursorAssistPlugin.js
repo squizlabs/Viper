@@ -108,6 +108,7 @@ ViperCursorAssistPlugin.prototype = {
 
                     prevElement = hoverElem;
                     prevPos = sibling;
+                    var inBetween = false;
 
                     var canShowLine = function(siblingType) {
                         // Check if the element after hoverElem is one of the valid elements or no next sibling.
@@ -121,6 +122,7 @@ ViperCursorAssistPlugin.prototype = {
 
                                     return false;
                                 } else {
+                                    inBetween = true;
                                     return true;
                                 }
                             }
@@ -168,13 +170,23 @@ ViperCursorAssistPlugin.prototype = {
 
                     if (sibling === 'previousSibling') {
                         ViperUtil.setStyle(line, 'top', elemRect.y1 + 'px');
-                        ViperUtil.addClass(line, 'insertBefore');
                         ViperUtil.removeClass(line, 'insertAfter');
+
+                        if (inBetween === true) {
+                            ViperUtil.addClass(line, 'insertBetween');
+                        } else {
+                            ViperUtil.addClass(line, 'insertBefore');
+                        }
                     } else {
                         ViperUtil.setStyle(line, 'top', elemRect.y2 + 'px');
-                        ViperUtil.addClass(line, 'insertAfter');
                         ViperUtil.removeClass(line, 'insertBefore');
-                    }
+
+                        if (inBetween === true) {
+                            ViperUtil.addClass(line, 'insertBetween');
+                        } else {
+                            ViperUtil.addClass(line, 'insertAfter');
+                        }
+                    }//end if
 
                     ViperUtil.setStyle(line, 'left', elemRect.x1 + 'px');
                     ViperUtil.setStyle(line, 'width', (elemRect.x2 - elemRect.x1) + 'px');
