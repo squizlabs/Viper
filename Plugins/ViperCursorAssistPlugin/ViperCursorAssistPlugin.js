@@ -168,6 +168,7 @@ ViperCursorAssistPlugin.prototype = {
                         });
                     }//end if
 
+                    ViperUtil.removeClass(line, 'insertBetween');
                     if (sibling === 'previousSibling') {
                         ViperUtil.setStyle(line, 'top', elemRect.y1 + 'px');
                         ViperUtil.removeClass(line, 'insertAfter');
