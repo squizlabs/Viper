@@ -56,6 +56,7 @@ class Viper_Tests_ViperListPlugin_CopyPasteListTest extends AbstractViperListPlu
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
 
         $this->assertHTMLMatch('<p>Unordered list %1%</p><ul><li>item %2% 1</li><li>item 2</li><li>item 3 %3%</li></ul><ul><li>item %2% 1</li><li>item 2</li><li>item 3 %3%</li></ul>');
 

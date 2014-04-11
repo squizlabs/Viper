@@ -29,6 +29,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
 
         // Check the state of the format icon after we have changed to a quote
+        $this->selectKeyword(2);
         $this->selectKeyword(4);
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'formats icon should not appear in the inline toolbar');
         $this->assertFalse($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Active formats icon should not appear in the inline toolbar');
@@ -80,6 +81,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
 
         // Check the state of the format icon after we have changed to a quote
+        $this->selectKeyword(2);
         $this->selectKeyword(4);
         $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'disabled'), 'Formats icon should disabled in the top toolbar');
 

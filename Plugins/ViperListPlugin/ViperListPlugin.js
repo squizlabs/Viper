@@ -376,7 +376,6 @@ ViperListPlugin.prototype = {
                     }
 
                     elem = [p];
-
                     list = this._makeList(tag, elem);
                     td.appendChild(list);
                 } else {
@@ -385,6 +384,7 @@ ViperListPlugin.prototype = {
                 }
 
                 this.viper.selectBookmark(bookmark);
+                return true;
             } else {
                 // Remove item from its list.
                 var listElement = this._getListElement(li);
@@ -508,7 +508,13 @@ ViperListPlugin.prototype = {
             node = range.startContainer;
         }
 
-        var firstParent = ViperUtil.getFirstBlockParent(node);
+        var firstParent = null;
+        if (ViperUtil.isBlockElement(node) === true) {
+            firstParent = node;
+        } else {
+            firstParent = ViperUtil.getFirstBlockParent(node);
+        }
+
         var listItems   = [];
         if (!firstParent || ViperUtil.isTag(firstParent, 'li') === true) {
             listItems = this._getListItemsFromRange(range, testOnly);
@@ -528,6 +534,11 @@ ViperListPlugin.prototype = {
             }
         } else if (firstParent && outdent !==  true) {
             updated  = this.convertRangeToList(range, testOnly, listType, true);
+            if (updated === true && testOnly !== true) {
+                this.viper.fireNodesChanged();
+                this.viper.fireSelectionChanged(null, true);
+            }
+
             return updated;
         }
 
@@ -543,7 +554,8 @@ ViperListPlugin.prototype = {
 
                     var range    = self.viper.getCurrentRange();
                     var nextItem = self.getNextItem(range.startContainer.parentNode);
-                    if (range.startOffset === range.startContainer.data.length
+                    if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                        && range.startOffset === range.startContainer.data.length
                         && range.collapsed === true
                         && range.startContainer.parentNode !== bookmarkParent
                         && (!nextItem || nextItem === bookmarkParent)
@@ -557,7 +569,8 @@ ViperListPlugin.prototype = {
                     }
 
                     range = self.viper.getCurrentRange();
-                    if (range.startOffset === range.startContainer.data.length
+                    if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                        && range.startOffset === range.startContainer.data.length
                         && range.collapsed === true
                         && range.startContainer.parentNode !== bookmarkParent
                         && (!nextItem || nextItem === bookmarkParent)
@@ -1135,6 +1148,12 @@ ViperListPlugin.prototype = {
             this.viper.fireNodesChanged(this.viper.getViperElement());
         }
 
+        // TODO: Properly fix fireNodesChanged event firing as this method maybe called by other create list method
+        // which also fire nodesChanged event causing multiple history entries.
+        if (canJoin === true) {
+            return false;
+        }
+
         return true;
 
     },
@@ -1484,7 +1503,7 @@ ViperListPlugin.prototype = {
         if (!startNode) {
             if (!range.startContainer
                 || range.startContainer !== range.endContainer
-                || ViperUtil.isStubElement(range.startContainer) !== true
+                || (ViperUtil.isStubElement(range.startContainer) !== true && ViperUtil.isTag(range.startContainer, 'li') === false)
             ) {
                 return;
             } else {
@@ -1500,7 +1519,11 @@ ViperListPlugin.prototype = {
         var startParent = null;
 
         var listElement = this._getListElement(startNode);
-        var firstBlock  = ViperUtil.getFirstBlockParent(startNode);
+        var firstBlock  = startNode;
+
+        if (ViperUtil.isBlockElement(startNode) === false) {
+            firstBlock  = ViperUtil.getFirstBlockParent(startNode);
+        }
 
         if (listElement
             && firstBlock
@@ -1907,9 +1930,11 @@ ViperListPlugin.prototype = {
                     listItems.push(child);
                 } else if (listItems.length > 0) {
                     var listItem = this._createListItem(listItems.shift());
-                    list.appendChild(listItem);
-                    while (listElem = listItems.shift()) {
-                        listItem.appendChild(listElem);
+                    if (listItem) {
+                        list.appendChild(listItem);
+                        while (listElem = listItems.shift()) {
+                            listItem.appendChild(listElem);
+                        }
                     }
                 }
 
@@ -1936,7 +1961,7 @@ ViperListPlugin.prototype = {
 
     _createListItem: function(element)
     {
-        if (!element || (element.nodeType === ViperUtil.TEXT_NODE && element.data.indexOf("\n") === 0)) {
+        if (!element || (element.nodeType === ViperUtil.TEXT_NODE && element.data.indexOf("\n") === 0 && ViperUtil.trim(element.data).length === 0)) {
             return null;
         }
 

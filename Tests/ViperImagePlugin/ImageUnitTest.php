@@ -412,7 +412,6 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         // Check that image is not inserted without alt
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p>sit amet <strong>%3%</strong></p>');
-
         $this->clickField('Alt');
         $this->clickField('Image is decorative');
         $this->sikuli->keyDown('Key.ENTER');
@@ -476,6 +475,13 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->clickTopToolbarButton('image', 'active');
         $this->sikuli->keyDown('Key.TAB');
         $this->sikuli->keyDown('Key.TAB');
+
+        // use backspace to delete the content for IE and Firefox
+        for ($i = 1; $i <= 10; $i++) {
+            $this->sikuli->keyDown('Key.BACKSPACE');
+        }
+
+        
         $this->type('Abcd');
         $this->sikuli->keyDown('Key.ENTER');
         $this->clickTopToolbarButton('image', 'selected');

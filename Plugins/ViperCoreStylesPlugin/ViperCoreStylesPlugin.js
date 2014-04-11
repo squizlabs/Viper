@@ -1493,7 +1493,7 @@ ViperCoreStylesPlugin.prototype = {
     _getActiveStates: function(range, tagNames)
     {
         var activeStates = [];
-        var selectedNode = range.getNodeSelection();
+        var selectedNode = range.getNodeSelection(null, true);
         var startNode    = null;
         var endNode      = null;
 
@@ -1534,7 +1534,7 @@ ViperCoreStylesPlugin.prototype = {
                 var c         = elems.length;
                 for (var i = 0; i < c; i++) {
                     if (elems[i].nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isBlockElement(elems[i]) === true) {
-                        var alignment = ViperUtil.getStyle(elems[i], 'text-align');
+                        var alignment = elems[i].style.textAlign;
                         if (activeStates.alignment !== null && alignment !== activeStates.alignment) {
                             activeStates.alignment = null;
                             break;
@@ -1548,7 +1548,7 @@ ViperCoreStylesPlugin.prototype = {
             }//end if
 
             if (startNode === endNode
-                || range.getNodeSelection()
+                || (selectedNode && selectedNode !== viperElement)
             ) {
                 while (startNode
                     && ViperUtil.isBlockElement(startNode) !== true
@@ -1601,7 +1601,7 @@ ViperCoreStylesPlugin.prototype = {
     {
         var range           = this.viper.getCurrentRange();
         var firstSelectable = range._getFirstSelectableChild(parentNode);
-        var lastSelectable  = range._getFirstSelectableChild(parentNode);
+        var lastSelectable  = range._getLastSelectableChild(parentNode);
         var firstSelectableParents = [];
         var styles = parentStyles;
         if (firstSelectable && lastSelectable) {

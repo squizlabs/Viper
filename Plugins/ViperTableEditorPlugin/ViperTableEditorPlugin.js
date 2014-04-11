@@ -3149,12 +3149,19 @@ ViperTableEditorPlugin.prototype = {
             }
         }
 
-        ViperUtil.remove(table);
-
-        this.viper.fireSelectionChanged();
-        this.viper.fireNodesChanged(this.viper.getViperElement());
+        if (ViperUtil.isBrowser('firefox') === true) {
+            this.viper.focus();
+        }
 
         this.hideCellToolsIcon();
+
+        this.viper.moveCaretAway(table);
+
+        ViperUtil.remove(table);
+
+        this.viper.fireSelectionChanged(null, true);
+        this.viper.fireNodesChanged(this.viper.getViperElement());
+
 
     },
 

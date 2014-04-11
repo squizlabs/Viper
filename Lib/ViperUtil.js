@@ -2395,6 +2395,24 @@ var ViperUtil = {
 
         return clone;
 
+    },
+
+    /**
+     * Starts debugging after specified calls to this method.
+     */
+    dcall: function(c)
+    {
+        if (!ViperUtil._dcall) {
+            ViperUtil._dcall = 0;
+        }
+
+        ViperUtil._dcall++;
+
+        if (c === ViperUtil._dcall) {
+            debugger;
+        }
+
+        console.info(ViperUtil._dcall);
     }
 
 };
