@@ -8,19 +8,9 @@
   100% { opacity: 1; }
 }
 
-@-moz-keyframes CAP-rotate {
-  0%   { -moz-transform: rotateX(90deg); }
-  100% { -moz-transform: rotateX(0deg); }
-}
-
-@-webkit-keyframes CAP-rotate {
-  0%   { -webkit-transform: rotateX(90deg); }
-  100% { -webkit-transform: rotateX(0deg); }
-}
-
 .ViperCursorAssistPlugin {
-    -webkit-animation: CAP-fade 0.2s 1, CAP-rotate 0.2s 1;
-    -moz-animation: CAP-fade 0.2s 1, CAP-rotate 0.2s 1;
+    -webkit-animation: CAP-fade 0.3s 1;
+    -moz-animation: CAP-fade 0.3s 1;
     position: absolute;
     height: 0;
     padding: 10px 0;
@@ -126,4 +116,8 @@
 
 .ViperCursorAssistPlugin.insertBefore {
     margin-top: -16px;
+}
+
+.ViperCursorAssistPlugin.insertBetween {
+    margin-top: -10px;
 }
