@@ -148,7 +148,7 @@ ViperCursorAssistPlugin.prototype = {
                             self.viper.focus();
 
                             var p = document.createElement('p');
-                            ViperUtil.setHtml(p, '&nbsp;');
+                            ViperUtil.setHtml(p, '<br/>');
 
                             if (sibling === 'previousSibling') {
                                 ViperUtil.insertBefore(hoverElem, p);
@@ -160,6 +160,9 @@ ViperCursorAssistPlugin.prototype = {
                             range.setStart(p.firstChild, 0);
                             range.collapse(true);
                             ViperSelection.addRange(range);
+
+                            self.viper.fireNodesChanged();
+                            self.viper.fireSelectionChanged(null, true);
                         });
                     }//end if
 
@@ -176,9 +179,6 @@ ViperCursorAssistPlugin.prototype = {
                     ViperUtil.setStyle(line, 'left', elemRect.x1 + 'px');
                     ViperUtil.setStyle(line, 'width', (elemRect.x2 - elemRect.x1) + 'px');
                     document.body.appendChild(line);
-
-                    self.viper.fireSelectionChanged();
-                    self.viper.fireNodesChanged();
                 }, 200);
             });
         });
