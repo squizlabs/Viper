@@ -161,6 +161,12 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
         $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
         $this->sikuli->keyDown('Key.TAB');
+
+        // use backspace to delete the content for IE and Firefox
+        for ($i = 1; $i <= 7; $i++) {
+            $this->sikuli->keyDown('Key.BACKSPACE');
+        }
+
         $this->type('Abcd');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->click($this->findKeyword(3));
