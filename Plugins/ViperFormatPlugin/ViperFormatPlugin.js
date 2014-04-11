@@ -516,9 +516,11 @@ ViperFormatPlugin.prototype = {
         if (!endNode) {
             endNode = startNode;
         }
-         // Anchor and Class.
-        if (selectedNode.nodeType === ViperUtil.ELEMENT_NODE
-            || ViperUtil.getFirstBlockParent(startNode) === ViperUtil.getFirstBlockParent(endNode)
+
+        // Anchor and Class.
+        if (selectedNode
+            && (selectedNode.nodeType === ViperUtil.ELEMENT_NODE
+            || ViperUtil.getFirstBlockParent(startNode) === ViperUtil.getFirstBlockParent(endNode))
         ) {
             var attrId = this._getAttributeValue('id', selectedNode);
             if (attrId) {
@@ -618,6 +620,7 @@ ViperFormatPlugin.prototype = {
 
         var updateToolbar = function(data) {
             data.range = self.viper.getCurrentRange();
+
             // Make sure passed in range is still valud.
             try {
                 if (data.range) {
@@ -647,8 +650,13 @@ ViperFormatPlugin.prototype = {
             if ((!nodeSelection || nodeSelection.nodeType !== ViperUtil.ELEMENT_NODE || nodeSelection === self.viper.getViperElement())
                 && (data.range.collapsed === true || ViperUtil.getFirstBlockParent(startNode) !== ViperUtil.getFirstBlockParent(endNode))
                 || (startNode === endNode && ViperUtil.isTag(startNode, 'br') === true && data.range.collapsed === true)
-                || (ViperUtil.isBrowser('msie', '8') === true && data.range.collapsed === true && nodeSelection && ViperUtil.getHtml(nodeSelection) === '')
+                || (ViperUtil.isBrowser('msie', '8') === true && data.range.collapsed === true && nodeSelection && ViperUtil.getHtml(nodeSelection) === '' && ViperUtil.isStubElement(nodeSelection) === false)
             ) {
+                tools.disableButton('anchor');
+                tools.disableButton('class');
+                tools.setButtonInactive('anchor');
+                tools.setButtonInactive('class');
+            } else if (nodeSelection && nodeSelection === self.viper.getViperElement()) {
                 tools.disableButton('anchor');
                 tools.disableButton('class');
                 tools.setButtonInactive('anchor');
@@ -683,26 +691,37 @@ ViperFormatPlugin.prototype = {
                 nodeSelection = formatElement;
             }
 
-            if (data.range.collapsed === false
+            if (nodeSelection
+                || (data.range.collapsed === false
                 || (ViperUtil.isTag(startNode, 'br') === false
-                && (startNode.nodeType === ViperUtil.TEXT_NODE && ViperUtil.trim(startNode.data) === '') === false)
+                && (startNode.nodeType === ViperUtil.TEXT_NODE && ViperUtil.trim(startNode.data) === '') === false))
             ) {
-                // Anchor.
-                var attrId = self._getAttributeValue('id', nodeSelection);
-                tools.getItem(prefix + 'anchor:input').setValue(attrId);
-                if (attrId) {
-                    tools.setButtonActive('anchor');
-                } else {
+                if (nodeSelection && nodeSelection === self.viper.getViperElement()) {
+                    tools.disableButton('anchor');
+                    tools.disableButton('class');
                     tools.setButtonInactive('anchor');
-                }
-
-                // Class.
-                var attrClass = self._getAttributeValue('class', nodeSelection);
-                tools.getItem(prefix + 'class:input').setValue(attrClass);
-                if (attrClass) {
-                    tools.setButtonActive('class');
-                } else {
                     tools.setButtonInactive('class');
+                } else if (nodeSelection) {
+                    tools.enableButton('anchor');
+                    tools.enableButton('class');
+
+                    // Anchor.
+                    var attrId = self._getAttributeValue('id', nodeSelection);
+                    tools.getItem(prefix + 'anchor:input').setValue(attrId);
+                    if (attrId) {
+                        tools.setButtonActive('anchor');
+                    } else {
+                        tools.setButtonInactive('anchor');
+                    }
+
+                    // Class.
+                    var attrClass = self._getAttributeValue('class', nodeSelection);
+                    tools.getItem(prefix + 'class:input').setValue(attrClass);
+                    if (attrClass) {
+                        tools.setButtonActive('class');
+                    } else {
+                        tools.setButtonInactive('class');
+                    }
                 }
             }//end if
 

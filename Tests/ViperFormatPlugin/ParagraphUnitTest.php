@@ -29,6 +29,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->checkStatusOfFormatIconsInTheInlineToolbar('active', NULL, NULL, NULL);
 
         // Check the state of the format icon after we have changed to a paragraph
+        $this->sikuli->click($this->findKeyword(2));
         $this->selectKeyword(4);
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'formats icon should not appear in the inline toolbar');
         $this->assertFalse($this->inlineToolbarButtonExists('formats-p', 'active'), 'Active formats icon should not appear in the inline toolbar');
@@ -77,6 +78,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
 
         // Check the state of the format icon after we have changed to a paragraph
+        $this->sikuli->click($this->findKeyword(2));
         $this->selectKeyword(4);
         $this->assertTrue($this->topToolbarButtonExists('formats-p', 'disabled'), 'Formats icon should disabled in the top toolbar');
 
@@ -237,14 +239,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
-        $this->type('New content');
-        sleep(1);
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        sleep(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->sikuli->keyDown('Key.RIGHT');
-        sleep(1);
-        $this->type(' on the page');
+        $this->type('New content on the page');
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->type('More new content');

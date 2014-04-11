@@ -166,7 +166,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteInFormatsUnitTest extends Abstra
         sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
 
-        $this->assertHTMLMatch('<pre>Lorum this is more content %1% to test %2%</pre><pre>%1% to test %2%</pre>');
+        $this->assertHTMLMatch('<pre>Lorum this is more content %1% to test %2%</pre><p>%1% to test %2%</p>');
 
     }//end testCopyAndPasteForAPreSection()
 

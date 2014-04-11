@@ -1256,6 +1256,19 @@ Viper.prototype = {
 
     },
 
+    /**
+     * Find the next good position for the caret outside of the sourceElement.
+     *
+     * This method should be used when removing an element where caret is in.
+     * If no valid elements found a new element will be created using the defaultBlockTag setting.
+     */
+    moveCaretAway: function(sourceElement)
+    {
+        var range = this.getViperRange();
+        return range.moveCaretAway(sourceElement, this.getViperElement(), this.getDefaultBlockTag());
+
+    },
+
 
     /**
      * Returns the caret coords.
@@ -2744,6 +2757,10 @@ Viper.prototype = {
             // Firefox sets the first child to be a textNode with \n as its content
             // if whole content is selected. Get the first selectable child.
             startNode = range._getFirstSelectableChild(viperElement);
+
+            if (ViperUtil.isBrowser('msie') === true) {
+                range.setStart(startNode, 0);
+            }
         }
 
         if (!endNode) {
@@ -2760,6 +2777,7 @@ Viper.prototype = {
             ViperSelection.addRange(range);
             return;
         }
+
 
         // Bookmark and get the top style parents.
         var bookmark       = this.createBookmark(range);
@@ -3309,7 +3327,7 @@ Viper.prototype = {
 
             range.collapse(true);
             ViperSelection.addRange(range);
-        } else if (ViperUtil.isBrowser('firefox') === true
+        } else if ((ViperUtil.isBrowser('firefox') === true || ViperUtil.isBrowser('msie') === true)
             && startContainer === endContainer
             && startOffset === 0
             && startContainer === this.getViperElement()
@@ -4481,15 +4499,6 @@ Viper.prototype = {
                     ViperSelection.addRange(range);
                 }
             }
-        } else if (endNode
-            && startNode
-            && ViperUtil.isTag(startNode, 'table') === true
-            && range._getLastSelectableChild(startNode) === endNode
-        ) {
-            // IE table selection.
-            range.setStart(startNode);
-            range.collapse(true);
-            ViperSelection.addRange(range);
         }//end if
 
         return range;
