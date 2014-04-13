@@ -48,25 +48,27 @@ ViperImagePlugin.prototype = {
                 range.selectNode(target);
                 ViperSelection.addRange(range);
                 self.viper.fireSelectionChanged(range, true);
-                ViperSelection.removeAllRanges();
 
                 if (ViperUtil.isBrowser('msie', '<11') === true && ViperUtil.isTag(target, 'img') === true) {
                     self._ieImageResize = target;
                     self.viper.registerCallback('Viper:mouseUp', 'ViperImagePlugin:ie', function(e) {
-                       ViperSelection.removeAllRanges();
                        var range = self.viper.getCurrentRange();
                        if (!target.nextSibling || target.nextSibling.nodeType !== ViperUtil.TEXT_NODE) {
                            var textNode = document.createTextNode('');
                            ViperUtil.insertAfter(target, textNode);
                        }
 
-                       range.setStart(target.nextSibling, 0);
-                       range.collapse(true);
+                       if (!target.previousSibling || target.previousSibling.nodeType !== ViperUtil.TEXT_NODE) {
+                           var textNode = document.createTextNode('');
+                           ViperUtil.insertBefore(target, textNode);
+                       }
+
+                       range.setStart(target.previousSibling, target.previousSibling.data.length);
+                       range.setEnd(target.nextSibling, 0);
                        ViperSelection.addRange(range);
 
                        ViperUtil.preventDefault(e);
                        self.viper.removeCallback('Viper:mouseUp', 'ViperImagePlugin:ie');
-                       ViperSelection.removeAllRanges();
                        return false;
                     });
                 }
@@ -577,7 +579,6 @@ ViperImagePlugin.prototype = {
 
             this.showImageResizeHandles(nodeSelection);
             this._updateToolbars(nodeSelection);
-            ViperSelection.removeAllRanges();
         }
 
     },

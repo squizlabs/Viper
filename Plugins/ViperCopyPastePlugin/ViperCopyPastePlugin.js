@@ -252,7 +252,13 @@ ViperCopyPastePlugin.prototype = {
             // Select the contents of the temp element.
             var firstChild = range._getFirstSelectableChild(tmp);
             var lastChild = range._getLastSelectableChild(tmp);
-            range.setEnd(lastChild, lastChild.data.length);
+            if (tmp.lastChild.nodeType === ViperUtil.ELEMENT_NODE) {
+                // Last child could be an image etc.
+                tmp.appendChild(document.createTextNode(''));
+                range.setEnd(tmp.lastChild, 0);
+            } else {
+                range.setEnd(lastChild, lastChild.data.length);
+            }
 
             // WORKING ON IE8
             if (ViperUtil.isBrowser('msie', '<11') === true) {
