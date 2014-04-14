@@ -308,7 +308,7 @@ ViperKeyboardEditorPlugin.prototype = {
                         }
 
                         var content = '<br />';
-                        if (ViperUtil.isBrowser('msie') === true) {
+                        if (ViperUtil.isBrowser('msie', '<11') === true) {
                             content = '&nbsp;';
                         }
 
@@ -381,7 +381,7 @@ ViperKeyboardEditorPlugin.prototype = {
                         }
 
                         if (p.firstChild.nodeType === ViperUtil.TEXT_NODE) {
-                            if (ViperUtil.isBrowser('msie') === true
+                            if (ViperUtil.isBrowser('msie', '<11') === true
                                 && p.firstChild.data === String.fromCharCode(160)
                             ) {
                                 range.setEnd(p.firstChild, 1);
@@ -666,13 +666,13 @@ ViperKeyboardEditorPlugin.prototype = {
                 range.setStart(startNode, range.startOffset);
                 range.collapse(true);
                 ViperSelection.addRange(range);
-            } else if (ViperUtil.isBrowser('msie')
+            } else if ((ViperUtil.isBrowser('msie') === true || ViperUtil.isBrowser('firefox') === true)
                 && range.startOffset === 0
                 && range.collapsed === true
                 && startNode.nodeType === ViperUtil.TEXT_NODE
                 && startNode === range._getFirstSelectableChild(ViperUtil.getFirstBlockParent(startNode))
             ) {
-                // IE11 seems to have an issue with creating a new paragraph before the caret. If the caret is at the
+                // IE11 & Firefox (only on 2nd enter) seems to have an issue with creating a new paragraph before the caret. If the caret is at the
                 // start of a paragraph and enter is pressed a new paragraph is added before the original P tag.
                 // However, in IE11, the innerHTML is '<br>' but firstChild of the paragraph is null..
                 // We handle the creation here to prevent issues with toolbar button statuses etc.
