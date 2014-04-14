@@ -265,7 +265,7 @@ ViperKeyboardEditorPlugin.prototype = {
 
             var firstBlock = ViperUtil.getFirstBlockParent(endNode);
             if (range.collapsed === true
-                && ((endNode.nodeType === ViperUtil.TEXT_NODE && range.endOffset === endNode.data.length || (range.endOffset === ViperUtil.rtrim(endNode.data).length))
+                && ((endNode.nodeType === ViperUtil.TEXT_NODE && (range.endOffset === endNode.data.length || range.endOffset === ViperUtil.rtrim(endNode.data).length))
                 || endNode.nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isTag(endNode, 'br'))
                 && (!endNode.nextSibling || ViperUtil.isTag(endNode.nextSibling, 'br') === true && !endNode.nextSibling.nextSibling)
                 && (range._getLastSelectableChild(firstBlock, true) === endNode
