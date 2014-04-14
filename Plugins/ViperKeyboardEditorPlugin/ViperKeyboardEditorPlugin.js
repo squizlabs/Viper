@@ -290,7 +290,7 @@ ViperKeyboardEditorPlugin.prototype = {
                     if (ViperUtil.inArray(firstBlockTagName, this._tagList) === true) {
                         handleEnter = true;
                     } else if (firstBlockTagName === 'li'
-                        && (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true)
+                        && (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true || ViperUtil.isBrowser('msie', '>=11') === true)
                         && ViperUtil.trim(ViperUtil.getNodeTextContent(firstBlock)) === ''
                     ) {
                         handleEnter = true;
