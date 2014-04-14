@@ -989,6 +989,7 @@ ViperCopyPastePlugin.prototype = {
         }
 
         this.viper.fireNodesChanged();
+        this.viper.fireSelectionChanged();
         this.viper.fireCallbacks('ViperCopyPastePlugin:paste');
 
     },
