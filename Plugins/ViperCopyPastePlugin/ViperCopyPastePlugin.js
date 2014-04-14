@@ -729,11 +729,7 @@ ViperCopyPastePlugin.prototype = {
         if (isViperContent === true) {
             // Content copied from Viper.
             html = this._cleanViperPaste(html);
-        } else if (pasteElement.firstChild
-            && (ViperUtil.isTag(pasteElement.firstChild, 'b') === true
-            || ViperUtil.isTag(pasteElement.firstChild.nextSibling, 'b') === true
-            || (pasteElement.firstChild.id && pasteElement.firstChild.id.indexOf('docs-internal-guid-') === 0))
-        ) {
+        } else if (this._isGoogleDocs(pasteElement) === true) {
             // Google Docs.
             html = this._cleanGoogleDocsPaste(html);
         } else {
@@ -1050,15 +1046,33 @@ ViperCopyPastePlugin.prototype = {
         var tmp = document.createElement('div');
         ViperUtil.setHtml(tmp, content);
 
-        var docParent = ViperUtil.find(tmp, '[id^="docs-internal-guid-"]');
-        if (docParent.length === 1) {
-            tmp = docParent[0];
+        var docParent = null;
+        if (ViperUtil.isBrowser('msie', '>=11') === true) {
+            docParent = tmp.firstChild;
+        } else if (ViperUtil.isBrowser('msie', '8') === true) {
+            docParent = tmp;
+        } else {
+            docParent = ViperUtil.find(tmp, '[id^="docs-internal-guid-"]');
+            if (docParent.length === 1) {
+                docParent = docParent[0];
+            }
+        }
+
+        tmp = docParent;
+
+        // Remove Google Doc id.
+        var docIdElem = ViperUtil.find(tmp, '[id^="docs-internal-guid-"]');
+        if (docIdElem.length > 0) {
+            ViperUtil.removeAttr(docIdElem, 'id');
         }
 
         // Remove the wrapping b tag.
-        ViperUtil.setHtml(tmp, ViperUtil.getHtml(ViperUtil.getTag('b', tmp)[0]));
-        content = ViperUtil.getHtml(tmp);
+        var bTag = ViperUtil.getTag('b', tmp);
+        if (bTag.length > 0) {
+            ViperUtil.setHtml(tmp, ViperUtil.getHtml(bTag[0]));
+        }
 
+        content = ViperUtil.getHtml(tmp);
         content = this._cleanStyleAttributes(content, 'google_docs');
 
         // Convert span tags with styles to the proper tags.
@@ -1116,6 +1130,31 @@ ViperCopyPastePlugin.prototype = {
         content = this._cleanStyleAttributes(content);
 
         return content;
+    },
+
+    _isGoogleDocs: function(elem)
+    {
+        if (elem.firstChild) {
+            if (ViperUtil.isTag(elem.firstChild, 'b') === true
+                || ViperUtil.isTag(elem.firstChild.nextSibling, 'b') === true
+                || (elem.firstChild.id && elem.firstChild.id.indexOf('docs-internal-guid-') === 0)
+            ) {
+                // Firefox, IE.
+                return true;
+            } else if (ViperUtil.isTag(elem.firstChild, 'meta') === true
+                && ViperUtil.isTag(elem.lastChild, 'b') === true
+                || (elem.lastChild.id && elem.lastChild.id.indexOf('docs-internal-guid-') === 0)
+            ) {
+                // Chrome.
+                return true;
+            } else if (ViperUtil.find(elem, '[id^="docs-internal-guid-"]').length === 1) {
+                // IE8.
+                return true;
+            }
+        }
+
+        return false;
+
     },
 
     _convertSpansToStyleTags: function(elem)
