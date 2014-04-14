@@ -217,14 +217,27 @@ ViperCopyPastePlugin.prototype = {
             var rangeClone = range.cloneRange();
 
             // Get the contents of the current selection and add Viper element so that it can be cleaned up in paste.
-            var selectedContent = range.getHTMLContents();
+            var selectedContent = '';
+            var selectedNode    = range.getNodeSelection();
+            if (selectedNode && selectedNode !== self.viper.getViperElement()) {
+                var surroundingParents = ViperUtil.getSurroundingParents(selectedNode);
+                if (surroundingParents.length > 0) {
+                    selectedNode = surroundingParents.pop();
+                }
+
+                var tmp = document.createElement('div');
+                tmp.appendChild(selectedNode.cloneNode(true));
+                selectedContent = ViperUtil.getHtml(tmp);
+            } else {
+                selectedContent = range.getHTMLContents()
+            }
 
             selectedContent = self._fixPartialSelection(selectedContent, range);
             selectedContent = '<b class="__viper_copy"> </b>' + selectedContent;
 
             // IE needs space before B tag otherwise it gets stripped out..
             if (ViperUtil.isBrowser('msie', '<11') === true) {
-                selectedContent = '  ' + selectedContent;
+                selectedContent = '&nbsp;' + selectedContent + '&nbsp;';
             } else if (ViperUtil.isBrowser('msie', '>=11') === true) {
                 selectedContent = '&nbsp;' + selectedContent;
             }
@@ -257,7 +270,7 @@ ViperCopyPastePlugin.prototype = {
                 tmp.appendChild(document.createTextNode(''));
                 range.setEnd(tmp.lastChild, 0);
             } else {
-                range.setEnd(lastChild, lastChild.data.length);
+                range.setEnd(lastChild, lastChild.data.length - 1);
             }
 
             // WORKING ON IE8
@@ -382,7 +395,7 @@ ViperCopyPastePlugin.prototype = {
 
     _fixPartialSelection: function(selectedContent, range)
     {
-        if (selectedContent.indexOf('<li>') === 0) {
+        if (selectedContent.toLowerCase().indexOf('<li>') === 0) {
             // Selection is inside a list.
             // Get list type from selection.
             var parents = ViperUtil.getParents(range.startContainer, 'ul,ol');
@@ -392,7 +405,7 @@ ViperCopyPastePlugin.prototype = {
             }
         } else {
             // Check for partial table selection.
-            var tableMatch = selectedContent.match(/^<(caption|tr|td|tbody|th|tfoot|thead)/);
+            var tableMatch = selectedContent.match(/^<(caption|tr|td|tbody|th|tfoot|thead)/i);
             if (tableMatch) {
                 // Add required wrapping table tags for the selected section.
                 switch (tableMatch[1]) {
@@ -686,6 +699,13 @@ ViperCopyPastePlugin.prototype = {
         // Check if the content was copied from Viper element.
         var isViperContent = false;
         var viperCopyElems = ViperUtil.getClass('__viper_copy', pasteElement);
+
+        if (viperCopyElems.length === 0 && ViperUtil.isBrowser('msie', '<11') === true) {
+            if (pasteElement.innerHTML.indexOf('<STRONG>&nbsp;</STRONG>') === 0) {
+                viperCopyElems = [pasteElement.firstChild];
+            }
+        }
+
         if (viperCopyElems.length === 1) {
             isViperContent = true;
             if (viperCopyElems[0].previousSibling) {
@@ -698,6 +718,9 @@ ViperCopyPastePlugin.prototype = {
         }
 
         var html = ViperUtil.getHtml(pasteElement);
+        if (isViperContent === true) {
+            html = html.replace(/&nbsp;$/, '');
+        }
 
         // Generic cleanup.
         html = this._cleanPaste(html);
