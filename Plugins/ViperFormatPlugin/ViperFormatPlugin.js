@@ -722,6 +722,11 @@ ViperFormatPlugin.prototype = {
                     } else {
                         tools.setButtonInactive('class');
                     }
+                } else {
+                    tools.getItem(prefix + 'class:input').setValue('');
+                    tools.getItem(prefix + 'anchor:input').setValue('');
+                    tools.setButtonInactive('anchor');
+                    tools.setButtonInactive('class');
                 }
             }//end if
 
