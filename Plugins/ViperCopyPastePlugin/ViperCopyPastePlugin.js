@@ -219,8 +219,9 @@ ViperCopyPastePlugin.prototype = {
             // Get the contents of the current selection and add Viper element so that it can be cleaned up in paste.
             var selectedContent = '';
             var selectedNode    = range.getNodeSelection();
-            if (selectedNode && selectedNode !== self.viper.getViperElement()) {
-                var surroundingParents = ViperUtil.getSurroundingParents(selectedNode);
+            var viperElem       = self.viper.getViperElement();
+            if (selectedNode && selectedNode !== viperElem) {
+                var surroundingParents = ViperUtil.getSurroundingParents(selectedNode, null, false, viperElem);
                 if (surroundingParents.length > 0) {
                     selectedNode = surroundingParents.pop();
                 }
