@@ -1038,6 +1038,8 @@ ViperCopyPastePlugin.prototype = {
 
     _cleanViperPaste: function(content)
     {
+        content = content.replace(/<(font)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>\s*/ig, '');
+        content = content.replace(/\s*<\/(font)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, '');
         return content;
 
     },
