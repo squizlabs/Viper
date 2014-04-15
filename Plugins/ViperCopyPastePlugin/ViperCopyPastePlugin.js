@@ -947,6 +947,7 @@ ViperCopyPastePlugin.prototype = {
 
             var changeid  = ViperChangeTracker.startBatchChange('textAdded');
             var prevChild = null;
+            var lastChild = null;
             while (fragment.lastChild) {
                 if (prevChild === fragment.lastChild) {
                     break;
@@ -985,6 +986,10 @@ ViperCopyPastePlugin.prototype = {
                     ViperChangeTracker.addNodeToChange(changeid, ctNode);
                     ViperUtil.insertAfter(prevBlock, ctNode);
                 }
+
+                if (lastChild === null) {
+                    lastChild = ctNode;
+                }
             }
 
             // Check that previous container is not empty.
@@ -998,6 +1003,15 @@ ViperCopyPastePlugin.prototype = {
                     }
 
                     ViperUtil.remove(prevBlock);
+                }
+            }
+
+            if (lastChild) {
+                // Move the caret to the end of the last pasted content.
+                var lastSelectable = range._getLastSelectableChild(lastChild);
+                if (lastSelectable) {
+                    this._tmpNode = lastSelectable;
+                    this._tmpNodeOffset = this._tmpNode.data.length;
                 }
             }
 
