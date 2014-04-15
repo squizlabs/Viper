@@ -28,6 +28,7 @@ class Viper_Tests_ViperCharMapPlugin_CharacterMapPluginUnitTest extends Abstract
 
         // Change to Latin char list.
         $this->sikuli->click($this->findImage('ViperCharMapPlugin-latinList', 'ul.VCMP-list li', 1));
+        sleep(1);
 
         // Insert char.
         $char = $this->findImage('ViperCharMapPlugin-symbolChar-3', 'table.VCMP-table.Viper-visible td', 9);
@@ -35,6 +36,7 @@ class Viper_Tests_ViperCharMapPlugin_CharacterMapPluginUnitTest extends Abstract
 
         // Change to Mathematics char list.
         $this->sikuli->click($this->findImage('ViperCharMapPlugin-mathList', 'ul.VCMP-list li', 2));
+        sleep(1);
 
         // Insert char.
         $char = $this->findImage('ViperCharMapPlugin-symbolChar-4', 'table.VCMP-table.Viper-visible td', 3);
@@ -42,6 +44,7 @@ class Viper_Tests_ViperCharMapPlugin_CharacterMapPluginUnitTest extends Abstract
 
         // Change to Mathematics char list.
         $this->sikuli->click($this->findImage('ViperCharMapPlugin-currList', 'ul.VCMP-list li', 3));
+        sleep(1);
 
         // Insert char.
         $char = $this->findImage('ViperCharMapPlugin-symbolChar-5', 'table.VCMP-table.Viper-visible td', 10);
