@@ -1419,11 +1419,8 @@ ViperKeyboardEditorPlugin.prototype = {
                 if (nodeSelection === this.viper.getViperElement()) {
                     var defaultTagName = this.viper.getDefaultBlockTag();
                     if (defaultTagName !== '') {
-                        var defTag = document.createElement(defaultTagName);
-                        ViperUtil.setHtml(defTag, '<br/>');
                         ViperUtil.setHtml(nodeSelection, '');
-                        nodeSelection.appendChild(defTag);
-                        range.setStart(defTag, 0);
+                        this.viper.initEditableElement();
                     } else {
                         ViperUtil.setHtml(nodeSelection, '<br />');
                     }
