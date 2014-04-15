@@ -1033,10 +1033,6 @@ ViperCopyPastePlugin.prototype = {
 
         this._updateSelection();
 
-        if (ViperUtil.isBrowser('msie') !== true) {
-            this.viper.cleanDOM();
-        }
-
         this.viper.fireNodesChanged();
         this.viper.fireSelectionChanged();
         this.viper.fireCallbacks('ViperCopyPastePlugin:paste');
