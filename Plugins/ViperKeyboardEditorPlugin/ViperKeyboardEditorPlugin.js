@@ -1277,6 +1277,9 @@ ViperKeyboardEditorPlugin.prototype = {
 
                     if (foundSib === true) {
                         break;
+                    } else if (ViperUtil.isTag(startNode, 'td') === true || ViperUtil.isTag(startNode, 'th') === true) {
+                        ViperUtil.preventDefault(e);
+                        return false;
                     }
 
                     startNode = startNode.parentNode;
@@ -1317,6 +1320,12 @@ ViperKeyboardEditorPlugin.prototype = {
             var currentParent  = ViperUtil.getFirstBlockParent(range.startContainer);
             var nextParent     = ViperUtil.getFirstBlockParent(nextSelectable);
             if (currentParent !== nextParent && this.viper.isOutOfBounds(nextSelectable) === false) {
+                if (ViperUtil.isTag(currentParent, 'td') === true || ViperUtil.isTag(currentParent, 'th') === true) {
+                    // At the end of a cell.. Do nothing.
+                    ViperUtil.preventDefault(e);
+                    return false;
+                }
+
                 while (nextParent.firstChild) {
                     currentParent.appendChild(nextParent.firstChild);
                 }
