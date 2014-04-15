@@ -364,6 +364,47 @@ ViperMozRange.prototype = {
             }
         }
 
+        if (viperElem && ViperUtil.isBrowser('msie', '11') === true) {
+            var parent = startContainer.parentNode;
+            var intree = false;
+            while (parent) {
+                if (parent === viperElem) {
+                    intree = true;
+                }
+
+                parent = parent.parentNode;
+            }
+
+            if (!parent) {
+                var start  = null;
+                var offset = 0;
+                if (this.rangeObj.startContainer.nodeType === ViperUtil.ELEMENT_NODE) {
+                    start  = this.rangeObj.startContainer.childNodes[this.rangeObj.startOffset];
+                    if (start.nodeType === ViperUtil.ELEMENT_NODE) {
+                        var firstChild = this._getFirstSelectableChild(start);
+                        if (!firstChild) {
+                            if (!start.firstChild) {
+                                ViperUtil.setHtml(start, '<br />');
+                            } else {
+                                ViperUtil.insertBefore(start, document.createElement('br'))
+                            }
+
+                            start = start.firstChild;
+                        } else {
+                            start = firstChild;
+                        }
+                    }
+                } else {
+                    start = this.rangeObj.startContainer;
+                }
+
+                this.setStart(start, offset);
+                this.collapse(true);
+                this._setCommonAncestorContainer();
+                return;
+            }
+        }
+
         this.setStart(startContainer, startOffset);
         this.collapse(true);
 

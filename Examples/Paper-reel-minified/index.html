@@ -18,6 +18,7 @@
                 var buttons = [['bold', 'italic', 'subscript', 'superscript', 'strikethrough', 'class'], 'removeFormat', ['justify', 'formats', 'headings'], ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], 'insertTable', 'image', 'hr', ['insertLink', 'removeLink', 'anchor'], 'insertCharacter', 'searchReplace', 'langTools', 'accessibility', 'sourceEditor'];
                 viperTest.getPluginManager().setPluginSettings('ViperToolbarPlugin', {buttons: buttons});
                 viperTest.getPluginManager().setPluginSettings('ViperInlineToolbarPlugin', {buttons: buttons});
+                viperTest.getPluginManager().setPluginSettings('ViperSourceViewPlugin', {jqueryURL: '../jquery.js'});
             });
         });
     </script>

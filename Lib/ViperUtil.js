@@ -664,7 +664,7 @@ var ViperUtil = {
      *
      * @return {array} Parent elements.
      */
-    getSurroundingParents: function(node, tagName, blockElementsOnly)
+    getSurroundingParents: function(node, tagName, blockElementsOnly, stopElem)
     {
         var parents = [];
         if (!node) {
@@ -673,6 +673,10 @@ var ViperUtil = {
 
         var parent  = node.parentNode;
         while (parent) {
+            if (stopElem && parent === stopElem) {
+                break;
+            }
+
             var c = parent.childNodes.length;
             for (var i = 0; i < c; i++) {
                 var child = parent.childNodes[i];
@@ -2179,6 +2183,45 @@ var ViperUtil = {
         }
 
         return mergedUrl;
+
+    },
+
+    /**
+     * Return key value pairs from the given query string.
+     */
+    queryString: function(url)
+    {
+        var result    = {};
+        var qStartIdx = url.search(/\?/);
+        if (qStartIdx === -1) {
+            return result;
+        } else {
+            var aStartIdx = url.search(/\#/);
+            if (aStartIdx === -1) {
+                var anchorPartAdj = 0;
+            } else {
+                var anchorPartAdj = (url.length - aStartIdx + 1);
+            }
+
+            // QryStr part is between ? and # in the URL.
+            var queryStr = url.substr((qStartIdx + 1), (url.length - qStartIdx - anchorPartAdj));
+            if (queryStr.length > 0) {
+                var pairs = queryStr.split('&');
+                var len   = pairs.length;
+                var pair  = [];
+                for (var i = 0; i < len; i++) {
+                    // Is it a valid key value pair?
+                    if (pairs[i].search('=') !== -1) {
+                        pair            = pairs[i].split('=');
+                        result[pair[0]] = pair[1];
+                    }
+                }
+
+                return result;
+            } else {
+                return result;
+            }
+        }//end if
 
     },
 
