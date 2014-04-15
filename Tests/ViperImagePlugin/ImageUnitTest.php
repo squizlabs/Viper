@@ -283,7 +283,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
 
         sleep(2);
         $this->findImage('ViperImagePlugin-loadError', '.Viper-textbox-error');
-
+        sleep(1);
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="http://www.squizlabs.com/html-codesniffer.png" alt="" /></p><p>sit amet <strong>%3%</strong></p>');
 
     }//end testInsertingImageWithIncorrectURL()
@@ -428,11 +428,17 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->clickTopToolbarButton('image', 'selected');
         $this->sikuli->click($this->findKeyword(3));
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /></p><p>sit amet <strong>%3%</strong></p>');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /></p><p>sit amet <strong>%3%</strong></p>');        
 
         $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
         $this->sikuli->keyDown('Key.TAB');
+
+        // use backspace to delete the content for IE and Firefox
+        for ($i = 1; $i <= 10; $i++) {
+            $this->sikuli->keyDown('Key.BACKSPACE');
+        }
+
         $this->type('Abcd');
         $this->sikuli->keyDown('Key.ENTER');
         $this->clickTopToolbarButton('image', 'selected');
@@ -678,6 +684,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->sikuli->click($this->findKeyword(1));
         $this->clickElement('img', 0);
 
+        sleep(1);
         $this->findImage('ImageHandle-sw', '.Viper-image-handle-sw');
         $this->findImage('ImageHandle-se', '.Viper-image-handle-se');
 
