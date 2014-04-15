@@ -111,7 +111,7 @@ ViperListPlugin.prototype = {
                     if (ViperUtil.isTag(startNode, 'p') === true
                         || ((startNode.nodeType === ViperUtil.TEXT_NODE || ViperUtil.isStubElement(startNode) === true) && ViperUtil.isTag(ViperUtil.getFirstBlockParent(startNode), 'p') === true)
                     ) {
-                        if (ViperUtil.getParents(startNode, 'td,th,blockquote').length === 0) {
+                        if (ViperUtil.getParents(startNode, 'td,th,blockquote', self.viper.getViperElement()).length === 0) {
                             self.convertRangeToList(range);
                             ViperUtil.preventDefault(e);
                             return false;
