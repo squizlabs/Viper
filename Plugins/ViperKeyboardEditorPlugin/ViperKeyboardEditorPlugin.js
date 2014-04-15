@@ -930,7 +930,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 if (currentParent !== prevParent && this.viper.isOutOfBounds(prevSelectable) === false) {
                     // Check if there are any other elements in between.
                     var elemsBetween = ViperUtil.getElementsBetween(prevParent, currentParent);
-                    if (elemsBetween.length > 0) {
+                    if (elemsBetween.length > 0 && ViperUtil.isBlank(ViperUtil.trim(elemsBetween[0].data)) === false) {
                         // There is at least one non block element in between.
                         // Remove it.
                         ViperUtil.remove(elemsBetween[(elemsBetween.length - 1)]);
