@@ -4436,7 +4436,7 @@ Viper.prototype = {
                 // event.
                 setTimeout(function() {
                     self.fireSelectionChanged(self.adjustRange(), true);
-                }, 500);
+                }, 300);
             } else {
                 self.fireSelectionChanged(range, true);
             }

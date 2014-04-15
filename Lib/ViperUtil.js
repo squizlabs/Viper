@@ -664,7 +664,7 @@ var ViperUtil = {
      *
      * @return {array} Parent elements.
      */
-    getSurroundingParents: function(node, tagName, blockElementsOnly)
+    getSurroundingParents: function(node, tagName, blockElementsOnly, stopElem)
     {
         var parents = [];
         if (!node) {
@@ -673,6 +673,10 @@ var ViperUtil = {
 
         var parent  = node.parentNode;
         while (parent) {
+            if (stopElem && parent === stopElem) {
+                break;
+            }
+
             var c = parent.childNodes.length;
             for (var i = 0; i < c; i++) {
                 var child = parent.childNodes[i];

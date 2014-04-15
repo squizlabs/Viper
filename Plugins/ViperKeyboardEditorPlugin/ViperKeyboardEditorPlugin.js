@@ -246,7 +246,7 @@ ViperKeyboardEditorPlugin.prototype = {
 
             var firstBlock = ViperUtil.getFirstBlockParent(endNode);
             if (range.collapsed === true
-                && ((endNode.nodeType === ViperUtil.TEXT_NODE && range.endOffset === endNode.data.length || (range.endOffset === ViperUtil.rtrim(endNode.data).length))
+                && ((endNode.nodeType === ViperUtil.TEXT_NODE && (range.endOffset === endNode.data.length || range.endOffset === ViperUtil.rtrim(endNode.data).length))
                 || endNode.nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isTag(endNode, 'br'))
                 && (!endNode.nextSibling || ViperUtil.isTag(endNode.nextSibling, 'br') === true && !endNode.nextSibling.nextSibling)
                 && (range._getLastSelectableChild(firstBlock, true) === endNode
@@ -271,7 +271,7 @@ ViperKeyboardEditorPlugin.prototype = {
                     if (ViperUtil.inArray(firstBlockTagName, this._tagList) === true) {
                         handleEnter = true;
                     } else if (firstBlockTagName === 'li'
-                        && (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true)
+                        && (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true || ViperUtil.isBrowser('msie', '>=11') === true)
                         && ViperUtil.trim(ViperUtil.getNodeTextContent(firstBlock)) === ''
                     ) {
                         handleEnter = true;
@@ -289,7 +289,7 @@ ViperKeyboardEditorPlugin.prototype = {
                         }
 
                         var content = '<br />';
-                        if (ViperUtil.isBrowser('msie') === true) {
+                        if (ViperUtil.isBrowser('msie', '<11') === true) {
                             content = '&nbsp;';
                         }
 
@@ -362,7 +362,7 @@ ViperKeyboardEditorPlugin.prototype = {
                         }
 
                         if (p.firstChild.nodeType === ViperUtil.TEXT_NODE) {
-                            if (ViperUtil.isBrowser('msie') === true
+                            if (ViperUtil.isBrowser('msie', '<11') === true
                                 && p.firstChild.data === String.fromCharCode(160)
                             ) {
                                 range.setEnd(p.firstChild, 1);
@@ -647,13 +647,13 @@ ViperKeyboardEditorPlugin.prototype = {
                 range.setStart(startNode, range.startOffset);
                 range.collapse(true);
                 ViperSelection.addRange(range);
-            } else if (ViperUtil.isBrowser('msie')
+            } else if ((ViperUtil.isBrowser('msie') === true || ViperUtil.isBrowser('firefox') === true)
                 && range.startOffset === 0
                 && range.collapsed === true
                 && startNode.nodeType === ViperUtil.TEXT_NODE
                 && startNode === range._getFirstSelectableChild(ViperUtil.getFirstBlockParent(startNode))
             ) {
-                // IE11 seems to have an issue with creating a new paragraph before the caret. If the caret is at the
+                // IE11 & Firefox (only on 2nd enter) seems to have an issue with creating a new paragraph before the caret. If the caret is at the
                 // start of a paragraph and enter is pressed a new paragraph is added before the original P tag.
                 // However, in IE11, the innerHTML is '<br>' but firstChild of the paragraph is null..
                 // We handle the creation here to prevent issues with toolbar button statuses etc.
@@ -911,7 +911,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 if (currentParent !== prevParent && this.viper.isOutOfBounds(prevSelectable) === false) {
                     // Check if there are any other elements in between.
                     var elemsBetween = ViperUtil.getElementsBetween(prevParent, currentParent);
-                    if (elemsBetween.length > 0) {
+                    if (elemsBetween.length > 0 && ViperUtil.isBlank(ViperUtil.trim(elemsBetween[0].data)) === false) {
                         // There is at least one non block element in between.
                         // Remove it.
                         ViperUtil.remove(elemsBetween[(elemsBetween.length - 1)]);
@@ -1258,6 +1258,9 @@ ViperKeyboardEditorPlugin.prototype = {
 
                     if (foundSib === true) {
                         break;
+                    } else if (ViperUtil.isTag(startNode, 'td') === true || ViperUtil.isTag(startNode, 'th') === true) {
+                        ViperUtil.preventDefault(e);
+                        return false;
                     }
 
                     startNode = startNode.parentNode;
@@ -1298,6 +1301,12 @@ ViperKeyboardEditorPlugin.prototype = {
             var currentParent  = ViperUtil.getFirstBlockParent(range.startContainer);
             var nextParent     = ViperUtil.getFirstBlockParent(nextSelectable);
             if (currentParent !== nextParent && this.viper.isOutOfBounds(nextSelectable) === false) {
+                if (ViperUtil.isTag(currentParent, 'td') === true || ViperUtil.isTag(currentParent, 'th') === true) {
+                    // At the end of a cell.. Do nothing.
+                    ViperUtil.preventDefault(e);
+                    return false;
+                }
+
                 while (nextParent.firstChild) {
                     currentParent.appendChild(nextParent.firstChild);
                 }
@@ -1400,11 +1409,8 @@ ViperKeyboardEditorPlugin.prototype = {
                 if (nodeSelection === this.viper.getViperElement()) {
                     var defaultTagName = this.viper.getDefaultBlockTag();
                     if (defaultTagName !== '') {
-                        var defTag = document.createElement(defaultTagName);
-                        ViperUtil.setHtml(defTag, '<br/>');
                         ViperUtil.setHtml(nodeSelection, '');
-                        nodeSelection.appendChild(defTag);
-                        range.setStart(defTag, 0);
+                        this.viper.initEditableElement();
                     } else {
                         ViperUtil.setHtml(nodeSelection, '<br />');
                     }

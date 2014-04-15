@@ -845,11 +845,25 @@ ViperDOMRange.prototype = {
             && range.startOffset === startNode.data.length
             && range.collapsed === true
         ) {
+            // Image Selection checks for IE.
             if (ViperUtil.isBrowser('msie', '<11') === true
-                && startNode.previousSibling
+                && startNode.nextSibling
+                && ViperUtil.isTag(startNode.nextSibling, 'img') === true
+                && endNode.previousSibling
                 && ViperUtil.isTag(startNode.previousSibling, 'img') === true
+                && range.endOffset === 0
+                && range.startOffset === 0
             ) {
-                this._nodeSel.node = startNode.previousSibling;
+                this._nodeSel.node = startNode.nextSibling;
+                return this._nodeSel.node;
+            } else if (ViperUtil.isBrowser('msie', '<11') === true
+                && startNode.nextSibling
+                && ViperUtil.isTag(startNode.nextSibling, 'img') === true
+                && endNode === startNode
+                && range.endOffset === 0
+                && range.startOffset === 0
+            ) {
+                this._nodeSel.node = startNode.nextSibling;
                 return this._nodeSel.node;
             }
 

@@ -1331,8 +1331,26 @@ ViperCoreStylesPlugin.prototype = {
         this.viper.ViperTools.setButtonInactive('vitpBold');
         this.viper.ViperTools.setButtonInactive('vitpItalic');
 
+        var selectedNode = data.range.getNodeSelection();
+
         // List of tags where the bold and italic icons will not be shown if they are part or inside of the selection.
-        var ignoredTags = ['a', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+        var ignoredTags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+        if (!selectedNode) {
+            ignoredTags.push('a');
+        } else {
+            switch (ViperUtil.getTagName(selectedNode)) {
+                case 'a':
+                case 'strong':
+                case 'em':
+                    // For these cases do not add the A tag.
+                break;
+
+                default:
+                    ignoredTags.push('a');
+                break;
+            }
+        }
+
         var activeStates = {};
         for (var i = 0; i < data.lineage.length; i++) {
             var tagName = ViperUtil.getTagName(data.lineage[i]);
