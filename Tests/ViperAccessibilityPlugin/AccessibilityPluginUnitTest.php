@@ -57,6 +57,8 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
         $this->sikuli->click($this->findKeyword(1));
         $this->clickTopToolbarButton('accessAudit');
 
+        sleep(2);
+
         // View Report.
         $viewReportButton = $this->findImage('HTMLCSViewReport', '#HTMLCS-settings-view-report');
         $this->sikuli->click($viewReportButton);
@@ -93,6 +95,8 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
 
         $this->sikuli->click($this->findKeyword(1));
         $this->clickTopToolbarButton('accessAudit');
+
+        sleep(2);
 
         // View Report.
         $viewReportButton = $this->findImage('HTMLCSViewReport', '#HTMLCS-settings-view-report');
