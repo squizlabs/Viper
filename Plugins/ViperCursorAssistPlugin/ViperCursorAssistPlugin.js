@@ -23,7 +23,7 @@ ViperCursorAssistPlugin.prototype = {
     {
         var self = this;
         var t    = null;
-        var validElems      = 'table,hr,img,object,ul,ol,iframe';
+        var validElems      = 'table,hr,img,object,ul,ol,iframe,canvas,audio,embed,figure';
         var validElemsArray = validElems.split(',');
         var prevElement = null;
         var prevPos     = null;
