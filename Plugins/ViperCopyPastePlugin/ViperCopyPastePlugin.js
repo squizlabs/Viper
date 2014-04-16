@@ -270,7 +270,7 @@ ViperCopyPastePlugin.prototype = {
                 // Last child could be an image etc.
                 tmp.appendChild(document.createTextNode(''));
                 range.setEnd(tmp.lastChild, 0);
-            } else if (ViperUtil.isBrowser('msie') === true) {
+            } else if (ViperUtil.isBrowser('msie', '<11') === true) {
                 range.setEnd(lastChild, lastChild.data.length - 1);
             } else {
                 range.setEnd(lastChild, lastChild.data.length);

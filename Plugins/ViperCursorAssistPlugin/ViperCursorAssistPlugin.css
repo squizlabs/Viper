@@ -20,6 +20,13 @@
     font-size: 11px;
     font-weight: bold;
     font-family: Arial, sans-serif;
+
+    -webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
 }
 
 .ViperCursorAssistPlugin:before,

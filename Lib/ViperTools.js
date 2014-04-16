@@ -440,6 +440,17 @@ ViperTools.prototype = {
             });
         }
 
+        // IE paste fix.
+        input.onpaste = function(e) {
+            if (ViperUtil.isBrowser('msie') === true) {
+                // Because Viper does the copy/cut in HTML format IE failed to paste it in to textboxes. So we prevent
+                // the default action and set the value of the input field using the clipboardData.
+                input.value = window.clipboardData.getData("Text");
+                return false;
+            }
+
+        };
+
         var self = this;
         ViperUtil.addEvent(input, 'focus', function(e) {
             ViperUtil.addClass(textBox, 'Viper-focused');

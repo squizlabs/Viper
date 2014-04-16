@@ -23,7 +23,7 @@ ViperCursorAssistPlugin.prototype = {
     {
         var self = this;
         var t    = null;
-        var validElems      = 'table,hr,img,object,ul,ol,iframe';
+        var validElems      = 'table,hr,img,object,ul,ol,iframe,canvas,audio,embed,figure';
         var validElemsArray = validElems.split(',');
         var prevElement = null;
         var prevPos     = null;
@@ -138,35 +138,52 @@ ViperCursorAssistPlugin.prototype = {
                         return;
                     }
 
-                    if (!line) {
-                        line    = document.createElement('div');
-                        line.id = self.viper.getId() + '-cursorAssist';
-                        ViperUtil.addClass(line, 'ViperCursorAssistPlugin');
-                        ViperUtil.setHtml(line, '<span class="ViperCursorAssistPlugin-cursorText">Insert</span><span class="ViperCursorAssistPlugin-cursorLine"></span>');
+                    if (line) {
+                        ViperUtil.remove(line);
+                    }
 
-                        ViperUtil.addEvent(line, 'click', function() {
-                            ViperUtil.remove(line);
+                    line    = document.createElement('div');
+                    line.id = self.viper.getId() + '-cursorAssist';
+                    ViperUtil.addClass(line, 'ViperCursorAssistPlugin');
+                    ViperUtil.setHtml(line, '<span class="ViperCursorAssistPlugin-cursorText">Insert</span><span class="ViperCursorAssistPlugin-cursorLine"></span>');
 
-                            self.viper.focus();
+                    ViperUtil.addEvent(line, 'mousedown', function() {
+                        ViperUtil.remove(line);
 
-                            var p = document.createElement('p');
+                        var p = document.createElement('p');
+
+                        if (ViperUtil.isBrowser('msie', '<11') === true) {
+                            ViperUtil.setHtml(p, '&nbsp;');
+                        } else {
                             ViperUtil.setHtml(p, '<br/>');
+                        }
 
-                            if (sibling === 'previousSibling') {
-                                ViperUtil.insertBefore(hoverElem, p);
-                            } else {
-                                ViperUtil.insertAfter(hoverElem, p);
+                        if (sibling === 'previousSibling') {
+                            ViperUtil.insertBefore(hoverElem, p);
+                        } else {
+                            ViperUtil.insertAfter(hoverElem, p);
+                        }
+
+                        setTimeout(function() {
+                            if (ViperUtil.isBrowser('msie') === false) {
+                                self.viper.focus();
                             }
 
                             var range = self.viper.getCurrentRange();
-                            range.setStart(p.firstChild, 0);
-                            range.collapse(true);
+                            var offset = 0;
+                            if (ViperUtil.isBrowser('msie', '<11') === true) {
+                                offset = 1;
+                            }
+
+                            range.setEnd(p.firstChild, offset);
+                            range.setStart(p.firstChild, offset);
+                            range.collapse(false);
                             ViperSelection.addRange(range);
 
                             self.viper.fireNodesChanged();
                             self.viper.fireSelectionChanged(null, true);
-                        });
-                    }//end if
+                        }, 10)
+                    });
 
                     ViperUtil.removeClass(line, 'insertBetween');
                     if (sibling === 'previousSibling') {
@@ -199,7 +216,10 @@ ViperCursorAssistPlugin.prototype = {
 
     isPluginElement: function(elem)
     {
-        if (elem.id === this.viper.getId() + '-cursorAssist') {
+        var viperid = this.viper.getId();
+        if (elem.id === viperid + '-cursorAssist'
+            || (elem.parentNode && elem.parentNode.id === viperid + '-cursorAssist')
+        ) {
             return true;
         }
 
