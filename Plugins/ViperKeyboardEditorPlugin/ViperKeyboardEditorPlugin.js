@@ -1223,6 +1223,7 @@ ViperKeyboardEditorPlugin.prototype = {
             return;
         }
 
+        // Range collapsed.
         var startNode = range.getStartNode();
         if (!startNode) {
             if (!range.startContainer
@@ -1265,7 +1266,26 @@ ViperKeyboardEditorPlugin.prototype = {
 
                     startNode = startNode.parentNode;
                 }//end while
+            } else if (range.startContainer !== startNode && range.startOffset === 0) {
+                range.setStart(startNode, 0);
             }//end if
+        } else {
+            // Element Node.
+            if (ViperUtil.isStubElement(startNode) === false) {
+                var textNode = range._getFirstSelectableChild(startNode);
+                if (textNode) {
+                    range.setStart(textNode, 0);
+                }
+            } else if (ViperUtil.isTag(startNode, 'br') === true
+                && startNode.parentNode
+                && startNode.parentNode.childNodes.length === 1
+                && ViperUtil.isBrowser('firefox') === true
+            ) {
+                var tmpNode = document.createTextNode('');
+                startNode.parentNode.appendChild(tmpNode);
+                ViperUtil.remove(startNode);
+                range.setStart(tmpNode);
+            }
         }//end if
 
         if (ViperUtil.isTag(startNode, 'br') === true
