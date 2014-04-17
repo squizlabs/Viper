@@ -1315,7 +1315,7 @@ Viper.prototype = {
             if (range.startContainer === range.endContainer
                 && range.startOffset === range.endOffset
             ) {
-                if (range.startContainer.nodeType !== ViperUtil.TEXT_NODE) {
+                if ((range.startContainer.nodeType !== ViperUtil.TEXT_NODE) && (range.startOffset < range.startContainer.childNodes.length)) {
                     elem = range.startContainer.childNodes[range.startOffset];
                 } else {
                     elem = range.startContainer;
