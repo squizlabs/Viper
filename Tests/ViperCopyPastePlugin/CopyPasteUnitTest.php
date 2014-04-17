@@ -45,7 +45,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->paste(TRUE);
 
         sleep(1);
-        $this->assertHTMLMatch('<p>%1%%1%</p>');
+        $this->assertHTMLMatch('<p>%1%</p><p>%1%</p>');
 
     }//end testRightClickPaste()
 
