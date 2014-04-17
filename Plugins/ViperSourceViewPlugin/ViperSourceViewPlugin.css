@@ -113,6 +113,29 @@
     padding-left: 0 !important;
 }
 
+.VSVP-source .ace_search {
+    border-bottom-color: #2b2b2b;
+    border-left-color: #2b2b2b;
+    background-color: #919097;
+}
+
+.VSVP-source .ace_search_form,
+.VSVP-source .ace_replace_form {
+    border-color: #767676;
+}
+
+.VSVP-source .ace_search_options .ace_button {
+    border-color: #606060;
+    border-radius: 2px;
+    padding: 0 3px;
+}
+
+.VSVP-source .ace_search_options .ace_button.checked {
+    background-color: #3784EE;
+    color: #FFF;
+    border-color: #1760CA;
+}
+
 /* Source Scroller for webkit */
 
 .Viper-popup-content .ace_editor .ace_sb::-webkit-scrollbar {
