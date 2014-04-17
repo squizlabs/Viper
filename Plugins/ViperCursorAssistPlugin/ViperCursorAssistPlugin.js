@@ -60,7 +60,23 @@ ViperCursorAssistPlugin.prototype = {
 
                             return;
                         } else {
-                            hoverElem = elems[0];
+                            hoverElem = elems.shift();
+
+                            if (elems.length > 0
+                                && (ViperUtil.isTag(hoverElem, 'ul') === true || ViperUtil.isTag(hoverElem, 'ol') === true)
+                            ) {
+                                // Do not show the line if this is a nested list.
+                                if (ViperUtil.getParents(hoverElem, 'ul,ol', self.viper.getViperElement()).length > 0) {
+                                    if (line) {
+                                        ViperUtil.remove(line);
+                                    }
+
+                                    prevElement = null;
+                                    prevPos     = null;
+
+                                    return;
+                                }
+                            }
                         }
                     }
 
