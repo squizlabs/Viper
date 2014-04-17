@@ -1218,6 +1218,18 @@ ViperKeyboardEditorPlugin.prototype = {
                 return false;
             } else if (this._isStartToEndOfMultiContainerSelection(range) === true) {
                 return this._removeContentFromStartToEndOfContainers(range);
+            } else if (ViperUtil.isBrowser('firefox') === true) {
+                var nodeSelection = range.getNodeSelection();
+                if (nodeSelection && ViperUtil.isBlockElement(nodeSelection) === true) {
+                    // When a block element is selected and removed in Firefox it leaves the content as <p>NULL CHAR</p>.
+                    // Handle the deletion here.
+                    this.viper.moveCaretAway(nodeSelection);
+                    ViperUtil.remove(nodeSelection);
+                    ViperUtil.preventDefault(e);
+                    this.viper.fireNodesChanged();
+                    this.viper.fireSelectionChanged();
+                    return false;
+                }
             }
 
             return;
