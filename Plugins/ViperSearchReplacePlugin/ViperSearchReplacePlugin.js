@@ -248,7 +248,12 @@ ViperSearchReplacePlugin.prototype = {
             this._finding = true;
             var found = viperRange.rangeObj.findText(text);
             if (testOnly !== true && found === true) {
-                viperRange.rangeObj.select();
+                try {
+                    viperRange.rangeObj.select();
+                } catch (e) {
+                    return false;
+                }
+
                 ViperSelection.addRange(this.viper.getCurrentRange());
                 this.viper.fireSelectionChanged();
                 setTimeout(function() {

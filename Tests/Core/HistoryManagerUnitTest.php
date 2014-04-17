@@ -282,7 +282,7 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.CMD + a');
         $this->sikuli->keyDown('Key.DELETE');
         sleep(2);
-        $this->assertHTMLMatch('');
+        $this->assertHTMLMatch('<p></p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
 
@@ -292,7 +292,7 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
 
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('');
+        $this->assertHTMLMatch('<p></p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
 
@@ -316,7 +316,7 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.CMD + a');
         $this->sikuli->keyDown('Key.DELETE');
         sleep(1);
-        $this->assertHTMLMatch('');
+        $this->assertHTMLMatch('<p></p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
 
@@ -326,7 +326,7 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
 
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        $this->assertHTMLMatch('');
+        $this->assertHTMLMatch('<p></p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
 

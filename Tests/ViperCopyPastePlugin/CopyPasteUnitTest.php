@@ -25,7 +25,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->sikuli->keyDown('Key.CMD + v');
         $this->type('C');
 
-        $this->assertHTMLMatch('<p>%1%A%1%B%1%C</p>');
+        $this->assertHTMLMatch('<p>%1%A</p><p>%1%B</p><p>%1%C</p>');
 
     }//end testSimpleTextCopyPaste()
 
@@ -45,7 +45,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->paste(TRUE);
 
         sleep(1);
-        $this->assertHTMLMatch('<p>%1%%1%</p>');
+        $this->assertHTMLMatch('<p>%1%</p><p>%1%</p>');
 
     }//end testRightClickPaste()
 
@@ -71,7 +71,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->type('C');
         sleep(1);
 
-        $this->assertHTMLMatch('<p><strong>%1%A%1%B%1%C</strong></p>');
+        $this->assertHTMLMatch('<p><strong>XAXA</strong></p><p><strong>XAXB</strong></p><p><strong>XAXC</strong></p>');
 
     }//end testBoldTextCopyPaste()
 
@@ -97,7 +97,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->type('C');
         sleep(1);
 
-        $this->assertHTMLMatch('<p><em>%1%A%1%B%1%C</em></p>');
+        $this->assertHTMLMatch('<p><em>XAXA</em></p><p><em>XAXB</em></p><p><em>XAXC</em></p>');
 
     }//end testItalicTextCopyPaste()
 

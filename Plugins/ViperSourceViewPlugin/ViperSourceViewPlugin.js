@@ -404,7 +404,7 @@ ViperSourceViewPlugin.prototype = {
     initEditorEvents: function(editor)
     {
         var self = this;
-        editor.getSession().addEventListener("tokenizerUpdate", function() {
+        editor.getSession().addEventListener("change", function() {
             if (self._ignoreUpdate === true) {
                 self._ignoreUpdate = false;
                 return;

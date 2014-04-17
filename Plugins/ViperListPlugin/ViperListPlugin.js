@@ -111,7 +111,7 @@ ViperListPlugin.prototype = {
                     if (ViperUtil.isTag(startNode, 'p') === true
                         || ((startNode.nodeType === ViperUtil.TEXT_NODE || ViperUtil.isStubElement(startNode) === true) && ViperUtil.isTag(ViperUtil.getFirstBlockParent(startNode), 'p') === true)
                     ) {
-                        if (ViperUtil.getParents(startNode, 'td,th,blockquote').length === 0) {
+                        if (ViperUtil.getParents(startNode, 'td,th,blockquote', self.viper.getViperElement()).length === 0) {
                             self.convertRangeToList(range);
                             ViperUtil.preventDefault(e);
                             return false;
@@ -2215,30 +2215,7 @@ ViperListPlugin.prototype = {
 
                 return false;
             }//end if
-        } else if (this._isKeyword() === true) {
-            // The content is a keyword insert empty list element after this one.
-            var newLi = li.cloneNode(false);
-            ViperUtil.setHtml(newLi, '&nbsp;');
-            ViperUtil.insertAfter(li, newLi);
-            var range = this.viper.getCurrentRange();
-            range.setStart(newLi.firstChild, 0);
-            range.collapse(true);
-            return false;
         }//end if
-
-        return true;
-
-    },
-
-    _isKeyword: function()
-    {
-        var keywordPlugin = this.viper.ViperPluginManager.getPlugin('ViperKeywordPlugin');
-        if (keywordPlugin) {
-            var range         = this.viper.getCurrentRange();
-            if (keywordPlugin._isKeyword(range.startContainer) === false && keywordPlugin._isKeyword(range.startContainer) === false) {
-                return false;
-            }
-        }
 
         return true;
 

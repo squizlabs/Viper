@@ -1072,6 +1072,8 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                                     $vals[0][$valIndex] .= ';';
                                 }
 
+                                // Remove the space between colon and style value.
+                                $vals[0][$valIndex] = str_replace(': ', ':', $vals[0][$valIndex]);
                                 $match .= $vals[0][$valIndex].' ';
                             }
 

@@ -959,7 +959,7 @@ Viper.prototype = {
     _useDefaultPlugins: function()
     {
         // Default plugins (all Viper plugins).
-        this.ViperPluginManager.setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin']);
+        this.ViperPluginManager.setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperCursorAssistPlugin', 'ViperTrackChangesPlugin']);
 
         // Default button ordering.
         var buttons = [['bold', 'italic', 'subscript', 'superscript', 'strikethrough', 'class'], 'removeFormat', ['justify', 'formats', 'headings'], ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], 'insertTable', 'image', 'hr', ['insertLink', 'removeLink', 'anchor'], 'insertCharacter', 'searchReplace', 'langTools', 'accessibility', 'sourceEditor'];
@@ -1297,6 +1297,56 @@ Viper.prototype = {
 
     },
 
+
+    /**
+     * Returns the element at the specified coords.
+     *
+     * @param {integer} x The x coord.
+     * @param {integer} y The y coord.
+     *
+     * @return {DOMNode}
+     */
+    getElementAtCoords: function(x, y)
+    {
+        var elem = null;
+        if (document.caretRangeFromPoint) {
+            // Webkit.
+            var range = document.caretRangeFromPoint(x, y);
+            if (range.startContainer === range.endContainer
+                && range.startOffset === range.endOffset
+            ) {
+                if (range.startContainer.nodeType !== ViperUtil.TEXT_NODE) {
+                    elem = range.startContainer.childNodes[range.startOffset];
+                } else {
+                    elem = range.startContainer;
+                }
+            }
+        } else if (document.caretPositionFromPoint) {
+            // Firefox.
+            var range = document.caretPositionFromPoint(x, y);
+            if (ViperUtil.isBlockElement(range.offsetNode) === true) {
+                var offset = range.offset;
+                if (offset >= range.offsetNode.childNodes.length) {
+                    offset = (range.offsetNode.childNodes.length - 1);
+                }
+
+                elem = range.offsetNode.childNodes[offset];
+            } else {
+                elem = range.offsetNode;
+            }
+        } else if (document.body.createTextRange) {
+            // IE.
+            range = document.body.createTextRange();
+            try {
+                range.moveToPoint(x, y);
+            } catch (e) {}
+
+            elem = range.parentElement();
+        }
+
+        return elem;
+
+    },
 
     getDocumentOffset: function()
     {
@@ -4386,7 +4436,7 @@ Viper.prototype = {
                 // event.
                 setTimeout(function() {
                     self.fireSelectionChanged(self.adjustRange(), true);
-                }, 500);
+                }, 300);
             } else {
                 self.fireSelectionChanged(range, true);
             }
