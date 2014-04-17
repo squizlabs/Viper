@@ -278,6 +278,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
 
         $this->clickTopToolbarButton('image');
         $this->type('http://www.squizlabs.com/html-codesniffer.png');
+        sleep(2);
         $this->clickField('Image is decorative');
         $this->sikuli->keyDown('Key.ENTER');
 
@@ -428,7 +429,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->clickTopToolbarButton('image', 'selected');
         $this->sikuli->click($this->findKeyword(3));
 
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /></p><p>sit amet <strong>%3%</strong></p>');        
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%</p><p><img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="Alt tag" /></p><p>sit amet <strong>%3%</strong></p>');
 
         $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
@@ -487,7 +488,7 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
             $this->sikuli->keyDown('Key.BACKSPACE');
         }
 
-        
+
         $this->type('Abcd');
         $this->sikuli->keyDown('Key.ENTER');
         $this->clickTopToolbarButton('image', 'selected');
