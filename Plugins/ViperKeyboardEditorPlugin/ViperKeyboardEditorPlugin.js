@@ -1103,6 +1103,8 @@ ViperKeyboardEditorPlugin.prototype = {
 
                 ViperUtil.remove(nodeSelection);
                 ViperSelection.addRange(range);
+                this.viper.fireNodesChanged();
+                this.viper.fireSelectionChanged();
                 return false;
             }
         }//end if
