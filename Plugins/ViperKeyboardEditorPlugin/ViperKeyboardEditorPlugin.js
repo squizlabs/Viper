@@ -1859,6 +1859,11 @@ ViperKeyboardEditorPlugin.prototype = {
 
     _isStartToEndOfMultiContainerSelection: function(range)
     {
+        var nodeSelection = range.getNodeSelection();
+        if (nodeSelection) {
+            return false;
+        }
+
         if (range.startOffset === 0
             && range.collapsed === false
             && ViperUtil.isBrowser('msie') !== true
@@ -1888,6 +1893,12 @@ ViperKeyboardEditorPlugin.prototype = {
         var startParent     = ViperUtil.getFirstBlockParent(range.startContainer);
         var endParent       = ViperUtil.getFirstBlockParent(range.endContainer);
         var defaultTagName  = this.viper.getDefaultBlockTag();
+        var common          = ViperUtil.getCommonAncestor(startParent, endParent);
+
+        if (common && (ViperUtil.isTag(common, 'ul') === true || ViperUtil.isTag(common, 'ol') === true)) {
+            // Multiple list items selected from the same list.
+            defaultTagName = 'li';
+        }
 
         if (defaultTagName !== '') {
             var p = document.createElement(defaultTagName);
@@ -1896,6 +1907,14 @@ ViperKeyboardEditorPlugin.prototype = {
             ViperUtil.remove(ViperUtil.getElementsBetween(startParent, endParent));
             ViperUtil.remove(startParent);
             ViperUtil.remove(endParent);
+
+            // If the new P tag is at the end of a UL/OL element move it after.
+            if ((ViperUtil.isTag(p.parentNode, 'ul') === true || ViperUtil.isTag(p.parentNode, 'ol') === true)
+                && !p.nextSibling
+            ) {
+                ViperUtil.insertAfter(p.parentNode, p);
+            }
+
             range.setStart(p, 0);
             range.collapse(true);
         } else {
