@@ -1103,6 +1103,8 @@ ViperKeyboardEditorPlugin.prototype = {
 
                 ViperUtil.remove(nodeSelection);
                 ViperSelection.addRange(range);
+                this.viper.fireNodesChanged();
+                this.viper.fireSelectionChanged();
                 return false;
             }
         }//end if
@@ -1218,6 +1220,18 @@ ViperKeyboardEditorPlugin.prototype = {
                 return false;
             } else if (this._isStartToEndOfMultiContainerSelection(range) === true) {
                 return this._removeContentFromStartToEndOfContainers(range);
+            } else if (ViperUtil.isBrowser('firefox') === true) {
+                var nodeSelection = range.getNodeSelection();
+                if (nodeSelection && ViperUtil.isBlockElement(nodeSelection) === true && ViperUtil.isStubElement(nodeSelection) === false) {
+                    // When a block element is selected and removed in Firefox it leaves the content as <p>NULL CHAR</p>.
+                    // Handle the deletion here.
+                    this.viper.moveCaretAway(nodeSelection);
+                    ViperUtil.remove(nodeSelection);
+                    ViperUtil.preventDefault(e);
+                    this.viper.fireNodesChanged();
+                    this.viper.fireSelectionChanged();
+                    return false;
+                }
             }
 
             return;
@@ -1847,6 +1861,11 @@ ViperKeyboardEditorPlugin.prototype = {
 
     _isStartToEndOfMultiContainerSelection: function(range)
     {
+        var nodeSelection = range.getNodeSelection();
+        if (nodeSelection) {
+            return false;
+        }
+
         if (range.startOffset === 0
             && range.collapsed === false
             && ViperUtil.isBrowser('msie') !== true
@@ -1876,6 +1895,12 @@ ViperKeyboardEditorPlugin.prototype = {
         var startParent     = ViperUtil.getFirstBlockParent(range.startContainer);
         var endParent       = ViperUtil.getFirstBlockParent(range.endContainer);
         var defaultTagName  = this.viper.getDefaultBlockTag();
+        var common          = ViperUtil.getCommonAncestor(startParent, endParent);
+
+        if (common && (ViperUtil.isTag(common, 'ul') === true || ViperUtil.isTag(common, 'ol') === true)) {
+            // Multiple list items selected from the same list.
+            defaultTagName = 'li';
+        }
 
         if (defaultTagName !== '') {
             var p = document.createElement(defaultTagName);
@@ -1884,6 +1909,14 @@ ViperKeyboardEditorPlugin.prototype = {
             ViperUtil.remove(ViperUtil.getElementsBetween(startParent, endParent));
             ViperUtil.remove(startParent);
             ViperUtil.remove(endParent);
+
+            // If the new P tag is at the end of a UL/OL element move it after.
+            if ((ViperUtil.isTag(p.parentNode, 'ul') === true || ViperUtil.isTag(p.parentNode, 'ol') === true)
+                && !p.nextSibling
+            ) {
+                ViperUtil.insertAfter(p.parentNode, p);
+            }
+
             range.setStart(p, 0);
             range.collapse(true);
         } else {
