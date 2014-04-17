@@ -1222,7 +1222,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 return this._removeContentFromStartToEndOfContainers(range);
             } else if (ViperUtil.isBrowser('firefox') === true) {
                 var nodeSelection = range.getNodeSelection();
-                if (nodeSelection && ViperUtil.isBlockElement(nodeSelection) === true) {
+                if (nodeSelection && ViperUtil.isBlockElement(nodeSelection) === true && ViperUtil.isStubElement(nodeSelection) === false) {
                     // When a block element is selected and removed in Firefox it leaves the content as <p>NULL CHAR</p>.
                     // Handle the deletion here.
                     this.viper.moveCaretAway(nodeSelection);
