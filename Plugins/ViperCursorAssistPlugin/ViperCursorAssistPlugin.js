@@ -28,12 +28,12 @@ ViperCursorAssistPlugin.prototype = {
         var prevElement = null;
         var prevPos     = null;
         this.viper.registerCallback('Viper:editableElementChanged', 'ViperCursorAssitPlugin', function() {
-            ViperUtil.addEvent(self.viper.getViperElement(), 'mousemove', function(e) {
+            ViperUtil.addEvent(document, 'mousemove', function(e) {
                 clearTimeout(t);
                 t = setTimeout(function() {
                     var line = ViperUtil.getid(self.viper.getId() + '-cursorAssist');
                     var hoverElem = self.viper.getElementAtCoords(e.clientX, e.clientY);
-                    if (hoverElem && hoverElem === line) {
+                    if (hoverElem && (hoverElem === line || hoverElem.parentNode.parentNode === line)) {
                         return;
                     }
 
@@ -224,7 +224,7 @@ ViperCursorAssistPlugin.prototype = {
 
                     ViperUtil.setStyle(line, 'left', elemRect.x1 + 'px');
                     ViperUtil.setStyle(line, 'width', (elemRect.x2 - elemRect.x1) + 'px');
-                    document.body.appendChild(line);
+                    self.viper.addElement(line);
                 }, 200);
             });
         });
