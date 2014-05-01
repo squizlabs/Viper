@@ -1508,12 +1508,16 @@ var ViperUtil = {
     getIFrameDocument: function(iframe)
     {
         var doc = null;
-        if (iframe.contentDocument) {
-            doc = iframe.contentDocument;
-        } else if (iframe.contentWindow) {
-            doc = iframe.contentWindow.document;
-        } else if (iframe.document) {
-            doc = iframe.document;
+        try {
+            if (iframe.contentDocument) {
+                doc = iframe.contentDocument;
+            } else if (iframe.contentWindow) {
+                doc = iframe.contentWindow.document;
+            } else if (iframe.document) {
+                doc = iframe.document;
+            }
+        } catch (e) {
+            doc = null;
         }
 
         return doc;
