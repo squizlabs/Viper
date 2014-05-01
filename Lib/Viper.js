@@ -3343,9 +3343,24 @@ Viper.prototype = {
             return false;
         }
 
+        var viperElement = this.getViperElement();
         var elems = ViperUtil.getElementsBetween(bookmark.start, bookmark.end);
         elems.push(bookmark.start, bookmark.end);
+        var parents = ViperUtil.$(elems).parents();
+
+        // Remove elements between the bookmarks.
         ViperUtil.remove(elems);
+
+        // Remove any parent element that is now empty.
+        for (var i = 0; i < parents.length; i++) {
+            if (parents[i] === viperElement) {
+                break;
+            }
+
+            if (this.elementIsEmpty(parents[i]) === true) {
+                ViperUtil.remove(parents[i]);
+            }
+        }
 
     },
 

@@ -333,6 +333,62 @@ ViperCopyPastePlugin.prototype = {
             }
         }//end if
 
+        // Handle drag/drop text in Webkit to prevent extra 'span' tags.
+        if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true) {
+            ViperUtil.addEvent(elem, 'drop.' + self.viper.getEventNamespace(), function(e) {
+                // Determine the selected content.
+                var selectedContent = '';
+                var rangeClone      = self.viper.getCurrentRange().cloneRange();
+                var selectedNode    = rangeClone.getNodeSelection();
+                if (selectedNode && selectedNode !== elem) {
+                    var surroundingParents = ViperUtil.getSurroundingParents(selectedNode, null, false, elem);
+                    if (surroundingParents.length > 0) {
+                        selectedNode = surroundingParents.pop();
+                    }
+
+                    var tmp = document.createElement('div');
+                    tmp.appendChild(selectedNode.cloneNode(true));
+                    selectedContent = ViperUtil.getHtml(tmp);
+                } else {
+                    selectedContent = rangeClone.getHTMLContents()
+                }
+
+                // Make sure partially selected lists, tables etc dont have broken HTML.
+                selectedContent = self._fixPartialSelection(selectedContent, rangeClone);
+
+                // Create a bookmark if a node was not selected so that we can remove it later on.
+                var bookmark = null;
+                if (!selectedNode) {
+                    bookmark = self.viper.createBookmark(rangeClone);
+                }
+
+                // Get the range from the mouse pointer (drop location).
+                var rangeObj  = document.caretRangeFromPoint(e.originalEvent.clientX, e.originalEvent.clientY);
+                var range     = new ViperMozRange(rangeObj);
+
+                // Create the tmpNode that is used for pasting content.
+                self._tmpNode = document.createTextNode(' ');
+                range.insertNode(self._tmpNode);
+                range.setStart(self._tmpNode, 0);
+                range.collapse(true);
+                ViperSelection.addRange(range);
+
+                // Use the pasteContent method to simulate pasting.
+                self._pasteContent(selectedContent, false, true);
+
+                // Remove the original selected content. Note that we must use bookmark instead of range as the content
+                // gets updated by pasteContent method. Also this content deletion cannot be done before inserting it to
+                // new location as it moves the content and changes the drop location.
+                if (selectedNode) {
+                    ViperUtil.remove(selectedNode);
+                } else if (bookmark) {
+                    self.viper.removeBookmark(bookmark);
+                }
+
+                ViperUtil.preventDefault(e);
+            });
+        }
+
     },
 
     _getFakeKeyboardEvent: function()
