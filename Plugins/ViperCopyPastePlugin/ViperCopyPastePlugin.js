@@ -1035,7 +1035,18 @@ ViperCopyPastePlugin.prototype = {
                     } else {
                         ctNode = fragment.lastChild;
                         ViperChangeTracker.addChange('textAdd', [ctNode]);
-                        ViperUtil.insertAfter(prevBlock, ctNode);
+
+                        if ((ViperUtil.isTag(ctNode, 'ul') === true
+                            || ViperUtil.isTag(ctNode, 'ol') === true)
+                            && ViperUtil.isTag(prevBlock, 'li') === true
+                        ) {
+                            // If this list is being pasted inside another list use its items instead.
+                            while (ctNode.firstChild) {
+                                ViperUtil.insertAfter(prevBlock, ctNode.firstChild);
+                            }console.info(222)
+                        } else {
+                            ViperUtil.insertAfter(prevBlock, ctNode);
+                        }
                     }
                 } else {
                     ctNode = ViperChangeTracker.createCTNode('ins', 'textAdd', fragment.lastChild);
