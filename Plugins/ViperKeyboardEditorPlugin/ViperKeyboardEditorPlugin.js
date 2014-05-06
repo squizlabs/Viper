@@ -391,7 +391,12 @@ ViperKeyboardEditorPlugin.prototype = {
             var startNode   = range.getStartNode();
             var blockParent = null;
             if (!startNode) {
-                startNode = range.startContainer;
+                if (range.startContainer.childNodes.length <= range.startOffset) {
+                    startNode = range.startContainer.childNodes[(range.startContainer.childNodes.length - 1)];
+                } else {
+                    startNode = range.startContainer;
+                }
+
                 if (ViperUtil.isBlockElement(startNode) === true) {
                     blockParent = startNode;
                 }
@@ -685,6 +690,25 @@ ViperKeyboardEditorPlugin.prototype = {
                 ViperSelection.addRange(range);
                 self.viper.fireSelectionChanged(null, true);
                 this.viper.fireNodesChanged();
+                return false;
+            } else if (startNode
+                && startNode === endNode
+                && ViperUtil.isStubElement(startNode) === true
+                && startNode.parentNode === self.viper.getViperElement()
+            ) {
+                // For content like <viperElement><iframe />*</viperElement>. Where * is the caret.
+                var defTag = null;
+                if (defaultTagName !== '') {
+                    defTag = document.createElement(defaultTagName);
+                    ViperUtil.setHtml(defTag, '<br/>');
+                } else {
+                    defTag = document.createTextNode(' ');
+                }
+
+                ViperUtil.insertAfter(startNode, defTag);
+                range.setStart(defTag, 0);
+                range.collapse(true);
+                ViperSelection.addRange(range);
                 return false;
             }//end if
 

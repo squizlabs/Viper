@@ -1312,27 +1312,31 @@ Viper.prototype = {
         if (document.caretRangeFromPoint) {
             // Webkit.
             var range = document.caretRangeFromPoint(x, y);
-            if (range.startContainer === range.endContainer
-                && range.startOffset === range.endOffset
-            ) {
-                if ((range.startContainer.nodeType !== ViperUtil.TEXT_NODE) && (range.startOffset < range.startContainer.childNodes.length)) {
-                    elem = range.startContainer.childNodes[range.startOffset];
-                } else {
-                    elem = range.startContainer;
+            if (range) {
+                if (range.startContainer === range.endContainer
+                    && range.startOffset === range.endOffset
+                ) {
+                    if ((range.startContainer.nodeType !== ViperUtil.TEXT_NODE) && (range.startOffset < range.startContainer.childNodes.length)) {
+                        elem = range.startContainer.childNodes[range.startOffset];
+                    } else {
+                        elem = range.startContainer;
+                    }
                 }
             }
         } else if (document.caretPositionFromPoint) {
             // Firefox.
             var range = document.caretPositionFromPoint(x, y);
-            if (ViperUtil.isBlockElement(range.offsetNode) === true) {
-                var offset = range.offset;
-                if (offset >= range.offsetNode.childNodes.length) {
-                    offset = (range.offsetNode.childNodes.length - 1);
-                }
+            if (range) {
+                if (ViperUtil.isBlockElement(range.offsetNode) === true) {
+                    var offset = range.offset;
+                    if (offset >= range.offsetNode.childNodes.length) {
+                        offset = (range.offsetNode.childNodes.length - 1);
+                    }
 
-                elem = range.offsetNode.childNodes[offset];
-            } else {
-                elem = range.offsetNode;
+                    elem = range.offsetNode.childNodes[offset];
+                } else {
+                    elem = range.offsetNode;
+                }
             }
         } else if (document.body.createTextRange) {
             // IE.
@@ -3339,9 +3343,24 @@ Viper.prototype = {
             return false;
         }
 
+        var viperElement = this.getViperElement();
         var elems = ViperUtil.getElementsBetween(bookmark.start, bookmark.end);
         elems.push(bookmark.start, bookmark.end);
+        var parents = ViperUtil.$(elems).parents();
+
+        // Remove elements between the bookmarks.
         ViperUtil.remove(elems);
+
+        // Remove any parent element that is now empty.
+        for (var i = 0; i < parents.length; i++) {
+            if (parents[i] === viperElement) {
+                break;
+            }
+
+            if (this.elementIsEmpty(parents[i]) === true) {
+                ViperUtil.remove(parents[i]);
+            }
+        }
 
     },
 

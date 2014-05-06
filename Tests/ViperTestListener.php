@@ -510,4 +510,10 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
     }//end addSkippedTest()
 
 
+    public function addRiskyTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    {
+
+    }//end addRiskyTest()
+
+
 }//end class

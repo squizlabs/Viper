@@ -113,7 +113,7 @@
             $phpunitCMD .= ' .';
         }
 
-        passthru('phpunit '.$phpunitCMD);
+        passthru('php phpunit.phar '.$phpunitCMD);
     }
 
     function getBrowserid($browser)
