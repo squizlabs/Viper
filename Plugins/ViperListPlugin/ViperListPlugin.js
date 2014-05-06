@@ -1340,17 +1340,20 @@ ViperListPlugin.prototype = {
 
             if (ViperUtil.getTag('li', list).length === 0) {
                 ViperUtil.remove(list);
-                self.joinSiblingLists(newParent);
+                var joinedList = self.joinSiblingLists(newParent);
+                if (joinedList) {
+                    processedParents.push(joinedList);
+                }
             }
         };
 
         var processedParents = [];
         for (var i = 0; i < listItems.length; i++) {
-            if (!listItems[i].parentNode || ViperUtil.inArray(processedParents, listItems[i].parentNode) === true) {
+            if (!listItems[i].parentNode || ViperUtil.inArray(listItems[i].parentNode, processedParents) === true) {
                 continue;
             }
 
-            processedParents.push(listItems[i].parentNode)
+            processedParents.push(listItems[i].parentNode);
             convertChildItems(listItems[i].parentNode);
         }
 
@@ -1735,7 +1738,7 @@ ViperListPlugin.prototype = {
         }
 
         if (currentType !== listType) {
-            this.changeListType(newType)
+            this.changeListType(newType);
             this.viper.fireSelectionChanged(null, true);
             this.viper.fireNodesChanged([this.viper.getViperElement()]);
             return;
@@ -1823,6 +1826,8 @@ ViperListPlugin.prototype = {
             // Remove the found list.
             ViperUtil.remove(node);
         }
+
+        return list;
 
     },
 
