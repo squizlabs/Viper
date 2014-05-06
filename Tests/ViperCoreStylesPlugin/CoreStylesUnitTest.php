@@ -14,13 +14,11 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
     {
         $this->selectKeyword(1);
 
-        $this->sikuli->keyDown('Key.CMD + b');
-        $this->sikuli->keyDown('Key.CMD + i');
-
+        $this->clickTopToolbarButton('bold');
+        $this->clickTopToolbarButton('italic');
         $this->clickTopToolbarButton('subscript');
         $this->clickTopToolbarButton('superscript');
         $this->clickTopToolbarButton('strikethrough');
-
         $this->assertHTMLMatch('<p><strong><em><sub><sup><del>%1%</del></sup></sub></em></strong> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         // Remove strike.
@@ -65,44 +63,6 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
 
 
     /**
-     * Test that style can be removed from the selection.
-     *
-     * @return void
-     */
-    public function testRemoveFormat()
-    {
-        $this->selectKeyword(1);
-
-        $this->sikuli->keyDown('Key.CMD + b');
-        $this->sikuli->keyDown('Key.CMD + i');
-        $this->assertHTMLMatch('<p><strong><em>%1%</em></strong> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
-
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('removeFormat');
-
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
-
-    }//end testRemoveFormat()
-
-
-    /**
-     * Tests that adding and removing styles spanning multiple paragraphs work.
-     *
-     * @return void
-     */
-    public function testMultiParaApplyAndRemoveStyle()
-    {
-        $this->selectKeyword(1, 4);
-        $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertHTMLMatch('<p><strong>%1% %2% %3%</strong></p><p><strong>sit <em>%4%</em></strong> <strong>%5%</strong></p>');
-
-        $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
-
-    }//end testMultiParaApplyAndRemoveStyle()
-
-
-    /**
      * Tests that removing multiple styles spanning multiple paragraphs work.
      *
      * @return void
@@ -110,17 +70,24 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
     public function testMultiParaRemoveStyles()
     {
         $this->selectKeyword(1, 4);
-        sleep(1);
         $this->sikuli->keyDown('Key.CMD + b');
-        usleep(50000);
+        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
+        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
         $this->sikuli->keyDown('Key.CMD + i');
-        usleep(50000);
-        $this->sikuli->keyDown('Key.CMD + i');
-        usleep(50000);
-        $this->sikuli->keyDown('Key.CMD + b');
-        usleep(50000);
+        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
+        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
+        $this->assertHTMLMatch('<p><strong><em>%1% %2% %3%</em></strong></p><p><em><strong>sit %4%</strong></em> <strong>%5%</strong></p>');
 
+        $this->selectKeyword(1, 4);
+        $this->sikuli->keyDown('Key.CMD + i');
+        sleep(1);
+        $this->assertTrue($this->inlineToolbarButtonExists('italic'), 'Italic icon in the inline toolbar should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('italic'), 'Italic icon in the top toolbar should not be active');
+        $this->sikuli->keyDown('Key.CMD + b');
+        sleep(1);
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit %4% <strong>%5%</strong></p>');
+        $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon in the inline toolbar should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar should not be active');
 
     }//end testMultiParaRemoveStyles()
 
@@ -130,12 +97,11 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
      *
      * @return void
      */
-    public function testSelectParaAfterStyling()
+    public function testSelectParaFromToolbarLineageAfterStyling()
     {
         $this->selectKeyword(1, 3);
         $this->sikuli->keyDown('Key.CMD + b');
         $this->sikuli->keyDown('Key.CMD + i');
-
         $this->selectInlineToolbarLineageItem(0);
 
         // Make sure bold icon is not shown in the toolbar.
@@ -146,7 +112,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
         $this->assertFalse($this->inlineToolbarButtonExists('italic', 'active'), 'Active italic icon is still shown in the inline toolbar');
         $this->assertFalse($this->inlineToolbarButtonExists('italic'), 'Italic icon is still shown in the inline toolbar');
 
-    }//end testSelectParaAfterStyling()
+    }//end testSelectParaFromToolbarLineageAfterStyling()
 
 
     /**
@@ -161,52 +127,26 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
         //Add bold and italics
         $this->sikuli->keyDown('Key.CMD + b');
         $this->sikuli->keyDown('Key.CMD + i');
-
         $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon is not active in the inline toolbar');
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon is not active in the top toolbar');
-
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon is not active in the inline toolbar');
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon is not active in the top toolbar');
-
         $this->assertHTMLMatch('<p><strong><em>%1%</em></strong> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         //Remove italics
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + i');
-
         $this->assertTrue($this->inlineToolbarButtonExists('italic'), 'Italic icon is still active in the inline toolbar');
         $this->assertTrue($this->topToolbarButtonExists('italic'), 'Italic icon is still active in the top toolbar');
+        $this->assertHTMLMatch('<p><strong>%1%</strong> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         //Remove bold
         $this->sikuli->keyDown('Key.CMD + b');
-
         $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon is still active in the inline toolbar');
         $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon is still active in the top toolbar');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testBoldAndItalic()
-
-
-     /**
-     * Tests selecting text in a paragraph.
-     *
-     * @return void
-     */
-    public function testSelectingTextInAParagraph()
-    {
-        $this->selectKeyword(1, 4);
-        $this->assertTrue($this->inlineToolbarButtonExists('italic'), 'Italic icon appears in the inline toolbar');
-        $this->assertFalse($this->topToolbarButtonExists('italic', 'active'), 'Active Italic icon appears in the inline toolbar');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon appears in the inline toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('bold', 'active'), 'Active Bold icon appears in the inline toolbar');
-
-        $this->selectKeyword(5);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->assertFalse($this->inlineToolbarButtonExists('italic'), 'Italic icon appears in the inline toolbar');
-        $this->assertFalse($this->topToolbarButtonExists('italic', 'active'), 'Active Italic icon appears in the inline toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('bold'), 'Bold icon appears in the inline toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('bold', 'active'), 'Active Bold icon appears in the inline toolbar');
-
-    }//end testSelectingTextInAParagraph()
 
 
     /**
@@ -360,39 +300,27 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
      */
     public function testStartingStylesForNewParagraph()
     {
+        // Test using keyboard shortcuts
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-
         $this->sikuli->keyDown('Key.CMD + b');
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
         $this->sikuli->keyDown('Key.CMD + i');
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'italic icon in the top toolbar should be active');
         $this->type('This is a new paragraph');
-
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p><strong><em>This is a new paragraph</em></strong></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-    }//end testStartingStylesForNewParagraph()
-
-
-    /**
-     * Test that you can start styles for a new parargraph using icon.
-     *
-     * @return void
-     */
-    public function testStartingStylesForNewParagraphUsingIcons()
-    {
-        $this->moveToKeyword(3, 'right');
+        // Test using icons
         $this->sikuli->keyDown('Key.ENTER');
-
         $this->clickTopToolbarButton('bold');
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
         $this->clickTopToolbarButton('italic');
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'italic icon in the top toolbar should be active');
-        $this->type('This is a new paragraph');
+        $this->type('This is another new paragraph');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p><strong><em>This is a new paragraph</em></strong></p><p><strong><em>This is another new paragraph</em></strong></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p><strong><em>This is a new paragraph</em></strong></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-    }//end testStartingStylesForNewParagraphUsingIcons()
+    }//end testStartingStylesForNewParagraph()
 
 
     /**
@@ -402,59 +330,45 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
      */
     public function testStartingAndStoppingStylesAfterWordThatIsStyled()
     {
+        // Test using keyboard shortcuts
         $this->moveToKeyword(4, 'right');
         $this->sikuli->keyDown('Key.CMD + i');
         $this->assertTrue($this->topToolbarButtonExists('italic'), 'italic icon in the top toolbar should not be active');
-        $this->type('test');
+        $this->type(' test ');
         $this->sikuli->keyDown('Key.CMD + i');
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'italic icon in the top toolbar should be active');
-        $this->type('test');
-
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em>test<em>test</em> <strong>%5%</strong></p>');
+        $this->type('%6%');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> test <em>%6%</em> <strong>%5%</strong></p>');
 
         $this->moveToKeyword(5, 'right');
         $this->sikuli->keyDown('Key.CMD + b');
         $this->assertTrue($this->topToolbarButtonExists('bold'), 'bold icon in the top toolbar should not be active');
-        $this->type('test');
+        $this->type(' test ');
         $this->sikuli->keyDown('Key.CMD + b');
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'bold icon in the top toolbar should be active');
-        $this->type('test');
+        $this->type('%7%');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> test <em>%6%</em> <strong>%5%</strong> test <strong>%7%</strong></p>');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em>test<em>test</em> <strong>%5%</strong>test<strong>test</strong></p>');
-
-
-    }//end testStartingAndStoppingStylesAfterWordThatIsStyled()
-
-
-    /**
-     * Test that you can start styles for a new parargraph using icon.
-     *
-     * @return void
-     */
-    public function testStartingAndStoppingStylesAfterWordThatIsStyledUsingIcons()
-    {
-        $this->moveToKeyword(4, 'right');
+        // Test using toolbar icons
+        $this->moveToKeyword(6, 'right');
         $this->clickTopToolbarButton('italic', 'active');
         $this->assertTrue($this->topToolbarButtonExists('italic'), 'italic icon in the top toolbar should not be active');
         $this->type('test');
         $this->clickTopToolbarButton('italic');
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'italic icon in the top toolbar should be active');
         $this->type('test');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> test <em>%6%</em>test<em>test</em> <strong>%5%</strong> test <strong>%7%</strong></p>');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em>test<em>test</em> <strong>%5%</strong></p>');
-
-        $this->moveToKeyword(5, 'right');
+        $this->moveToKeyword(7, 'right');
         $this->clickTopToolbarButton('bold', 'active');
         $this->assertTrue($this->topToolbarButtonExists('bold'), 'bold icon in the top toolbar should not be active');
-
         $this->type('test');
         $this->clickTopToolbarButton('bold');
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'bold icon in the top toolbar should be active');
         $this->type('test');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> test <em>%6%</em>test<em>test</em> <strong>%5%</strong> test <strong>%7%</strong>test<strong>test</strong></p>');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em>test<em>test</em> <strong>%5%</strong>test<strong>test</strong></p>');
-
-    }//end testStartingAndStoppingStylesAfterWordThatIsStyledUsingIcons()
+    }//end testStartingAndStoppingStylesAfterWordThatIsStyled()
 
 
 }//end class

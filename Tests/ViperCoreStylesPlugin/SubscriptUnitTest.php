@@ -7,93 +7,71 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
 
 
     /**
-     * Test that style can be applied to the selection at start of a paragraph.
+     * Test that subscript can be applied and removed to different parts of a paragraph.
      *
      * @return void
      */
-    public function testStartOfParaSubscript()
+    public function testApplyAndRemoveSubscript()
     {
+        // Apply and remove at the start of a paragraph
         $this->selectKeyword(1);
-
         $this->clickTopToolbarButton('subscript');
         $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
-
         $this->assertHTMLMatch('<p><sub>%1%</sub> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('subscript'), 'Subscript icon in the top toolbar is active');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-    }//end testStartOfParaSubscript()
-
-
-    /**
-     * Test that style can be applied to middle of a paragraph.
-     *
-     * @return void
-     */
-    public function testMidOfParaSubscript()
-    {
+        // Apply and remove in the middle of a paragraph
         $this->selectKeyword(2);
-
         $this->clickTopToolbarButton('subscript');
         $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
-
         $this->assertHTMLMatch('<p>%1% <sub>%2%</sub> %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('subscript'), 'Subscript icon in the top toolbar is active');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-    }//end testMidOfParaSubscript()
-
-
-    /**
-     * Test that style can be applied to the end of a paragraph.
-     *
-     * @return void
-     */
-    public function testEndOfParaSubscript()
-    {
+        // Apply and remove at the end of a paragraph
         $this->selectKeyword(3);
-
         $this->clickTopToolbarButton('subscript');
         $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
-
         $this->assertHTMLMatch('<p>%1% %2% <sub>%3%</sub></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->selectKeyword(3);
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('subscript'), 'Subscript icon in the top toolbar is active');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-    }//end testEndOfParaSubscript()
+    }//end testApplyAndRemoveSubscript()
 
 
     /**
-     * Test that strikethrough is applied to two words and then removed from one word.
+     * Test that subscript is applied to two words and then removed from one word.
      *
      * @return void
      */
-    public function testRemovingFormatFromPartOfTheContent()
+    public function testRemoveSubscriptFromPartOfTheContent()
     {
+        // Apply strihethrough to multiple keywords
         $this->selectKeyword(2, 3);
-
         $this->clickTopToolbarButton('subscript');
         $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
-
         $this->assertHTMLMatch('<p>%1% <sub>%2% %3%</sub></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-
+        // Remove it from one keyword
+        $this->selectKeyword(3);
         $this->clickTopToolbarButton('subscript', 'active');
         $this->assertTrue($this->topToolbarButtonExists('subscript'), 'Subscript icon in the top toolbar is still active');
-
         $this->assertHTMLMatch('<p>%1% <sub>%2% </sub>%3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
+        // Remove it from the other keyword
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('subscript'), 'Subscript icon in the top toolbar is still active');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-    }//end testRemovingFormatFromPartOfTheContent()
+    }//end testRemoveSubscriptFromPartOfTheContent()
 
 
     /**
@@ -101,27 +79,20 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
      *
      * @return void
      */
-    public function testAdjacentWordStyling()
+    public function testAdjacentSubscriptStyling()
     {
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('subscript');
 
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->selectKeyword(2, 3);
         $this->clickTopToolbarButton('subscript');
 
-        $this->selectKeyword(1);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('subscript');
 
         $this->assertHTMLMatch('<p><sub>%1% %2% %3%</sub></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-    }//end testAdjacentWordStyling()
+    }//end testAdjacentSubscriptStyling()
 
 
     /**
@@ -129,7 +100,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
      *
      * @return void
      */
-    public function testSpaceSeparatedAdjacentWordStyling()
+    public function testSpaceSeparatedSubscriptStyling()
     {
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('subscript');
@@ -142,50 +113,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
 
         $this->assertHTMLMatch('<p><sub>%1%</sub> <sub>%2%</sub> <sub>%3%</sub></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-    }//end testSpaceSeparatedAdjacentWordStyling()
-
-
-    /**
-     * Test that subscript can be removed.
-     *
-     * @return void
-     */
-    public function testRemoveFormating()
-    {
-        $this->selectKeyword(5);
-
-        $this->clickTopToolbarButton('subscript');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong><sub>%5%</sub></strong></p>');
-
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript'), 'Subscript icon is still active in the top toolbar is not active');
-
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
-
-    }//end testRemoveFormating()
-
-
-    /**
-     * Test that the subscript icon is active when you select a word that has strikethrough applied.
-     *
-     * @return void
-     */
-    public function testIconsIsActive()
-    {
-        $this->selectKeyword(5);
-
-        $this->clickTopToolbarButton('subscript');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
-
-        $this->moveToKeyword(4, 'right');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
-
-    }//end testIconsIsActive()
+    }//end testSpaceSeparatedSubscriptStyling()
 
 
     /**

@@ -7,55 +7,43 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
 
 
     /**
-     * Test that style can be applied to the selection at start of a paragraph.
+     * Test that style can be applied and removed from various sections of a paragraph.
      *
      * @return void
      */
-    public function testStartOfParaSuperscript()
+    public function testAddAndRemoveSuperscript()
     {
+        // apply and remove from the start of a paragraph
         $this->selectKeyword(1);
-
         $this->clickTopToolbarButton('superscript');
         $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
-
         $this->assertHTMLMatch('<p><sup>%1%</sup> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('superscript'), 'Superscript icon in the top toolbar is active');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-    }//end testStartOfParaSuperscript()
-
-
-    /**
-     * Test that style can be applied to middle of a paragraph.
-     *
-     * @return void
-     */
-    public function testMidOfParaSuperscript()
-    {
-
+        // Apply and remove from the middle of a paragraph
         $this->selectKeyword(2);
-
         $this->clickTopToolbarButton('superscript');
         $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
-
         $this->assertHTMLMatch('<p>%1% <sup>%2%</sup> %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('superscript'), 'Superscript icon in the top toolbar is active');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-    }//end testMidOfParaSuperscript()
-
-
-    /**
-     * Test that style can be applied to the end of a paragraph.
-     *
-     * @return void
-     */
-    public function testEndOfParaSuperscript()
-    {
+        // Apply and remove from the end of a paragraph
         $this->selectKeyword(3);
-
         $this->clickTopToolbarButton('superscript');
         $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
-
         $this->assertHTMLMatch('<p>%1% %2% <sup>%3%</sup></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->selectKeyword(3);
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('superscript'), 'Superscript icon in the top toolbar is active');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-    }//end testEndOfParaSuperscript()
+    }//end testAddAndRemoveSuperscript()
 
 
     /**
@@ -63,38 +51,27 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testRemovingFormatFromPartOfTheContent()
+    public function testRemoveSuperscriptFromPartOfTheContent()
     {
+        // Apply superscript to multiple keywords
         $this->selectKeyword(2, 3);
-
         $this->clickTopToolbarButton('superscript');
         $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
-
         $this->assertHTMLMatch('<p>%1% <sup>%2% %3%</sup></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-
+        // Remove superscript from one keyword
+        $this->selectKeyword(3);
         $this->clickTopToolbarButton('superscript', 'active');
         $this->assertTrue($this->topToolbarButtonExists('superscript'), 'Superscript icon in the top toolbar is still active');
-
         $this->assertHTMLMatch('<p>%1% <sup>%2% </sup>%3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
+        // Remove superscript from the other keyword
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('superscript'), 'Superscript icon in the top toolbar is still active');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-    }//end testRemovingFormatFromPartOfTheContent()
+    }//end testRemoveSuperscriptFromPartOfTheContent()
 
 
     /**
@@ -102,27 +79,20 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testAdjacentWordStyling()
+    public function testAdjacentSuperscriptStyling()
     {
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('superscript');
 
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->selectKeyword(2, 3);
         $this->clickTopToolbarButton('superscript');
 
-        $this->selectKeyword(1);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('superscript');
 
         $this->assertHTMLMatch('<p><sup>%1% %2% %3%</sup></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-    }//end testAdjacentWordStyling()
+    }//end testAdjacentSuperscriptStyling()
 
 
     /**
@@ -130,10 +100,10 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSpaceSeparatedAdjacentWordStyling()
+    public function testSpaceSeparatedSuperscriptStyling()
     {
         $this->selectKeyword(2);
-         $this->clickTopToolbarButton('superscript');
+        $this->clickTopToolbarButton('superscript');
 
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('superscript');
@@ -143,50 +113,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sup>%1%</sup> <sup>%2%</sup> <sup>%3%</sup></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-    }//end testSpaceSeparatedAdjacentWordStyling()
-
-
-    /**
-     * Test that subscripy can be removed.
-     *
-     * @return void
-     */
-    public function testRemoveFormating()
-    {
-        $this->selectKeyword(5);
-
-        $this->clickTopToolbarButton('superscript');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong><sup>%5%</sup></strong></p>');
-
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript'), 'Superscript icon is still active in the top toolbar is not active');
-
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
-
-    }//end testRemoveFormating()
-
-
-    /**
-     * Test that the superscript icon is active when you select a word that has superscript applied.
-     *
-     * @return void
-     */
-    public function testIconsIsActive()
-    {
-        $this->selectKeyword(5);
-
-        $this->clickTopToolbarButton('superscript');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
-
-        $this->moveToKeyword(4, 'right');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
-
-    }//end testIconsIsActive()
+    }//end testSpaceSeparatedSuperscriptStyling()
 
 
     /**
