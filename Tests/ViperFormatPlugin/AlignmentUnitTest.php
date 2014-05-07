@@ -7,402 +7,331 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
 
 
     /**
-     * Test that only block level elements are aligned.
+     * Test that you can apply and remove justification when clicking inside a word.
      *
      * @return void
      */
-    public function testAlignmentInNoneBlockTag()
+    public function testApplyAndRemoveJustificationWhenClickingInWord()
     {
-        $this->sikuli->click($this->findKeyword(7));
+        $this->useTest(1);
 
-        $this->clickTopToolbarButton('justifyLeft');
-        $this->clickTopToolbarButton('justifyCenter');
-        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'));
-
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: center;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
-
-    }//end testAlignmentInNoneBlockTag()
-
-
-    /**
-     * Test that you can apply left justification to a paragraph.
-     *
-     * @return void
-     */
-    public function testApplyingLeftJustify()
-    {
-        $this->selectKeyword(6, 8);
+        // Apply left justify
+        $this->moveToKeyword(1);
         $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyLeft');
-
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: left;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
-
+        $this->assertHTMLMatch('<p style="text-align: left;">%1% test content %2%</p>');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
-
-    }//end testApplyingLeftJustify()
-
-
-    /**
-     * Test that you can apply left justification to a paragraph when selecting a bold word.
-     *
-     * @return void
-     */
-    public function testApplyingLeftJustifyWithBoldWord()
-    {
-        $this->selectKeyword(9);
-        $this->clickTopToolbarButton('justifyLeft');
-        $this->clickTopToolbarButton('justifyLeft');
-
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p>%6% %7% %8%</p><p style="text-align: left;">test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
-
-        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
-
-    }//end testApplyingLeftJustifyWithBoldWord()
-
-
-    /**
-     * Test that you can apply left justification to a paragraph when selecting a italic word.
-     *
-     * @return void
-     */
-    public function testApplyingLeftJustifyWithItalicWord()
-    {
-        $this->selectKeyword(10);
-        $this->clickTopToolbarButton('justifyLeft');
-        $this->clickTopToolbarButton('justifyLeft');
-
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p>%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p style="text-align: left;">test <em>%10%</em> text.</p>');
-
-        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
-
-    }//end testApplyingLeftJustifyWithItalicWord()
-
-
-    /**
-     * Test that when you select a paragraph that has left justification applied, that the toolbar icon is hightlighted.
-     *
-     * @return void
-     */
-    public function testSelectingParagraphWithLeftJustification()
-    {
-        $this->selectKeyword(1, 2);
-        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left justify icon is not active in the top toolbar');
-
-    }//end testSelectingParagraphWithLeftJustification()
-
-
-    /**
-     * Test removing left justification.
-     *
-     * @return void
-     */
-    public function testRemovingLeftJustification()
-    {
-        $this->selectKeyword(1, 2);
-
+        
+        // Remove left justify
+        $this->moveToKeyword(1);
         $this->clickTopToolbarButton('justifyLeft', 'active');
         $this->clickTopToolbarButton('justifyLeft', 'active');
+        $this->assertHTMLMatch('<p>%1% test content %2%</p>');
 
-        $this->assertHTMLMatch('<p>%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p>%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
-
-    }//end testRemovingLeftJustification()
-
-
-    /**
-     * Test that you can apply right justification to a paragraph.
-     *
-     * @return void
-     */
-    public function testApplyingRightJustify()
-    {
-        $this->selectKeyword(6, 8);
-        $this->clickTopToolbarButton('justifyLeft');
-        $this->clickTopToolbarButton('justifyRight');
-
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: right;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
-
-        $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Right justify active icon does not appear in the top toolbar');
-
-    }//end testApplyingRightJustify()
-
-
-    /**
-     * Test that you can apply right justification to a paragraph when selecting a bold word.
-     *
-     * @return void
-     */
-    public function testApplyingRightJustifyWithBoldWord()
-    {
-        $this->selectKeyword(9);
-        $this->clickTopToolbarButton('justifyLeft');
-        $this->clickTopToolbarButton('justifyRight');
-
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p>%6% %7% %8%</p><p style="text-align: right;">test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
-
-        $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Active right justify icon does not appear in the top toolbar');
-
-    }//end testApplyingRightJustifyWithBoldWord()
-
-
-    /**
-     * Test that you can apply right justification to a paragraph when selecting a italic word.
-     *
-     * @return void
-     */
-    public function testApplyingRightJustifyWithItalicWord()
-    {
-        $this->selectKeyword(10);
-        $this->clickTopToolbarButton('justifyLeft');
-        $this->clickTopToolbarButton('justifyRight');
-
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p>%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p style="text-align: right;">test <em>%10%</em> text.</p>');
-
-        $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Active right justify icon does not appear in the top toolbar');
-
-    }//end testApplyingRightJustifyWithItalicWord()
-
-
-    /**
-     * Test that when you select a paragraph that has right justification applied, that the toolbar icon is hightlighted.
-     *
-     * @return void
-     */
-    public function testSelectingParagraphWithRightJustification()
-    {
-        $this->selectkeyword(4);
-        $this->selectInlineToolbarLineageItem(0);
-
-        $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Right justify active icon does not appear in the top toolbar');
-
-    }//end testSelectingParagraphWithRightJustification()
-
-
-    /**
-     * Test removing right justification.
-     *
-     * @return void
-     */
-    public function testRemovingRightJustification()
-    {
-        $this->selectKeyword(4);
-
-        $this->clickTopToolbarButton('justifyRight', 'active');
-        $this->clickTopToolbarButton('justifyRight', 'active');
-
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p>%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p>%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
-
-    }//end testRemovingRightJustification()
-
-
-    /**
-     * Test that you can apply centre justification to a paragraph.
-     *
-     * @return void
-     */
-    public function testApplyingCentreJustify()
-    {
-        $this->selectKeyword(6, 8);
+        // Apply centre justify
+        $this->moveToKeyword(1);
         $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyCenter');
+        $this->assertHTMLMatch('<p style="text-align: center;">%1% test content %2%</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Active centrr justify icon does not appear in the top toolbar');
 
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: center;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
-
-        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Centre justify active icon does not appear in the top toolbar');
-
-    }//end testApplyingCentreJustify()
-
-
-    /**
-     * Test that you can apply centre justification to a paragraph when selecting a bold word.
-     *
-     * @return void
-     */
-    public function testApplyingCentreJustifyWithBoldWord()
-    {
-        $this->selectKeyword(9);
-        $this->clickTopToolbarButton('justifyLeft');
-        $this->clickTopToolbarButton('justifyCenter');
-
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p>%6% %7% %8%</p><p style="text-align: center;">test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
-
-        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Active right justify icon does not appear in the top toolbar');
-
-    }//end testApplyingCenterJustifyWithBoldWord()
-
-
-    /**
-     * Test that you can apply center justification to a paragraph when selecting a italic word.
-     *
-     * @return void
-     */
-    public function testApplyingCenterJustifyWithItalicWord()
-    {
-        $this->selectKeyword(10);
-        $this->clickTopToolbarButton('justifyLeft');
-        $this->clickTopToolbarButton('justifyCenter');
-
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p>%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p style="text-align: center;">test <em>%10%</em> text.</p>');
-
-        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Active center justify icon does not appear in the top toolbar');
-
-    }//end testApplyingCenterJustifyWithItalicWord()
-
-
-    /**
-     * Test that when you select a paragraph that has centre justification applied, that the toolbar icon is hightlighted.
-     *
-     * @return void
-     */
-    public function testSelectingParagraphWithCentreJustification()
-    {
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-
-        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Centre justify active icon does not appear int he top toolbar');
-
-    }//end testSelectingParagraphWithCentreJustification()
-
-
-    /**
-     * Test removing centre justification.
-     *
-     * @return void
-     */
-    public function testRemovingCentreJustification()
-    {
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
+        // Remove centre justify
+        $this->moveToKeyword(1);
         $this->clickTopToolbarButton('justifyCenter', 'active');
         $this->clickTopToolbarButton('justifyCenter', 'active');
+        $this->assertHTMLMatch('<p>%1% test content %2%</p>');
 
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p>%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p>%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
-
-    }//end testRemovingCentreJustification()
-
-
-    /**
-     * Test that you can apply block justification to a paragraph.
-     *
-     * @return void
-     */
-    public function testApplyingBlockJustify()
-    {
-        $this->selectKeyword(6, 8);
-        $this->clickTopToolbarButton('justifyLeft');
-        $this->clickTopToolbarButton('justifyBlock');
-
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: justify;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
-
-        $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Toogle justification icon is not selected');
-
-    }//end testApplyingBlockJustify()
-
-
-    /**
-     * Test that you can apply block justification to a paragraph when selecting a bold word.
-     *
-     * @return void
-     */
-    public function testApplyingBlockJustifyWithBoldWord()
-    {
-        $this->selectKeyword(9);
-        $this->clickTopToolbarButton('justifyLeft');
-        $this->clickTopToolbarButton('justifyBlock');
-
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p>%6% %7% %8%</p><p style="text-align: justify;">test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
-
-        $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Active right justify icon does not appear in the top toolbar');
-
-    }//end testApplyingBlockJustifyWithBoldWord()
-
-
-    /**
-     * Test that you can apply block justification to a paragraph when selecting a italic word.
-     *
-     * @return void
-     */
-    public function testApplyingBlockJustifyWithItalicWord()
-    {
-        $this->selectKeyword(10);
-        $this->clickTopToolbarButton('justifyLeft');
-        $this->clickTopToolbarButton('justifyBlock');
-
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p>%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p style="text-align: justify;">test <em>%10%</em> text.</p>');
-
-        $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Active center justify icon does not appear in the top toolbar');
-
-    }//end testApplyingBlockJustifyWithItalicWord()
-
-
-    /**
-     * Test that when you select a paragraph that has block justification applied, that the toolbar icon is hightlighted.
-     *
-     * @return void
-     */
-    public function testSelectingParagraphWithBlockJustification()
-    {
-        $this->selectKeyword(5);
-        $this->selectInlineToolbarLineageItem(0);
-
-        $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Block justify active icon does not appear in the toolbar');
-
-    }//end testSelectingParagraphWithBlockJustification()
-
-
-    /**
-     * Test removing block justification.
-     *
-     * @return void
-     */
-    public function testRemovingBlockJustification()
-    {
-        $this->selectKeyword(5);
-        $this->selectInlineToolbarLineageItem(0);
-
-        $this->clickTopToolbarButton('justifyBlock', 'active');
-        $this->clickTopToolbarButton('justifyBlock', 'active');
-
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p>%5% GaG</p><p>%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
-
-    }//end testRemovingBlockJustification()
-
-
-    /**
-     * Test that justification is applied to the paragraph when you select a word.
-     *
-     * @return void
-     */
-    public function testJustificationWhenSelectingAWord()
-    {
-        $this->selectKeyword(6);
-
-        $this->clickTopToolbarButton('justifyLeft');
-        $this->clickTopToolbarButton('justifyLeft');
-
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: left;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
-
-        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Acitve left justify icon does not appear in the top toolbar');
-
-    }//end testJustificationWhenSelectingAWord()
-
-
-    /**
-     * Test that when you click in a word and select a justification, it is applied to the paragraph that the word is in..
-     *
-     * @return void
-     */
-    public function testJustificationWhenClickingInAWord()
-    {
-        $this->sikuli->click($this->findKeyword(8));
-
+        // Apply right justify
+        $this->moveToKeyword(1);
         $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyRight');
+        $this->assertHTMLMatch('<p style="text-align: right;">%1% test content %2%</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Active right justify icon does not appear in the top toolbar');
 
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: right;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
+        // Remove left justify
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('justifyRight', 'active');
+        $this->clickTopToolbarButton('justifyRight', 'active');
+        $this->assertHTMLMatch('<p>%1% test content %2%</p>');
 
-        $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Acitve right justify icon does not appear in the top toolbar');
+        // Apply block justify
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->clickTopToolbarButton('justifyBlock');
+        $this->assertHTMLMatch('<p style="text-align: justify;">%1% test content %2%</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Active block justify icon does not appear in the top toolbar');
 
-    }//end testJustificationWhenClickingInAWord()
+        // Remove block justify
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('justifyBlock', 'active');
+        $this->clickTopToolbarButton('justifyBlock', 'active');
+        $this->assertHTMLMatch('<p>%1% test content %2%</p>');
+
+    }//end testApplyAndRemoveJustificationWhenClickingInWord()
+
+
+    /**
+     * Test that you can apply and remove justification when selecting a word.
+     *
+     * @return void
+     */
+    public function testApplyAndRemoveJustificationWhenSelectingAWord()
+    {
+        $this->useTest(1);
+
+        // Apply left justify
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->assertHTMLMatch('<p style="text-align: left;">%1% test content %2%</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
+        
+        // Remove left justify
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyLeft', 'active');
+        $this->clickTopToolbarButton('justifyLeft', 'active');
+        $this->assertHTMLMatch('<p>%1% test content %2%</p>');
+
+        // Apply centre justify
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->clickTopToolbarButton('justifyCenter');
+        $this->assertHTMLMatch('<p style="text-align: center;">%1% test content %2%</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Active centrr justify icon does not appear in the top toolbar');
+
+        // Remove centre justify
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyCenter', 'active');
+        $this->clickTopToolbarButton('justifyCenter', 'active');
+        $this->assertHTMLMatch('<p>%1% test content %2%</p>');
+
+        // Apply right justify
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->clickTopToolbarButton('justifyRight');
+        $this->assertHTMLMatch('<p style="text-align: right;">%1% test content %2%</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Active right justify icon does not appear in the top toolbar');
+
+        // Remove left justify
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyRight', 'active');
+        $this->clickTopToolbarButton('justifyRight', 'active');
+        $this->assertHTMLMatch('<p>%1% test content %2%</p>');
+
+        // Apply block justify
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->clickTopToolbarButton('justifyBlock');
+        $this->assertHTMLMatch('<p style="text-align: justify;">%1% test content %2%</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Active block justify icon does not appear in the top toolbar');
+
+        // Remove block justify
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyBlock', 'active');
+        $this->clickTopToolbarButton('justifyBlock', 'active');
+        $this->assertHTMLMatch('<p>%1% test content %2%</p>');
+
+    }//end testApplyAndRemoveJustificationWhenSelectingAWord()
+
+
+    /**
+     * Test that you can apply and remove justification when selecting a paragraph.
+     *
+     * @return void
+     */
+    public function testApplyAndRemoveJustificationWhenSelectingParagraph()
+    {
+        $this->useTest(1);
+
+        // Apply left justify
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->assertHTMLMatch('<p style="text-align: left;">%1% test content %2%</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
+        
+        // Remove left justify
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('justifyLeft', 'active');
+        $this->clickTopToolbarButton('justifyLeft', 'active');
+        $this->assertHTMLMatch('<p>%1% test content %2%</p>');
+
+        // Apply centre justify
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->clickTopToolbarButton('justifyCenter');
+        $this->assertHTMLMatch('<p style="text-align: center;">%1% test content %2%</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Active centrr justify icon does not appear in the top toolbar');
+
+        // Remove centre justify
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('justifyCenter', 'active');
+        $this->clickTopToolbarButton('justifyCenter', 'active');
+        $this->assertHTMLMatch('<p>%1% test content %2%</p>');
+
+        // Apply right justify
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->clickTopToolbarButton('justifyRight');
+        $this->assertHTMLMatch('<p style="text-align: right;">%1% test content %2%</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Active right justify icon does not appear in the top toolbar');
+
+        // Remove left justify
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('justifyRight', 'active');
+        $this->clickTopToolbarButton('justifyRight', 'active');
+        $this->assertHTMLMatch('<p>%1% test content %2%</p>');
+
+        // Apply block justify
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->clickTopToolbarButton('justifyBlock');
+        $this->assertHTMLMatch('<p style="text-align: justify;">%1% test content %2%</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Active block justify icon does not appear in the top toolbar');
+
+        // Remove block justify
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('justifyBlock', 'active');
+        $this->clickTopToolbarButton('justifyBlock', 'active');
+        $this->assertHTMLMatch('<p>%1% test content %2%</p>');
+
+    }//end testApplyAndRemoveJustificationWhenSelectingParagraph()
+
+
+    /**
+     * Test that you can apply and remove each justification type to a paragraph when selecting a bold word.
+     *
+     * @return void
+     */
+    public function testApplyAndRemoveJustificationWhenSelectingBoldWord()
+    {
+        $this->useTest(2);
+
+        // Apply left justification
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->assertHTMLMatch('<p style="text-align: left;">test content <strong>%1%</strong> more test content</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
+
+        //Remove left justification
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyLeft', 'active');
+        $this->clickTopToolbarButton('justifyLeft', 'active');
+        $this->assertHTMLMatch('<p>test content <strong>%1%</strong> more test content</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Active left justify icon should not appear in the top toolbar');
+
+        // Apply centre justification
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->clickTopToolbarButton('justifyCenter');
+        $this->assertHTMLMatch('<p style="text-align: center;">test content <strong>%1%</strong> more test content</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Active centre justify icon does not appear in the top toolbar');
+
+        //Remove center justification
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyCenter', 'active');
+        $this->clickTopToolbarButton('justifyCenter', 'active');
+        $this->assertHTMLMatch('<p>test content <strong>%1%</strong> more test content</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Active center justify icon should not appear in the top toolbar');
+
+        // Apply right justification
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->clickTopToolbarButton('justifyRight');
+        $this->assertHTMLMatch('<p style="text-align: right;">test content <strong>%1%</strong> more test content</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Active right justify icon does not appear in the top toolbar');
+
+        //Remove center justification
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyRight', 'active');
+        $this->clickTopToolbarButton('justifyRight', 'active');
+        $this->assertHTMLMatch('<p>test content <strong>%1%</strong> more test content</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Active right justify icon should not appear in the top toolbar');
+
+        // Apply block justification
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->clickTopToolbarButton('justifyBlock');
+        $this->assertHTMLMatch('<p style="text-align: justify;">test content <strong>%1%</strong> more test content</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Active block justify icon does not appear in the top toolbar');
+
+        //Remove block justification
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyBlock', 'active');
+        $this->clickTopToolbarButton('justifyBlock', 'active');
+        $this->assertHTMLMatch('<p>test content <strong>%1%</strong> more test content</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Active block justify icon should not appear in the top toolbar');
+
+    }//end testApplyAndRemoveJustificationWhenSelectingBoldWord()
+
+
+    /**
+     * Test that you can apply and remove each justification type to a paragraph when selecting an italic word.
+     *
+     * @return void
+     */
+    public function testApplyAndRemoveJustificationWhenSelectingItalicWord()
+    {
+        $this->useTest(3);
+
+        // Apply left justification
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->assertHTMLMatch('<p style="text-align: left;">test content <em>%1%</em> more test content</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
+
+        //Remove left justification
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyLeft', 'active');
+        $this->clickTopToolbarButton('justifyLeft', 'active');
+        $this->assertHTMLMatch('<p>test content <em>%1%</em> more test content</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Active left justify icon should not appear in the top toolbar');
+
+        // Apply centre justification
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->clickTopToolbarButton('justifyCenter');
+        $this->assertHTMLMatch('<p style="text-align: center;">test content <em>%1%</em> more test content</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Active centre justify icon does not appear in the top toolbar');
+
+        //Remove center justification
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyCenter', 'active');
+        $this->clickTopToolbarButton('justifyCenter', 'active');
+        $this->assertHTMLMatch('<p>test content <em>%1%</em> more test content</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Active center justify icon should not appear in the top toolbar');
+
+        // Apply right justification
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->clickTopToolbarButton('justifyRight');
+        $this->assertHTMLMatch('<p style="text-align: right;">test content <em>%1%</em> more test content</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Active right justify icon does not appear in the top toolbar');
+
+        //Remove center justification
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyRight', 'active');
+        $this->clickTopToolbarButton('justifyRight', 'active');
+        $this->assertHTMLMatch('<p>test content <em>%1%</em> more test content</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Active right justify icon should not appear in the top toolbar');
+
+        // Apply block justification
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->clickTopToolbarButton('justifyBlock');
+        $this->assertHTMLMatch('<p style="text-align: justify;">test content <em>%1%</em> more test content</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Active block justify icon does not appear in the top toolbar');
+
+        //Remove block justification
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyBlock', 'active');
+        $this->clickTopToolbarButton('justifyBlock', 'active');
+        $this->assertHTMLMatch('<p>test content <em>%1%</em> more test content</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Active block justify icon should not appear in the top toolbar');
+
+    }//end testApplyAndRemoveJustificationWhenSelectingItalicWord()
 
 
     /**
@@ -412,17 +341,41 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testJustificationMultipleParagraphsWithAlignmentsApplied()
     {
-        $this->selectkeyword(2, 7);
+        // Apply left justify
+        $this->useTest(4);
+        $this->selectkeyword(2, 6);
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: left;">%3% TpT</p><p style="text-align: left;">%4% aaa</p><p style="text-align: left;">%5% GaG</p><p style="text-align: left;">test content %6% more test content</p>');
+        $this->selectkeyword(2, 6);
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Acitve left justify icon does not appear in the top toolbar');
 
+        // Apply centre justify
+        $this->useTest(4);
+        $this->selectkeyword(2, 6);
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->clickTopToolbarButton('justifyCenter');
+        $this->assertHTMLMatch('<p style="text-align: center;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: center;">%4% aaa</p><p style="text-align: center;">%5% GaG</p><p style="text-align: center;">test content %6% more test content</p>');
+        $this->selectkeyword(2, 6);
+        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Acitve centre justify icon does not appear in the top toolbar');
+
+        // Apply right justify
+        $this->useTest(4);
+        $this->selectkeyword(2, 6);
         $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyRight');
-
-        $this->assertHTMLMatch('<p style="text-align: right;">%1% amet %2%</p><p style="text-align: right;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: right;">%5% GaG</p><p style="text-align: right;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
-
-        $this->sikuli->click($this->findkeyword(9));
-
-        $this->selectkeyword(2, 7);
+        $this->assertHTMLMatch('<p style="text-align: right;">%1% amet %2%</p><p style="text-align: right;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: right;">%5% GaG</p><p style="text-align: right;">test content %6% more test content</p>');
+        $this->selectkeyword(2, 6);
         $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Acitve right justify icon does not appear in the top toolbar');
+
+        // Apply block justify
+        $this->useTest(4);
+        $this->selectkeyword(2, 6);
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->clickTopToolbarButton('justifyBlock');
+        $this->assertHTMLMatch('<p style="text-align: justify;">%1% amet %2%</p><p style="text-align: justify;">%3% TpT</p><p style="text-align: justify;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: justify;">test content %6% more test content</p>');
+        $this->selectkeyword(2, 6);
+        $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Acitve block justify icon does not appear in the top toolbar');
 
     }//end testJustificationMultipleParagraphsWithAlignmentsApplied()
 
@@ -434,12 +387,45 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testJustificationMultipleParagraphsWithNoAlignmentsApplied()
     {
-        $this->selectKeyword(6, 10);
+        // Apply left justify
+        $this->useTest(5);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->assertHTMLMatch('<p style="text-align: left;">%1% test content</p><p style="text-align: left;">another paragraph</p><p style="text-align: left;">more test content %2%</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Acitve left justify icon does not appear in the top toolbar');
+        $this->selectkeyword(1, 2);
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Acitve left justify icon does not appear in the top toolbar');
 
+        // Apply centre justify
+        $this->useTest(5);
+        $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyCenter');
+        $this->assertHTMLMatch('<p style="text-align: center;">%1% test content</p><p style="text-align: center;">another paragraph</p><p style="text-align: center;">more test content %2%</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Acitve centre justify icon does not appear in the top toolbar');
+        $this->selectkeyword(1, 2);
+        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Acitve centre justify icon does not appear in the top toolbar');
 
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: center;">%6% %7% %8%</p><p style="text-align: center;">test <strong>%9%</strong> text</p><p style="text-align: center;">test <em>%10%</em> text.</p>');
+        // Apply right justify
+        $this->useTest(5);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->clickTopToolbarButton('justifyRight');
+        $this->assertHTMLMatch('<p style="text-align: right;">%1% test content</p><p style="text-align: right;">another paragraph</p><p style="text-align: right;">more test content %2%</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Acitve right justify icon does not appear in the top toolbar');
+        $this->selectkeyword(1, 2);
+        $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Acitve right justify icon does not appear in the top toolbar');
+
+        // Apply block justify
+        $this->useTest(5);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->clickTopToolbarButton('justifyBlock');
+        $this->assertHTMLMatch('<p style="text-align: justify;">%1% test content</p><p style="text-align: justify;">another paragraph</p><p style="text-align: justify;">more test content %2%</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Acitve block icon does not appear in the top toolbar');
+        $this->selectkeyword(1, 2);
+        $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Acitve block icon does not appear in the top toolbar');
 
     }//end testJustificationMultipleParagraphsWithNoAlignmentsApplied()
 
@@ -451,6 +437,8 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testAligningAnImage()
     {
+        $this->useTest(6);
+
         $this->clickElement('img', 0);
         $this->clickTopToolbarButton('justifyLeft');
 
@@ -484,53 +472,48 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testUndoAndRedoForAlignments()
     {
-        $this->selectKeyword(6, 8);
-
+        
         // Test left justification
+        $this->useTest(1);
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyLeft');
-
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: left;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
-
+        $this->assertHTMLMatch('<p style="text-align: left;">%1% test content %2%</p>');
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p>%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
-
+        $this->assertHTMLMatch('<p>%1% test content %2%</p>');
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: left;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
+        $this->assertHTMLMatch('<p style="text-align: left;">%1% test content %2%</p>');
 
         // Test center justification
+        $this->useTest(1);
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('justifyCenter');
-
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: center;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
-
+        $this->assertHTMLMatch('<p style="text-align: center;">%1% test content %2%</p>');
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: left;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
-
+        $this->assertHTMLMatch('<p>%1% test content %2%</p>');
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: center;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
-
+        $this->assertHTMLMatch('<p style="text-align: center;">%1% test content %2%</p>');
+        
         // Test right justification
+        $this->useTest(1);
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('justifyRight');
-
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: right;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
-
+        $this->assertHTMLMatch('<p style="text-align: right;">%1% test content %2%</p>');
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: center;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
-
+        $this->assertHTMLMatch('<p>%1% test content %2%</p>');     
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: right;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
-
+        $this->assertHTMLMatch('<p style="text-align: right;">%1% test content %2%</p>');
+        
         // Test block justification
+        $this->useTest(1);
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('justifyBlock');
-
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: justify;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
-
+        $this->assertHTMLMatch('<p style="text-align: justify;">%1% test content %2%</p>');        
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: right;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
-
+        $this->assertHTMLMatch('<p>%1% test content %2%</p>');
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<p style="text-align: left;">%1% amet %2%</p><p style="text-align: center;">%3% TpT</p><p style="text-align: right;">%4% aaa</p><p style="text-align: justify;">%5% GaG</p><p style="text-align: justify;">%6% %7% %8%</p><p>test <strong>%9%</strong> text</p><p>test <em>%10%</em> text.</p>');
-
+        $this->assertHTMLMatch('<p style="text-align: justify;">%1% test content %2%</p>');
+        
     }//end testUndoAndRedoForAlignments()
 
 
