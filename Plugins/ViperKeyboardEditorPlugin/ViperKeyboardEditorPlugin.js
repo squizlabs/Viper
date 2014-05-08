@@ -426,6 +426,8 @@ ViperKeyboardEditorPlugin.prototype = {
                     ViperSelection.addRange(range);
                 } else {
                     this.insertTextAtRange(range, "\n");
+                    this.viper.fireNodesChanged();
+                    this.viper.fireSelectionChanged(null, true);
                 }
 
                 return false;
@@ -1837,6 +1839,8 @@ ViperKeyboardEditorPlugin.prototype = {
             var startNode = range.getStartNode();
             if (startNode && ViperUtil.isTag(ViperUtil.getFirstBlockParent(startNode), 'pre') === true) {
                 this.insertTextAtRange(range, "\n");
+                this.viper.fireNodesChanged();
+                this.viper.fireSelectionChanged(null, true);
                 return false;
             }
         }
