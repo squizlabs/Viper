@@ -105,7 +105,7 @@
         }
 
         if ($test !== NULL) {
-            $phpunitCMD .= ' --filter \''.$test.'\'';
+            $phpunitCMD .= ' --filter "'.$test.'"';
             putenv('VIPER_TEST_FILTER='.$test);
         }
 
