@@ -1857,6 +1857,8 @@ ViperKeyboardEditorPlugin.prototype = {
             ViperUtil.insertAfter(node.parentNode, node);
         }
 
+        this.viper.fireNodesChanged();
+        this.viper.fireSelectionChanged(null, true);
         return !this.viper.setCaretAfterNode(node);
 
     },
