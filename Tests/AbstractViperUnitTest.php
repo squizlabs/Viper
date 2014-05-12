@@ -429,7 +429,14 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     {
         // Clean up old files.
         $imgPath = $this->getBrowserImagePath();
-        @exec('rm '.$imgPath.'/*.png');
+        $images  = glob($imgPath.'/*.png');
+        foreach($images as $image) {
+            if (is_file($image) === TRUE) {
+                unlink($image);
+            } else {
+                print_r($image);
+            }
+        }
 
         $url = $this->_getBaseUrl().'/Web/calibrate.html';
         $this->sikuli->goToURL($url);
