@@ -169,11 +169,6 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         $this->sikuli = self::$_sikuli;
 
-        // Reset the Sikuli connection after 15 tests.
-        if ((self::$_testCount % 15) === 0) {
-            $this->resetConnection();
-        }
-
         // Get the contents of the test file template.
         if (self::$_testContent === NULL) {
             self::$_testContent = file_get_contents($baseDir.'/Web/test-template.html');
