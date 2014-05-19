@@ -113,6 +113,50 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
 
 
     /**
+     * Test that applying and removing an anchor to a heading.
+     *
+     * @return void
+     */
+    public function testApplyAndRemoveAnchorToHeading()
+    {
+        $this->useTest(3);
+
+        // Apply anchor using the inline toolbar
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test1');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<h1 id="test1">Heading One %1%</h1><p>Test content</p>');
+
+        // Remove anchor using inline toolbar
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<h1>Heading One %1%</h1><p>Test content</p>');
+
+        // Apply anchor using the top toolbar
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test1');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<h1 id="test1">Heading One %1%</h1><p>Test content</p>');
+
+        // Remove anchor using inline toolbar
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<h1>Heading One %1%</h1><p>Test content</p>');
+
+    }//end testApplyAndRemoveAnchorToHeading()
+
+
+    /**
      * Test applying an anchor to an image.
      *
      * @return void
@@ -207,6 +251,81 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
 
     }//end testStateOfAnchorIconInContent()
 
+
+    /**
+     * Test that reverting the value in the anchor field.
+     *
+     * @return void
+     */
+    public function testRevertAnchorValueIcon()
+    {
+        $this->useTest(4);
+
+        // Remove anchor value and revert using inline toolbar
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('anchorID', 'active');
+        sleep(2);
+        $this->clearFieldValue('ID');
+        sleep(2);
+        $this->revertFieldValue('ID');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content <span id="test1">%1%</span> more test content %2%</p>');
+
+        // Remove anchor value and revert using top toolbar
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->revertFieldValue('ID');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content <span id="test1">%1%</span> more test content %2%</p>');
+
+        // Apply anchor value, cleaar field and revert using inline toolbar
+        $this->selectKeyword(2);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test');
+        $this->clearFieldValue('ID');
+        $this->revertFieldValue('ID');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content <span id="test1">%1%</span> more test content <span id="test">%2%</span></p>');
+
+        // Apply anchor value and revert using top toolbar
+        $this->useTest(4);
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test');
+        $this->revertFieldValue('ID');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content <span id="test1">%1%</span> more test content <span id="test">%2%</span></p>');
+
+    }//end testRevertAnchorValueIcon()
+
+
+    /**
+     * Test blank value is not added into the source code when you clear the anchor field.
+     *
+     * @return void
+     */
+    public function testClearAnchorFieldIcon()
+    {
+        $this->useTest(1);
+
+        // Using inline toolbar
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test');
+        $this->clearFieldValue('ID');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content %1% more test content %2%</p>');
+
+        // Using top toolbar
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test');
+        $this->clearFieldValue('ID');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content %1% more test content %2%</p>');
+
+    }//end testClearAnchorFieldIcon()
 
 }//end class
 
