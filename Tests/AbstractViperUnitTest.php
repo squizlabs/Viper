@@ -1857,6 +1857,8 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $actionImage  = $this->getBrowserImagePath().'/textField_action_revert.png';
         $actionButton = $this->sikuli->find($actionImage, $fieldRegion);
 
+        $this->sikuli->click($actionButton);
+        
     }//end revertFieldValue()
 
 
