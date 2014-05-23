@@ -91,6 +91,13 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
      */
     private static $_filter = NULL;
 
+    /**
+     * Number of consecutive errors.
+     *
+     * @var integer
+     */
+    private static $_errorStreak = 0;
+
 
     /**
      * Set sikuli handler.
@@ -216,11 +223,11 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
         $path .= '/results.inc';
 
         $result = array(
-                   'testClass'  => get_class($test),
-                   'testName'   => $test->getName(),
-                   'status'     => $status,
-                   'message'    => $msg,
-                   'time'       => 0,
+                   'testClass' => get_class($test),
+                   'testName'  => $test->getName(),
+                   'status'    => $status,
+                   'message'   => $msg,
+                   'time'      => 0,
                   );
 
         $resultCont  = '<'.'?php $results[] = ';
@@ -315,6 +322,7 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
      */
     public function addError(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
+        self::$_errorStreak++;
         self::$_errors++;
         $this->_addLog('error', $test, $e);
 
@@ -332,6 +340,7 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
      */
     public function addFailure(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time)
     {
+        self::$_errorStreak = 0;
         self::$_failures++;
         $this->_addLog('failure', $test, $e);
 
@@ -348,6 +357,11 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
      */
     public function endTest(PHPUnit_Framework_Test $test, $time)
     {
+        if ($test->getStatus() === 0) {
+            // Pass..
+            self::$_errorStreak = 0;
+        }
+
         // Report progress.
         $path = $this->getLogPath();
         if (empty($path) === FALSE) {
@@ -389,7 +403,7 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
         }
 
         self::$_startTime = time();
-        $filters = getenv('VIPER_TEST_FILTER');
+        $filters          = getenv('VIPER_TEST_FILTER');
 
         if (empty($filters) === FALSE) {
             $filters = trim($filters, '/');
@@ -486,6 +500,18 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
 
 
     /**
+     * Returns the number of consecutive errors.
+     *
+     * @return integer
+     */
+    public static function getErrorStreak()
+    {
+        return self::$_errorStreak;
+
+    }//end getErrorStreak()
+
+
+    /**
      * Incomplete test.
      *
      * @param PHPUnit_Framework_Test $test The test object.
@@ -496,6 +522,7 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
      */
     public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
+        self::$_errorStreak = 0;
 
     }//end addIncompleteTest()
 
@@ -511,12 +538,23 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
      */
     public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
+        self::$_errorStreak = 0;
 
     }//end addSkippedTest()
 
 
+    /**
+     * Risky test.
+     *
+     * @param PHPUnit_Framework_Test $test The test object.
+     * @param Exception              $e    The exception.
+     * @param float                  $time Time of the error.
+     *
+     * @return void
+     */
     public function addRiskyTest(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
+        self::$_errorStreak = 0;
 
     }//end addRiskyTest()
 
