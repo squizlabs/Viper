@@ -250,6 +250,9 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
      */
     private function _screenshot($type, PHPUnit_Framework_Test $test, Exception $e)
     {
+        // TODO: Disable screenshots for now.
+        return;
+
         $path = $this->getLogPath();
         if (empty($path) === TRUE) {
             return;
