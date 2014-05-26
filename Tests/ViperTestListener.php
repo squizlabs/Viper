@@ -250,9 +250,6 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
      */
     private function _screenshot($type, PHPUnit_Framework_Test $test, Exception $e)
     {
-        // TODO: Disable screenshots for now.
-        return;
-
         $path = $this->getLogPath();
         if (empty($path) === TRUE) {
             return;
@@ -269,7 +266,7 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
             rename($imagePath, $path);
 
             // Resize image.
-            exec('mogrify -resize 75% -quality 80 '.$path.' > /dev/null 2>&1');
+            exec('mogrify -resize 40% -quality 60 '.$path.' > /dev/null 2>&1');
         }
 
     }//end _screenshot()
