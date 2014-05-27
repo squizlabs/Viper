@@ -266,7 +266,14 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
             rename($imagePath, $path);
 
             // Resize image.
-            exec('mogrify -resize 40% -quality 60 '.$path.' > /dev/null 2>&1');
+            $cmd = 'mogrify -resize 40% -quality 60 '.$path;
+            if (self::$_sikuli->getOS() === 'windows') {
+                $cmd .= ' > NUL 2>&1';
+            } else {
+                $cmd .= ' > /dev/null 2>&1';
+            }
+
+            exec($cmd);
         }
 
     }//end _screenshot()
@@ -509,6 +516,18 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
         return self::$_errorStreak;
 
     }//end getErrorStreak()
+
+
+    /**
+     * Resets the error streak.
+     *
+     * @return void
+     */
+    public static function resetErrorStreak()
+    {
+        self::$_errorStreak = 0;
+
+    }//end resetErrorStreak()
 
 
     /**

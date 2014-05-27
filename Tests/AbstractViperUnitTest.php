@@ -180,6 +180,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         if (ViperTestListener::getErrorStreak() >= self::$_maxErrorStreak) {
             $this->resetConnection();
             $this->sikuli->restartBrowser();
+            ViperTestListener::resetErrorStreak();
         }
 
         // Get the contents of the test file template.
@@ -1874,7 +1875,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $actionButton = $this->sikuli->find($actionImage, $fieldRegion);
 
         $this->sikuli->click($actionButton);
-        
+
     }//end revertFieldValue()
 
 
