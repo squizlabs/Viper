@@ -78,6 +78,13 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     private static $_testCount = 0;
 
     /**
+     * Maximum number of consecutive errors before Sikuli connection is reset and browser is restarted.
+     *
+     * @var integer
+     */
+    private static $_maxErrorStreak = 5;
+
+    /**
      * List of applications and if they are available in the current system.
      *
      * @var array
@@ -104,7 +111,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         // Find the HTML file for this test.
         $testFileContent = '';
         $jsPath          = NULL;
-        $count = count($paths);
+        $count           = count($paths);
         while ($count > 0) {
             $last     = array_pop($paths);
             $filePath = $baseDir.'/'.implode('/', $paths).'/'.$last.'.'.$type;
@@ -169,9 +176,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         $this->sikuli = self::$_sikuli;
 
-        // Reset the Sikuli connection after 15 tests.
-        if ((self::$_testCount % 15) === 0) {
+        // Reset the Sikuli connection and restart the browser if the number of consecutive errors reach the limit.
+        if (ViperTestListener::getErrorStreak() >= self::$_maxErrorStreak) {
             $this->resetConnection();
+            $this->sikuli->restartBrowser();
+            ViperTestListener::resetErrorStreak();
         }
 
         // Get the contents of the test file template.
@@ -400,7 +409,8 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         // Make sure page is loaded.
         if ($this->topToolbarButtonExists('bold', 'disabled') === FALSE) {
-            $this->sikuli->keyDown('Key.CMD + r');
+            // Try to go to the test URL again. Do not refresh incase browser has navigated to another URL.
+            $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
             $this->_waitForViper($retries - 1);
             return;
         }
@@ -429,7 +439,12 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     {
         // Clean up old files.
         $imgPath = $this->getBrowserImagePath();
-        @exec('rm '.$imgPath.'/*.png');
+        $images  = glob($imgPath.'/*.png');
+        foreach ($images as $image) {
+            if (is_file($image) === TRUE) {
+                unlink($image);
+            }
+        }
 
         $url = $this->_getBaseUrl().'/Web/calibrate.html';
         $this->sikuli->goToURL($url);
@@ -1122,7 +1137,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $elemRect = $this->sikuli->execJS('gVITPArrow()');
             $match    = $this->sikuli->getRegionOnPage($elemRect);
             if ($match === NULL) {
-                throw new Exception('Could not find Inline Toolbar');
+                $this->fail('Inline Toolbar is not visible');
             }
         }
 
@@ -1357,24 +1372,28 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $region = $location;
         }
 
-        $match = NULL;
-        if ($isText === TRUE) {
-            if ($forceJSPos === TRUE) {
-                $rect  = $this->_getTextButtonRectangle($buttonIcon, $state, $location);
-                $match = $this->sikuli->getRegionOnPage($rect);
-            } else {
-                // Its harder for Sikuli to match a text button so use lower similarity.
-                try {
-                    $match = $this->sikuli->find($buttonObj, $region, 0.7);
-                } catch (Exception $e) {
-                    // Try to find it again without the image.
+        try {
+            $match = NULL;
+            if ($isText === TRUE) {
+                if ($forceJSPos === TRUE) {
                     $rect  = $this->_getTextButtonRectangle($buttonIcon, $state, $location);
                     $match = $this->sikuli->getRegionOnPage($rect);
+                } else {
+                    // Its harder for Sikuli to match a text button so use lower similarity.
+                    try {
+                        $match = $this->sikuli->find($buttonObj, $region, 0.7);
+                    } catch (Exception $e) {
+                        // Try to find it again without the image.
+                        $rect  = $this->_getTextButtonRectangle($buttonIcon, $state, $location);
+                        $match = $this->sikuli->getRegionOnPage($rect);
+                    }
                 }
+            } else {
+                $match = $this->sikuli->find($buttonObj, $region, $this->getData('buttonSimmilarity'));
             }
-        } else {
-            $match = $this->sikuli->find($buttonObj, $region, $this->getData('buttonSimmilarity'));
-        }
+        } catch (FindFailedException $e) {
+            $this->fail($e->getMessage());
+        }//end try
 
         $this->sikuli->click($match);
 
@@ -1572,7 +1591,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     {
         $rect = $this->getBoundingRectangle('.ViperITP-lineageItem', $index);
         if (is_array($rect) === FALSE) {
-            throw new Exception('Inline Toolbar lineage item not found!');
+            $this->fail('Inline Toolbar lineage item ('.$index.') not found!');
         }
 
         $region = $this->sikuli->getRegionOnPage($rect);
@@ -1648,7 +1667,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         try {
             $start = $this->sikuli->find($startKeywordImage, NULL, $this->getData('textSimmilarity'));
-        } catch (Exception $e) {
+        } catch (FindFailedException $e) {
             // Sometimes the caret is causing Sikuli not to find the keyword, Click on another keyword
             // and then try to find this keyword again.
             try {
@@ -1659,8 +1678,8 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 }
 
                 $start = $this->sikuli->find($startKeywordImage, NULL, $this->getData('textSimmilarity'));
-            } catch (Exception $e) {
-                throw new Exception('Failed to find keyword: '.$this->getKeyword($startKeyword));
+            } catch (FindFailedException $e) {
+                throw new FindFailedException('Failed to find keyword: '.$this->getKeyword($startKeyword));
             }
         }
 
@@ -1748,11 +1767,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $loc = NULL;
         try {
             $loc = $this->sikuli->find($this->_getKeywordImage($keyword), NULL, $this->getData('textSimmilarity'));
-        } catch (Exception $e) {
+        } catch (FindFailedException $e) {
             // Try searching for it using JS.
             $loc = $this->getStringLocation($this->getKeyword($keyword));
             if (is_array($loc) === FALSE) {
-                throw new Exception('Failed to find keyword: '.$this->getKeyword($keyword));
+                throw new FindFailedException('Failed to find keyword: '.$this->getKeyword($keyword));
             }
 
             $loc = $this->sikuli->getRegionOnPage($loc);
@@ -1789,7 +1808,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     {
         try {
             $this->sikuli->find($this->_getLabel($label), NULL, 0.7);
-        } catch (Exception $e) {
+        } catch (FindFailedException $e) {
             return FALSE;
         }
 
@@ -1823,7 +1842,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     {
         try {
             $fieldLabel = $this->sikuli->find($this->_getLabel($label), NULL, 0.7);
-        } catch (Exception $e) {
+        } catch (FindFailedException $e) {
             $fieldLabel = $this->sikuli->find($this->_getLabel($label, TRUE), NULL, 0.7);
         }
 
@@ -1847,13 +1866,15 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     {
         try {
             $fieldLabel = $this->sikuli->find($this->_getLabel($label), NULL, 0.7);
-        } catch (Exception $e) {
+        } catch (FindFailedException $e) {
             $fieldLabel = $this->sikuli->find($this->_getLabel($label, TRUE), NULL, 0.7);
         }
 
         $fieldRegion  = $this->sikuli->extendRight($fieldLabel, 400);
         $actionImage  = $this->getBrowserImagePath().'/textField_action_revert.png';
         $actionButton = $this->sikuli->find($actionImage, $fieldRegion);
+
+        $this->sikuli->click($actionButton);
 
     }//end revertFieldValue()
 
@@ -2179,7 +2200,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     /**
      * Runs the test only if the specified OS or the browser is being used.
      *
-     * @param string $os The OS the test runs for, if NULL it will run for all OS types.
+     * @param string $os      The OS the test runs for, if NULL it will run for all OS types.
      * @param string $browser The browser the test runs for, if NULL it will run for all browsers.
      *
      * @return void

@@ -73,6 +73,10 @@ end idle
 - When **saving** make sure File Format is set to **Application** and tick **Stay open after run handler**.
 - Put the App to somwhere like ~/Desktop and open it. This app will run the runner.php file every minute to look for CI tasks and run them. This app also needs to be added to the Assistive Devices list.
 - The logs for the test run is located at ~/Sites/Viper/Tests/cron.log
+- Create a new cron entry that will update progress every minute while a task is running:
+```
+*/1     *       *       *       *       php /Users/squizlabs/Sites/Viper/Tests/runner.php -c
+```
 
 ###Windows
 - Install Java Runtime 6+

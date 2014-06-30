@@ -4,177 +4,156 @@ require_once 'AbstractViperUnitTest.php';
 
 class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
 {
-
-
     /**
-     * Test that creating anchor works.
+     * Test that applying and removing an anchor to a word.
      *
      * @return void
      */
-    public function testCreateAnchorUsingTheInlineToolbar()
+    public function testApplyAndRemoveAnchorToWord()
     {
+        $this->useTest(1);
+
+        // Apply anchor using the inline toolbar
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('anchorID');
-        $this->type('test');
+        $this->type('test1');
         $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content <span id="test1">%1%</span> more test content %2%</p>');
 
-        $this->assertHTMLMatch('<p><span id="test">%1%</span> %2% %3%</p><p id="test">sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is %6%</p>');
-
-        $this->sikuli->click($this->findKeyword(3));
-        sleep(1);
-        $this->selectKeyword(1);
-        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'), 'Anchor icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists('anchorID', 'active'), 'Anchor icon in the inline toolbar should be active');
-
-        $this->selectKeyword(6);
+        $this->selectKeyword(2);
         $this->clickInlineToolbarButton('anchorID');
-        $this->type('test');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->type('test2');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content <span id="test1">%1%</span> more test content <span id="test2">%2%</span></p>');
 
-        $this->assertHTMLMatch('<p><span id="test">%1%</span> %2% %3%</p><p id="test">sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is <span id="test">%6%</span></p>');
+        // Remove anchor using inline toolbar
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content %1% more test content <span id="test2">%2%</span></p>');
 
-        $this->sikuli->click($this->findKeyword(3));
-        sleep(1);
-        $this->selectKeyword(6);
-        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'), 'Anchor icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists('anchorID', 'active'), 'Anchor icon in the inline toolbar should be active');
+        $this->selectKeyword(2);
+        $this->clickInlineToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content %1% more test content %2%</p>');
 
-    }//end testCreateAnchorUsingTheInlineToolbar()
-
-
-    /**
-     * Test that creating anchor works.
-     *
-     * @return void
-     */
-    public function testCreateAnchorUsingTheTopToolbar()
-    {
+         // Apply anchor using the top toolbar
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('anchorID');
-        $this->type('test');
+        $this->type('test1');
         $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content <span id="test1">%1%</span> more test content %2%</p>');
 
-        $this->assertHTMLMatch('<p><span id="test">%1%</span> %2% %3%</p><p id="test">sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is %6%</p>');
-
-        $this->sikuli->click($this->findKeyword(3));
-        sleep(1);
-        $this->selectKeyword(1);
-        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'), 'Anchor icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists('anchorID', 'active'), 'Anchor icon in the inline toolbar should be active');
-
-        $this->selectKeyword(6);
+        $this->selectKeyword(2);
         $this->clickTopToolbarButton('anchorID');
-        $this->type('test');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-
-        $this->assertHTMLMatch('<p><span id="test">%1%</span> %2% %3%</p><p id="test">sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is <span id="test">%6%</span></p>');
-
-        $this->sikuli->click($this->findKeyword(3));
-        sleep(1);
-        $this->selectKeyword(6);
-        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'), 'Anchor icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists('anchorID', 'active'), 'Anchor icon in the inline toolbar should be active');
-
-    }//end testCreateAnchorUsingTheTopToolbar()
-
-
-    /**
-     * Test that the anchor icon appears in the inline toolbar for the last word in a paragraph.
-     *
-     * @return void
-     */
-    public function testAnchorIconAppearsInTheInlineToolbar()
-    {
-        $this->moveToKeyword(6, 'right');
+        $this->type('test2');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->type('This is a new line of CONTENT');
+        $this->assertHTMLMatch('<p>test content <span id="test1">%1%</span> more test content <span id="test2">%2%</span></p>');
 
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        // Remove anchor using inline toolbar
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content %1% more test content <span id="test2">%2%</span></p>');
 
-        $this->assertTrue($this->inlineToolbarButtonExists('anchorID'), 'Anchor icon should appear in the inline toolbar.');
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content %1% more test content %2%</p>');
 
-    }//end testAnchorIconAppearsInTheInlineToolbar()
+    }//end testApplyAndRemoveAnchorToWord()
 
 
     /**
-     * Test selecting anchors.
+     * Test that applying and removing an anchor to a paragraph.
      *
      * @return void
      */
-    public function testSelectingAnchors()
+    public function testApplyAndRemoveAnchorToParagraph()
     {
-        $this->selectKeyword(4);
-        $this->assertTrue($this->inlineToolbarButtonExists('anchorID'), 'Anchor icon should appear in the inline toolbar.');
-        $this->assertTrue($this->topToolbarButtonExists('anchorID'), 'Anchor icon should be available in the top toolbar');
+        $this->useTest(1);
 
+        // Apply anchor using the inline toolbar
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->inlineToolbarButtonExists('anchorID', 'active'), 'Active anchor icon should appear in the inline toolbar.');
-        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'), 'Active anchor icon should be available in the top toolbar');
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test1');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p id="test1">test content %1% more test content %2%</p>');
 
-        $this->sikuli->click($this->findKeyword(2));
-
-        $this->selectKeyword(5);
-        $this->assertTrue($this->inlineToolbarButtonExists('anchorID', 'active'), 'Active anchor icon should appear in the inline toolbar.');
-        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'), 'Active anchor icon should be available in the top toolbar');
-
-    }//end testSelectingAnchors()
-
-
-    /**
-     * Test deleting anchors using the inline toolbar.
-     *
-     * @return void
-     */
-    public function testDeletingAnchorsUsingTheInlineToolbar()
-    {
-        $this->selectKeyword(4);
+        // Remove anchor using inline toolbar
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('anchorID', 'active');
         $this->clearFieldValue('ID');
         $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content %1% more test content %2%</p>');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is %6%</p>');
+        // Apply anchor using the top toolbar
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test1');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p id="test1">test content %1% more test content %2%</p>');
 
-        $this->selectKeyword(5);
-        sleep(1);
-        $this->clickInlineToolbarButton('anchorID', 'active');
-        $this->clearFieldValue('ID');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz %5% is %6%</p>');
-
-    }//end testDeletingAnchorsUsingTheInlineToolbar()
-
-
-    /**
-     * Test deleting anchors using the top toolbar.
-     *
-     * @return void
-     */
-    public function testDeletingAnchorsUsingTheTopToolbar()
-    {
-        $this->selectKeyword(4);
+        // Remove anchor using inline toolbar
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('anchorID', 'active');
         $this->clearFieldValue('ID');
         $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content %1% more test content %2%</p>');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is %6%</p>');
+    }//end testApplyAndRemoveAnchorToParagraph()
 
-        $this->selectKeyword(5);
+
+    /**
+     * Test that applying and removing an anchor to a heading.
+     *
+     * @return void
+     */
+    public function testApplyAndRemoveAnchorToHeading()
+    {
+        $this->useTest(3);
+
+        // Apply anchor using the inline toolbar
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test1');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<h1 id="test1">Heading One %1%</h1><p>Test content</p>');
+
+        // Remove anchor using inline toolbar
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<h1>Heading One %1%</h1><p>Test content</p>');
+
+        // Apply anchor using the top toolbar
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test1');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<h1 id="test1">Heading One %1%</h1><p>Test content</p>');
+
+        // Remove anchor using inline toolbar
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('anchorID', 'active');
         $this->clearFieldValue('ID');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<h1>Heading One %1%</h1><p>Test content</p>');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz %5% is %6%</p>');
-
-    }//end testDeletingAnchorsUsingTheInlineToolbar()
+    }//end testApplyAndRemoveAnchorToHeading()
 
 
     /**
@@ -184,6 +163,8 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
      */
     public function testApplyingAnAnchorToAnImage()
     {
+        $this->useTest(2);
+
         $this->clickElement('img', 0);
         $this->clickInlineToolbarButton('anchorID');
         $this->type('test');
@@ -209,35 +190,142 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
      */
     public function testUndoAndRedoForAnchors()
     {
+        // Test when applying an anchor to a word
+        $this->useTest(1);
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('anchorID');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-
-        $this->assertHTMLMatch('<p><span id="test">%1%</span> %2% %3%</p><p id="test">sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is %6%</p>');
-
+        $this->assertHTMLMatch('<p>test content <span id="test">%1%</span> more test content %2%</p>');
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p id="test">sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is %6%</p>');
-
+        $this->assertHTMLMatch('<p>test content %1% more test content %2%</p>');
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<p><span id="test">%1%</span> %2% %3%</p><p id="test">sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is %6%</p>');
+        $this->assertHTMLMatch('<p>test content <span id="test">%1%</span> more test content %2%</p>');
 
-        $this->sikuli->click($this->findKeyword(3));
-        $this->selectKeyword(4);
+        // Test when applying an anchor to a paragraph
+        $this->useTest(1);
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('anchorID', 'active');
-        $this->clearFieldValue('ID');
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p><span id="test">%1%</span> %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is %6%</p>');
-
+        $this->assertHTMLMatch('<p id="test">test content %1% more test content %2%</p>');
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p><span id="test">%1%</span> %2% %3%</p><p id="test">sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is %6%</p>');
-
+        $this->assertHTMLMatch('<p>test content %1% more test content %2%</p>');
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<p><span id="test">%1%</span> %2% %3%</p><p>sit amet <strong>%4%</strong></p><p>Test AbC</p><p>Squiz <span id="myclass">%5%</span> is %6%</p>');
-
+        $this->assertHTMLMatch('<p id="test">test content %1% more test content %2%</p>');
+       
     }//end testUndoAndRedoForAnchors()
 
+
+    /**
+     * Test the state of the anchor icon in different parts of the content on a page.
+     *
+     * @return void
+     */
+    public function testStateOfAnchorIconInContent()
+    {
+        $this->useTest(1);
+
+        $this->moveToKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'), 'Anchor icon should be disabled');
+
+        $this->selectKeyword(1);
+        $this->assertTrue($this->inlineToolbarButtonExists('anchorID'), 'Anchor icon should be available');
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'), 'Anchor icon should be available');
+
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->inlineToolbarButtonExists('anchorID'), 'Anchor icon should be available');
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'), 'Anchor icon should be available');
+
+        //Make sure the anchor icon is disabled when you copy and paste a paragraph.
+        $this->sikuli->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'), 'Anchor icon should be disabled');
+
+        //Select all the content on a page and check anchor icon is disabled
+        $this->sikuli->keyDown('Key.CMD + c');
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'), 'Anchor icon should be disabled');
+
+    }//end testStateOfAnchorIconInContent()
+
+
+    /**
+     * Test that reverting the value in the anchor field.
+     *
+     * @return void
+     */
+    public function testRevertAnchorValueIcon()
+    {
+        $this->useTest(4);
+
+        // Remove anchor value and revert using inline toolbar
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('anchorID', 'active');
+        sleep(2);
+        $this->clearFieldValue('ID');
+        sleep(2);
+        $this->revertFieldValue('ID');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content <span id="test1">%1%</span> more test content %2%</p>');
+
+        // Remove anchor value and revert using top toolbar
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->revertFieldValue('ID');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content <span id="test1">%1%</span> more test content %2%</p>');
+
+        // Apply anchor value, cleaar field and revert using inline toolbar
+        $this->selectKeyword(2);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test');
+        $this->clearFieldValue('ID');
+        $this->revertFieldValue('ID');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content <span id="test1">%1%</span> more test content <span id="test">%2%</span></p>');
+
+        // Apply anchor value and revert using top toolbar
+        $this->useTest(4);
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test');
+        $this->revertFieldValue('ID');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content <span id="test1">%1%</span> more test content <span id="test">%2%</span></p>');
+
+    }//end testRevertAnchorValueIcon()
+
+
+    /**
+     * Test blank value is not added into the source code when you clear the anchor field.
+     *
+     * @return void
+     */
+    public function testClearAnchorFieldIcon()
+    {
+        $this->useTest(1);
+
+        // Using inline toolbar
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test');
+        $this->clearFieldValue('ID');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content %1% more test content %2%</p>');
+
+        // Using top toolbar
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test');
+        $this->clearFieldValue('ID');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content %1% more test content %2%</p>');
+
+    }//end testClearAnchorFieldIcon()
 
 }//end class
 
