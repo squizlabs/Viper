@@ -4006,6 +4006,7 @@ Viper.prototype = {
             && e.ctrlKey !== true
             && e.altKey !== true
             && e.metaKey !== true
+            && e.which !== 27
         ) {
             return true;
         }
@@ -4085,6 +4086,7 @@ Viper.prototype = {
             && e.altKey === false
             && (e.shiftKey === false || e.which !== 16)
             && e.metaKey === false
+            && e.which !== 27
         ) {
             // Nothing special about this key let the browser handle it unless
             // the track changes is activated or no plugin is direcly modifying it.
@@ -4266,7 +4268,6 @@ Viper.prototype = {
                 ViperSelection.addRange(range);
             } else {
                 if (nodeSelection && ViperUtil.isBlockElement(nodeSelection) === true && String.fromCharCode(e.which) !== '') {
-
                     switch (ViperUtil.getTagName(nodeSelection)) {
                         case 'table':
                         case 'ul':
