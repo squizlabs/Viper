@@ -2424,6 +2424,31 @@ var ViperUtil = {
 
     },
 
+    getOS: function()
+    {
+        var platform = navigator.platform.toLowerCase();
+        if (platform.indexOf('win') === 0) {
+            return 'windows';
+        } else if (platform.indexOf('mac') === 0) {
+            return 'mac';
+        } else if (platform.indexOf('linux') === 0) {
+            return 'linux';
+        }
+
+        return platform;
+
+    },
+
+    isOS: function(os)
+    {
+        if (this.getOS() === os) {
+            return true;
+        }
+
+        return false;
+
+    },
+
     /**
      * Clones given node and its children.
      */
