@@ -14,6 +14,7 @@
 function ViperLinkPlugin(viper)
 {
     this.viper = viper;
+    this._autoLinkOpensInNewWindow = false;
 
     this.initToolbar();
     this.initInlineToolbar();
@@ -26,6 +27,21 @@ ViperLinkPlugin.prototype = {
         this.enableAutoLink();
 
     },
+
+    setSettings: function(settings)
+    {
+        if (!settings) {
+            return;
+        }
+
+        if (settings.autoLinkOpensInNewWindow === true) {
+            this._autoLinkOpensInNewWindow = true;
+        } else {
+            this._autoLinkOpensInNewWindow = false;
+        }
+
+    },
+
 
     enableAutoLink: function()
     {
@@ -66,9 +82,9 @@ ViperLinkPlugin.prototype = {
         // If the text node content up to the current caret position ends with
         // a URL then convert the text to an A tag.
         var text = startNode.data.substr(0, (range.startOffset - mod));
-        var url  = text.match(/ ((http:\/\/|www\.)\S+)$/);
+        var url  = text.match(/ ((http[s]?:\/\/|www\.)\S+)$/);
         if (!url) {
-            url = text.match(/^((http:\/\/|www\.)\S+)$/);
+            url = text.match(/^((http[s]?:\/\/|www\.)\S+)$/);
             if (!url) {
                 return;
             }
@@ -85,6 +101,10 @@ ViperLinkPlugin.prototype = {
         }
 
         a.setAttribute('href', url);
+
+        if (this._autoLinkOpensInNewWindow === true) {
+            a.setAttribute('target', '_blank');
+        }
 
         var nextNode = startNode.splitText((range.startOffset - mod - length));
         ViperUtil.insertBefore(nextNode, a);
