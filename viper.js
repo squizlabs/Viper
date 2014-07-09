@@ -3748,6 +3748,7 @@ Viper.prototype = {
             && e.ctrlKey !== true
             && e.altKey !== true
             && e.metaKey !== true
+            && e.which !== 27
         ) {
             return true;
         }
@@ -3804,6 +3805,7 @@ Viper.prototype = {
             && e.altKey === false
             && (e.shiftKey === false || e.which !== 16)
             && e.metaKey === false
+            && e.which !== 27
         ) {
             // Nothing special about this key let the browser handle it unless
             // the track changes is activated or no plugin is direcly modifying it.
@@ -3828,8 +3830,12 @@ Viper.prototype = {
                 self.fireSelectionChanged();
             }, 50);
             return true;
-        } else if ((e.which === 37 || e.which === 39) && (e.ctrlKey === true || e.metaKey === true)) {
-            // Prevent browser history triger.
+        } else if ((e.which === 37 || e.which === 39) && (e.metaKey === true && ViperUtil.isOS('mac') === true)) {
+            // Prevent browser history triger on OSX.
+            ViperUtil.preventDefault(e);
+            return false;
+        } else if ((e.which === 37 || e.which === 39) && (e.altKey === true && (ViperUtil.isOS('windows') === true || ViperUtil.isOS('linux') === true))) {
+            // Prevent browser history triger on Windows and Linux.
             ViperUtil.preventDefault(e);
             return false;
         }
@@ -3975,7 +3981,6 @@ Viper.prototype = {
                 ViperSelection.addRange(range);
             } else {
                 if (nodeSelection && ViperUtil.isBlockElement(nodeSelection) === true && String.fromCharCode(e.which) !== '') {
-
                     switch (ViperUtil.getTagName(nodeSelection)) {
                         case 'table':
                         case 'ul':
@@ -7254,6 +7259,7 @@ ViperDOMRange.prototype = {
             && range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
             && range.startOffset === 0
             && range.endOffset === 0
+            && (range.startContainer.childNodes.length === 0 || ViperUtil.isStubElement(range.startContainer.childNodes[0]) === false)
         ) {
             this._nodeSel.node = range.startContainer;
             return range.startContainer;
@@ -13987,6 +13993,31 @@ var ViperUtil = {
 
             default:
                 return false;
+        }
+
+        return false;
+
+    },
+
+    getOS: function()
+    {
+        var platform = navigator.platform.toLowerCase();
+        if (platform.indexOf('win') === 0) {
+            return 'windows';
+        } else if (platform.indexOf('mac') === 0) {
+            return 'mac';
+        } else if (platform.indexOf('linux') === 0) {
+            return 'linux';
+        }
+
+        return platform;
+
+    },
+
+    isOS: function(os)
+    {
+        if (this.getOS() === os) {
+            return true;
         }
 
         return false;
@@ -33855,6 +33886,7 @@ ViperLangToolsPlugin.prototype = {
 function ViperLinkPlugin(viper)
 {
     this.viper = viper;
+    this._autoLinkOpensInNewWindow = false;
 
     this.initToolbar();
     this.initInlineToolbar();
@@ -33867,6 +33899,21 @@ ViperLinkPlugin.prototype = {
         this.enableAutoLink();
 
     },
+
+    setSettings: function(settings)
+    {
+        if (!settings) {
+            return;
+        }
+
+        if (settings.autoLinkOpensInNewWindow === true) {
+            this._autoLinkOpensInNewWindow = true;
+        } else {
+            this._autoLinkOpensInNewWindow = false;
+        }
+
+    },
+
 
     enableAutoLink: function()
     {
@@ -33907,9 +33954,9 @@ ViperLinkPlugin.prototype = {
         // If the text node content up to the current caret position ends with
         // a URL then convert the text to an A tag.
         var text = startNode.data.substr(0, (range.startOffset - mod));
-        var url  = text.match(/ ((http:\/\/|www\.)\S+)$/);
+        var url  = text.match(/ ((http[s]?:\/\/|www\.)\S+)$/);
         if (!url) {
-            url = text.match(/^((http:\/\/|www\.)\S+)$/);
+            url = text.match(/^((http[s]?:\/\/|www\.)\S+)$/);
             if (!url) {
                 return;
             }
@@ -33926,6 +33973,10 @@ ViperLinkPlugin.prototype = {
         }
 
         a.setAttribute('href', url);
+
+        if (this._autoLinkOpensInNewWindow === true) {
+            a.setAttribute('target', '_blank');
+        }
 
         var nextNode = startNode.splitText((range.startOffset - mod - length));
         ViperUtil.insertBefore(nextNode, a);
