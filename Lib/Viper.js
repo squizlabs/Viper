@@ -4006,6 +4006,7 @@ Viper.prototype = {
             && e.ctrlKey !== true
             && e.altKey !== true
             && e.metaKey !== true
+            && e.which !== 27
         ) {
             return true;
         }
@@ -4085,6 +4086,7 @@ Viper.prototype = {
             && e.altKey === false
             && (e.shiftKey === false || e.which !== 16)
             && e.metaKey === false
+            && e.which !== 27
         ) {
             // Nothing special about this key let the browser handle it unless
             // the track changes is activated or no plugin is direcly modifying it.
@@ -4109,8 +4111,12 @@ Viper.prototype = {
                 self.fireSelectionChanged();
             }, 50);
             return true;
-        } else if ((e.which === 37 || e.which === 39) && (e.ctrlKey === true || e.metaKey === true)) {
-            // Prevent browser history triger.
+        } else if ((e.which === 37 || e.which === 39) && (e.metaKey === true && ViperUtil.isOS('mac') === true)) {
+            // Prevent browser history triger on OSX.
+            ViperUtil.preventDefault(e);
+            return false;
+        } else if ((e.which === 37 || e.which === 39) && (e.altKey === true && (ViperUtil.isOS('windows') === true || ViperUtil.isOS('linux') === true))) {
+            // Prevent browser history triger on Windows and Linux.
             ViperUtil.preventDefault(e);
             return false;
         }
@@ -4262,7 +4268,6 @@ Viper.prototype = {
                 ViperSelection.addRange(range);
             } else {
                 if (nodeSelection && ViperUtil.isBlockElement(nodeSelection) === true && String.fromCharCode(e.which) !== '') {
-
                     switch (ViperUtil.getTagName(nodeSelection)) {
                         case 'table':
                         case 'ul':
