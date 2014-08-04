@@ -981,12 +981,16 @@ ViperCoreStylesPlugin.prototype = {
                 return false;
             }
 
+            var continueElement = null;
             if (!bookmark || elem !== bookmark.start) {
                 if (elem.nodeType === ViperUtil.ELEMENT_NODE) {
                     ViperUtil.removeAttr(elem, 'style');
                     ViperUtil.removeAttr(elem, 'class');
 
                     if (elem.attributes.length === 0 && ViperUtil.isTag(elem, 'span') === true) {
+                        // Set the continueElement to be the first child of this element as it will be removed and
+                        // we want to continue walking DOM from the first child element.
+                        continueElement = elem.firstChild;
                         while (elem.firstChild) {
                             ViperUtil.insertBefore(elem, elem.firstChild);
                         }
@@ -1002,6 +1006,8 @@ ViperCoreStylesPlugin.prototype = {
             if (nodeSelection && elem === stopElem) {
                 return false;
             }
+
+            return continueElement;
         });
 
         if (bookmark) {
