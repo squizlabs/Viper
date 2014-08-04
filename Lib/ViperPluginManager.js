@@ -53,7 +53,7 @@ ViperPluginManager.prototype = {
         for (var i = 0; i < c; i++) {
             var pluginName     = '';
             var pluginSettings = null;
-            if (typeof plugin === 'object') {
+            if (typeof plugins[i] === 'object') {
                 pluginName     = plugins[i].name;
                 pluginSettings = plugins[i].settings;
             } else {
