@@ -184,6 +184,44 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
 
 
     /**
+     * Test inserting an image and applying an anchor.
+     *
+     * @return void
+     */
+    public function testInsertImageAndApplyAnchor()
+    {
+        $this->useTest(5);
+
+        // Insert an image
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton('image');
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
+        $this->clickField('Image is decorative');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->moveToKeyword(2, 'right');
+        $this->assertHTMLMatch('<p>Content to test insert an image and add an anchor %1%</p><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="" /></p><p>Another paragraph</p><p>Another paragraph</p><p>End of content %2%</p>');
+
+        // Add an anchor to the image
+        $this->clickElement('img');
+        sleep(1);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->moveToKeyword(2, 'right');
+        $this->assertHTMLMatch('<p>Content to test insert an image and add an anchor %1%</p><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="" id="test" /></p><p>Another paragraph</p><p>Another paragraph</p><p>End of content %2%</p>');
+
+        // Check that anchor icon is active for image
+        $this->clickElement('img');
+        sleep(1);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'), 'Anchor icon in Top Toolbar should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists('anchorID', 'active'), 'Anchor icon in VITP should be active.');
+
+    }//end testInsertImageAndApplyAnchor()
+
+
+    /**
      * Test undo and redo.
      *
      * @return void
@@ -326,6 +364,27 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<p>test content %1% more test content %2%</p>');
 
     }//end testClearAnchorFieldIcon()
+
+
+    /**
+     * Test that the anchor icon is disabled when you copy and paste a paragraph
+     *
+     * @return void
+     */
+    public function testAnchorIconDisabledWhenCopyParagraph()
+    {
+        $this->useTest(1);
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->sikuli->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
+        
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'), 'Class icon should be disabled in the top toolbar.');
+
+    }//end testAnchorIconDisabledWhenCopyParagraph()
 
 }//end class
 
