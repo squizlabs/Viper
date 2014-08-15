@@ -7,11 +7,50 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
 
 
     /**
+     * Test applying and removing the div tag to a paragraph when clicking inside a section
+     *
+     * @return void
+     */
+    public function testApplingAndRemovingTheDivFormatWhenClickingInSection()
+    {
+
+        // For a single line
+        $this->useTest(1);
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('formats-p', 'active');
+        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<div>This is some content %1% to test divs with</div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
+
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('formats-div', 'active');
+        $this->clickTopToolbarButton('DIV', 'active', TRUE);
+        $this->assertHTMLMatch('<p>This is some content %1% to test divs with</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
+
+        // For a multi-line section
+        $this->useTest(3);
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('formats-div', 'active');
+        $this->clickTopToolbarButton('DIV', 'active', TRUE);
+        $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
+
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('formats-p', 'active');
+        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<div>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
+
+    }//end testApplingAndRemovingTheDivFormatWhenClickingInSection()
+
+
+    /**
      * Test applying and removing the div tag to a paragraph
      *
      * @return void
      */
-    public function testApplingAndRemovingTheDivFormat()
+    public function testApplingAndRemovingTheDivFormatWhenSelectingSection()
     {
         // Using the inline toolbar on a single line
         $this->useTest(1);
@@ -77,7 +116,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->assertHTMLMatch('<div>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
 
-    }//end testApplingAndRemovingTheDivFormat()
+    }//end testApplingAndRemovingTheDivFormatWhenSelectingSection()
 
 
     /**

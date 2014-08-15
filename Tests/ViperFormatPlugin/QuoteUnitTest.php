@@ -5,12 +5,52 @@ require_once 'AbstractFormatsUnitTest.php';
 class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTest
 {
 
+
     /**
-     * Test applying and removing the quote tag to a paragraph
+     * Test applying and removing the quote tag to a paragraph when clicking in a section
      *
      * @return void
      */
-    public function testApplingAndRemovingTheQuoteFormat()
+    public function testApplingAndRemovingTheQuoteFormatWhenClickingInSection()
+    {
+        
+        // For a single line
+        $this->useTest(1);
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('formats-p', 'active');
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<blockquote><p>This is some content %1% to test blockquotes with</p></blockquote>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
+
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('formats-blockquote', 'active');
+        $this->clickTopToolbarButton('Quote', 'active', TRUE);
+        $this->assertHTMLMatch('<p>This is some content %1% to test blockquotes with</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
+
+        // For a multi-line section
+        $this->useTest(2);
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('formats-blockquote', 'active');
+        $this->clickTopToolbarButton('P', NULL, TRUE);
+        $this->assertHTMLMatch('<p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
+
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('formats-p', 'active');
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<blockquote><p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
+
+    }//end testApplingAndRemovingTheQuoteFormatWhenClickingInSection()
+
+
+    /**
+     * Test applying and removing the quote tag to a paragraph when selecting a section
+     *
+     * @return void
+     */
+    public function testApplingAndRemovingTheQuoteFormatWhenSelectingASection()
     {
         // Using the inline toolbar on a single line
         $this->useTest(1);
@@ -19,6 +59,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->clickInlineToolbarButton('formats-p', 'active');
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
         $this->assertHTMLMatch('<blockquote><p>This is some content %1% to test blockquotes with</p></blockquote>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
 
         $this->selectKeyword(1);
         // Check the state of the format icon when we click P
@@ -29,6 +70,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->clickInlineToolbarButton('formats-blockquote', 'active');
         $this->clickInlineToolbarButton('Quote', 'active', TRUE);
         $this->assertHTMLMatch('<p>This is some content %1% to test blockquotes with</p>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active');
 
         // Using the top toolbar on a single line
         $this->useTest(1);
@@ -37,6 +79,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
         $this->assertHTMLMatch('<blockquote><p>This is some content %1% to test blockquotes with</p></blockquote>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
 
         $this->selectKeyword(1);
         // Check the state of the format icon when we click P
@@ -47,6 +90,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('Quote', 'active', TRUE);
         $this->assertHTMLMatch('<p>This is some content %1% to test blockquotes with</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
 
         // Using the inline toolbar on a multi-line section
         $this->useTest(2);
@@ -55,12 +99,14 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->clickInlineToolbarButton('formats-blockquote', 'active');
         $this->clickInlineToolbarButton('P', NULL, TRUE);
         $this->assertHTMLMatch('<p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active');
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('formats-p', 'active');
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
         $this->assertHTMLMatch('<blockquote><p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
 
         // Using the top toolbar on a multi-line section
         $this->useTest(2);
@@ -69,14 +115,16 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('P', NULL, TRUE);
         $this->assertHTMLMatch('<p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
         $this->assertHTMLMatch('<blockquote><p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
-
-    }//end testApplingAndRemovingTheQuoteFormat()
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
+        
+    }//end testApplingAndRemovingTheQuoteFormatWhenSelectingASection()
 
 
     /**
@@ -160,7 +208,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
         $this->assertEquals($this->replaceKeywords('%1% xtn dolor'), $this->getSelectedText(), 'Original selection is not selected');
 
-        // Apply bold and italics to a multi-line div section
+        // Apply bold and italics to a multi-line quote section
         $this->useTest(2); 
 
         $this->selectKeyword(1);
@@ -279,14 +327,12 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
 
         // Using top toolbar with a single line
         $this->useTest(3);
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
+        $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
         $this->assertHTMLMatch('<div>%1% xtn dolor</div>');
 
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
+        $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-div', 'active');
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
         $this->assertHTMLMatch('<blockquote><p>%1% xtn dolor</p></blockquote>');
@@ -307,14 +353,12 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
 
         // Using top toolbar with multiline section
         $this->useTest(2);
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
+        $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
         $this->assertHTMLMatch('<div>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
 
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
+        $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-div', 'active');
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
         $this->assertHTMLMatch('<blockquote><p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
@@ -327,7 +371,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
      *
      * @return void
      */
-    public function testChangingAQuoteToAPreUsingTheInlineToolbar()
+    public function testChangingAQuoteToAPre()
     {
 
         // Using inline toolbar with a single line
@@ -346,14 +390,12 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
 
         // Using top toolbar with a single line
         $this->useTest(3);
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
+        $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('PRE', NULL, TRUE);
         $this->assertHTMLMatch('<pre>%1% xtn dolor</pre>');
 
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
+        $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-pre', 'active');
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
         $this->assertHTMLMatch('<blockquote><p>%1% xtn dolor</p></blockquote>');
@@ -374,19 +416,17 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
 
         // Using top toolbar with multiline section
         $this->useTest(2);
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
+        $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('PRE', NULL, TRUE);
         $this->assertHTMLMatch('<pre>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre>');
 
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
+        $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-pre', 'active');
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
         $this->assertHTMLMatch('<blockquote><p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
 
-    }//end testChangingAQuoteToAPreUsingTheInlineToolbar()
+    }//end testChangingAQuoteToAPre()
 
 
     /**
@@ -413,14 +453,12 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
 
         // Using top toolbar with a single line
         $this->useTest(3);
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
+        $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('P', NULL, TRUE);
         $this->assertHTMLMatch('<p>%1% xtn dolor</p>');
 
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
+        $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
         $this->assertHTMLMatch('<blockquote><p>%1% xtn dolor</p></blockquote>');
@@ -441,14 +479,12 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
 
         // Using top toolbar with multiline section
         $this->useTest(2);
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
+        $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('P', NULL, TRUE);
         $this->assertHTMLMatch('<p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
 
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
+        $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
         $this->assertHTMLMatch('<blockquote><p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
