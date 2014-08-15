@@ -161,6 +161,34 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractFormatsUnitTest
 
 
     /**
+     * Test clicking the active pre icon in the toolbar change it to a paragraph.
+     *
+     * @return void
+     */
+    public function testClickingActivePreIconsInToolbar()
+    {
+        
+        // Check that when you click the active pre icon in the inline toolbar, it is changed to paragraph.
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-pre', 'active');
+        $this->clickInlineToolbarButton('PRE', 'active', TRUE);
+        $this->assertHTMLMatch('<p>This is some content %1% to test pre with</p>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active');
+
+        // Check that when you click the active pre icon in the top toolbar, it is changed to a paragraph.
+        $this->useTest(2);
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('formats-pre', 'active');
+        $this->clickTopToolbarButton('PRE', 'active', TRUE);
+        $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
+        
+    }//end testClickingActivePreIconsInToolbar()
+
+
+    /**
      * Test that applying styles to whole pre and selecting the PRE in lineage shows correct icons.
      *
      * @return void

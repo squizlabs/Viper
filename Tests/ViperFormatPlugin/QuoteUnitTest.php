@@ -180,6 +180,34 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
 
 
     /**
+     * Test clicking the active quote icon in the toolbar change it to a paragraph.
+     *
+     * @return void
+     */
+    public function testClickingActiveQuoteIconsInToolbar()
+    {
+        
+        // Check that when you click the active quote icon in the inline toolbar, it is changed to paragraph.
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-blockquote', 'active');
+        $this->clickInlineToolbarButton('Quote', 'active', TRUE);
+        $this->assertHTMLMatch('<p>%1% xtn dolor</p>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active');
+
+        // Check that when you click the active quote icon in the top toolbar, it is changed to a paragraph.
+        $this->useTest(2);
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('formats-blockquote', 'active');
+        $this->clickTopToolbarButton('Quote', 'active', TRUE);
+        $this->assertHTMLMatch('<p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
+        
+    }//end testClickingActiveQuoteIconsInToolbar()
+
+
+    /**
      * Test that applying styles to whole blockquote and selecting the Quote in lineage shows quote tools only.
      *
      * @return void

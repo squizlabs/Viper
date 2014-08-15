@@ -158,6 +158,34 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
  
 
     /**
+     * Test clicking the active div icon in the toolbar change it to a paragraph.
+     *
+     * @return void
+     */
+    public function testClickingActiveDivIconsInToolbar()
+    {
+        
+        // Check that when you click the active div icon in the inline toolbar, it is changed to paragraph.
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-div', 'active');
+        $this->clickInlineToolbarButton('DIV', 'active', TRUE);
+        $this->assertHTMLMatch('<p>%1% xtn dolor</p>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active');
+
+        // Check that when you click the active div icon in the top toolbar, it is changed to a paragraph.
+        $this->useTest(3);
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('formats-div', 'active');
+        $this->clickTopToolbarButton('DIV', 'active', TRUE);
+        $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
+        
+    }//end testClickingActiveDivIconsInToolbar()
+
+
+    /**
      * Test that applying styles to whole div and selecting the Div value in lineage shows correct format icons in the toolbars.
      *
      * @return void
