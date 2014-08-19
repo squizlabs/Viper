@@ -1157,8 +1157,11 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('link');
         $this->sikuli->keyDown('Key.CMD + v');
         $this->sikuli->keyDown('Key.TAB');
+        sleep(1);
         $this->type('Subject');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
 
         $this->assertHTMLMatch('<p>test</p><p><a href="mailto:%1%@squiz.com.au?subject=Subject">%1%@squiz.com.au</a></p>');
 
