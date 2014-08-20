@@ -120,7 +120,7 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
         // Click Apply Changes.
         $bubble = $this->getActiveBubble();
         $this->clickButton('Apply Changes', NULL, TRUE, $bubble);
-        sleep(2);
+        sleep(5);
 
         $this->assertHTMLMatch('<p>%1%</p><p><img src="http://placebox.es/150/150/666666/f1f1f1/" alt="alt" title="Link title texttest" /></p>');
 
