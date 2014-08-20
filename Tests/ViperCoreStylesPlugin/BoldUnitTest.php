@@ -610,6 +610,54 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
 
     }//end testUndoAndRedoForBold()
 
+
+    /**
+     * Test that bold icon is not available in the inline toolbar for a heading.
+     *
+     * @return void
+     */
+    public function testBoldIconForHeadingInInlineToolbar()
+    {
+        $this->useTest(5);
+        
+        // Test H1
+        $this->selectKeyword(1);
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'));
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'));
+
+        // Test H2
+        $this->selectKeyword(2);
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'));
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'));
+
+        // Test H3
+        $this->selectKeyword(3);
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'));
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'));
+
+        // Test H4
+        $this->selectKeyword(4);
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'));
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'));
+
+        // Test H5
+        $this->selectKeyword(5);
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'));
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'));
+
+        // Test H6
+        $this->selectKeyword(6);
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'));
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'));
+
+    }//end testBoldIconForHeadingInInlineToolbar()
+
 }//end class
 
 ?>

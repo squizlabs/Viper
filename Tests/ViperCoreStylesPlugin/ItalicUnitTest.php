@@ -559,6 +559,53 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
     }//end testAddAndRemoveItalicForLink()
 
 
+    /**
+     * Test that italic icon is not available in the inline toolbar for a heading.
+     *
+     * @return void
+     */
+    public function testItalicIconForHeadingInInlineToolbar()
+    {
+        $this->useTest(5);
+        
+        // Test H1
+        $this->selectKeyword(1);
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'));
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'));
+
+        // Test H2
+        $this->selectKeyword(2);
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'));
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'));
+
+        // Test H3
+        $this->selectKeyword(3);
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'));
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'));
+
+        // Test H4
+        $this->selectKeyword(4);
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'));
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'));
+
+        // Test H5
+        $this->selectKeyword(5);
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'));
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'));
+
+        // Test H6
+        $this->selectKeyword(6);
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'));
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'));
+
+    }//end testItalicIconForHeadingInInlineToolbar()
+
 }//end class
 
 ?>

@@ -7,94 +7,204 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
 
 
     /**
-     * Test applying the quote tag to a paragraph using the inline toolbar.
+     * Test applying and removing the quote tag to a paragraph when clicking in a section
      *
      * @return void
      */
-    public function testApplingTheQuoteStyleUsingInlineToolbar()
+    public function testApplingAndRemovingTheQuoteFormatWhenClickingInSection()
     {
-        // Test selecting a word in a p to change to a paragraph
-        $this->selectKeyword(4);
-        $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Toogle formats icon should not appear in the inline toolbar');
-
-        // Select all content in the p and change to a quote
-        $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'), 'Toogle formats should appear in the inline toolbar');
-        $this->clickInlineToolbarButton('formats-p', 'active');
-        $this->checkStatusOfFormatIconsInTheInlineToolbar('active', NULL, NULL, NULL);
-        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><blockquote><p>%4% is a paragraph to change to a quote</p></blockquote>');
-        $this->assertTrue($this->inlineToolbarButtonExists('formats-blockquote', 'selected'), 'Selected quote icon should appear in the inline toolbar');
-        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'), 'Active quote icon should appear in the inline toolbar');
-        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
-
-        // Check the state of the format icon after we have changed to a quote
-        $this->selectKeyword(2);
-        $this->selectKeyword(4);
-        $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'formats icon should not appear in the inline toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Active formats icon should not appear in the inline toolbar');
-
-        // Check the state of the format icon when we click P
-        $this->selectInlineToolbarLineageItem(1);
-        $this->assertTrue($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Formats icon should not appear in the inline toolbar');
-
-        $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'), 'Active quote icon should appear in the top toolbar');
-        $this->clickTopToolbarButton('formats-blockquote', 'active');
+        
+        // For a single line
+        $this->useTest(1);
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('formats-p', 'active');
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<blockquote><p>This is some content %1% to test blockquotes with</p></blockquote>');
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
 
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('formats-blockquote', 'active');
+        $this->clickTopToolbarButton('Quote', 'active', TRUE);
+        $this->assertHTMLMatch('<p>This is some content %1% to test blockquotes with</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
 
-    }//end testApplingTheQuoteStyleUsingInlineToolbar()
+        // For a multi-line section
+        $this->useTest(2);
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('formats-blockquote', 'active');
+        $this->clickTopToolbarButton('P', NULL, TRUE);
+        $this->assertHTMLMatch('<p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
+
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('formats-p', 'active');
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<blockquote><p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
+
+    }//end testApplingAndRemovingTheQuoteFormatWhenClickingInSection()
 
 
     /**
-     * Test applying the quote tag to a paragraph using the top toolbar.
+     * Test applying and removing the quote tag to a paragraph when selecting a section
      *
      * @return void
      */
-    public function testApplingTheQuoteStyleUsingTopToolbar()
+    public function testApplingAndRemovingTheQuoteFormatWhenSelectingASection()
     {
-        // Test clicking in a P to change to a Quote
-        $this->sikuli->click($this->findKeyword(4));
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
-        $this->clickTopToolbarButton('Quote', NULL, TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><blockquote><p>%4% is a paragraph to change to a quote</p></blockquote>');
-        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'selected'), 'Selected quote icon should appear in the inline toolbar');
-        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
-
-        // Change it back to do more testing
-        $this->clickTopToolbarButton('P', NULL, TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
-        $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
-
-        // Test selecting a paragraph to change to a quote
-        $this->sikuli->click($this->findKeyword(2));
-        $this->selectKeyword(4);
+        // Using the inline toolbar on a single line
+        $this->useTest(1);
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'), 'active P icon should appear in the top toolbar');
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
-        $this->clickTopToolbarButton('Quote', NULL, TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><blockquote><p>%4% is a paragraph to change to a quote</p></blockquote>');
-        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'selected'), 'Selected quote icon should appear in the inline toolbar');
-        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
+        $this->clickInlineToolbarButton('formats-p', 'active');
+        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<blockquote><p>This is some content %1% to test blockquotes with</p></blockquote>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
 
-        // Check the state of the format icon after we have changed to a quote
-        $this->selectKeyword(2);
-        $this->selectKeyword(4);
-        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'disabled'), 'Formats icon should disabled in the top toolbar');
-
+        $this->selectKeyword(1);
         // Check the state of the format icon when we click P
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'), 'Active blockquote icon should appear in the top toolbar');
-
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Active blockquote icon should appear in the toolbar');
+        // Click the blockquote and change it
         $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-blockquote', 'active');
+        $this->clickInlineToolbarButton('Quote', 'active', TRUE);
+        $this->assertHTMLMatch('<p>This is some content %1% to test blockquotes with</p>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active');
+
+        // Using the top toolbar on a single line
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-p', 'active');
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<blockquote><p>This is some content %1% to test blockquotes with</p></blockquote>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
+
+        $this->selectKeyword(1);
+        // Check the state of the format icon when we click P
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'), 'Active blockquote icon should appear in the toolbar');
+        // Click the blockquote and change it
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-blockquote', 'active');
+        $this->clickTopToolbarButton('Quote', 'active', TRUE);
+        $this->assertHTMLMatch('<p>This is some content %1% to test blockquotes with</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
+
+        // Using the inline toolbar on a multi-line section
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-blockquote', 'active');
+        $this->clickInlineToolbarButton('P', NULL, TRUE);
+        $this->assertHTMLMatch('<p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active');
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-p', 'active');
+        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<blockquote><p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
+
+        // Using the top toolbar on a multi-line section
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-blockquote', 'active');
+        $this->clickTopToolbarButton('P', NULL, TRUE);
+        $this->assertHTMLMatch('<p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('formats-p', 'active');
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<blockquote><p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
+        
+    }//end testApplingAndRemovingTheQuoteFormatWhenSelectingASection()
+
+
+    /**
+     * Test the format icon in the toolbar for a quote section.
+     *
+     * @return void
+     */
+    public function testCheckWhenQuoteIconIsAvailableInToolbar()
+    {
+        $this->useTest(3);
+
+        // Check that icon is active in top toolbar when you click in a quote.
+        $this->moveToKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'), 'Active quote icon should appear in the top toolbar');
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
 
-    }//end testApplingTheQuoteStyleUsingTopToolbar()
+        // Check that the icon is not available in the inline toolbar or the top toolbar when you select a word.
+        $this->selectKeyword(1);
+        $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('formats-p', 'active'), 'Active P icon should not appear in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Active quote icon should not appear in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'disabled'), 'Disabled formats icon should appear in the top toolbar');
+
+        // Check that the quote icon appears in the inline toolbar and top toolbar when you select the P in a quote.
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Active quote icon should appear in the inline toolbar');
+        $this->clickInlineToolbarButton('formats-blockquote', 'active');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
+        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'), 'Active quote icon should appear in the top toolbar');
+        $this->clickTopToolbarButton('formats-blockquote', 'active');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
+
+        // Check that the icon appears in the inline toolbar and top toolbar when you select a quote.
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Active quote icon should appear in the inline toolbar');
+        $this->clickInlineToolbarButton('formats-blockquote', 'active');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
+        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'), 'Active quote icon should appear in the top toolbar');
+        $this->clickTopToolbarButton('formats-blockquote', 'active');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
+
+        // Check that the icon is removed from the inline toolbar when you go from selection, to quote and back to selection.
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->assertFalse($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Active quote icon should not appear in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'disabled'), 'Disabled quote icon should appear in the top toolbar');
+        
+    }//end testCheckWhenQuoteIconIsAvailableInToolbar()
+
+
+    /**
+     * Test clicking the active quote icon in the toolbar change it to a paragraph.
+     *
+     * @return void
+     */
+    public function testClickingActiveQuoteIconsInToolbar()
+    {
+        
+        // Check that when you click the active quote icon in the inline toolbar, it is changed to paragraph.
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-blockquote', 'active');
+        $this->clickInlineToolbarButton('Quote', 'active', TRUE);
+        $this->assertHTMLMatch('<p>%1% xtn dolor</p>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active');
+
+        // Check that when you click the active quote icon in the top toolbar, it is changed to a paragraph.
+        $this->useTest(2);
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('formats-blockquote', 'active');
+        $this->clickTopToolbarButton('Quote', 'active', TRUE);
+        $this->assertHTMLMatch('<p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
+        
+    }//end testClickingActiveQuoteIconsInToolbar()
 
 
     /**
@@ -104,59 +214,51 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
      */
     public function testSelectQuoteAfterStylingShowsCorrectIcons()
     {
-        $this->selectKeyword(1, 2);
+        // Apply bold and italics to a one line quote section
+        $this->useTest(3);
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + b');
         $this->sikuli->keyDown('Key.CMD + i');
 
+        // Select quote in lineage and make sure the correct icons are being shown in the inline toolbar.
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
-
-        // Make sure the correct icons are being shown in the inline toolbar.
-        $this->assertTrue($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Active quote icon does not appear in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Toogle formats icon is not selected');
         $this->clickInlineToolbarButton('formats-blockquote', 'active');
         $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
-        $this->assertEquals($this->replaceKeywords('%1% xtn %2%'), $this->getSelectedText(), 'Original selection is not selected');
+        $this->assertEquals($this->replaceKeywords('%1% xtn dolor'), $this->getSelectedText(), 'Original selection is not selected');
 
         // Make sure the correct icons are being shown in the top toolbar.
-        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'), 'Active quote icon does not appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'), 'Toogle formats icon is not selected');
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
-        $this->assertEquals($this->replaceKeywords('%1% xtn %2%'), $this->getSelectedText(), 'Original selection is not selected');
+        $this->assertEquals($this->replaceKeywords('%1% xtn dolor'), $this->getSelectedText(), 'Original selection is not selected');
+
+        // Apply bold and italics to a multi-line quote section
+        $this->useTest(2); 
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + i');
+
+        // Select Quote in the lineage and make sure the correct icons are being shown in the inline toolbar.
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Toogle formats icon is not selected');
+        $this->clickInlineToolbarButton('formats-blockquote', 'active');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
+        $this->assertEquals($this->replaceKeywords('%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.'), $this->getSelectedText(), 'Original selection is not selected');
+
+        // Make sure the correct icons are being shown in the top toolbar.
+        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'), 'Toogle formats icon is not selected');
+        $this->clickTopToolbarButton('formats-blockquote', 'active');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
+        $this->assertEquals($this->replaceKeywords('%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.'), $this->getSelectedText(), 'Original selection is not selected');
 
     }//end testSelectQuoteAfterStylingShowsCorrectIcons()
-
-
-    /**
-     * Test that applying styles to multi-line blockquote and selecting the Quote in lineage shows quote tools only.
-     *
-     * @return void
-     */
-    public function testSelectMultiLineQuoteAfterStylingShowsCorrectIcons()
-    {
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-div', 'active');
-        $this->clickTopToolbarButton('Quote', NULL, TRUE);
-
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->sikuli->keyDown('Key.CMD + b');
-        $this->sikuli->keyDown('Key.CMD + i');
-
-        $this->selectInlineToolbarLineageItem(0);
-
-        // Make sure the correct icons are being shown in the inline toolbar.
-        $this->assertTrue($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Active quote icon does not appear in the inline toolbar');
-        $this->clickInlineToolbarButton('formats-blockquote', 'active');
-        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
-        $this->assertEquals($this->replaceKeywords('%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.'), $this->getSelectedText(), 'Original selection is not selected');
-
-        // Make sure the correct icons are being shown in the top toolbar.
-        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'), 'Active quote icon does not appear in the top toolbar');
-        $this->clickTopToolbarButton('formats-blockquote', 'active');
-        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
-        $this->assertEquals($this->replaceKeywords('%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.'), $this->getSelectedText(), 'Original selection is not selected');
-
-    }//end testSelectMultiLineQuoteAfterStylingShowsCorrectIcons()
 
 
     /**
@@ -166,14 +268,14 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
      */
     public function testUsingBoldInBlockquotes()
     {
+        $this->useTest(3);
+
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + b');
-
-        $this->assertHTMLMatch('<blockquote><p><strong>%1%</strong> xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+        $this->assertHTMLMatch('<blockquote><p><strong>%1%</strong> xtn dolor</p></blockquote>');
 
         $this->sikuli->keyDown('Key.CMD + b');
-
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn dolor</p></blockquote>');
 
     }//end testUsingBoldInBlockquotes()
 
@@ -185,136 +287,17 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
      */
     public function testUsingItalicInBlockquotes()
     {
-        $this->selectKeyword(1);
-        $this->sikuli->keyDown('Key.CMD + i');
-
-        $this->assertHTMLMatch('<blockquote><p><em>%1%</em> xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+        $this->useTest(3);
 
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + i');
+        $this->assertHTMLMatch('<blockquote><p><em>%1%</em> xtn dolor</p></blockquote>');
 
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn dolor</p></blockquote>');
 
     }//end testUsingItalicInBlockquotes()
-
-
-    /**
-     * Test that the quote icon is selected when you switch between selection and quote.
-     *
-     * @return void
-     */
-    public function testQuoteIconIsActiveWhenSelectingQuoteTag()
-    {
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Toogle formats icon is not selected');
-        $this->clickInlineToolbarButton('formats-blockquote', 'active');
-        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
-
-        // Go to P
-        $this->selectInlineToolbarLineageItem(1);
-        $this->assertTrue($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Quote icon should appear in the inline toolbar');
-
-        // Go back to Quote then Selection
-        $this->selectInlineToolbarLineageItem(0);
-        $this->selectInlineToolbarLineageItem(2);
-        $this->assertFalse($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Toogle formats icon is still active in the inline toolbar');
-
-    }//end testQuoteIconIsActiveWhenSelectingQuoteTag()
-
-
-    /**
-     * Test that when you select part of a blockquote that you cannot change it to another format type.
-     *
-     * @return void
-     */
-    public function testPartialSelectionOfQuote()
-    {
-        $this->selectKeyword(2);
-        $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('formats-p', 'active'), 'Active P icon should not appear in the inline toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Active quote icon should not appear in the inline toolbar');
-        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'disabled'), 'Disabled formats icon should appear in the top toolbar');
-
-    }//end testPartialSelectionOfQuote()
-
-
-    /**
-     * Test applying and then removing the Quote format using the inline toolbar.
-     *
-     * @return void
-     */
-    public function testApplyingAndRemovingQuoteUsingInlineToolbar()
-    {
-        // Test single line
-        $this->selectKeyword(4);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickInlineToolbarButton('formats-p', 'active');
-        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><blockquote><p>%4% is a paragraph to change to a quote</p></blockquote>');
-
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickInlineToolbarButton('formats-blockquote', 'active');
-        $this->clickInlineToolbarButton('Quote', 'active', TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
-
-        // Make sure all icons are still enabled
-        $this->checkStatusOfFormatIconsInTheInlineToolbar('active');
-
-        // Test multi-line
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickInlineToolbarButton('formats-div', 'active');
-        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
-        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
-
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickInlineToolbarButton('formats-blockquote', 'active');
-        $this->clickInlineToolbarButton('Quote', 'active', TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><p>%4% is a paragraph to change to a quote</p>');
-        $this->checkStatusOfFormatIconsInTheInlineToolbar('active');
-
-    }//end testApplyingAndRemovingQuoteUsingInlineToolbar()
-
-
-    /**
-     * Test applying and then removing the Quote format using the top toolbar.
-     *
-     * @return void
-     */
-    public function testApplyingAndRemovingQuoteUsingTopToolbar()
-    {
-        // Test single line
-        $this->selectKeyword(4);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-p', 'active');
-        $this->clickTopToolbarButton('Quote', NULL, TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><blockquote><p>%4% is a paragraph to change to a quote</p></blockquote>');
-
-        $this->clickTopToolbarButton('Quote', 'active', TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
-
-        // Make sure all icons are still enabled
-        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
-
-        // Test multi-line
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-div', 'active');
-        $this->clickTopToolbarButton('Quote', NULL, TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
-        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
-
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-blockquote', 'active');
-        $this->clickTopToolbarButton('Quote', 'active', TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><p>%4% is a paragraph to change to a quote</p>');
-        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
-
-    }//end testApplyingAndRemovingQuoteUsingTopToolbar()
 
 
     /**
@@ -324,197 +307,220 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
      */
     public function testCreatingNewContentWithABlockquoteTag()
     {
-        $this->selectKeyword(4);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->sikuli->keyDown('Key.RIGHT');
+        $this->useTest(4);
+
+        $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->type('New %5%');
-        $this->selectKeyword(5);
+
+        $this->type('New %2%');
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('formats-p', 'active');
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
-        $this->moveToKeyword(5, 'right');
+
+        $this->moveToKeyword(2, 'right');
         $this->type(' on the page');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('More new content');
 
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p><blockquote><p>New XTX on the page</p><p>More new content</p></blockquote>');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('Outside of blockquote');
+
+        $this->assertHTMLMatch('<p>Paragraph section %1%</p><blockquote><p>New %2% on the page</p><p>More new content</p></blockquote><p>Outside of blockquote</p>');
 
     }//end testCreatingNewContentWithABlockquoteTag()
 
 
     /**
-     * Test changing a multi-line div section to a quote.
+     * Tests changing a blockquote to a div and then back again.
      *
      * @return void
      */
-    public function testChaningMultiLineDivToQuote()
+    public function testChangingAQuoteToADiv()
     {
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-div', 'active');
-        $this->clickTopToolbarButton('Quote', NULL, TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
-
-        $this->clickTopToolbarButton('DIV', NULL, TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
-
-        $this->clickTopToolbarButton('Quote', NULL, TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
-
-    }//end testChaningMultiLineDivToQuote()
-
-
-     /**
-     * Tests that when you select a quote and then a word in that quote, the disabled format icon is shown in the top toolbar.
-     *
-     * @return void
-     */
-    public function testFormatIconWhenSwitchingBetweenQuoteAndWord()
-    {
-        // Highlight the content of a quote
-        $this->selectKeyword(1, 2);
-        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'), 'Active blockquote icon should appear in the top toolbar');
-
-        // Highlight a word in the selected paragraph
-        $this->selectKeyword(2);
-        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'disabled'), 'P icon should be disabled in the top toolbar');
-
-    }//end testFormatIconWhenSwitchingBetweenQuoteAndWord()
-
-
-    /**
-     * Tests changing a blockquote to a div and then back again using the inline toolbar.
-     *
-     * @return void
-     */
-    public function testChangingAQuoteToADivUsingInlineToolbar()
-    {
+        // Using inline toolbar with a single line
+        $this->useTest(3);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('formats-blockquote', 'active');
         $this->clickInlineToolbarButton('DIV', NULL, TRUE);
-        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, 'active', NULL, NULL);
-        $this->assertHTMLMatch('<div>%1% xtn %2%</div><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
-
-        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
-        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
-
-    }//end testChangingAQuoteToADivUsingInlineToolbar()
-
-
-    /**
-     * Tests changing a blockquote to a div and then back again using the top toolbar.
-     *
-     * @return void
-     */
-    public function testChangingAQuoteToADivUsingTopToolbar()
-    {
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div>');
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-div', 'active');
+        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn dolor</p></blockquote>');
+
+        // Using top toolbar with a single line
+        $this->useTest(3);
+        $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
-        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
-        $this->assertHTMLMatch('<div>%1% xtn %2%</div><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div>');
 
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('formats-div', 'active');
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
-        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn dolor</p></blockquote>');
 
-    }//end testChangingAQuoteToADivUsingTopToolbar()
+        // Using inline toolbar with multiline section
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-blockquote', 'active');
+        $this->clickInlineToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<div>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-div', 'active');
+        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<blockquote><p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
+
+        // Using top toolbar with multiline section
+        $this->useTest(2);
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('formats-blockquote', 'active');
+        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<div>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('formats-div', 'active');
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<blockquote><p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
+
+    }//end testChangingAQuoteToADiv()
 
 
-     /**
-     * Tests changing a Quote to a PRE and then back again using the inline toolbar.
+    /**
+     * Tests changing a Quote to a PRE and then back again.
      *
      * @return void
      */
-    public function testChangingAQuoteToAPreUsingTheInlineToolbar()
+    public function testChangingAQuoteToAPre()
     {
 
+        // Using inline toolbar with a single line
+        $this->useTest(3);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('formats-blockquote', 'active');
         $this->clickInlineToolbarButton('PRE', NULL, TRUE);
-        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, NULL, 'active');
-        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
-
-        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
-        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
-
-    }//end testChangingAQuoteToAPreUsingTheInlineToolbar()
-
-
-     /**
-     * Tests changing a Quote to a PRE and then back again using the top toolbar.
-     *
-     * @return void
-     */
-    public function testChangingAQuoteToAPreUsingTheTopToolbar()
-    {
+        $this->assertHTMLMatch('<pre>%1% xtn dolor</pre>');
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-pre', 'active');
+        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn dolor</p></blockquote>');
+
+        // Using top toolbar with a single line
+        $this->useTest(3);
+        $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('PRE', NULL, TRUE);
-        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, 'active');
-        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+        $this->assertHTMLMatch('<pre>%1% xtn dolor</pre>');
 
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('formats-pre', 'active');
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
-        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn dolor</p></blockquote>');
 
-    }//end testChangingAParagraphToAPreUsingTheTopToolbar()
+        // Using inline toolbar with multiline section
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-blockquote', 'active');
+        $this->clickInlineToolbarButton('PRE', NULL, TRUE);
+        $this->assertHTMLMatch('<pre>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre>');
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-pre', 'active');
+        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<blockquote><p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
+
+        // Using top toolbar with multiline section
+        $this->useTest(2);
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('formats-blockquote', 'active');
+        $this->clickTopToolbarButton('PRE', NULL, TRUE);
+        $this->assertHTMLMatch('<pre>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre>');
+
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('formats-pre', 'active');
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<blockquote><p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
+
+    }//end testChangingAQuoteToAPre()
 
 
-     /**
-     * Tests changing a Quote to a paragraph and then back again using the inline toolbar.
+    /**
+     * Tests changing a Quote to a paragraph and then back again.
      *
      * @return void
      */
-    public function testChangingAQuoteToAParagraphUsingTheInlineToolbar()
+    public function testChangingAQuoteToAParagraph()
     {
 
+        // Using inline toolbar with a single line
+        $this->useTest(3);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('formats-blockquote', 'active');
         $this->clickInlineToolbarButton('P', NULL, TRUE);
-        $this->checkStatusOfFormatIconsInTheInlineToolbar('active', NULL, NULL, NULL);
-        $this->assertHTMLMatch('<p>%1% xtn %2%</p><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
-
-        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
-        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
-
-    }//end testApplyingQuoteToAParagraphUsingTheInlineToolbar()
-
-
-     /**
-     * Tests changing a Quote to a paragraph and then back again using the top toolbar.
-     *
-     * @return void
-     */
-    public function testChangingAQuoteToAParagraphUsingTheTopToolbar()
-    {
+        $this->assertHTMLMatch('<p>%1% xtn dolor</p>');
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-p', 'active');
+        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn dolor</p></blockquote>');
+
+        // Using top toolbar with a single line
+        $this->useTest(3);
+        $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('P', NULL, TRUE);
-        $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
-        $this->assertHTMLMatch('<p>%1% xtn %2%</p><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+        $this->assertHTMLMatch('<p>%1% xtn dolor</p>');
 
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
-        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn dolor</p></blockquote>');
 
-    }//end testChangingAQuoteToAParagraphUsingTheTopToolbar()
+        // Using inline toolbar with multiline section
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-blockquote', 'active');
+        $this->clickInlineToolbarButton('P', NULL, TRUE);
+        $this->assertHTMLMatch('<p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats-p', 'active');
+        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<blockquote><p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
+
+        // Using top toolbar with multiline section
+        $this->useTest(2);
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('formats-blockquote', 'active');
+        $this->clickTopToolbarButton('P', NULL, TRUE);
+        $this->assertHTMLMatch('<p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('formats-p', 'active');
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<blockquote><p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
+
+    }//end testChangingAQuoteToAParagraph()
 
 
-     /**
+    /**
      * Tests selecting the P element in a blockquote and trying to change it to a blockquote.
      *
      * @return void
@@ -522,24 +528,31 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
     public function testChangingThePElementInQuoteToAQuote()
     {
 
+        $this->useTest(3);
+
+        // Using the inline toolbar
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickInlineToolbarButton('formats-blockquote', 'active');
         $this->clickInlineToolbarButton('Quote', 'active', TRUE);
         $this->checkStatusOfFormatIconsInTheInlineToolbar('active', NULL, NULL, NULL);
-        $this->assertHTMLMatch('<p>%1% xtn %2%</p><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+        $this->assertHTMLMatch('<p>%1% xtn dolor</p>');
 
-        // Change it back so we can test the top toolbar
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn dolor</p></blockquote>');
 
+        // Using the top toolbar
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('Quote', 'active', TRUE);
         $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
-        $this->assertHTMLMatch('<p>%1% xtn %2%</p><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+        $this->assertHTMLMatch('<p>%1% xtn dolor</p>');
+
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn dolor</p></blockquote>');
 
     }//end testChangingThePElementInQuoteToAQuote()
 
@@ -552,29 +565,36 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
     public function testChangingThePElementInQuoteToADiv()
     {
 
+        $this->useTest(3);
+
+        // Using the inline toolbar
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickInlineToolbarButton('formats-blockquote', 'active');
         $this->clickInlineToolbarButton('DIV', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, 'active', NULL, NULL);
-        $this->assertHTMLMatch('<div>%1% xtn %2%</div><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div>');
 
-        // Change it back so we can test the top toolbar
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn dolor</p></blockquote>');
 
+        // Using the top toolbar
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
-        $this->assertHTMLMatch('<div>%1% xtn %2%</div><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div>');
+
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn dolor</p></blockquote>');
 
     }//end testChangingThePElementInQuoteToADiv()
 
 
-     /**
+    /**
      * Tests selecting the P element in a blockquote and changing it to a Pre.
      *
      * @return void
@@ -582,29 +602,73 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
     public function testChangingThePElementInQuoteToAPre()
     {
 
+        $this->useTest(3);
+
+        // Using the inline toolbar
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickInlineToolbarButton('formats-blockquote', 'active');
         $this->clickInlineToolbarButton('PRE', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, NULL, 'active');
-        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+        $this->assertHTMLMatch('<pre>%1% xtn dolor</pre>');
 
-        // Change it back so we can test the top toolbar
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn dolor</p></blockquote>');
 
+        // Using the top toolbar
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('PRE', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, 'active');
-        $this->assertHTMLMatch('<pre>%1% xtn %2%</pre><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+        $this->assertHTMLMatch('<pre>%1% xtn dolor</pre>');
+
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn dolor</p></blockquote>');
 
     }//end testChangingThePElementInQuoteToAPre()
 
 
-     /**
+    /**
+     * Test selecting the P element in a blockquote and changing it to a P.
+     *
+     * @return void
+     */
+    public function testChangingThePElementInQuoteToAParagraph()
+    {
+
+        $this->useTest(3);
+
+        // Using the inline toolbar
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickInlineToolbarButton('formats-blockquote', 'active');
+        $this->clickInlineToolbarButton('P', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active', NULL, NULL, NULL);
+        $this->assertHTMLMatch('<p>%1% xtn dolor</p>');
+
+        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn dolor</p></blockquote>');
+
+        // Using the top toolbar
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('formats-blockquote', 'active');
+        $this->clickTopToolbarButton('P', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
+        $this->assertHTMLMatch('<p>%1% xtn dolor</p>');
+
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
+        $this->assertHTMLMatch('<blockquote><p>%1% xtn dolor</p></blockquote>');
+
+    }//end testChangingThePElementInQuoteToAParagraph()
+
+
+    /**
      * Tests that the list icons are not available for a quote.
      *
      * @return void
@@ -612,11 +676,12 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
     public function testListIconsNotAvailableForQuote()
     {
 
-        $this->sikuli->click($this->findKeyword(1));
+        $this->useTest(3);
+
+        $this->moveToKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('listOL', 'disabled'), 'Ordered list icon should be available in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists('listUL', 'disabled'), 'Unordered list icon should be available in the top toolbar');
 
-        sleep(1);
         $this->selectKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('listOL', 'disabled'), 'Ordered list icon should be available in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists('listUL', 'disabled'), 'Unordered list icon should be available in the top toolbar');
@@ -624,20 +689,14 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('listOL', 'disabled'), 'Ordered list icon should be available in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists('listUL', 'disabled'), 'Unordered list icon should be available in the top toolbar');
-        $this->sikuli->keyDown('Key.RIGHT');
 
-        // Change the div to a quote
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-div', 'active');
-        $this->clickTopToolbarButton('Quote', NULL, TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
-
-        $this->sikuli->click($this->findKeyword(3));
+        // Check multi-line Div section
+        $this->useTest(2);
+        $this->moveToKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('listOL', 'disabled'), 'Ordered list icon should be available in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists('listUL', 'disabled'), 'Unordered list icon should be available in the top toolbar');
 
-        $this->selectKeyword(3);
+        $this->selectKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('listOL', 'disabled'), 'Ordered list icon should be available in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists('listUL', 'disabled'), 'Unordered list icon should be available in the top toolbar');
 
@@ -655,17 +714,19 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
      */
     public function testUndoAndRedoForQuote()
     {
-        $this->selectKeyword(4);
+        $this->useTest(1);
+
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('formats-p', 'active');
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><blockquote><p>%4% is a paragraph to change to a quote</p></blockquote>');
+        $this->assertHTMLMatch('<blockquote><p>This is some content %1% to test blockquotes with</p></blockquote>');
 
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
+        $this->assertHTMLMatch('<p>This is some content %1% to test blockquotes with</p>');
 
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><blockquote><p>%4% is a paragraph to change to a quote</p></blockquote>');
+        $this->assertHTMLMatch('<blockquote><p>This is some content %1% to test blockquotes with</p></blockquote>');
 
     }//end testUndoAndRedoForQuote()
 
@@ -675,128 +736,83 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
      *
      * @return void
      */
-    public function testCombiningQuoteSections()
+    public function testCombiningAQuoteWithDifferentFormatSections()
     {
-        // Change the div to a quote
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-div', 'active');
-        $this->clickTopToolbarButton('Quote', NULL, TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
-
-        $this->moveToKeyword(3, 'left');
+        // Combine two blockquote sections
+        $this->useTest(5);
+        $this->moveToKeyword(1, 'left');
         $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<blockquote><p>First blockquote section%1% Second blockquote section</p></blockquote>');
 
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
+        // Combine a quote and a paragraph section
+        $this->useTest(6);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<blockquote><p>First blockquote section%1% Second paragraph section</p></blockquote>');
 
-    }//end testCombiningQuoteSections()
+        // Combine a quote and a div section
+        $this->useTest(7);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<blockquote><p>First blockquote section%1% Second div section</p></blockquote>');
+
+        // Combine a quote and a pre section
+        $this->useTest(8);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<blockquote><p>First blockquote section%1% Second pre section</p></blockquote>');
+
+    }//end testCombiningAQuoteWithDifferentFormatSections()
 
 
     /**
-     * Test combining a Quote sand P section.
+     * Test splitting a blockquote into multiple paragraphs and then joining them back together.
      *
      * @return void
      */
-    public function testCombiningQuoteAndPSections()
+    public function testSplittingOneQuoteIntoMultipleQuotes()
     {
-        // Change the div to a P
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-div', 'active');
-        $this->clickTopToolbarButton('P', NULL, TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p><p>%4% is a paragraph to change to a quote</p>');
+        $this->useTest(2);
 
-        $this->moveToKeyword(3, 'left');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
-
-    }//end testCombiningQuoteAndPSections()
-
-
-    /**
-     * Test combining a Quote sand Div section.
-     *
-     * @return void
-     */
-    public function testCombiningQuoteAndDivSections()
-    {
-        $this->moveToKeyword(3, 'left');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
-
-    }//end testCombiningQuoteAndDivSections()
-
-
-    /**
-     * Test combining a Quote sand Pre section.
-     *
-     * @return void
-     */
-    public function testCombiningQuoteAndPreSections()
-    {
-        // Change the div to a Pre
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-div', 'active');
-        $this->clickTopToolbarButton('PRE', NULL, TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><pre>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre><p>%4% is a paragraph to change to a quote</p>');
-
-        $this->moveToKeyword(3, 'left');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
-
-    }//end testCombiningQuoteAndPreSections()
-
-
-    /**
-     * Test splitting a blockquote into two paragraphs.
-     *
-     * @return void
-     */
-    public function testSplittingBlockQuotesIntoTwoParagraphs()
-    {
-        // Change the div to a blockquote
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('formats-div', 'active');
-        $this->clickTopToolbarButton('Quote', NULL, TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><blockquote><p>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
-
-        $this->moveToKeyword(3, 'right');
+        // Split the quote 
+        $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->type('test');
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn %2%</p></blockquote><blockquote><p>%3%</p></blockquote><p>test</p><blockquote><p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote><p>%4% is a paragraph to change to a quote</p>');
+        $this->type('a');
+        sleep(1);
+        $this->assertHTMLMatch('<blockquote><p>%1%</p></blockquote><p>a</p><blockquote><p> %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
 
-    }//end testSplittingBlockQuotesIntoTwoParagraphs()
-
-
-    /**
-     * Test splitting a blockquote into two paragraphs and then rejoining them together.
-     *
-     * @return void
-     */
-    public function testSplittingBlockQuotesIntoTwoParagraphsAndThenRejoinging()
-    {
-        $this->moveToKeyword(2, 'left');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('%5% test');
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn</p></blockquote><p>%5% test</p><blockquote><p>%2%</p></blockquote><div>%3% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>%4% is a paragraph to change to a quote</p>');
-
+        // Join the quote together
         $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<blockquote><p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
 
-        $this->moveToKeyword(5, 'left');
+    }//end testSplittingOneQuoteIntoMultipleQuotes()
+
+
+    /**
+     * Test splitting a paragraph in a quote into multiple paragraphs and then joining them back together.
+     *
+     * @return void
+     */
+    public function testSplittingParagraphInQuote()
+    {
+        $this->useTest(2);
+
+        // Split the paragraph 
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('a');
+        $this->assertHTMLMatch('<blockquote><p>%1%</p><p>a %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
+
+        // Join the paragraph together
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<blockquote><p>XAX xtn&nbsp;XTX testXBX</p></blockquote><div>XCX Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div><p>XDX is a paragraph to change to a quote</p>');
+        $this->assertHTMLMatch('<blockquote><p>%1%&nbsp;%2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
 
-    }//end testSplittingBlockQuotesIntoTwoParagraphsAndThenRejoinging()
+    }//end testSplittingParagraphInQuote()
 
 
 }//end class

@@ -49,6 +49,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
 
         $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs.com">%1% <strong>%2%</strong></a></p>');
 
@@ -61,6 +62,7 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
 
         $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs.com">%1% <strong>%2%</strong></a></p>');
 
@@ -1155,8 +1157,11 @@ class Viper_Tests_ViperLinkPlugin_LinkUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('link');
         $this->sikuli->keyDown('Key.CMD + v');
         $this->sikuli->keyDown('Key.TAB');
+        sleep(1);
         $this->type('Subject');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
 
         $this->assertHTMLMatch('<p>test</p><p><a href="mailto:%1%@squiz.com.au?subject=Subject">%1%@squiz.com.au</a></p>');
 
