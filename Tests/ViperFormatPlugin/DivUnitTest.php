@@ -410,10 +410,9 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
 
         // Remove Quote
         $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('Quote', 'active', TRUE);
-        $this->assertHTMLMatch('<div>%1% xtn dolor</div>');
+        $this->assertHTMLMatch('<div><p>%1%</p> xtn dolor</div>');
         $this->checkStatusOfFormatIconsInTheTopToolbar('active');
 
         // Do the same to a bold keyword
@@ -428,8 +427,8 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('Quote', 'active', TRUE);
-        $this->assertHTMLMatch('<div>Div section with a strong word <strong>%1%</strong></div>');
-        $this->checkStatusOfFormatIconsInTheTopToolbar();
+        $this->assertHTMLMatch('<div>Div section with a strong word <p><strong>%1%</strong></p></div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
 
         // Do the same to an italic keyword
         $this->useTest(5);
@@ -443,8 +442,8 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('Quote', 'active', TRUE);
-        $this->assertHTMLMatch('<div>Div section with an italic word <em>%1%</em></div>');
-        $this->checkStatusOfFormatIconsInTheTopToolbar();
+        $this->assertHTMLMatch('<div>Div section with an italic word <p><em>%1%</em></p></div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
 
     }//end testApplyingQuoteInsideDiv()
 
