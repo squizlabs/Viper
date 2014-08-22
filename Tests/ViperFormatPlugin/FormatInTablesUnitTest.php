@@ -1034,6 +1034,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
     {
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
@@ -1042,6 +1043,7 @@ class Viper_Tests_ViperFormatPlugin_FormatInTablesUnitTest extends AbstractViper
 
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');;
         $this->sikuli->keyDown('Key.ENTER');
