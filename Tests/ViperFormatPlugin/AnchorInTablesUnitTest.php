@@ -563,14 +563,14 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
 
 
     /**
-     * Test editing the table id using the inline toolbar.
+     * Test editing the table id.
      *
      * @return void
      */
-    public function testEditingTheTableIdUsingInlineToolbar()
+    public function testEditingTheTableId()
     {
+        // Using the inline toolbar
         $this->useTest(1);
-
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('anchorID', 'active');
@@ -579,18 +579,8 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<table id="test123" border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th id="test123r1c1">Col1 Header</th><th id="test123r1c2">Col2 %2%</th><th id="test123r1c3">Col3 Header</th></tr></thead><tfoot><tr><td colspan="3" headers="test123r1c1 test123r1c2 test123r1c3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td headers="test123r1c1">nec porta ante</td><td headers="test123r1c2">sapien vel %4%</td><td headers="test123r1c3"><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td headers="test123r1c1">nec porta ante</td><td colspan="2" headers="test123r1c2 test123r1c3">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
-    }//end testEditingTheTableIdUsingInlineToolbar()
-
-
-     /**
-     * Test editing the table id using the top toolbar.
-     *
-     * @return void
-     */
-    public function testEditingTheTableIdUsingTopToolbar()
-    {
+        // Using the top toolbar
         $this->useTest(1);
-        
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('anchorID', 'active');
@@ -599,7 +589,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<table id="test123" border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th id="test123r1c1">Col1 Header</th><th id="test123r1c2">Col2 %2%</th><th id="test123r1c3">Col3 Header</th></tr></thead><tfoot><tr><td colspan="3" headers="test123r1c1 test123r1c2 test123r1c3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td headers="test123r1c1">nec porta ante</td><td headers="test123r1c2">sapien vel %4%</td><td headers="test123r1c3"><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td headers="test123r1c1">nec porta ante</td><td colspan="2" headers="test123r1c2 test123r1c3">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
-    }//end testEditingTheTableIdUsingTopToolbar()
+    }//end testEditingTheTableId()
 
 }//end class
 
