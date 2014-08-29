@@ -11,7 +11,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
      *
      * @return void
      */
-    public function testFormatIconsInInlineToolbar()
+    public function testFormatIcons()
     {
         $this->useTest(1);
 
@@ -30,7 +30,89 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should appear in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists('anchorID'), 'Anchor icon should appear in the top toolbar');
 
-    }//end testFormatIconsInInlineToolbar()
+    }//end testFormatIcons()
+
+
+    /**
+     * Test the format icon in the toolbars when applying bold and italics to a section.
+     *
+     * @return void
+     */
+    public function testFormatIconWhenApplyingBoldAndItalics()
+    {
+        // Check icons when applying bold to a paragraph
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'disabled'));
+        $this->assertFalse($this->inlineToolbarButtonExists('formats-p', 'active'));
+        $this->assertFalse($this->inlineToolbarButtonExists('formats', NULL));
+        
+        // Check icons when applying italics to a paragraph
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'disabled'));
+        $this->assertFalse($this->inlineToolbarButtonExists('formats-p', 'active'));
+        $this->assertFalse($this->inlineToolbarButtonExists('formats', NULL));
+
+        // Check icons when applying bold to a div
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->assertTrue($this->topToolbarButtonExists('formats-div', NULL));
+        $this->assertFalse($this->inlineToolbarButtonExists('formats-div', 'active'));
+        $this->assertFalse($this->inlineToolbarButtonExists('formats', NULL));
+        
+        // Check icons when applying italics to a div
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->assertTrue($this->topToolbarButtonExists('formats-div', NULL));
+        $this->assertFalse($this->inlineToolbarButtonExists('formats-div', 'active'));
+        $this->assertFalse($this->inlineToolbarButtonExists('formats', NULL));
+
+        // Check icons when applying bold to a quote
+        $this->useTest(4);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'disabled'));
+        $this->assertFalse($this->inlineToolbarButtonExists('formats-blockquote', 'active'));
+        $this->assertFalse($this->inlineToolbarButtonExists('formats', NULL));
+        
+        // Check icons when applying italics to a quote
+        $this->useTest(4);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'disabled'));
+        $this->assertFalse($this->inlineToolbarButtonExists('formats-blockquote', 'active'));
+        $this->assertFalse($this->inlineToolbarButtonExists('formats', NULL));
+
+        // Check icons when applying bold to a pre
+        $this->useTest(5);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->assertTrue($this->topToolbarButtonExists('formats-pre', 'disabled'));
+        $this->assertFalse($this->inlineToolbarButtonExists('formats-pre', 'active'));
+        $this->assertFalse($this->inlineToolbarButtonExists('formats', NULL));
+        
+        // Check icons when applying italics to a pre
+        $this->useTest(5);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->assertTrue($this->topToolbarButtonExists('formats-pre', 'disabled'));
+        $this->assertFalse($this->inlineToolbarButtonExists('formats-pre', 'active'));
+        $this->assertFalse($this->inlineToolbarButtonExists('formats', NULL));
+
+    }//end testFormatIconWhenApplyingBoldAndItalics()
 
 
     /**
