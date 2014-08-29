@@ -780,8 +780,40 @@ class Viper_Tests_ViperImagePlugin_ImageUnitTest extends AbstractViperImagePlugi
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" width="300" height="280" /></p><p>sit amet <strong>%3%</strong></p>');
 
-    }//end testResizingAnImage()
+    }//end testResizingAnImageAndClickingUndo()
 
+
+    /**
+     * Test resizing an image, deleting it and then clicking undo.
+     *
+     * @return void
+     */
+    public function testResizeImageDeleteItAndClickUndo()
+    {
+        $this->moveToKeyword(2, 'right');
+
+        // Insert the image
+        $this->clickTopToolbarButton('image');
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
+        $this->clickField('Image is decorative');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton('image', 'selected');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /></p><p>sit amet <strong>%3%</strong></p>');
+
+        // Resize the image
+        $this->clickElement('img', 0);
+        $this->resizeImage(300);
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" width="300" height="280" /></p><p>sit amet <strong>%3%</strong></p>');
+
+        // Delete the image
+        $this->clickElement('img', 0);
+        $this->sikuli->keyDown('Key.DELETE');
+
+        // Undo and check that the resized image was inserted into the content
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% %2%<img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" width="300" height="280" /></p><p>sit amet <strong>%3%</strong></p>');
+
+    }//end testResizeImageDeleteItAndClickUndo()
 
     /**
      * Test that the image icon appears in the inline toolbar after you insert an image at the start of a paragraph.
