@@ -998,6 +998,59 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
     }//end testFormatIconInList()
 
 
+    /**
+     * Test applying formats to an image
+     *
+     * @return void
+     */
+    public function testApplyingFormatsToAnImage()
+    {
+        $this->useTest(13);
+
+        // Check icon is disabled for the image
+        $this->clickElement('img', 0);
+        $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'));
+        $this->assertFalse($this->inlineToolbarButtonExists('formats', 'disabled'));
+        $this->assertFalse($this->inlineToolbarButtonExists('formats-p', NULL));
+
+        // Select the P in the linage and check the icon
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'));
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'));
+
+        // Change format around the image using the inline toolbar
+        $this->clickInlineToolbarButton('formats-p', 'active');
+        $this->clickInlineToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% XuT</p><div><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167"/></div><p>LABS is ORSM</p>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, 'active', NULL, NULL);
+        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% XuT</p><blockquote><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167"/></p></blockquote><p>LABS is ORSM</p>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
+        $this->clickInlineToolbarButton('PRE', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% XuT</p><pre><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167"/></pre><p>LABS is ORSM</p>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, NULL, 'active');
+        $this->clickInlineToolbarButton('P', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167"/></p><p>LABS is ORSM</p>');
+        $this->checkStatusOfFormatIconsInTheInlineToolbar('active');
+
+        // Change format around the image using the top toolbar
+        $this->clickTopToolbarButton('formats-p', 'active');
+        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% XuT</p><div><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167"/></div><p>LABS is ORSM</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
+        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% XuT</p><blockquote><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167"/></p></blockquote><p>LABS is ORSM</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
+        $this->clickTopToolbarButton('PRE', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% XuT</p><pre><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167"/></pre><p>LABS is ORSM</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, 'active');
+        $this->clickTopToolbarButton('P', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167"/></p><p>LABS is ORSM</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
+
+    }//end testApplyingFormatsToAnImage()
+
+
 }//end class
 
 ?>
