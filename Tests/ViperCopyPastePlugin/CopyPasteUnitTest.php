@@ -142,22 +142,6 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
 
     /**
-     * Test that copying/pasting links works.
-     *
-     * @return void
-     */
-    public function testCopyPasteLinks()
-    {
-        $this->useTest(1);
-
-        $this->selectKeyword(1);
-        $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/CopyPasteFiles/ExampleLinks.txt'));
-        $this->assertHTMLMatch('<p>link with http - <a href="http://www.squizlabs.com">http://www.squizlabs.com</a></p><p>link with https - <a href="https://www.squizlabs.com">https://www.squizlabs.com</a></p><p>blocked link with http - <a href="http://www.squizlabs.com">blocked::http://www.squizlabs.com</a></p><p>blocked link with https - <a href="https://www.squizlabs.com">blocked::https://www.squizlabs.com</a></p>');
-
-    }//end testCopyPasteLinks()
-
-
-    /**
      * Test that copying/pasting a LibreOffice document works.
      *
      * @return void
