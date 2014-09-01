@@ -279,8 +279,10 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('This should be a paragraph');
+        $this->sikuli->keyDown('Key.UP');
+        $this->type('A new paragraph created above the previous paragraph');
 
-        $this->assertHTMLMatch('<p>Paragraph section XAX</p><p>New content</p><p>More new content</p><p>This should be a paragraph</p>');
+        $this->assertHTMLMatch('<p>Paragraph section XAX</p><p>New content</p><p>More new content</p><p>A new paragraph created above the previous paragraph</p><p>This should be a paragraph</p>');
 
     }//end testCreatingNewContentWithAPTag()
 
