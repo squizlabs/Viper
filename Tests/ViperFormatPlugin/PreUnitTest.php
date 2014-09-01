@@ -617,6 +617,32 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractFormatsUnitTest
     }//end testCombiningAPreWithDifferentFormatSections()
 
 
+    /**
+     * Test changing a heading to a pre and then adding new content.
+     *
+     * @return void
+     */
+    public function testChaningHeadingToPre()
+    {
+        $this->useTest(8);
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats', NULL);
+        $this->clickInlineToolbarButton('PRE', NULL, TRUE);
+        $this->assertHTMLMatch('<pre>Heading for the page %1%</pre><p>First paragraph on the page</p><p>Second paragraph on the page</p>');
+
+        $this->moveToKeyword(1, 'right');
+        $this->type(' New content');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('More new content');
+
+        $this->assertHTMLMatch('<pre>Heading for the page %1% New content</pre><p>More new content</p><p>First paragraph on the page</p><p>Second paragraph on the page</p>');
+
+    }//end testChaningHeadingToPre()
+
+
 }//end class
 
 ?>

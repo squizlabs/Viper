@@ -571,6 +571,31 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
 
     }//end testCombiningAParagraphWithDifferentFormatSections()
 
+
+    /**
+     * Test changing a heading to a paragraph and then adding new content.
+     *
+     * @return void
+     */
+    public function testChaningHeadingToParagraph()
+    {
+        $this->useTest(8);
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats', NULL);
+        $this->clickInlineToolbarButton('P', NULL, TRUE);
+        $this->assertHTMLMatch('<p>Heading for the page %1%</p><p>First paragraph on the page</p><p>Second paragraph on the page</p>');
+
+        $this->moveToKeyword(1, 'right');
+        $this->type(' New content');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('More new content');
+
+        $this->assertHTMLMatch('<p>Heading for the page %1% New content</p><p>More new content</p><p>First paragraph on the page</p><p>Second paragraph on the page</p>');
+
+    }//end testChaningHeadingToParagraph()
+
 }//end class
 
 ?>

@@ -813,6 +813,31 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
     }//end testApplyDivsAroundMultipleParagraphs()
 
 
+    /**
+     * Test changing a heading to a div and then adding new content.
+     *
+     * @return void
+     */
+    public function testChaningHeadingToDiv()
+    {
+        $this->useTest(12);
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats', NULL);
+        $this->clickInlineToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<div>Heading for the page %1%</div><p>First paragraph on the page</p><p>Second paragraph on the page</p>');
+
+        $this->moveToKeyword(1, 'right');
+        $this->type(' New content');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('More new content');
+
+        $this->assertHTMLMatch('<div>Heading for the page %1% New content</div><p>More new content</p><p>First paragraph on the page</p><p>Second paragraph on the page</p>');
+
+    }//end testChaningHeadingToDiv()
+
+
 }//end class
 
 ?>
