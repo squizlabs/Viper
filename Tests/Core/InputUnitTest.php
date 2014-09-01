@@ -58,10 +58,87 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('Testing input');
-
         $this->assertHTMLMatch('<p>%1%</p><p>Testing input</p><p>EIB MOZ</p>');
 
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.UP');
+        $this->type('New paragraph');
+        $this->assertHTMLMatch('<p>New paragraph</p><p>%1%</p><p>Testing input</p><p>EIB MOZ</p>');
+
     }//end testCreatingANewParagraph()
+
+
+    /**
+     * Test that the icons are available in the top toolbar when you create new paragraphs.
+     *
+     * @return void
+     */
+    public function testTopToolbarIcons()
+    {
+        $this->useTest(1);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertTrue($this->topToolbarButtonExists('bold', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('italic', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('removeFormat', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('headings', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('listUL', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('listOL', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('listIndent', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('listOutdent', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('table', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('image', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('insertHr', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('linkRemove', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('charmap', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('searchReplace', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('langtools', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('accessAudit', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('sourceView', NULL));
+
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.UP');
+        $this->assertTrue($this->topToolbarButtonExists('bold', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('italic', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('removeFormat', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('headings', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('listUL', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('listOL', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('listIndent', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('listOutdent', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('table', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('image', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('insertHr', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('linkRemove', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('charmap', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('searchReplace', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('langtools', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('accessAudit', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('sourceView', NULL));
+
+    }//end testTopToolbarIcons()
 
 
     /**
