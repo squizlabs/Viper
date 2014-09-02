@@ -75,6 +75,51 @@ class Viper_Tests_ViperListPlugin_CopyPasteListTest extends AbstractViperListPlu
     
     }//end testCopyAndPasteWholeList()
 
+
+    /**
+     * Test copy and paste part of a list inside another list
+     *
+     * @return void
+     */
+    public function testCopyAndPastePartOfListIntoAnotherList()
+    {
+        // Test copying unordered list items to another unordered list
+        $this->useTest(3);
+        $this->selectKeyword(1, 2);
+        $this->sikuli->keyDown('Key.CMD + c');
+        $this->moveToKeyword(3, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
+        $this->assertHTMLMatch('<p>First list:</p><ul><li>item 1</li><li>%1% item 2</li><li>item 3 %2%</li><li>item 4</li></ul><p>Second list:</p><ul><li>item 1</li><li>item 2 %3%</li><li>item 3 %2%</li><li>%1% item 2</li><li>item 3</li><li>item 4</li></ul>');
+
+        // Test copying ordered list items to another ordered list
+        $this->useTest(4);
+        $this->selectKeyword(1, 2);
+        $this->sikuli->keyDown('Key.CMD + c');
+        $this->moveToKeyword(3, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
+        $this->assertHTMLMatch('<p>First list:</p><ol><li>item 1</li><li>%1% item 2</li><li>item 3 %2%</li><li>item 4</li></ol><p>Second list:</p><ol><li>item 1</li><li>item 2 %3%</li><li>item 3 %2%</li><li>%1% item 2</li><li>item 3</li><li>item 4</li></ol>');
+
+         // Test copying list items into different list types
+        $this->useTest(5);
+        $this->selectKeyword(1, 2);
+        $this->sikuli->keyDown('Key.CMD + c');
+        $this->moveToKeyword(4, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
+        $this->assertHTMLMatch('<p>First list:</p><ul><li>item 1</li><li>%1% item 2</li><li>item 3 %2%</li><li>item 4</li></ul><p>Second list:</p><ol><li>item 1</li><li>%3% item 2</li><li>item 3 %4%</li><li>item 3 %2%</li><li>%1% item 2</li><li>item 4</li></ol>');
+
+        $this->selectKeyword(3, 4);
+        $this->sikuli->keyDown('Key.CMD + c');
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
+        $this->assertHTMLMatch('<p>First list:</p><ul><li>item 1</li><li>%1% item 2</li><li>item 3 %2%</li><li>item 3 %4%</li><li>%3% item 2</li><li>item 4</li></ul><p>Second list:</p><ol><li>item 1</li><li>%3% item 2</li><li>item 3 %4%</li><li>item 3 %2%</li><li>%1% item 2</li><li>item 4</li></ol>');
+
+    }//end testCopyAndPastePartOfListIntoAnotherList()
+
+
 }//end class
 
 ?>
