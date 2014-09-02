@@ -308,8 +308,10 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.CMD + a');
         $this->sikuli->keyDown('Key.DELETE');
 
-        $this->type('abc');
-        $this->assertHTMLMatch('<p>abc</p>');
+        $this->type('This is the first paragraph');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('This is the second paragraph');
+        $this->assertHTMLMatch('<p>This is the first paragraph</p><p>This is the second paragraph</p>');
 
     }//end testSelectAllAndRemove()
 
@@ -529,52 +531,6 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<p>123456</p>');
 
     }//end testTabInToViperWithNoContent()
-
-
-    /**
-     * Test embedding a youtube video.
-     *
-     * @return void
-     */
-    public function testEmbeddingVideo()
-    {
-        $this->useTest(1);
-        $this->sikuli->click($this->findKeyword(1));
-        $this->clickTopToolbarButton('sourceView');
-
-        // Check to make sure the source editor appears.
-        try {
-            $image = $this->findImage('dragPopupIcon', '.Viper-popup-dragIcon');
-        } catch (Exception $e) {
-            $this->fail('Source editor did not appear on the screen');
-        }
-
-        // Embed the video
-        $this->sikuli->keyDown('Key.CMD + a');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->type('<iframe title="Roadmap" src="http://www.youtube.com/embed/PYm4Atlxe4M" allowfullscreen="" frameborder="0" height="315" width="420"></iframe>');
-        $this->clickButton('Apply Changes', NULL, TRUE);
-
-        $this->assertHTMLMatch('<iframe title="Roadmap" src="http://www.youtube.com/embed/PYm4Atlxe4M" allowfullscreen="" frameborder="0" height="315" width="420"></iframe>');
-
-        $this->clickTopToolbarButton('sourceView');
-
-        // Check to make sure the source editor appears.
-        try {
-            $image = $this->findImage('dragPopupIcon', '.Viper-popup-dragIcon');
-        } catch (Exception $e) {
-            $this->fail('Source editor did not appear on the screen');
-        }
-
-        // Embed the video using object tags
-        $this->sikuli->keyDown('Key.CMD + a');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->type('<object width="560" height="315"><param name="movie" value="http://www.youtube.com/v/f6ZSZbNfSpk?version=3&amp;hl=en_GB"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/f6ZSZbNfSpk?version=3&amp;hl=en_GB" type="application/x-shockwave-flash" width="560" height="315" allowscriptaccess="always" allowfullscreen="true"></embed></object>');
-        $this->clickButton('Apply Changes', NULL, TRUE);
-
-
-    }//end testEmbeddingVideo()
-
 
 }//end class
 
