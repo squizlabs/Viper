@@ -169,6 +169,12 @@ class Viper_Tests_ViperLinkPlugin_CreateLinkUnitTest extends AbstractViperUnitTe
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1% link test test %2%</a></p>');
 
+        // Check icon in the top toolbar
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('link', 'active'), 'Link icon should be active in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('linkRemove'), 'Remove link icon should be available.');
+
     }//end testCreateLinkForParagraph()
 
 

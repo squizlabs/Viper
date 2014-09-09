@@ -386,6 +386,166 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
 
     }//end testAnchorIconDisabledWhenCopyParagraph()
 
+
+    /**
+     * Test that the Apply Changes button is inactive for a new selection after you click away from a previous selection.
+     *
+     * @return void
+     */
+    public function testApplyChangesButtonWhenClickingAwayFromAnchorPopUp()
+    {
+        // Using the inline toolbar
+        $this->useTest(1);
+
+        // Start creating the anchor for the first selection
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('id');
+
+        // Click away from the anchor by selecting a new selection
+        $this->selectKeyword(2);
+
+        // Make sure the anchor was not created
+        $this->assertHTMLMatch('<p>test content %1% more test content %2%</p>');
+        $this->clickInlineToolbarButton('anchorID');
+
+        // Check apply change button
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE));
+        $this->type('test');
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>test content %1% more test content <span id="test">%2%</span></p>');
+
+        // Using the top toolbar
+        $this->useTest(1);
+
+        // Start creating the anchor for the first selection
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('id');
+
+        // Click away from the anchor by selecting a new selection
+        $this->selectKeyword(2);
+
+        // Make sure the anchor was not created
+        $this->assertHTMLMatch('<p>test content %1% more test content %2%</p>');
+        $this->clickTopToolbarButton('anchorID');
+
+        // Check apply change button
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE));
+        $this->type('test');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>test content %1% more test content <span id="test">%2%</span></p>');
+
+    }//end testApplyChangesButtonWhenClickingAwayFromAnchorPopUp()
+
+
+    /**
+     * Test that the Apply Changes button is inactive for a new selection after you close the anchor pop without saving the changes.
+     *
+     * @return void
+     */
+    public function testApplyChangesButtonWhenClosingTheAnchorPopUp()
+    {
+        // Using the inline toolbar
+        $this->useTest(1);
+
+        // Start creating the anchor for the first selection
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('id');
+
+        // Close pop up without saving changes and make new select
+        $this->clickInlineToolbarButton('anchorID', 'selected');
+        $this->selectKeyword(2);
+
+        // Make sure the anchor was not created
+        $this->assertHTMLMatch('<p>test content %1% more test content %2%</p>');
+        $this->clickInlineToolbarButton('anchorID');
+
+        // Check icons
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE));
+        $this->type('test');
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>test content %1% more test content <span id="test">%2%</span></p>');
+
+        // Using the top toolbar
+        $this->useTest(1);
+
+        // Start creating the anchor for the first selection
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('id');
+
+        // Close pop up without saving changes and make new select
+        $this->clickTopToolbarButton('anchorID', 'selected');
+        $this->selectKeyword(2);
+
+        // Make sure the anchor was not created
+        $this->assertHTMLMatch('<p>test content %1% more test content %2%</p>');
+        $this->clickTopToolbarButton('anchorID');
+
+        // Check icons
+        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE));
+        $this->type('test');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>test content %1% more test content <span id="test">%2%</span></p>');
+
+    }//end testApplyChangesButtonWhenClosingTheAnchorPopUp()
+
+
+    /**
+     * Test that the Apply Changes button is inactive after you cancel changes to a anchor.
+     *
+     * @return void
+     */
+    public function testApplyChangesButtonIsDisabledAfterCancellingChangesToALink()
+    {
+        // Using the inline toolbar
+        $this->useTest(4);
+
+        // Select anchor and make changes without saving
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('anchorID', 'active');
+        $this->type('222');
+        $this->selectKeyword(2);
+
+        // Check to make sure the HTML did not change.
+        $this->assertHTMLMatch('<p>test content <span id="test1">%1%</span> more test content %2%</p>');
+
+        // Select the anchor again and make sure the Apply Changes button is inactive
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('anchorID', 'active');
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE));
+
+        // Edit the anchor and make sure the Apply Changes button still works.
+        $this->type('234');
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>test content <span id="test1234">%1%</span> more test content %2%</p>');
+
+        // Using the top toolbar
+        $this->useTest(4);
+
+        // Select anchor and make changes without saving
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('anchorID', 'active');
+        $this->type('333');
+        $this->selectKeyword(2);
+
+        // Check to make sure the HTML did not change.
+        $this->assertHTMLMatch('<p>test content <span id="test1">%1%</span> more test content %2%</p>');
+
+        // Select the anchor again and make sure the Apply Changes button is inactive
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('anchorID', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE));
+
+        // Edit the anchor and make sure the Apply Changes button still works.
+        $this->type('234');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>test content <span id="test1234">%1%</span> more test content %2%</p>');
+
+    }//end testApplyChangesButtonIsDisabledAfterCancellingChangesToALink()
+
 }//end class
 
 ?>
