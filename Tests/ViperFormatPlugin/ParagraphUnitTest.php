@@ -33,13 +33,13 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
-        $this->assertHTMLMatch('<div>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+        $this->assertHTMLMatch('<div>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae %2%.</div>');
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
 
         $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-div', 'active');
         $this->clickTopToolbarButton('P', NULL, TRUE);
-        $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+        $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae %2%.</p>');
         $this->checkStatusOfFormatIconsInTheTopToolbar('active');
 
     }//end testApplingAndRemovingTheParagraphFormatWhenClickingInSection()
@@ -90,14 +90,14 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('formats-p', 'active');
         $this->clickInlineToolbarButton('DIV', NULL, TRUE);
-        $this->assertHTMLMatch('<div>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+        $this->assertHTMLMatch('<div>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae %2%.</div>');
         $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, 'active', NULL, NULL);
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('formats-div', 'active');
         $this->clickInlineToolbarButton('P', NULL, TRUE);
-        $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+        $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae %2%.</p>');
         $this->checkStatusOfFormatIconsInTheInlineToolbar('active');
 
         // Using the top toolbar on a multi-line section
@@ -106,14 +106,14 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
-        $this->assertHTMLMatch('<div>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+        $this->assertHTMLMatch('<div>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae %2%.</div>');
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('formats-div', 'active');
         $this->clickTopToolbarButton('P', NULL, TRUE);
-        $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+        $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae %2%.</p>');
         $this->checkStatusOfFormatIconsInTheTopToolbar('active');
         
     }//end testApplingAndRemovingTheQuoteFormatWhenSelectingASection()
@@ -182,7 +182,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('P', 'active', TRUE);
-        $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+        $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae %2%.</p>');
         $this->checkStatusOfFormatIconsInTheTopToolbar('active');
         
     }//end testCheckWhenPIconIsAvailableInToolbar()
@@ -251,7 +251,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'));
         $this->clickInlineToolbarButton('formats-p', 'active');
         $this->checkStatusOfFormatIconsInTheInlineToolbar('active');
-        $this->assertEquals($this->replaceKeywords('%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.'), $this->getSelectedText(), 'Original selection is not selected');
+        $this->assertEquals($this->replaceKeywords('%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae %2%.'), $this->getSelectedText(), 'Original selection is not selected');
 
         // Make sure the correct icons are being shown in the top toolbar.
         $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'));
@@ -327,20 +327,20 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('formats-p', 'active');
         $this->clickInlineToolbarButton('DIV', NULL, TRUE);
-        $this->assertHTMLMatch('<div>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+        $this->assertHTMLMatch('<div>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae %2%.</div>');
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('formats-div', 'active');
         $this->clickInlineToolbarButton('P', NULL, TRUE);
-        $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+        $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae %2%.</p>');
 
         // Using top toolbar with multiline section
         $this->useTest(2);
         $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
-        $this->assertHTMLMatch('<div>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</div>');
+        $this->assertHTMLMatch('<div>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae %2%.</div>');
 
         $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-div', 'active');
@@ -391,25 +391,25 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('formats-p', 'active');
         $this->clickInlineToolbarButton('PRE', NULL, TRUE);
-        $this->assertHTMLMatch('<pre>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre>');
+        $this->assertHTMLMatch('<pre>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae %2%.</pre>');
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('formats-pre', 'active');
         $this->clickInlineToolbarButton('P', NULL, TRUE);
-        $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+        $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae %2%.</p>');
 
         // Using top toolbar with multiline section
         $this->useTest(2);
         $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('PRE', NULL, TRUE);
-        $this->assertHTMLMatch('<pre>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre>');
+        $this->assertHTMLMatch('<pre>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae %2%.</pre>');
 
         $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-pre', 'active');
         $this->clickTopToolbarButton('P', NULL, TRUE);
-        $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+        $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae %2%.</p>');
 
     }//end testChangingAParagraphToAPre()
 
@@ -455,25 +455,25 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('formats-p', 'active');
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
+        $this->assertHTMLMatch('<blockquote><p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae %2%.</p></blockquote>');
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('formats-blockquote', 'active');
         $this->clickInlineToolbarButton('P', NULL, TRUE);
-        $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+        $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae %2%.</p>');
 
         // Using top toolbar with multiline section
         $this->useTest(2);
         $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
-        $this->assertHTMLMatch('<blockquote><p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
+        $this->assertHTMLMatch('<blockquote><p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae %2%.</p></blockquote>');
 
         $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('P', NULL, TRUE);
-        $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+        $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae %2%.</p>');
 
     }//end testApplyingQuoteToAParagraph()
 
@@ -597,6 +597,54 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->assertHTMLMatch('<p>Heading for the page %1% New content</p><p>More new content</p><p>First paragraph on the page</p><p>Second paragraph on the page</p>');
 
     }//end testChaningHeadingToParagraph()
+
+
+    /**
+     * Test that p tags remain in the source when you delete a bold paragraph.
+     *
+     * @return void
+     */
+    public function testDeletingBoldParagraph()
+    {
+        $this->useTest(2);
+
+        // Apply bold formatting to the paragraph
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('bold');
+        $this->assertHTMLMatch('<p><strong>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae %2%.</strong></p>');
+
+        // Delete content and add new content
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->type('This is a new paragraph on the page');
+        $this->assertHTMLMatch('<p>This is a new paragraph on the page</p>');
+
+    }//end testDeletingBoldParagraph()
+
+
+    /**
+     * Test that p tags remain in the source when you delete an italic paragraph.
+     *
+     * @return void
+     */
+    public function testDeletingItalicParagraph()
+    {
+        $this->useTest(2);
+
+        // Apply italic formatting to the paragraph
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('italic');
+        $this->assertHTMLMatch('<p><em>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae %2%.</em></p>');
+
+        // Delete content and add new content
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->type('This is a new paragraph on the page');
+        $this->assertHTMLMatch('<p>This is a new paragraph on the page</p>');
+
+    }//end testDeletingItalicParagraph()
 
 }//end class
 

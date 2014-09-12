@@ -158,6 +158,24 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
 
 
     /**
+     * Test checking that the italic tag is not used when you delete bold content and add new content.
+     *
+     * @return void
+     */
+    public function testDeletingItalicContent()
+    {
+        $this->useTest(1);
+        
+        // Delete italic word and replace with new content
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('this is new content');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit this is new content <strong>%5%</strong></p>');
+
+    }//end testDeletingItalicContent()
+
+    /**
      * Test that the shortcut command works for Italics.
      *
      * @return void
