@@ -541,6 +541,24 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
 
 
     /**
+     * Test undo icon when creating a new paragraph.
+     *
+     * @return void
+     */
+    public function testCheckUndoIconWhenCreatingNewParagraph()
+    {
+        $this->useTest(2);
+
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.ENTER');
+
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', NULL));
+       
+    }//end testCheckUndoIconWhenCreatingNewParagraph()
+
+
+    /**
      * Test combining different formats to a pre section.
      *
      * @return void
