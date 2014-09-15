@@ -20,24 +20,27 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>test content <span id="test1">%1%</span> more test content %2%</p>');
 
-        $this->selectKeyword(2);
-        $this->clickInlineToolbarButton('anchorID');
-        $this->type('test2');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>test content <span id="test1">%1%</span> more test content <span id="test2">%2%</span></p>');
-
-        // Remove anchor using inline toolbar
+        // Re-select the word and remove anchor using inline toolbar and pressing enter
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('anchorID', 'active');
         $this->clearFieldValue('ID');
         $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content %1% more test content %2%</p>');
+
+        // Apply anchor using the inline toolbar and pressing Apply Changes
+        $this->selectKeyword(2);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test2');
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>test content %1% more test content <span id="test2">%2%</span></p>');
 
-        $this->selectKeyword(2);
-        $this->clickInlineToolbarButton('anchorID', 'active');
+        // Remove anchor using inline toolbar and pressing Apply Changes, without re-selecting the word
         $this->clearFieldValue('ID');
-        $this->sikuli->keyDown('Key.ENTER');
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>test content %1% more test content %2%</p>');
+
+        // Check that the P icon is not active in the top toolbar. This was reported as a bug.
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'disabled'));
 
          // Apply anchor using the top toolbar
         $this->selectKeyword(1);
@@ -46,24 +49,27 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>test content <span id="test1">%1%</span> more test content %2%</p>');
 
-        $this->selectKeyword(2);
-        $this->clickTopToolbarButton('anchorID');
-        $this->type('test2');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>test content <span id="test1">%1%</span> more test content <span id="test2">%2%</span></p>');
-
-        // Remove anchor using inline toolbar
+        // Re-select the word and remove anchor using top toolbar
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('anchorID', 'active');
         $this->clearFieldValue('ID');
         $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content %1% more test content %2%</p>');
+
+        // Apply anchor using the top toolbar and pressing Apply Changes
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test2');
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>test content %1% more test content <span id="test2">%2%</span></p>');
 
-        $this->selectKeyword(2);
-        $this->clickTopToolbarButton('anchorID', 'active');
+        // Remove anchor using top toolbar and pressing Apply Changes, without re-selecting the word
         $this->clearFieldValue('ID');
-        $this->sikuli->keyDown('Key.ENTER');
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>test content %1% more test content %2%</p>');
+
+        // Check that the P icon is not active in the top toolbar. This was reported as a bug.
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'disabled'));
 
     }//end testApplyAndRemoveAnchorToWord()
 

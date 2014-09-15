@@ -2,7 +2,7 @@
 
 require_once 'AbstractFormatsUnitTest.php';
 
-class Viper_Tests_ViperFormatPlugin_DivUnitTest::testFormatIconWhenSelectingDivs extends AbstractFormatsUnitTest
+class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
 {
 
     /**

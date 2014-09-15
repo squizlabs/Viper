@@ -23,30 +23,31 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>This is some content <span class="test">%1%</span> in my unit test %2%</p>');
 
+        // Re-select the word and remove class using inline toolbar and pressing enter
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('cssClass', 'active');
+        $this->clearFieldValue('Class');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->assertHTMLMatch('<p>This is some content %1% in my unit test %2%</p>');
+
         // Add class using inline toolbar and pressing Apply Changes.
         $this->selectKeyword(2);
         sleep(1);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('class');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p>This is some content <span class="test">%1%</span> in my unit test <span class="class">%2%</span></p>');
-        
-        // Remove class using inline toolbar and pressing enter
-        $this->selectKeyword(1);
-        $this->clickInlineToolbarButton('cssClass', 'active');
-        $this->clearFieldValue('Class');
-        $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
         $this->assertHTMLMatch('<p>This is some content %1% in my unit test <span class="class">%2%</span></p>');
         
-        // Remove class using inline toolbar and pressing Apply Changes
-        $this->selectKeyword(2);
-        $this->clickInlineToolbarButton('cssClass', 'active');
+        // Remove class using inline toolbar and pressing Apply Changes, without re-selecting the word
         $this->clearFieldValue('Class');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         sleep(1);
         $this->assertHTMLMatch('<p>This is some content %1% in my unit test %2%</p>');
-        
+
+        // Check that the P icon is not active in the top toolbar. This was reported as a bug.
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'disabled'));
+
         // Add class using top toolbar and pressing enter
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('cssClass');
@@ -54,28 +55,29 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>This is some content <span class="test">%1%</span> in my unit test %2%</p>');
 
-         // Add class using top toolbar and pressing Apply Changes
-        $this->selectKeyword(2);
-        $this->clickTopToolbarButton('cssClass');
-        $this->type('class');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p>This is some content <span class="test">%1%</span> in my unit test <span class="class">%2%</span></p>');
-        
-        // Remove class using top toolbar and pressing enter
+        // Re-select the word and remove class using top toolbar and pressing enter
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
+        $this->assertHTMLMatch('<p>This is some content %1% in my unit test %2%</p>');
+
+         // Add class using top toolbar and pressing Apply Changes
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('cssClass');
+        $this->type('class');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>This is some content %1% in my unit test <span class="class">%2%</span></p>');
         
-        // Remove class using top toolbar and pressing Apply Changes
-        $this->selectKeyword(2);
-        $this->clickTopToolbarButton('cssClass', 'active');
+        // Remove class using top toolbar and pressing Apply Changes, without re-selecting the word
         $this->clearFieldValue('Class');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         sleep(1);
         $this->assertHTMLMatch('<p>This is some content %1% in my unit test %2%</p>');
+
+        // Check that the P icon is not active in the top toolbar. This was reported as a bug.
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'disabled'));
 
     }//end testAddingAndRemovingClassAttributeToAWord()
 
