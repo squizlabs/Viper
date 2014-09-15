@@ -504,6 +504,33 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
 
     /**
+     * Test that the class field remamins open in the inline toolbar when applying a class to a word after applying bold and italic.
+     *
+     * @return void
+     */
+    public function testClassFieldRemainsOpenAfterApplyingBoldAndItalic()
+    {
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('bold');
+        $this->clickInlineToolbarButton('italic');
+
+        // Select bold in the lineage
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->type('test');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>This is some content<strong class="test"><em>%1%</em></strong> in my unit test %2%</p>');
+
+        // Check that the class field stayed open in the inline toolbar has remaind open with the class field
+        $this->type('class');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>This is some content <strong class="testclass"><em>%1%</em></strong> in my unit test %2%</p>');
+
+    }//end testClassFieldRemainsOpenAfterApplyingBoldAndItalic()
+
+
+    /**
      * Test that you can apply a class to a pargraph where the first word is italic.
      *
      * @return void

@@ -546,6 +546,33 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
 
     }//end testApplyChangesButtonIsDisabledAfterCancellingChangesToALink()
 
+
+    /**
+     * Test that the anchor field remamins open in the inline toolbar when applying a anchor to a word after applying bold and italic.
+     *
+     * @return void
+     */
+    public function testAnchorFieldRemainsOpenAfterApplyingBoldAndItalic()
+    {
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('bold');
+        $this->clickInlineToolbarButton('italic');
+
+        // Select bold in the lineage
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content <strong id="test"><em>%1%</em></strong> more test content %2%</p>');
+
+        // Check that the anchor field stayed open in the inline toolbar has remaind open with the anchor field
+        $this->type('anchor');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content <strong id="testanchor"><em>%1%</em></strong> more test content %2%</p>');
+
+    }//end testAnchorFieldRemainsOpenAfterApplyingBoldAndItalic()
+    
 }//end class
 
 ?>
