@@ -415,32 +415,36 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that removing characters using DELETE works.
+     * Test Delete and Backspace.
      *
      * @return void
      */
-    public function testDelete()
+    public function testDeleteAndBackspace()
     {
+        // Test delete
         $this->useTest(1);
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.CMD + b');
-        $this->type('test');
-        $this->sikuli->keyDown('Key.CMD + b');
-        $this->type(' input...');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('Testing...');
 
-        for ($i = 0; $i < 27; $i++) {
-            $this->sikuli->keyDown('Key.LEFT');
-        }
+        $this->moveToKeyword(1, 'left');
+        sleep(1);
 
-        for ($i = 0; $i < 28; $i++) {
+        for ($i = 0; $i < 8; $i++) {
             $this->sikuli->keyDown('Key.DELETE');
         }
 
-        $this->assertHTMLMatch('<p>EIB MOZ %2%</p>');
+        $this->assertHTMLMatch('<p>MOZ %2%</p>');
 
-    }//end testDelete()
+        // Test backspace
+        $this->useTest(1);
+
+        $this->moveToKeyword(2, 'right');
+
+        for ($i = 0; $i < 8; $i++) {
+            $this->sikuli->keyDown('Key.BACKSPACE');
+        }
+
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB</p>');
+
+    }//end testDeleteAndBackspace()
 
 
     /**
@@ -640,6 +644,23 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<p>123456</p>');
 
     }//end testTabInToViperWithNoContent()
+
+
+    /**
+     * Test entering content before a br tag.
+     *
+     * @return void
+     */
+    public function testEnteringContentBeforeBrTag()
+    {
+        $this->useTest(7);
+        $this->moveToKeyword(1, 'right');
+        sleep(1);
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('Testing input');
+        $this->assertHTMLMatch('<p>%1%</p><p>Testing input<br />%2%<br />%3%</p>');
+
+    }//end testEnteringContentBeforeBrTag()
 
 }//end class
 
