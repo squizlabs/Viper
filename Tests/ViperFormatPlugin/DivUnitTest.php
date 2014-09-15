@@ -2,8 +2,28 @@
 
 require_once 'AbstractFormatsUnitTest.php';
 
-class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
+class Viper_Tests_ViperFormatPlugin_DivUnitTest::testFormatIconWhenSelectingDivs extends AbstractFormatsUnitTest
 {
+
+    /**
+     * Test format icons when selecting divs.
+     *
+     * @return void
+     */
+    public function testFormatIconWhenSelectingDivs()
+    {
+        $this->useTest(13);
+
+        // Check selecting a single div
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('formats-div', 'active'));
+
+        // Check selecting multiple divs
+        $this->selectKeyword(1, 2);
+        $this->assertTrue($this->topToolbarButtonExists('formats', NULL));
+
+    }//end testFormatIconWhenSelectingDivs()
 
 
     /**

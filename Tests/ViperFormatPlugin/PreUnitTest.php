@@ -5,6 +5,27 @@ require_once 'AbstractFormatsUnitTest.php';
 class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractFormatsUnitTest
 {
 
+    /**
+     * Test format icons when selecting multiple pre sections.
+     *
+     * @return void
+     */
+    public function testFormatIconWhenSelectingPreSections()
+    {
+        $this->useTest(9);
+
+        // Check selecting a single pre section
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-pre', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('formats-pre', 'active'));
+
+        // Check selecting multiple pre sections
+        $this->selectKeyword(1, 2);
+        $this->assertTrue($this->topToolbarButtonExists('formats', NULL));
+
+    }//end testFormatIconWhenSelectingPreSections()
+
 
     /**
      * Test applying and removing the pre tag to a paragraph when clicking in a section

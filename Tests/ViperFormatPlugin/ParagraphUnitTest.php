@@ -7,6 +7,29 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
 
 
     /**
+     * Test format icons when selecting paragraphs.
+     *
+     * @return void
+     */
+    public function testFormatIconWhenSelectingParagraphs()
+    {
+        $this->useTest(8);
+
+        // Check selecting a single paragraph
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'));
+
+        // Check selecting multiple paragraphs
+        $this->selectKeyword(2, 3);
+        $this->assertTrue($this->inlineToolbarButtonExists('formats', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('formats', NULL));
+
+    }//end testFormatIconWhenSelectingParagraphs()
+
+
+    /**
      * Test applying and removing the paragraph tag when clicking in a section
      *
      * @return void
@@ -605,14 +628,14 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('formats', NULL);
         $this->clickInlineToolbarButton('P', NULL, TRUE);
-        $this->assertHTMLMatch('<p>Heading for the page %1%</p><p>First paragraph on the page</p><p>Second paragraph on the page</p>');
+        $this->assertHTMLMatch('<p>Heading for the page %1%</p><p>%2% First paragraph on the page</p><p>Second paragraph on the page %3%</p>');
 
         $this->moveToKeyword(1, 'right');
         $this->type(' New content');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('More new content');
 
-        $this->assertHTMLMatch('<p>Heading for the page %1% New content</p><p>More new content</p><p>First paragraph on the page</p><p>Second paragraph on the page</p>');
+        $this->assertHTMLMatch('<p>Heading for the page %1% New content</p><p>More new content</p><p>%2% First paragraph on the page</p><p>Second paragraph on the page %3%</p>');
 
     }//end testChaningHeadingToParagraph()
 
