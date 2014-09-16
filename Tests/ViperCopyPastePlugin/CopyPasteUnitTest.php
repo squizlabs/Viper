@@ -13,6 +13,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
      */
     public function testSimpleTextCopyPaste()
     {
+        // Copy and paste without deleteing text
         $this->useTest(1);
 
         $this->selectKeyword(1);
@@ -28,6 +29,26 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->type('C');
 
         $this->assertHTMLMatch('<p>%1%A</p><p>%1%B</p><p>%1%C</p>');
+
+        // Delete all content, add new content and then copy and paste
+        $this->useTest(1);
+        $this->moveToKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('%1% This is one line of content %2%');
+        $this->selectKeyword(1, 2);
+        sleep(1);
+        $this->sikuli->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
+        $this->assertHTMLMatch('<p>%1% This is one line of content %2%</p><p>%1% This is one line of content %2%</p>');
+        $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
+        $this->assertHTMLMatch('<p>%1% This is one line of content %2%</p><p>%1% This is one line of content %2%</p><p>%1% This is one line of content %2%</p>');
+        $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
+        $this->assertHTMLMatch('<p>%1% This is one line of content %2%</p><p>%1% This is one line of content %2%</p><p>%1% This is one line of content %2%</p><p>%1% This is one line of content %2%</p>');
 
     }//end testSimpleTextCopyPaste()
 
