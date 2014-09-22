@@ -43,12 +43,25 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
         $this->assertHTMLMatch('<p>%1% This is one line of content %2%</p><p>%1% This is one line of content %2%</p>');
+        // Type some content to make sure the cursor is at the end
+        $this->type(' Added content');
+        $this->assertHTMLMatch('<p>%1% This is one line of content %2%</p><p>%1% This is one line of content %2% Added content</p>');
+
+        // Paste again
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
-        $this->assertHTMLMatch('<p>%1% This is one line of content %2%</p><p>%1% This is one line of content %2%</p><p>%1% This is one line of content %2%</p>');
+        $this->assertHTMLMatch('<p>%1% This is one line of content %2%</p><p>%1% This is one line of content %2% Added content</p><p>%1% This is one line of content %2%</p>');
+        // Type some content to make sure the cursor is at the end
+        $this->type(' More added content');
+        $this->assertHTMLMatch('<p>%1% This is one line of content %2%</p><p>%1% This is one line of content %2% Added content</p><p>%1% This is one line of content %2% More added content</p>');
+
+        // Paste again
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
-        $this->assertHTMLMatch('<p>%1% This is one line of content %2%</p><p>%1% This is one line of content %2%</p><p>%1% This is one line of content %2%</p><p>%1% This is one line of content %2%</p>');
+        $this->assertHTMLMatch('<p>%1% This is one line of content %2%</p><p>%1% This is one line of content %2% Added content</p><p>%1% This is one line of content %2% More added content</p><p>%1% This is one line of content %2%</p>');
+        // Type some content to make sure the cursor is at the end
+        $this->type(' Last added content');
+        $this->assertHTMLMatch('<p>%1% This is one line of content %2%</p><p>%1% This is one line of content %2% Added content</p><p>%1% This is one line of content %2% More added content</p><p>%1% This is one line of content %2% Last added content</p>');
 
     }//end testSimpleTextCopyPaste()
 
