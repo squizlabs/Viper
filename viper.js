@@ -255,7 +255,7 @@ Viper.prototype = {
     _createElementHolder: function()
     {
         var holder = document.createElement('div');
-        Viper.document.body.appendChild(holder);
+        document.body.appendChild(holder);
 
         // Add browser type.
         var browser = ViperUtil.getBrowserType();
