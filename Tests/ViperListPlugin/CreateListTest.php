@@ -252,6 +252,54 @@ class Viper_Tests_ViperListPlugin_CreateListTest extends AbstractViperListPlugin
 
     }//end testCreatingNewListAndDeletingIt()
 
+
+    /**
+     * Tests creating a new list and then deleting it
+     *
+     * @return void
+     */
+    public function testCreatingNewListAfterDeletingAllContent()
+    {
+        //Test unordered list
+        $this->useTest(4);
+
+        //Enter content
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+
+        // Create unordered list and delete it
+        $this->clickTopToolbarButton('listUL');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p></p>');
+
+        // Create unordered list and add a list item
+        $this->clickTopToolbarButton('listUL');
+        $this->type('New list item');
+        $this->assertHTMLMatch('<ul><li>New list item</li></ul>');
+
+        //Test ordered list
+        $this->useTest(4);
+
+        //Enter content
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+
+        // Create ordered list and delete it
+        $this->clickTopToolbarButton('listOL');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p></p>');
+
+        // Create ordered list and add a list item
+        $this->clickTopToolbarButton('listOL');
+        $this->type('New list item');
+        $this->assertHTMLMatch('<ol><li>New list item</li></ol>');
+
+    }//end testCreatingNewListAfterDeletingAllContent()
+
 }//end class
 
 ?>
