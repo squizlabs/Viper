@@ -289,6 +289,68 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
     }//end testCopyPasteImage()
 
 
+    /**
+     * Test copy and pasting acroynm, abbreviation and language.
+     *
+     * @return void
+     */
+    public function testCopyPasteLanguageSettings()
+    {
+        $this->useTest(5);
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->sikuli->keyDown('Key.CMD + c');
+        sleep(1);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
+        $this->assertHTMLMatch('<p>%1% This is the <span lang="en">first</span> <acronym title="abc">paragraph</acronym> in the <abbr title="def">content</abbr> of the page %2%</p><p>This is the second one %2%</p><p>%1% This is the <span lang="en">first</span> <acronym title="abc">paragraph</acronym> in the <abbr title="def">content</abbr> of the page %2%</p>');
+
+    }//end testCopyPasteLanguageSettings()
+
+
+    /**
+     * Test copy and pasting direction settings.
+     *
+     * @return void
+     */
+    public function testCopyPasteDirectionSettings()
+    {
+        $this->useTest(6);
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->sikuli->keyDown('Key.CMD + c');
+        sleep(1);
+        $this->moveToKeyword(4, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
+        $this->assertHTMLMatch('<p dir="rtl">Write this text right-to-left %1%</p><p dir="ltr">Write this text left-to-right %2%</p><p dir="auto">Auto setting for direction %3%</p><p>Last paragraph %4%</p><p dir="rtl">Write this text right-to-left %1%</p>');
+
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->sikuli->keyDown('Key.CMD + c');
+        sleep(1);
+        $this->moveToKeyword(4, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
+        $this->assertHTMLMatch('<p dir="rtl">Write this text right-to-left %1%</p><p dir="ltr">Write this text left-to-right %2%</p><p dir="auto">Auto setting for direction %3%</p><p>Last paragraph %4%</p><p dir="ltr">Write this text left-to-right %2%</p><p dir="rtl">Write this text right-to-left %1%</p>');
+
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->sikuli->keyDown('Key.CMD + c');
+        sleep(1);
+        $this->moveToKeyword(4, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
+        $this->assertHTMLMatch('<p dir="rtl">Write this text right-to-left %1%</p><p dir="ltr">Write this text left-to-right %2%</p><p dir="auto">Auto setting for direction %3%</p><p>Last paragraph %4%</p><p dir="auto">Auto setting for direction %3%</p><p dir="ltr">Write this text left-to-right %2%</p><p dir="rtl">Write this text right-to-left %1%</p>');
+
+    }//end testCopyPasteDirectionSettings()
 
 }//end class
 
