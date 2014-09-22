@@ -5,6 +5,27 @@ require_once 'AbstractFormatsUnitTest.php';
 class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractFormatsUnitTest
 {
 
+    /**
+     * Test format icons when selecting multiple pre sections.
+     *
+     * @return void
+     */
+    public function testFormatIconWhenSelectingPreSections()
+    {
+        $this->useTest(9);
+
+        // Check selecting a single pre section
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-pre', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('formats-pre', 'active'));
+
+        // Check selecting multiple pre sections
+        $this->selectKeyword(1, 2);
+        $this->assertTrue($this->topToolbarButtonExists('formats', NULL));
+
+    }//end testFormatIconWhenSelectingPreSections()
+
 
     /**
      * Test applying and removing the pre tag to a paragraph when clicking in a section
@@ -615,6 +636,32 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractFormatsUnitTest
         $this->assertHTMLMatch('<pre>First pre section%1% Second pre section</pre>');
 
     }//end testCombiningAPreWithDifferentFormatSections()
+
+
+    /**
+     * Test changing a heading to a pre and then adding new content.
+     *
+     * @return void
+     */
+    public function testChaningHeadingToPre()
+    {
+        $this->useTest(8);
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats', NULL);
+        $this->clickInlineToolbarButton('PRE', NULL, TRUE);
+        $this->assertHTMLMatch('<pre>Heading for the page %1%</pre><p>First paragraph on the page</p><p>Second paragraph on the page</p>');
+
+        $this->moveToKeyword(1, 'right');
+        $this->type(' New content');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('More new content');
+
+        $this->assertHTMLMatch('<pre>Heading for the page %1% New content</pre><p>More new content</p><p>First paragraph on the page</p><p>Second paragraph on the page</p>');
+
+    }//end testChaningHeadingToPre()
 
 
 }//end class

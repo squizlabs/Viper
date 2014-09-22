@@ -16,6 +16,8 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         // Using the inline toolbar
         $this->useTest(1);
         $this->selectKeyword(1);
+        // Check that the heading icon does not appear in the inline toolbar
+        $this->assertFalse($this->inlineToolbarButtonExists('headings', 'active'));
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('headings', 'active');
         $this->clickInlineToolbarButton('H2', NULL, TRUE);
@@ -132,7 +134,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
      *
      * @return void
      */
-    public function testDeletingAHeading()
+    public function testDeletingAHeadingFromContent()
     {
         $this->useTest(16);
 
@@ -143,7 +145,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
 
         $this->assertHTMLMatch('<p>Test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test</p>');
 
-    }//end testDeletingAHeading()
+    }//end testDeletingAHeadingFromContent()
 
 
     /**

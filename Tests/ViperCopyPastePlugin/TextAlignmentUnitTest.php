@@ -129,6 +129,7 @@ class Viper_Tests_ViperCopyPastePlugin_TextAlignmentUnitTest extends AbstractVip
      */
     private function _runTest($textFileURL)
     {
+        $this->useTest(1);
         $this->selectKeyword(1);
         $this->pasteFromURL($textFileURL);
 

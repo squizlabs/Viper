@@ -5,6 +5,26 @@ require_once 'AbstractFormatsUnitTest.php';
 class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
 {
 
+    /**
+     * Test format icons when selecting divs.
+     *
+     * @return void
+     */
+    public function testFormatIconWhenSelectingDivs()
+    {
+        $this->useTest(13);
+
+        // Check selecting a single div
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('formats-div', 'active'));
+
+        // Check selecting multiple divs
+        $this->selectKeyword(1, 2);
+        $this->assertTrue($this->topToolbarButtonExists('formats', NULL));
+
+    }//end testFormatIconWhenSelectingDivs()
+
 
     /**
      * Test applying and removing the div tag to a paragraph when clicking inside a section
@@ -410,10 +430,9 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
 
         // Remove Quote
         $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('Quote', 'active', TRUE);
-        $this->assertHTMLMatch('<div>%1% xtn dolor</div>');
+        $this->assertHTMLMatch('<div><p>%1%</p> xtn dolor</div>');
         $this->checkStatusOfFormatIconsInTheTopToolbar('active');
 
         // Do the same to a bold keyword
@@ -428,8 +447,8 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('Quote', 'active', TRUE);
-        $this->assertHTMLMatch('<div>Div section with a strong word <strong>%1%</strong></div>');
-        $this->checkStatusOfFormatIconsInTheTopToolbar();
+        $this->assertHTMLMatch('<div>Div section with a strong word <p><strong>%1%</strong></p></div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
 
         // Do the same to an italic keyword
         $this->useTest(5);
@@ -443,8 +462,8 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('Quote', 'active', TRUE);
-        $this->assertHTMLMatch('<div>Div section with an italic word <em>%1%</em></div>');
-        $this->checkStatusOfFormatIconsInTheTopToolbar();
+        $this->assertHTMLMatch('<div>Div section with an italic word <p><em>%1%</em></p></div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
 
     }//end testApplyingQuoteInsideDiv()
 
@@ -812,6 +831,31 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
 
     }//end testApplyDivsAroundMultipleParagraphs()
+
+
+    /**
+     * Test changing a heading to a div and then adding new content.
+     *
+     * @return void
+     */
+    public function testChaningHeadingToDiv()
+    {
+        $this->useTest(12);
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats', NULL);
+        $this->clickInlineToolbarButton('DIV', NULL, TRUE);
+        $this->assertHTMLMatch('<div>Heading for the page %1%</div><p>First paragraph on the page</p><p>Second paragraph on the page</p>');
+
+        $this->moveToKeyword(1, 'right');
+        $this->type(' New content');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('More new content');
+
+        $this->assertHTMLMatch('<div>Heading for the page %1% New content</div><p>More new content</p><p>First paragraph on the page</p><p>Second paragraph on the page</p>');
+
+    }//end testChaningHeadingToDiv()
 
 
 }//end class

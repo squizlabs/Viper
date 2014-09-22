@@ -13,6 +13,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
      */
     public function testSimpleTextCopyPaste()
     {
+        // Copy and paste without deleteing text
         $this->useTest(1);
 
         $this->selectKeyword(1);
@@ -28,6 +29,39 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->type('C');
 
         $this->assertHTMLMatch('<p>%1%A</p><p>%1%B</p><p>%1%C</p>');
+
+        // Delete all content, add new content and then copy and paste
+        $this->useTest(1);
+        $this->moveToKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('%1% This is one line of content %2%');
+        $this->selectKeyword(1, 2);
+        sleep(1);
+        $this->sikuli->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
+        $this->assertHTMLMatch('<p>%1% This is one line of content %2%</p><p>%1% This is one line of content %2%</p>');
+        // Type some content to make sure the cursor is at the end
+        $this->type(' Added content');
+        $this->assertHTMLMatch('<p>%1% This is one line of content %2%</p><p>%1% This is one line of content %2% Added content</p>');
+
+        // Paste again
+        $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
+        $this->assertHTMLMatch('<p>%1% This is one line of content %2%</p><p>%1% This is one line of content %2% Added content</p><p>%1% This is one line of content %2%</p>');
+        // Type some content to make sure the cursor is at the end
+        $this->type(' More added content');
+        $this->assertHTMLMatch('<p>%1% This is one line of content %2%</p><p>%1% This is one line of content %2% Added content</p><p>%1% This is one line of content %2% More added content</p>');
+
+        // Paste again
+        $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
+        $this->assertHTMLMatch('<p>%1% This is one line of content %2%</p><p>%1% This is one line of content %2% Added content</p><p>%1% This is one line of content %2% More added content</p><p>%1% This is one line of content %2%</p>');
+        // Type some content to make sure the cursor is at the end
+        $this->type(' Last added content');
+        $this->assertHTMLMatch('<p>%1% This is one line of content %2%</p><p>%1% This is one line of content %2% Added content</p><p>%1% This is one line of content %2% More added content</p><p>%1% This is one line of content %2% Last added content</p>');
 
     }//end testSimpleTextCopyPaste()
 
@@ -142,22 +176,6 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
 
     /**
-     * Test that copying/pasting links works.
-     *
-     * @return void
-     */
-    public function testCopyPasteLinks()
-    {
-        $this->useTest(1);
-
-        $this->selectKeyword(1);
-        $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/CopyPasteFiles/ExampleLinks.txt'));
-        $this->assertHTMLMatch('<p>link with http - <a href="http://www.squizlabs.com">http://www.squizlabs.com</a></p><p>link with https - <a href="https://www.squizlabs.com">https://www.squizlabs.com</a></p><p>blocked link with http - <a href="http://www.squizlabs.com">blocked::http://www.squizlabs.com</a></p><p>blocked link with https - <a href="https://www.squizlabs.com">blocked::https://www.squizlabs.com</a></p>');
-
-    }//end testCopyPasteLinks()
-
-
-    /**
      * Test that copying/pasting a LibreOffice document works.
      *
      * @return void
@@ -261,6 +279,91 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->assertHTMLMatch('<h1>Heading One %1%</h1><p>This is a paragraph %2%</p><h1>Heading One %1%</h1><h2>Heading Two %3%</h2><p>This is another paragraph %4%</p><h2>Heading Two %3%</h2>');
 
     }//end testCopyPasteHeading()
+
+
+    /**
+     * Test copy and pasting an image.
+     *
+     * @return void
+     */
+    public function testCopyPasteImage()
+    {
+        $this->useTest(4);
+
+        $this->clickElement('img', 0);
+        $this->sikuli->keyDown('Key.CMD + c');
+        sleep(1);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
+        $this->assertHTMLMatch('<p>First paragraph</p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" /><p>This is the second paragraph in the content of the page %1%</p><p></p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" />');
+
+    }//end testCopyPasteImage()
+
+
+    /**
+     * Test copy and pasting acroynm, abbreviation and language.
+     *
+     * @return void
+     */
+    public function testCopyPasteLanguageSettings()
+    {
+        $this->useTest(5);
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->sikuli->keyDown('Key.CMD + c');
+        sleep(1);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
+        $this->assertHTMLMatch('<p>%1% This is the <span lang="en">first</span> <acronym title="abc">paragraph</acronym> in the <abbr title="def">content</abbr> of the page %2%</p><p>This is the second one %2%</p><p>%1% This is the <span lang="en">first</span> <acronym title="abc">paragraph</acronym> in the <abbr title="def">content</abbr> of the page %2%</p>');
+
+    }//end testCopyPasteLanguageSettings()
+
+
+    /**
+     * Test copy and pasting direction settings.
+     *
+     * @return void
+     */
+    public function testCopyPasteDirectionSettings()
+    {
+        $this->useTest(6);
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->sikuli->keyDown('Key.CMD + c');
+        sleep(1);
+        $this->moveToKeyword(4, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
+        $this->assertHTMLMatch('<p dir="rtl">Write this text right-to-left %1%</p><p dir="ltr">Write this text left-to-right %2%</p><p dir="auto">Auto setting for direction %3%</p><p>Last paragraph %4%</p><p dir="rtl">Write this text right-to-left %1%</p>');
+
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->sikuli->keyDown('Key.CMD + c');
+        sleep(1);
+        $this->moveToKeyword(4, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
+        $this->assertHTMLMatch('<p dir="rtl">Write this text right-to-left %1%</p><p dir="ltr">Write this text left-to-right %2%</p><p dir="auto">Auto setting for direction %3%</p><p>Last paragraph %4%</p><p dir="ltr">Write this text left-to-right %2%</p><p dir="rtl">Write this text right-to-left %1%</p>');
+
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->sikuli->keyDown('Key.CMD + c');
+        sleep(1);
+        $this->moveToKeyword(4, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
+        $this->assertHTMLMatch('<p dir="rtl">Write this text right-to-left %1%</p><p dir="ltr">Write this text left-to-right %2%</p><p dir="auto">Auto setting for direction %3%</p><p>Last paragraph %4%</p><p dir="auto">Auto setting for direction %3%</p><p dir="ltr">Write this text left-to-right %2%</p><p dir="rtl">Write this text right-to-left %1%</p>');
+
+    }//end testCopyPasteDirectionSettings()
 
 }//end class
 

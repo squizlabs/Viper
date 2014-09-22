@@ -487,6 +487,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         // Test center justification
         $this->useTest(1);
         $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyCenter');
         $this->assertHTMLMatch('<p style="text-align: center;">%1% test content %2%</p>');
         $this->clickTopToolbarButton('historyUndo');
@@ -497,6 +498,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         // Test right justification
         $this->useTest(1);
         $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyRight');
         $this->assertHTMLMatch('<p style="text-align: right;">%1% test content %2%</p>');
         $this->clickTopToolbarButton('historyUndo');
@@ -507,6 +509,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         // Test block justification
         $this->useTest(1);
         $this->selectKeyword(1);
+        $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyBlock');
         $this->assertHTMLMatch('<p style="text-align: justify;">%1% test content %2%</p>');        
         $this->clickTopToolbarButton('historyUndo');

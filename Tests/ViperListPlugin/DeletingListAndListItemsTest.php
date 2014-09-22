@@ -210,6 +210,177 @@ class Viper_Tests_ViperListPlugin_DeletingListAndListItemsTest extends AbstractV
     }//end testDeletingAnItemFromSubList()
 
 
+    /**
+     * Test deleting list items for a list using the delete key.
+     *
+     * @return void
+     */
+    public function testDeletingAllListItemsUsingDeleteKey()
+    {
+        //Test unordered list
+        $this->useTest(1);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->sikuli->keyDown('Key.DELETE');
+        sleep(1);
+        
+        // Check that the inline toolbar no longer appears  on the screen
+        $inlineToolbarFound = true;
+        try
+        {
+            $this->getInlineToolbar();
+        }
+        catch  (Exception $e) {
+            $inlineToolbarFound = false;
+        }
+
+        $this->assertFalse($inlineToolbarFound, 'The inline toolbar was found');
+        $this->assertHTMLMatch('<p>Unordered List:</p>');
+
+        //Test ordered list
+        $this->useTest(2);
+
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->sikuli->keyDown('Key.DELETE');
+        sleep(1);
+
+        // Check that the inline toolbar no longer appears  on the screen
+        $inlineToolbarFound = true;
+        try
+        {
+            $this->getInlineToolbar();
+        }
+        catch  (Exception $e) {
+            $inlineToolbarFound = false;
+        }
+
+        $this->assertFalse($inlineToolbarFound, 'The inline toolbar was found');
+        $this->assertHTMLMatch('<p>Ordered List:</p>');
+
+    }//end testDeletingAllListItemsUsingDeleteKey()
+
+
+    /**
+     * Test deleteing multiple list items using the delete key.
+     *
+     * @return void
+     */
+    public function testDeletingMultipleListItemsUsingDeleteKey()
+    {
+        //Test Unordered list
+        $this->useTest(1);
+        $this->selectKeyword(1, 2);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>third %3% item</li></ul>');
+
+        //Test ordered list
+        $this->useTest(2);
+        $this->selectKeyword(1, 2);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>third %3% item</li></ol>');
+
+    }//end testDeletingMultipleListItemsUsingDeleteKey()
+
+
+    /**
+     * Test that a single list item can be deleted from the list using the delete key.
+     *
+     * @return void
+     */
+    public function testDeleteAnItemFromListUsingDeleteKey()
+    {
+        //Test unordered list
+        $this->useTest(1);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(1);
+        // Remove whole item.
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>third %3% item</li></ul>');
+
+        //Test ordered list
+        $this->useTest(2);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(1);
+        // Remove whole item.
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>third %3% item</li></ol>');
+
+    }//end testDeleteAnItemFromListUsingDeleteKey()
+
+
+    /**
+     * Test that a sub list is deleted from the main list using the delete key.
+     *
+     * @return void
+     */
+    public function testDeletingSubListFromListUsingDeleteKey()
+    {
+        //Test unordered list
+        $this->useTest(3);
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->sikuli->keyDown('Key.DELETE');
+        // Check that the inline toolbar no longer appears  on the screen
+        $inlineToolbarFound = true;
+        try
+        {
+            $this->getInlineToolbar();
+        }
+        catch  (Exception $e) {
+            $inlineToolbarFound = false;
+        }
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item</li><li>second item</li><li>third item</li></ul>');
+
+        //Test ordered list
+        $this->useTest(4);
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->sikuli->keyDown('Key.DELETE');
+        // Check that the inline toolbar no longer appears  on the screen
+        $inlineToolbarFound = true;
+        try
+        {
+            $this->getInlineToolbar();
+        }
+        catch  (Exception $e) {
+            $inlineToolbarFound = false;
+        }
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item</li><li>second item</li><li>third item</li></ol>');
+
+    }//end testDeletingSubListFromListUsingDeleteKey()
+
+
+    /**
+     * Test deleting an item from a sub list using the delete key.
+     *
+     * @return void
+     */
+    public function testDeletingAnItemFromSubListUsingDeleteKey()
+    {
+        //Test unordered list
+        $this->useTest(3);
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(3);
+        // Remove whole item.
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub list item 1</li><li>sub list item 3</li></ul></li><li>second item</li><li>third item</li></ul>');
+
+        //Test ordered list
+        $this->useTest(4);
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(3);
+        // Remove whole item.
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub list item 1</li><li>sub list item 3</li></ol></li><li>second item</li><li>third item</li></ol>');
+
+    }//end testDeletingAnItemFromSubListUsingDeleteKey()
+
+
 }//end class
 
 ?>

@@ -5,6 +5,27 @@ require_once 'AbstractFormatsUnitTest.php';
 class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTest
 {
 
+    /**
+     * Test format icons when selecting multiple quote sections.
+     *
+     * @return void
+     */
+    public function testFormatIconWhenSelectingQuoteSections()
+    {
+        $this->useTest(10);
+
+        // Check selecting a single quote section
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-blockquote', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'));
+
+        // Check selecting multiple quote sections
+        $this->selectKeyword(1, 2);
+        $this->assertTrue($this->topToolbarButtonExists('formats', NULL));
+
+    }//end testFormatIconWhenSelectingQuoteSections()
+
 
     /**
      * Test applying and removing the quote tag to a paragraph when clicking in a section
@@ -814,6 +835,30 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
 
     }//end testSplittingParagraphInQuote()
 
+
+    /**
+     * Test changing a heading to a quote and then adding new content.
+     *
+     * @return void
+     */
+    public function testChaningHeadingToQuote()
+    {
+        $this->useTest(9);
+
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('formats', NULL);
+        $this->clickInlineToolbarButton('Quote', NULL, TRUE);
+        $this->assertHTMLMatch('<blockquote><p>Heading for the page %1%</p></blockquote><p>First paragraph on the page</p><p>Second paragraph on the page</p>');
+
+        $this->moveToKeyword(1, 'right');
+        $this->type(' New content');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('More new content');
+
+        $this->assertHTMLMatch('<blockquote><p>Heading for the page %1% New content</p><p>More new content</p></blockquote><p>First paragraph on the page</p><p>Second paragraph on the page</p>');
+
+    }//end testChaningHeadingToQuote()
 
 }//end class
 

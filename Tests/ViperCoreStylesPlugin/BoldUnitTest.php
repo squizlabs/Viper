@@ -202,6 +202,25 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
 
 
     /**
+     * Test checking that the strong tag is not used when you delete bold content and add new content.
+     *
+     * @return void
+     */
+    public function testDeletingBoldContent()
+    {
+        $this->useTest(1);
+        
+        // Delete bold word and replace with new content
+        $this->selectKeyword(5);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('this is new content');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> this is new content</p>');
+
+    }//end testDeletingBoldContent()
+
+
+    /**
      * Test that the shortcut command works for Bold.
      *
      * @return void
