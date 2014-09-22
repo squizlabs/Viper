@@ -132,7 +132,7 @@ Viper.prototype = {
 
     },
 
-    
+
     setSettings: function(settings, clean)
     {
         if (clean === true) {
@@ -209,7 +209,7 @@ Viper.prototype = {
 
     },
 
-    
+
     init: function()
     {
         this.ViperTools          = new ViperTools(this);
@@ -237,7 +237,7 @@ Viper.prototype = {
 
     },
 
-    
+
     addElement: function(element)
     {
         if (!element) {
@@ -280,7 +280,7 @@ Viper.prototype = {
 
     },
 
-    
+
     setMode: function(mode)
     {
         if (mode === 'inline') {
@@ -291,7 +291,7 @@ Viper.prototype = {
 
     },
 
-    
+
     getBrowserType: function()
     {
         if (this._browserType === null) {
@@ -317,7 +317,7 @@ Viper.prototype = {
 
     },
 
-    
+
     getBrowserVersion: function()
     {
         var browsers = ['MSIE', 'Trident', 'Chrome', 'Safari', 'Firefox'];
@@ -359,7 +359,7 @@ Viper.prototype = {
 
     },
 
-    
+
     getViperPath: function()
     {
         // TODO: This path may need to be set incase a different file name is used.
@@ -424,7 +424,7 @@ Viper.prototype = {
 
     },
 
-    
+
     _addEvents: function(elem)
     {
         if (!elem) {
@@ -524,7 +524,7 @@ Viper.prototype = {
 
     },
 
-    
+
     _removeEvents: function(elem)
     {
         if (!elem) {
@@ -535,7 +535,7 @@ Viper.prototype = {
 
     },
 
-    
+
      setEnabled: function(enabled)
      {
         this._viperRange = null;
@@ -640,14 +640,14 @@ Viper.prototype = {
 
     },
 
-    
+
     isEnabled: function()
     {
         return this.enabled;
 
     },
 
-    
+
     setEditableElement: function(elem)
     {
         var self = this;
@@ -750,6 +750,14 @@ Viper.prototype = {
         var elem = elem || this.element;
         if (!elem) {
             return;
+        }
+
+        this._document = elem.ownerDocument;
+        Viper.document = this._document;
+        if (this._document.defaultView) {
+            Viper.window = this._document.defaultView;
+        } else {
+            Viper.window = window;
         }
 
         if (ViperUtil.isBrowser('msie') === true) {
@@ -962,7 +970,7 @@ Viper.prototype = {
 
     },
 
-    
+
     getCurrentRange: function()
     {
         var range =  ViperSelection.getRangeAt(0);
@@ -971,7 +979,7 @@ Viper.prototype = {
 
     },
 
-    
+
     getViperRange: function()
     {
         if (ViperUtil.isBrowser('msie') === false) {
@@ -993,7 +1001,7 @@ Viper.prototype = {
 
     },
 
-    
+
     selectElement: function(element)
     {
         var range = this.getViperRange();
@@ -1017,7 +1025,7 @@ Viper.prototype = {
 
     },
 
-    
+
     setAttribute: function(element, attribute, value)
     {
         if (!element || !element.setAttribute) {
@@ -1062,7 +1070,7 @@ Viper.prototype = {
 
     },
 
-    
+
     getWholeElementSelection: function(range)
     {
         range = range || this.getViperRange();
@@ -1118,7 +1126,7 @@ Viper.prototype = {
 
     },
 
-    
+
     selectNodeToNode: function(start, end)
     {
         var range = this.getViperRange();
@@ -1143,7 +1151,7 @@ Viper.prototype = {
 
     },
 
-    
+
     moveCaretAway: function(sourceElement)
     {
         var range = this.getViperRange();
@@ -1152,7 +1160,7 @@ Viper.prototype = {
     },
 
 
-    
+
     getCaretCoords: function()
     {
         // TODO: Change this to range coords.
@@ -1176,7 +1184,7 @@ Viper.prototype = {
     },
 
 
-    
+
     getElementAtCoords: function(x, y)
     {
         var elem = null;
@@ -1255,7 +1263,7 @@ Viper.prototype = {
     },
 
 
-    
+
     rangeInViperBounds: function(range)
     {
         range = range || this.getCurrentRange();
@@ -1267,7 +1275,7 @@ Viper.prototype = {
 
     },
 
-    
+
     isOutOfBounds: function(element)
     {
         if (element === this.element || ViperUtil.isChildOf(element, this.element) === true) {
@@ -1280,7 +1288,7 @@ Viper.prototype = {
 
     },
 
-    
+
     insertNodeAtCaret: function(node)
     {
         var range = this.getCurrentRange();
@@ -1427,7 +1435,7 @@ Viper.prototype = {
 
     },
 
-    
+
     ctmInsertNodeAtCaret: function(range, node)
     {
         if (ViperChangeTracker.isTracking() === true) {
@@ -1503,7 +1511,7 @@ Viper.prototype = {
 
     },
 
-    
+
     insertTextAtCaret: function(text)
     {
         if (typeof text !== 'string') {
@@ -1514,7 +1522,7 @@ Viper.prototype = {
 
     },
 
-    
+
     _getNodeOffset: function(node)
     {
         var nodes = node.parentNode.childNodes;
@@ -1564,7 +1572,7 @@ Viper.prototype = {
 
     },
 
-    
+
     getTextContentFromElements: function(elements)
     {
         var text = [];
@@ -2111,7 +2119,7 @@ Viper.prototype = {
 
     },
 
-    
+
     surroundContents: function(tag, attributes, range, keepSelection)
     {
         range = range || this.getCurrentRange();
@@ -2405,7 +2413,7 @@ Viper.prototype = {
 
     },
 
-    
+
     _wrapElement: function(parent, tag, callback, attributes)
     {
         if (!parent) {
@@ -2549,7 +2557,7 @@ Viper.prototype = {
     },
 
 
-    
+
     removeTagFromChildren: function(parent, tag, incParent)
     {
         var c          = parent.childNodes.length;
@@ -2802,7 +2810,7 @@ Viper.prototype = {
 
     },
 
-    
+
     setCaretAfterNode: function(node)
     {
         if (!node || !node.parentNode) {
@@ -2830,7 +2838,7 @@ Viper.prototype = {
 
     },
 
-    
+
     setCaretBeforeNode: function(node)
     {
         if (!node || !node.parentNode) {
@@ -2919,7 +2927,7 @@ Viper.prototype = {
 
     },
 
-    
+
     insertAfter: function(node, newNode)
     {
         // Fire beforeInsertAfter.
@@ -2931,7 +2939,7 @@ Viper.prototype = {
 
     },
 
-    
+
     insertBefore: function(node, newNode)
     {
         // Fire beforeInsertAfter.
@@ -3074,7 +3082,7 @@ Viper.prototype = {
 
     },
 
-    
+
     getBookmark: function(parent, type)
     {
         var bookmarks = ViperUtil.getClass('viperBookmark_' + type, parent);
@@ -3104,7 +3112,7 @@ Viper.prototype = {
 
     },
 
-    
+
     removeBookmark: function(bookmark)
     {
         if (!bookmark.start || !bookmark.end) {
@@ -3303,7 +3311,7 @@ Viper.prototype = {
 
     },
 
-    
+
     splitNodeAtBookmark: function(tag, bookmark, copyMidTags)
     {
         if (!bookmark) {
@@ -3414,7 +3422,7 @@ Viper.prototype = {
 
     },
 
-    
+
     highlightSelection: function()
     {
         var highlights = ViperUtil.getClass('__viper_selHighlight', this.element);
@@ -3665,7 +3673,7 @@ Viper.prototype = {
 
     },
 
-    
+
     isKey: function(e, keys)
     {
         var eKeys = [];
@@ -3757,14 +3765,14 @@ Viper.prototype = {
 
     },
 
-    
+
     isSpecialKey: function(e)
     {
         return ViperUtil.inArray(e.which, this._specialKeys);
 
     },
 
-    
+
     addSpecialKey: function(keyCode)
     {
         this._specialKeys.push(keyCode);
@@ -3772,10 +3780,10 @@ Viper.prototype = {
     },
 
 
-    
+
     _keyDownRangeCollapsed: true,
 
-    
+
     keyDown: function(e)
     {
         this._viperRange = null;
@@ -3886,7 +3894,7 @@ Viper.prototype = {
     },
 
 
-    
+
     keyPress: function(e)
     {
         if (this._preventKeyPress === true || this.enabled !== true) {
@@ -4181,7 +4189,7 @@ Viper.prototype = {
 
     },
 
-    
+
     adjustRange: function(range)
     {
         range = range || this.getViperRange();
@@ -4586,7 +4594,7 @@ Viper.prototype = {
     },
 
 
-    
+
     getHtml: function(elem, settings)
     {
         elem = elem || this.element;
@@ -4651,7 +4659,7 @@ Viper.prototype = {
 
     },
 
-    
+
     getContents: function(elem)
     {
         elem = elem || this.element;
@@ -4703,7 +4711,7 @@ Viper.prototype = {
 
     },
 
-    
+
     setContents: function(contents)
     {
         if (typeof contents === 'string') {
@@ -4718,7 +4726,7 @@ Viper.prototype = {
 
     },
 
-    
+
     setHtml: function(contents, callback)
     {
         var clone = Viper.document.createElement('div');
@@ -4820,7 +4828,7 @@ Viper.prototype = {
 
     },
 
-    
+
     cleanDOM: function(elem, tagName)
     {
         if (!elem) {
@@ -5083,7 +5091,7 @@ var ViperChangeTracker = {
     _tmpData: {},
     _currentUserid: null,
 
-    
+
     init: function(viper, trackChanges)
     {
         var self       = this;
@@ -5161,7 +5169,7 @@ var ViperChangeTracker = {
 
     },
 
-    
+
     reLoad: function()
     {
         this.cleanUp();
@@ -5191,7 +5199,7 @@ var ViperChangeTracker = {
 
     },
 
-    
+
     cleanUp: function()
     {
         this._changes     = {};
@@ -5212,14 +5220,14 @@ var ViperChangeTracker = {
 
     },
 
-    
+
     hasChanges: function()
     {
         return (ViperUtil.isEmpty(this._changes) !== true);
 
     },
 
-    
+
     isTracking: function()
     {
         var tracking = (this._viper._subElementActive !== true && this._tracking === true);
@@ -5227,7 +5235,7 @@ var ViperChangeTracker = {
 
     },
 
-    
+
     isTrackingNode: function(node, ctNodeType)
     {
         if (node && node.nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.hasClass(node, this._nodeClassName) === true) {
@@ -5333,7 +5341,7 @@ var ViperChangeTracker = {
 
     },
 
-    
+
     isNodeTypeVisible: function(ctNodeType)
     {
         if (ViperUtil.isset(this._nodeTypeVisibility[ctNodeType]) === true && this._nodeTypeVisibility[ctNodeType] !== true) {
@@ -5873,7 +5881,7 @@ var ViperChangeTracker = {
     },
 
 
-    
+
     _positionInfoBox: function(infoBox, dim, show)
     {
         var height  = 0;
@@ -6078,7 +6086,7 @@ var ViperChangeTracker = {
 
     },
 
-    
+
     addNodeToChange: function(changeid, ctNode, replaceNode)
     {
         if (this._batchChangeid !== null) {
@@ -6199,7 +6207,7 @@ var ViperChangeTracker = {
 
     },
 
-    
+
     setDescriptionCallback: function(ctnType, callback)
     {
         this._descCallbacks[ctnType] = callback;
@@ -6476,7 +6484,7 @@ var ViperChangeTracker = {
 
     },
 
-    
+
     removeTrackChanges: function(node, nodeOnly)
     {
         if (ViperChangeTracker.isTracking() !== true) {
@@ -6533,7 +6541,7 @@ var ViperChangeTracker = {
 
     },
 
-    
+
     setCTData: function(node, type, value)
     {
         if (!node || !type) {
@@ -6612,7 +6620,7 @@ var ViperChangeTracker = {
 
     },
 
-     
+
     getTrackingInfo: function(elem)
     {
         var info    = null;
@@ -6687,25 +6695,25 @@ function ViperDOMRange(rangeObj)
 {
     this.rangeObj = rangeObj;
 
-    
+
     this.startContainer = null;
 
-    
+
     this.endContainer = null;
 
-    
+
     this.startOffset = 0;
 
-    
+
     this.endOffset = 0;
 
-    
+
     this.collapsed = true;
 
-    
+
     this.commonAncestorContainer = null;
 
-    
+
     this.anchorToStart = 'undefined';
 
 }
@@ -6735,91 +6743,91 @@ ViperDOMRange.LINE_UNIT = 'line';
 
 ViperDOMRange.prototype = {
 
-    
+
     setStart: function(node, offset) {},
 
-    
+
     setEnd: function(node, offset) {},
 
-    
+
     setStartBefore: function(node) {},
 
-    
+
     setStartAfter: function(node) {},
 
-    
+
     setEndBefore: function(node) {},
 
-    
+
     setEndAfter: function(node) {},
 
-    
+
     selectNode: function(node) {},
 
-    
+
     selectNodeContents: function(node) {},
 
-    
+
     surroundContents: function(node) {},
 
-    
+
     collapse: function(toStart) {},
 
     // Range Comparisons.
-    
+
     compareBoundaryPoints: function(how, sourceRange) {},
 
     // Extract Content.
-    
+
     deleteContents: function() {},
 
-    
+
     extractContents: function() {},
 
-    
+
     cloneContents: function() {},
 
     // Inserting.
-    
+
     insertNode: function(node) {},
 
     // Misc.
-    
+
     cloneRange: function() {},
 
-    
+
     toString: function() {},
 
-    
+
     detach: function() {},
 
-    
 
-    
+
+
     getCommonElement: function () {},
 
-    
+
     moveStart: function(unitType, units) {},
 
-    
+
     moveEnd: function(unitType, units) {},
 
-    
+
     setAnchor: function(toStart) {},
 
-    
+
     setFocus: function(node, offset) {},
 
-    
+
     moveFocus: function(unitType, units) {},
 
-    
+
     getRangeCoords: function(toStart) {},
 
-    
+
     getBoundingClientRect: function() {},
 
-    
+
     getPreviousContainer: function(container, skippedBlockElem, skipEmptyNodes, brIsSelectable)
     {
         if (!container) {
@@ -6883,7 +6891,7 @@ ViperDOMRange.prototype = {
 
     },
 
-    
+
     getNextContainer: function(container, skippedBlockElem, skipSpaceTextNodes, brIsSelectable)
     {
         if (!container) {
@@ -7104,10 +7112,10 @@ ViperDOMRange.prototype = {
 
     },
 
-    
+
     _nodeSel: {},
 
-    
+
     clearNodeSelectionCache: function()
     {
         this._nodeSel = {};
@@ -7452,7 +7460,7 @@ function ViperHistoryManager(viper)
 
 ViperHistoryManager.prototype = {
 
-    
+
     add: function(source, action)
     {
         if (this._ignoreAdd === true) {
@@ -7538,7 +7546,7 @@ ViperHistoryManager.prototype = {
 
     },
 
-    
+
     undo: function()
     {
         if (this.viper._subElementActive === true) {
@@ -7635,7 +7643,7 @@ ViperHistoryManager.prototype = {
 
     },
 
-    
+
     clear: function()
     {
         this.undoHistory = [];
@@ -7731,7 +7739,7 @@ ViperHistoryManager.prototype = {
 
     },
 
-    
+
     begin: function()
     {
         this.batchCount++;
@@ -7742,7 +7750,7 @@ ViperHistoryManager.prototype = {
 
     },
 
-    
+
     end: function()
     {
         this.batchCount--;
@@ -7782,16 +7790,16 @@ function ViperIERange(rangeObj)
     this._prevHeight    = null;
     this._prevContainer = null;
 
-    
+
     ViperDOMRange.START_TO_START = 'StartToStart';
 
-    
+
     ViperDOMRange.START_TO_END = 'StartToEnd';
 
-    
+
     ViperDOMRange.END_TO_END = 'EndToEnd';
 
-    
+
     ViperDOMRange.END_TO_START = 'EndToStart';
 
 }
@@ -7808,7 +7816,7 @@ ViperIERange._prevRange = {
 ViperIERange.prototype = {
 
 
-    
+
     _initContainerInfo: function()
     {
         var clone  = this.rangeObj.duplicate();
@@ -7882,7 +7890,7 @@ ViperIERange.prototype = {
     },
 
     // Range Select Modifiers.
-    
+
     setStart: function(node, offset)
     {
         if (document.activeElement && ViperUtil.isTag(document.activeElement, 'input')) {
@@ -7925,7 +7933,7 @@ ViperIERange.prototype = {
 
     },
 
-    
+
     setEnd: function(node, offset)
     {
         if (document.activeElement && ViperUtil.isTag(document.activeElement, 'input')) {
@@ -7968,7 +7976,7 @@ ViperIERange.prototype = {
 
     },
 
-    
+
     setStartBefore: function(node)
     {
         // Looks like Firefox setStartBefore() method sets the range to
@@ -7978,18 +7986,18 @@ ViperIERange.prototype = {
 
     },
 
-    
+
     setStartAfter: function(node)
     {
         var next = this.getNextContainer(node);
         this.setStart(next, 0);
-        
+
         this._setCollapsed();
         this._setCommonAncestorContainer();
 
     },
 
-    
+
     setEndBefore: function(node)
     {
         var previous = this.getPreviousContainer(node);
@@ -8007,14 +8015,14 @@ ViperIERange.prototype = {
 
     },
 
-    
+
     setEndAfter: function(node)
     {
         this.setEnd(node.parentNode, this.getNodeIndex(node) + 1);
 
     },
 
-    
+
     selectNode: function(node)
     {
         if (node.nodeType === ViperUtil.TEXT_NODE) {
@@ -8060,7 +8068,7 @@ ViperIERange.prototype = {
 
     },
 
-    
+
     selectNodeContents: function(node)
     {
         if (node.nodeType === ViperUtil.TEXT_NODE) {
@@ -8076,7 +8084,7 @@ ViperIERange.prototype = {
 
     },
 
-    
+
     surroundContents: function(node)
     {
         var contents = this.extractContents();
@@ -8085,7 +8093,7 @@ ViperIERange.prototype = {
 
     },
 
-    
+
     collapse: function(toStart)
     {
         this.rangeObj.collapse(toStart);
@@ -8102,7 +8110,7 @@ ViperIERange.prototype = {
     },
 
     // Range Comparisons.
-    
+
     compareBoundaryPoints: function(how, sourceRange)
     {
         return this.rangeObj.compareEndPoints(how, sourceRange.rangeObj);
@@ -8110,7 +8118,7 @@ ViperIERange.prototype = {
     },
 
     // Extract Content.
-    
+
     deleteContents: function()
     {
         if (this.startContainer === this.endContainer
@@ -8141,7 +8149,7 @@ ViperIERange.prototype = {
 
     },
 
-    
+
     extractContents: function()
     {
         var fragment = Viper.document.createDocumentFragment();
@@ -8178,7 +8186,7 @@ ViperIERange.prototype = {
 
     },
 
-    
+
     cloneContents: function()
     {
         var fragment = this.createDocumentFragment(this.rangeObj.htmlText);
@@ -8187,7 +8195,7 @@ ViperIERange.prototype = {
     },
 
     // Inserting.
-    
+
     insertNode: function(node)
     {
         var before = null;
@@ -8229,7 +8237,7 @@ ViperIERange.prototype = {
     },
 
     // Misc.
-    
+
     cloneRange: function()
     {
         var range = new ViperIERange(this.rangeObj.duplicate());
@@ -8244,7 +8252,7 @@ ViperIERange.prototype = {
 
     },
 
-    
+
     detach: function()
     {
         this.rangeObj = null;
@@ -8269,7 +8277,7 @@ ViperIERange.prototype = {
 
     },
 
-    
+
     _setCollapsed: function()
     {
         if (this.startContainer === this.endContainer && this.startOffset === this.endOffset) {
@@ -8280,7 +8288,7 @@ ViperIERange.prototype = {
 
     },
 
-    
+
     _setCommonAncestorContainer: function()
     {
         if (this.startContainer === this.endContainer) {
@@ -8291,7 +8299,7 @@ ViperIERange.prototype = {
 
     },
 
-    
+
     _getContainerInfo: function(textRange)
     {
         var element = textRange.parentElement();
@@ -8403,7 +8411,7 @@ ViperIERange.prototype = {
 
     },
 
-    
+
     _getCharOffsetWithinParent: function(node, offset)
     {
         // NEW Version: 08-01-09 (Thanks to Mozile).
@@ -8443,7 +8451,7 @@ ViperIERange.prototype = {
     },
 
 
-    
+
     moveStart: function(unitType, units, updateInfo)
     {
         switch (unitType) {
@@ -8480,7 +8488,7 @@ ViperIERange.prototype = {
 
     },
 
-    
+
     moveEnd: function(unitType, units)
     {
         switch (unitType) {
@@ -8509,7 +8517,7 @@ ViperIERange.prototype = {
 
     },
 
-    
+
     _moveLine: function(moveStart, units)
     {
         // Clone the range and work with cloned range.
@@ -8607,7 +8615,7 @@ ViperIERange.prototype = {
 
     },
 
-    
+
     getCommonElement: function()
     {
         var parentEl = this.rangeObj.parentElement();
@@ -8635,7 +8643,7 @@ ViperIERange.prototype = {
 
     },
 
-    
+
     getRangeCoords: function(toStart)
     {
         var clone = this.cloneRange();
@@ -8703,7 +8711,7 @@ ViperIERange.prototype = {
 
 
 
-    
+
     getBoundingClientRect: function()
     {
         return this.rangeObj.getBoundingClientRect();
@@ -8724,7 +8732,7 @@ ViperIERange.prototype = {
 
     },
 
-    
+
     toString: function()
     {
         var text = this.rangeObj.text;
@@ -8753,23 +8761,23 @@ function ViperMozRange(rangeObj)
 
     this.posSpan = Viper.document.createElement('span');
 
-    
+
     ViperDOMRange.START_TO_START = Range.START_TO_START;
 
-    
+
     ViperDOMRange.START_TO_END = Range.END_TO_START;
 
-    
+
     ViperDOMRange.END_TO_END = Range.END_TO_END;
 
-    
+
     ViperDOMRange.END_TO_START = Range.START_TO_END;
 
 }
 
 ViperMozRange.prototype = {
 
-    
+
     setStart: function(node, offset)
     {
         this.rangeObj.setStart(node, offset);
@@ -8787,7 +8795,7 @@ ViperMozRange.prototype = {
 
     },
 
-    
+
     setEnd: function(node, offset)
     {
         this.rangeObj.setEnd(node, offset);
@@ -8804,7 +8812,7 @@ ViperMozRange.prototype = {
 
     },
 
-    
+
     setStartBefore: function(node)
     {
         this.rangeObj.setStartBefore(node);
@@ -8818,7 +8826,7 @@ ViperMozRange.prototype = {
 
     },
 
-    
+
     setStartAfter: function(node)
     {
         this.rangeObj.setStartAfter(node);
@@ -8832,7 +8840,7 @@ ViperMozRange.prototype = {
 
     },
 
-    
+
     setEndBefore: function(node)
     {
         this.rangeObj.setEndBefore(node);
@@ -8846,7 +8854,7 @@ ViperMozRange.prototype = {
 
     },
 
-    
+
     setEndAfter: function(node)
     {
         this.rangeObj.setEndAfter(node);
@@ -8860,7 +8868,7 @@ ViperMozRange.prototype = {
 
     },
 
-    
+
     selectNode: function(node)
     {
         this.rangeObj.selectNode(node);
@@ -8875,7 +8883,7 @@ ViperMozRange.prototype = {
 
     },
 
-    
+
     selectNodeContents: function(node)
     {
         this.rangeObj.selectNodeContents(node);
@@ -8889,7 +8897,7 @@ ViperMozRange.prototype = {
 
     },
 
-    
+
     surroundContents: function(node)
     {
         this.rangeObj.surroundContents(node);
@@ -8904,7 +8912,7 @@ ViperMozRange.prototype = {
 
     },
 
-    
+
     collapse: function(toStart)
     {
         this.rangeObj.collapse(toStart);
@@ -8921,7 +8929,7 @@ ViperMozRange.prototype = {
     },
 
     // Range Comparisons.
-    
+
     compareBoundaryPoints: function(how, sourceRange)
     {
         return this.rangeObj.compareBoundaryPoints(how, sourceRange.rangeObj);
@@ -8929,7 +8937,7 @@ ViperMozRange.prototype = {
     },
 
     // Extract Content.
-    
+
     deleteContents: function(viperElem, defaultTagName)
     {
         var startContainer = this.startContainer;
@@ -9024,7 +9032,7 @@ ViperMozRange.prototype = {
 
     },
 
-    
+
     extractContents: function()
     {
         return this.rangeObj.extractContents();
@@ -9053,7 +9061,7 @@ ViperMozRange.prototype = {
 
     },
 
-    
+
     cloneContents: function()
     {
         return this.rangeObj.cloneContents();
@@ -9061,7 +9069,7 @@ ViperMozRange.prototype = {
     },
 
     // Inserting.
-    
+
     insertNode: function(node)
     {
         if (this.startContainer.nodeType === ViperUtil.ELEMENT_NODE) {
@@ -9098,7 +9106,7 @@ ViperMozRange.prototype = {
     },
 
     // Misc.
-    
+
     cloneRange: function()
     {
         var clone = this.rangeObj.cloneRange();
@@ -9106,14 +9114,14 @@ ViperMozRange.prototype = {
 
     },
 
-    
+
     toString: function()
     {
         return this.rangeObj.toString();
 
     },
 
-    
+
     detach: function()
     {
         this.rangeObj.detach();
@@ -9157,7 +9165,7 @@ ViperMozRange.prototype = {
 
     },
 
-    
+
     getRangeCoords: function(toStart)
     {
         var clone = this.rangeObj.cloneRange();
@@ -9332,7 +9340,7 @@ ViperMozRange.prototype = {
 
     },
 
-    
+
     getStartOffset: function(incSpaces)
     {
         if (incSpaces === true) {
@@ -9804,7 +9812,7 @@ ViperPluginManager.prototype = {
 
     },
 
-    
+
     removePlugin: function(pluginName)
     {
         if (this._plugins[pluginName]) {
@@ -9824,7 +9832,7 @@ ViperPluginManager.prototype = {
 
     },
 
-    
+
     removePlugins: function(pluginNames)
     {
         if (!pluginNames) {
@@ -9840,7 +9848,7 @@ ViperPluginManager.prototype = {
 
     },
 
-    
+
     getPlugin: function(name)
     {
         return this._plugins[name];
@@ -9896,7 +9904,7 @@ var ViperSelection = {
 
     _viper: null,
 
-    
+
     _getSelection: function()
     {
         if (Viper.document.selection) {
@@ -9911,7 +9919,7 @@ var ViperSelection = {
 
     },
 
-    
+
     createRange: function()
     {
          var rangeObj = null;
@@ -9927,7 +9935,7 @@ var ViperSelection = {
 
     },
 
-    
+
     getRangeAt: function(pos)
     {
         this._selection = ViperSelection._getSelection();
@@ -9961,7 +9969,7 @@ var ViperSelection = {
 
     },
 
-    
+
     addRange: function(range)
     {
         this._selection = ViperSelection._getSelection();
@@ -10084,7 +10092,7 @@ ViperTools.prototype = {
 
     },
 
-    
+
     createButtonGroup: function(id, customClass)
     {
         var group = document.createElement('div');
@@ -10105,7 +10113,7 @@ ViperTools.prototype = {
     },
 
 
-    
+
     createButton: function(id, content, titleAttr, customClass, clickAction, disabled, isActive)
     {
         if (!content) {
@@ -10316,7 +10324,7 @@ ViperTools.prototype = {
 
     },
 
-    
+
     createTextbox: function(id, label, value, action, required, expandable, desc, events, labelWidth)
     {
         return this._createTextbox(id, label, value, action, required, expandable, desc, events, labelWidth);
@@ -10660,7 +10668,7 @@ ViperTools.prototype = {
 
     },
 
-    
+
     setFieldErrors: function(itemid, errors)
     {
         var item = this.getItem(itemid);
@@ -10700,7 +10708,7 @@ ViperTools.prototype = {
 
     },
 
-    
+
     createCheckbox: function(id, label, checked, changeCallback)
     {
         var labelElem = document.createElement('label');
@@ -10795,7 +10803,7 @@ ViperTools.prototype = {
     },
 
 
-    
+
     createRadiobutton: function(name, value, label, checked)
     {
         var labelElem = document.createElement('label');
@@ -11348,7 +11356,7 @@ ViperTools.prototype = {
                 return ViperUtil.hasClass(toolbar, 'Viper-visible');
             },
 
-            
+
             makeSubSection: function(id, element, onOpenCallback, onCloseCallback) {
                 if (!element) {
                     return false;
@@ -11386,7 +11394,7 @@ ViperTools.prototype = {
 
             },
 
-            
+
             setSubSectionButton: function(buttonid, subSectionid) {
                 if (!this._subSections[subSectionid]) {
                     // Throw exception not a valid sub section id.
@@ -11428,7 +11436,7 @@ ViperTools.prototype = {
 
             },
 
-            
+
             toggleSubSection: function(subSectionid, ignoreCallbacks)
             {
                 var subSection = this._subSections[subSectionid];
@@ -11536,7 +11544,7 @@ ViperTools.prototype = {
                 }
             },
 
-            
+
             setSubSectionAction: function(subSectionid, action, widgetids)
             {
                 widgetids      = widgetids || [];
@@ -12047,7 +12055,7 @@ var ViperUtil = {
 
     },
 
-    
+
     remove: function(element)
     {
         if (element) {
@@ -12056,35 +12064,35 @@ var ViperUtil = {
 
     },
 
-    
+
     insertBefore: function(before, elem)
     {
         ViperUtil.$(before).before(elem);
 
     },
 
-    
+
     insertAfter: function(after, elem)
     {
         ViperUtil.$(after).after(elem);
 
     },
 
-    
+
     addClass: function(element, classNames)
     {
         ViperUtil.$(element).addClass(classNames);
 
     },
 
-    
+
     removeClass: function(element, classNames)
     {
         ViperUtil.$(element).removeClass(classNames);
 
     },
 
-    
+
     setStyle: function(element, property, value)
     {
         if (element) {
@@ -12093,7 +12101,7 @@ var ViperUtil = {
 
     },
 
-    
+
     getTag: function(tagName, startElement, onlyChildren)
     {
         var ret;
@@ -12112,7 +12120,7 @@ var ViperUtil = {
 
     },
 
-    
+
     setHtml: function(element, content)
     {
         if (element) {
@@ -12121,14 +12129,14 @@ var ViperUtil = {
 
     },
 
-    
+
     getHtml: function(element)
     {
         return ViperUtil.$(element).html();
 
     },
 
-    
+
     isBlockElement: function(element)
     {
         if (!element) {
@@ -12187,7 +12195,7 @@ var ViperUtil = {
 
     },
 
-    
+
     isStubElement: function(element)
     {
         if (element) {
@@ -12223,7 +12231,7 @@ var ViperUtil = {
 
     },
 
-    
+
     ltrim: function (str, trimChars)
     {
         trimChars = trimChars || '\\s';
@@ -12231,7 +12239,7 @@ var ViperUtil = {
 
     },
 
-    
+
     rtrim: function (str, trimChars)
     {
         trimChars = trimChars || '\\s';
@@ -12240,7 +12248,7 @@ var ViperUtil = {
     },
 
 
-    
+
     trim: function(value, trimChars)
     {
         return ViperUtil.ltrim(ViperUtil.rtrim(value, trimChars), trimChars);
@@ -12253,7 +12261,7 @@ var ViperUtil = {
 
     },
 
-    
+
     isBlank: function(value)
     {
         if (!value || /^\s*$/.test(value)) {
@@ -12304,7 +12312,7 @@ var ViperUtil = {
 
     },
 
-    
+
     addEvent: function(elements, type, callback, data)
     {
         if (elements) {
@@ -12319,7 +12327,7 @@ var ViperUtil = {
 
     },
 
-    
+
     removeEvent: function(elements, type, func)
     {
         if (elements) {
@@ -12345,7 +12353,7 @@ var ViperUtil = {
 
     },
 
-    
+
     trigger: function(elements, type, data)
     {
         if (elements) {
@@ -12362,7 +12370,7 @@ var ViperUtil = {
 
     },
 
-    
+
     preventDefault: function(e)
     {
         e.preventDefault();
@@ -12370,7 +12378,7 @@ var ViperUtil = {
 
     },
 
-    
+
     getMouseEventTarget: function(evt)
     {
        var ret = null;
@@ -12384,7 +12392,7 @@ var ViperUtil = {
 
     },
 
-    
+
     getClass: function(className, startElement, tagName, onlyChildren)
     {
         var ret;
@@ -12409,21 +12417,21 @@ var ViperUtil = {
 
     },
 
-    
+
     hasClass: function(element, className)
     {
         return ViperUtil.$(element).hasClass(className);
 
     },
 
-    
+
     getStyle: function(element, property)
     {
         return ViperUtil.$(element).css(property);
 
     },
 
-    
+
     getComputedStyle: function (el, styleName)
     {
         if (styleName) {
@@ -12483,7 +12491,7 @@ var ViperUtil = {
 
     },
 
-    
+
     getSurroundingParents: function(node, tagName, blockElementsOnly, stopElem)
     {
         var parents = [];
@@ -12525,7 +12533,7 @@ var ViperUtil = {
 
     },
 
-    
+
     isChildOf: function(el, parent, stopElem)
     {
         try {
@@ -12558,7 +12566,7 @@ var ViperUtil = {
 
     },
 
-    
+
     getElementsBetween: function(fromElem, toElem)
     {
         var elements = [];
@@ -12620,7 +12628,7 @@ var ViperUtil = {
 
     },
 
-    
+
     getSiblings: function(element, dir, elementNodesOnly, stopElem)
     {
         if (elementNodesOnly === true) {
@@ -12656,7 +12664,7 @@ var ViperUtil = {
 
     },
 
-    
+
     arrayMerge: function (array1, array2)
     {
         // We won't maintain the index if array1 is a JS array because if it tries to
@@ -12681,7 +12689,7 @@ var ViperUtil = {
 
     },
 
-    
+
     foreach: function(value, cb)
     {
         if (value instanceof Array) {
@@ -12705,7 +12713,7 @@ var ViperUtil = {
 
     },
 
-    
+
     attr: function(elements, key, val)
     {
         if (ViperUtil.isset(val) === true) {
@@ -12722,7 +12730,7 @@ var ViperUtil = {
 
     },
 
-    
+
     getBoundingRectangle: function(element)
     {
         // Retrieve the coordinates and dimensions of the element.
@@ -12741,7 +12749,7 @@ var ViperUtil = {
 
     },
 
-    
+
     getNodeTextContent: function(node)
     {
        return ViperUtil.$(node).text();
@@ -12756,7 +12764,7 @@ var ViperUtil = {
 
     },
 
-    
+
     getid: function(id, startElement)
     {
         if (!startElement) {
@@ -12768,7 +12776,7 @@ var ViperUtil = {
 
     },
 
-    
+
     empty: function(element)
     {
         if (element) {
@@ -12828,7 +12836,7 @@ var ViperUtil = {
 
     },
 
-    
+
     getElementHeight: function(element, inner)
     {
         if (inner === true) {
@@ -12839,7 +12847,7 @@ var ViperUtil = {
 
     },
 
-    
+
     getElementWidth: function(element, inner)
     {
         if (inner === true) {
@@ -12860,7 +12868,7 @@ var ViperUtil = {
 
     },
 
-    
+
     getWindowDimensions: function(win)
     {
         win = win || window;
@@ -12905,7 +12913,7 @@ var ViperUtil = {
 
     },
 
-    
+
     getScrollCoords: function(win)
     {
         win = win || window;
@@ -12936,7 +12944,7 @@ var ViperUtil = {
 
     },
 
-    
+
     getScrollbarWidth: function()
     {
         if (ViperUtil._scrollBarWidth) {
@@ -12985,7 +12993,7 @@ var ViperUtil = {
 
     },
 
-    
+
     getElementCoords: function(element, relative)
     {
         var offset = ViperUtil.$(element).offset();
@@ -13017,7 +13025,7 @@ var ViperUtil = {
 
     },
 
-    
+
     getXPath: function(node)
     {
         var path = '';
@@ -13064,7 +13072,7 @@ var ViperUtil = {
 
     },
 
-    
+
     getNodeFromXPath: function(path)
     {
         if (document.evaluate) {
@@ -13077,7 +13085,7 @@ var ViperUtil = {
     },
 
 
-    
+
     getNodeFromPath: function(path)
     {
         var paths  = path.split('/');
@@ -13095,7 +13103,7 @@ var ViperUtil = {
 
     },
 
-    
+
     getNodeFromPathSegment: function(parent, path)
     {
         var pos = path.match(/\[(\d+)\]/);
@@ -13145,7 +13153,7 @@ var ViperUtil = {
     },
 
 
-    
+
     getDocuments: function()
     {
         var docs = [document];
@@ -13158,7 +13166,7 @@ var ViperUtil = {
 
     },
 
-    
+
     getIFrameDocument: function(iframe)
     {
         var doc = null;
@@ -13178,7 +13186,7 @@ var ViperUtil = {
 
     },
 
-    
+
     sprintf: function(str)
     {
         var c = arguments.length;
@@ -13240,14 +13248,14 @@ var ViperUtil = {
 
     },
 
-    
+
     setNodeTextContent: function(node, txt)
     {
        return ViperUtil.$(node).text(txt);
 
     },
 
-    
+
     _inherited: {},
     inherits: function(child, parent)
     {
@@ -13293,7 +13301,7 @@ var ViperUtil = {
 
     },
 
-    
+
     inArray: function(needle, haystack, typeSensitive)
     {
         if (ViperUtil.isset(typeSensitive) === false) {
@@ -13313,7 +13321,7 @@ var ViperUtil = {
 
     },
 
-    
+
     arraySearch: function(needle, haystack)
     {
         var length = haystack.length;
@@ -13337,7 +13345,7 @@ var ViperUtil = {
 
     },
 
-    
+
     arrayDiff: function(array1, array2, firstOnly)
     {
         var al  = array1.length;
@@ -13361,7 +13369,7 @@ var ViperUtil = {
 
     },
 
-    
+
     ellipsize: function(value, length)
     {
         // Type validation.
@@ -13671,7 +13679,7 @@ var ViperUtil = {
 
     },
 
-    
+
     replaceCommonNamedEntities: function(html)
     {
         var newHtml = '';
@@ -13762,7 +13770,7 @@ var ViperUtil = {
 
     },
 
-    
+
     addToQueryString: function(url, addQueries)
     {
         var mergedUrl        = '';
@@ -13792,7 +13800,7 @@ var ViperUtil = {
 
     },
 
-    
+
     queryString: function(url)
     {
         var result    = {};
@@ -13829,7 +13837,7 @@ var ViperUtil = {
 
     },
 
-    
+
     getURLAnchor: function(url)
     {
         if (typeof url === 'string') {
@@ -13868,7 +13876,7 @@ var ViperUtil = {
 
     },
 
-    
+
     camelCase: function(property)
     {
         // Regular expression to find the next hyphen followed by a letter and to
@@ -13884,7 +13892,7 @@ var ViperUtil = {
 
     },
 
-    
+
     getBrowserType: function()
     {
         if (ViperUtil._browserType === null) {
@@ -13910,7 +13918,7 @@ var ViperUtil = {
 
     },
 
-    
+
     getBrowserVersion: function()
     {
         if (ViperUtil._browserVersion !== null) {
@@ -13957,7 +13965,7 @@ var ViperUtil = {
 
     },
 
-    
+
     isBrowser: function(browser, version)
     {
         if (ViperUtil.getBrowserType() !== browser) {
@@ -14024,7 +14032,7 @@ var ViperUtil = {
 
     },
 
-    
+
     cloneNode: function(node)
     {
         // Clone the element so we dont modify the actual contents.
@@ -14042,7 +14050,7 @@ var ViperUtil = {
 
     },
 
-    
+
     dcall: function(c)
     {
         if (!ViperUtil._dcall) {
@@ -14093,7 +14101,7 @@ var HTMLCSAuditor = new function()
 
     this.pointerContainer = null;
 
-    
+
     var buildSummaryButton = function(id, className, title, onclick) {
         var button       = _doc.createElement('div');
         button.id        = id;
@@ -14118,7 +14126,7 @@ var HTMLCSAuditor = new function()
         return button;
     };
 
-    
+
     var buildCheckbox = function(id, title, checked, disabled, onclick) {
         if (checked === undefined) {
             checked = false;
@@ -14169,7 +14177,7 @@ var HTMLCSAuditor = new function()
         return label;
     };
 
-    
+
     var buildRadioButton = function(groupName, value, title, checked) {
         if (checked === undefined) {
             checked = false;
@@ -14195,7 +14203,7 @@ var HTMLCSAuditor = new function()
         return label;
     };
 
-    
+
     var buildHeaderSection = function(standard, wrapper) {
         var header       = _doc.createElement('div');
         header.className = _prefix + 'header';
@@ -14261,7 +14269,7 @@ var HTMLCSAuditor = new function()
         return header;
     };
 
-    
+
     var buildSummarySection = function(errors, warnings, notices) {
         var summary       = _doc.createElement('div');
         summary.className = _prefix + 'summary';
@@ -14337,7 +14345,7 @@ var HTMLCSAuditor = new function()
         return summary;
     };
 
-    
+
     var buildDetailSummarySection = function(issue, totalIssues) {
         var summary       = _doc.createElement('div');
         summary.className = _prefix + 'summary-detail';
@@ -14452,7 +14460,7 @@ var HTMLCSAuditor = new function()
         return summary;
     };
 
-    
+
     var buildIssueListSection = function(messages) {
         var issueListWidth = (Math.ceil(messages.length / 5) * 300);
         var issueList      = _doc.createElement('div');
@@ -15081,7 +15089,7 @@ var HTMLCSAuditor = new function()
 
     };
 
-    
+
     var _includeScript = function(src, callback) {
         var script    = document.createElement('script');
         script.onload = function() {
@@ -15326,7 +15334,7 @@ var HTMLCSAuditor = new function()
         return standards;
     };
 
-    
+
     this.run = function(standard, source, options) {
         var standards       = this.getStandardList();
         var standardsToLoad = [];
@@ -16147,12 +16155,12 @@ var HTMLCS = new function()
     var _messages     = [];
     var _msgOverrides = {};
 
-    
+
     this.ERROR   = 1;
     this.WARNING = 2;
     this.NOTICE  = 3;
 
-    
+
     this.process = function(standard, content, callback) {
         // Clear previous runs.
         _standards    = {};
@@ -16173,7 +16181,7 @@ var HTMLCS = new function()
         }
     };
 
-    
+
     this.loadStandard = function(standard, callback) {
         if (!standard) {
             return false;
@@ -16185,7 +16193,7 @@ var HTMLCS = new function()
         });
     };
 
-    
+
     this.run = function(callback, content) {
         var element      = null;
         var loadingFrame = false;
@@ -16259,7 +16267,7 @@ var HTMLCS = new function()
         }
     };
 
-    
+
     this.isFullDoc = function(content) {
         var fullDoc = false;
         if (typeof content === 'string') {
@@ -16278,7 +16286,7 @@ var HTMLCS = new function()
         return fullDoc;
     }
 
-    
+
     this.addMessage = function(type, element, msg, code, data) {
         code = _getMessageCode(code);
 
@@ -16291,12 +16299,12 @@ var HTMLCS = new function()
         });
     };
 
-    
+
     this.getMessages = function() {
         return _messages.concat([]);
     };
 
-    
+
     var _run = function(elements, topElement, callback) {
         var topMsgs = [];
         while (elements.length > 0) {
@@ -16335,7 +16343,7 @@ var HTMLCS = new function()
         }
     };
 
-    
+
     var _processSniffs = function(element, sniffs, topElement, callback) {
         while (sniffs.length > 0) {
             var sniff     = sniffs.shift();
@@ -16362,7 +16370,7 @@ var HTMLCS = new function()
         }
     };
 
-    
+
     var _includeStandard = function(standard, callback, options) {
         if (standard.indexOf('http') !== 0) {
             standard = _getStandardPath(standard);
@@ -16382,7 +16390,7 @@ var HTMLCS = new function()
         }//end if
     };
 
-    
+
     var _registerStandard = function(standard, callback, options) {
         // Get the object name.
         var parts = standard.split('/');
@@ -16424,7 +16432,7 @@ var HTMLCS = new function()
         _registerSniffs(standard, sniffs, callback);
     };
 
-    
+
     var _registerSniffs = function(standard, sniffs, callback) {
         if (sniffs.length === 0) {
             callback.call(this);
@@ -16438,7 +16446,7 @@ var HTMLCS = new function()
         });
     };
 
-    
+
     var _loadSniffFile = function(standard, sniff, callback) {
         if (typeof sniff === 'string') {
             var sniffObj = _getSniff(standard, sniff);
@@ -16471,7 +16479,7 @@ var HTMLCS = new function()
         }
     };
 
-    
+
     var _registerSniff = function(standard, sniff) {
         // Get the sniff object.
         var sniffObj = _getSniff(standard, sniff);
@@ -16497,7 +16505,7 @@ var HTMLCS = new function()
         _sniffs.push(sniffObj);
     };
 
-    
+
     var _getSniffPath = function(standard, sniff) {
         var parts = standard.split('/');
         parts.pop();
@@ -16505,7 +16513,7 @@ var HTMLCS = new function()
         return path;
     };
 
-    
+
     var _getStandardPath = function(standard)
     {
         // Get the include path of a local standard.
@@ -16529,7 +16537,7 @@ var HTMLCS = new function()
 
     };
 
-    
+
     var _getSniff = function(standard, sniff) {
         var name = 'HTMLCS_';
         name    += _standards[standard].name + '_Sniffs_';
@@ -16543,13 +16551,13 @@ var HTMLCS = new function()
         return window[name];
     };
 
-    
+
     var _getMessageCode = function(code) {
         code = _standard + '.' + _currentSniff._name + '.' + code;
         return code;
     };
 
-    
+
     var _includeScript = function(src, callback) {
         var script    = document.createElement('script');
         script.onload = function() {
@@ -16574,7 +16582,7 @@ var HTMLCS = new function()
         }
     };
 
-    
+
     var _getAllTags = function(element) {
         element      = element || document;
         var elements = element.getElementsByTagName('*');
@@ -16589,12 +16597,12 @@ var HTMLCS = new function()
     };
 
     this.util = new function() {
-        
+
         this.trim = function(string) {
             return string.replace(/^\s*(.*)\s*$/g, '$1');
         };
 
-        
+
         this.isStringEmpty = function(string) {
             if (typeof string !== 'string') {
                 return true;
@@ -16613,7 +16621,7 @@ var HTMLCS = new function()
             return empty;
         };
 
-        
+
         this.getElementWindow = function(element)
         {
             if (element.ownerDocument) {
@@ -16633,7 +16641,7 @@ var HTMLCS = new function()
 
         };
 
-        
+
         this.style = function(element) {
             var computedStyle = null;
             var window        = this.getElementWindow(element);
@@ -16647,7 +16655,7 @@ var HTMLCS = new function()
             return computedStyle;
         };
 
-        
+
         this.isHidden = function(element) {
             var hidden = false;
 
@@ -16670,7 +16678,7 @@ var HTMLCS = new function()
             return hidden;
         };
 
-        
+
         this.isInDocument = function(element) {
             // Check whether the element is in the document, by looking up its
             // DOM tree for a document object.
@@ -16687,7 +16695,7 @@ var HTMLCS = new function()
             return true;
         };
 
-        
+
         this.contains = function(parent, child) {
             var contained = false;
 
@@ -16714,7 +16722,7 @@ var HTMLCS = new function()
             return contained;
         };
 
-        
+
         this.isLayoutTable = function(table) {
             var th = table.querySelector('th');
             if (th === null) {
@@ -16724,7 +16732,7 @@ var HTMLCS = new function()
             return false;
         };
 
-        
+
         this.contrastRatio = function(colour1, colour2) {
             var ratio = (0.05 + this.relativeLum(colour1)) / (0.05 + this.relativeLum(colour2));
             if (ratio < 1) {
@@ -16734,7 +16742,7 @@ var HTMLCS = new function()
             return ratio;
         };
 
-        
+
         this.relativeLum = function(colour) {
             if (colour.charAt) {
                 var colour = this.colourStrToRGB(colour);
@@ -16753,7 +16761,7 @@ var HTMLCS = new function()
             return lum;
         }
 
-        
+
         this.colourStrToRGB = function(colour) {
             colour = colour.toLowerCase();
 
@@ -16785,7 +16793,7 @@ var HTMLCS = new function()
             return colour;
         };
 
-        
+
         this.RGBtoColourStr = function(colour) {
             colourStr = '#';
             colour.red   = Math.round(colour.red * 255);
@@ -16817,7 +16825,7 @@ var HTMLCS = new function()
             return colourStr;
         };
 
-        
+
         this.sRGBtoHSV = function(colour) {
             // If this is a string, then convert to a colour structure.
             if (colour.charAt) {
@@ -16857,7 +16865,7 @@ var HTMLCS = new function()
             return hsvColour;
         };
 
-        
+
         this.HSVtosRGB = function(hsvColour) {
             var colour = {
                 red: 0,
@@ -16916,7 +16924,7 @@ var HTMLCS = new function()
             return colour;
         };
 
-        
+
         this.getElementTextContent = function(element, includeAlt)
         {
             if (includeAlt === undefined) {
@@ -16956,7 +16964,7 @@ var HTMLCS = new function()
             return text;
         };
 
-        
+
         this.testTableHeaders = function(element)
         {
             var retval = {
@@ -17110,7 +17118,7 @@ var HTMLCS = new function()
             return retval;
         };
 
-        
+
         this.getCellHeaders = function(table) {
             if (typeof table !== 'object') {
                 return null;
@@ -17264,7 +17272,7 @@ window.HTMLCS_Section508 = {
 
 
 var HTMLCS_Section508_Sniffs_A = {
-    
+
     register: function()
     {
         return [
@@ -17279,7 +17287,7 @@ var HTMLCS_Section508_Sniffs_A = {
 
     },
 
-    
+
     process: function(element, top)
     {
         if (element === top) {
@@ -17297,7 +17305,7 @@ var HTMLCS_Section508_Sniffs_A = {
         }
     },
 
-    
+
     testNullAltText: function(top)
     {
         var errors = {
@@ -17404,7 +17412,7 @@ var HTMLCS_Section508_Sniffs_A = {
         return errors;
     },
 
-    
+
     addNullAltTextResults: function(top)
     {
         var errors = this.testNullAltText(top);
@@ -17513,7 +17521,7 @@ var HTMLCS_Section508_Sniffs_A = {
         return errors;
     },
 
-    
+
     addMediaAlternativesResults: function(top)
     {
         var errors = HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_1_1_1_1.testMediaTextAlternatives(top);
@@ -17543,7 +17551,7 @@ var HTMLCS_Section508_Sniffs_A = {
 
 
 var HTMLCS_Section508_Sniffs_B = {
-    
+
     register: function()
     {
         return [
@@ -17555,7 +17563,7 @@ var HTMLCS_Section508_Sniffs_B = {
 
     },
 
-    
+
     process: function(element, top)
     {
         var nodeName = element.nodeName.toLowerCase();
@@ -17568,14 +17576,14 @@ var HTMLCS_Section508_Sniffs_B = {
 
 
 var HTMLCS_Section508_Sniffs_C = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'Ensure that any information conveyed using colour alone is also available without colour, such as through context or markup.', 'Colour');
@@ -17586,14 +17594,14 @@ var HTMLCS_Section508_Sniffs_C = {
 
 
 var HTMLCS_Section508_Sniffs_D = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         if (element === top) {
@@ -17612,7 +17620,7 @@ var HTMLCS_Section508_Sniffs_D = {
         }
     },
 
-    
+
     testPresentationMarkup: function(top)
     {
         // Presentation tags that should have no place in modern HTML.
@@ -17658,14 +17666,14 @@ var HTMLCS_Section508_Sniffs_D = {
 
 
 var HTMLCS_Section508_Sniffs_G = {
-    
+
     register: function()
     {
         return ['table'];
 
     },
 
-    
+
     process: function(element, top)
     {
         // If no table headers, emit notice about the table.
@@ -17679,14 +17687,14 @@ var HTMLCS_Section508_Sniffs_G = {
 
 
 var HTMLCS_Section508_Sniffs_H = {
-    
+
     register: function()
     {
         return ['table'];
 
     },
 
-    
+
     process: function(table, top)
     {
         var headersAttr = HTMLCS.util.testTableHeaders(table);
@@ -17720,7 +17728,7 @@ var HTMLCS_Section508_Sniffs_H = {
 
 
 var HTMLCS_Section508_Sniffs_I = {
-    
+
     register: function()
     {
         return [
@@ -17731,7 +17739,7 @@ var HTMLCS_Section508_Sniffs_I = {
 
     },
 
-    
+
     process: function(element, top)
     {
         var nodeName   = element.nodeName.toLowerCase();
@@ -17751,14 +17759,14 @@ var HTMLCS_Section508_Sniffs_I = {
 
 
 var HTMLCS_Section508_Sniffs_J = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         // The term in Sec. 508 is "flicker" rather than flash.
@@ -17769,14 +17777,14 @@ var HTMLCS_Section508_Sniffs_J = {
 
 
 var HTMLCS_Section508_Sniffs_K = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'If this page cannot be made compliant, a text-only page with equivalent information or functionality should be provided. The alternative page needs to be updated in line with this page\'s content.', 'AltVersion');
@@ -17787,14 +17795,14 @@ var HTMLCS_Section508_Sniffs_K = {
 
 
 var HTMLCS_Section508_Sniffs_L = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         if (element === top) {
@@ -17893,7 +17901,7 @@ var HTMLCS_Section508_Sniffs_L = {
         return errors;
     },
 
-    
+
     testKeyboard: function(top)
     {
         // Testing for elements that have explicit attributes for mouse-specific
@@ -17935,7 +17943,7 @@ var HTMLCS_Section508_Sniffs_L = {
 
 
 var HTMLCS_Section508_Sniffs_M = {
-    
+
     register: function()
     {
         return [
@@ -17949,7 +17957,7 @@ var HTMLCS_Section508_Sniffs_M = {
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'If external media requires a plugin or application to view, ensure a link is provided to a plugin or application that complies with Section 508 accessibility requirements for applications.', 'PluginLink');
@@ -17960,14 +17968,14 @@ var HTMLCS_Section508_Sniffs_M = {
 
 
 var HTMLCS_Section508_Sniffs_N = {
-    
+
     register: function()
     {
         return ['form'];
 
     },
 
-    
+
     process: function(element, top)
     {
         var nodeName = element.nodeName.toLowerCase();
@@ -17983,7 +17991,7 @@ var HTMLCS_Section508_Sniffs_N = {
 
 
 var HTMLCS_Section508_Sniffs_O = {
-    
+
     register: function()
     {
         return [
@@ -17994,7 +18002,7 @@ var HTMLCS_Section508_Sniffs_O = {
 
     },
 
-    
+
     process: function(element, top)
     {
         if (element === top) {
@@ -18038,7 +18046,7 @@ var HTMLCS_Section508_Sniffs_O = {
 
 
 var HTMLCS_Section508_Sniffs_P = {
-    
+
     register: function()
     {
         return [
@@ -18048,7 +18056,7 @@ var HTMLCS_Section508_Sniffs_P = {
 
     },
 
-    
+
     process: function(element, top)
     {
         if (element === top) {
@@ -18276,7 +18284,7 @@ window.HTMLCS_WCAG2AAA = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_1_1_1_1 = {
-    
+
     register: function()
     {
         return [
@@ -18286,7 +18294,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_1_1_1_1 = {
 
     },
 
-    
+
     process: function(element, top)
     {
         if (element === top) {
@@ -18304,7 +18312,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_1_1_1_1 = {
         }//end if
     },
 
-    
+
     addNullAltTextResults: function(top)
     {
         var errors = this.testNullAltText(top);
@@ -18346,7 +18354,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_1_1_1_1 = {
         }
     },
 
-    
+
     testNullAltText: function(top)
     {
         var errors = {
@@ -18453,14 +18461,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_1_1_1_1 = {
         return errors;
     },
 
-    
+
     testLongdesc: function(element)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'If this image cannot be fully described in a short text alternative, ensure a long text alternative is also available, such as in the body text or through a link.', 'G73,G74');
 
     },
 
-    
+
     testLinkStutter: function(element)
     {
         if (element.parentNode.nodeName.toLowerCase() === 'a') {
@@ -18546,7 +18554,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_1_1_1_1 = {
         }//end if
     },
 
-    
+
     addMediaAlternativesResults: function(top)
     {
         var errors = this.testMediaTextAlternatives(top);
@@ -18639,7 +18647,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_1_1_1_1 = {
         return errors;
     },
 
-    
+
     _getLinkAltText: function(anchor)
     {
         var anchor = anchor.cloneNode(true);
@@ -18673,7 +18681,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_1_1_1_1 = {
         return alt;
     },
 
-    
+
     _getPreviousSiblingElement: function(element, tagName, immediate) {
         if (tagName === undefined) {
             tagName = null;
@@ -18713,7 +18721,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_1_1_1_1 = {
         return prevNode;
     },
 
-    
+
     _getNextSiblingElement: function(element, tagName, immediate) {
         if (tagName === undefined) {
             tagName = null;
@@ -18757,7 +18765,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_1_1_1_1 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_1 = {
-    
+
     register: function()
     {
         return [
@@ -18771,7 +18779,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_1 = {
 
     },
 
-    
+
     process: function(element, top)
     {
         var nodeName = element.nodeName.toLowerCase();
@@ -18790,7 +18798,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_1 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_2 = {
-    
+
     register: function()
     {
         return [
@@ -18802,7 +18810,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_2 = {
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'If this embedded object contains pre-recorded synchronised media and is not provided as an alternative for text content, check that captions are provided for audio content.', 'G87,G93');
@@ -18813,7 +18821,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_2 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_3 = {
-    
+
     register: function()
     {
         return [
@@ -18825,7 +18833,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_3 = {
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'If this embedded object contains pre-recorded synchronised media and is not provided as an alternative for text content, check that an audio description of its video, and/or an alternative text version of the content is provided.', 'G69,G78,G173,G8');
@@ -18836,7 +18844,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_3 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_4 = {
-    
+
     register: function()
     {
         return [
@@ -18848,7 +18856,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_4 = {
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'If this embedded object contains synchronised media, check that captions are provided for live audio content.', 'G9,G87,G93');
@@ -18859,7 +18867,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_4 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_5 = {
-    
+
     register: function()
     {
         return [
@@ -18871,7 +18879,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_5 = {
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'If this embedded object contains pre-recorded synchronised media, check that an audio description is provided for its video content.', 'G78,G173,G8');
@@ -18882,7 +18890,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_5 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_6 = {
-    
+
     register: function()
     {
         return [
@@ -18894,7 +18902,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_6 = {
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'If this embedded object contains pre-recorded synchronised media, check that a sign language interpretation is provided for its audio.', 'G54,G81');
@@ -18905,7 +18913,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_6 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_7 = {
-    
+
     register: function()
     {
         return [
@@ -18917,7 +18925,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_7 = {
 
     },
 
-    
+
     process: function(element, top)
     {
         // Check for elements that could potentially contain video.
@@ -18929,7 +18937,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_7 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_8 = {
-    
+
     register: function()
     {
         return [
@@ -18941,7 +18949,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_8 = {
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'If this embedded object contains pre-recorded synchronised media or video-only content, check that an alternative text version of the content is provided.', 'G69,G159');
@@ -18952,7 +18960,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_8 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_9 = {
-    
+
     register: function()
     {
         return [
@@ -18965,7 +18973,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_9 = {
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'If this embedded object contains live audio-only content, check that an alternative text version of the content is provided.', 'G150,G151,G157');
@@ -19001,7 +19009,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
 
     },
 
-    
+
     process: function(element, top)
     {
         var nodeName = element.nodeName.toLowerCase();
@@ -19055,7 +19063,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
         }//end if
     },
 
-    
+
     testEmptyDupeLabelForAttrs: function(top)
     {
         this._labelNames = {};
@@ -19097,7 +19105,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
         }//end for
     },
 
-    
+
     testLabelsOnInputs: function(element, top)
     {
         var nodeName  = element.nodeName.toLowerCase();
@@ -19199,7 +19207,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
         }//end if
     },
 
-    
+
     testPresentationMarkup: function(top)
     {
         // Presentation tags that should have no place in modern HTML.
@@ -19219,7 +19227,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
         }
     },
 
-    
+
     testNonSemanticHeading: function(element)
     {
         // Test for P|DIV > STRONG|EM|other inline styling, when said inline
@@ -19238,7 +19246,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
         }
     },
 
-    
+
     testTableHeaders: function(table)
     {
         var headersAttr = HTMLCS.util.testTableHeaders(table);
@@ -19321,7 +19329,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
         }
     },
 
-    
+
     _testTableScopeAttrs: function(table)
     {
         var elements = {
@@ -19382,7 +19390,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
         return retval;
     },
 
-    
+
     testTableCaptionSummary: function(table) {
         var summary   = table.getAttribute('summary') || '';
         var captionEl = table.getElementsByTagName('caption');
@@ -19422,7 +19430,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
         }//end if
     },
 
-    
+
     testFieldsetLegend: function(fieldset) {
         var legend = fieldset.querySelector('legend');
 
@@ -19431,7 +19439,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
         }
     },
 
-    
+
     testOptgroup: function(select) {
         var optgroup = select.querySelector('optgroup');
 
@@ -19441,7 +19449,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
         }
     },
 
-    
+
     testRequiredFieldsets: function(form) {
         var optionInputs = form.querySelectorAll('input[type=radio], input[type=checkbox]');
         var usedNames     = {};
@@ -19477,7 +19485,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
         }//end for
     },
 
-    
+
     testListsWithBreaks: function(element) {
         var firstBreak = element.querySelector('br');
         var items      = [];
@@ -19553,7 +19561,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
         }
     },
 
-    
+
     testEmptyHeading: function(element) {
         var text = element.textContent;
 
@@ -19566,7 +19574,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
         }
     },
 
-    
+
     testUnstructuredNavLinks: function(element)
     {
         var nodeName    = element.nodeName.toLowerCase();
@@ -19597,7 +19605,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
         }//end if
     },
 
-    
+
     testGeneralTable: function(table) {
         if (HTMLCS.util.isLayoutTable(table) === true) {
             HTMLCS.addMessage(HTMLCS.NOTICE, table, 'This table appears to be a layout table. If it is meant to instead be a data table, ensure header cells are identified using th elements.', 'LayoutTable');
@@ -19620,7 +19628,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1_A = {
 
     },
 
-    
+
     process: function(element, top)
     {
         var sniff = HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1;
@@ -19645,7 +19653,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1_AAA = {
 
     },
 
-    
+
     process: function(element, top)
     {
         var sniff = HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1;
@@ -19660,14 +19668,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1_AAA = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_2 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'Check that the content is ordered in a meaningful sequence when linearised, such as when style sheets are disabled.', 'G57');
@@ -19678,14 +19686,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_2 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_3 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'Where instructions are provided for understanding the content, do not rely on sensory characteristics alone (such as shape, size or location) to describe objects.', 'G96');
@@ -19696,14 +19704,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_3 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_1 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'Check that any information conveyed using colour alone is also available in text, or through other visual cues.', 'G14,G182');
@@ -19714,7 +19722,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_1 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_2 = {
-    
+
     register: function()
     {
         return [
@@ -19728,7 +19736,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_2 = {
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'If this element contains audio that plays automatically for longer than 3 seconds, check that there is the ability to pause, stop or mute the audio.', 'F23');
@@ -19739,14 +19747,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_2 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_3 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         if (element === top) {
@@ -19754,7 +19762,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_3 = {
 
             for (var i = 0; i < failures.length; i++) {
                 var element   = failures[i].element;
-                
+
                 var decimals  = 2;
                 var value     = (Math.round(failures[i].value * Math.pow(10, decimals)) / Math.pow(10, decimals));
                 var required  = failures[i].required;
@@ -19766,7 +19774,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_3 = {
                     decimals++;
                     value = (Math.round(failures[i].value * Math.pow(10, decimals)) / Math.pow(10, decimals));
                 }
-                
+
                 if (required === 4.5) {
                     var code = 'G18';
                 } else if (required === 3.0) {
@@ -20050,14 +20058,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_3_Contrast = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_3_F24 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         // Test for background/foreground stuff.
@@ -20067,7 +20075,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_3_F24 = {
         }
     },
 
-    
+
     testColourComboFail: function(element)
     {
         var hasFg = element.hasAttribute('color');
@@ -20102,14 +20110,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_3_F24 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_4 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'Check that text can be resized without assistive technology up to 200 percent without loss of content or functionality.', 'G142');
@@ -20120,14 +20128,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_4 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_5 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         var imgObj = top.querySelector('img');
@@ -20142,14 +20150,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_5 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_6 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         if (element === top) {
@@ -20157,7 +20165,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_6 = {
 
             for (var i = 0; i < failures.length; i++) {
                 var element   = failures[i].element;
-                
+
                 var decimals  = 2;
                 var value     = (Math.round(failures[i].value * Math.pow(10, decimals)) / Math.pow(10, decimals));
                 var required  = failures[i].required;
@@ -20205,7 +20213,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_6 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_7 = {
-    
+
     register: function()
     {
         return [
@@ -20218,7 +20226,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_7 = {
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'For pre-recorded audio-only content in this element that is primarily speech (such as narration), any background sounds should be muteable, or be at least 20 dB (or about 4 times) quieter than the speech.', 'G56');
@@ -20229,14 +20237,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_7 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_8 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         // This Success Criterion has five prongs, and each should be thrown as a
@@ -20253,14 +20261,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_8 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_9 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         var imgObj = top.querySelector('img');
@@ -20274,14 +20282,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_9 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_1_2_1_1 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         // Testing for elements that have explicit attributes for mouse-specific
@@ -20325,7 +20333,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_1_2_1_1 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_1_2_1_2 = {
-    
+
     register: function()
     {
         return [
@@ -20336,7 +20344,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_1_2_1_2 = {
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.WARNING, element, 'Check that this applet or plugin provides the ability to move the focus away from itself when using the keyboard.', 'F10');
@@ -20347,14 +20355,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_1_2_1_2 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_2_2_2_1 = {
-    
+
     register: function()
     {
         return ['meta'];
 
     },
 
-    
+
     process: function(element, top)
     {
         // Meta refresh testing under H76/F41. Fails if a non-zero timeout is provided.
@@ -20381,7 +20389,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_2_2_2_1 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_2_2_2_2 = {
-    
+
     register: function()
     {
         return [
@@ -20391,7 +20399,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_2_2_2_2 = {
 
     },
 
-    
+
     process: function(element, top)
     {
         if (element === top) {
@@ -20417,14 +20425,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_2_2_2_2 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_2_2_2_3 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'Check that timing is not an essential part of the event or activity presented by the content, except for non-interactive synchronized media and real-time events.', 'G5');
@@ -20435,14 +20443,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_2_2_2_3 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_2_2_2_4 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'Check that all interruptions (including updates to content) can be postponed or suppressed by the user, except interruptions involving an emergency.', 'SCR14');
@@ -20453,14 +20461,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_2_2_2_4 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_2_2_2_5 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'If this Web page is part of a set of Web pages with an inactivity time limit, check that an authenticated user can continue the activity without loss of data after re-authenticating.', 'G105,G181');
@@ -20471,14 +20479,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_2_2_2_5 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_3_2_3_1 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         // The "small" flashing area is deliberately vague - users should see
@@ -20496,14 +20504,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_3_2_3_1 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_3_2_3_2 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'Check that no component of the content flashes more than three times in any 1-second period.', 'G19');
@@ -20514,7 +20522,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_3_2_3_2 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_1 = {
-    
+
     register: function()
     {
         return [
@@ -20526,7 +20534,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_1 = {
 
     },
 
-    
+
     process: function(element, top)
     {
         if (element === top) {
@@ -20547,7 +20555,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_1 = {
         }
     },
 
-    
+
     testIframeTitle: function(element)
     {
         var nodeName = element.nodeName.toLowerCase();
@@ -20568,13 +20576,13 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_1 = {
         }//end if
     },
 
-    
+
     testGenericBypassMsg: function(top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'Ensure that any common navigation elements can be bypassed; for instance, by use of skip links, header elements, or ARIA landmark roles.', 'G1,G123,G124,H69');
     },
 
-    
+
     testSameDocFragmentLinks: function(element, top)
     {
         if (element.hasAttribute('href') === true) {
@@ -20613,14 +20621,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_1 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_2 = {
-    
+
     register: function()
     {
         return ['html'];
 
     },
 
-    
+
     process: function(element, top)
     {
         // Find a head first.
@@ -20664,14 +20672,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_2 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_3 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         if (element === top) {
@@ -20687,14 +20695,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_3 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_4 = {
-    
+
     register: function()
     {
         return ['a'];
 
     },
 
-    
+
     process: function(element, top)
     {
         if (element.hasAttribute('title') === true) {
@@ -20709,14 +20717,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_4 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_5 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'If this Web page is not part of a linear process, check that there is more than one way of locating this Web page within a set of Web pages.', 'G125,G64,G63,G161,G126,G185');
@@ -20727,14 +20735,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_5 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_6 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'Check that headings and labels describe topic or purpose.', 'G130,G131');
@@ -20745,14 +20753,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_6 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_7 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         // Fire this notice if there appears to be an input field or link on the page
@@ -20770,14 +20778,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_7 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_8 = {
-    
+
     register: function()
     {
         return ['link'];
 
     },
 
-    
+
     process: function(element, top)
     {
         var linkParentName = element.parentNode.nodeName.toLowerCase();
@@ -20803,14 +20811,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_8 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_9 = {
-    
+
     register: function()
     {
         return ['a'];
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'Check that text of the link describes the purpose of the link.', 'H30');
@@ -20821,14 +20829,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_9 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_1_3_1_1 = {
-    
+
     register: function()
     {
         return ['html'];
 
     },
 
-    
+
     process: function(element, top)
     {
         if ((element.hasAttribute('lang') === false) && (element.hasAttribute('xml:lang') === false)) {
@@ -20854,7 +20862,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_1_3_1_1 = {
     },
 
 
-    
+
     isValidLanguageTag: function(langTag)
     {
         // Allow irregular or private-use tags starting with 'i' or 'x'.
@@ -20904,14 +20912,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_1_3_1_1 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_1_3_1_2 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         // Generic message for changes in language.
@@ -20956,14 +20964,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_1_3_1_2 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_1_3_1_3 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'Check that there is a mechanism available for identifying specific definitions of words or phrases used in an unusual or restricted way, including idioms and jargon.', 'H40,H54,H60,G62,G70');
@@ -20974,14 +20982,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_1_3_1_3 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_1_3_1_4 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'Check that a mechanism for identifying the expanded form or meaning of abbreviations is available.', 'G102,G55,G62,H28,G97');
@@ -20992,14 +21000,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_1_3_1_4 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_1_3_1_5 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'Where the content requires reading ability more advanced than the lower secondary education level, supplemental content or an alternative version should be provided.', 'G86,G103,G79,G153,G160');
@@ -21010,14 +21018,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_1_3_1_5 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_1_3_1_6 = {
-    
+
     register: function()
     {
         return ['ruby'];
 
     },
 
-    
+
     process: function(element, top)
     {
         var rb = element.querySelectorAll('rb');
@@ -21045,7 +21053,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_1_3_1_6 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_2_3_2_1 = {
-    
+
     register: function()
     {
         return [
@@ -21057,7 +21065,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_2_3_2_1 = {
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'Check that a change of context does not occur when this input field receives focus.', 'G107');
@@ -21068,14 +21076,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_2_3_2_1 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_2_3_2_2 = {
-    
+
     register: function()
     {
         return ['form'];
 
     },
 
-    
+
     process: function(element, top)
     {
         var nodeName = element.nodeName.toLowerCase();
@@ -21085,7 +21093,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_2_3_2_2 = {
         }
     },
 
-    
+
     checkFormSubmitButton: function(form)
     {
         // Test for one of the three types of submit buttons.
@@ -21100,14 +21108,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_2_3_2_2 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_2_3_2_3 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'Check that navigational mechanisms that are repeated on multiple Web pages occur in the same relative order each time they are repeated, unless a change is initiated by the user.', 'G61');
@@ -21118,14 +21126,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_2_3_2_3 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_2_3_2_4 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'Check that components that have the same functionality within this Web page are identified consistently in the set of Web pages to which it belongs.', 'G197');
@@ -21136,14 +21144,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_2_3_2_4 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_2_3_2_5 = {
-    
+
     register: function()
     {
         return ['a'];
 
     },
 
-    
+
     process: function(element, top)
     {
         var nodeName = element.nodeName.toLowerCase();
@@ -21153,7 +21161,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_2_3_2_5 = {
         }
     },
 
-    
+
     checkNewWindowTarget: function(link)
     {
         var hasTarget = link.hasAttribute('target');
@@ -21170,14 +21178,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_2_3_2_5 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_3_3_3_1 = {
-    
+
     register: function()
     {
         return ['form'];
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'If an input error is automatically detected in this form, check that the item(s) in error are identified and the error(s) are described to the user in text.', 'G83,G84,G85');
@@ -21187,14 +21195,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_3_3_3_1 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_3_3_3_2 = {
-    
+
     register: function()
     {
         return ['form'];
 
     },
 
-    
+
     process: function(element, top)
     {
         // Only the generic message will be displayed here. If there were problems
@@ -21207,14 +21215,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_3_3_3_2 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_3_3_3_3 = {
-    
+
     register: function()
     {
         return ['form'];
 
     },
 
-    
+
     process: function(element, top)
     {
         // Only G177 (about providing suggestions) is flagged as a technique.
@@ -21226,14 +21234,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_3_3_3_3 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_3_3_3_4 = {
-    
+
     register: function()
     {
         return ['form'];
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'If this form would bind a user to a financial or legal commitment, modify/delete user-controllable data, or submit test responses, ensure that submissions are either reversible, checked for input errors, and/or confirmed by the user.', 'G98,G99,G155,G164,G168.LegalForms');
@@ -21243,14 +21251,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_3_3_3_4 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_3_3_3_5 = {
-    
+
     register: function()
     {
         return ['form'];
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'Check that context-sensitive help is available for this form, at a Web-page and/or control level.', 'G71,G184,G193');
@@ -21260,14 +21268,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_3_3_3_5 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_3_3_3_6 = {
-    
+
     register: function()
     {
         return ['form'];
 
     },
 
-    
+
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'Check that submissions to this form are either reversible, checked for input errors, and/or confirmed by the user.', 'G98,G99,G155,G164,G168.AllForms');
@@ -21277,7 +21285,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_3_3_3_6 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle4_Guideline4_1_4_1_1 = {
-    
+
     register: function()
     {
         return [
@@ -21286,7 +21294,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle4_Guideline4_1_4_1_1 = {
 
     },
 
-    
+
     process: function(element, top)
     {
         if (element === top) {
@@ -21310,14 +21318,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle4_Guideline4_1_4_1_1 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle4_Guideline4_1_4_1_2 = {
-    
+
     register: function()
     {
         return ['_top'];
 
     },
 
-    
+
     process: function(element, top)
     {
         if (element === top) {
@@ -23111,7 +23119,7 @@ ViperAccessibilityPlugin.prototype = {
 
     },
 
-    
+
     includeScript: function(src, callback) {
         var script    = document.createElement('script');
         script.onload = function() {
@@ -23146,7 +23154,7 @@ ViperAccessibilityPlugin.prototype = {
         }
     },
 
-    
+
     includeCss: function(href) {
         if (ViperUtil.inArray(href, this._includedCSS) === true) {
             return;
@@ -24446,7 +24454,7 @@ ViperCopyPastePlugin.prototype = {
                             // If this list is being pasted inside another list use its items instead.
                             while (ctNode.firstChild) {
                                 ViperUtil.insertAfter(prevBlock, ctNode.firstChild);
-                            }console.info(222)
+                            }
                         } else {
                             ViperUtil.insertAfter(prevBlock, ctNode);
                         }
@@ -26448,7 +26456,7 @@ ViperCoreStylesPlugin.prototype = {
 
     },
 
-    
+
     setJustifyChangeTrackInfo: function(node)
     {
         if (node && ViperChangeTracker.isTrackingNode(node) === false) {
@@ -28900,7 +28908,7 @@ ViperFormatPlugin.prototype = {
 
     },
 
-    
+
     getFormatButtonStatuses: function(element)
     {
         var statuses = {
@@ -29131,7 +29139,7 @@ ViperFormatPlugin.prototype = {
 
     },
 
-    
+
     handleFormat: function(type)
     {
         var lineage         = this._inlineToolbar.getLineage();
@@ -30711,7 +30719,7 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
-    
+
     updateToolbar: function(range, nodeSelection, hasActiveSection)
     {
         if (this._lineageClicked !== true) {
@@ -30768,7 +30776,7 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
-    
+
     _updateInnerContainer: function(range, lineage, nodeSelection)
     {
         if (!lineage || lineage.length === 0) {
@@ -30791,7 +30799,7 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
-    
+
     getReadableTagName: function(tagName)
     {
         switch (tagName) {
@@ -30853,7 +30861,7 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
-    
+
     selectLineageItem: function(index)
     {
         var tags = ViperUtil.getTag('li', this._lineage);
@@ -30888,7 +30896,7 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
-    
+
     _updateLineage: function(lineage, selIndex)
     {
         // Remove the contents of the lineage container.
@@ -31083,7 +31091,7 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
-    
+
     _getSelectionLineage: function(range, nodeSelection)
     {
         range             = range || this.viper.getViperRange();
@@ -33115,7 +33123,7 @@ ViperKeyboardEditorPlugin.prototype = {
         return false;
     },
 
-    
+
     handleSoftEnter: function(e)
     {
         if (e) {
@@ -33596,7 +33604,7 @@ ViperLangToolsPlugin.prototype = {
 
     },
 
-    
+
     getSurroundingParents: function(node, tagName)
     {
         if (!node) {
@@ -33995,7 +34003,7 @@ ViperLinkPlugin.prototype = {
 
     },
 
-    
+
     validateEmail: function(email)
     {
         var regExStr = '^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.([a-z][a-z]+)|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$';
@@ -35917,7 +35925,7 @@ ViperListPlugin.prototype = {
 
     },
 
-    
+
     splitListAtItem: function(li)
     {
         var siblings = [];
@@ -35968,7 +35976,7 @@ ViperListPlugin.prototype = {
 
     },
 
-    
+
     convertElement: function(elem, tagName, detached)
     {
         var newElem = document.createElement(tagName);
@@ -36142,7 +36150,7 @@ ViperListPlugin.prototype = {
 
     },
 
-    
+
     getItemContents: function(li)
     {
         var contentElements = [];
@@ -36753,7 +36761,7 @@ ViperListPlugin.prototype = {
 
     },
 
-    
+
     _getListItem: function(element)
     {
         while (element && element !== this.viper.element) {
@@ -36861,7 +36869,7 @@ ViperListPlugin.prototype = {
 
     },
 
-    
+
     handleEnter: function(li)
     {
         var content = ViperUtil.getNodeTextContent(li);
@@ -37854,7 +37862,7 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
     return this;
   }
 
-  
+
 
 
 
@@ -38548,7 +38556,7 @@ ViperSourceViewPlugin.prototype = {
     },
 
 
-    
+
     _includeScript: function(src, callback) {
         var script    = document.createElement('script');
         script.onload = function() {
@@ -39035,7 +39043,7 @@ ViperTableEditorPlugin.prototype = {
     },
 
 
-    
+
     showCellToolsIcon: function(cell, inTopBar)
     {
         if (!cell) {
@@ -39244,7 +39252,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    
+
     updateToolbar: function(cell, type, activeSubSection)
     {
         this._activeSection = null;
@@ -39468,7 +39476,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    
+
     _updatePosition: function(cell, verticalOnly)
     {
         var rangeCoords = this._toolbarWidget.getElementCoords(cell);
@@ -40174,7 +40182,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    
+
     canMergeLeft: function(cell)
     {
         var cells   = this._getCellsExpanded();
@@ -40584,7 +40592,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    
+
     canMoveColLeft: function(cell)
     {
          var colNum = this.getColNum(cell);
@@ -40881,7 +40889,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    
+
     convertToHeader: function(cell, type, actualType)
     {
         var elem = cell;
@@ -40991,7 +40999,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    
+
     convertToCell: function(cell, type, actualType)
     {
         var elem = cell;
@@ -41165,7 +41173,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    
+
     splitVertical: function(cell)
     {
         if (!cell || !cell.getAttribute('colspan')) {
@@ -41192,7 +41200,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    
+
     splitHorizontal: function(cell)
     {
         var rowspan = this.getRowspan(cell);
@@ -41714,7 +41722,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    
+
     _createToolbarEditorBubble: function()
     {
         var main = document.createElement('div');
@@ -42253,7 +42261,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    
+
     getCell: function(row, cell)
     {
         if (ViperUtil.isset(cell) === false) {
@@ -42639,7 +42647,7 @@ ViperToolbarPlugin.prototype = {
 
     },
 
-    
+
     addButton: function(button)
     {
         if (!this._settingButtons) {
@@ -43377,7 +43385,7 @@ ViperTrackChangesPlugin.prototype = {
 
     },
 
-    
+
     addComment: function()
     {
         this.viper.focus();
