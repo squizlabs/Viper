@@ -574,6 +574,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('anchorID', 'active');
+        sleep(1);
         $this->clearFieldValue('ID');
         sleep(1);
         $this->type('123');
@@ -590,6 +591,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('anchorID', 'active');
+        sleep(1);
         $this->clearFieldValue('ID');
         sleep(1);
         $this->type('123');
