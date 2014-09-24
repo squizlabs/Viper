@@ -1035,7 +1035,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      *
      * @return void
      */
-    public function testApplyChangesButtonIsDisabledAfterCancellingChangesToAClassAA()
+    public function testApplyChangesButtonIsDisabledAfterCancellingChangesToAClass()
     {
         // Using the inline toolbar
         $this->useTest(2);
