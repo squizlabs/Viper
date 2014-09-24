@@ -391,7 +391,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->type('This is the first paragraph');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('This is the second paragraph');
-        $this->assertHTMLMatch('<p>This is the first paragraph</p><p>This is the second paragraph %2%</p>');
+        $this->assertHTMLMatch('<p>This is the first paragraph</p><p>This is the second paragraph</p>');
 
     }//end testSelectAllAndRemove()
 
