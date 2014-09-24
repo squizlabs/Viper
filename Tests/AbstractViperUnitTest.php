@@ -176,6 +176,16 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         $this->sikuli = self::$_sikuli;
 
+        if (self::$_testRun !== TRUE) {
+            try {
+                // Move the mouse incase there is an active screensaver.
+                $this->sikuli->mouseMove($this->sikuli->mouseMoveOffset(-50, -50));
+                sleep(2);
+            } catch (Exception $e) {
+                // Ignore the error.
+            }
+        }
+
         // Reset the Sikuli connection and restart the browser if the number of consecutive errors reach the limit.
         if (ViperTestListener::getErrorStreak() >= self::$_maxErrorStreak) {
             $this->resetConnection();
