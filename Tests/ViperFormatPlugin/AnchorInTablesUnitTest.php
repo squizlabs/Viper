@@ -616,7 +616,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         // Check icon when inserting a table with no header row
         $this->useTest(2);
         $this->insertTable(1, 0, 2, 2);
-        $this->assertTableWithoutHeaders('<p>A paragraph on the page to test tables %1%</p><table border="1" style="width:100%;"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>A paragraph on the page to test tables %1%</p><table border="1" style="width:100%;"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p></p>');
 
         // Check the anchor icon in each cell
         $this->clickCell(0);
