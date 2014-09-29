@@ -1,8 +1,8 @@
 <?php
 
-require_once 'AbstractViperUnitTest.php';
+require_once 'AbstractViperTableEditorPluginUnitTest.php';
 
-class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViperUnitTest
+class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViperTableEditorPluginUnitTest
 {
 
 
@@ -574,6 +574,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('anchorID', 'active');
+        sleep(1);
         $this->clearFieldValue('ID');
         sleep(1);
         $this->type('123');
@@ -590,6 +591,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('anchorID', 'active');
+        sleep(1);
         $this->clearFieldValue('ID');
         sleep(1);
         $this->type('123');
@@ -602,6 +604,173 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         $this->assertHTMLMatch('<table id="123test" border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1% </caption><thead><tr><th id="123testr1c1">Col1 Header </th><th id="123testr1c2">Col2 %2% </th><th id="123testr1c3">Col3 Header </th></tr></thead><tfoot><tr><td colspan="3" headers="123testr1c1 123testr1c2 123testr1c3">Note: this is the table footer %3% </td></tr></tfoot><tbody><tr><td headers="123testr1c1">nec porta ante </td><td headers="123testr1c2">sapien vel %4% </td><td headers="123testr1c3"><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td headers="123testr1c1">nec porta ante </td><td colspan="2" headers="123testr1c2 123testr1c3">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testEditingTheTableId()
+
+
+    /**
+     * Test anchor icon when creating a new table.
+     *
+     * @return void
+     */
+    public function testAnchorIconInNewTable()
+    {
+        // Check icon when inserting a table with no header row
+        $this->useTest(2);
+        $this->insertTable(1, 0, 2, 2);
+        $this->assertHTMLMatchNoHeaders('<p>A paragraph on the page to test tables %1%</p><table border="1" style="width:100%;"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p></p>');
+
+        // Check the anchor icon in each cell
+        $this->clickCell(0);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->clickCell(1);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->clickCell(2);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->clickCell(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+
+        // Check icon when inserting a table with side header row
+        $this->useTest(2);
+        $this->insertTableWithSpecificId('test', 2, 2, 1, 1);
+        $this->assertHTMLMatch('<p>A paragraph on the page to test tables %1%</p><table border="1" id="test" style="width:100%;"><tbody><tr><th id="testr1c1"></th><td headers="testr1c1"></td></tr><tr><th id="testr2c1"></th><td headers="testr2c1"></td></tr></tbody></table><p></p>');
+
+        // Check the anchor icon in each cell
+        $this->clickCell(0);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->clickCell(1);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->clickCell(2);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->clickCell(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+
+        // Check icon when inserting a table with top header row
+        $this->useTest(2);
+        $this->insertTableWithSpecificId('test', 2, 2, 2, 1);
+        $this->assertHTMLMatch('<p>A paragraph on the page to test tables %1%</p><table border="1" id="test" style="width: 100%;"><thead><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th></tr></thead><tbody><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c2">&nbsp;</td></tr></tbody></table><p></p>');
+
+        // Check the anchor icon in each cell
+        $this->clickCell(0);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->clickCell(1);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->clickCell(2);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->clickCell(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+
+        // Check icon when inserting a table with side and top header row
+        $this->useTest(2);
+        $this->insertTableWithSpecificId('test', 2, 2, 3, 1);
+        $this->assertHTMLMatch('<p>A paragraph on the page to test tables %1%</p><table border="1" id="test" style="width:100%;"><thead><tr><th id="testr1c1"></th><th id="testr1c2"></th></tr></thead><tbody><tr><th id="testr2c1"></th><td headers="testr1c2 testr2c1"></td></tr></tbody></table><p></p>');
+
+        // Check the anchor icon in each cell
+        $this->clickCell(0);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->clickCell(1);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->clickCell(2);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->clickCell(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+
+    }//end testAnchorIconInNewTable()
+
+
+    /**
+     * Test anchor icon in header cells exisitng tables.
+     *
+     * @return void
+     */
+    public function testAnchorIconInHeaderCells()
+    {
+        // Check icon in table with side header
+        $this->useTest(3);
+        
+        // Check the anchor icon in teach cell
+        $this->clickCell(0);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
+        $this->selectKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->selectInlineToolbarLineageItem(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->clickCell(1);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
+        $this->selectKeyword(2);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->selectInlineToolbarLineageItem(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->clickCell(2);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
+        $this->selectKeyword(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->selectInlineToolbarLineageItem(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->clickCell(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
+        $this->selectKeyword(4);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->selectInlineToolbarLineageItem(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+
+        // Check icon in table with top header
+        $this->useTest(4);
+        
+        // Check the anchor icon in teach cell
+        $this->clickCell(0);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
+        $this->selectKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->selectInlineToolbarLineageItem(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->clickCell(1);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
+        $this->selectKeyword(2);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->selectInlineToolbarLineageItem(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->clickCell(2);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
+        $this->selectKeyword(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->selectInlineToolbarLineageItem(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->clickCell(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
+        $this->selectKeyword(4);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->selectInlineToolbarLineageItem(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+
+        // Check icon in table with top header
+        $this->useTest(5);
+        
+        // Check the anchor icon in teach cell
+        $this->clickCell(0);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
+        $this->selectKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->selectInlineToolbarLineageItem(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->clickCell(1);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
+        $this->selectKeyword(2);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->selectInlineToolbarLineageItem(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->clickCell(2);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
+        $this->selectKeyword(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->selectInlineToolbarLineageItem(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->clickCell(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
+        $this->selectKeyword(4);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->selectInlineToolbarLineageItem(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+
+    }//end testAnchorIconInHeaderCells()
 
 }//end class
 

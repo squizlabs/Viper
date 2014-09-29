@@ -12,6 +12,8 @@ class Viper_Tests_ViperListPlugin_CreateListWithKeyboardShortcutsTest extends Ab
      */
     public function testCreatingAListUsingTabKey()
     {
+        $this->useTest(1);
+        
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
 
@@ -36,6 +38,8 @@ class Viper_Tests_ViperListPlugin_CreateListWithKeyboardShortcutsTest extends Ab
      */
     public function testCreatingAListWithASubListUsingKeyboard()
     {
+        $this->useTest(1);
+
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.TAB');
@@ -65,6 +69,8 @@ class Viper_Tests_ViperListPlugin_CreateListWithKeyboardShortcutsTest extends Ab
      */
     public function testAddingItemsToOrderedListWithUsingKeyboard()
     {
+        $this->useTest(1);
+
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->clickTopToolbarButton('listOL');
@@ -94,6 +100,8 @@ class Viper_Tests_ViperListPlugin_CreateListWithKeyboardShortcutsTest extends Ab
      */
     public function testCreatingAListAfterEnteringText()
     {
+        $this->useTest(1);
+
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
 
@@ -107,6 +115,35 @@ class Viper_Tests_ViperListPlugin_CreateListWithKeyboardShortcutsTest extends Ab
         $this->assertHTMLMatch('<p>Create list test %1%</p><ul><li>New list item</li><li>Second list item</li></ul>');
 
     }//end testCreatingAListAfterEnteringText()
+
+
+    /**
+     * Tests creating a new list and then deleting it
+     *
+     * @return void
+     */
+    public function testCreatingNewListAfterDeletingAllContent()
+    {
+        //Test unordered list
+        $this->useTest(2);
+
+        //Enter content
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+
+        // Create unordered list and delete it
+        $this->sikuli->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p></p>');
+
+        // Create unordered list and add a list item
+        $this->sikuli->keyDown('Key.TAB');
+        $this->type('New list item');
+        $this->assertHTMLMatch('<ul><li>New list item</li></ul>');
+
+    }//end testCreatingNewListAfterDeletingAllContent()
 
 
 }//end class

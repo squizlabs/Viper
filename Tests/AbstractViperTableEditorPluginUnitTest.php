@@ -190,21 +190,6 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
 
 
     /**
-     * Checks that the expected html matches the actual html after removing the header tags from the table.
-     *
-     * @param string $html The expected HTML.
-     * @param string $msg  The error message to print.
-     *
-     * @return void
-     */
-    protected function assertTableWithoutHeaders($html, $msg=NULL)
-    {
-        $this->assertHTMLMatchNoHeaders($html, $msg);
-
-    }//end assertTableWithoutHeaders()
-
-
-    /**
      * Checks that the merge and split icon statuses are correct.
      *
      * @param int     $cell       The cell to check the icons for.

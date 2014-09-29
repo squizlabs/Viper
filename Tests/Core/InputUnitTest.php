@@ -391,7 +391,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->type('This is the first paragraph');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('This is the second paragraph');
-        $this->assertHTMLMatch('<p>This is the first paragraph</p><p>This is the second paragraph %2%</p>');
+        $this->assertHTMLMatch('<p>This is the first paragraph</p><p>This is the second paragraph</p>');
 
     }//end testSelectAllAndRemove()
 
@@ -412,6 +412,30 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<p>abc</p>');
 
     }//end testSelectAllAndReplace()
+
+
+    /**
+     * Test that when you delete all of the content, enter new content and delete the last 3 words that the other content remains.
+     *
+     * @return void
+     */
+    public function testDeletingNewContent()
+    {
+        $this->useTest(1);
+
+        // Select all content, delete it and replace with new content
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        sleep(1);
+        $this->type('This is a long line of content to test deleting the last three %1% words %2%');
+
+        // Select the last 3 words and delete them
+        $this->selectKeyword(1, 2);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p>This is a long line of content to test deleting the last three</p>');
+
+    }//end testDeletingNewContent()
 
 
     /**
