@@ -289,6 +289,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $this->sikuli->execJS('clean()');
 
         self::$_topToolbar = NULL;
+        self::$_testRun    = FALSE;
 
         $this->sikuli->resetConnection();
         $this->sikuli->resize();
