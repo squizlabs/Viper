@@ -1892,6 +1892,23 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
 
     /**
+     * Returns the value of the specified field.
+     *
+     * If field not found it will return FALSE.
+     *
+     * @param string $label The label of the field.
+     *
+     * @return mixed
+     */
+    protected function getFieldValue($label)
+    {
+        $value = $this->sikuli->execJS('gFieldValue("'.$label.'")');
+        return $value;
+
+    }//end getFieldValue()
+
+
+    /**
      * Returns the label image for the specified label element.
      *
      * @param string  $label The label of a field.
