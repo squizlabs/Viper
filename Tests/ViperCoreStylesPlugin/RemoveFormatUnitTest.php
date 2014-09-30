@@ -135,6 +135,57 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
     }//end testRemoveFormatForANestedStyleElement()
 
 
+     /**
+     * Test remove format for a nested style element.
+     *
+     * @return void
+     */
+    public function testRemoveFormatOnContentWithMultipleFormats()
+    {
+        $this->useTest(6);
+        
+        // Apply italic, subscript and superscript to the word
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('italic');
+        $this->clickTopToolbarButton('subscript');
+        $this->clickTopToolbarButton('superscript');
+        $this->assertHTMLMatch('<p>Test content with <em><sub><sup>%1%</sup></sub></em> no styles applied</p>');
+
+        // Remove format for the content
+        $this->clickTopToolbarButton('removeFormat');
+        $this->assertHTMLMatch('<p>Test content with %1% no styles applied</p>');
+
+        // Try removing content from the content again to make sure it is not deleted
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('removeFormat');
+        $this->assertHTMLMatch('<p>Test content with %1% no styles applied</p>');
+
+        // Apply bold, italic, subscript and superscript to the word
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('bold');
+        $this->clickTopToolbarButton('italic');
+        $this->clickTopToolbarButton('subscript');
+        $this->clickTopToolbarButton('superscript');
+        $this->assertHTMLMatch('<p>Test content with <strong><em><sub><sup>%1%</sup></sub></em></strong> no styles applied</p>');
+
+        // Remove format for the content
+        $this->clickTopToolbarButton('removeFormat');
+        $this->assertHTMLMatch('<p>Test content with %1% no styles applied</p>');
+
+        // Select content again and make sure icons are not active
+        $this->selectKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('italic'));
+        $this->assertTrue($this->inlineToolbarButtonExists('italic'));
+        $this->assertTrue($this->topToolbarButtonExists('subscript'));
+        $this->assertTrue($this->topToolbarButtonExists('superscript'));
+
+        // Click remove format again to make sure content is not broken
+        $this->clickTopToolbarButton('removeFormat');
+        $this->assertHTMLMatch('<p>Test content with %1% no styles applied</p>');
+
+    }//end testRemoveFormatOnContentWithMultipleFormats()
+
+
 }//end class
 
 
