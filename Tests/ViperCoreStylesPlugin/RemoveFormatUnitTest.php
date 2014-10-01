@@ -157,6 +157,7 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
 
         // Try removing content from the content again to make sure it is not deleted
         $this->selectKeyword(1);
+        sleep(1);
         $this->clickTopToolbarButton('removeFormat');
         $this->assertHTMLMatch('<p>Test content with %1% no styles applied</p>');
 
@@ -170,10 +171,12 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
 
         // Remove format for the content
         $this->clickTopToolbarButton('removeFormat');
+        sleep(1);
         $this->assertHTMLMatch('<p>Test content with %1% no styles applied</p>');
 
         // Select content again and make sure icons are not active
         $this->selectKeyword(1);
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('italic'));
         $this->assertTrue($this->inlineToolbarButtonExists('italic'));
         $this->assertTrue($this->topToolbarButtonExists('subscript'));
