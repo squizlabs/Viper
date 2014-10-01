@@ -82,7 +82,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @var integer
      */
-    private static $_maxErrorStreak = 5;
+    private static $_maxErrorStreak = 3;
 
     /**
      * List of applications and if they are available in the current system.
@@ -433,6 +433,19 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     {
         if ($retries === 0) {
             throw new Exception('Failed to load Viper test page.');
+        }
+
+        try {
+            // This will make sure that the browser has loaded the Viper page.
+            $this->getTopToolbar();
+        } catch (Exception $e) {
+            // Its not working.. Try to start browser again.
+            $this->sikuli->startBrowser();
+            sleep(2);
+            $this->sikuli->resize();
+            $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
+            sleep(2);
+            $this->getTopToolbar();
         }
 
         $this->sikuli->setAutoWaitTimeout(4, $this->getTopToolbar());
