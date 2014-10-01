@@ -31,11 +31,11 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteLinksUnitTest extends AbstractVi
         
         // Test copy and paste link only
         $this->useTest(2);
-        $this->moveToKeyword(1);
+        $this->selectKeyword(1);
         sleep(2);
         $this->selectInlineToolbarLineageItem(1);
         $this->sikuli->keyDown('Key.CMD + c');
-        $this->moveToKeyword(3);
+        sleep(2);
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.SPACE');
         sleep(1);
@@ -44,10 +44,11 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteLinksUnitTest extends AbstractVi
 
         // Test copy and paste paragraph containing the link
         $this->useTest(2);
-        $this->moveToKeyword(1);
+        $this->selectKeyword(1);
         sleep(2);
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + c');
+        sleep(2);
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
