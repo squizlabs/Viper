@@ -329,11 +329,14 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
      */
     public function addError(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
-        // Rertry a few times.
-        for ($i = 0; $i < 3; $i++) {
-            $result = $test->run(NULL);
-            if ($result->errorCount() === 0 && $result->failureCount() === 0) {
-                return;
+        $path = $this->getLogPath();
+        if (empty($path) === FALSE) {
+            // Retry a few times.
+            for ($i = 0; $i < 3; $i++) {
+                $result = $test->run(NULL);
+                if ($result->errorCount() === 0 && $result->failureCount() === 0) {
+                    return;
+                }
             }
         }
 
