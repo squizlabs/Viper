@@ -180,13 +180,13 @@ class Viper_Tests_ViperImagePlugin_UndoAndRedoForImageUnitTest extends AbstractV
 
         $this->clickElement('img', 0);
         $this->resizeImage(300);
-        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" height="280" src="http://localhost/~dsherwood/Viper/Tests/ViperImagePlugin/Images/html-codesniffer.png" width="300" /></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" height="280" src="%url%/ViperImagePlugin/Images/html-codesniffer.png" width="300" /></p><p>LABS is ORSM</p>');
 
         $this->clickTopToolbarButton('historyUndo');
         $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt=""/></p><p>LABS is ORSM</p>');
 
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" height="280" src="http://localhost/~dsherwood/Viper/Tests/ViperImagePlugin/Images/html-codesniffer.png" width="300" /></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" height="280" src="%url%/Viper/Tests/ViperImagePlugin/Images/html-codesniffer.png" width="300" /></p><p>LABS is ORSM</p>');
 
     }//end testUndoResizeOfImage()
 
@@ -202,16 +202,19 @@ class Viper_Tests_ViperImagePlugin_UndoAndRedoForImageUnitTest extends AbstractV
 
         // Resize the image
         $this->clickElement('img', 0);
+        sleep(1);
         $this->resizeImage(300);
-        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" height="280" src="http://localhost/~dsherwood/Viper/Tests/ViperImagePlugin/Images/html-codesniffer.png" width="300" /></p><p>LABS is ORSM</p>');
+        sleep(1);
+        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" height="280" src="%url%/Viper/Tests/ViperImagePlugin/Images/html-codesniffer.png" width="300" /></p><p>LABS is ORSM</p>');
 
         // Delete the image
         $this->clickElement('img', 0);
+        sleep(1);
         $this->sikuli->keyDown('Key.DELETE');
 
         // Undo and check that the resized image was inserted into the content
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" height="280" src="http://localhost/~dsherwood/Viper/Tests/ViperImagePlugin/Images/html-codesniffer.png" width="300" /></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" height="280" src="%url%/Viper/Tests/ViperImagePlugin/Images/html-codesniffer.png" width="300" /></p><p>LABS is ORSM</p>');
 
     }//end testResizeImageDeleteItAndClickUndo()
 
