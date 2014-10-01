@@ -101,6 +101,7 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
         // View Report.
         $viewReportButton = $this->findImage('HTMLCSViewReport', '#HTMLCS-settings-view-report');
         $this->sikuli->click($viewReportButton);
+        sleep(2);
 
         // Click error.
         $warningIcon = $this->findImage('HTMLCS-report-error', '.HTMLCS-issue-type.HTMLCS-error');
