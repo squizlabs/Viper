@@ -36,6 +36,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteLinksUnitTest extends AbstractVi
         $this->selectInlineToolbarLineageItem(1);
         $this->sikuli->keyDown('Key.CMD + c');
         sleep(2);
+        $this->moveToKeyword(3);
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.SPACE');
         sleep(1);
