@@ -13,7 +13,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
      */
     public function testOpenAndCloseSourceEditor()
     {
-        $this->sikuli->click($this->findKeyword(2));
+        $this->moveToKeyword(2);
         $this->clickTopToolbarButton('sourceView');
 
         // Check to make sure the source editor appears.
@@ -49,7 +49,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
      */
     public function testEditingAfterClosingSourceEditor()
     {
-        $this->sikuli->click($this->findKeyword(1));
+        $this->moveToKeyword(1);
         $this->clickTopToolbarButton('sourceView');
 
         $closeIcon = $this->findImage('closePopupIcon', '.Viper-popup-closeIcon');
@@ -71,7 +71,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
      */
     public function testEditingTheSourceCode()
     {
-        $this->sikuli->click($this->findKeyword(2));
+        $this->moveToKeyword(2);
         $this->clickTopToolbarButton('sourceView');
         sleep(2);
         $this->sikuli->keyDown('Key.CMD + a');
@@ -94,7 +94,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
     {
         $this->markTestSkipped('Atm the top buttons are removed when it switches windows. Need a way to keep the buttons there');
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->moveToKeyword(2);
         $this->clickTopToolbarButton('sourceView');
         sleep(2);
         $this->sikuli->keyDown('Key.CMD + a');
@@ -119,7 +119,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
     {
         $this->markTestSkipped('Atm the top buttons are removed when it switches windows. Need a way to keep the buttons there');
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->moveToKeyword(2);
         $this->clickTopToolbarButton('sourceView');
         sleep(2);
         $this->sikuli->keyDown('Key.CMD + a');
@@ -144,7 +144,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
     {
         $this->markTestSkipped('Atm the testing system cannot handle more than one window');
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->moveToKeyword(2);
         $this->clickTopToolbarButton('sourceView');
         sleep(2);
 
@@ -167,7 +167,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
     {
         $this->markTestSkipped('Atm the testing system cannot handle more than one window');
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->moveToKeyword(2);
         $this->clickTopToolbarButton('sourceView');
         sleep(2);
 
@@ -224,7 +224,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
      */
     public function testOpenSourceEditorAfterEmbeddingVideo()
     {
-        $this->sikuli->click($this->findKeyword(2));
+        $this->moveToKeyword(2);
         $this->clickTopToolbarButton('sourceView');
 
         // Check to make sure the source editor appears.
@@ -259,6 +259,34 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
         }
 
     }//end testOpenSourceEditorAfterEmbeddingVideo()
+
+
+    /**
+     * Test that when you add script tags into the source code, Viper strips them out
+     *
+     * @return void
+     */
+    public function testAddingScriptTagsInSourceCode()
+    {
+        $this->moveToKeyword(2);
+        $this->clickTopToolbarButton('sourceView');
+
+        // Check to make sure the source editor appears.
+        try {
+            $image = $this->findImage('dragPopupIcon', '.Viper-popup-dragIcon');
+        } catch (Exception $e) {
+            $this->fail('Source editor did not appear on the screen');
+        }
+
+        // Embed script tags
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('<canvas id="myCanvas"></canvas><script></script>');
+        $this->clickButton('Apply Changes', NULL, TRUE);
+
+        $this->assertHTMLMatch('<p><canvas id="myCanvas"></canvas></p>');
+
+    }//end testAddingScriptTagsInSourceCode()
 
 
 }//end class
