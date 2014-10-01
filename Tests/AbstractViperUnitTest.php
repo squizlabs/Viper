@@ -383,6 +383,25 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         if ($this->sikuli !== NULL) {
+
+            // Check if there were any JS errors.
+            $jsErrors = $this->sikuli->getJSErrors();
+            if (empty($jsErrors) === FALSE) {
+                $msgs = array();
+                foreach ($jsErrors as $error) {
+                    $msg  = 'JavaScript error detected: '.$error['errorMsg'].' in '.$error['url'];
+                    $msg .= ' on line '.$error['lineNumber'];
+
+                    if (empty($error['stackTrace']) === FALSE) {
+                        $msg .= "\n\nStack:\n".$error['stackTrace'];
+                    }
+
+                    $msgs[] = $msg;
+                }
+
+                $this->fail(implode("\n", $msgs));
+            }
+
             $this->sikuli->clearVars();
         }
 
