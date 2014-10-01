@@ -178,9 +178,8 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         if (self::$_testRun !== TRUE) {
             try {
-                // Move the mouse incase there is an active screensaver.
-                $loc = $this->sikuli->mouseMoveOffset(-50, -50);
-                $this->sikuli->click($loc);
+                // Press ESC incase there is an active screensaver.
+                $this->sikuli->keyDown('Key.ESC');
                 sleep(2);
             } catch (Exception $e) {
                 // Ignore the error.
