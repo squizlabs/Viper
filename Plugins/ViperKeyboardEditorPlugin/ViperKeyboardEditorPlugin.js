@@ -1548,7 +1548,41 @@ ViperKeyboardEditorPlugin.prototype = {
                 this.viper.fireSelectionChanged(null, true);
                 return false;
             }
+        } else if (range.collapsed === false
+            && range.getNodeSelection()
+        ) {
+            var nodeSelection = range.getNodeSelection();
+            if (nodeSelection
+                && ViperUtil.isStubElement(nodeSelection) === false
+                && ViperUtil.isTag(nodeSelection, 'td') === false
+                && ViperUtil.isTag(nodeSelection, 'th') === false
+            ) {
+                // Handle deletion of a whole bold/italic/etc tag.
+                range = this.viper.moveCaretAway(nodeSelection);
+                ViperUtil.remove(nodeSelection);
+                if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                    && range.startContainer.data === ' '
+                    && range.startContainer.previousSibling
+                    && range.startContainer.previousSibling.nodeType !== ViperUtil.TEXT_NODE
+                ) {
+                    // Fix for Chrome.. If content is '<em>test</em> <strong>content</strong>' and the sourceElement is
+                    // the strong tag then change the space to non breaking space to prevent caret moving in to <em>.
+                    range.startContainer.data = String.fromCharCode(160);
+                    range.setStart(range.startContainer, range.startContainer.data.length);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                }
+
+                ViperUtil.preventDefault(e);
+
+                this.viper.fireNodesChanged();
+                this.viper.fireSelectionChanged(null, true);
+                return false;
+            }
+
         }//end if
+
+
 
     },
 
