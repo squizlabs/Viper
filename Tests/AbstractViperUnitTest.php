@@ -1178,6 +1178,10 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         if ($match === NULL) {
             // Get it using JS.
             $elemRect = $this->sikuli->execJS('gVITPArrow()');
+            if ($elemRect === NULL) {
+                $this->fail('Inline Toolbar is not visible');
+            }
+
             $match    = $this->sikuli->getRegionOnPage($elemRect);
             if ($match === NULL) {
                 $this->fail('Inline Toolbar is not visible');
@@ -1722,7 +1726,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
                 $start = $this->sikuli->find($startKeywordImage, NULL, $this->getData('textSimmilarity'));
             } catch (FindFailedException $e) {
-                throw new FindFailedException('Failed to find keyword: '.$this->getKeyword($startKeyword));
+                throw new FindFailedException('Failed to find keyword '.$this->getKeyword($startKeyword));
             }
         }
 
