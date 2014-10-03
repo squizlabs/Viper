@@ -1919,7 +1919,7 @@ ViperKeyboardEditorPlugin.prototype = {
         if (range.collapsed === false) {
             var viperElement    = this.viper.getViperElement();
             var firstSelectable = range._getFirstSelectableChild(viperElement);
-            if (firstSelectable === range.startContainer || (viperElement === range.startContainer && range.startOffset === 0)) {
+            if ((firstSelectable === range.startContainer || viperElement === range.startContainer) && range.startOffset === 0) {
                 var lastSelectable  = range._getLastSelectableChild(viperElement);
                 if ((range.endContainer === viperElement && range.endOffset >= viperElement.childNodes.length)
                     || (range.endContainer === lastSelectable && range.endOffset === lastSelectable.data.length)
