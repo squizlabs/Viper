@@ -91,6 +91,13 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     private static $_apps = array();
 
+    /**
+     * The current version of Viper.
+     *
+     * @var string
+     */
+    private static $_viperVersion = '';
+
 
     /**
      * Returns the path of a test file.
@@ -184,6 +191,8 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             } catch (Exception $e) {
                 // Ignore the error.
             }
+
+            self::$_viperVersion = $this->_getGitCommitid();
         }
 
         // Reset the Sikuli connection and restart the browser if the number of consecutive errors reach the limit.
@@ -235,6 +244,8 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $contents = str_replace('__TEST_VIPER_INCLUDE__', $viperInclude, $contents);
         $contents = str_replace('__TEST_TITLE__', $testTitle, $contents);
         $contents = str_replace('__TEST_JS_INCLUDE__', $jsInclude, $contents);
+        $contents = str_replace('__TEST_VIPER_VERSION__', self::$_viperVersion, $contents);
+
         $dest     = $baseDir.'/tmp/test_tmp.html';
         file_put_contents($dest, $contents);
 
@@ -276,6 +287,19 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         }//end if
 
     }//end setUp()
+
+
+    /**
+     * Returns the commit id.
+     *
+     * @return string
+     */
+    private function _getGitCommitid()
+    {
+        $commitid = exec('git rev-parse --short HEAD');
+        return $commitid;
+
+    }//end _getGitCommitid()
 
 
     /**

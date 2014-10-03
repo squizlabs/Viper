@@ -415,16 +415,16 @@ Viper.prototype = {
         var c       = scripts.length;
         for (var i = 0; i < c; i++) {
             if (scripts[i].src) {
-                if (scripts[i].src.match(/\/Lib\/Viper\.js/)) {
+                if (scripts[i].src.match(/\/Lib\/Viper\.js.*/)) {
                     // library, so we can extract the path and include the rest.
-                    path = scripts[i].src.replace(/\/Lib\/Viper\.js/,'');
+                    path = scripts[i].src.replace(/\/Lib\/Viper\.js.*/,'');
                     break;
-                } else if (scripts[i].src.match(/\/viper-combined\.js/)) {
+                } else if (scripts[i].src.match(/\/viper-combined\.js.*/)) {
                     // library, so we can extract the path and include the rest.
-                    path = scripts[i].src.replace(/\/viper-combined\.js/,'');
+                    path = scripts[i].src.replace(/\/viper-combined\.js.*/,'');
                     break;
-                } else if (scripts[i].src.match(/\/viper\.js/)) {
-                    path = scripts[i].src.replace(/\/viper\.js/,'');
+                } else if (scripts[i].src.match(/\/viper\.js.*/)) {
+                    path = scripts[i].src.replace(/\/viper\.js.*/,'');
                     break;
                 }
             }
