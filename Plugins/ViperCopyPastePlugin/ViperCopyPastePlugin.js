@@ -1041,9 +1041,12 @@ ViperCopyPastePlugin.prototype = {
                             && ViperUtil.isTag(prevBlock, 'li') === true
                         ) {
                             // If this list is being pasted inside another list use its items instead.
+                            var insAfter = prevBlock;
                             while (ctNode.firstChild) {
-                                ViperUtil.insertAfter(prevBlock, ctNode.firstChild);
-                            }console.info(222)
+                                var firstChild = ctNode.firstChild;
+                                ViperUtil.insertAfter(insAfter, firstChild);
+                                insAfter = firstChild;
+                            }
                         } else {
                             ViperUtil.insertAfter(prevBlock, ctNode);
                         }
