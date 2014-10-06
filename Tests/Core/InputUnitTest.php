@@ -285,6 +285,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testAltAndLeftArrow()
     {
+        $this->runTestFor('osx');
         $this->useTest(1);
 
         $this->moveToKeyword(2, 'right');
@@ -305,6 +306,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      */
     public function testAltAndRightArrow()
     {
+        $this->runTestFor('osx');
         $this->useTest(1);
 
         $this->moveToKeyword(1, 'left');
@@ -319,12 +321,55 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
+     * Test that using CTRL + Left moves the cursor to the previous word.
+     *
+     * @return void
+     */
+    public function testCtrlAndLeftArrow()
+    {
+        $this->runTestFor('windows');
+        $this->useTest(1);
+
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.CTRL + Key.LEFT');
+        $this->sikuli->keyDown('Key.CTRL + Key.LEFT');
+        $this->sikuli->keyDown('Key.CTRL + Key.LEFT');
+
+        $this->type('test ');
+        $this->assertHTMLMatch('<p>%1%</p><p>test EIB MOZ %2%</p>');
+
+    }//end testShiftAndLeftArrow()
+
+
+    /**
+     * Test that using CTRL + Right moves the cursor to the next word.
+     *
+     * @return void
+     */
+    public function testCtrlAndRightArrow()
+    {
+        $this->runTestFor('windows');
+        $this->useTest(1);
+
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.CTRL + Key.RIGHT');
+        $this->sikuli->keyDown('Key.CTRL + Key.RIGHT');
+        $this->sikuli->keyDown('Key.CTRL + Key.RIGHT');
+
+        $this->type('test ');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB test MOZ %2%</p>');
+
+    }//end testAltAndRightArrow()
+
+
+    /**
      * Test that using Cmd+Shift+Left and Cmd+Shift+Right moves the cursor to the next word.
      *
      * @return void
      */
     public function testCmdShiftLeftAndCmdShiftRight()
     {
+        $this->runTestFor('osx');
         $this->useTest(1);
 
         $this->moveToKeyword(2, 'right');
@@ -687,5 +732,3 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
     }//end testEnteringContentBeforeBrTag()
 
 }//end class
-
-?>
