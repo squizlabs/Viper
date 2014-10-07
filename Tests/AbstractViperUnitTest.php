@@ -279,7 +279,14 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 }
             }
 
-            $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
+            /*$matches = $this->sikuli->findAll(dirname(__FILE__).'/Web/favicon.png', NULL, 0.9);
+            if (empty($matches) === FALSE) {
+                $match = array_pop($matches);
+                $this->sikuli->click($match);
+            } else {*/
+                $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
+            //}
+
             $this->sikuli->setAutoWaitTimeout(1);
             $this->_waitForViper();
 
