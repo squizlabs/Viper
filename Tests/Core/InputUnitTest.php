@@ -176,7 +176,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.UP');
         $this->type('U');
 
-        $this->assertHTMLMatch('<p>TeUsting LinRput</p><p>EIB MOZD %2%</p>');
+        $this->assertHTMLMatch('<p>TesUting LinRput</p><p>EIB MOZ D%2%</p>');
 
     }//end testArrowKeyNavigation()
 
