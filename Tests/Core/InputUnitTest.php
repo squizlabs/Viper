@@ -279,7 +279,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that using Alt + Left moves the cursor to the next word.
+     * Test that using Alt + Left moves the cursor to the next word on OSX.
      *
      * @return void
      */
@@ -300,7 +300,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that using Alt + Right moves the cursor to the next word.
+     * Test that using Alt + Right moves the cursor to the next word on OSX.
      *
      * @return void
      */
@@ -321,7 +321,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that using CTRL + Left moves the cursor to the previous word.
+     * Test that using CTRL + Left moves the cursor to the previous word on Windows.
      *
      * @return void
      */
@@ -342,7 +342,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that using CTRL + Right moves the cursor to the next word.
+     * Test that using CTRL + Right moves the cursor to the next word on Windows.
      *
      * @return void
      */
@@ -363,7 +363,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that using Cmd+Shift+Left and Cmd+Shift+Right moves the cursor to the next word.
+     * Test that using Cmd+Shift+Left and Cmd+Shift+Right highlights the line of text in OSX.
      *
      * @return void
      */
@@ -383,6 +383,29 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->assertEquals($this->replaceKeywords('EIB MOZ %2%'), $this->getSelectedText(), 'Second line of text should be selected');
 
     }//end testCmdShiftLeftAndCmdShiftRight()
+
+
+    /**
+     * Test that using Shift+Home and Shift+End highlights the line of text in Windows.
+     *
+     * @return void
+     */
+    public function testShiftHomeAndShiftEnd()
+    {
+        $this->runTestFor('windows');
+        $this->useTest(1);
+
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.SHIFT + Key.HOME');
+        $this->assertEquals($this->replaceKeywords('EIB MOZ %2%'), $this->getSelectedText(), 'Second line of text should be selected');
+
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->assertEquals($this->replaceKeywords(''), $this->getSelectedText(), 'Nothing should be selected');
+
+        $this->sikuli->keyDown('Key.SHIFT + Key.END');
+        $this->assertEquals($this->replaceKeywords('EIB MOZ %2%'), $this->getSelectedText(), 'Second line of text should be selected');
+
+    }//end testShiftHomeAndShiftEnd()
 
 
     /**
