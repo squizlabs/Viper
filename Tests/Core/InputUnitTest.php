@@ -84,7 +84,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('subscript', NULL));
         $this->assertTrue($this->topToolbarButtonExists('superscript', NULL));
         $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL));
-        $this->assertTrue($this->topToolbarButtonExists('cssClass', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('removeFormat', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', NULL));
         $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'));
@@ -115,7 +115,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('subscript', NULL));
         $this->assertTrue($this->topToolbarButtonExists('superscript', NULL));
         $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL));
-        $this->assertTrue($this->topToolbarButtonExists('cssClass', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('removeFormat', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', NULL));
         $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'));
