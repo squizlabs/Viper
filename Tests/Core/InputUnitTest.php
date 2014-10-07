@@ -500,7 +500,9 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
         // Select the last 3 words and delete them
         $this->selectKeyword(1, 2);
+        sleep(1);
         $this->sikuli->keyDown('Key.DELETE');
+        sleep(1);
         $this->assertHTMLMatch('<p>This is a long line of content to test deleting the last three</p>');
 
     }//end testDeletingNewContent()
