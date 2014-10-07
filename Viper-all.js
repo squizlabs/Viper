@@ -24,8 +24,8 @@ ViperReadyCallback = null;
     var scriptsLen = scripts.length;
     for (var i = 0; i < scriptsLen; i++) {
         if (scripts[i].src) {
-            if (scripts[i].src.match(/Viper-all\.js/)) {
-                path = scripts[i].src.replace(/Viper-all\.js/,'');
+            if (scripts[i].src.match(/Viper-all\.js.*/)) {
+                path = scripts[i].src.replace(/Viper-all\.js.*/,'');
                 break;
             }
         }

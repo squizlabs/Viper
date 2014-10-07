@@ -214,10 +214,10 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 throw new Exception('Could not find: '.$path);
             }
 
-            $viperInclude = '<script type="text/javascript" src="../../build/viper.js"></script>
-                             <link rel="stylesheet" media="screen" href="../../build/viper.css" />';
+            $viperInclude = '<script type="text/javascript" src="../../build/viper.js?v='.self::$_viperVersion.'"></script>
+                             <link rel="stylesheet" media="screen" href="../../build/viper.css?v='.self::$_viperVersion.'" />';
         } else {
-            $viperInclude = '<script type="text/javascript" src="../../Viper-all.js"></script>';
+            $viperInclude = '<script type="text/javascript" src="../../Viper-all.js?v='.self::$_viperVersion.'"></script>';
         }
 
         // Get stats.
