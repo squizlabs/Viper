@@ -1488,6 +1488,7 @@ ViperKeyboardEditorPlugin.prototype = {
                     if (defaultTagName !== '') {
                         ViperUtil.setHtml(nodeSelection, '');
                         this.viper.initEditableElement();
+                        range = this.viper.getCurrentRange();
                     } else {
                         ViperUtil.setHtml(nodeSelection, '<br />');
                     }
