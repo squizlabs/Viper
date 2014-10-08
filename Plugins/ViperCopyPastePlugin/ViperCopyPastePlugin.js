@@ -1954,7 +1954,8 @@ ViperCopyPastePlugin.prototype = {
     _getListType: function(elem, listTypes)
     {
         var style = elem.getAttribute('style');
-        if (!style || style.indexOf('mso-list') === -1) {
+        var className = elem.getAttribute('class');
+        if (!style || (style.indexOf('mso-list') === -1 && className.indexOf('MsoList') === -1)) {
             return null;
         }
 
@@ -1968,17 +1969,19 @@ ViperCopyPastePlugin.prototype = {
             ViperUtil.foreach(listTypes[k], function(j) {
                 ViperUtil.foreach(listTypes[k][j], function(m) {
                     if ((new RegExp(listTypes[k][j][m])).test(elContent) === true) {
-                        var html = ViperUtil.getHtml(elem);
-                        html     = html.replace(/\n/mg, ' ');
+                        var origHtml = ViperUtil.getHtml(elem);
+                        var html = origHtml.replace(/\n/mg, ' ');
                         html     = ViperUtil.trim(html);
                         html     = html.replace(/^(&nbsp;)+/m, '');
                         html     = html.replace(/(&nbsp;)+$/m, '');
                         html     = ViperUtil.trim(html);
                         html     = html.replace(new RegExp(listTypes[k][j][m]), '');
+
                         info = {
                             html: html,
                             listType: k,
-                            listStyle: j
+                            listStyle: j,
+                            origHtml: origHtml
                         };
 
                         // Break from loop.
@@ -2011,6 +2014,8 @@ ViperCopyPastePlugin.prototype = {
         var li         = null;
         var newList    = true;
         var prevType   = null;
+        var styleToLvl = {};
+        var prevCssStyle = null;
 
         var circleCharsArray = [111, 167, 183, 216, 222, 223, 252, 8721, 8226];
         var circleChars      = [];
@@ -2043,22 +2048,44 @@ ViperCopyPastePlugin.prototype = {
             if (listTypeInfo === null) {
                 // Next list item will be the start of a new list.
                 newList = true;
+                styleToLvl = {};
+                prevLevel = null;
                 continue;
             }
 
-            var listType   = listTypeInfo.listType;
-            var listStyle  = listTypeInfo.listStyle;
-            var level      = (pEl.getAttribute('style') || '').match(/level([\d])+/mi);
+            var listType  = listTypeInfo.listType;
+            var listStyle = listTypeInfo.listStyle;
+            var level     = (pEl.getAttribute('style') || '').match(/level([\d])+/mi);
+            var cssStyle  = pEl.getAttribute('style');
             ViperUtil.setHtml(pEl, listTypeInfo.html);
 
+            if (listType === 'ol' && listTypeInfo.origHtml.indexOf('v') === 0) {
+                // Change the list type to ul.
+                // TODO: Might have to check font-family here incase this is part of a OL list a -> z.
+                listType = 'ul';
+            }
+
             if (!level) {
-                level = 1;
+                level = prevLevel || 1;
             } else {
                 level = level[1];
             }
 
             if (prevType !== listType && level === prevLevel) {
                 newList = true;
+            } else if (ViperUtil.isBrowser('safari') === true) {
+                if (prevCssStyle !== cssStyle) {
+                    if (styleToLvl[cssStyle]) {
+                        level = styleToLvl[cssStyle];
+                    } else {
+                        level++;
+                        styleToLvl[cssStyle] = level;
+                    }
+                } else if (styleToLvl[cssStyle]) {
+                    level = styleToLvl[cssStyle];
+                }
+
+                prevCssStyle = cssStyle;
             }
 
             prevType = listType;
