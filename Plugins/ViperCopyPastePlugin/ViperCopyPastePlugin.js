@@ -2222,6 +2222,12 @@ ViperCopyPastePlugin.prototype = {
         content = content.replace(/<title[\s\S]*?<\/title>/gi, '');
         content = content.replace(/<style[\s\S]*?<\/style>/gi, '');
 
+        // Remove everything after <!--EndFragment--> on Chrome.
+        var pos = content.indexOf('<!--EndFragment-->');
+        if (pos > 0) {
+            content = content.substr(0, pos);
+        }
+
         // Comments.
         content = content.replace(/<!--(.|\s)*?-->/gi, '');
 
