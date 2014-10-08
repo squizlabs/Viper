@@ -391,7 +391,7 @@ ViperKeyboardEditorPlugin.prototype = {
             var startNode   = range.getStartNode();
             var blockParent = null;
             if (!startNode) {
-                if (range.startContainer.childNodes.length <= range.startOffset) {
+                if (range.startContainer.childNodes.length <= range.startOffset && range.startOffset !== 0) {
                     startNode = range.startContainer.childNodes[(range.startContainer.childNodes.length - 1)];
                 } else {
                     startNode = range.startContainer;
