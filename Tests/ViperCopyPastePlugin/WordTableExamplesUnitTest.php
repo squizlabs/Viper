@@ -65,7 +65,7 @@ class Viper_Tests_ViperCopyPastePlugin_WordTableExamplesUnitTest extends Abstrac
     public function testWordTableExamplesForWindowsChrome()
     {
         $this->runTestFor('windows', 'chrome');
-        $this->_runTest($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacGoogleChrome/WordTableExamples.txt'));
+        $this->_runTest($this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsGoogleChrome/WordTableExamples.txt'));
 
     }//end testWordTableExamplesForWindowsChrome()
 

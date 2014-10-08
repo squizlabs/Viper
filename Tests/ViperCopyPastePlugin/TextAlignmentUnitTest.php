@@ -65,7 +65,7 @@ class Viper_Tests_ViperCopyPastePlugin_TextAlignmentUnitTest extends AbstractVip
     public function testTextAlignmentForWindowsChrome()
     {
         $this->runTestFor('windows', 'chrome');
-        $this->_runTest($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacGoogleChrome/TextAlignment.txt'));
+        $this->_runTest($this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsGoogleChrome/TextAlignment.txt'));
 
     }//end testTextAlignmentForWindowsChrome()
 
