@@ -409,39 +409,39 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that using Shift + Alt + Left hightlights the word to the left.
+     * Test that using Shift + Ctrl+ Left hightlights the word to the left.
      *
      * @return void
      */
-    public function testShiftAltAndLeftArrow()
+    public function testShiftCtrlAndLeftArrow()
     {
         $this->useTest(1);
 
         $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.SHIFT + Key.ALT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.ALT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.ALT + Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.CTRL + Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.CTRL + Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.CTRL + Key.LEFT');
         sleep(1);
         $this->assertEquals($this->replaceKeywords('EIB MOZ %2%'), $this->getSelectedText(), 'Second line of text should be selected');
 
-    }//end testShiftAndLeftArrow()
+    }//end testShiftCtrlAndLeftArrow()
 
 
     /**
-     * Test that using Shift + Alt + Right hightlights the word to the left.
+     * Test that using Shift + Ctrl+ Right hightlights the word to the right
      *
      * @return void
      */
-    public function testShiftAltAndRightArrow()
+    public function testShiftCtrlAndRightArrow()
     {
         $this->useTest(1);
 
         $this->moveToKeyword(1, 'left');
-        $this->sikuli->keyDown('Key.SHIFT + Key.ALT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.CTRL + Key.RIGHT');
         sleep(1);
         $this->assertEquals($this->replaceKeywords('%1%'), $this->getSelectedText(), 'First line of text should be selected');
 
-    }//end testShiftAltAndRightArrow()
+    }//end testShiftCtrlAndRightArrow()
 
 
     /**
