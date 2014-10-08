@@ -29,7 +29,7 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
         $this->type('http://www.squizlabs.com');
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>Ordered list without links:</p><ol><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ol>');
-       
+
        // Using the top toolbar in an unordered list
         $this->useTest(1);
         $this->selectKeyword(1);
@@ -106,7 +106,7 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
         $this->assertTrue($this->topToolbarButtonExists('link', 'selected'), 'Toolbar button icon is not correct');
         $this->type('http://www.squizlabs.com');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Ordered list without links:</p><a href="http://www.squizlabs.com"><ul><li>%1% item 1</li><li>item 2</li><li>item 3 %2%</li></ul></a>');
+        $this->assertHTMLMatch('<p>Ordered list without links:</p><a href="http://www.squizlabs.com"><ol><li>%1% item 1</li><li>item 2</li><li>item 3 %2%</li></ol></a>');
 
     }//end testLinkingAList()
 
@@ -222,7 +222,7 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
-        
+
     }//end testCreateLinkInAListItem()
 
 
@@ -408,7 +408,7 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
         $this->moveToKeyword(1, 'middle');
         $this->selectInlineToolbarLineageItem(1);
         $this->clickInlineToolbarButton('linkRemove');
-        $this->assertHTMLMatch('<p>Ordered list with links:</p><ul><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ul>'); 
+        $this->assertHTMLMatch('<p>Ordered list with links:</p><ul><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ul>');
 
         // Selecting the list
         $this->useTest(4);
@@ -557,7 +557,7 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
         $this->selectInlineToolbarLineageItem(0);
         $this->assertFalse($this->inlineToolbarButtonExists('formats'));
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'));
-        
+
     }//end testFormatIconForLinkedListItems()
 
 
