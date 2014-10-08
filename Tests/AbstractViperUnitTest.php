@@ -1828,6 +1828,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $this->sikuli->keyDown('Key.RIGHT');
         } else if ($position === 'left') {
             $this->sikuli->keyDown('Key.LEFT');
+        } else if ($position === 'middle') {
+            $this->sikuli->keyDown('Key.LEFT');
+            $this->sikuli->keyDown('Key.RIGHT');
         }
 
     }//end moveToKeyword()

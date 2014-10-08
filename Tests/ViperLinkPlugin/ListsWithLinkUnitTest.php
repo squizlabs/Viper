@@ -363,27 +363,27 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
 
         // Clicking in the link
         $this->useTest(3);
-        $this->moveToKeyword(2);
+        $this->moveToKeyword(2, 'middle');
         $this->clickInlineToolbarButton('linkRemove');
         $this->assertHTMLMatch('<p>Unordered list with links:</p><ul><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ul>');
 
         // Selecting the link
         $this->useTest(3);
-        $this->moveToKeyword(2);
+        $this->moveToKeyword(2, 'middle');
         $this->selectInlineToolbarLineageItem(2);
         $this->clickInlineToolbarButton('linkRemove');
         $this->assertHTMLMatch('<p>Unordered list with links:</p><ul><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ul>');
 
         // Selecting the list item
         $this->useTest(3);
-        $this->moveToKeyword(1);
+        $this->moveToKeyword(1, 'middle');
         $this->selectInlineToolbarLineageItem(1);
         $this->clickInlineToolbarButton('linkRemove');
         $this->assertHTMLMatch('<p>Unordered list with links:</p><ul><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ul>');
 
         // Selecting the list
         $this->useTest(3);
-        $this->moveToKeyword(2);
+        $this->moveToKeyword(2, 'middle');
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('linkRemove');
         $this->assertHTMLMatch('<p>Unordered list with links:</p><ul><li>%1% item 1</li><li>item 2</li><li>item 3 %2%</li></ul>');
@@ -392,27 +392,27 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
 
         // Clicking in the link
         $this->useTest(4);
-        $this->moveToKeyword(2);
+        $this->moveToKeyword(2, 'middle');
         $this->clickInlineToolbarButton('linkRemove');
         $this->assertHTMLMatch('<p>Ordered list with links:</p><ol><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ol>');
 
         // Selecting the link
         $this->useTest(4);
-        $this->moveToKeyword(2);
+        $this->moveToKeyword(2, 'middle');
         $this->selectInlineToolbarLineageItem(2);
         $this->clickInlineToolbarButton('linkRemove');
         $this->assertHTMLMatch('<p>Ordered list with links:</p><ol><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ol>');
 
        // Selecting the list item
         $this->useTest(4);
-        $this->moveToKeyword(1);
+        $this->moveToKeyword(1, 'middle');
         $this->selectInlineToolbarLineageItem(1);
         $this->clickInlineToolbarButton('linkRemove');
         $this->assertHTMLMatch('<p>Ordered list with links:</p><ul><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ul>'); 
 
         // Selecting the list
         $this->useTest(4);
-        $this->moveToKeyword(2);
+        $this->moveToKeyword(2, 'middle');
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('linkRemove');
         $this->assertHTMLMatch('<p>Ordered list with links:</p><ol><li>%1% item 1</li><li>item 2</li><li>item 3 %2%</li></ol>');
@@ -421,27 +421,27 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
 
         // Clicking in the link
         $this->useTest(3);
-        $this->moveToKeyword(2);
+        $this->moveToKeyword(2, 'middle');
         $this->clickTopToolbarButton('linkRemove');
         $this->assertHTMLMatch('<p>Unordered list with links:</p><ul><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ul>');
 
         // Selecting the link
         $this->useTest(3);
-        $this->moveToKeyword(2);
+        $this->moveToKeyword(2, 'middle');
         $this->selectInlineToolbarLineageItem(2);
         $this->clickTopToolbarButton('linkRemove');
         $this->assertHTMLMatch('<p>Unordered list with links:</p><ul><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ul>');
 
         // Selecting the list item
         $this->useTest(3);
-        $this->moveToKeyword(2);
+        $this->moveToKeyword(2, 'middle');
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('linkRemove');
         $this->assertHTMLMatch('<p>Unordered list with links:</p><ul><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ul>');
 
         // Selecting the list
         $this->useTest(3);
-        $this->moveToKeyword(2);
+        $this->moveToKeyword(2, 'middle');
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('linkRemove');
         $this->assertHTMLMatch('<p>Unordered list with links:</p><ul><li>%1% item 1</li><li>item 2</li><li>item 3 %2%</li></ul>');
@@ -450,27 +450,27 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
 
         // Clicking in the link
         $this->useTest(4);
-        $this->moveToKeyword(2);
+        $this->moveToKeyword(2, 'middle');
         $this->clickTopToolbarButton('linkRemove');
         $this->assertHTMLMatch('<p>Ordered list with links:</p><ol><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ol>');
 
         // Selecting the link
         $this->useTest(4);
-        $this->moveToKeyword(2);
+        $this->moveToKeyword(2, 'middle');
         $this->selectInlineToolbarLineageItem(2);
         $this->clickTopToolbarButton('linkRemove');
         $this->assertHTMLMatch('<p>Ordered list with links:</p><ol><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ol>');
 
         // Selecting the list item
         $this->useTest(4);
-        $this->moveToKeyword(2);
+        $this->moveToKeyword(2, 'middle');
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('linkRemove');
         $this->assertHTMLMatch('<p>Ordered list with links:</p><ol><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ol>');
 
         // Selecting the list
         $this->useTest(4);
-        $this->moveToKeyword(2);
+        $this->moveToKeyword(2, 'middle');
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('linkRemove');
         $this->assertHTMLMatch('<p>Ordered list with links:</p><ol><li>%1% item 1</li><li>item 2</li><li>item 3 %2%</li></ol>');
@@ -488,7 +488,7 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
         $this->useTest(3);
 
         // Check where the whole list item is linked
-        $this->moveToKeyword(2);
+        $this->moveToKeyword(2, 'middle');
         $this->assertFalse($this->inlineToolbarButtonExists('formats'));
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'));
         $this->selectKeyword(2);
@@ -505,7 +505,7 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'));
 
         // Check where only a word in the list item is linked
-        $this->moveToKeyword(1);
+        $this->moveToKeyword(1, 'middle');
         $this->assertFalse($this->inlineToolbarButtonExists('formats'));
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'));
         $this->selectKeyword(1);
@@ -525,7 +525,7 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
         $this->useTest(4);
 
         // Check where the whole list item is linked
-        $this->moveToKeyword(2);
+        $this->moveToKeyword(2, 'middle');
         $this->assertFalse($this->inlineToolbarButtonExists('formats'));
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'));
         $this->selectKeyword(2);
@@ -542,7 +542,7 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'));
 
         // Check where only a word in the list item is linked
-        $this->moveToKeyword(1);
+        $this->moveToKeyword(1, 'middle');
         $this->assertFalse($this->inlineToolbarButtonExists('formats'));
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'));
         $this->selectKeyword(1);
