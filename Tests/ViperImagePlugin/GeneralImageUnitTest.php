@@ -93,6 +93,21 @@ class Viper_Tests_ViperImagePlugin_GeneralImageUnitTest extends AbstractViperIma
 
     }//end testFormatIconIsDisabled()
 
+
+     /**
+     * Test selecting the image twice.
+     *
+     * @return void
+     */
+    public function testSelectingImageTwice()
+    {
+        $this->clickElement('img', 0);
+        $this->clickElement('img', 0);
+        $this->assertTrue($this->inlineToolbarButtonExists('image', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('image', 'active'));
+
+    }//end testSelectingImageTwice()
+
 }//end class
 
 ?>
