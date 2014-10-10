@@ -333,6 +333,51 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
     }//end testInsertingImageWithNoBaseTag()
 
 
+    /**
+     * Test inserting and editing an image.
+     *
+     * @return void
+     */
+    public function testInsertAndEditImage()
+    {
+        $this->useTest(1);
+
+        $this->moveToKeyword(1, 'right');
+        $this->clickTopToolbarButton('image');
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
+        $this->clickField('Image is decorative');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        sleep(1);
+        $this->assertHTMLMatch('<p>%1%<img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt=""/> Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
+
+        $this->clickField('Image is decorative');
+        sleep(1);
+        $this->clickField('Alt');
+        $this->type('alt tag');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        sleep(1);
+        $this->assertHTMLMatch('<p>%1%<img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="alt tag"/> Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
+
+        // Check alt field to make sure it has not been cleared
+        $this->assertEquals('alt tag', $this->getFieldValue('Alt'), 'Alt field should not be empty');
+
+        // Edit the image again
+        $this->moveToKeyword(2);
+        $this->clickElement('img', 0);
+        $this->clickTopToolbarButton('image', 'active');
+        $this->clickField('Image is decorative');
+        sleep(1);
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        sleep(1);
+        $this->assertHTMLMatch('<p>%1%<img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt=""/> Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
+
+        // Check URL field to make sure it has not been clearerd
+        $urlValue = $this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png');
+        $this->assertEquals($urlValue, $this->getFieldValue('URL'), 'URL field should not be empty');
+
+    }//end testInsertAndEditImage()
+
+
 }//end class
 
 ?>
