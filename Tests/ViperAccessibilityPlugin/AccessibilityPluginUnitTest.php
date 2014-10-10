@@ -96,18 +96,18 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
         $this->sikuli->click($this->findKeyword(1));
         $this->clickTopToolbarButton('accessAudit');
 
-        sleep(2);
+        sleep(4);
 
         // View Report.
         $viewReportButton = $this->findImage('HTMLCSViewReport', '#HTMLCS-settings-view-report');
         $this->sikuli->click($viewReportButton);
-        sleep(2);
+        sleep(4);
 
         // Click error.
         $warningIcon = $this->findImage('HTMLCS-report-error', '.HTMLCS-issue-type.HTMLCS-error');
         $this->sikuli->click($warningIcon);
 
-        sleep(1);
+        sleep(3);
 
         // Click alt field.
         $this->clickField('Alt');
@@ -116,12 +116,12 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
         // Click title field.
         $this->clickField('Title');
         $this->type('test');
-        sleep(2);
+        sleep(4);
 
         // Click Apply Changes.
         $bubble = $this->getActiveBubble();
         $this->clickButton('Apply Changes', NULL, TRUE, $bubble);
-        sleep(5);
+        sleep(8);
 
         $this->assertHTMLMatch('<p>%1%</p><p><img src="http://placebox.es/150/150/666666/f1f1f1/" alt="alt" title="Link title texttest" /></p>');
 
