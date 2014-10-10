@@ -87,8 +87,11 @@ class Viper_Tests_ViperListPlugin_CopyPasteListTest extends AbstractViperListPlu
         $this->useTest(3);
         $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.CMD + c');
+        sleep(1);
         $this->moveToKeyword(3, 'right');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
         $this->assertHTMLMatch('<p>First list:</p><ul><li>item 1</li><li>%1% item 2</li><li>item 3 %2%</li><li>item 4</li></ul><p>Second list:</p><ul><li>item 1</li><li>item 2 %3%</li><li>%1% item 2</li><li>item 3 %2%</li><li>item 3</li><li>item 4</li></ul>');
@@ -97,8 +100,11 @@ class Viper_Tests_ViperListPlugin_CopyPasteListTest extends AbstractViperListPlu
         $this->useTest(4);
         $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.CMD + c');
+        sleep(1);
         $this->moveToKeyword(3, 'right');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
         $this->assertHTMLMatch('<p>First list:</p><ol><li>item 1</li><li>%1% item 2</li><li>item 3 %2%</li><li>item 4</li></ol><p>Second list:</p><ol><li>item 1</li><li>item 2 %3%</li><li>%1% item 2</li><li>item 3 %2%</li><li>item 3</li><li>item 4</li></ol>');
@@ -107,16 +113,22 @@ class Viper_Tests_ViperListPlugin_CopyPasteListTest extends AbstractViperListPlu
         $this->useTest(5);
         $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.CMD + c');
+        sleep(1);
         $this->moveToKeyword(4, 'right');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
         $this->assertHTMLMatch('<p>First list:</p><ul><li>item 1</li><li>%1% item 2</li><li>item 3 %2%</li><li>item 4</li></ul><p>Second list:</p><ol><li>item 1</li><li>XCX item 2</li><li>item 3 XDX</li><li>XAX item 2</li><li>item 3 XBX</li><li>item 4</li></ol>');
 
         $this->selectKeyword(3, 4);
         $this->sikuli->keyDown('Key.CMD + c');
+        sleep(1);
         $this->moveToKeyword(2, 'right');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
         $this->assertHTMLMatch('<p>First list:</p><ul><li>item 1</li><li>XAX item 2</li><li>item 3 XBX</li><li>XCX item 2</li><li>item 3 XDX</li><li>item 4</li></ul><p>Second list:</p><ol><li>item 1</li><li>XCX item 2</li><li>item 3 XDX</li><li>XAX item 2</li><li>item 3 XBX</li><li>item 4</li></ol>');

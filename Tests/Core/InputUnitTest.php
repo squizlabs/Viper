@@ -525,7 +525,8 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
             $this->sikuli->keyDown('Key.DELETE');
         }
 
-        $this->assertHTMLMatch('<p>MOZ %2%</p>');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>testMOZ %2%</p>');
 
         // Test backspace
         $this->useTest(1);
@@ -536,7 +537,8 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
             $this->sikuli->keyDown('Key.BACKSPACE');
         }
 
-        $this->assertHTMLMatch('<p>%1%</p><p>EIB</p>');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIBtest</p>');
 
     }//end testDeleteAndBackspace()
 
