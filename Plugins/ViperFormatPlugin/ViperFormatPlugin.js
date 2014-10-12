@@ -1144,6 +1144,8 @@ ViperFormatPlugin.prototype = {
 
             this.viper.fireCallbacks('ViperFormatPlugin:elementAttributeSet', {element: selectedNode, oldValue: oldVal, newValue:value});
             return;
+        } else if (ViperUtil.trim(value) === '') {
+            return;
         }
 
         // Wrap the selection with span tag.

@@ -11,194 +11,132 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
      *
      * @return void
      */
-    public function testChangingHeadingsUsingInlineToolbar()
+    public function testEditingAHeading()
     {
-
+        // Using the inline toolbar
         $this->useTest(1);
-
-        $this->selectKeyword(1, 2);
+        $this->selectKeyword(1);
+        // Check that the heading icon does not appear in the inline toolbar
+        $this->assertFalse($this->inlineToolbarButtonExists('headings', 'active'));
+        $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('headings', 'active');
         $this->clickInlineToolbarButton('H2', NULL, TRUE);
-        $this->assertHTMLMatch('<h2>%1% %2%</h2>');
-
+        $this->assertHTMLMatch('<h2>Heading %1%</h2>');
         $this->clickInlineToolbarButton('H3', NULL, TRUE);
-        $this->assertHTMLMatch('<h3>%1% %2%</h3>');
-
+        $this->assertHTMLMatch('<h3>Heading %1%</h3>');
         $this->clickInlineToolbarButton('H4', NULL, TRUE);
-        $this->assertHTMLMatch('<h4>%1% %2%</h4>');
-
+        $this->assertHTMLMatch('<h4>Heading %1%</h4>');
         $this->clickInlineToolbarButton('H5', NULL, TRUE);
-        $this->assertHTMLMatch('<h5>%1% %2%</h5>');
-
+        $this->assertHTMLMatch('<h5>Heading %1%</h5>');
         $this->clickInlineToolbarButton('H1', NULL, TRUE);
-        $this->assertHTMLMatch('<h1>%1% %2%</h1>');
+        $this->assertHTMLMatch('<h1>Heading %1%</h1>');
 
-    }//end testChangingHeadingsUsingInlineToolbar()
-
-
-    /**
-     * Test changing headings using the top toolbar when you click in a paragraph.
-     *
-     * @return void
-     */
-    public function testChangingHeadingsWhenClickingInParagraphUsingTopToolbar()
-    {
-
+        // Using the top toolbar and clicking in the heading
         $this->useTest(1);
-
-        $this->sikuli->click($this->findKeyword(1));
+        $this->moveToKeyword(1);
         $this->clickTopToolbarButton('headings', 'active');
         $this->clickTopToolbarButton('H2', NULL, TRUE);
-        $this->assertHTMLMatch('<h2>%1% %2%</h2>');
-
+        $this->assertHTMLMatch('<h2>Heading %1%</h2>');
         $this->clickTopToolbarButton('H3', NULL, TRUE);
-        $this->assertHTMLMatch('<h3>%1% %2%</h3>');
-
+        $this->assertHTMLMatch('<h3>Heading %1%</h3>');
         $this->clickTopToolbarButton('H4', NULL, TRUE);
-        $this->assertHTMLMatch('<h4>%1% %2%</h4>');
-
+        $this->assertHTMLMatch('<h4>Heading %1%</h4>');
         $this->clickTopToolbarButton('H5', NULL, TRUE);
-        $this->assertHTMLMatch('<h5>%1% %2%</h5>');
-
+        $this->assertHTMLMatch('<h5>Heading %1%</h5>');
         $this->clickTopToolbarButton('H1', NULL, TRUE);
-        $this->assertHTMLMatch('<h1>%1% %2%</h1>');
+        $this->assertHTMLMatch('<h1>Heading %1%</h1>');
 
-    }//end testChangingHeadingsWhenClickingInParagraphUsingTopToolbar()
-
-
-    /**
-     * Test changing headings using the top toolbar when you select the parargraph.
-     *
-     * @return void
-     */
-    public function testChangingHeadingsWhenSelectingParagraphUsingTopToolbar()
-    {
-
+        // Using the top toolbar and selecting a word
         $this->useTest(1);
-
-        $this->selectKeyword(1, 2);
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('headings', 'active');
         $this->clickTopToolbarButton('H2', NULL, TRUE);
-        $this->assertHTMLMatch('<h2>%1% %2%</h2>');
-
+        $this->assertHTMLMatch('<h2>Heading %1%</h2>');
         $this->clickTopToolbarButton('H3', NULL, TRUE);
-        $this->assertHTMLMatch('<h3>%1% %2%</h3>');
-
+        $this->assertHTMLMatch('<h3>Heading %1%</h3>');
         $this->clickTopToolbarButton('H4', NULL, TRUE);
-        $this->assertHTMLMatch('<h4>%1% %2%</h4>');
-
+        $this->assertHTMLMatch('<h4>Heading %1%</h4>');
         $this->clickTopToolbarButton('H5', NULL, TRUE);
-        $this->assertHTMLMatch('<h5>%1% %2%</h5>');
-
+        $this->assertHTMLMatch('<h5>Heading %1%</h5>');
         $this->clickTopToolbarButton('H1', NULL, TRUE);
-        $this->assertHTMLMatch('<h1>%1% %2%</h1>');
+        $this->assertHTMLMatch('<h1>Heading %1%</h1>');
 
-    }//end testChangingHeadingsWhenSelectingParagraphUsingTopToolbar()
+        // Using the top toolbar and selecting the heading
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('headings', 'active');
+        $this->clickTopToolbarButton('H2', NULL, TRUE);
+        $this->assertHTMLMatch('<h2>Heading %1%</h2>');
+        $this->clickTopToolbarButton('H3', NULL, TRUE);
+        $this->assertHTMLMatch('<h3>Heading %1%</h3>');
+        $this->clickTopToolbarButton('H4', NULL, TRUE);
+        $this->assertHTMLMatch('<h4>Heading %1%</h4>');
+        $this->clickTopToolbarButton('H5', NULL, TRUE);
+        $this->assertHTMLMatch('<h5>Heading %1%</h5>');
+        $this->clickTopToolbarButton('H1', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Heading %1%</h1>');
+
+    }//end testEditingAHeading()
 
 
     /**
-     * Test that remove and apply headings using the inline toolbar.
+     * Test removing a heading.
      *
      * @return void
      */
-    public function testApplyingAndRemovingHeadingsUsingInlineToolbar()
+    public function testRemovingAHeading()
     {
+        // Using the inline toolbar
         $this->useTest(1);
-
-        // Remove the heading
-        $this->selectKeyword(1, 2);
-        $this->assertTrue($this->inlineToolbarButtonExists('headings', 'active'), 'Headings icon is not highlighted in the inline toolbar');
-        $this->assertTrue($this->inlineToolbarButtonExists('formats'), 'Formats icon should be enabled in the inline toolbar');
-
+        $this->selectKeyword(1);
+        sleep(1);
+        $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
+        $this->assertTrue($this->inlineToolbarButtonExists('headings', 'active'));
+        $this->assertTrue($this->inlineToolbarButtonExists('formats'));
         $this->clickInlineToolbarButton('headings', 'active');
         $this->clickInlineToolbarButton('H1', 'active', TRUE);
+        $this->assertTrue($this->inlineToolbarButtonExists('H1', NULL, TRUE));
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'));
+        $this->assertHTMLMatch('<p>Heading %1%</p>');
 
-        $this->assertTrue($this->inlineToolbarButtonExists('H1', NULL, TRUE), 'H1 icon should not be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'), 'Formats icon shoudl be active');
-
-        $this->assertHTMLMatch('<p>%1% %2%</p>');
-
-        // Applying the heading
-        $this->selectKeyword(1, 2);
-
-        $this->clickInlineToolbarButton('headings');
-        $this->clickInlineToolbarButton('H2', NULL, TRUE);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('H2', 'active', TRUE), 'H2 icon should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('formats'), 'Formats icon should not be active');
-
-        $this->assertHTMLMatch('<h2>%1% %2%</h2>');
-
-    }//end testApplyingAndRemovingHeadingsUsingInlineToolbar()
-
-
-    /**
-     * Test that remove and apply headings using the top toolbar.
-     *
-     * @return void
-     */
-    public function testApplyingAndRemovingHeadingsUsingTopToolbar()
-    {
+        // Using the top toolbar and clicking in the heading
         $this->useTest(1);
-
-        // Remove the heading
-        $this->selectKeyword(1, 2);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'active'), 'Headings icon is not highlighted in the top toolbar');
-        $this->assertTrue($this->topToolbarButtonExists('formats'), 'Formats icon should be enabled in the top toolbar');
-
+        $this->moveToKeyword(1);
         $this->clickTopToolbarButton('headings', 'active');
         $this->clickTopToolbarButton('H1', 'active', TRUE);
+        $this->assertTrue($this->topToolbarButtonExists('H1', NULL, TRUE));
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'));
+        $this->assertHTMLMatch('<p>Heading %1%</p>');
 
-        $this->assertTrue($this->topToolbarButtonExists('H1', NULL, TRUE), 'H1 icon should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'), 'Formats icon should be active');
-
-        $this->assertHTMLMatch('<p>%1% %2%</p>');
-
-        // Applying the heading
-        $this->selectKeyword(1, 2);
-
-        $this->clickTopToolbarButton('headings');
-        $this->clickTopToolbarButton('H2', NULL, TRUE);
-
-        $this->assertTrue($this->topToolbarButtonExists('H2', 'active', TRUE), 'H1 icon should be active');
-        $this->assertTrue($this->topToolbarButtonExists('formats'), 'Formats icon should be enabled in the top toolbar');
-
-        $this->assertHTMLMatch('<h2>%1% %2%</h2>');
-
-    }//end testApplyingAndRemovingHeadingsUsingTopToolbar()
-
-
-    /**
-     * Test that you can remove headings when you click in a paragraph.
-     *
-     * @return void
-     */
-    public function testRemovingHeadingsWhenClickingInParagraph()
-    {
+        // Using the top toolbar and selecting a word in the heading
         $this->useTest(1);
-
-        // Remove the heading
-        $this->sikuli->click($this->findKeyword(1));
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'active'), 'Headings icon is not highlighted in the top toolbar');
-        $this->assertTrue($this->topToolbarButtonExists('formats'), 'Formats icon should be enabled in the top toolbar');
-
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('headings', 'active');
         $this->clickTopToolbarButton('H1', 'active', TRUE);
+        $this->assertTrue($this->topToolbarButtonExists('H1', NULL, TRUE));
+        $this->assertHTMLMatch('<p>Heading %1%</p>');
 
-        $this->assertTrue($this->topToolbarButtonExists('H1', NULL, TRUE), 'H1 icon should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'), 'Formats icon should be active');
+        // Using the top toolbar and selecting the heading
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('headings', 'active');
+        $this->clickTopToolbarButton('H1', 'active', TRUE);
+        $this->assertTrue($this->topToolbarButtonExists('H1', NULL, TRUE));
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'));
+        $this->assertHTMLMatch('<p>Heading %1%</p>');
 
-        $this->assertHTMLMatch('<p>%1% %2%</p>');
-
-    }//end testRemovingHeadingsWhenClickingInParagraph()
+    }//end testRemovingAHeading()
 
 
     /**
-     * Test deleting a heading from the content of the page
+     * Test deleting a heading and its content from the page.
      *
      * @return void
      */
-    public function testDeletingAHeading()
+    public function testDeletingAHeadingFromContent()
     {
         $this->useTest(16);
 
@@ -209,7 +147,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
 
         $this->assertHTMLMatch('<p>Test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test</p>');
 
-    }//end testDeletingAHeading()
+    }//end testDeletingAHeadingFromContent()
 
 
     /**
@@ -241,76 +179,57 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
 
 
     /**
-     * Test applying a heading to different types of Parargraph sections using the inline toolbar
+     * Test applying a heading to a Parargraph
      *
      * @return void
      */
-    public function testApplyingAHeadingToParragraphSectionsUsingInlineToolbar()
+    public function testApplyingAHeadingToParragraphSections()
     {
+        // Using the inline toolbar
         $this->useTest(2);
 
-        // Check single line parragraph
-        $this->selectKeyword(1);
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
+        // Check single line paragraph
+        $this->selectKeyword(1); 
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
+        $this->assertTrue($this->inlineToolbarButtonExists('headings'));
         $this->clickInlineToolbarButton('headings');
         $this->clickInlineToolbarButton('H1', NULL, TRUE);
         $this->assertHTMLMatch('<h1>sit amet %1%</h1><p>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
         $this->assertTrue($this->inlineToolbarButtonExists('H1', 'active', TRUE), 'H1 icon should be active in the inline toolbar');
 
-        // Check multi-line parargraph
+        // Check that the heading toolbar doesn't appear in the inline toolbar for a multiline paragraph (by design)
         $this->selectKeyword(2);
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
 
-    }//end testApplyingAHeadingToParragraphSectionsUsingInlineToolbar()
-
-
-    /**
-     * Test applying a heading to different types of Parargraph sections using the top toolbar
-     *
-     * @return void
-     */
-    public function testApplyingAHeadingToParragraphSectionsUsingTopToolbar()
-    {
+        // Using the top toolbar
         $this->useTest(2);
 
         // Check single line parragraph
-        $this->sikuli->click($this->findKeyword(1));
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-
+        $this->moveToKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('headings'));
         $this->selectKeyword(1);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be disabled in the top toolbar');
-
         $this->clickTopToolbarButton('headings');
         $this->clickTopToolbarButton('H1', NULL, TRUE);
         $this->assertHTMLMatch('<h1>sit amet %1%</h1><p>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
-        $this->assertTrue($this->topToolbarButtonExists('H1', 'active', TRUE), 'H1 icon should be active in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('H1', 'active', TRUE));
 
         // Check multi-line paragraph
-        $this->sikuli->click($this->findKeyword(2));
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-
+        $this->moveToKeyword(2);
+        $this->assertTrue($this->topToolbarButtonExists('headings'));
         $this->selectKeyword(2);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be appear in the top toolbar');
-
         $this->clickTopToolbarButton('headings');
         $this->clickTopToolbarButton('H1', NULL, TRUE);
         $this->assertHTMLMatch('<h1>sit amet %1%</h1><h1>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</h1>');
-        $this->assertTrue($this->topToolbarButtonExists('H1', 'active', TRUE), 'H1 icon should be active in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('H1', 'active', TRUE));
 
-    }//end testApplyingAHeadingToParragraphSectionsUsingTopToolbar()
+    }//end testApplyingAHeadingToParragraphSections()
 
 
     /**
@@ -327,17 +246,17 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->sikuli->keyDown('Key.CMD + b');
         $this->assertHTMLMatch('<p>sit amet <strong>%1%</strong></p><p>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
 
-        $this->sikuli->click($this->findKeyword(1));
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
+        $this->moveToKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('headings'));
 
         sleep(1);
         $this->selectKeyword(1);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-        $this->assertTrue($this->inlineToolbarButtonExists('headings'), 'Heading icon should appear in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('headings'));
+        $this->assertTrue($this->inlineToolbarButtonExists('headings'));
 
         $this->clickInlineToolbarButton('headings');
         $this->clickInlineToolbarButton('H1', NULL, TRUE);
@@ -361,15 +280,15 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->assertHTMLMatch('<p>sit amet <em>%1%</em></p><p>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
 
         $this->sikuli->click($this->findKeyword(1));
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('headings'));
 
         $this->selectKeyword(1);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-        $this->assertTrue($this->inlineToolbarButtonExists('headings'), 'Heading icon should appear in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('headings'));
+        $this->assertTrue($this->inlineToolbarButtonExists('headings'));
 
         $this->clickInlineToolbarButton('headings');
         $this->clickInlineToolbarButton('H1', NULL, TRUE);
@@ -379,76 +298,59 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
 
 
     /**
-     * Test applying a heading to different types of Pre sections using the inline toolbar
+     * Test applying a heading to different types of Pre sections
      *
      * @return void
      */
-    public function testApplyingAHeadingToPreSectionsUsingInlineToolbar()
+    public function testApplyingAHeadingToPreSections()
     {
+        // Using the inline toolbar
         $this->useTest(3);
 
         // Check single line parragraph
         $this->selectKeyword(1);
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
         $this->clickInlineToolbarButton('headings');
         $this->clickInlineToolbarButton('H1', NULL, TRUE);
         $this->assertHTMLMatch('<h1>sit amet %1%</h1><pre>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</pre>');
-        $this->assertTrue($this->inlineToolbarButtonExists('H1', 'active', TRUE), 'H1 icon should be active in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('H1', 'active', TRUE));
 
-        // Check multi-line pre
+        // Check that the heading toolbar doesn't appear in the inline toolbar for a multiline pre (by design)
         $this->selectKeyword(2);
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
 
-    }//end testApplyingAHeadingToPreSectionsUsingInlineToolbar()
-
-
-    /**
-     * Test applying a heading to different types of Pre sections using the top toolbar
-     *
-     * @return void
-     */
-    public function testApplyingAHeadingToPreSectionsUsingTopToolbar()
-    {
+        // Using top toolbar
         $this->useTest(3);
 
         // Check single line parragraph
-        $this->sikuli->click($this->findKeyword(1));
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-
+        $this->moveToKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('headings'));
         $this->selectKeyword(1);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be disabled in the top toolbar');
 
         $this->clickTopToolbarButton('headings');
         $this->clickTopToolbarButton('H1', NULL, TRUE);
         $this->assertHTMLMatch('<h1>sit amet %1%</h1><pre>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</pre>');
-        $this->assertTrue($this->topToolbarButtonExists('H1', 'active', TRUE), 'H1 icon should be active in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('H1', 'active', TRUE));
 
         // Check multi-line paragraph
-        $this->sikuli->click($this->findKeyword(2));
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-
+        $this->moveToKeyword(2);
+        $this->assertTrue($this->topToolbarButtonExists('headings'));
         $this->selectKeyword(2);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('headings'));
 
         $this->clickTopToolbarButton('headings');
         $this->clickTopToolbarButton('H1', NULL, TRUE);
         $this->assertHTMLMatch('<h1>sit amet %1%</h1><h1>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</h1>');
-        $this->assertTrue($this->topToolbarButtonExists('H1', 'active', TRUE), 'H1 icon should be active in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('H1', 'active', TRUE));
 
-    }//end testApplyingAHeadingToPreSectionsUsingTopToolbar()
+    }//end testApplyingAHeadingToPreSections()
 
 
     /**
@@ -465,16 +367,14 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->sikuli->keyDown('Key.CMD + b');
         $this->assertHTMLMatch('<pre>sit amet <strong>%1%</strong></pre><pre>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</pre>');
 
-        $this->sikuli->click($this->findKeyword(1));
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-
+        $this->moveToKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('headings'));
         $this->selectKeyword(1);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-        $this->assertTrue($this->inlineToolbarButtonExists('headings'), 'Heading icon should appear in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('headings'));
+        $this->assertTrue($this->inlineToolbarButtonExists('headings'));
 
         $this->clickInlineToolbarButton('headings');
         $this->clickInlineToolbarButton('H1', NULL, TRUE);
@@ -498,15 +398,15 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->assertHTMLMatch('<pre>sit amet <em>%1%</em></pre><pre>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</pre>');
 
         $this->sikuli->click($this->findKeyword(1));
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('headings'));
 
         $this->selectKeyword(1);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-        $this->assertTrue($this->inlineToolbarButtonExists('headings'), 'Heading icon should appear in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('headings'));
+        $this->assertTrue($this->inlineToolbarButtonExists('headings'));
 
         $this->clickInlineToolbarButton('headings');
         $this->clickInlineToolbarButton('H1', NULL, TRUE);
@@ -516,169 +416,102 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
 
 
     /**
-     * Test applying a heading to Quote sections using the inline toolbar.
+     * Test applying a heading to Quote sections.
      *
      * @return void
      */
-    public function testApplyingHeadingToQuoteSectionsUsingInlineToolbar()
+    public function testApplyingHeadingToQuoteSections()
     {
+        // Using the inline toolbar
         $this->useTest(4);
 
         // Check single line quote
         $this->selectKeyword(1);
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
+        // Check the the heading icon does not appear in the toolbar when you click the P
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
         $this->clickInlineToolbarButton('headings');
         $this->clickInlineToolbarButton('H1', NULL, TRUE);
         $this->assertHTMLMatch('<h1>sit amet %1%</h1><blockquote><p>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p></blockquote><blockquote><p>test1 test2 test3 sit amet %3%</p><p>%4% long paragraph for testing that the heading icon work for multiline paragraphs in quotes.</p></blockquote>');
-        $this->assertTrue($this->inlineToolbarButtonExists('H1', 'active', TRUE), 'H1 icon should be not appear in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('H1', 'active', TRUE));
 
-        // Check multi-line quote
+        // Check that the heading toolbar doesn't appear in the inline toolbar for a multiline quote (by design)
         $this->selectKeyword(2);
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
 
-        // Check quote section with multi P's
+        // Check that the heading icon doesn't appear in the inline toolbar for a quote with multiple paragraphs (by design)
         $this->selectKeyword(3);
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
 
         $this->selectKeyword(4);
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
 
-    }//end testApplyingHeadingToQuoteSectionsUsingInlineToolbar()
-
-
-    /**
-     * Test applying a heading to Quote sections using the top toolbar.
-     *
-     * @return void
-     */
-    public function testApplyingAHeadingToQuoteSectionsUsingTopToolbar()
-    {
+        // Using the top toolbar
         $this->useTest(4);
 
         // Check single line quote
-        $this->sikuli->click($this->findKeyword(1));
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-
+        $this->moveToKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('headings'));
         $this->selectKeyword(1);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
+        // Check the the heading icon is disabled in the toolbar when you click the P
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
+        
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-
         $this->clickTopToolbarButton('headings');
         $this->clickTopToolbarButton('H1', NULL, TRUE);
         $this->assertHTMLMatch('<h1>sit amet %1%</h1><blockquote><p>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p></blockquote><blockquote><p>test1 test2 test3 sit amet %3%</p><p>%4% long paragraph for testing that the heading icon work for multiline paragraphs in quotes.</p></blockquote>');
-        $this->assertTrue($this->topToolbarButtonExists('H1', 'active', TRUE), 'H1 icon should be active in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('H1', 'active', TRUE));
 
         // Check multi-line quote
-        $this->sikuli->click($this->findKeyword(2));
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-
+        $this->moveToKeyword(2);
+        $this->assertTrue($this->topToolbarButtonExists('headings'));
         $this->selectKeyword(2);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
+        // Check the the heading icon is disabled in the toolbar when you click the P
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be appear in the top toolbar');
-
         $this->clickTopToolbarButton('headings');
         $this->clickTopToolbarButton('H1', NULL, TRUE);
         $this->assertHTMLMatch('<h1>sit amet %1%</h1><h1>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</h1><blockquote><p>test1 test2 test3 sit amet %3%</p><p>%4% long paragraph for testing that the heading icon work for multiline paragraphs in quotes.</p></blockquote>');
-        $this->assertTrue($this->topToolbarButtonExists('H1', 'active', TRUE), 'H1 icon should be active in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('H1', 'active', TRUE));
 
-        // Check quote section with multi P's
-        $this->sikuli->click($this->findKeyword(3));
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-
+        // Check that the heading icon doesn't appear in the top toolbar for a quote with multiple paragraphs (by design)
+        $this->moveToKeyword(3);
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
         $this->selectKeyword(3);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
 
-        $this->sikuli->click($this->findKeyword(4));
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-
+        $this->moveToKeyword(4);
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
         $this->selectKeyword(4);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
+        $this->selectInlineToolbarLineageItem(1);
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
 
-    }//end testApplyingAHeadingToQuoteSectionsUsingTopToolbar()
-
-
-    /**
-     * Test applying a heading to a P tag that is inside a Quote.
-     *
-     * @return void
-     */
-    public function testApplyingHeadingToPSectionInsideQuote()
-    {
-        $this->useTest(4);
-
-        // Check single line quote
-        $this->sikuli->click($this->findKeyword(1));
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-
-        $this->sikuli->click($this->findKeyword(2));
-        $this->selectKeyword(1);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
-        $this->selectInlineToolbarLineageItem(1);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
-        // Check multi-line quote
-        $this->sikuli->click($this->findKeyword(1));
-        $this->sikuli->click($this->findKeyword(2));
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-
-        $this->selectKeyword(2);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
-        $this->selectInlineToolbarLineageItem(1);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be appear in the top toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
-        // Check quote section with multi P's
-        $this->sikuli->click($this->findKeyword(3));
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-
-        $this->selectKeyword(3);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
-        $this->selectInlineToolbarLineageItem(1);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
-        $this->sikuli->click($this->findKeyword(4));
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-
-        $this->selectKeyword(4);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
-        $this->selectInlineToolbarLineageItem(1);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
-    }//end testApplyingHeadingToPSectionInsideQuote()
+    }//end testApplyingHeadingToQuoteSections()
 
 
     /**
@@ -695,16 +528,14 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->sikuli->keyDown('Key.CMD + b');
         $this->assertHTMLMatch('<blockquote><p>sit amet <strong>%1%</strong></p></blockquote><blockquote><p>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p></blockquote><blockquote><p>test1 test2 test3 sit amet %3%</p><p>%4% long paragraph for testing that the heading icon work for multiline paragraphs in quotes.</p></blockquote>');
 
-        $this->sikuli->click($this->findKeyword(1));
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-
+        $this->moveToKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('headings'));
         $this->selectKeyword(1);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-        $this->assertTrue($this->inlineToolbarButtonExists('headings'), 'Heading icon should appear in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('headings'));
+        $this->assertTrue($this->inlineToolbarButtonExists('headings'));
 
         $this->clickInlineToolbarButton('headings');
         $this->clickInlineToolbarButton('H1', NULL, TRUE);
@@ -728,16 +559,15 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->assertHTMLMatch('<blockquote><p>sit amet <em>%1%</em></p></blockquote><blockquote><p>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p></blockquote><blockquote><p>test1 test2 test3 sit amet %3%</p><p>%4% long paragraph for testing that the heading icon work for multiline paragraphs in quotes.</p></blockquote>');
 
         $this->sikuli->click($this->findKeyword(1));
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-
+        $this->assertTrue($this->topToolbarButtonExists('headings'));
         sleep(1);
         $this->selectKeyword(1);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-        $this->assertTrue($this->inlineToolbarButtonExists('headings'), 'Heading icon should appear in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('headings'));
+        $this->assertTrue($this->inlineToolbarButtonExists('headings'));
 
         $this->clickInlineToolbarButton('headings');
         $this->clickInlineToolbarButton('H1', NULL, TRUE);
@@ -747,77 +577,56 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
 
 
     /**
-     * Test applying a heading to Div sections using the inline toolbar.
+     * Test applying a heading to Div sections.
      *
      * @return void
      */
-    public function testApplyingHeadingToDivSectionsUsingInlineToolbar()
+    public function testApplyingHeadingToDivSections()
     {
+        // Using the inline toolbar
         $this->useTest(5);
 
         // Check single line div
         $this->selectKeyword(1);
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
         $this->clickInlineToolbarButton('headings');
         $this->clickInlineToolbarButton('H1', NULL, TRUE);
         $this->assertHTMLMatch('<h1>sit amet %1%</h1><div>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</div>');
-        $this->assertTrue($this->inlineToolbarButtonExists('H1', 'active', TRUE), 'H1 icon should be not appear in the inline toolbar');
+        $this->assertTrue($this->inlineToolbarButtonExists('H1', 'active', TRUE));
 
-        // Check multi-line div
+        // Check that the heading toolbar doesn't appear in the inline toolbar for a multiline div (by design)
         $this->selectKeyword(2);
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
 
-    }//end testApplyingHeadingToDivSectionsUsingInlineToolbar()
-
-
-    /**
-     * Test applying a heading to Div sections using the top toolbar.
-     *
-     * @return void
-     */
-    public function testApplyingAHeadingToDivSectionsUsingTopToolbar()
-    {
+        // Using the top toolbar
         $this->useTest(5);
 
         // Check single line div
-        $this->sikuli->click($this->findKeyword(1));
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-
-        $this->sikuli->click($this->findKeyword(2));
+        $this->moveToKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('headings'));
         $this->selectKeyword(1);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-
         $this->clickTopToolbarButton('headings');
         $this->clickTopToolbarButton('H1', NULL, TRUE);
         $this->assertHTMLMatch('<h1>sit amet %1%</h1><div>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</div>');
-        $this->assertTrue($this->topToolbarButtonExists('H1', 'active', TRUE), 'H1 icon should be active in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('H1', 'active', TRUE));
 
         // Check multi-line div
-        $this->sikuli->click($this->findKeyword(2));
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-
+        $this->moveToKeyword(2);
+        $this->assertTrue($this->topToolbarButtonExists('headings'));
         $this->selectKeyword(2);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be appear in the top toolbar');
-
         $this->clickTopToolbarButton('headings');
         $this->clickTopToolbarButton('H1', NULL, TRUE);
         $this->assertHTMLMatch('<h1>sit amet %1%</h1><h1>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</h1>');
-        $this->assertTrue($this->topToolbarButtonExists('H1', 'active', TRUE), 'H1 icon should be active in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('H1', 'active', TRUE));
 
-    }//end testApplyingAHeadingToDivSectionsUsingTopToolbar()
+    }//end testApplyingHeadingToDivSections()
 
 
     /**
@@ -834,17 +643,14 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->sikuli->keyDown('Key.CMD + b');
         $this->assertHTMLMatch('<div>sit amet <strong>%1%</strong></div><div>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</div>');
 
-        $this->sikuli->click($this->findKeyword(1));
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-
+        $this->moveToKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('headings'));
         $this->selectKeyword(1);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-        $this->assertTrue($this->inlineToolbarButtonExists('headings'), 'Heading icon should appear in the inline toolbar');
-
+        $this->assertTrue($this->topToolbarButtonExists('headings'));
+        $this->assertTrue($this->inlineToolbarButtonExists('headings'));
         $this->clickInlineToolbarButton('headings');
         $this->clickInlineToolbarButton('H1', NULL, TRUE);
         $this->assertHTMLMatch('<h1>sit amet <strong>%1%</strong></h1><div>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</div>');
@@ -866,48 +672,19 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->sikuli->keyDown('Key.CMD + i');
         $this->assertHTMLMatch('<div>sit amet <em>%1%</em></div><div>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</div>');
 
-        $this->sikuli->click($this->findKeyword(1));
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should appear in the top toolbar');
-
+        $this->moveToKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('headings'));
         $this->selectKeyword(1);
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
-        $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
-
+        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
+        $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-        $this->assertTrue($this->inlineToolbarButtonExists('headings'), 'Heading icon should appear in the inline toolbar');
-
+        $this->assertTrue($this->topToolbarButtonExists('headings'));
+        $this->assertTrue($this->inlineToolbarButtonExists('headings'));
         $this->clickInlineToolbarButton('headings');
         $this->clickInlineToolbarButton('H1', NULL, TRUE);
         $this->assertHTMLMatch('<h1>sit amet <em>%1%</em></h1><div>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</div>');
 
     }//end testApplyingHeadingToDivWhenSelectingItalicWord()
-
-
-    /**
-     * Test that heading icon shows in top toolbar when range is collaped.
-     *
-     * @return void
-     */
-    public function testCollapsedRangeEnabledHeadingIconInTopToolbar()
-    {
-        $this->useTest(14);
-        $this->sikuli->click($this->findKeyword(1));
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-
-        $this->sikuli->click($this->findKeyword(2));
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-
-        $this->sikuli->click($this->findKeyword(3));
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-
-        $this->sikuli->click($this->findKeyword(4));
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-
-        $this->sikuli->click($this->findKeyword(5));
-        $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should not be enabled in the top toolbar');
-
-    }//end testCollapsedRangeEnabledHeadingIconInTopToolbar()
 
 
     /**
@@ -917,6 +694,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
      */
     public function testApplyingHeadginsWithOnePInsideADiv()
     {
+        // Test changing the p to a heading
         $this->useTest(6);
 
         $this->selectKeyword(1);
@@ -932,13 +710,10 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->clickTopToolbarButton('H1', NULL, TRUE);
         $this->assertHTMLMatch('<div><h1>Long paragraph for testing that the heading icon does not appear in the inline toolbar %1%.</h1></div>');
 
-        // Undo the changes so we can test chagning the Div section
-        $this->clickTopToolbarButton('historyUndo');
-
+        // Test changing the div to a heading
+        $this->useTest(6);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
-
         $this->clickTopToolbarButton('headings');
         $this->clickTopToolbarButton('H1', NULL, TRUE);
         $this->assertHTMLMatch('<h1>Long paragraph for testing that the heading icon does not appear in the inline toolbar %1%.</h1>');
@@ -955,10 +730,10 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
     {
         $this->useTest(7);
 
-        $this->sikuli->click($this->findKeyword(1));
+        $this->moveToKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->moveToKeyword(2);
         $this->selectKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
         $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
@@ -975,10 +750,10 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         // Undo the changes so we can test chagning the second P section
         $this->sikuli->keyDown('Key.CMD + z');
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->moveToKeyword(2);
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
 
-        $this->sikuli->click($this->findKeyword(1));
+        $this->moveToKeyword(1);
         $this->selectKeyword(2);
         $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
         $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
@@ -1012,7 +787,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
     {
         $this->useTest(8);
 
-        $this->sikuli->click($this->findKeyword(1));
+        $this->moveToKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should appear in the top toolbar');
 
         sleep(1);
@@ -1050,7 +825,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
 
         $this->useTest(9);
 
-        $this->sikuli->click($this->findKeyword(1));
+        $this->moveToKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should appear in the top toolbar');
 
         sleep(1);
@@ -1144,7 +919,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
 
         $this->useTest(11);
 
-        $this->sikuli->click($this->findKeyword(1));
+        $this->moveToKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should appear in the top toolbar');
 
         $this->selectKeyword(1);
@@ -1169,7 +944,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
 
         sleep(1);
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->moveToKeyword(2);
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should appear in the top toolbar');
 
         $this->selectKeyword(2);
@@ -1210,7 +985,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
     {
         $this->useTest(12);
 
-        $this->sikuli->click($this->findKeyword(1));
+        $this->moveToKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should appear in the top toolbar');
 
         sleep(1);
@@ -1248,7 +1023,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
     {
         $this->useTest(13);
 
-        $this->sikuli->click($this->findKeyword(1));
+        $this->moveToKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should appear in the top toolbar');
 
         $this->selectKeyword(1);
@@ -1267,7 +1042,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         // Undo the changes so we can test the second Pre section
         $this->sikuli->keyDown('Key.CMD + z');
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->moveToKeyword(2);
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should appear in the top toolbar');
 
         $this->selectKeyword(2);
@@ -1358,7 +1133,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->useTest(15);
 
         // Check ul list
-        $this->sikuli->click($this->findKeyword(1));
+        $this->moveToKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the top toolbar.');
 
         $this->selectKeyword(1);
@@ -1379,7 +1154,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should appear in the top toolbar.');
 
         // Check 0l list
-        $this->sikuli->click($this->findKeyword(2));
+        $this->moveToKeyword(2);
         $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the top toolbar.');
 
         $this->selectKeyword(2);

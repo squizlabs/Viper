@@ -65,7 +65,7 @@ class Viper_Tests_ViperCopyPastePlugin_OrderedListsFormatsUnitTest extends Abstr
     public function testOrderedListsFormatsForWindowsChrome()
     {
         $this->runTestFor('windows', 'chrome');
-        $this->_runTest($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacGoogleChrome/OrderedListsFormats.txt'));
+        $this->_runTest($this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsGoogleChrome/OrderedListsFormats.txt'));
 
     }//end testOrderedListsFormatsForWindowsChrome()
 
@@ -129,6 +129,7 @@ class Viper_Tests_ViperCopyPastePlugin_OrderedListsFormatsUnitTest extends Abstr
      */
     private function _runTest($textFileURL)
     {
+        $this->useTest(1);
         $this->selectKeyword(1);
         $this->pasteFromURL($textFileURL);
 

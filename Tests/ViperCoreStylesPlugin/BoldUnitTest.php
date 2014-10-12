@@ -202,6 +202,25 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
 
 
     /**
+     * Test checking that the strong tag is not used when you delete bold content and add new content.
+     *
+     * @return void
+     */
+    public function testDeletingBoldContent()
+    {
+        $this->useTest(1);
+        
+        // Delete bold word and replace with new content
+        $this->selectKeyword(5);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('this is new content');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> this is new content</p>');
+
+    }//end testDeletingBoldContent()
+
+
+    /**
      * Test that the shortcut command works for Bold.
      *
      * @return void
@@ -609,6 +628,54 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon should be active in the top toolbar');
 
     }//end testUndoAndRedoForBold()
+
+
+    /**
+     * Test that bold icon is not available in the inline toolbar for a heading.
+     *
+     * @return void
+     */
+    public function testBoldIconForHeadingInInlineToolbar()
+    {
+        $this->useTest(5);
+        
+        // Test H1
+        $this->selectKeyword(1);
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'));
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'));
+
+        // Test H2
+        $this->selectKeyword(2);
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'));
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'));
+
+        // Test H3
+        $this->selectKeyword(3);
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'));
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'));
+
+        // Test H4
+        $this->selectKeyword(4);
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'));
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'));
+
+        // Test H5
+        $this->selectKeyword(5);
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'));
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'));
+
+        // Test H6
+        $this->selectKeyword(6);
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'));
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertFalse($this->inlineToolbarButtonExists('bold'));
+
+    }//end testBoldIconForHeadingInInlineToolbar()
 
 }//end class
 

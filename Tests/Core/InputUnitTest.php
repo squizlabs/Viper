@@ -27,7 +27,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $expected .= 'QWERTYUIOPASDFGHJKLZXCVBNM';
         $expected .= '~!@#$%^&amp;*()_+{}|:"&lt;&gt;? &nbsp; .';
 
-        $this->assertHTMLMatch('<p>'.$expected.'</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>'.$expected.'</p><p>EIB MOZ %2%</p>');
 
     }//end testTextType()
 
@@ -42,7 +42,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->useTest(1);
         $this->selectKeyword(1);
         $this->type('Testing input');
-        $this->assertHTMLMatch('<p>Testing input</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>Testing input</p><p>EIB MOZ %2%</p>');
 
     }//end testTextTypeReplaceSelection()
 
@@ -58,10 +58,87 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('Testing input');
+        $this->assertHTMLMatch('<p>%1%</p><p>Testing input</p><p>EIB MOZ %2%</p>');
 
-        $this->assertHTMLMatch('<p>%1%</p><p>Testing input</p><p>EIB MOZ</p>');
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.UP');
+        $this->type('New paragraph');
+        $this->assertHTMLMatch('<p>New paragraph</p><p>%1%</p><p>Testing input</p><p>EIB MOZ %2%</p>');
 
     }//end testCreatingANewParagraph()
+
+
+    /**
+     * Test that the icons are available in the top toolbar when you create new paragraphs.
+     *
+     * @return void
+     */
+    public function testTopToolbarIcons()
+    {
+        $this->useTest(1);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertTrue($this->topToolbarButtonExists('bold', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('italic', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('removeFormat', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('headings', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('listUL', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('listOL', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('listIndent', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('listOutdent', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('table', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('image', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('insertHr', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('linkRemove', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('charmap', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('searchReplace', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('langtools', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('accessAudit', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('sourceView', NULL));
+
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.UP');
+        $this->assertTrue($this->topToolbarButtonExists('bold', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('italic', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('removeFormat', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('headings', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('listUL', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('listOL', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('listIndent', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('listOutdent', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('table', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('image', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('insertHr', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('linkRemove', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('charmap', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('searchReplace', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('langtools', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('accessAudit', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('sourceView', NULL));
+
+    }//end testTopToolbarIcons()
 
 
     /**
@@ -69,7 +146,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      *
      * @return void
      */
-    public function testKeyboradNavigation()
+    public function testArrowKeyNavigation()
     {
         $this->useTest(1);
         $text = $this->selectKeyword(1);
@@ -99,9 +176,9 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.UP');
         $this->type('U');
 
-        $this->assertHTMLMatch('<p>TeUsting LinRput</p><p>EIB MOZD</p>');
+        $this->assertHTMLMatch('<p>TesUting LinRput</p><p>EIB MOZ D%2%</p>');
 
-    }//end testKeyboradNavigation()
+    }//end testArrowKeyNavigation()
 
 
     /**
@@ -120,13 +197,13 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('Testing...');
 
-        $this->assertHTMLMatch('<p>XAX<strong>test</strong> input...</p><p>Testing...</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>XAX<strong>test</strong> input...</p><p>Testing...</p><p>EIB MOZ %2%</p>');
 
         for ($i = 0; $i < 30; $i++) {
             $this->sikuli->keyDown('Key.BACKSPACE');
         }
 
-        $this->assertHTMLMatch('<p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>EIB MOZ %2%</p>');
 
     }//end testBackspace()
 
@@ -143,60 +220,13 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         sleep(1);
         $this->sikuli->keyDown('Key.CMD + Key.LEFT');
         $this->type(' test');
-        $this->assertHTMLMatch('<p>%1% test</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1% test</p><p>EIB MOZ %2%</p>');
 
         $this->sikuli->keyDown('Key.CMD + Key.RIGHT');
         $this->type(' test');
-        $this->assertHTMLMatch('<p>%1% test test</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1% test test</p><p>EIB MOZ %2%</p>');
 
     }//end testCommandLeftAndCommandRight()
-
-
-    /**
-     * Test that removing characters using DELETE works.
-     *
-     * @return void
-     */
-    public function testDelete()
-    {
-        $this->useTest(1);
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.CMD + b');
-        $this->type('test');
-        $this->sikuli->keyDown('Key.CMD + b');
-        $this->type(' input...');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('Testing...');
-
-        for ($i = 0; $i < 27; $i++) {
-            $this->sikuli->keyDown('Key.LEFT');
-        }
-
-        for ($i = 0; $i < 28; $i++) {
-            $this->sikuli->keyDown('Key.DELETE');
-        }
-
-        $this->assertHTMLMatch('<p>EIB MOZ</p>');
-
-    }//end testDelete()
-
-
-    /**
-     * Test that holding down Shift + Right does select text.
-     *
-     * @return void
-     */
-    public function testRightKeyboardSelection()
-    {
-        $this->useTest(1);
-        $text = $this->selectKeyword(1);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->type('p');
-        $this->assertHTMLMatch('<p>pIB MOZ</p>');
-
-    }//end testRightKeyboardSelection()
 
 
     /**
@@ -204,19 +234,214 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
      *
      * @return void
      */
-    public function testLeftKeyboardSelection()
+    public function testShiftAndLeftArrow()
     {
         $this->useTest(1);
-        $text = $this->selectKeyword(1);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->type('p');
-        $this->assertHTMLMatch('<p>pAX</p><p>EIB MOZ</p>');
 
-    }//end testRightKeyboardSelection()
+        $this->moveToKeyword(1, 'right');
+
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->assertEquals($this->replaceKeywords('%1%'), $this->getSelectedText(), 'First line of text should be selected');
+
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>test</p><p>EIB MOZ %2%</p>');
+
+    }//end testShiftAndLeftArrow()
+
+
+    /**
+     * Test that holding down Shift + Right does select text.
+     *
+     * @return void
+     */
+    public function testShiftAndRightArrow()
+    {
+        $this->useTest(1);
+
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        sleep(1);
+        $this->assertEquals($this->replaceKeywords('%1%'), $this->getSelectedText(), 'First line of text should be selected');
+
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>testIB MOZ %2%</p>');
+
+    }//end testShiftAndRightArrow()
+
+
+    /**
+     * Test that using Alt + Left moves the cursor to the next word on OSX.
+     *
+     * @return void
+     */
+    public function testAltAndLeftArrow()
+    {
+        $this->runTestFor('osx');
+        $this->useTest(1);
+
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ALT + Key.LEFT');
+        $this->sikuli->keyDown('Key.ALT + Key.LEFT');
+        $this->sikuli->keyDown('Key.ALT + Key.LEFT');
+
+        $this->type('test ');
+        $this->assertHTMLMatch('<p>%1%</p><p>test EIB MOZ %2%</p>');
+
+    }//end testShiftAndLeftArrow()
+
+
+    /**
+     * Test that using Alt + Right moves the cursor to the next word on OSX.
+     *
+     * @return void
+     */
+    public function testAltAndRightArrow()
+    {
+        $this->runTestFor('osx');
+        $this->useTest(1);
+
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.ALT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.ALT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.ALT + Key.RIGHT');
+
+        $this->type(' test');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ test %2%</p>');
+
+    }//end testAltAndRightArrow()
+
+
+    /**
+     * Test that using CTRL + Left moves the cursor to the previous word on Windows.
+     *
+     * @return void
+     */
+    public function testCtrlAndLeftArrow()
+    {
+        $this->runTestFor('windows');
+        $this->useTest(1);
+
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.CTRL + Key.LEFT');
+        $this->sikuli->keyDown('Key.CTRL + Key.LEFT');
+        $this->sikuli->keyDown('Key.CTRL + Key.LEFT');
+
+        $this->type('test ');
+        $this->assertHTMLMatch('<p>%1%</p><p>test EIB MOZ %2%</p>');
+
+    }//end testShiftAndLeftArrow()
+
+
+    /**
+     * Test that using CTRL + Right moves the cursor to the next word on Windows.
+     *
+     * @return void
+     */
+    public function testCtrlAndRightArrow()
+    {
+        $this->runTestFor('windows');
+        $this->useTest(1);
+
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.CTRL + Key.RIGHT');
+        $this->sikuli->keyDown('Key.CTRL + Key.RIGHT');
+        $this->sikuli->keyDown('Key.CTRL + Key.RIGHT');
+
+        $this->type('test ');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB test MOZ %2%</p>');
+
+    }//end testAltAndRightArrow()
+
+
+    /**
+     * Test that using Cmd+Shift+Left and Cmd+Shift+Right highlights the line of text in OSX.
+     *
+     * @return void
+     */
+    public function testCmdShiftLeftAndCmdShiftRight()
+    {
+        $this->runTestFor('osx');
+        $this->useTest(1);
+
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.SHIFT + Key.CMD + Key.LEFT');
+        $this->assertEquals($this->replaceKeywords('EIB MOZ %2%'), $this->getSelectedText(), 'Second line of text should be selected');
+
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->assertEquals($this->replaceKeywords(''), $this->getSelectedText(), 'Nothing should be selected');
+
+        $this->sikuli->keyDown('Key.SHIFT + Key.CMD + Key.RIGHT');
+        $this->assertEquals($this->replaceKeywords('EIB MOZ %2%'), $this->getSelectedText(), 'Second line of text should be selected');
+
+    }//end testCmdShiftLeftAndCmdShiftRight()
+
+
+    /**
+     * Test that using Shift+Home and Shift+End highlights the line of text in Windows.
+     *
+     * @return void
+     */
+    public function testShiftHomeAndShiftEnd()
+    {
+        $this->runTestFor('windows');
+        $this->useTest(1);
+
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.SHIFT + Key.HOME');
+        $this->assertEquals($this->replaceKeywords('EIB MOZ %2%'), $this->getSelectedText(), 'Second line of text should be selected');
+
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->assertEquals($this->replaceKeywords(''), $this->getSelectedText(), 'Nothing should be selected');
+
+        $this->sikuli->keyDown('Key.SHIFT + Key.END');
+        $this->assertEquals($this->replaceKeywords('EIB MOZ %2%'), $this->getSelectedText(), 'Second line of text should be selected');
+
+    }//end testShiftHomeAndShiftEnd()
+
+
+    /**
+     * Test that using Shift + Ctrl+ Left hightlights the word to the left.
+     *
+     * @return void
+     */
+    public function testShiftCtrlAndLeftArrow()
+    {
+        $this->useTest(1);
+
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.SHIFT + Key.CTRL + Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.CTRL + Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.CTRL + Key.LEFT');
+        sleep(1);
+        $this->assertEquals($this->replaceKeywords('EIB MOZ %2%'), $this->getSelectedText(), 'Second line of text should be selected');
+
+    }//end testShiftCtrlAndLeftArrow()
+
+
+    /**
+     * Test that using Shift + Ctrl+ Right hightlights the word to the right
+     *
+     * @return void
+     */
+    public function testShiftCtrlAndRightArrow()
+    {
+        $this->useTest(1);
+
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.SHIFT + Key.CTRL + Key.RIGHT');
+        sleep(1);
+        $this->assertEquals($this->replaceKeywords('%1%'), $this->getSelectedText(), 'First line of text should be selected');
+
+    }//end testShiftCtrlAndRightArrow()
 
 
     /**
@@ -231,8 +456,10 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.CMD + a');
         $this->sikuli->keyDown('Key.DELETE');
 
-        $this->type('abc');
-        $this->assertHTMLMatch('<p>abc</p>');
+        $this->type('This is the first paragraph');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('This is the second paragraph');
+        $this->assertHTMLMatch('<p>This is the first paragraph</p><p>This is the second paragraph</p>');
 
     }//end testSelectAllAndRemove()
 
@@ -253,6 +480,67 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<p>abc</p>');
 
     }//end testSelectAllAndReplace()
+
+
+    /**
+     * Test that when you delete all of the content, enter new content and delete the last 3 words that the other content remains.
+     *
+     * @return void
+     */
+    public function testDeletingNewContent()
+    {
+        $this->useTest(1);
+
+        // Select all content, delete it and replace with new content
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        sleep(1);
+        $this->type('This is a long line of content to test deleting the last three %1% words %2%');
+
+        // Select the last 3 words and delete them
+        $this->selectKeyword(1, 2);
+        sleep(1);
+        $this->sikuli->keyDown('Key.DELETE');
+        sleep(1);
+        $this->assertHTMLMatch('<p>This is a long line of content to test deleting the last three</p>');
+
+    }//end testDeletingNewContent()
+
+
+    /**
+     * Test Delete and Backspace.
+     *
+     * @return void
+     */
+    public function testDeleteAndBackspace()
+    {
+        // Test delete
+        $this->useTest(1);
+
+        $this->moveToKeyword(1, 'left');
+        sleep(1);
+
+        for ($i = 0; $i < 8; $i++) {
+            $this->sikuli->keyDown('Key.DELETE');
+        }
+
+        $this->type('test');
+        $this->assertHTMLMatch('<p>testMOZ %2%</p>');
+
+        // Test backspace
+        $this->useTest(1);
+
+        $this->moveToKeyword(2, 'right');
+
+        for ($i = 0; $i < 8; $i++) {
+            $this->sikuli->keyDown('Key.BACKSPACE');
+        }
+
+        $this->type('test');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIBtest</p>');
+
+    }//end testDeleteAndBackspace()
 
 
     /**
@@ -322,7 +610,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test');
 
-        $this->assertHTMLMatch('<p>XAX</p><p>testEIB MOZ</p>');
+        $this->assertHTMLMatch('<p>XAX</p><p>testEIB MOZ %2%</p>');
 
     }//end testJoinParagraphsAndSplit()
 
@@ -345,7 +633,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test');
 
-        $this->assertHTMLMatch('<p><strong>XAX</strong></p><p>testtest</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p><strong>XAX</strong></p><p>testtest</p><p>EIB MOZ %2%</p>');
 
     }//end testJoinParagraphsAndSplitAtEndOfTag()
 
@@ -427,7 +715,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.TAB');
         $this->type('123456');
 
-        $this->assertHTMLMatch('<p>123456%1%</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>123456%1%</p><p>EIB MOZ %2%</p>');
 
     }//end testTabInToViper()
 
@@ -455,50 +743,19 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test embedding a youtube video.
+     * Test entering content before a br tag.
      *
      * @return void
      */
-    public function testEmbeddingVideo()
+    public function testEnteringContentBeforeBrTag()
     {
-        $this->useTest(1);
-        $this->sikuli->click($this->findKeyword(1));
-        $this->clickTopToolbarButton('sourceView');
+        $this->useTest(7);
+        $this->moveToKeyword(1, 'right');
+        sleep(1);
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('Testing input');
+        $this->assertHTMLMatch('<p>%1%</p><p>Testing input<br />%2%<br />%3%</p>');
 
-        // Check to make sure the source editor appears.
-        try {
-            $image = $this->findImage('dragPopupIcon', '.Viper-popup-dragIcon');
-        } catch (Exception $e) {
-            $this->fail('Source editor did not appear on the screen');
-        }
-
-        // Embed the video
-        $this->sikuli->keyDown('Key.CMD + a');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->type('<iframe title="Roadmap" src="http://www.youtube.com/embed/PYm4Atlxe4M" allowfullscreen="" frameborder="0" height="315" width="420"></iframe>');
-        $this->clickButton('Apply Changes', NULL, TRUE);
-
-        $this->assertHTMLMatch('<iframe title="Roadmap" src="http://www.youtube.com/embed/PYm4Atlxe4M" allowfullscreen="" frameborder="0" height="315" width="420"></iframe>');
-
-        $this->clickTopToolbarButton('sourceView');
-
-        // Check to make sure the source editor appears.
-        try {
-            $image = $this->findImage('dragPopupIcon', '.Viper-popup-dragIcon');
-        } catch (Exception $e) {
-            $this->fail('Source editor did not appear on the screen');
-        }
-
-        // Embed the video using object tags
-        $this->sikuli->keyDown('Key.CMD + a');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->type('<object width="560" height="315"><param name="movie" value="http://www.youtube.com/v/f6ZSZbNfSpk?version=3&amp;hl=en_GB"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/f6ZSZbNfSpk?version=3&amp;hl=en_GB" type="application/x-shockwave-flash" width="560" height="315" allowscriptaccess="always" allowfullscreen="true"></embed></object>');
-        $this->clickButton('Apply Changes', NULL, TRUE);
-
-
-    }//end testEmbeddingVideo()
-
+    }//end testEnteringContentBeforeBrTag()
 
 }//end class
-
-?>

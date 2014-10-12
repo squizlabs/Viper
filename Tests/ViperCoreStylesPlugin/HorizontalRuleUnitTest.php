@@ -96,17 +96,34 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
 
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->type('%2% Content');
+        $this->type('%3% Content');
 
-        $this->assertHTMLMatch('<h1>Heading %1%</h1><hr /><p>%2% Content</p><p>Paragraph after heading</p>');
+        $this->assertHTMLMatch('<h1>Heading %1%</h1><hr /><p>%3% Content</p><p>Paragraph after heading %2%</p><p>Another paragraph</p>');
 
-        $this->selectKeyword(2);
+        $this->selectKeyword(3);
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.BACKSPACE');
 
-        $this->assertHTMLMatch('<h1>Heading %1%</h1><p>%2% Content</p><p>Paragraph after heading</p>');
+        $this->assertHTMLMatch('<h1>Heading %1%</h1><p>%3% Content</p><p>Paragraph after heading %2%</p><p>Another paragraph</p>');
 
     }//end testAddingAndDeletingHorizontalRuleAfterHeading()
+
+
+    /**
+     * Test that you can add a horizontal rule in between two paragraphs.
+     *
+     * @return void
+     */
+    public function testAddingAndDeletingHorizontalRuleBetweenParagraphs()
+    {
+        $this->useTest(2);
+
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton('insertHr');
+        $this->assertHTMLMatch('<h1>Heading %1%</h1><p>Paragraph after heading %2%</p><hr /><p>Another paragraph</p>');
+
+    }//end testAddingAndDeletingHorizontalRuleBetweenParagraphs()
 
 
     /**

@@ -568,15 +568,19 @@ ViperImagePlugin.prototype = {
     _updateInlineToolbar: function(data)
     {
         var nodeSelection = data.nodeSelection || data.range.getNodeSelection();
+        var self          = this;
 
         this.hideImageResizeHandles();
         if (nodeSelection && ViperUtil.isTag(nodeSelection, 'img') === true) {
             this._resizeImage = nodeSelection;
             data.toolbar.showButton('vitpImage');
             data.toolbar.showButton('vitpImageMove');
+            nodeSelection.onload = function() {
+                self.showImageResizeHandles(nodeSelection);
+                self._inlineToolbar.update(null, nodeSelection);
+            };
 
             this.viper.ViperTools.setButtonActive('vitpImage');
-
             this.showImageResizeHandles(nodeSelection);
             this._updateToolbars(nodeSelection);
         }

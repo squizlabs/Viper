@@ -160,6 +160,59 @@ class Viper_Tests_ViperListPlugin_ConvertListTypesTest extends AbstractViperList
 
 
     /**
+     * Test converting two list items and then converting them back to the original list type.
+     *
+     * @return void
+     */
+    public function testConvertTwoListItems()
+    {
+        $this->useTest(3);
+
+        // Test unordered to ordered and then back again
+        $this->selectKeyword(1, 2);
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+
+        //Using top toolbar
+        $this->clickTopToolbarButton('listOL');
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li></ul><ol><li>%1% item 2</li><li>item 3 %2%</li></ol><ul><li>item 4</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2</li><li>item 3 %4%</li><li>item 4</li></ol>');
+        $this->clickTopToolbarButton('listUL');
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>%1% item 2</li><li>item 3 %2%</li><li>item 4</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2</li><li>item 3 %4%</li><li>item 4</li></ol>');
+
+        //Using inline toolbar
+        sleep(1);
+        $this->clickInlineToolbarButton('listOL');
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li></ul><ol><li>%1% item 2</li><li>item 3 %2%</li></ol><ul><li>item 4</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2</li><li>item 3 %4%</li><li>item 4</li></ol>');
+        $this->clickInlineToolbarButton('listUL');
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>%1% item 2</li><li>item 3 %2%</li><li>item 4</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2</li><li>item 3 %4%</li><li>item 4</li></ol>');
+
+        // Test ordered to unordered and then back again
+        $this->selectKeyword(3, 4);
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+
+        //Using top toolbar
+        $this->clickTopToolbarButton('listUL');
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>%1% item 2</li><li>item 3 %2%</li><li>item 4</li></ul><p>Ordered list:</p><ol><li>item 1</li></ol><ul><li>%3% item 2</li><li>item 3 %4%</li></ul><ol><li>item 4</li></ol>');
+        $this->clickTopToolbarButton('listOL');
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>%1% item 2</li><li>item 3 %2%</li><li>item 4</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2</li><li>item 3 %4%</li><li>item 4</li></ol>');
+
+        //Using inline toolbar
+        sleep(1);
+        $this->clickInlineToolbarButton('listUL');
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>%1% item 2</li><li>item 3 %2%</li><li>item 4</li></ul><p>Ordered list:</p><ol><li>item 1</li></ol><ul><li>%3% item 2</li><li>item 3 %4%</li></ul><ol><li>item 4</li></ol>');
+        $this->clickInlineToolbarButton('listOL');
+        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>%1% item 2</li><li>item 3 %2%</li><li>item 4</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2</li><li>item 3 %4%</li><li>item 4</li></ol>');
+
+    }//end testConvertAllItemsInAListAndSubList()
+
+    /**
      * Test converting an item in a sub list from unordered to ordered to unordered.
      *
      * @return void

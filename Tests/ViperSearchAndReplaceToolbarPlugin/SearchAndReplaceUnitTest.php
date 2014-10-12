@@ -170,13 +170,35 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
 
 
     /**
+     * Test that you can find content and then replace all.
+     *
+     * @return void
+     */
+    public function testFindAndThenReplaceAll()
+    {
+        $this->moveToKeyword(1);
+
+        $this->clickTopToolbarButton('searchReplace');
+        $this->type('websites');
+        $this->clickTopToolbarButton('Find Next', NULL, TRUE);
+
+        $this->clickField('Replace');
+        $this->type('test');
+        $this->clickTopToolbarButton('Replace All', NULL, TRUE);
+
+        $this->assertHTMLMatch('<h1>%1% Simple Viper Example</h1><p>Australian governments at all levels have <strong><em>endorsed</em></strong> WCAG 2.0, and require all government test (federal, state and territory) to meet the new guidelines find at the minimum compliance level (Single A) by the end of 2012. In addition, the Australian Government requires all federal test to meet the medium conformance level (Double A) by the end of FIND 2014.</p><p>Further information at <a href="http://webguide.gov.au/accessibility-usability/accessibility/%20">http://webguide.gov.au/accessibility-usability/accessibility/</a> and <a href="http://www.w3.org/TR/WCAG20/">http://www.w3.org/TR/WCAG20/</a>.</p><ul><li>Audit of Homepage and 6 Section Landing pages</li><li>4 additional templates</li><li>Audit of 20 additional pages for content</li><li>Accessibility audit report</li><li>Recommendations and action plan</li><li>Squiz Matrix content accessibility guide</li></ul>');
+
+    }//end testFindAndThenReplaceAll()
+
+
+    /**
      * Test search and replace all.
      *
      * @return void
      */
     public function testSearchAndReplaceAll()
     {
-        $this->sikuli->click($this->findKeyword(1));
+        $this->moveToKeyword(1);
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('FIND');
@@ -197,7 +219,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
      */
     public function testUndoAfterReplace()
     {
-        $this->sikuli->click($this->findKeyword(1));
+        $this->moveToKeyword(1);
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('FIND');
@@ -224,7 +246,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
      */
     public function testUndoAfterReplaceAll()
     {
-        $this->sikuli->click($this->findKeyword(1));
+        $this->moveToKeyword(1);
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('FIND');
@@ -251,7 +273,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
      */
     public function testSearchAndReplaceLastWordInList()
     {
-        $this->sikuli->click($this->findKeyword(1));
+        $this->moveToKeyword(1);
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('templates');
@@ -272,7 +294,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
      */
     public function testSearchAndReplaceAfterClosingFields()
     {
-        $this->sikuli->click($this->findKeyword(1));
+        $this->moveToKeyword(1);
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('FIND');
@@ -285,7 +307,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
 
         // Close the search fields
         $this->clickTopToolbarButton('searchReplace', 'selected');
-        $this->sikuli->click($this->findKeyword(1));
+        $this->moveToKeyword(1);
 
         // Open the search fields again and make sure only the Find Next button is enabled
         $this->clickTopToolbarButton('searchReplace');
@@ -299,6 +321,46 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
         $this->assertHTMLMatch('<h1>%1% Simple Viper Example</h1><p>Australian governments at all levels have <strong><em>endorsed</em></strong> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines replace at the minimum compliance level (Single A) by the end of 2012. In addition, the Australian Government requires all federal websites to meet the medium conformance level (Double A) by the end of replace 2014.</p><p>Further information at <a href="http://webguide.gov.au/accessibility-usability/accessibility/%20">http://webguide.gov.au/accessibility-usability/accessibility/</a> and <a href="http://www.w3.org/TR/WCAG20/">http://www.w3.org/TR/WCAG20/</a>.</p><ul><li>Audit of Homepage and 6 Section Landing pages</li><li>4 additional templates</li><li>Audit of 20 additional pages for content</li><li>Accessibility audit report</li><li>Recommendations and action plan</li><li>Squiz Matrix content accessibility guide</li></ul>');
 
     }//end testSearchAndReplaceAfterClosingFields()
+
+
+    /**
+     * Test that reverting the value in the search and replace field.
+     *
+     * @return void
+     */
+    public function testRevertValueIcons()
+    {
+
+        $this->moveToKeyword(1);
+
+        $this->clickTopToolbarButton('searchReplace');
+        $this->type('websites');
+        $this->clickField('Replace');
+        $this->type('test');
+        $this->clickTopToolbarButton('Find Next', NULL, TRUE);
+        $this->clickTopToolbarButton('Replace All', NULL, TRUE);
+
+        // Clear the search field
+        $this->clearFieldValue('Search');
+        sleep(1);
+        $this->assertEquals('', $this->getFieldValue('Search'), 'Search field should be empty');
+
+        // Revernt the search field
+        $this->revertFieldValue('Search');
+        sleep(1);
+        $this->assertEquals('websites', $this->getFieldValue('Search'), 'Search field should not be empty');
+
+        // Clear the replace field
+        $this->clearFieldValue('Replace');
+        sleep(1);
+        $this->assertEquals('', $this->getFieldValue('Replace'), 'Replace field should be empty');
+
+        // Revernt the search field
+        $this->revertFieldValue('Replace');
+        sleep(1);
+        $this->assertEquals('test', $this->getFieldValue('Replace'), 'Replace field should not be empty');
+
+    }//end testRevertValueIcons()
 
 }//end class
 

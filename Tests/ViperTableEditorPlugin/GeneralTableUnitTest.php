@@ -728,7 +728,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->type('1');
 
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th>1</th><th>2</th></tr></thead><tbody><tr><td>3</td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th>1</th><th>2</th></tr></thead><tbody><tr><td>3</td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testTableKeyboardNav()
 
@@ -773,7 +773,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->type('4');
 
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><td rowspan="2"></td><td></td><td>1</td></tr><tr><td colspan="2">2</td></tr><tr><td>3</td><td></td><td>4</td></tr><tr><td>5</td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><td rowspan="2"></td><td></td><td>1</td></tr><tr><td colspan="2">2</td></tr><tr><td>3</td><td></td><td>4</td></tr><tr><td>5</td><td></td><td></td></tr></tbody></table><p></p>');
 
     }//end testTableKeyboardNavWithRowNColSpan()
 
@@ -830,7 +830,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->sikuli->keyDown('Key.DOWN');
         $this->type('test');
 
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>&nbsp;test</p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>&nbsp;test</p>');
 
     }//end testTableNavigatingOutOfTable()
 
@@ -855,7 +855,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->sikuli->keyDown('Key.DOWN');
         $this->sikuli->keyDown('Key.CMD + v');
 
-        $this->assertTableWithoutHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>&nbsp;Test %1%</p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>&nbsp;Test %1%</p>');
 
     }//end testPastingContentAfterAnEmptyTable()
 
@@ -887,7 +887,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->sikuli->keyDown('Key.DOWN');
         $this->sikuli->keyDown('Key.CMD + v');
 
-        $this->assertTableWithoutHeaders('<p>Test XAX</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Cell 9</td><td>Cell 10</td><td>Cell 11</td></tr></tbody></table><p>&nbsp;Test %1%</p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test XAX</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Cell 9</td><td>Cell 10</td><td>Cell 11</td></tr></tbody></table><p>&nbsp;Test %1%</p>');
 
     }//end testPastingContentAfterATable()
 
@@ -910,7 +910,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->clickButton('Apply Changes', NULL, TRUE);
 
         $this->clickCell(0);
-        $this->assertTableWithoutHeaders('<div><table style="width: 100%;"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table></div>');
+        $this->assertHTMLMatchNoHeaders('<div><table style="width: 100%;"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table></div>');
 
     }//end testClickingInsideEmptyTableInDiv()
 

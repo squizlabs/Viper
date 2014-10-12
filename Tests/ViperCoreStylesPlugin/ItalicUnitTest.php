@@ -158,6 +158,24 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
 
 
     /**
+     * Test checking that the italic tag is not used when you delete bold content and add new content.
+     *
+     * @return void
+     */
+    public function testDeletingItalicContent()
+    {
+        $this->useTest(1);
+        
+        // Delete italic word and replace with new content
+        $this->selectKeyword(4);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('this is new content');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit this is new content <strong>%5%</strong></p>');
+
+    }//end testDeletingItalicContent()
+
+    /**
      * Test that the shortcut command works for Italics.
      *
      * @return void
@@ -558,6 +576,53 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
 
     }//end testAddAndRemoveItalicForLink()
 
+
+    /**
+     * Test that italic icon is not available in the inline toolbar for a heading.
+     *
+     * @return void
+     */
+    public function testItalicIconForHeadingInInlineToolbar()
+    {
+        $this->useTest(5);
+        
+        // Test H1
+        $this->selectKeyword(1);
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'));
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'));
+
+        // Test H2
+        $this->selectKeyword(2);
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'));
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'));
+
+        // Test H3
+        $this->selectKeyword(3);
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'));
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'));
+
+        // Test H4
+        $this->selectKeyword(4);
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'));
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'));
+
+        // Test H5
+        $this->selectKeyword(5);
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'));
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'));
+
+        // Test H6
+        $this->selectKeyword(6);
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'));
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertFalse($this->inlineToolbarButtonExists('italic'));
+
+    }//end testItalicIconForHeadingInInlineToolbar()
 
 }//end class
 
