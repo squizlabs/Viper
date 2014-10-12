@@ -35,7 +35,7 @@
 
                 viperHtml = viper.getHtml();
 
-                if (_tmpNode && viper.isBrowser('firefox') === true) {
+                if (_tmpNode && ViperUtil.isBrowser('firefox') === true) {
                     // Firefox seems to have an issue with creating some of the fragments
                     // thinking they are only text.
                     viperHtml = viperHtml.replace('&lt;', '<', 'g');

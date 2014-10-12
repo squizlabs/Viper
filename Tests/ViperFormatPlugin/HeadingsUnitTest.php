@@ -90,7 +90,9 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         // Using the inline toolbar
         $this->useTest(1);
         $this->selectKeyword(1);
+        sleep(1);
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('headings', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('formats'));
         $this->clickInlineToolbarButton('headings', 'active');

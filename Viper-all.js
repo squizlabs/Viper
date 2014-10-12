@@ -12,6 +12,10 @@
  */
 ViperReadyCallback = null;
 (function() {
+    if (!window.ViperVersion) {
+        ViperVersion = null;
+    }
+
     var scripts = document.getElementsByTagName('script');
     var path       = null;
 
@@ -20,8 +24,8 @@ ViperReadyCallback = null;
     var scriptsLen = scripts.length;
     for (var i = 0; i < scriptsLen; i++) {
         if (scripts[i].src) {
-            if (scripts[i].src.match(/Viper-all\.js/)) {
-                path = scripts[i].src.replace(/Viper-all\.js/,'');
+            if (scripts[i].src.match(/Viper-all\.js.*/)) {
+                path = scripts[i].src.replace(/Viper-all\.js.*/,'');
                 break;
             }
         }
@@ -56,6 +60,10 @@ ViperReadyCallback = null;
             script.src = path + scriptName;
         }
 
+        if (ViperVersion) {
+            script.src += '?v=' + ViperVersion;
+        }
+
         if (document.head) {
             document.head.appendChild(script);
         } else {
@@ -78,7 +86,7 @@ ViperReadyCallback = null;
     var jsFiles = 'ViperUtil.js|Viper.js|ViperTranslation.js|ViperChangeTracker.js|ViperTools.js|ViperDOMRange.js|ViperIERange.js|ViperMozRange.js|ViperSelection.js|ViperPluginManager.js|ViperHistoryManager.js';
     jsFiles     = jsFiles.split('|');
 
-    _loadScripts(path + '/Lib/', jsFiles, function() {
+    _loadScripts(path + 'Lib/', jsFiles, function() {
         var plugins    = 'ViperCopyPastePlugin|ViperToolbarPlugin|ViperInlineToolbarPlugin|ViperCoreStylesPlugin|ViperFormatPlugin|ViperKeyboardEditorPlugin|ViperListPlugin|ViperHistoryPlugin|ViperTableEditorPlugin|ViperTrackChangesPlugin|ViperLinkPlugin|ViperAccessibilityPlugin|ViperSourceViewPlugin|ViperImagePlugin|ViperSearchReplacePlugin|ViperLangToolsPlugin|ViperCharMapPlugin|ViperCursorAssistPlugin';
         plugins        = plugins.split('|');
 
@@ -106,6 +114,10 @@ ViperReadyCallback = null;
             link.rel   = 'stylesheet';
             link.media = 'screen';
             link.href  = path + 'Css/' + coreCSS[j] + '.css';
+            if (ViperVersion) {
+                link.href += '?v=' + ViperVersion;
+            }
+
             document.getElementsByTagName('head')[0].appendChild(link);
         }
 
@@ -114,6 +126,10 @@ ViperReadyCallback = null;
             link.rel   = 'stylesheet';
             link.media = 'screen';
             link.href  = path + 'Plugins/' + plugins[j] + '/' + plugins[j] + '.css';
+            if (ViperVersion) {
+                link.href += '?v=' + ViperVersion;
+            }
+
             document.getElementsByTagName('head')[0].appendChild(link);
         }
     });

@@ -65,7 +65,7 @@ class Viper_Tests_ViperCopyPastePlugin_ListsUnitTest extends AbstractViperUnitTe
     public function testListsForWindowsChrome()
     {
         $this->runTestFor('windows', 'chrome');
-        $this->_runTest($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacGoogleChrome/Lists.txt'));
+        $this->_runTest($this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsGoogleChrome/Lists.txt'));
 
     }//end testListsForWindowsChrome()
 

@@ -82,7 +82,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @var integer
      */
-    private static $_maxErrorStreak = 5;
+    private static $_maxErrorStreak = 3;
 
     /**
      * List of applications and if they are available in the current system.
@@ -90,6 +90,13 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      * @var array
      */
     private static $_apps = array();
+
+    /**
+     * The current version of Viper.
+     *
+     * @var string
+     */
+    private static $_viperVersion = '';
 
 
     /**
@@ -178,12 +185,14 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         if (self::$_testRun !== TRUE) {
             try {
-                // Move the mouse incase there is an active screensaver.
-                $this->sikuli->mouseMove($this->sikuli->mouseMoveOffset(-50, -50));
+                // Press ESC incase there is an active screensaver.
+                $this->sikuli->keyDown('Key.ESC');
                 sleep(2);
             } catch (Exception $e) {
                 // Ignore the error.
             }
+
+            self::$_viperVersion = $this->_getGitCommitid();
         }
 
         // Reset the Sikuli connection and restart the browser if the number of consecutive errors reach the limit.
@@ -205,10 +214,10 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 throw new Exception('Could not find: '.$path);
             }
 
-            $viperInclude = '<script type="text/javascript" src="../../build/viper.js"></script>
-                             <link rel="stylesheet" media="screen" href="../../build/viper.css" />';
+            $viperInclude = '<script type="text/javascript" src="../../build/viper.js?v='.self::$_viperVersion.'"></script>
+                             <link rel="stylesheet" media="screen" href="../../build/viper.css?v='.self::$_viperVersion.'" />';
         } else {
-            $viperInclude = '<script type="text/javascript" src="../../Viper-all.js"></script>';
+            $viperInclude = '<script type="text/javascript" src="../../Viper-all.js?v='.self::$_viperVersion.'"></script>';
         }
 
         // Get stats.
@@ -235,6 +244,8 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $contents = str_replace('__TEST_VIPER_INCLUDE__', $viperInclude, $contents);
         $contents = str_replace('__TEST_TITLE__', $testTitle, $contents);
         $contents = str_replace('__TEST_JS_INCLUDE__', $jsInclude, $contents);
+        $contents = str_replace('__TEST_VIPER_VERSION__', self::$_viperVersion, $contents);
+
         $dest     = $baseDir.'/tmp/test_tmp.html';
         file_put_contents($dest, $contents);
 
@@ -268,7 +279,14 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 }
             }
 
-            $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
+            /*$matches = $this->sikuli->findAll(dirname(__FILE__).'/Web/favicon.png', NULL, 0.9);
+            if (empty($matches) === FALSE) {
+                $match = array_pop($matches);
+                $this->sikuli->click($match);
+            } else {*/
+                $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
+            //}
+
             $this->sikuli->setAutoWaitTimeout(1);
             $this->_waitForViper();
 
@@ -276,6 +294,19 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         }//end if
 
     }//end setUp()
+
+
+    /**
+     * Returns the commit id.
+     *
+     * @return string
+     */
+    private function _getGitCommitid()
+    {
+        $commitid = exec('git rev-parse --short HEAD');
+        return $commitid;
+
+    }//end _getGitCommitid()
 
 
     /**
@@ -288,6 +319,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $this->sikuli->execJS('clean()');
 
         self::$_topToolbar = NULL;
+        self::$_testRun    = FALSE;
 
         $this->sikuli->resetConnection();
         $this->sikuli->resize();
@@ -381,6 +413,25 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         if ($this->sikuli !== NULL) {
+
+            // Check if there were any JS errors.
+            $jsErrors = $this->sikuli->getJSErrors();
+            if (empty($jsErrors) === FALSE) {
+                $msgs = array();
+                foreach ($jsErrors as $error) {
+                    $msg  = 'JavaScript error detected: '.$error['errorMsg'].' in '.$error['url'];
+                    $msg .= ' on line '.$error['lineNumber'];
+
+                    if (empty($error['stackTrace']) === FALSE) {
+                        $msg .= "\n\nStack:\n".$error['stackTrace'];
+                    }
+
+                    $msgs[] = $msg;
+                }
+
+                $this->fail(implode("\n", $msgs));
+            }
+
             $this->sikuli->clearVars();
         }
 
@@ -413,6 +464,19 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     {
         if ($retries === 0) {
             throw new Exception('Failed to load Viper test page.');
+        }
+
+        try {
+            // This will make sure that the browser has loaded the Viper page.
+            $this->getTopToolbar();
+        } catch (Exception $e) {
+            // Its not working.. Try to start browser again.
+            $this->sikuli->startBrowser();
+            sleep(2);
+            $this->sikuli->resize();
+            $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
+            sleep(2);
+            $this->getTopToolbar();
         }
 
         $this->sikuli->setAutoWaitTimeout(4, $this->getTopToolbar());
@@ -1145,6 +1209,10 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         if ($match === NULL) {
             // Get it using JS.
             $elemRect = $this->sikuli->execJS('gVITPArrow()');
+            if ($elemRect === NULL) {
+                $this->fail('Inline Toolbar is not visible');
+            }
+
             $match    = $this->sikuli->getRegionOnPage($elemRect);
             if ($match === NULL) {
                 $this->fail('Inline Toolbar is not visible');
@@ -1689,7 +1757,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
                 $start = $this->sikuli->find($startKeywordImage, NULL, $this->getData('textSimmilarity'));
             } catch (FindFailedException $e) {
-                throw new FindFailedException('Failed to find keyword: '.$this->getKeyword($startKeyword));
+                throw new FindFailedException('Failed to find keyword '.$this->getKeyword($startKeyword));
             }
         }
 
@@ -1760,6 +1828,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $this->sikuli->keyDown('Key.RIGHT');
         } else if ($position === 'left') {
             $this->sikuli->keyDown('Key.LEFT');
+        } else if ($position === 'middle') {
+            $this->sikuli->keyDown('Key.LEFT');
+            $this->sikuli->keyDown('Key.RIGHT');
         }
 
     }//end moveToKeyword()
@@ -1887,6 +1958,23 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $this->sikuli->click($actionButton);
 
     }//end revertFieldValue()
+
+
+    /**
+     * Returns the value of the specified field.
+     *
+     * If field not found it will return FALSE.
+     *
+     * @param string $label The label of the field.
+     *
+     * @return mixed
+     */
+    protected function getFieldValue($label)
+    {
+        $value = $this->sikuli->execJS('gFieldValue("'.$label.'")');
+        return $value;
+
+    }//end getFieldValue()
 
 
     /**

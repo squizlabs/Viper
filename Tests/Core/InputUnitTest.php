@@ -84,7 +84,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('subscript', NULL));
         $this->assertTrue($this->topToolbarButtonExists('superscript', NULL));
         $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL));
-        $this->assertTrue($this->topToolbarButtonExists('cssClass', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('removeFormat', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', NULL));
         $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'));
@@ -115,7 +115,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('subscript', NULL));
         $this->assertTrue($this->topToolbarButtonExists('superscript', NULL));
         $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL));
-        $this->assertTrue($this->topToolbarButtonExists('cssClass', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('removeFormat', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', NULL));
         $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'));
@@ -176,7 +176,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.UP');
         $this->type('U');
 
-        $this->assertHTMLMatch('<p>TeUsting LinRput</p><p>EIB MOZD %2%</p>');
+        $this->assertHTMLMatch('<p>TesUting LinRput</p><p>EIB MOZ D%2%</p>');
 
     }//end testArrowKeyNavigation()
 
@@ -279,12 +279,13 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that using Alt + Left moves the cursor to the next word.
+     * Test that using Alt + Left moves the cursor to the next word on OSX.
      *
      * @return void
      */
     public function testAltAndLeftArrow()
     {
+        $this->runTestFor('osx');
         $this->useTest(1);
 
         $this->moveToKeyword(2, 'right');
@@ -299,12 +300,13 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that using Alt + Right moves the cursor to the next word.
+     * Test that using Alt + Right moves the cursor to the next word on OSX.
      *
      * @return void
      */
     public function testAltAndRightArrow()
     {
+        $this->runTestFor('osx');
         $this->useTest(1);
 
         $this->moveToKeyword(1, 'left');
@@ -319,12 +321,55 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that using Cmd+Shift+Left and Cmd+Shift+Right moves the cursor to the next word.
+     * Test that using CTRL + Left moves the cursor to the previous word on Windows.
+     *
+     * @return void
+     */
+    public function testCtrlAndLeftArrow()
+    {
+        $this->runTestFor('windows');
+        $this->useTest(1);
+
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.CTRL + Key.LEFT');
+        $this->sikuli->keyDown('Key.CTRL + Key.LEFT');
+        $this->sikuli->keyDown('Key.CTRL + Key.LEFT');
+
+        $this->type('test ');
+        $this->assertHTMLMatch('<p>%1%</p><p>test EIB MOZ %2%</p>');
+
+    }//end testShiftAndLeftArrow()
+
+
+    /**
+     * Test that using CTRL + Right moves the cursor to the next word on Windows.
+     *
+     * @return void
+     */
+    public function testCtrlAndRightArrow()
+    {
+        $this->runTestFor('windows');
+        $this->useTest(1);
+
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.CTRL + Key.RIGHT');
+        $this->sikuli->keyDown('Key.CTRL + Key.RIGHT');
+        $this->sikuli->keyDown('Key.CTRL + Key.RIGHT');
+
+        $this->type('test ');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB test MOZ %2%</p>');
+
+    }//end testAltAndRightArrow()
+
+
+    /**
+     * Test that using Cmd+Shift+Left and Cmd+Shift+Right highlights the line of text in OSX.
      *
      * @return void
      */
     public function testCmdShiftLeftAndCmdShiftRight()
     {
+        $this->runTestFor('osx');
         $this->useTest(1);
 
         $this->moveToKeyword(2, 'right');
@@ -341,39 +386,62 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that using Shift + Alt + Left hightlights the word to the left.
+     * Test that using Shift+Home and Shift+End highlights the line of text in Windows.
      *
      * @return void
      */
-    public function testShiftAltAndLeftArrow()
+    public function testShiftHomeAndShiftEnd()
+    {
+        $this->runTestFor('windows');
+        $this->useTest(1);
+
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.SHIFT + Key.HOME');
+        $this->assertEquals($this->replaceKeywords('EIB MOZ %2%'), $this->getSelectedText(), 'Second line of text should be selected');
+
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->assertEquals($this->replaceKeywords(''), $this->getSelectedText(), 'Nothing should be selected');
+
+        $this->sikuli->keyDown('Key.SHIFT + Key.END');
+        $this->assertEquals($this->replaceKeywords('EIB MOZ %2%'), $this->getSelectedText(), 'Second line of text should be selected');
+
+    }//end testShiftHomeAndShiftEnd()
+
+
+    /**
+     * Test that using Shift + Ctrl+ Left hightlights the word to the left.
+     *
+     * @return void
+     */
+    public function testShiftCtrlAndLeftArrow()
     {
         $this->useTest(1);
 
         $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.SHIFT + Key.ALT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.ALT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.ALT + Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.CTRL + Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.CTRL + Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.CTRL + Key.LEFT');
         sleep(1);
         $this->assertEquals($this->replaceKeywords('EIB MOZ %2%'), $this->getSelectedText(), 'Second line of text should be selected');
 
-    }//end testShiftAndLeftArrow()
+    }//end testShiftCtrlAndLeftArrow()
 
 
     /**
-     * Test that using Shift + Alt + Right hightlights the word to the left.
+     * Test that using Shift + Ctrl+ Right hightlights the word to the right
      *
      * @return void
      */
-    public function testShiftAltAndRightArrow()
+    public function testShiftCtrlAndRightArrow()
     {
         $this->useTest(1);
 
         $this->moveToKeyword(1, 'left');
-        $this->sikuli->keyDown('Key.SHIFT + Key.ALT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.CTRL + Key.RIGHT');
         sleep(1);
         $this->assertEquals($this->replaceKeywords('%1%'), $this->getSelectedText(), 'First line of text should be selected');
 
-    }//end testShiftAltAndRightArrow()
+    }//end testShiftCtrlAndRightArrow()
 
 
     /**
@@ -432,7 +500,9 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
         // Select the last 3 words and delete them
         $this->selectKeyword(1, 2);
+        sleep(1);
         $this->sikuli->keyDown('Key.DELETE');
+        sleep(1);
         $this->assertHTMLMatch('<p>This is a long line of content to test deleting the last three</p>');
 
     }//end testDeletingNewContent()
@@ -455,7 +525,8 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
             $this->sikuli->keyDown('Key.DELETE');
         }
 
-        $this->assertHTMLMatch('<p>MOZ %2%</p>');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>testMOZ %2%</p>');
 
         // Test backspace
         $this->useTest(1);
@@ -466,7 +537,8 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
             $this->sikuli->keyDown('Key.BACKSPACE');
         }
 
-        $this->assertHTMLMatch('<p>%1%</p><p>EIB</p>');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIBtest</p>');
 
     }//end testDeleteAndBackspace()
 
@@ -687,5 +759,3 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
     }//end testEnteringContentBeforeBrTag()
 
 }//end class
-
-?>

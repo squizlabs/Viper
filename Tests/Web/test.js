@@ -177,6 +177,21 @@ function gField(label)
 
 }
 
+function gFieldValue(label)
+{
+    var selector = '.Viper-subSection.Viper-active label span';
+    selector    += ':contains(' + label + ')';
+
+    var field = viperTest.getWindow().ViperUtil.$.find(selector)[0];
+    if (!field) {
+        return false;
+    }
+
+    var value = field.nextSibling.value;
+    return value;
+
+}
+
 
 /**
  * Executes the JS string set as the value of jsExec textarea.

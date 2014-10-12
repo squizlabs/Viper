@@ -240,7 +240,10 @@ ViperLinkPlugin.prototype = {
         }
 
         if (node && node.nodeType === ViperUtil.ELEMENT_NODE) {
-            if (ViperUtil.isStubElement(node) === true) {
+            if (ViperUtil.isStubElement(node) === true
+                || ViperUtil.isTag(node, 'ul') === true
+                || ViperUtil.isTag(node, 'ol') === true
+            ) {
                 ViperUtil.insertBefore(node, a);
                 a.appendChild(node);
             } else {

@@ -329,11 +329,14 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
      */
     public function addError(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
-        // Rertry a few times.
-        for ($i = 0; $i < 3; $i++) {
-            $result = $test->run(NULL);
-            if ($result->errorCount() === 0 && $result->failureCount() === 0) {
-                return;
+        $path = $this->getLogPath();
+        if (empty($path) === FALSE) {
+            // Retry a few times.
+            for ($i = 0; $i < 3; $i++) {
+                $result = $test->run(NULL);
+                if ($result->errorCount() === 0 && $result->failureCount() === 0) {
+                    return;
+                }
             }
         }
 
@@ -425,8 +428,10 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
             $filters = explode('|', $filters);
             foreach ($filters as $filter) {
                 if (method_exists($suite, 'tests') === TRUE) {
-                    $testName = $filter;
+                    $testName   = $filter;
+                    $exactMatch = FALSE;
                     if (strpos($filter, '::') !== FALSE) {
+                        $exactMatch = TRUE;
                         list($className, $testName) = explode('::', $filter);
                     }
 
@@ -436,7 +441,9 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
                             self::$_numTests += $test->count();
                         } else if (method_exists($test, 'tests') === TRUE) {
                             foreach ($test->tests() as $testCase) {
-                                if (preg_match('#'.$testName.'#', $testCase->getName()) > 0) {
+                                if ($exactMatch === FALSE && preg_match('#'.$testName.'#', $testCase->getName()) > 0) {
+                                    self::$_numTests++;
+                                } else if ($testName === $testCase->getName()) {
                                     self::$_numTests++;
                                 }
                             }

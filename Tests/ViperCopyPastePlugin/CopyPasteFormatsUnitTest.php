@@ -64,9 +64,11 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteFormatsUnitTest extends Abstract
         $this->sikuli->keyDown('Key.CMD + c');
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
         $this->assertHTMLMatch('<pre>Lorum this is more content %1% to test %2%</pre><p>%1% to test %2%</p>');
 
         // Test copy and paste a div section

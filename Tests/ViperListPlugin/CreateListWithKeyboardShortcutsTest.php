@@ -45,8 +45,8 @@ class Viper_Tests_ViperListPlugin_CreateListWithKeyboardShortcutsTest extends Ab
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
         $this->type('Test 2');
+        $this->sikuli->keyDown('Key.TAB');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('Test 3');
         $this->sikuli->keyDown('Key.ENTER');
