@@ -65,7 +65,7 @@ class Viper_Tests_ViperCopyPastePlugin_SpecialCharactersUnitTest extends Abstrac
     public function testSpecialCharactersForWindowsChrome()
     {
         $this->runTestFor('windows', 'chrome');
-        $this->_runTest($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacGoogleChrome/SpecialCharacters.txt'));
+        $this->_runTest($this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsGoogleChrome/SpecialCharacters.txt'));
 
     }//end testSpecialCharactersForWindowsChrome()
 
@@ -129,6 +129,7 @@ class Viper_Tests_ViperCopyPastePlugin_SpecialCharactersUnitTest extends Abstrac
      */
     private function _runTest($textFileURL)
     {
+        $this->useTest(1);
         $this->selectKeyword(1);
         $this->pasteFromURL($textFileURL);
 

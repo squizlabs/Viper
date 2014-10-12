@@ -391,7 +391,7 @@ ViperKeyboardEditorPlugin.prototype = {
             var startNode   = range.getStartNode();
             var blockParent = null;
             if (!startNode) {
-                if (range.startContainer.childNodes.length <= range.startOffset) {
+                if (range.startContainer.childNodes.length <= range.startOffset && range.startOffset !== 0) {
                     startNode = range.startContainer.childNodes[(range.startContainer.childNodes.length - 1)];
                 } else {
                     startNode = range.startContainer;
@@ -1248,11 +1248,28 @@ ViperKeyboardEditorPlugin.prototype = {
                 return this._removeContentFromStartToEndOfContainers(range);
             } else if (ViperUtil.isBrowser('firefox') === true) {
                 var nodeSelection = range.getNodeSelection();
-                if (nodeSelection && ViperUtil.isBlockElement(nodeSelection) === true && ViperUtil.isStubElement(nodeSelection) === false) {
+                if (nodeSelection
+                    && ViperUtil.isStubElement(nodeSelection) === false
+                    && ViperUtil.isTag(nodeSelection, 'td') === false
+                    && ViperUtil.isTag(nodeSelection, 'th') === false
+                ) {
                     // When a block element is selected and removed in Firefox it leaves the content as <p>NULL CHAR</p>.
                     // Handle the deletion here.
-                    this.viper.moveCaretAway(nodeSelection);
+                    range = this.viper.moveCaretAway(nodeSelection);
                     ViperUtil.remove(nodeSelection);
+                    if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                        && range.startContainer.data === ' '
+                        && range.startContainer.previousSibling
+                        && range.startContainer.previousSibling.nodeType !== ViperUtil.TEXT_NODE
+                    ) {
+                        // If content is '<em>test</em> <strong>content</strong>' and the sourceElement is
+                        // the strong tag then change the space to non breaking space to prevent caret moving in to <em>.
+                        range.startContainer.data = String.fromCharCode(160);
+                        range.setStart(range.startContainer, range.startContainer.data.length);
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+                    }
+
                     ViperUtil.preventDefault(e);
                     this.viper.fireNodesChanged();
                     this.viper.fireSelectionChanged();
@@ -1471,6 +1488,7 @@ ViperKeyboardEditorPlugin.prototype = {
                     if (defaultTagName !== '') {
                         ViperUtil.setHtml(nodeSelection, '');
                         this.viper.initEditableElement();
+                        range = this.viper.getCurrentRange();
                     } else {
                         ViperUtil.setHtml(nodeSelection, '<br />');
                     }
@@ -1548,7 +1566,41 @@ ViperKeyboardEditorPlugin.prototype = {
                 this.viper.fireSelectionChanged(null, true);
                 return false;
             }
+        } else if (range.collapsed === false
+            && range.getNodeSelection()
+        ) {
+            var nodeSelection = range.getNodeSelection();
+            if (nodeSelection
+                && ViperUtil.isStubElement(nodeSelection) === false
+                && ViperUtil.isTag(nodeSelection, 'td') === false
+                && ViperUtil.isTag(nodeSelection, 'th') === false
+            ) {
+                // Handle deletion of a whole bold/italic/etc tag.
+                range = this.viper.moveCaretAway(nodeSelection);
+                ViperUtil.remove(nodeSelection);
+                if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                    && range.startContainer.data === ' '
+                    && range.startContainer.previousSibling
+                    && range.startContainer.previousSibling.nodeType !== ViperUtil.TEXT_NODE
+                ) {
+                    // Fix for Chrome.. If content is '<em>test</em> <strong>content</strong>' and the sourceElement is
+                    // the strong tag then change the space to non breaking space to prevent caret moving in to <em>.
+                    range.startContainer.data = String.fromCharCode(160);
+                    range.setStart(range.startContainer, range.startContainer.data.length);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                }
+
+                ViperUtil.preventDefault(e);
+
+                this.viper.fireNodesChanged();
+                this.viper.fireSelectionChanged(null, true);
+                return false;
+            }
+
         }//end if
+
+
 
     },
 
@@ -1868,7 +1920,7 @@ ViperKeyboardEditorPlugin.prototype = {
         if (range.collapsed === false) {
             var viperElement    = this.viper.getViperElement();
             var firstSelectable = range._getFirstSelectableChild(viperElement);
-            if (firstSelectable === range.startContainer || (viperElement === range.startContainer && range.startOffset === 0)) {
+            if ((firstSelectable === range.startContainer || viperElement === range.startContainer) && range.startOffset === 0) {
                 var lastSelectable  = range._getLastSelectableChild(viperElement);
                 if ((range.endContainer === viperElement && range.endOffset >= viperElement.childNodes.length)
                     || (range.endContainer === lastSelectable && range.endOffset === lastSelectable.data.length)

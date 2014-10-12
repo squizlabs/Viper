@@ -371,6 +371,27 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
     }//end testStartingAndStoppingStylesAfterWordThatIsStyled()
 
 
+    /**
+     * Test checking that the strong and italic tags is not used when you delete content and add new content.
+     *
+     * @return void
+     */
+    public function testDeletingBoldAndItalicContent()
+    {
+        // CApply bold and italic formatting
+        $this->selectKeyword(2);
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->assertHTMLMatch('<p>%1% <em><strong>%2%</strong></em> %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+
+        // Delete bold word and italic and replace with new content
+        $this->selectKeyword(2);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('this is new content');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+
+    }//end testDeletingBoldAndItalicContent()
+
 }//end class
 
 ?>

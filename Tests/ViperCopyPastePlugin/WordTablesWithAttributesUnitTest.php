@@ -65,7 +65,7 @@ class Viper_Tests_ViperCopyPastePlugin_WordTablesWithAttributesUnitTest extends 
     public function testWordTablesWithAttributesForWindowsChrome()
     {
         $this->runTestFor('windows', 'chrome');
-        $this->_runTest($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacGoogleChrome/WordTablesWithAttributes.txt'));
+        $this->_runTest($this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsGoogleChrome/WordTablesWithAttributes.txt'));
 
     }//end testWordTablesWithAttributesForWindowsChrome()
 
@@ -129,6 +129,7 @@ class Viper_Tests_ViperCopyPastePlugin_WordTablesWithAttributesUnitTest extends 
      */
     private function _runTest($textFileURL)
     {
+        $this->useTest(1);
         $this->selectKeyword(1);
         $this->pasteFromURL($textFileURL);
 

@@ -65,7 +65,7 @@ class Viper_Tests_ViperCopyPastePlugin_ViperTestDocUnitTest extends AbstractVipe
     public function testViperTestDocForWindowsChrome()
     {
         $this->runTestFor('windows', 'chrome');
-        $this->_runTest($this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacGoogleChrome/ViperTestDoc.txt'));
+        $this->_runTest($this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsGoogleChrome/ViperTestDoc.txt'));
 
     }//end testViperTestDocForWindowsChrome()
 
@@ -129,6 +129,7 @@ class Viper_Tests_ViperCopyPastePlugin_ViperTestDocUnitTest extends AbstractVipe
      */
     private function _runTest($textFileURL)
     {
+        $this->useTest(1);
         $this->selectKeyword(1);
         $this->pasteFromURL($textFileURL);
 

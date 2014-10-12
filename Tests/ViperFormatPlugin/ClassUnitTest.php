@@ -7,554 +7,419 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that you can add the class attribute to a word using the inline toolbar.
+     * Test that you can add the class attribute to a word.
      *
      * @return void
      */
-    public function testAddingClassAttributeToAWordUsingTheInlineToolbar()
+    public function testAddingAndRemovingClassAttributeToAWord()
     {
-        $this->selectKeyword(2);
+        $this->useTest(1);
+
+        // Add class using inline toolbar and pressing enter
+        $this->selectKeyword(1);
+        sleep(1);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>This is some content <span class="test">%1%</span> in my unit test %2%</p>');
 
-        $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
+        // Re-select the word and remove class using inline toolbar and pressing enter
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('cssClass', 'active');
+        $this->clearFieldValue('Class');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->assertHTMLMatch('<p>This is some content %1% in my unit test %2%</p>');
 
-        $this->sikuli->click($this->findKeyword(3));
+        // Add class using inline toolbar and pressing Apply Changes.
         $this->selectKeyword(2);
-        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
-
-        $this->selectKeyword(3);
+        sleep(1);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('class');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> <span class="class">%3%</span></p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>This is some content %1% in my unit test <span class="class">%2%</span></p>');
+        
+        // Remove class using inline toolbar and pressing Apply Changes, without re-selecting the word
+        $this->clearFieldValue('Class');
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        sleep(1);
+        $this->assertHTMLMatch('<p>This is some content %1% in my unit test %2%</p>');
 
-    }//end testAddingClassAttributeToAWordUsingTheInlineToolbar()
+        // Check that the P icon is not active in the top toolbar. This was reported as a bug.
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'disabled'));
 
-
-    /**
-     * Test that the class icon appears in the inline toolbar for the last word in a paragraph.
-     *
-     * @return void
-     */
-    public function testClassIconAppearsInTheInlineToolbar()
-    {
-        $this->moveToKeyword(5, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('This is a new line of %12%');
-
-        $this->selectKeyword(12);
-        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon should appear in the inline toolbar.');
-
-    }//end testClassIconAppearsInTheInlineToolbar()
-
-
-    /**
-     * Test that you can add the class attribute to a word using the top toolbar.
-     *
-     * @return void
-     */
-    public function testAddingClassAttributeToAWordUsingTheTopToolbar()
-    {
-        $this->selectKeyword(2);
+        // Add class using top toolbar and pressing enter
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>This is some content <span class="test">%1%</span> in my unit test %2%</p>');
 
-        $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
+        // Re-select the word and remove class using top toolbar and pressing enter
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('cssClass', 'active');
+        $this->clearFieldValue('Class');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->assertHTMLMatch('<p>This is some content %1% in my unit test %2%</p>');
 
-        $this->sikuli->click($this->findKeyword(1));
+         // Add class using top toolbar and pressing Apply Changes
         $this->selectKeyword(2);
-        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
-
-        $this->selectKeyword(3);
         $this->clickTopToolbarButton('cssClass');
         $this->type('class');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> <span class="class">%3%</span></p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
-
-
-    }//end testAddingClassAttributeToAWordUsingTheTopToolbar()
-
-
-    /**
-     * Test that the update changes button is disabled when you initially click on the class icon.
-     *
-     * @return void
-     */
-    public function testUpdateChangesButtonIsDisabledForClassIcon()
-    {
-        $this->selectKeyword(2);
-        $this->clickTopToolbarButton('cssClass');
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
-
-        $this->selectKeyword(3);
-        $this->clickInlineToolbarButton('cssClass');
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
-
-    }//end testUpdateChangesButtonIsDisabledForClassIcon()
-
-
-    /**
-     * Test that you can remove a class from a word using the inline toolbar.
-     *
-     * @return void
-     */
-    public function testRemovingClassAttributeFromAWordUsingTheInlineToolbar()
-    {
-        $this->selectKeyword(6);
-        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
-
-        $this->clickInlineToolbarButton('cssClass', 'active');
-        $this->clearFieldValue('Class');
-        $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
-
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz %6% is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
-
-        $this->sikuli->click($this->findKeyword(2));
-        $this->selectKeyword(6);
-        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon is still active in the Top Toolbar.');
-        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon is still active in the inline toolbar.');
-
-        // Reapply the class so that we can delete it with the Apply Changes button
-        $this->clickTopToolbarButton('cssClass');
-        $this->type('test');
-        $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="test">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
-
-        $this->sikuli->click($this->findKeyword(7));
-        $this->selectKeyword(6);
-        sleep(1);
-        $this->clickInlineToolbarButton('cssClass', 'active');
-        $this->clearFieldValue('Class');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz %6% is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
-
-    }//end testRemovingClassAttributeFromAWordUsingTheInlineToolbar()
-
-
-    /**
-     * Test that you can remove a class from a word using the top toolbar.
-     *
-     * @return void
-     */
-    public function testRemovingClassAttributeFromAWordUsingTheTopToolbar()
-    {
-        $text = 'lABs';
-
-        $this->selectKeyword(6);
-        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
-
-        $this->clickTopToolbarButton('cssClass', 'active');
-        $this->clearFieldValue('Class');
-        $this->sikuli->keyDown('Key.ENTER');
-
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz %6% is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
-
-        $this->sikuli->click($this->findKeyword(3));
-        $this->selectKeyword(6);
-        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon is still active in the Top Toolbar.');
-        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon is still active in the inline toolbar.');
-
-        // Reapply the class so that we can delete it with the Apply Changes button
-        $this->clickTopToolbarButton('cssClass');
-        $this->type('test');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="test">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
-
-        $this->selectKeyword(6);
-        $this->clickTopToolbarButton('cssClass', 'active');
+        $this->assertHTMLMatch('<p>This is some content %1% in my unit test <span class="class">%2%</span></p>');
+        
+        // Remove class using top toolbar and pressing Apply Changes, without re-selecting the word
         $this->clearFieldValue('Class');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        sleep(1);
+        $this->assertHTMLMatch('<p>This is some content %1% in my unit test %2%</p>');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz %6% is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
+        // Check that the P icon is not active in the top toolbar. This was reported as a bug.
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'disabled'));
 
-    }//end testRemovingClassAttributeFromAWordUsingTheTopToolbar()
+    }//end testAddingAndRemovingClassAttributeToAWord()
 
 
     /**
-     * Test that you can update the class applied to a word using the inline toolbar.
+     * Test that you can add the class attribute to a word and then edit the value without closing the pop up.
      *
      * @return void
      */
-    public function testUpdatingAClassUsingTheInlineToolbar()
+    public function testAddAndEditClassToWordWithoutClosingPopUp()
     {
-        $this->selectKeyword(6);
-        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
-
-        $this->clickInlineToolbarButton('cssClass', 'active');
+        
+        // Add class and edit it using inline toolbar
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        sleep(1);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->type('test');
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>This is some content <span class="test">%1%</span> in my unit test %2%</p>');
         $this->type('abc');
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>This is some content <span class="testabc">%1%</span> in my unit test %2%</p>');
+        
+        // Add class and edit it using top toolbar
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('cssClass');
+        $this->type('my');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>This is some content <span class="my">%1%</span> in my unit test %2%</p>');
+        $this->type('class');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>This is some content <span class="myclass">%1%</span> in my unit test %2%</p>');
+
+    }//end testAddAndEditClassToWordWithoutClosingPopUp()
+
+
+    /**
+     * Test that you can add and remove the class attribute to a paragraph.
+     *
+     * @return void
+     */
+    public function testAddingAndRemovingClassAttributeToAParagraph()
+    {
+
+        $this->useTest(1);
+
+        // Add class using inline toolbar and pressing enter
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p class="test">This is some content %1% in my unit test %2%</p>');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclassabc">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
-
-        $this->sikuli->click($this->findKeyword(3));
-        $this->selectKeyword(6);
+        // Remove class using inline toolbar and pressing enter
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('cssClass', 'active');
-        $this->type('def');
+        $this->clearFieldValue('Class');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->assertHTMLMatch('<p>This is some content %1% in my unit test %2%</p>');
+
+        // Add class using inline toolbar and pressing Apply Changes
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->type('class');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p class="class">This is some content %1% in my unit test %2%</p>');
+        
+        // Remove class using inline toolbar and pressing Apply Changes
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('cssClass', 'active');
+        $this->clearFieldValue('Class');
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        sleep(1);
+        $this->assertHTMLMatch('<p>This is some content %1% in my unit test %2%</p>');
+        
+        // Add class using top toolbar and pressing enter
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('cssClass');
+        $this->type('test');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p class="test">This is some content %1% in my unit test %2%</p>');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclassabcdef">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
+        // Remove class using top toolbar and pressing enter
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('cssClass', 'active');
+        $this->clearFieldValue('Class');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->assertHTMLMatch('<p>This is some content %1% in my unit test %2%</p>');
 
-    }//end testUpdatingAClassUsingTheInlineToolbar()
+         // Add class using top toolbar and pressing Apply Changes
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('cssClass');
+        $this->type('class');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p class="class">This is some content %1% in my unit test %2%</p>');
+        
+        // Remove class using top toolbar and pressing Apply Changes
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('cssClass', 'active');
+        $this->clearFieldValue('Class');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        sleep(1);
+        $this->assertHTMLMatch('<p>This is some content %1% in my unit test %2%</p>');
 
+    }//end testAddingAndRemovingClassAttributeToAParagraph()
+ 
 
     /**
-     * Test that you can update the class applied to a word using the top toolbar.
+     * Test that you can add the class attribute to a paragraph and then edit the value without closing the pop up.
      *
      * @return void
      */
-    public function testUpdatingAClassUsingTheTopToolbar()
+    public function testAddAndEditClassToParagraphWithoutClosingPopUp()
     {
-        $this->selectKeyword(6);
-        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
-
-        $this->clickTopToolbarButton('cssClass', 'active');
+        
+        // Add class and edit it using inline toolbar
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->type('test');
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p class="test">This is some content %1% in my unit test %2%</p>');
         $this->type('abc');
-        $this->sikuli->keyDown('Key.ENTER');
-
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclassabc">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
-
-        $this->sikuli->click($this->findKeyword(3));
-        $this->selectKeyword(6);
-        $this->clickTopToolbarButton('cssClass', 'active');
-        $this->type('def');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclassabcdef">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
-
-    }//end testUpdatingAClassUsingTheTopToolbar()
-
-
-    /**
-     * Test that you can add the class attribute to a paragraph using the inline toolbar.
-     *
-     * @return void
-     */
-    public function testAddingClassAttributeToAParagraphUsingTheInlineToolbar()
-    {
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickInlineToolbarButton('cssClass');
-        $this->type('test');
-        $this->sikuli->keyDown('Key.ENTER');
-
-        $this->assertHTMLMatch('<p class="test">%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
-
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
-
-        $this->sikuli->click($this->findKeyword(2));
-
-        // Need to add the sleep so that the test passes in Firefox otherwise it doesn't click AbC
-        sleep(1);
-
-        $this->selectKeyword(5);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickInlineToolbarButton('cssClass');
-        $this->type('class');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p class="test">%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p class="class"><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
-
-    }//end testAddingClassAttributeToAParagraphUsingTheInlineToolbar()
-
-
-    /**
-     * Test that you can add the class attribute to a paragraph using the top toolbar.
-     *
-     * @return void
-     */
-    public function testAddingClassAttributeToAParagraphUsingTheTopToolbar()
-    {
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('cssClass');
-        $this->type('test');
-        $this->sikuli->keyDown('Key.ENTER');
-
-        $this->assertHTMLMatch('<p class="test">%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
-
+        $this->assertHTMLMatch('<p class="testabc">This is some content %1% in my unit test %2%</p>');
+        
+        // Add class and edit it using top toolbar
+        $this->useTest(1);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
-
-        $this->sikuli->click($this->findKeyword(2));
-
-        // Need to add the sleep so that the test passes in Firefox otherwise it doesn't click AbC
-        sleep(1);
-
-        $this->selectKeyword(5);
-        $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('cssClass');
+        $this->type('my');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p class="my">This is some content %1% in my unit test %2%</p>');
         $this->type('class');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p class="test">%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p class="class"><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
+        $this->assertHTMLMatch('<p class="myclass">This is some content %1% in my unit test %2%</p>');
 
-    }//end testAddingClassAttributeToAParagraphUsingTheTopToolbar()
+    }//end testAddAndEditClassToParagraphWithoutClosingPopUp()
 
 
     /**
-     * Test adding a class to a paragraph that was a class applied to a word.
+     * Test adding a class to a paragraph that has a class applied to a word.
      *
      * @return void
      */
     public function testAddingClassToParagraphWithClassAppliedToWord()
     {
-        $this->selectKeyword(7);
+        $this->useTest(2);
+
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('cssClass');
-        $this->type('test');
+        $this->type('testclass');
         $this->sikuli->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p class="test">Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
+        $this->assertHTMLMatch('<p class="testclass">This is some content <span class="myclass">%1%</span> with classes applied %2%.</p>');
 
-        $this->selectKeyword(7);
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
-        $this->sikuli->click($this->findKeyword(7));
-        $this->selectKeyword(6);
+        $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
 
-    }//end testAddingClassAttributeToAParagraphUsingTheInlineToolbar()
+    }//end testAddingClassToParagraphWithClassAppliedToWord()
 
 
     /**
-     * Test that you can remove a class from a paragraph using the inline toolbar.
+     * Test that the class icon appears in the toolbar for the last word of a new paragraph.
      *
      * @return void
      */
-    public function testRemovingClassAttributeFromParagraphUsingInlineToolbar()
+    public function testClassIconAppearsForLastWordInParagraph()
     {
+        $this->useTest(1);
 
-        $this->selectKeyword(4);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
-
-        $this->clickInlineToolbarButton('cssClass', 'active');
-        $this->clearFieldValue('Class');
+        $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
+        $this->type('This is a new line of %3%');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
+        $this->selectKeyword(3);
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon should appear in the inline toolbar.');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be active in the top toolbar.');
 
-        $this->sikuli->click($this->findKeyword(2));
-        $this->selectKeyword(4);
-        $this->selectInlineToolbarLineageItem(0);
-
-        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon is still active in the Top Toolbar.');
-        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon is still active in the inline toolbar.');
-
-        // Reapply the class so that we can delete again using the Apply Changes button.
-        $this->clickInlineToolbarButton('cssClass');
-        $this->type('test');
-        $this->sikuli->keyDown('Key.ENTER');
-
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
-
-        $this->sikuli->click($this->findKeyword(2));
-        $this->selectKeyword(4);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickInlineToolbarButton('cssClass', 'active');
-        $this->clearFieldValue('Class');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
-
-    }//end testRemovingClassAttributeFromParagraphUsingInlineToolbar()
+    }//end testClassIconAppearsForLastWordInParagraph()
 
 
     /**
-     * Test that you can remove a class from a paragraph using the top toolbar.
+     * Test that the class icon is disabled when you copy and paste a paragraph
      *
      * @return void
      */
-    public function testRemovingClassAttributeFromParagraphUsingTopToolbar()
+    public function testClassIconDisabledWhenCopyParagraph()
     {
+        $this->useTest(1);
 
-        $this->selectKeyword(4);
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
-
-        $this->clickTopToolbarButton('cssClass', 'active');
-        $this->clearFieldValue('Class');
+        $this->sikuli->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
+        
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'disabled'), 'Class icon should be disabled in the top toolbar.');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
+    }//end testClassIconDisabledWhenCopyParagraph()
 
-        $this->sikuli->click($this->findKeyword(2));
-        $this->selectKeyword(4);
-        $this->selectInlineToolbarLineageItem(0);
 
-        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon is still active in the Top Toolbar.');
-        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon is still active in the inline toolbar.');
+    /**
+     * Test that the apply changes button is disabled when you initially click on the class icon.
+     *
+     * @return void
+     */
+    public function testApplyChangesButtonIsDisabled()
+    {
+        $this->useTest(1);
 
-        //Reapply the class so that we can delete again using the Apply Changes button
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('cssClass');
-        $this->type('test');
-        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
+        $this->selectKeyword(2);
+        sleep(1);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
 
-        $this->sikuli->click($this->findKeyword(2));
-        $this->selectKeyword(4);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('cssClass', 'active');
-        $this->clearFieldValue('Class');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
-
-    }//end testRemovingClassAttributeFromParagraphUsingTopToolbar()
+    }//end testApplyChangesButtonIsDisabled()
 
 
     /**
-     * Test that you can edit the class applied to a paragraph using the inline toolbar.
+     * Test that you can update the class applied to a word.
      *
      * @return void
      */
-    public function testEditingTheClassForAParagraphUsingInlineToolbar()
+    public function testUpdatingClassAppliedToWord()
     {
-        $this->selectKeyword(4);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
-
+        
+        // Updating a class using inline toolbar and pressing enter
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        sleep(1);
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->type('abc');
         $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>This is some content <span class="myclassabc">%1%</span> with classes applied %2%.</p>');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="testabc">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
+        // Updating a class using top toolbar and pressing enter
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        sleep(1);
+        $this->clickTopToolbarButton('cssClass', 'active');
+        $this->type('test');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>This is some content <span class="myclasstest">%1%</span> with classes applied %2%.</p>');
 
-        $this->selectKeyword(4);
+        // Updating a class using inline toolbar and pressing Apply Changes
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        sleep(1);
+        $this->clickInlineToolbarButton('cssClass', 'active');
+        $this->clearFieldValue('Class');
+        $this->type('abc');
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>This is some content <span class="abc">%1%</span> with classes applied %2%.</p>');
+
+        // Updating a class using top toolbar and pressing Apply Changes
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('cssClass', 'active');
+        $this->clearFieldValue('Class');
+        $this->type('testclass');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>This is some content <span class="testclass">%1%</span> with classes applied %2%.</p>');
+
+
+    }//end testUpdatingClassAppliedToWord()
+
+
+    /**
+     * Test that you can update the class applied to a paragraph.
+     *
+     * @return void
+     */
+    public function testUpdatingClassAppliedToParagraph()
+    {
+        
+        // Updating a class using inline toolbar and pressing enter
+        $this->useTest(3);
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('cssClass', 'active');
-        $this->type('def');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="testabcdef">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
-
-    }//end testEditingTheClassUsingInlineToolbar()
-
-
-    /**
-     * Test that you can edit the class applied to a paragraph using the top toolbar.
-     *
-     * @return void
-     */
-    public function testEditingTheClassUsingTopToolbar()
-    {
-
-        $this->selectKeyword(4);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
-        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
-
-        $this->clickTopToolbarButton('cssClass', 'active');
         $this->type('abc');
         $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p class="myclassabc">This is some content %1% with classes applied.</p>');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="testabc">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
-
-        $this->selectKeyword(4);
+        // Updating a class using top toolbar and pressing enter
+        $this->useTest(3);
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('cssClass', 'active');
-        $this->type('def');
+        $this->type('test');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p class="myclasstest">This is some content %1% with classes applied.</p>');
+
+        // Updating a class using inline toolbar and pressing Apply Changes
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('cssClass', 'active');
+        $this->clearFieldValue('Class');
+        $this->type('abc');
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p class="abc">This is some content %1% with classes applied.</p>');
+
+        // Updating a class using top toolbar and pressing Apply Changes
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('cssClass', 'active');
+        $this->clearFieldValue('Class');
+        $this->type('testclass');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p class="testclass">This is some content %1% with classes applied.</p>');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="testabcdef">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
-
-    }//end testEditingTheClassUsingTopToolbar()
-
-
-    /**
-     * Test that you can apply a class to a pargraph using the inline toolbar where the first word is bold.
-     *
-     * @return void
-     */
-    public function testAddingClassToAParagraphUsingInlineToolbarWithBoldFirstWord()
-    {
-        $this->selectKeyword(9);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickInlineToolbarButton('cssClass');
-        $this->type('test');
-        $this->sikuli->keyDown('Key.ENTER');
-
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p class="test"><strong>%8%</strong> %9% the lazy dog</p>');
-
-    }//end testAddingClassToAParagraphUsingInlineToolbarWithBoldFirstWord()
-
-
-    /**
-     * Test that you can apply a class to a pargraph using the top toolbar where the first word is bold.
-     *
-     * @return void
-     */
-    public function testAddingClassToAParagraphUsingTopToolbarWithBoldFirstWord()
-    {
-        $this->selectKeyword(9);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('cssClass');
-        $this->type('test');
-        $this->sikuli->keyDown('Key.ENTER');
-
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p class="test"><strong>%8%</strong> %9% the lazy dog</p>');
-
-    }//end testAddingClassToAParagraphUsingTopToolbarWithBoldFirstWord()
-
-
-    /**
-     * Test that you can apply a class to a pargraph using the inline toolbar where the first word is italic.
-     *
-     * @return void
-     */
-    public function testAddingClassToAParagraphUsingInlineToolbarWithItalicFirstWord()
-    {
-
-        $this->selectKeyword(5);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickInlineToolbarButton('cssClass');
-        $this->type('test');
-        $this->sikuli->keyDown('Key.ENTER');
-
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p class="test"><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
-
-    }//end testAddingClassToAParagraphUsingInlineToolbarWithItalicFirstWord()
-
-
-    /**
-     * Test that you can apply a class to a pargraph using the top toolbar where the first word is italic.
-     *
-     * @return void
-     */
-    public function testAddingClassToAParagraphUsingTopToolbarWithItalicFirstWord()
-    {
-
-        $this->selectKeyword(5);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('cssClass');
-        $this->type('test');
-        $this->sikuli->keyDown('Key.ENTER');
-
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p class="test"><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
-
-    }//end testAddingClassToAParagraphUsingTopToolbarWithItalicFirstWord()
+    }//end testUpdatingClassAppliedToParagraph()
 
 
     /**
@@ -562,79 +427,248 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      *
      * @return void
      */
-    public function testAddingClassToABoldWord()
+    public function testAddingClassToBoldWord()
     {
 
-        $this->selectKeyword(8);
+        // Using inline toolbar
+        $this->useTest(4);
+        $this->selectKeyword(1);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Test <strong class="test">%1%</strong> content with a bold word %2%</p>');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong class="test">%8%</strong> %9% the lazy dog</p>');
+        // Using top toolbar
+        $this->useTest(4);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('cssClass');
+        $this->type('myclass');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Test <strong class="myclass">%1%</strong> content with a bold word %2%</p>');
 
-    }//end testAddingClassToAParagraphWithBoldFirstWord()
+    }//end testAddingClassToBoldWord()
 
 
     /**
-     * Test that you can apply a class to italac word.
+     * Test that you can apply a class to a pargraph where the first word is bold.
      *
      * @return void
      */
-    public function testAddingClassToAItalicWord()
+    public function testAddingClassToAParagraphWhereFirstWordBold()
     {
-
-        $this->selectKeyword(5);
-        $this->sikuli->keyDown('Key.CMD + i');
-
+        
+        // Using the inline toolbar
+        $this->useTest(4);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p class="test">Test <strong>%1%</strong> content with a bold word %2%</p>');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> <em class="test">%5%</em></p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
+        // Using the top toolbar
+        $this->useTest(4);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('cssClass');
+        $this->type('myclass');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p class="myclass">Test <strong>%1%</strong> content with a bold word %2%</p>');
 
-    }//end testAddingClassToAItalicWord()
+    }//end testAddingClassToAParagraphWhereFirstWordBold()
 
 
     /**
-     * Test applying a class to one word out of two words that are bold.
+     * Test that you can apply a class to italic word.
+     *
+     * @return void
+     */
+    public function testAddingClassToItalicWord()
+    {
+
+        // Using inline toolbar
+        $this->useTest(5);
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->type('test');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Test <em class="test">%1%</em> content with an italic word %2%</p>');
+
+        // Using top toolbar
+        $this->useTest(5);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('cssClass');
+        $this->type('myclass');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Test <em class="myclass">%1%</em> content with an italic word %2%</p>');
+
+    }//end testAddingClassToItalicWord()
+
+
+    /**
+     * Test that the class field remamins open in the inline toolbar when applying a class to a word after applying bold and italic.
+     *
+     * @return void
+     */
+    public function testClassFieldRemainsOpenAfterApplyingBoldAndItalic()
+    {
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('bold');
+        $this->clickInlineToolbarButton('italic');
+
+        // Select bold in the lineage
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->type('test');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>This is some content<strong class="test"><em>%1%</em></strong> in my unit test %2%</p>');
+
+        // Check that the class field stayed open in the inline toolbar has remaind open with the class field
+        $this->type('class');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>This is some content <strong class="testclass"><em>%1%</em></strong> in my unit test %2%</p>');
+
+    }//end testClassFieldRemainsOpenAfterApplyingBoldAndItalic()
+
+
+    /**
+     * Test that you can apply a class to a pargraph where the first word is italic.
+     *
+     * @return void
+     */
+    public function testAddingClassToAParagraphWhereFirstWordItalic()
+    {
+        
+        // Using the inline toolbar
+        $this->useTest(5);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->type('test');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p class="test">Test <em>%1%</em> content with an italic word %2%</p>');
+
+        // Using the top toolbar
+        $this->useTest(5);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('cssClass');
+        $this->type('myclass');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p class="myclass">Test <em>%1%</em> content with an italic word %2%</p>');
+
+
+    }//end testAddingClassToAParagraphWhereFirstWordItalic()
+
+
+    /**
+     * Test that you can apply and remove a class to a section without closing the pop up.
+     *
+     * @return void
+     */
+    public function testAddAndRemoveClassWithoutClosingPopUp()
+    {
+        
+        // Using the inline toolbar with a section containing a bold word
+        $this->useTest(4);
+        $this->selectKeyword(1, 2);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->type('test');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Test <span class="test"><strong>%1%</strong> content with a bold word %2%</span></p>');
+        $this->clearFieldValue('Class');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Test <strong>%1%</strong> content with a bold word %2%</p>');
+
+        // Using the top toolbar with a section containing a bold word
+        $this->useTest(4);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('cssClass');
+        $this->type('myclass');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Test <span class="myclass"><strong>%1%</strong> content with a bold word %2%</span></p>');
+        $this->clearFieldValue('Class');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Test <strong>%1%</strong> content with a bold word %2%</p>');
+
+         // Using the inline toolbar with a section containing an italic word
+        $this->useTest(5);
+        $this->selectKeyword(1, 2);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->type('test');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Test <span class="test"><em>%1%</em> content with an italic word %2%</span></p>');
+        $this->clearFieldValue('Class');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Test <em>%1%</em> content with an italic word %2%</p>');
+
+        // Using the top toolbar with a section containing an italic word
+        $this->useTest(5);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('cssClass');
+        $this->type('myclass');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Test <span class="myclass"><em>%1%</em> content with an italic word %2%</span></p>');
+        $this->clearFieldValue('Class');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Test <em>%1%</em> content with an italic word %2%</p>');
+
+    }//end testAddAndRemoveClassWithoutClosingPopUp()
+
+
+    /**
+     * Test applying a class to one word where two words are bold
      *
      * @return void
      */
     public function testAddingClassToAOneBoldWord()
     {
-        $this->selectKeyword(8, 9);
-        $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8% %9%</strong> the lazy dog</p>');
-
-        $this->selectKeyword(9);
+        // Using inline toolbar
+        $this->useTest(6);
+        $this->selectKeyword(2);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p><strong>%1% <span class="test">%2%</span></strong> Content with two bold words</p>');
 
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8% <span class="test">%9%</span></strong> the lazy dog</p>');
+        // Using top toolbar
+        $this->useTest(6);
+        $this->selectKeyword(1);
+        sleep(1);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->type('myclass');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p><strong><span class="myclass">%1%</span> %2%</strong> Content with two bold words</p>');
 
     }//end testAddingClassToAOneBoldWord()
 
 
     /**
-     * Test applying a class to one word out of two words that are italics.
+     * Test applying a class to one word where two words are italics
      *
      * @return void
      */
-    public function testAddingClassToAOneItalicWord()
+    public function testAddingClassToAOneBoldItalic()
     {
-        $this->selectKeyword(2, 3);
-        $this->sikuli->keyDown('Key.CMD + i');
-        $this->assertHTMLMatch('<p>%1% <em>%2% %3%</em></p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
-
+        // Using inline toolbar
+        $this->useTest(7);
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p><em>%1% <span class="test">%2%</span></em> Content with two italic words</p>');
 
-        $this->assertHTMLMatch('<p>%1% <em><span class="test">%2%</span> %3%</em></p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
+        // Using top toolbar
+        $this->useTest(7);
+        $this->selectKeyword(1);
+        sleep(1);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->type('myclass');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p><em><span class="myclass">%1%</span> %2%</em> Content with two italic words</p>');
 
-    }//end testAddingClassToAOneItalicWord()
+    }//end testAddingClassToAOneBoldItalic()
 
 
     /**
@@ -642,53 +676,61 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      *
      * @return void
      */
-    public function testSelectionIsMaintainedForWordWhenOpeningAndClosingClassFields()
+    public function testSelectionIsMaintainedWhenUsingClassIcon()
     {
-        $this->selectKeyword(2);
+        $this->useTest(1);
 
+        // Using inline toolbar for a word
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->assertEquals($this->replaceKeywords('%1%'), $this->getSelectedText(), 'Original selection is not selected');
+        $this->clickInlineToolbarButton('cssClass', 'selected');
+        $this->assertEquals($this->replaceKeywords('%1%'), $this->getSelectedText(), 'Original selection is not selected');
+        $this->clickInlineToolbarButton('cssClass');
+        $this->assertEquals($this->replaceKeywords('%1%'), $this->getSelectedText(), 'Original selection is not selected');
+
+        // Using top toolbar for a word
+        $this->selectKeyword(2);
         $this->clickTopToolbarButton('cssClass');
         $this->assertEquals($this->replaceKeywords('%2%'), $this->getSelectedText(), 'Original selection is not selected');
-
         $this->clickTopToolbarButton('cssClass', 'selected');
         $this->assertEquals($this->replaceKeywords('%2%'), $this->getSelectedText(), 'Original selection is not selected');
-
         $this->clickTopToolbarButton('cssClass');
         $this->assertEquals($this->replaceKeywords('%2%'), $this->getSelectedText(), 'Original selection is not selected');
 
-    }//end testSelectionIsMaintainedForWordWhenOpeningAndClosingClassFields()
+        // Using inline toolbar for a paragraph
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->assertEquals($this->replaceKeywords('This is some content %1% in my unit test %2%'), $this->getSelectedText(), 'Original selection is not selected');
+        $this->clickInlineToolbarButton('cssClass', 'selected');
+        $this->assertEquals($this->replaceKeywords('This is some content %1% in my unit test %2%'), $this->getSelectedText(), 'Original selection is not selected');
+        $this->clickInlineToolbarButton('cssClass');
+        $this->assertEquals($this->replaceKeywords('This is some content %1% in my unit test %2%'), $this->getSelectedText(), 'Original selection is not selected');
 
-
-    /**
-     * Test that selection is maintained when opening and closing the class icon for a paragraph.
-     *
-     * @return void
-     */
-    public function testSelectionIsMaintainedForParaWhenOpeningAndClosingClassFields()
-    {
+        // Using top toolbar for a word for a paragraph
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
-
         $this->clickTopToolbarButton('cssClass');
-        $this->assertEquals($this->replaceKeywords('%1% %2% %3%'), $this->getSelectedText(), 'Original selection is not selected');
-
+        $this->assertEquals($this->replaceKeywords('This is some content %1% in my unit test %2%'), $this->getSelectedText(), 'Original selection is not selected');
         $this->clickTopToolbarButton('cssClass', 'selected');
-        $this->assertEquals($this->replaceKeywords('%1% %2% %3%'), $this->getSelectedText(), 'Original selection is not selected');
-
+        $this->assertEquals($this->replaceKeywords('This is some content %1% in my unit test %2%'), $this->getSelectedText(), 'Original selection is not selected');
         $this->clickTopToolbarButton('cssClass');
-        $this->assertEquals($this->replaceKeywords('%1% %2% %3%'), $this->getSelectedText(), 'Original selection is not selected');
+        $this->assertEquals($this->replaceKeywords('This is some content %1% in my unit test %2%'), $this->getSelectedText(), 'Original selection is not selected');
 
-    }//end testSelectionIsMaintainedForParaWhenOpeningAndClosingClassFields()
+    }//end testSelectionIsMaintainedWhenUsingClassIcon()
 
 
     /**
-     * Test that class info is not added to the source code when you remove italics formatting.
+     * Test that class attribute is not added to the source code when you remove italics formatting.
      *
      * @return void
      */
-    public function testApplyingBoldAndItalicsClickingClassRemovingBold()
+    public function testClassAttributeNotAddedWhenRemovingItalics()
     {
-        $this->selectKeyword(2);
+        $this->useTest(1);
 
+        $this->selectKeyword(2);
         $this->clickInlineToolbarButton('bold');
         $this->clickInlineToolbarButton('italic');
         $this->clickInlineToolbarButton('cssClass');
@@ -697,11 +739,14 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $viperBookmarkElements = $this->sikuli->execJS('viperTest.getWindow().ViperUtil.getClass("viperBookmark").length');
         $this->assertEquals(0, $viperBookmarkElements, 'There should be no viper bookmark elements');
 
-        $this->assertHTMLMatch('<p>%1% <strong>%2%</strong> %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
+        // Only strong tag should appear around keyword 2
+        $this->assertHTMLMatch('<p>This is some content %1% in my unit test <strong>%2%</strong></p>');
 
+        // Italic icon should not be active as it was removed
         $this->assertTrue($this->inlineToolbarButtonExists('italic'), 'Italics icon in VITP should not be active.');
+        $this->assertTrue($this->topToolbarButtonExists('italic'), 'Italics icon should not be active.');
 
-    }//end testApplyingBoldAndItalicsClickingClassRemovingBold()
+    }//end testClassAttributeNotAddedWhenRemovingItalics()
 
 
     /**
@@ -711,24 +756,82 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testApplyingAClassToAnImage()
     {
+        
+        // Add a class using the inline toolbar
+        $this->useTest(8);
+
         $this->clickElement('img');
+        sleep(1);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" class="test" /></p><p>LABS is ORSM</p>');
-        $this->clickInlineToolbarButton('cssClass', 'selected');
+        $this->assertHTMLMatch('<p>Content with an image</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" class="test"/></p><p>End of content</p>');
 
-        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should not be active.');
+        // Edit the class using the inline toolbar
+        $this->clickElement('img');
+        sleep(1);
+        $this->clickInlineToolbarButton('cssClass', 'active');
+        $this->type('myclass');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Content with an image</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" class="testmyclass"/></p><p>End of content</p>');
+
+        // Add a class using the top toolbar
+        $this->useTest(8);
 
         $this->clickElement('img');
-        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should not be active.');
-
-        $this->clickTopToolbarButton('cssClass', 'active');
-        $this->type('abc');
+        sleep(1);
+        $this->clickTopToolbarButton('cssClass');
+        $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>LOREM XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" class="testabc" /></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<p>Content with an image</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" class="test"/></p><p>End of content</p>');
+
+        // Edit the class using the top toolbar
+        $this->clickElement('img');
+        sleep(1);
+        $this->clickTopToolbarButton('cssClass', 'active');
+        $this->type('myclass');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Content with an image</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" class="testmyclass"/></p><p>End of content</p>');
 
     }//end testApplyingAClassToAnImage()
+
+
+    /**
+     * Test inserting an image and applying a class.
+     *
+     * @return void
+     */
+    public function testInsertImageAndApplyClass()
+    {
+        $this->useTest(9);
+
+        // Insert an image
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton('image');
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
+        $this->clickField('Image is decorative');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->moveToKeyword(2, 'right');
+        $this->assertHTMLMatch('<p>Content to test insert an image and add a class %1%</p><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="" /></p><p>Another paragraph</p><p>Another paragraph</p><p>End of content %2%</p>');
+
+        // Add a class to the image
+        $this->clickElement('img');
+        sleep(1);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->type('test');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->moveToKeyword(2, 'right');
+        $this->assertHTMLMatch('<p>Content to test insert an image and add a class %1%</p><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="" class="test"/></p><p>Another paragraph</p><p>Another paragraph</p><p>End of content %2%</p>');
+
+        // Check that class icon is active for image
+        $this->clickElement('img');
+        sleep(1);
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon in Top Toolbar should be active.');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon in VITP should be active.');
+
+    }//end testInsertImageAndApplyClass()
 
 
     /**
@@ -738,31 +841,247 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testUndoAndRedoForClass()
     {
+        $this->useTest(1);
+
+        // Test a word
         $this->selectKeyword(2);
+        sleep(1);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>This is some content %1% in my unit test <span class="test">%2%</span></p>');
 
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>This is some content %1% in my unit test %2%</p>');
 
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>This is some content %1% in my unit test <span class="test">%2%</span></p>');
 
-        $this->selectKeyword(6);
-        $this->clickInlineToolbarButton('cssClass', 'active');
-        $this->clearFieldValue('Class');
+        // Test a paragraph
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+
+        $this->clickInlineToolbarButton('cssClass');
+        $this->type('myclass');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz %6% is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
+        $this->assertHTMLMatch('<p class="myclass">This is some content %1% in my unit test <span class="test">%2%</span></p>');
 
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz <span class="myclass">%6%</span> is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
+        $this->assertHTMLMatch('<p>This is some content %1% in my unit test <span class="test">%2%</span></p>');
 
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<p>%1% <span class="test">%2%</span> %3%</p><p class="test">sit amet <strong>%4%</strong></p><p><em>Test</em> %5%</p><p>Squiz %6% is %7%</p><p><strong>%8%</strong> %9% the lazy dog</p>');
+        $this->assertHTMLMatch('<p class="myclass">This is some content %1% in my unit test <span class="test">%2%</span></p>');
 
     }//end testUndoAndRedoForClass()
+
+
+    /**
+     * Test that reverting the value in the class field.
+     *
+     * @return void
+     */
+    public function testRevertClassValueIcon()
+    {
+        $this->useTest(2);
+
+        // Remove class value and revert using inline toolbar
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('cssClass', 'active');
+        sleep(2);
+        $this->clearFieldValue('Class');
+        sleep(2);
+        $this->revertFieldValue('Class');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>This is some content <span class="myclass">%1%</span> with classes applied %2%.</p>');
+
+        // Remove class value and revert using top toolbar
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('cssClass', 'active');
+        $this->clearFieldValue('Class');
+        $this->revertFieldValue('Class');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>This is some content <span class="myclass">%1%</span> with classes applied %2%.</p>');
+
+        // Apply class value, clear field and revert using inline toolbar
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->type('test');
+        $this->clearFieldValue('Class');
+        $this->revertFieldValue('Class');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>This is some content <span class="test">%1%</span> in my unit test %2%</p>');
+
+        // Apply anchor value and revert using top toolbar
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('cssClass');
+        $this->type('abc');
+        $this->revertFieldValue('Class');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>This is some content %1% in my unit test %2%</p>');
+
+    }//end testRevertClassValueIcon()
+
+
+    /**
+     * Test that the Apply Changes button is inactive for a new selection after you click away from a previous selection.
+     *
+     * @return void
+     */
+    public function testApplyChangesButtonWhenClickingAwayFromClassPopUp()
+    {
+        // Using the inline toolbar
+        $this->useTest(1);
+
+        // Start creating the class for the first selection
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->type('class');
+
+        // Click away from the class by selecting a new selection
+        $this->selectKeyword(2);
+
+        // Make sure the class was not created
+        $this->assertHTMLMatch('<p>This is some content %1% in my unit test %2%</p>');
+        $this->clickInlineToolbarButton('cssClass');
+
+        // Check apply change button
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE));
+        $this->type('test');
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>This is some content %1% in my unit test <span class="test">%2%</span></p>');
+
+        // Using the top toolbar
+        $this->useTest(1);
+
+        // Start creating the class for the first selection
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('cssClass');
+        $this->type('id');
+
+        // Click away from the class by selecting a new selection
+        $this->selectKeyword(2);
+
+        // Make sure the anchor was not created
+        $this->assertHTMLMatch('<p>This is some content %1% in my unit test %2%</p>');
+        $this->clickTopToolbarButton('cssClass');
+
+        // Check apply change button
+        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE));
+        $this->type('test');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>This is some content %1% in my unit test <span class="test">%2%</span></p>');
+
+    }//end testApplyChangesButtonWhenClickingAwayFromClassPopUp()
+
+
+    /**
+     * Test that the Apply Changes button is inactive for a new selection after you close the class pop without saving the changes.
+     *
+     * @return void
+     */
+    public function testApplyChangesButtonWhenClosingTheClassPopUp()
+    {
+        // Using the inline toolbar
+        $this->useTest(1);
+
+        // Start creating the class for the first selection
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->type('id');
+
+        // Close pop up without saving changes and make new select
+        $this->clickInlineToolbarButton('cssClass', 'selected');
+        $this->selectKeyword(2);
+
+        // Make sure the class was not created
+        $this->assertHTMLMatch('<p>This is some content %1% in my unit test %2%</p>');
+        $this->clickInlineToolbarButton('cssClass');
+
+        // Check icons
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE));
+        $this->type('test');
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>This is some content %1% in my unit test <span class="test">%2%</span></p>');
+
+        // Using the top toolbar
+        $this->useTest(1);
+
+        // Start creating the class for the first selection
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('cssClass');
+        $this->type('id');
+
+        // Close pop up without saving changes and make new select
+        $this->clickTopToolbarButton('cssClass', 'selected');
+        $this->selectKeyword(2);
+
+        // Make sure the class was not created
+        $this->assertHTMLMatch('<p>This is some content %1% in my unit test %2%</p>');
+        $this->clickTopToolbarButton('cssClass');
+
+        // Check icons
+        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE));
+        $this->type('test');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>This is some content %1% in my unit test <span class="test">%2%</span></p>');
+
+    }//end testApplyChangesButtonWhenClosingTheClassPopUp()
+
+
+    /**
+     * Test that the Apply Changes button is inactive after you cancel changes to a class.
+     *
+     * @return void
+     */
+    public function testApplyChangesButtonIsDisabledAfterCancellingChangesToAClass()
+    {
+        // Using the inline toolbar
+        $this->useTest(2);
+
+        // Select class and make changes without saving
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('cssClass', 'active');
+        $this->type('222');
+        $this->selectKeyword(2);
+
+        // Check to make sure the HTML did not change.
+        $this->assertHTMLMatch('<p>This is some content <span class="myclass">%1%</span> with classes applied %2%.</p>');
+
+        // Select the class again and make sure the Apply Changes button is inactive
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('cssClass', 'active');
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE));
+
+        // Edit the class and make sure the Apply Changes button still works.
+        $this->type('123');
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>This is some content <span class="myclass123">%1%</span> with classes applied %2%.</p>');
+
+        // Using the top toolbar
+        $this->useTest(2);
+
+        // Select class and make changes without saving
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('cssClass', 'active');
+        $this->type('333');
+        $this->selectKeyword(2);
+
+        // Check to make sure the HTML did not change.
+        $this->assertHTMLMatch('<p>This is some content <span class="myclass">%1%</span> with classes applied %2%.</p>');
+
+        // Select the class again and make sure the Apply Changes button is inactive
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('cssClass', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE));
+
+        // Edit the class and make sure the Apply Changes button still works.
+        $this->type('123');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>This is some content <span class="myclass123">%1%</span> with classes applied %2%.</p>');
+
+    }//end testApplyChangesButtonIsDisabledAfterCancellingChangesToAClass()
 
 
 }//end class
