@@ -525,6 +525,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<p>This is some content<strong class="test"><em>%1%</em></strong> in my unit test %2%</p>');
 
         // Check that the class field stayed open in the inline toolbar has remaind open with the class field
+        $this->clickField('Class');
         $this->type('class');
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>This is some content <strong class="testclass"><em>%1%</em></strong> in my unit test %2%</p>');
