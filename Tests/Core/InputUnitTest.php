@@ -48,6 +48,54 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
+     * Test that you can delete all of the content and enter new content.
+     *
+     * @return void
+     */
+    public function testTextTypeReplaceAllContent()
+    {
+        $this->useTest(1);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('Testing input');
+
+        //Check that the icons are correct in the top toolbar
+        $this->assertTrue($this->topToolbarButtonExists('bold', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('italic', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('removeFormat', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('headings', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('listUL', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('listOL', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('listIndent', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('listOutdent', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('table', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('image', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('insertHr', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('linkRemove', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('charmap', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('searchReplace', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('langtools', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('accessAudit', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('sourceView', NULL));
+
+        $this->type(' more content');
+        $this->assertHTMLMatch('<p>Testing input more content</p>');
+
+    }//end testTextTypeReplaceAllContent()
+
+
+    /**
      * Test enter a new paragraph.
      *
      * @return void
