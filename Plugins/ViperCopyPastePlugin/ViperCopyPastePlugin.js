@@ -101,15 +101,29 @@ ViperCopyPastePlugin.prototype = {
                         dataType = 'text/html';
                     }
 
+                    var files = ViperUtil.arraySearch('Files', e.clipboardData.types);
+
                     self.pasteElement = self._createPasteDiv();
-                    var pasteContent = e.clipboardData.getData(dataType);
+                    var pasteContent  = e.clipboardData.getData(dataType);
                     if (dataType === 'text/plain') {
                         pasteContent = pasteContent.replace(/\r\n/g, '<br />');
                         pasteContent = pasteContent.replace(/\n/g, '<br />');
+                    } else if (files === 0) {
+                        var file = e.clipboardData.items[files];
+                        var blob  = file.getAsFile();
+                        var reader = new FileReader();
+                        var itemsCount = e.clipboardData.items.length;
+                        reader.onload = function(event) {
+                            var base64   = event.target.result;
+                            pasteContent = '<img src="' + base64 + '"/>';
+                            ViperUtil.setHtml(self.pasteElement, pasteContent);
+                            self._handleFormattedPasteValue((self.pasteType === 'formattedClean'));
+                        };
+                        reader.readAsDataURL(blob);
+                    } else {
+                        ViperUtil.setHtml(self.pasteElement, pasteContent);
+                        self._handleFormattedPasteValue((self.pasteType === 'formattedClean'));
                     }
-
-                    ViperUtil.setHtml(self.pasteElement, pasteContent);
-                    self._handleFormattedPasteValue((self.pasteType === 'formattedClean'));
                 } else {
                     if (dataType === null) {
                         dataType = 'text';
