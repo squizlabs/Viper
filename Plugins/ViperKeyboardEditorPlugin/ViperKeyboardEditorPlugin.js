@@ -787,6 +787,9 @@ ViperKeyboardEditorPlugin.prototype = {
                             range.collapse(true);
                             ViperSelection.addRange(range);
                         }
+                    } else {
+                        var nonSelectableElements = ViperUtil.getElementsBetween(viperElement, startNode);
+                        ViperUtil.remove(nonSelectableElements);
                     }
 
                     if (startNode.nodeType === ViperUtil.TEXT_NODE
