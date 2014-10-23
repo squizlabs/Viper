@@ -1,0 +1,100 @@
+.Viper-subSectionRow.Viper-imageUploadRow {
+    padding-right: 7.8em;
+}
+
+
+.Viper-buttonIcon.Viper-ees-target {
+    background-position: 0 -1215px;
+}
+
+.Viper-button:active .Viper-buttonIcon.Viper-ees-target, .Viper-button.Viper-active .Viper-buttonIcon.Viper-ees-target, .Viper-button.Viper-selected .Viper-buttonIcon.Viper-ees-target {
+  background-position: -33px -1215px;
+}
+.Viper-button.Viper-ees-target {
+  position: absolute;
+  right: 0;
+  top: 0;
+  line-height: 2.1em;
+}
+
+
+.Viper-buttonIcon.Viper-assetSelector-button {
+    background-position: 0 -1215px;
+}
+
+.Viper-button:active .Viper-buttonIcon.Viper-assetSelector-button, .Viper-button.Viper-active .Viper-buttonIcon.Viper-assetSelector-button, .Viper-button.Viper-selected .Viper-buttonIcon.Viper-assetSelector-button {
+  background-position: -33px -1215px;
+}
+.Viper-button.Viper-assetSelector-button {
+  position: absolute;
+  right: 2.7em;
+  top: 0;
+  line-height: 2.1em;
+}
+
+.Viper-buttonIcon.Viper-uploadImage-button {
+  background-image: url(../../Images/matrixButtonIcons.png);  
+  background-position: 0 -49px;
+}
+.Viper-button:active .Viper-buttonIcon.Viper-uploadImage-button, .Viper-button.Viper-active .Viper-buttonIcon.Viper-uploadImage-button, .Viper-button.Viper-selected .Viper-buttonIcon.Viper-uploadImage-button {
+    background-image: url(../../Images/matrixButtonIcons.png);  
+  background-position: 0 -49px;
+}
+.Viper-button.Viper-uploadImage-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  line-height: 2.1em;
+}
+
+
+.uploadImage-progressIndicator .uploadImage-progress-status {
+    color: #ddd;
+    font-size: 1.3em;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    white-space: nowrap;
+    margin: 5px 0;
+    text-align: center;
+}
+
+.uploadImage-progressIndicator .uploadImage-progress-message {
+    color: #c44e4e;
+    font-size: 1.3em;
+    font-weight: bold;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    white-space: nowrap;
+    margin: 0 0 5px;
+    text-align: center;
+}
+
+.uploadImage-progressIndicator .uploadImage-progress {
+    width: 100%;
+    padding-bottom: 10px;
+}
+
+.uploadImage-progressIndicator .uploadImage-progress-bar {
+    background-color: #F0F0F0;
+    border-radius: 5px;
+    box-shadow: 0 1px 5px #CCCCCC inset, 0 1px 0 #DDDDDD;
+    height: 10px;
+    margin: 0 auto;
+    padding: 2px;
+    width: 277px;
+}
+
+.uploadImage-progressIndicator .uploadImage-progress-bar span {
+    background-color: #007EDD;
+    background-image: url(../../Images/progress-bar-bg.gif);
+    border-radius: 4px;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset;
+    display: block;
+    height: 100%;
+    transition: width 0.4s ease-in-out 0s;
+    width: 0;
+}
+
+.uploadImageForm {
+    padding-bottom: 10px!important;
+    padding-top: 5px!important;
+}
+
