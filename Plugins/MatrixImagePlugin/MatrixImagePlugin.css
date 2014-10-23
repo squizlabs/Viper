@@ -34,11 +34,11 @@
 
 .Viper-buttonIcon.Viper-uploadImage-button {
   background-image: url(../../Images/matrixButtonIcons.png);  
-  background-position: 0 -49px;
+  background-position: 0 -54px;
 }
 .Viper-button:active .Viper-buttonIcon.Viper-uploadImage-button, .Viper-button.Viper-active .Viper-buttonIcon.Viper-uploadImage-button, .Viper-button.Viper-selected .Viper-buttonIcon.Viper-uploadImage-button {
     background-image: url(../../Images/matrixButtonIcons.png);  
-  background-position: 0 -49px;
+  background-position: -33px -54px;
 }
 .Viper-button.Viper-uploadImage-button {
   position: absolute;
