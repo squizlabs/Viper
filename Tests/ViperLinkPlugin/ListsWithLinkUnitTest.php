@@ -361,54 +361,54 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
     {
         // Using the inline toolbar in an unordered list
 
-        // Clicking in the link
-        $this->useTest(3);
-        $this->moveToKeyword(2, 'middle');
-        $this->clickInlineToolbarButton('linkRemove');
-        $this->assertHTMLMatch('<p>Unordered list with links:</p><ul><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ul>');
+       // Clicking in the link
+       $this->useTest(3);
+       $this->moveToKeyword(2, 'middle');
+       $this->clickInlineToolbarButton('linkRemove');
+       $this->assertHTMLMatch('<p>Unordered list with links:</p><ul><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ul>');
 
-        // Selecting the link
-        $this->useTest(3);
-        $this->moveToKeyword(2, 'middle');
-        $this->selectInlineToolbarLineageItem(2);
-        $this->clickInlineToolbarButton('linkRemove');
-        $this->assertHTMLMatch('<p>Unordered list with links:</p><ul><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ul>');
+       // Selecting the link
+       $this->useTest(3);
+       $this->moveToKeyword(2, 'middle');
+       $this->selectInlineToolbarLineageItem(2);
+       $this->clickInlineToolbarButton('linkRemove');
+       $this->assertHTMLMatch('<p>Unordered list with links:</p><ul><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ul>');
 
-        // Selecting the list item
-        $this->useTest(3);
-        $this->moveToKeyword(1, 'middle');
-        $this->selectInlineToolbarLineageItem(1);
-        $this->clickInlineToolbarButton('linkRemove');
-        $this->assertHTMLMatch('<p>Unordered list with links:</p><ul><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ul>');
+       // Selecting the list item
+       $this->useTest(3);
+       $this->moveToKeyword(1, 'middle');
+       $this->selectInlineToolbarLineageItem(1);
+       $this->clickInlineToolbarButton('linkRemove');
+       $this->assertHTMLMatch('<p>Unordered list with links:</p><ul><li>XAX item 1</li><li>item 2</li><li><a href="http://www.squizlabs.com">item 3 XBX</a></li></ul>');
 
-        // Selecting the list
-        $this->useTest(3);
-        $this->moveToKeyword(2, 'middle');
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickInlineToolbarButton('linkRemove');
-        $this->assertHTMLMatch('<p>Unordered list with links:</p><ul><li>%1% item 1</li><li>item 2</li><li>item 3 %2%</li></ul>');
+       // Selecting the list
+       $this->useTest(3);
+       $this->moveToKeyword(2, 'middle');
+       $this->selectInlineToolbarLineageItem(0);
+       $this->clickInlineToolbarButton('linkRemove');
+       $this->assertHTMLMatch('<p>Unordered list with links:</p><ul><li>%1% item 1</li><li>item 2</li><li>item 3 %2%</li></ul>');
 
-        // Using the inline toolbar in an ordered list
+       // Using the inline toolbar in an ordered list
 
-        // Clicking in the link
-        $this->useTest(4);
-        $this->moveToKeyword(2, 'middle');
-        $this->clickInlineToolbarButton('linkRemove');
-        $this->assertHTMLMatch('<p>Ordered list with links:</p><ol><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ol>');
+       // Clicking in the link
+       $this->useTest(4);
+       $this->moveToKeyword(2, 'middle');
+       $this->clickInlineToolbarButton('linkRemove');
+       $this->assertHTMLMatch('<p>Ordered list with links:</p><ol><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ol>');
 
-        // Selecting the link
-        $this->useTest(4);
-        $this->moveToKeyword(2, 'middle');
-        $this->selectInlineToolbarLineageItem(2);
-        $this->clickInlineToolbarButton('linkRemove');
-        $this->assertHTMLMatch('<p>Ordered list with links:</p><ol><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ol>');
+       // Selecting the link
+       $this->useTest(4);
+       $this->moveToKeyword(2, 'middle');
+       $this->selectInlineToolbarLineageItem(2);
+       $this->clickInlineToolbarButton('linkRemove');
+       $this->assertHTMLMatch('<p>Ordered list with links:</p><ol><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ol>');
 
        // Selecting the list item
         $this->useTest(4);
         $this->moveToKeyword(1, 'middle');
         $this->selectInlineToolbarLineageItem(1);
         $this->clickInlineToolbarButton('linkRemove');
-        $this->assertHTMLMatch('<p>Ordered list with links:</p><ul><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ul>');
+        $this->assertHTMLMatch('<p>Ordered list with links:</p><ol><li>XAX item 1</li><li>item 2</li><li><a href="http://www.squizlabs.com">item 3 XBX</a></li></ol>');
 
         // Selecting the list
         $this->useTest(4);
