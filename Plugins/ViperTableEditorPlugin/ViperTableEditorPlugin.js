@@ -2591,6 +2591,7 @@ ViperTableEditorPlugin.prototype = {
             var colCellPos = this.getCellPosition(colCell);
             if (colCellPos.col === cellPos.col) {
                 ViperUtil.setStyle(colCell, 'width', width);
+                this.tableUpdated();
                 return;
             }
         }
