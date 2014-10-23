@@ -508,6 +508,7 @@ ViperTools.prototype = {
                     ViperUtil.addClass(textBox, 'Viper-actionClear');
                     actionIcon.setAttribute('title', 'Clear this value');
                 } else if (ViperUtil.hasClass(textBox, 'Viper-actionClear') === true) {
+                    value = input.value;
                     input.value = '';
                     ViperUtil.removeClass(textBox, 'Viper-actionClear');
 

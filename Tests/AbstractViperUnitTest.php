@@ -1951,9 +1951,16 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $fieldLabel = $this->sikuli->find($this->_getLabel($label, TRUE), NULL, 0.7);
         }
 
-        $fieldRegion  = $this->sikuli->extendRight($fieldLabel, 400);
+        $topLeft     = $this->sikuli->getTopLeft($fieldLabel);
+        $fieldRegion = $this->sikuli->createRegion(
+            $this->sikuli->getX($topLeft),
+            $this->sikuli->getY($topLeft) - 5,
+            400,
+            30
+        );
+
         $actionImage  = $this->getBrowserImagePath().'/textField_action_revert.png';
-        $actionButton = $this->sikuli->find($actionImage, $fieldRegion);
+        $actionButton = $this->sikuli->find($actionImage, $fieldRegion, 0.4);
 
         $this->sikuli->click($actionButton);
 
