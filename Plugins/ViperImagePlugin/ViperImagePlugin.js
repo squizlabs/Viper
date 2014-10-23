@@ -428,6 +428,11 @@ ViperImagePlugin.prototype = {
 
     _updateToolbar: function(image, toolbarPrefix)
     {
+        var toolbar = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+        if (!toolbar) {
+            return;
+        }
+
         var tools = this.viper.ViperTools;
 
         if (image && ViperUtil.isTag(image, 'img') === true) {

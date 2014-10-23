@@ -135,23 +135,23 @@ ViperCoreStylesPlugin.prototype = {
             toolbarPlugin.addButton(hr);
 
             callbackType = 'ViperToolbarPlugin:updateToolbar';
-        }//end if
 
-        this.viper.registerCallback(callbackType, 'ViperCoreStylesPlugin', function(data) {
-            var range = data;
-            if (data.range) {
-                range = data.range;
-            }
-
-            self._updateToolbarButtonStates(toolbarButtons, range);
-
-            if (self._onChangeAddStyle.length > 0) {
-                var style = null;
-                while (style = self._onChangeAddStyle.shift()) {
-                    self.viper.ViperTools.setButtonInactive(self._buttons[style]);
+            this.viper.registerCallback(callbackType, 'ViperCoreStylesPlugin', function(data) {
+                var range = data;
+                if (data.range) {
+                    range = data.range;
                 }
-            }
-        });
+
+                self._updateToolbarButtonStates(toolbarButtons, range);
+
+                if (self._onChangeAddStyle.length > 0) {
+                    var style = null;
+                    while (style = self._onChangeAddStyle.shift()) {
+                        self.viper.ViperTools.setButtonInactive(self._buttons[style]);
+                    }
+                }
+            });
+        }//end if
 
         this.viper.registerCallback('Viper:keyPress', 'ViperCoreStylesPlugin', function(e) {
             if (self._onChangeAddStyle.length > 0 && self.viper.isInputKey(e) === true) {
