@@ -346,7 +346,7 @@ MatrixImagePlugin.prototype = {
         ViperUtil.setStyle(content, 'display', 'none');
 
         // use current location checkbox
-        var useCurrentLocation = tools.createCheckbox(prefix + ':useCurrentLocation', _('Use current asset as location'), false, function(presVal) {
+        var useCurrentLocation = tools.createCheckbox(prefix + ':useCurrentLocation', _('Use current asset as upload location'), false, function(presVal) {
             if (presVal === true) {
                 tools.getItem(prefix + ':parentRootNode').disable();
                 tools.disableButton(prefix + ':assetPickerParentRootNode');
