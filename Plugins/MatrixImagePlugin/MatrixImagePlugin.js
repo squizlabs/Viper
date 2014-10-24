@@ -5,6 +5,7 @@ function MatrixImagePlugin(viper)
 
     this._uploadForm    = null;
     this._inlineUploadForm    = null;
+    this._uploading = false;
 
 }
 
@@ -83,6 +84,8 @@ MatrixImagePlugin.prototype = {
             // reset choose location fields
             tools.getItem(prefix + ':useCurrentLocation').setValue(false);
             tools.getItem(prefix + ':parentRootNode').setValue('');
+
+            self._uploading = false;
 
         });
 
@@ -170,6 +173,8 @@ MatrixImagePlugin.prototype = {
             tools.getItem(prefix + ':useCurrentLocation').setValue(false);
             tools.getItem(prefix + ':parentRootNode').setValue('');
 
+            self._uploading = false;
+
         });
 
     },
@@ -199,8 +204,30 @@ MatrixImagePlugin.prototype = {
         // update preview from uploaded image
         $form.find('#'+ prefix + 'uploadImageButton').change(function(){
             var fileName = this.value;
+
             if(typeof fileName !== 'undefined' && fileName) {
-                // if File API is supported
+
+                self.setUrlFieldValue('file://' + fileName);          
+
+                // validate file type before sending it to Matrix
+                var cleanFileName = fileName.replace(/^.*[\\\/]/, '');
+                var isValid = /\.(jpe?g)|(gif)|(png)$/i.test(cleanFileName);
+                if(!isValid) {
+                    self.viper.ViperTools.setFieldErrors('ViperImagePlugin:urlInput', [_('Incorrect file type')]);
+                    self.viper.ViperTools.setFieldErrors('vitpImagePlugin:urlInput', [_('Incorrect file type')]);
+                    ViperUtil.setStyle(self._previewBox, 'display', 'none');
+                    // disable the apply button
+                    if(self.viper.ViperTools.getItem('ViperImagePlugin:bubbleSubSection-applyButton')) {
+                        self.viper.ViperTools.disableButton('ViperImagePlugin:bubbleSubSection-applyButton');
+                    }
+                    if(self.viper.ViperTools.getItem('vitpImagePlugin-infoSubsection-applyButton')) {
+                        self.viper.ViperTools.disableButton('vitpImagePlugin-infoSubsection-applyButton');
+                    }
+                    return;
+                }
+
+
+                // if File API is supported, load preview
                 if (window.File && window.FileReader && this.files && this.files[0]) {
                     var reader = new FileReader();
                     self.setPreviewContent(false, true);
@@ -216,10 +243,25 @@ MatrixImagePlugin.prototype = {
                     }
                 }
 
-                self.setUrlFieldValue('file://' + fileName);          
-
                 // show choose location fields
-                $('.' + prefix + '-chooseLocationFields').css('display', 'block');                        
+                $('.' + prefix + '-chooseLocationFields').css('display', 'block');       
+
+                // if the editable area does not belong to an asset, disable the choose current location option
+                var editableElement = self.viper.getEditableElement();
+                var idString = ViperUtil.$(editableElement).attr('id');
+                var matches = idString.match(/_([0-9]+)/);
+                if(matches == null) {
+                     $('.' + prefix + '-chooseLocationFields').find('.Viper-checkbox').css('display', 'none'); 
+                }
+                else {
+                     $('.' + prefix + '-chooseLocationFields').find('.Viper-checkbox').css('display', 'block'); 
+                }
+
+                // enable the location selector
+                self.viper.ViperTools.getItem(prefix + ':parentRootNode').enable();
+                // reseb the use current location checkbox
+                self.viper.ViperTools.getItem(prefix + ':useCurrentLocation').setValue(false);
+
 
 
                 // enable the apply button
@@ -285,7 +327,8 @@ MatrixImagePlugin.prototype = {
               $('.uploadImage-progress-bar-inner').width(percentVal);
           },
           complete: function(xhr) {
-              var response = JSON.parse(xhr.responseText);
+                var response = JSON.parse(xhr.responseText);
+                self._uploading = false;
 
                 // hide the upload form which was displayed for older IE
                 if(ViperUtil.isBrowser('msie', '<10') === true) {
@@ -300,6 +343,8 @@ MatrixImagePlugin.prototype = {
 
                     //reset the upload form
                     uploadForm.get(0).reset();
+
+                    self.setUrlFieldValue('');
 
                 }
                 else {
@@ -350,9 +395,11 @@ MatrixImagePlugin.prototype = {
             if (presVal === true) {
                 tools.getItem(prefix + ':parentRootNode').disable();
                 tools.disableButton(prefix + ':assetPickerParentRootNode');
+                tools.getItem(prefix + ':parentRootNode').setRequired(false);
             } else {
                 tools.getItem(prefix + ':parentRootNode').enable();
                 tools.enableButton(prefix + ':assetPickerParentRootNode');
+                tools.getItem(prefix + ':parentRootNode').setRequired(true);
             }
             // enable the apply button
             if(self.viper.ViperTools.getItem('ViperImagePlugin:bubbleSubSection-applyButton')) {
@@ -454,6 +501,13 @@ MatrixImagePlugin.prototype = {
         if(url == null) return;
         var matrixPrefix = null;
 
+        // if we are in the uploading process, don't submit the upload again
+        // this prevents Viper setting extra onsubmit event to all forms in the plugin
+        if(this._uploading) {
+            return;
+        }
+
+
         // start the upload process
         if (url.indexOf("file://") === 0) {
             var uploadForm = null;
@@ -461,13 +515,22 @@ MatrixImagePlugin.prototype = {
                 uploadForm = this._inlineUploadForm;
                 matrixPrefix = 'vitpMatrixImagePlugin';
 
-                // with inline plugin, the upload form submit would trigger the plugin form submit which would call this function again, avoid loop
-                tools.getItem('vitpImagePlugin-infoSubsection').form.onsubmit = null;
+
+                // the upload form submit would trigger the plugin form submit which would call this function again, avoid loop
+                //tools.getItem('vitpImagePlugin-infoSubsection').form.onsubmit = null;
+
             }
             else {
                 uploadForm = this._uploadForm;
                 matrixPrefix = 'MatrixImagePlugin';
+
+
+
+                // the upload form submit would trigger the plugin form submit which would call this function again, avoid loop
+                //tools.getItem('ViperImagePlugin:bubbleSubSection').form.onsubmit = null;
+
             }
+
 
 
             // set the selected parent root node location
@@ -477,7 +540,7 @@ MatrixImagePlugin.prototype = {
             var editableElement = this.viper.getEditableElement();
             var idString = ViperUtil.$(editableElement).attr('id');
             var matches = idString.match(/_([0-9]+)/);
-            if(typeof matches[1] !== 'undefined') {
+            if(matches !== null && typeof matches[1] !== 'undefined') {
                 currentAssetid = matches[1];
             }
 
@@ -507,6 +570,7 @@ MatrixImagePlugin.prototype = {
                 EasyEdit.getToken(function(token) {
                     uploadForm.find('input[name=token]').val(token);
                     // submit the file upload form
+                    this._uploading = true;
                     uploadForm.submit();
                 });
             }
@@ -514,6 +578,7 @@ MatrixImagePlugin.prototype = {
                     var token = $('#token').val();
                     if (token) {
                         uploadForm.find('input[name=token]').val(token);
+                        this._uploading = true;
                         uploadForm.submit();
                     }
             }
