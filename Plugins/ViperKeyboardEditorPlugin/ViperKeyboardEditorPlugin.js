@@ -1527,11 +1527,13 @@ ViperKeyboardEditorPlugin.prototype = {
                         var nextSelectable = range.getNextContainer(range.startContainer, null, true);
                         if (this.viper.isOutOfBounds(nextSelectable) === false) {
                             var nextParent = ViperUtil.getFirstBlockParent(nextSelectable);
-                            while (nextParent.firstChild) {
-                                startParent.appendChild(nextParent.firstChild);
-                            }
+                            if (startParent !== nextParent) {
+                                while (nextParent.firstChild) {
+                                    startParent.appendChild(nextParent.firstChild);
+                                }
 
-                            ViperUtil.remove(nextParent);
+                                ViperUtil.remove(nextParent);
+                            }
                         }
                     } else {
                         ViperUtil.remove(startParent);
