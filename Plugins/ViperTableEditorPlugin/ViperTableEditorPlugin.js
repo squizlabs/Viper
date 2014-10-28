@@ -250,7 +250,11 @@ ViperTableEditorPlugin.prototype = {
                 if (!node) {
                     node = range.getEndNode();
                     if (!node) {
-                        return;
+                        if (range.startContainer !== range.endContainer) {
+                            return;
+                        } else {
+                            node = range.startContainer;
+                        }
                     }
                 }
 
