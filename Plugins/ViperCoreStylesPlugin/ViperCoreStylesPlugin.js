@@ -1521,9 +1521,10 @@ ViperCoreStylesPlugin.prototype = {
         var startNode    = null;
         var endNode      = null;
 
-        if (!selectedNode) {
-            startNode = range.getStartNode();
-            endNode   = range.getEndNode();
+        if (!selectedNode || selectedNode === this.viper.getViperElement()) {
+            startNode    = range.getStartNode();
+            endNode      = range.getEndNode();
+            selectedNode = null;
         } else {
             startNode = selectedNode;
         }
