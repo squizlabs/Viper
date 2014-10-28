@@ -1554,7 +1554,7 @@ ViperListPlugin.prototype = {
             indent   = true;
         } else {
             var nodeSelection = range.getNodeSelection();
-            if (nodeSelection) {
+            if (nodeSelection && nodeSelection !== this.viper.getViperElement()) {
                 startNode = nodeSelection;
                 endNode   = null;
             }
