@@ -3691,8 +3691,14 @@ Viper.prototype = {
             var span = document.createElement('span');
             ViperUtil.addClass(span, '__viper_selHighlight');
             ViperUtil.setStyle(span, 'border-right', '1px solid #000');
-            range.insertNode(span);
-            var parentNode = span.parentNode;
+
+            if (ViperUtil.isStubElement(range.startContainer) === false) {
+                range.insertNode(span);
+                var parentNode = span.parentNode;
+            } else {
+                parentNode = range.startContainer.parentNode;
+            }
+
             if (parentNode) {
                 var tagName = ViperUtil.getTagName(parentNode);
                 if (ViperUtil.inArray(tagName, ['table', 'tbody', 'tr']) === true) {
