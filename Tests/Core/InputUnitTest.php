@@ -592,6 +592,28 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
+     * Test deleting a line of content in a paragraph.
+     *
+     * @return void
+     */
+    public function testDeletingLineInParagraph()
+    {
+        $this->useTest(8);
+
+        // Select the first line of content and delete it
+        $this->moveToKeyword(1, 'left');
+        sleep(5);
+        $this->sikuli->keyDown('Key.SHIFT + Key.DOWN');
+        sleep(5);
+        $this->sikuli->keyDown('Key.DELETE');
+        sleep(1);
+        $this->type('New content in paragraph');
+        $this->assertHTMLMatch('<p>New content in paragraphThis is the first line of content.<br />This is the second line of content.</p>');
+
+    }//end testDeletingLineInParagraph()
+
+
+    /**
      * Tests changing the defailt block tags and entering content.
      *
      * @return void
