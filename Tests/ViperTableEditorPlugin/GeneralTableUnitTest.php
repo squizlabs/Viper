@@ -5,39 +5,6 @@ require_once 'AbstractViperTableEditorPluginUnitTest.php';
 class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractViperTableEditorPluginUnitTest
 {
 
-
-    /**
-     * Returns the difference in pixel between two positions.
-     *
-     * @param integer $pos1 A position.
-     * @param integer $pos2 A position.
-     *
-     * @return integer
-     */
-    private function _posDiff($pos1, $pos2)
-    {
-        return abs((int) ($pos1 - $pos2));
-
-    }//end _posDiff()
-
-
-    /**
-     * Asserts that the highlight is in correct position.
-     *
-     * @param integer $actual   The highlight position.
-     * @param integer $expected The expected position.
-     * @param integer $maxDiff  The max difference between two positions.
-     *
-     * @return void
-     */
-    public function assertHighlightPos($actual, $expected, $maxDiff=3)
-    {
-        $diff = abs((int) ($actual - $expected));
-        $this->assertTrue(($diff <= $maxDiff), 'Table highlight is not correct. Diff = '.$diff);
-
-    }//end assertHighlightPos()
-
-
     /**
      * Test that you can open and close the table tools using the top toolbar.
      *
@@ -45,6 +12,8 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testUsingTableIconInTopToolbar()
     {
+        $this->useTest(1);
+
         $this->insertTable(1);
         $this->clickCell(0);
         $this->assertTrue($this->topToolbarButtonExists('table', 'active'), 'Create table should be active');
@@ -67,6 +36,8 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testTableIconNotAvailableForList()
     {
+        $this->useTest(7);
+
         // Check an unordered list
         $this->sikuli->click($this->findKeyword(1));
         $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not appear in the top toolbar.');
@@ -133,6 +104,8 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testTableEditingIconAndTools()
     {
+        $this->useTest(1);
+
         $this->insertTable(1);
 
         // Get the first cell of the table.
@@ -234,32 +207,6 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
 
 
     /**
-     * Retuns the icon for the table tools.
-     *
-     * @param integer $cellNum The cell to click.
-     *
-     * @return object
-     */
-    private function _getTableToolsIcon($cellNum)
-    {
-        $this->clickCell($cellNum);
-        $icon =  NULL;
-
-        try {
-            $toolIconRect = $this->getBoundingRectangle('#test-ViperTEP', 0);
-            $icon         = $this->sikuli->getRegionOnPage($toolIconRect);
-        } catch (Exception $e) {
-            $this->clickCell($cellNum);
-            $toolIconRect = $this->getBoundingRectangle('#test-ViperTEP', 0);
-            $icon         = $this->sikuli->getRegionOnPage($toolIconRect);
-        }
-
-        return $icon;
-
-    }//end _getTableToolsIcon()
-
-
-    /**
      * Tests that table highlights work in complex tables.
      *
      * Complex tables have tbody, thead, tfoot, %2%, cells with rowspan and colspan.
@@ -268,6 +215,8 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testComplextTableHighlights()
     {
+        $this->useTest(2);
+
         $table   = $this->getBoundingRectangle('table');
         $tbody   = $this->getBoundingRectangle('tbody');
         $tfoot   = $this->getBoundingRectangle('tfoot');
@@ -503,6 +452,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testComplextTableHighlightsNoFooter()
     {
+        $this->useTest(3);
 
         $table   = $this->getBoundingRectangle('table');
         $tbody   = $this->getBoundingRectangle('tbody');
@@ -574,6 +524,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testComplextTableHighlightsNoHeader()
     {
+        $this->useTest(4);
 
         $table   = $this->getBoundingRectangle('table');
         $tbody   = $this->getBoundingRectangle('tbody');
@@ -645,6 +596,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testComplextTableHighlightsNoCaption()
     {
+        $this->useTest(5);
 
         $table   = $this->getBoundingRectangle('table');
         $tbody   = $this->getBoundingRectangle('tbody');
@@ -716,6 +668,8 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testTableKeyboardNav2()
     {
+        $this->useTest(1);
+
         $this->insertTable(1, 2, 2, 3);
 
         $this->clickCell(0);
@@ -740,6 +694,8 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testTableKeyboardNavWithRowAndColSpan()
     {
+        $this->useTest(1);
+
         $this->insertTable(1, 0, 3, 3);
         $this->showTools(0, 'cell');
         $this->clickMergeSplitIcon('mergeDown');
@@ -785,6 +741,8 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testRemoveTableOnLastRowDelete()
     {
+        $this->useTest(1);
+
         $this->insertTable(1, 2, 2, 2);
 
         $this->showTools(0, 'row');
@@ -805,6 +763,8 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testRemoveTableOnLastColDelete()
     {
+        $this->useTest(1);
+
         $this->insertTable(1, 2, 2, 2);
 
         $this->showTools(0, 'col');
@@ -825,6 +785,8 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testTableNavigatingOutOfTable()
     {
+        $this->useTest(1);
+
         $this->insertTable(1);
         $this->clickCell(11);
         $this->sikuli->keyDown('Key.DOWN');
@@ -842,6 +804,8 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testPastingContentAfterAnEmptyTable()
     {
+        $this->useTest(1);
+
         // Copy content
         $this->moveToKeyword(1, 'left');
         $this->sikuli->keyDown('Key.CMD + a');
@@ -855,7 +819,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->sikuli->keyDown('Key.DOWN');
         $this->sikuli->keyDown('Key.CMD + v');
 
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>&nbsp;Test %1%</p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>Test %1%</p>');
 
     }//end testPastingContentAfterAnEmptyTable()
 
@@ -867,6 +831,8 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testPastingContentAfterATable()
     {
+        $this->useTest(1);
+
         // Copy content
         $this->moveToKeyword(1, 'left');
         $this->sikuli->keyDown('Key.CMD + a');
@@ -887,7 +853,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->sikuli->keyDown('Key.DOWN');
         $this->sikuli->keyDown('Key.CMD + v');
 
-        $this->assertHTMLMatchNoHeaders('<p>Test XAX</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Cell 9</td><td>Cell 10</td><td>Cell 11</td></tr></tbody></table><p>&nbsp;Test %1%</p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test XAX</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Cell 9</td><td>Cell 10</td><td>Cell 11</td></tr></tbody></table><p>Test %1%</p>');
 
     }//end testPastingContentAfterATable()
 
@@ -899,6 +865,8 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testClickingInsideEmptyTableInDiv()
     {
+        $this->useTest(1);
+
         $this->selectKeyword(1);
 
         $this->clickTopToolbarButton('sourceView');
@@ -922,6 +890,8 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testDeleteContentLastElementTable()
     {
+        $this->useTest(6);
+
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + a');
         $this->sikuli->keyDown('Key.DELETE');
@@ -938,6 +908,63 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
 
     }//end testDeleteContentLastElementTable()
 
+
+    /**
+     * Asserts that the highlight is in correct position.
+     *
+     * @param integer $actual   The highlight position.
+     * @param integer $expected The expected position.
+     * @param integer $maxDiff  The max difference between two positions.
+     *
+     * @return void
+     */
+    public function assertHighlightPos($actual, $expected, $maxDiff=3)
+    {
+        $diff = abs((int) ($actual - $expected));
+        $this->assertTrue(($diff <= $maxDiff), 'Table highlight is not correct. Diff = '.$diff);
+
+    }//end assertHighlightPos()
+
+
+    /**
+     * Retuns the icon for the table tools.
+     *
+     * @param integer $cellNum The cell to click.
+     *
+     * @return object
+     */
+    private function _getTableToolsIcon($cellNum)
+    {
+        $this->clickCell($cellNum);
+        $icon =  NULL;
+
+        try {
+            $toolIconRect = $this->getBoundingRectangle('#test-ViperTEP', 0);
+            $icon         = $this->sikuli->getRegionOnPage($toolIconRect);
+        } catch (Exception $e) {
+            $this->clickCell($cellNum);
+            $toolIconRect = $this->getBoundingRectangle('#test-ViperTEP', 0);
+            $icon         = $this->sikuli->getRegionOnPage($toolIconRect);
+        }
+
+        return $icon;
+
+    }//end _getTableToolsIcon()
+
+
+    /**
+     * Returns the difference in pixel between two positions.
+     *
+     * @param integer $pos1 A position.
+     * @param integer $pos2 A position.
+     *
+     * @return integer
+     */
+    private function _posDiff($pos1, $pos2)
+    {
+        return abs((int) ($pos1 - $pos2));
+
+    }//end _posDiff()
 
 }//end class
 
