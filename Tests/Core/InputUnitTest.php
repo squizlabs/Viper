@@ -344,7 +344,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->type('test ');
         $this->assertHTMLMatch('<p>%1%</p><p>test EIB MOZ %2%</p>');
 
-    }//end testShiftAndLeftArrow()
+    }//end testAltAndLeftArrow()
 
 
     /**
@@ -386,7 +386,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->type('test ');
         $this->assertHTMLMatch('<p>%1%</p><p>test EIB MOZ %2%</p>');
 
-    }//end testShiftAndLeftArrow()
+    }//end testCtrlAndLeftArrow()
 
 
     /**
@@ -423,12 +423,18 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.SHIFT + Key.CMD + Key.LEFT');
         $this->assertEquals($this->replaceKeywords('EIB MOZ %2%'), $this->getSelectedText(), 'Second line of text should be selected');
+        // Check inline toolbar appears
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'));
+        $this->assertTrue($this->inlineToolbarButtonExists('headings', NULL));
 
         $this->sikuli->keyDown('Key.LEFT');
         $this->assertEquals($this->replaceKeywords(''), $this->getSelectedText(), 'Nothing should be selected');
 
         $this->sikuli->keyDown('Key.SHIFT + Key.CMD + Key.RIGHT');
         $this->assertEquals($this->replaceKeywords('EIB MOZ %2%'), $this->getSelectedText(), 'Second line of text should be selected');
+        // Check inline toolbar appears
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'));
+        $this->assertTrue($this->inlineToolbarButtonExists('headings', NULL));
 
     }//end testCmdShiftLeftAndCmdShiftRight()
 
@@ -446,12 +452,18 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.SHIFT + Key.HOME');
         $this->assertEquals($this->replaceKeywords('EIB MOZ %2%'), $this->getSelectedText(), 'Second line of text should be selected');
+        // Check inline toolbar appears
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'));
+        $this->assertTrue($this->inlineToolbarButtonExists('headings', NULL));
 
         $this->sikuli->keyDown('Key.LEFT');
         $this->assertEquals($this->replaceKeywords(''), $this->getSelectedText(), 'Nothing should be selected');
 
         $this->sikuli->keyDown('Key.SHIFT + Key.END');
         $this->assertEquals($this->replaceKeywords('EIB MOZ %2%'), $this->getSelectedText(), 'Second line of text should be selected');
+        // Check inline toolbar appears
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'));
+        $this->assertTrue($this->inlineToolbarButtonExists('headings', NULL));
 
     }//end testShiftHomeAndShiftEnd()
 
