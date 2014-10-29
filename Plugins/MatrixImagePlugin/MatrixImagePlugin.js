@@ -70,6 +70,7 @@ MatrixImagePlugin.prototype = {
         var imageUploadProgressBar = this.createImageUploadProgressBar(prefix);
         ViperUtil.insertAfter(this._previewBox, imageUploadProgressBar);
 
+        // if the plugin bubble is shown
         ViperUtil.addEvent($('#' + this.viper.getId() + '-image').get(0), 'mousedown', function(e) {
             // reset upload forms   
             self._uploadForm.get(0).reset();
@@ -139,11 +140,6 @@ MatrixImagePlugin.prototype = {
 
         urlRow.appendChild(form);
 
-        // append the hidden image upload form to out most element, otherwise it would trigger event listener on submit of inner forms
-        /*
-        var subSection    = tools.getItem('vitpImagePlugin-infoSubsection').element;
-        subSection.appendChild(form);
-        */
 
 
         // append the choose location fields for image upload
@@ -363,6 +359,10 @@ MatrixImagePlugin.prototype = {
                         self.setUrlFieldValue(response.assetid);
                         ViperImagePlugin.prototype._setImageAttributes.call(self, 'ViperImagePlugin');
                         ViperImagePlugin.prototype._setImageAttributes.call(self, 'vitpImagePlugin');
+
+                        if (top.frames.sq_sidenav != null && top.frames.sq_sidenav.JS_Asset_Map && response.root_node) {
+                            top.frames.sq_sidenav.JS_Asset_Map.refreshTree(response.root_node);
+                        }
                     }                
                 }
           }
