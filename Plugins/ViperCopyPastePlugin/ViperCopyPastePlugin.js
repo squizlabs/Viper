@@ -45,6 +45,19 @@ ViperCopyPastePlugin.prototype = {
             return self.keyDown(e);
         });
 
+        this.viper.registerCallback('Viper:dropped:text/html', 'ViperCopyPastePlugin', function(data) {
+            if (!data.data) {
+                return;
+            }
+
+            ViperSelection.addRange(data.range);
+            var div = document.createElement('div');
+            ViperUtil.setHtml(div, data.data);
+            self._beforePaste();
+            self._handleFormattedPasteValue(false, div);
+            return false;
+        });
+
         if (this._isMSIE === true) {
             this.pasteElement = this._createPasteDiv();
         }

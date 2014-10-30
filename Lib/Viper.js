@@ -545,6 +545,58 @@ Viper.prototype = {
             }
         });
 
+        ViperUtil.addEvent(elem, 'dragover.' + namespace, function(e) {
+            ViperUtil.preventDefault(e);
+            return false;
+        });
+        ViperUtil.addEvent(elem, 'dragenter.' + namespace, function(e) {
+            ViperUtil.preventDefault(e);
+            return false;
+        });
+
+        ViperUtil.addEvent(elem, 'drop.' + namespace, function(e) {
+            ViperUtil.preventDefault(e);
+
+            // Get the range using the mouse pointer (drop location).
+            var range        = self.getRangeFromCoords(e.originalEvent.clientX, e.originalEvent.clientY);
+            var dataTransfer = e.originalEvent.dataTransfer;
+
+            // Call the callback functions with dataTransfer object, range and original event.
+            if (self.fireCallbacks('Viper:dropped', {dataTransfer: dataTransfer, range: range, e: e}) === false) {
+                return false;
+            }
+
+            var textPlain = null;
+            for (var i = 0; i < dataTransfer.types.length; i++) {
+                try {
+                    var data = {
+                        data: dataTransfer.getData(dataTransfer.types[i]),
+                        range: range
+                    };
+                } catch (e) {
+                    continue;
+                }
+
+                if (dataTransfer.types[i] === 'text/plain' || dataTransfer.types[i] === 'Text') {
+                    textPlain = data;
+                }
+
+                // Fire callbacks for each data type.
+                if (self.fireCallbacks('Viper:dropped:' + dataTransfer.types[i], data) === false) {
+                    return false;
+                }
+            }
+
+            // Nothing handled this drop try text/plain.
+            if (textPlain !== null && textPlain.data) {
+                ViperSelection.addRange(range);
+                self.insertNodeAtCaret(document.createTextNode(textPlain.data));
+            }
+
+            return false;
+
+        });
+
         ViperUtil.addEvent(elem, 'focus.' + namespace, function(e) {
             if (self.fireCallbacks('Viper:viperElementFocused') === false) {
                 return;
@@ -1294,6 +1346,49 @@ Viper.prototype = {
         }
 
         return coords;
+
+    },
+
+
+    /**
+     * Returns the range object for the given coords.
+     *
+     * @param {integer} x The x coord.
+     * @param {integer} y The y coord.
+     *
+     * @return {DOMRange}
+     */
+    getRangeFromCoords: function(x, y)
+    {
+        var range = null;
+        if (document.caretRangeFromPoint) {
+            // Webkit.
+            var rangeObj = document.caretRangeFromPoint(x, y);
+            range = new ViperMozRange(rangeObj);
+        } else if (document.caretPositionFromPoint) {
+            // Firefox.
+            var rangeObj = document.caretPositionFromPoint(x, y);
+            range = this.getCurrentRange().cloneRange();
+            range.setStart(rangeObj.offsetNode, rangeObj.offset);
+            range.collapse(true);
+        } else if (document.body.createTextRange) {
+            var rangeObj = document.body.createTextRange();
+            try {
+                rangeObj.moveToPoint(x, y);
+            } catch (e) {}
+
+            range = new ViperIERange(rangeObj);
+
+            if (Viper.document.createRange) {
+                rangeObj = Viper.document.createRange();
+                var ieToMozRange = new ViperMozRange(rangeObj);
+                ieToMozRange.setStart(range.startContainer, range.startOffset);
+                ieToMozRange.collapse(true);
+                range = ieToMozRange;
+            }
+        }
+
+        return range;
 
     },
 
