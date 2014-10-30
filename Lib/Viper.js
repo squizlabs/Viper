@@ -650,8 +650,8 @@ Viper.prototype = {
      * @param boolean enabled If true viper will be enabled, otherwise it will be
      *                        disabled.
      */
-     setEnabled: function(enabled)
-     {
+    setEnabled: function(enabled)
+    {
         this._viperRange = null;
 
         if (enabled === true && this.enabled === false) {
@@ -1377,7 +1377,7 @@ Viper.prototype = {
             try {
                 rangeObj.moveToPoint(x, y);
             } catch (e) {
-}
+            }
 
             range = new ViperIERange(rangeObj);
 
@@ -1441,7 +1441,7 @@ Viper.prototype = {
             try {
                 range.moveToPoint(x, y);
             } catch (e) {
-}
+            }
 
             elem = range.parentElement();
         }//end if
@@ -1587,24 +1587,24 @@ Viper.prototype = {
             } else {
                 newRange = range;
 
-                 if (newRange.collapsed === true
-                     && newRange.startContainer.parentNode
-                     && newRange.startContainer.parentNode.firstChild.nodeType === ViperUtil.TEXT_NODE
-                     && newRange.startContainer.parentNode.firstChild === newRange.startContainer.parentNode.lastChild
-                     && ViperUtil.trim(newRange.startContainer.parentNode.firstChild.data) === ''
-                 ) {
-                     newRange.setStart(newRange.startContainer.parentNode.firstChild, 0);
-                     newRange.collapse(true);
-                     newRange.startContainer.parentNode.firstChild.data = '';
-                 } else if (newRange.collapsed === true
-                     && ViperUtil.isStubElement(newRange.startContainer) === true
-                 ) {
-                     var tmpTextNode = Viper.document.createTextNode('');
-                     ViperUtil.insertBefore(newRange.startContainer, tmpTextNode);
-                     ViperUtil.remove(newRange.startContainer);
-                     newRange.setStart(tmpTextNode, 0);
-                     newRange.collapse(true);
-                 }
+                if (newRange.collapsed === true
+                    && newRange.startContainer.parentNode
+                    && newRange.startContainer.parentNode.firstChild.nodeType === ViperUtil.TEXT_NODE
+                    && newRange.startContainer.parentNode.firstChild === newRange.startContainer.parentNode.lastChild
+                    && ViperUtil.trim(newRange.startContainer.parentNode.firstChild.data) === ''
+                ) {
+                    newRange.setStart(newRange.startContainer.parentNode.firstChild, 0);
+                    newRange.collapse(true);
+                    newRange.startContainer.parentNode.firstChild.data = '';
+                } else if (newRange.collapsed === true
+                    && ViperUtil.isStubElement(newRange.startContainer) === true
+                ) {
+                    var tmpTextNode = Viper.document.createTextNode('');
+                    ViperUtil.insertBefore(newRange.startContainer, tmpTextNode);
+                    ViperUtil.remove(newRange.startContainer);
+                    newRange.setStart(tmpTextNode, 0);
+                    newRange.collapse(true);
+                }
             }//end if
 
             if (this.fireCallbacks('Viper:nodesInserted', {node: newNode, range: newRange}) === false) {
@@ -2407,10 +2407,10 @@ Viper.prototype = {
             tag = 'span';
         }
 
-       var startContainer = range.getStartNode();
-       var endContainer   = range.getEndNode();
+        var startContainer = range.getStartNode();
+        var endContainer   = range.getEndNode();
 
-       if (startContainer === endContainer) {
+        if (startContainer === endContainer) {
             // Selected contents from same node.
             if (startContainer.nodeType === ViperUtil.TEXT_NODE) {
                 // Selection is a text node.
@@ -4005,7 +4005,7 @@ Viper.prototype = {
             try {
                 range = this.adjustRange(range);
             } catch (e) {
-}
+            }
         }
 
         if (!this._prevRange
@@ -4108,7 +4108,7 @@ Viper.prototype = {
 
     isInputKey: function(e)
     {
-         if ((e.which !== 0 || e.keyCode === 46)
+        if ((e.which !== 0 || e.keyCode === 46)
             && e.ctrlKey !== true
             && e.altKey !== true
             && e.metaKey !== true
@@ -4289,7 +4289,7 @@ Viper.prototype = {
         // Check that keyCode is not 0 as Firefox fires keyPress for arrow keys which
         // have key code of 0.
         if (e.which !== 0 && ViperChangeTracker.isTracking() === true) {
-             if (e.which === ViperUtil.DOM_VK_DELETE) {
+            if (e.which === ViperUtil.DOM_VK_DELETE) {
                 // Handle delete OP here because some browsers (e.g. Chrome, IE) does not
                 // fire keyPress when DELETE is held down.
                 this.deleteContents();
@@ -4522,7 +4522,7 @@ Viper.prototype = {
                 try {
                     range = self.adjustRange();
                 } catch (e) {
-}
+                }
 
                 // Delay calling the fireSelectionChanged to get the updated range.
                 self.fireSelectionChanged(range);
@@ -4559,7 +4559,7 @@ Viper.prototype = {
             try {
                 range = self.adjustRange();
             } catch (e) {
-}
+            }
 
             if (range.collapsed === true && ViperUtil.isBrowser('msie') === true) {
                 // If clicked inside the previous selection then IE takes a lot
