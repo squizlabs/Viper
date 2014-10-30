@@ -1967,8 +1967,8 @@ ViperCopyPastePlugin.prototype = {
 
     _getListType: function(elem, listTypes)
     {
-        var style = elem.getAttribute('style');
-        var className = elem.getAttribute('class');
+        var style     = elem.getAttribute('style');
+        var className = elem.getAttribute('class') || '';
         if (!style || (style.indexOf('mso-list') === -1 && className.indexOf('MsoList') === -1)) {
             return null;
         }
