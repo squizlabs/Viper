@@ -2232,39 +2232,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         if ($rightClick !== TRUE) {
             $this->sikuli->keyDown('Key.CMD + v');
         } else {
-            if ($this->sikuli->getBrowserid() !== 'googlechrome') {
-                sleep(1);
-                $this->sikuli->rightClick($this->sikuli->getMouseLocation());
-            }
-
-            switch ($this->sikuli->getBrowserid()) {
-                case 'firefox':
-                    // Click the paste item in the right click menu.
-                    $this->sikuli->click($this->sikuli->mouseMoveOffset(30, 80));
-                    $this->_rightClickPasteDiv();
-
-                    // Click the paste item in the right click menu.
-                    $this->sikuli->click($this->sikuli->mouseMoveOffset(30, 80));
-                break;
-
-                case 'safari':
-                    // Click the paste item in the right click menu.
-                    $this->sikuli->click($this->sikuli->mouseMoveOffset(30, 100));
-                    $this->_rightClickPasteDiv();
-
-                    // Click the paste item in the right click menu.
-                    $this->sikuli->click($this->sikuli->mouseMoveOffset(30, 40));
-                break;
-
-                case 'chrome':
-                    // Google does not need the right click pop for pasting, just
-                    // click the paste from the right click menu.
-                    $this->sikuli->click($this->sikuli->mouseMoveOffset(30, 95));
-                break;
-
-                default:
-                throw new Exception('Right click testing for this browser has not been implemented');
-            }//end switch
+            $this->sikuli->rightClick($this->sikuli->getMouseLocation());
+            $this->sikuli->keyDown('p');
+            $this->sikuli->keyDown('Key.ENTER');
         }//end if
 
     }//end paste()
@@ -2300,6 +2270,54 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $this->sikuli->rightClick($this->sikuli->createLocation($loc['x'], $loc['y']));
 
     }//end _rightClickPasteDiv()
+
+
+    /**
+     * Cut content.
+     *
+     * Note that if right click is being used then make sure to move the mouse to the
+     * target location before calling this method.
+     *
+     * @param boolean $rightClick If TRUE then contents will be cut using the
+     *                            browser's right click menu.
+     *
+     * @return void
+     * @throws Exception If the browser is not supported.
+     */
+    protected function cut($rightClick=FALSE)
+    {
+        if ($rightClick !== TRUE) {
+            $this->sikuli->keyDown('Key.CMD + c');
+        } else {
+            $this->sikuli->rightClick($this->sikuli->getMouseLocation());
+
+            switch ($this->sikuli->getBrowserid()) {
+                case 'firefox':
+                case 'firefoxNightly':
+                case 'ie11':
+                case 'ie10':
+                case 'ie9':
+                case 'ie8':
+                    // Use the shortcut to select the cut menu option.
+                    $this->sikuli->keyDown('t');
+                break;
+
+                case 'chrome':
+                case 'chromium':
+                case 'safari':
+                    // Use the shortcut menu to select the menu option and then move the mouse up to cut.
+                    $this->sikuli->keyDown('c');
+                    $this->sikuli->keyDown('Key.UP');
+                    $this->sikuli->keyDown('Key.ENTER');
+                break;
+
+                default:
+                throw new Exception('Right click testing for this browser has not been implemented');
+            }//end switch
+
+        }//end if
+
+    }//end cut()
 
 
     /**
