@@ -813,8 +813,12 @@ var ViperUtil = {
 
         var lastParent = parentElems[(parentElems.length - 1)];
         elements       = ViperUtil.arrayMerge(elements, ViperUtil.getElementsBetween(lastParent, toElem));
-        if (lastParent.firstChild === lastParent.lastChild && lastParent.firstChild === fromElem) {
-            elements.push(lastParent);
+
+        if (lastParent.firstChild === lastParent.lastChild
+            && lastParent.firstChild === fromElem
+            && lastParent !== toElem
+        ) {
+           elements.push(lastParent);
         }
 
         return elements;
