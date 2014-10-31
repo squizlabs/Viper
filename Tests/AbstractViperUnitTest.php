@@ -175,7 +175,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $options       = array(
                               'size' => array(
                                          'width'  => 1270,
-                                         'height' => 900,
+                                         'height' => 850,
                                         ),
                              );
             self::$_sikuli = new PHPSikuliBrowser($browser, $options);
@@ -471,7 +471,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $this->getTopToolbar();
         } catch (Exception $e) {
             // Its not working.. Try to start browser again.
-            $this->sikuli->startBrowser();
+            $this->sikuli->restartBrowser();
             sleep(2);
             $this->sikuli->resize();
             $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
