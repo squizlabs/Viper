@@ -101,9 +101,13 @@ ViperCopyPastePlugin.prototype = {
 
                 var dataType = null;
                 if (e.clipboardData.types) {
-                    if (ViperUtil.inArray('text/html', e.clipboardData.types) === true) {
+                    if (ViperUtil.inArray('text/html', e.clipboardData.types) === true
+                        && e.clipboardData.getData('text/html').length !== 0
+                    ) {
                         dataType = 'text/html';
-                    } else if (ViperUtil.inArray('text/plain', e.clipboardData.types) === true) {
+                    } else if (ViperUtil.inArray('text/plain', e.clipboardData.types) === true
+                        && e.clipboardData.getData('text/plain').length !== 0
+                    ) {
                         dataType = 'text/plain';
                     }
                 }
@@ -133,10 +137,10 @@ ViperCopyPastePlugin.prototype = {
                             self._handleFormattedPasteValue((self.pasteType === 'formattedClean'));
                         };
                         reader.readAsDataURL(blob);
-                    } else {
-                        ViperUtil.setHtml(self.pasteElement, pasteContent);
-                        self._handleFormattedPasteValue((self.pasteType === 'formattedClean'));
                     }
+
+                    ViperUtil.setHtml(self.pasteElement, pasteContent);
+                    self._handleFormattedPasteValue((self.pasteType === 'formattedClean'));
                 } else {
                     if (dataType === null) {
                         dataType = 'text';
