@@ -503,7 +503,12 @@ ViperKeyboardEditorPlugin.prototype = {
             ) {
                 var elem = document.createElement(defaultTagName);
                 ViperUtil.setHtml(elem, '<br />');
-                ViperUtil.insertBefore(startNode, elem);
+                if (startNode === viperElem.lastChild) {
+                    ViperUtil.insertAfter(startNode, elem);
+                } else {
+                    ViperUtil.insertBefore(startNode, elem);
+                }
+
                 range.selectNode(elem.firstChild);
                 range.collapse(true);
                 ViperSelection.addRange(range);
