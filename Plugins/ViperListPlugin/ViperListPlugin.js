@@ -632,8 +632,13 @@ ViperListPlugin.prototype = {
             }
         } else {
             var elems = ViperUtil.getElementsBetween(startNode, endNode);
-            elems.unshift(startNode);
-            elems.push(endNode);
+            if (ViperUtil.inArray(startNode, elems) === false) {
+                elems.unshift(startNode);
+            }
+
+            if (ViperUtil.inArray(endNode, elems) === false) {
+                elems.push(endNode);
+            }
 
             var c = elems.length;
             for (var i = 0; i < c; i++) {
@@ -649,7 +654,10 @@ ViperListPlugin.prototype = {
                         listItems.push(li);
                     }
                 } else {
-                    listItems.push(elems[i]);
+                    if (li && ViperUtil.inArray(elems[i], listItems) === false) {
+                        listItems.push(elems[i]);
+                    }
+
                     if (expand === true) {
                         listItems = listItems.concat(ViperUtil.getTag('li', elems[i]));
                     }
