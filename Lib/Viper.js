@@ -4198,7 +4198,7 @@ Viper.prototype = {
             // the track changes is activated or no plugin is direcly modifying it.
             if (this.isSpecialKey(e) === false) {
                 if (ViperUtil.isBrowser('firefox') === true) {
-                    this._firefoxKeyDown();
+                    this._firefoxKeyDown(e);
                 } else if ((this.isKey(e, 'backspace') === true || this.isKey(e, 'delete') === true)
                     && (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true || ViperUtil.isBrowser('msie') === true)
                 ) {
@@ -4229,8 +4229,13 @@ Viper.prototype = {
 
     },
 
-    _firefoxKeyDown: function()
+    _firefoxKeyDown: function(e)
     {
+        if (e.which >= 37 && e.which <= 40) {
+            // Arrow keys.
+            return;
+        }
+
         var range = this.getCurrentRange();
         var elem  = this.getViperElement();
         if (elem.childNodes.length === 0
