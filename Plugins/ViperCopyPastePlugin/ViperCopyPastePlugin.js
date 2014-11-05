@@ -913,8 +913,21 @@ ViperCopyPastePlugin.prototype = {
             return;
         }
 
+        var fragment = null;
         var range    = this.rangeObj || this.viper.getCurrentRange();
-        var fragment = range.createDocumentFragment(html);
+        if (ViperUtil.isBrowser('chrome') === true
+            && range.startContainer === range.endContainer
+            && ViperUtil.isTag(range.startContainer, 'br') === true
+        ) {
+            // Workaround for Chrome not being able to create fragment "in br".
+            var tmpTextNode = document.createTextNode('');
+            var rangeClone  = range.cloneRange();
+            rangeClone.setStart(tmpTextNode);
+            rangeClone.collapse(true);
+            fragment = rangeClone.createDocumentFragment(html);console.info(111);
+        } else {
+            fragment = range.createDocumentFragment(html);
+        }
 
         var convertTags = this.convertTags;
         if (stripTags === true && this.convertTags !== null) {
