@@ -924,7 +924,7 @@ ViperCopyPastePlugin.prototype = {
             var rangeClone  = range.cloneRange();
             rangeClone.setStart(tmpTextNode);
             rangeClone.collapse(true);
-            fragment = rangeClone.createDocumentFragment(html);console.info(111);
+            fragment = rangeClone.createDocumentFragment(html);
         } else {
             fragment = range.createDocumentFragment(html);
         }
