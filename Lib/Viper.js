@@ -4259,7 +4259,19 @@ Viper.prototype = {
             range.setStart(textNode, 0);
             range.collapse(true);
             ViperSelection.addRange(range);
+        } else {
+            var startNode = range.getStartNode();
+            var endNode   = range.getEndNode();
+            if (startNode && startNode === endNode && startNode.nodeType === ViperUtil.ELEMENT_NODE) {
+                var firstChild = range._getFirstSelectableChild(startNode);
+                if (firstChild) {
+                    range.setStart(firstChild, 0);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                }
+            }
         }
+
 
         // When element is empty Firefox puts <br _moz_dirty="" type="_moz">
         // in to the element which stops text typing, so remove the br tag
