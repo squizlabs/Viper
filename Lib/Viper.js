@@ -3282,7 +3282,11 @@ Viper.prototype = {
             || ViperUtil.getElementsBetween(bookmark.start, bookmark.end).length === 0
         ) {
             // Bookmark is collapsed.
-            if (bookmark.end.nextSibling) {
+            // Pick the best node to select. Make sure that if next sibling is block element the previous sibling is not
+            // then use the previous sibling.
+            if (bookmark.end.nextSibling
+                && (ViperUtil.isBlockElement(bookmark.end.nextSibling) === false || !bookmark.start.previousSibling || ViperUtil.isBlockElement(bookmark.start.previousSibling))
+            ) {
                 if ((ViperUtil.isTag(bookmark.end.nextSibling, 'span') !== true || ViperUtil.hasClass(bookmark.end.nextSibling, 'viperBookmark') === false)) {
                     startPos = ViperUtil.getFirstChildTextNode(bookmark.end.nextSibling);
                 } else {
