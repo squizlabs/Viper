@@ -98,3 +98,6 @@
     padding-top: 5px!important;
 }
 
+.uploadImageForm input {
+	font-size: 1.49em;
+}
