@@ -543,6 +543,48 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
+     * Test that using UP, DOWN, RIGHT, and LEFT arrows move caret correctly.
+     *
+     * @return void
+     */
+    public function testSelectAllAndArrowKeyNavigation()
+    {
+        // Select all of the content and then press left arrow key
+        $this->useTest(2);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('new');
+        $this->assertHTMLMatch('<p>newtest test1 test2</p><p>test3 test4 test5</p><p>%1% test6 test7</p><p>test8 test9 <strong>%2%</strong></p>');
+
+        // Select all of the content and then press right arrow key
+        $this->useTest(2);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->type('new');
+        $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><p>%1% test6 test7</p><p>test8 test9 <strong>%2%new</strong></p>');
+
+        // Select all of the content and then press up arrow key
+        $this->useTest(2);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.UP');
+        $this->type('new');
+        $this->assertHTMLMatch('<p>newtest test1 test2</p><p>test3 test4 test5</p><p>%1% test6 test7</p><p>test8 test9 <strong>%2%</strong></p>');
+
+        // Select all of the content and then press down arrow key
+        $this->useTest(2);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DOWN');
+        $this->type('new');
+        $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><p>%1% test6 test7</p><p>test8 test9 <strong>%2%new</strong></p>');
+
+    }//end testSelectAllAndArrowKeyNavigation()
+
+
+    /**
      * Tests changing the defailt block tags and entering content.
      *
      * @return void
