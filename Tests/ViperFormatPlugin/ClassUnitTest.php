@@ -38,7 +38,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('class');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>This is some content %1% in my unit test <span class="class">%2%</span></p>');
-        
+
         // Remove class using inline toolbar and pressing Apply Changes, without re-selecting the word
         $this->clearFieldValue('Class');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
@@ -69,7 +69,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('class');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>This is some content %1% in my unit test <span class="class">%2%</span></p>');
-        
+
         // Remove class using top toolbar and pressing Apply Changes, without re-selecting the word
         $this->clearFieldValue('Class');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
@@ -89,7 +89,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddAndEditClassToWordWithoutClosingPopUp()
     {
-        
+
         // Add class and edit it using inline toolbar
         $this->useTest(1);
         $this->selectKeyword(1);
@@ -101,7 +101,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('abc');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>This is some content <span class="testabc">%1%</span> in my unit test %2%</p>');
-        
+
         // Add class and edit it using top toolbar
         $this->useTest(1);
         $this->selectKeyword(1);
@@ -150,7 +150,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('class');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p class="class">This is some content %1% in my unit test %2%</p>');
-        
+
         // Remove class using inline toolbar and pressing Apply Changes
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
@@ -159,7 +159,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         sleep(1);
         $this->assertHTMLMatch('<p>This is some content %1% in my unit test %2%</p>');
-        
+
         // Add class using top toolbar and pressing enter
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
@@ -184,7 +184,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('class');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p class="class">This is some content %1% in my unit test %2%</p>');
-        
+
         // Remove class using top toolbar and pressing Apply Changes
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
@@ -195,7 +195,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<p>This is some content %1% in my unit test %2%</p>');
 
     }//end testAddingAndRemovingClassAttributeToAParagraph()
- 
+
 
     /**
      * Test that you can add the class attribute to a paragraph and then edit the value without closing the pop up.
@@ -204,7 +204,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddAndEditClassToParagraphWithoutClosingPopUp()
     {
-        
+
         // Add class and edit it using inline toolbar
         $this->useTest(1);
         $this->selectKeyword(1);
@@ -217,7 +217,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('abc');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p class="testabc">This is some content %1% in my unit test %2%</p>');
-        
+
         // Add class and edit it using top toolbar
         $this->useTest(1);
         $this->selectKeyword(1);
@@ -297,7 +297,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.CMD + v');
-        
+
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'disabled'), 'Class icon should be disabled in the top toolbar.');
 
     }//end testClassIconDisabledWhenCopyParagraph()
@@ -331,7 +331,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testUpdatingClassAppliedToWord()
     {
-        
+
         // Updating a class using inline toolbar and pressing enter
         $this->useTest(2);
         $this->selectKeyword(1);
@@ -380,7 +380,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testUpdatingClassAppliedToParagraph()
     {
-        
+
         // Updating a class using inline toolbar and pressing enter
         $this->useTest(3);
         $this->selectKeyword(1);
@@ -456,7 +456,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToAParagraphWhereFirstWordBold()
     {
-        
+
         // Using the inline toolbar
         $this->useTest(4);
         $this->selectKeyword(1);
@@ -525,6 +525,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<p>This is some content<strong class="test"><em>%1%</em></strong> in my unit test %2%</p>');
 
         // Check that the class field stayed open in the inline toolbar has remaind open with the class field
+        $this->clickField('Class');
         $this->type('class');
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>This is some content <strong class="testclass"><em>%1%</em></strong> in my unit test %2%</p>');
@@ -539,7 +540,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddingClassToAParagraphWhereFirstWordItalic()
     {
-        
+
         // Using the inline toolbar
         $this->useTest(5);
         $this->selectKeyword(1);
@@ -569,7 +570,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testAddAndRemoveClassWithoutClosingPopUp()
     {
-        
+
         // Using the inline toolbar with a section containing a bold word
         $this->useTest(4);
         $this->selectKeyword(1, 2);
@@ -756,7 +757,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
      */
     public function testApplyingAClassToAnImage()
     {
-        
+
         // Add a class using the inline toolbar
         $this->useTest(8);
 

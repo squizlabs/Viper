@@ -175,7 +175,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $options       = array(
                               'size' => array(
                                          'width'  => 1270,
-                                         'height' => 900,
+                                         'height' => 850,
                                         ),
                              );
             self::$_sikuli = new PHPSikuliBrowser($browser, $options);
@@ -471,7 +471,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $this->getTopToolbar();
         } catch (Exception $e) {
             // Its not working.. Try to start browser again.
-            $this->sikuli->startBrowser();
+            $this->sikuli->restartBrowser();
             sleep(2);
             $this->sikuli->resize();
             $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
@@ -1951,9 +1951,16 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $fieldLabel = $this->sikuli->find($this->_getLabel($label, TRUE), NULL, 0.7);
         }
 
-        $fieldRegion  = $this->sikuli->extendRight($fieldLabel, 400);
+        $topLeft     = $this->sikuli->getTopLeft($fieldLabel);
+        $fieldRegion = $this->sikuli->createRegion(
+            $this->sikuli->getX($topLeft),
+            $this->sikuli->getY($topLeft) - 5,
+            400,
+            30
+        );
+
         $actionImage  = $this->getBrowserImagePath().'/textField_action_revert.png';
-        $actionButton = $this->sikuli->find($actionImage, $fieldRegion);
+        $actionButton = $this->sikuli->find($actionImage, $fieldRegion, 0.4);
 
         $this->sikuli->click($actionButton);
 
@@ -2225,39 +2232,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         if ($rightClick !== TRUE) {
             $this->sikuli->keyDown('Key.CMD + v');
         } else {
-            if ($this->sikuli->getBrowserid() !== 'googlechrome') {
-                sleep(1);
-                $this->sikuli->rightClick($this->sikuli->getMouseLocation());
-            }
-
-            switch ($this->sikuli->getBrowserid()) {
-                case 'firefox':
-                    // Click the paste item in the right click menu.
-                    $this->sikuli->click($this->sikuli->mouseMoveOffset(30, 80));
-                    $this->_rightClickPasteDiv();
-
-                    // Click the paste item in the right click menu.
-                    $this->sikuli->click($this->sikuli->mouseMoveOffset(30, 80));
-                break;
-
-                case 'safari':
-                    // Click the paste item in the right click menu.
-                    $this->sikuli->click($this->sikuli->mouseMoveOffset(30, 100));
-                    $this->_rightClickPasteDiv();
-
-                    // Click the paste item in the right click menu.
-                    $this->sikuli->click($this->sikuli->mouseMoveOffset(30, 40));
-                break;
-
-                case 'chrome':
-                    // Google does not need the right click pop for pasting, just
-                    // click the paste from the right click menu.
-                    $this->sikuli->click($this->sikuli->mouseMoveOffset(30, 95));
-                break;
-
-                default:
-                throw new Exception('Right click testing for this browser has not been implemented');
-            }//end switch
+            $this->sikuli->rightClick($this->sikuli->getMouseLocation());
+            $this->sikuli->keyDown('p');
+            $this->sikuli->keyDown('Key.ENTER');
         }//end if
 
     }//end paste()
@@ -2296,6 +2273,54 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
 
     /**
+     * Cut content.
+     *
+     * Note that if right click is being used then make sure to move the mouse to the
+     * target location before calling this method.
+     *
+     * @param boolean $rightClick If TRUE then contents will be cut using the
+     *                            browser's right click menu.
+     *
+     * @return void
+     * @throws Exception If the browser is not supported.
+     */
+    protected function cut($rightClick=FALSE)
+    {
+        if ($rightClick !== TRUE) {
+            $this->sikuli->keyDown('Key.CMD + c');
+        } else {
+            $this->sikuli->rightClick($this->sikuli->getMouseLocation());
+
+            switch ($this->sikuli->getBrowserid()) {
+                case 'firefox':
+                case 'firefoxNightly':
+                case 'ie11':
+                case 'ie10':
+                case 'ie9':
+                case 'ie8':
+                    // Use the shortcut to select the cut menu option.
+                    $this->sikuli->keyDown('t');
+                break;
+
+                case 'chrome':
+                case 'chromium':
+                case 'safari':
+                    // Use the shortcut menu to select the menu option and then move the mouse up to cut.
+                    $this->sikuli->keyDown('c');
+                    $this->sikuli->keyDown('Key.UP');
+                    $this->sikuli->keyDown('Key.ENTER');
+                break;
+
+                default:
+                throw new Exception('Right click testing for this browser has not been implemented');
+            }//end switch
+
+        }//end if
+
+    }//end cut()
+
+
+    /**
      * Runs the test only if the specified OS or the browser is being used.
      *
      * @param string $os      The OS the test runs for, if NULL it will run for all OS types.
@@ -2315,6 +2340,27 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
 
     /**
+     * Returns TRUE if the current browser/os matches the specified parameters.
+     *
+     * @param string $os      The OS the test runs for, NULL for any.
+     * @param string $browser The browser the test runs for, NULL for any.
+     *
+     * @return void
+     */
+    protected function isOSAndBrowser($os=NULL, $browser=NULL)
+    {
+        if ($os !== NULL && $os !== $this->sikuli->getOS()) {
+            return FALSE;
+        } else if ($browser !== NULL && $browser !== $this->sikuli->getBrowserid()) {
+            return FALSE;
+        }
+
+        return TRUE;
+
+    }//end isOSAndBrowser()
+
+
+    /**
      * Moves the mouse to the next line from its current position and clicks it.
      *
      * Note that the mouse must already be pointing to a line.
@@ -2326,6 +2372,93 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $this->sikuli->click($this->sikuli->mouseMoveOffset(0, 50));
 
     }//end clickNextLine()
+
+
+    /**
+     * Moves the mouse pointer to the specified location for the given element.
+     *
+     *
+     * @return void
+     */
+    protected function moveMouseToElement($selector, $position='bottom', $index=0)
+    {
+        $elemRect = $this->getBoundingRectangle($selector, $index);
+        $x        = ($elemRect['x1'] + ($elemRect['x2'] - $elemRect['x1']) / 2);
+
+        switch ($position) {
+            case 'bottom':
+                $y = ($elemRect['y2'] + 20);
+            break;
+
+            case 'top':
+                $y = ($elemRect['y1'] - 20);
+            break;
+        }
+
+        $loc = $this->sikuli->createLocation(
+            $this->sikuli->getPageXRelativeToScreen($x),
+            $this->sikuli->getPageYRelativeToScreen($y)
+        );
+        $this->sikuli->mouseMove($loc);
+
+    }//end moveMouseToElement()
+
+
+    /**
+     * Returns TRUE if the Cursor Assist plugin's line is visible.
+     *
+     * @param string  $relativeElement The selector for the relative element.
+     * @param string  $position        The position of the line relative to the element.
+     * @param integer $index           The element index of the resulting array.
+     *
+     * @return boolean
+     */
+    protected function isCursorAssistLineVisible($relativeElement=NULL, $position='bottom', $index=0)
+    {
+        $rect = $this->getBoundingRectangle('.ViperCursorAssistPlugin');
+        if (empty($rect) === FALSE) {
+            if ($relativeElement !== NULL) {
+                // Get the position  of the element.
+                $elemPos = $this->getBoundingRectangle($relativeElement, $index);
+
+                switch ($position) {
+                    case 'bottom':
+                        if ($rect['y2'] <= $elemPos['y2']) {
+                            return FALSE;
+                        }
+                    break;
+
+                    case 'top':
+                        if ($rect['y1'] >= $elemPos['y1']) {
+                            return FALSE;
+                        }
+                    break;
+
+                    default:
+                        throw new Exception('Position "'.$position.'" not supported.');
+                    break;
+                }//end switch
+
+            }//end if
+
+            return TRUE;
+        }//end if
+
+        return FALSE;
+
+    }//end isCursorAssistLineVisible()
+
+
+    /**
+     * Clicks the visible cursor assist line.
+     *
+     * @return void
+     */
+    protected function clickCursorAssistLine()
+    {
+        $this->clickElement('.ViperCursorAssistPlugin');
+
+    }//end clickCursorAssistLine()
 
 
 }//end class

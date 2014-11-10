@@ -150,6 +150,37 @@ ViperImagePlugin.prototype = {
             }
         );
 
+        this.viper.registerCallback('Viper:dropped', 'ViperImagePlugin', function(data) {
+            for (var i = 0; i < data.dataTransfer.files.length; i++) {
+                self.readDroppedImage(data.dataTransfer.files[i], function(image, file) {
+                    self.insertDroppedImage(image, data.range, file);
+                });
+            }
+        });
+
+    },
+
+    readDroppedImage: function(file, callback)
+    {
+        var reader = new FileReader();
+        reader.onload = function (event) {
+            var image = new Image();
+            image.src = event.target.result;
+            callback.call(this, image, file);
+        };
+
+        reader.readAsDataURL(file);
+
+    },
+
+    insertDroppedImage: function(image, range, fileInfo)
+    {
+        fileInfo    = fileInfo || {};
+        range       = range || this.viper.getViperRange();
+        image.alt   = fileInfo.name || '';
+
+        this._rangeToImage(range, image);
+
     },
 
     moveImage: function(image, range)
@@ -185,7 +216,7 @@ ViperImagePlugin.prototype = {
             ViperSelection.addRange(range);
         }
 
-        var bookmark = this.viper.createBookmark();
+        var bookmark = this.viper.createBookmark(range);
 
         var elems = ViperUtil.getElementsBetween(bookmark.start, bookmark.end);
         for (var i = 0; i < elems.length; i++) {
@@ -428,6 +459,11 @@ ViperImagePlugin.prototype = {
 
     _updateToolbar: function(image, toolbarPrefix)
     {
+        var toolbar = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+        if (!toolbar) {
+            return;
+        }
+
         var tools = this.viper.ViperTools;
 
         if (image && ViperUtil.isTag(image, 'img') === true) {

@@ -610,15 +610,6 @@ ViperLinkPlugin.prototype = {
         var self          = this;
         var range         = data.range;
         var currentIsLink = false;
-
-        // Check if we need to show the link options.
-        if ((ViperUtil.isTag(data.lineage[data.current], 'img') !== true
-            && ViperUtil.isBlockElement(data.lineage[data.current]) === true)
-            || ViperUtil.inArray(ViperUtil.getTagName(data.lineage[data.current]), ('thead,tfoot'.split(','))) === true
-        ) {
-            return false;
-        }
-
         var startNode     = null;
         var endNode       = null;
         var nodeSelection = range.getNodeSelection();

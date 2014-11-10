@@ -280,13 +280,21 @@ ViperTools.prototype = {
 
     setButtonInactive: function(buttonid)
     {
-        ViperUtil.removeClass(this.getItem(buttonid).element, 'Viper-active');
+        var button = this.getItem(buttonid);
+        if (!button) {
+            return;
+        }
+
+        ViperUtil.removeClass(button.element, 'Viper-active');
 
     },
 
     setButtonActive: function(buttonid)
     {
         var button = this.getItem(buttonid);
+        if (!button) {
+            return;
+        }
 
         ViperUtil.addClass(button.element, 'Viper-active');
         this.enableButton(buttonid);
@@ -296,7 +304,7 @@ ViperTools.prototype = {
     enableButton: function(buttonid)
     {
         var buttonObj = this.getItem(buttonid);
-        if (buttonObj.isEnabled() === true) {
+        if (!buttonObj || buttonObj.isEnabled() === true) {
             return;
         }
 
@@ -500,6 +508,7 @@ ViperTools.prototype = {
                     ViperUtil.addClass(textBox, 'Viper-actionClear');
                     actionIcon.setAttribute('title', 'Clear this value');
                 } else if (ViperUtil.hasClass(textBox, 'Viper-actionClear') === true) {
+                    value = input.value;
                     input.value = '';
                     ViperUtil.removeClass(textBox, 'Viper-actionClear');
 

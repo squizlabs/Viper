@@ -38,6 +38,73 @@ class Viper_Tests_ViperListPlugin_ListsInTablesTest extends AbstractViperListPlu
 
 
     /**
+     * Test creating a list in a cell, removing it and re-creating it
+     *
+     * @return void
+     */
+    public function testCreatingRemovingAdnCreatingAList()
+    {
+
+        // Test adding unordered list
+        $this->useTest(1);
+        $this->moveToKeyword(1);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><ul><li>Cell 1 %1%</li></ul></td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+
+        // Test removing unordered list
+        $this->clickTopToolbarButton('listUL', 'active');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><p>Cell 1 %1%</p></td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+
+        // Remove the extra p tags around the content
+        $this->clickTopToolbarButton('sourceView');
+        sleep(2);
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
+        $this->clickButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
+
+        // Test re-creating the list
+        $this->moveToKeyword(1);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, FALSE, FALSE);
+        $this->clickTopToolbarButton('listUL');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><ul><li>Cell 1 %1%</li></ul></td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+
+        // Test creating ordered list
+        $this->useTest(1);
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('listOL');
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><ol><li>Cell 1 %1%</li></ol></td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
+
+        // Test removing ordered list
+        $this->clickTopToolbarButton('listOL', 'active');
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><p>Cell 1 %1%</p></td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+
+        // Remove the extra p tags around the content
+        $this->clickTopToolbarButton('sourceView');
+        sleep(2);
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
+        $this->clickButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>Cell 1 %1%</td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
+
+        // Test re-creating ordered list
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('listOL');
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with unordered list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><ol><li>Cell 1 %1%</li></ol></td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
+
+    }//end testCreatingRemovingAdnCreatingAList()
+
+
+    /**
      * Test creating a list in a table and clicking undo.
      *
      * @return void

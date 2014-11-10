@@ -104,6 +104,40 @@ class Viper_Tests_ViperListPlugin_CreateListTest extends AbstractViperListPlugin
 
 
     /**
+     * Test that you can createa a list when you select all content on the page.
+     *
+     * @return void
+     */
+    public function testListCreationFromAllContent()
+    {
+        $this->useTest(5);
+
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+
+        //Test unordered list.
+        $this->clickTopToolbarButton('listUL');
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+        $this->assertHTMLMatch('<ul><li>Create list test %1% paragraph one</li><li>This is paragraph two</li><li>This is paragraph three</li></ul>');
+
+        $this->clickTopToolbarButton('listUL', 'active');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+        $this->assertHTMLMatch('<p>Create list test %1% paragraph one</p><p>This is paragraph two</p><p>This is paragraph three</p>');
+
+        //Test ordered list.
+        $this->clickTopToolbarButton('listOL');
+        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        $this->assertHTMLMatch('<ol><li>Create list test %1% paragraph one</li><li>This is paragraph two</li><li>This is paragraph three</li></ol>');
+
+        $this->clickTopToolbarButton('listOL', 'active');
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+        $this->assertHTMLMatch('<p>Create list test %1% paragraph one</p><p>This is paragraph two</p><p>This is paragraph three</p>');
+
+    }//end testListCreationFromAllContent()
+
+
+    /**
      * Test creating a list and then clicking undo and redo.
      *
      * @return void

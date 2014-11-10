@@ -250,7 +250,11 @@ ViperTableEditorPlugin.prototype = {
                 if (!node) {
                     node = range.getEndNode();
                     if (!node) {
-                        return;
+                        if (range.startContainer !== range.endContainer) {
+                            return;
+                        } else {
+                            node = range.startContainer;
+                        }
                     }
                 }
 
@@ -2591,6 +2595,7 @@ ViperTableEditorPlugin.prototype = {
             var colCellPos = this.getCellPosition(colCell);
             if (colCellPos.col === cellPos.col) {
                 ViperUtil.setStyle(colCell, 'width', width);
+                this.tableUpdated();
                 return;
             }
         }

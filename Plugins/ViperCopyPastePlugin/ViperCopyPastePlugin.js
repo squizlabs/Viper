@@ -45,6 +45,19 @@ ViperCopyPastePlugin.prototype = {
             return self.keyDown(e);
         });
 
+        this.viper.registerCallback('Viper:dropped:text/html', 'ViperCopyPastePlugin', function(data) {
+            if (!data.data) {
+                return;
+            }
+
+            ViperSelection.addRange(data.range);
+            var div = document.createElement('div');
+            ViperUtil.setHtml(div, data.data);
+            self._beforePaste();
+            self._handleFormattedPasteValue(false, div);
+            return false;
+        });
+
         if (this._isMSIE === true) {
             this.pasteElement = this._createPasteDiv();
         }
@@ -80,7 +93,7 @@ ViperCopyPastePlugin.prototype = {
         }
 
         var self = this;
-        if (this._isMSIE !== true && this._isFirefox !== true && this._isSafari !== true) {
+        if (this._isMSIE !== true && this._isSafari !== true) {
             elem.onpaste = function(e) {
                 if (!e.clipboardData) {
                     return;
@@ -88,9 +101,13 @@ ViperCopyPastePlugin.prototype = {
 
                 var dataType = null;
                 if (e.clipboardData.types) {
-                    if (ViperUtil.inArray('text/html', e.clipboardData.types) === true) {
+                    if (ViperUtil.inArray('text/html', e.clipboardData.types) === true
+                        && e.clipboardData.getData('text/html').length !== 0
+                    ) {
                         dataType = 'text/html';
-                    } else if (ViperUtil.inArray('text/plain', e.clipboardData.types) === true) {
+                    } else if (ViperUtil.inArray('text/plain', e.clipboardData.types) === true
+                        && e.clipboardData.getData('text/plain').length !== 0
+                    ) {
                         dataType = 'text/plain';
                     }
                 }
@@ -101,11 +118,25 @@ ViperCopyPastePlugin.prototype = {
                         dataType = 'text/html';
                     }
 
+                    var files = ViperUtil.arraySearch('Files', e.clipboardData.types);
+
                     self.pasteElement = self._createPasteDiv();
-                    var pasteContent = e.clipboardData.getData(dataType);
+                    var pasteContent  = e.clipboardData.getData(dataType);
                     if (dataType === 'text/plain') {
                         pasteContent = pasteContent.replace(/\r\n/g, '<br />');
                         pasteContent = pasteContent.replace(/\n/g, '<br />');
+                    } else if (files === 0) {
+                        var file = e.clipboardData.items[files];
+                        var blob  = file.getAsFile();
+                        var reader = new FileReader();
+                        var itemsCount = e.clipboardData.items.length;
+                        reader.onload = function(event) {
+                            var base64   = event.target.result;
+                            pasteContent = '<img src="' + base64 + '"/>';
+                            ViperUtil.setHtml(self.pasteElement, pasteContent);
+                            self._handleFormattedPasteValue((self.pasteType === 'formattedClean'));
+                        };
+                        reader.readAsDataURL(blob);
                     }
 
                     ViperUtil.setHtml(self.pasteElement, pasteContent);
@@ -527,7 +558,7 @@ ViperCopyPastePlugin.prototype = {
 
     keyDown: function (e)
     {
-        if (this._isMSIE === true || this._isFirefox === true || this._isSafari === true) {
+        if (this._isMSIE === true || this._isSafari === true) {
             if (e.metaKey === true || e.ctrlKey === true) {
                 if (e.keyCode === 86) {
                     // CTRL/CMD + V.
@@ -882,8 +913,21 @@ ViperCopyPastePlugin.prototype = {
             return;
         }
 
+        var fragment = null;
         var range    = this.rangeObj || this.viper.getCurrentRange();
-        var fragment = range.createDocumentFragment(html);
+        if (ViperUtil.isBrowser('chrome') === true
+            && range.startContainer === range.endContainer
+            && ViperUtil.isTag(range.startContainer, 'br') === true
+        ) {
+            // Workaround for Chrome not being able to create fragment "in br".
+            var tmpTextNode = document.createTextNode('');
+            var rangeClone  = range.cloneRange();
+            rangeClone.setStart(tmpTextNode);
+            rangeClone.collapse(true);
+            fragment = rangeClone.createDocumentFragment(html);
+        } else {
+            fragment = range.createDocumentFragment(html);
+        }
 
         var convertTags = this.convertTags;
         if (stripTags === true && this.convertTags !== null) {
@@ -1953,8 +1997,8 @@ ViperCopyPastePlugin.prototype = {
 
     _getListType: function(elem, listTypes)
     {
-        var style = elem.getAttribute('style');
-        var className = elem.getAttribute('class');
+        var style     = elem.getAttribute('style');
+        var className = elem.getAttribute('class') || '';
         if (!style || (style.indexOf('mso-list') === -1 && className.indexOf('MsoList') === -1)) {
             return null;
         }

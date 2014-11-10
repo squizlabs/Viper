@@ -132,7 +132,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
 
 
     /**
-     * Test deleting a heading and its content from the page.
+     * Test deleting a heading from the page.
      *
      * @return void
      */
@@ -148,6 +148,25 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->assertHTMLMatch('<p>Test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test</p>');
 
     }//end testDeletingAHeadingFromContent()
+
+
+    /**
+     * Test deleting a heading by tripple clicking the heading.
+     *
+     * @return void
+     */
+    public function testDeleteHeadingWithTrippleClick()
+    {
+        $this->useTest(17);
+
+        // Tripple click the heading
+        $location = $this->findKeyword(1);
+        $this->sikuli->tripleClick($location);
+        $this->sikuli->keyDown('Key.DELETE');
+
+        $this->assertHTMLMatch('<p>Test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test</p>');
+
+    }//end testDeleteHeadingWithTrippleClick()
 
 
     /**

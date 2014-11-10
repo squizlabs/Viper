@@ -48,6 +48,54 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
+     * Test that you can delete all of the content and enter new content.
+     *
+     * @return void
+     */
+    public function testTextTypeReplaceAllContent()
+    {
+        $this->useTest(1);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('Testing input');
+
+        //Check that the icons are correct in the top toolbar
+        $this->assertTrue($this->topToolbarButtonExists('bold', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('italic', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('removeFormat', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('headings', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('historyUndo', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('listUL', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('listOL', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('listIndent', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('listOutdent', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('table', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('image', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('insertHr', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('linkRemove', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('charmap', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('searchReplace', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('langtools', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('accessAudit', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('sourceView', NULL));
+
+        $this->type(' more content');
+        $this->assertHTMLMatch('<p>Testing input more content</p>');
+
+    }//end testTextTypeReplaceAllContent()
+
+
+    /**
      * Test enter a new paragraph.
      *
      * @return void
@@ -296,7 +344,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->type('test ');
         $this->assertHTMLMatch('<p>%1%</p><p>test EIB MOZ %2%</p>');
 
-    }//end testShiftAndLeftArrow()
+    }//end testAltAndLeftArrow()
 
 
     /**
@@ -338,7 +386,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->type('test ');
         $this->assertHTMLMatch('<p>%1%</p><p>test EIB MOZ %2%</p>');
 
-    }//end testShiftAndLeftArrow()
+    }//end testCtrlAndLeftArrow()
 
 
     /**
@@ -375,12 +423,18 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.SHIFT + Key.CMD + Key.LEFT');
         $this->assertEquals($this->replaceKeywords('EIB MOZ %2%'), $this->getSelectedText(), 'Second line of text should be selected');
+        // Check inline toolbar appears
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'));
+        $this->assertTrue($this->inlineToolbarButtonExists('headings', NULL));
 
         $this->sikuli->keyDown('Key.LEFT');
         $this->assertEquals($this->replaceKeywords(''), $this->getSelectedText(), 'Nothing should be selected');
 
         $this->sikuli->keyDown('Key.SHIFT + Key.CMD + Key.RIGHT');
         $this->assertEquals($this->replaceKeywords('EIB MOZ %2%'), $this->getSelectedText(), 'Second line of text should be selected');
+        // Check inline toolbar appears
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'));
+        $this->assertTrue($this->inlineToolbarButtonExists('headings', NULL));
 
     }//end testCmdShiftLeftAndCmdShiftRight()
 
@@ -398,12 +452,18 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.SHIFT + Key.HOME');
         $this->assertEquals($this->replaceKeywords('EIB MOZ %2%'), $this->getSelectedText(), 'Second line of text should be selected');
+        // Check inline toolbar appears
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'));
+        $this->assertTrue($this->inlineToolbarButtonExists('headings', NULL));
 
         $this->sikuli->keyDown('Key.LEFT');
         $this->assertEquals($this->replaceKeywords(''), $this->getSelectedText(), 'Nothing should be selected');
 
         $this->sikuli->keyDown('Key.SHIFT + Key.END');
         $this->assertEquals($this->replaceKeywords('EIB MOZ %2%'), $this->getSelectedText(), 'Second line of text should be selected');
+        // Check inline toolbar appears
+        $this->assertTrue($this->inlineToolbarButtonExists('formats-p', 'active'));
+        $this->assertTrue($this->inlineToolbarButtonExists('headings', NULL));
 
     }//end testShiftHomeAndShiftEnd()
 
@@ -483,64 +543,45 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that when you delete all of the content, enter new content and delete the last 3 words that the other content remains.
+     * Test that using UP, DOWN, RIGHT, and LEFT arrows move caret correctly.
      *
      * @return void
      */
-    public function testDeletingNewContent()
+    public function testSelectAllAndArrowKeyNavigation()
     {
-        $this->useTest(1);
-
-        // Select all content, delete it and replace with new content
-        $this->selectKeyword(1);
+        // Select all of the content and then press left arrow key
+        $this->useTest(2);
+        $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.CMD + a');
-        $this->sikuli->keyDown('Key.DELETE');
-        sleep(1);
-        $this->type('This is a long line of content to test deleting the last three %1% words %2%');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('new');
+        $this->assertHTMLMatch('<p>newtest test1 test2</p><p>test3 test4 test5</p><p>%1% test6 test7</p><p>test8 test9 <strong>%2%</strong></p>');
 
-        // Select the last 3 words and delete them
-        $this->selectKeyword(1, 2);
-        sleep(1);
-        $this->sikuli->keyDown('Key.DELETE');
-        sleep(1);
-        $this->assertHTMLMatch('<p>This is a long line of content to test deleting the last three</p>');
+        // Select all of the content and then press right arrow key
+        $this->useTest(2);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->type('new');
+        $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><p>%1% test6 test7</p><p>test8 test9 <strong>%2%new</strong></p>');
 
-    }//end testDeletingNewContent()
+        // Select all of the content and then press up arrow key
+        $this->useTest(2);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.UP');
+        $this->type('new');
+        $this->assertHTMLMatch('<p>newtest test1 test2</p><p>test3 test4 test5</p><p>%1% test6 test7</p><p>test8 test9 <strong>%2%</strong></p>');
 
+        // Select all of the content and then press down arrow key
+        $this->useTest(2);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DOWN');
+        $this->type('new');
+        $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><p>%1% test6 test7</p><p>test8 test9 <strong>%2%new</strong></p>');
 
-    /**
-     * Test Delete and Backspace.
-     *
-     * @return void
-     */
-    public function testDeleteAndBackspace()
-    {
-        // Test delete
-        $this->useTest(1);
-
-        $this->moveToKeyword(1, 'left');
-        sleep(1);
-
-        for ($i = 0; $i < 8; $i++) {
-            $this->sikuli->keyDown('Key.DELETE');
-        }
-
-        $this->type('test');
-        $this->assertHTMLMatch('<p>testMOZ %2%</p>');
-
-        // Test backspace
-        $this->useTest(1);
-
-        $this->moveToKeyword(2, 'right');
-
-        for ($i = 0; $i < 8; $i++) {
-            $this->sikuli->keyDown('Key.BACKSPACE');
-        }
-
-        $this->type('test');
-        $this->assertHTMLMatch('<p>%1%</p><p>EIBtest</p>');
-
-    }//end testDeleteAndBackspace()
+    }//end testSelectAllAndArrowKeyNavigation()
 
 
     /**

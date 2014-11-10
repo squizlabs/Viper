@@ -175,7 +175,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->assertTrue($this->topToolbarButtonExists('formats-div'), 'Formats icon should appear in the top toolbar');
 
     }//end testCheckWhenDivIconIsAvailableInToolbar()
- 
+
 
     /**
      * Test clicking the active div icon in the toolbar change it to a paragraph.
@@ -184,7 +184,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
      */
     public function testClickingActiveDivIconsInToolbar()
     {
-        
+
         // Check that when you click the active div icon in the inline toolbar, it is changed to paragraph.
         $this->useTest(2);
         $this->selectKeyword(1);
@@ -201,7 +201,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->clickTopToolbarButton('DIV', 'active', TRUE);
         $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
         $this->checkStatusOfFormatIconsInTheTopToolbar('active');
-        
+
     }//end testClickingActiveDivIconsInToolbar()
 
 
@@ -235,7 +235,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->assertEquals($this->replaceKeywords('%1% xtn dolor'), $this->getSelectedText(), 'Original selection is not selected');
 
         // Apply bold and italics to a multi-line div section
-        $this->useTest(3); 
+        $this->useTest(3);
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
@@ -304,7 +304,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
      */
     public function testApplyingPInsideDiv()
     {
-        
+
         // Apply and remove the P
         $this->useTest(2);
         $this->selectKeyword(1);
@@ -432,8 +432,8 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('Quote', 'active', TRUE);
-        $this->assertHTMLMatch('<div><p>%1%</p> xtn dolor</div>');
-        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
+        $this->assertHTMLMatch('<div>%1% xtn dolor</div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar();
 
         // Do the same to a bold keyword
         $this->useTest(4);
@@ -447,8 +447,8 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('Quote', 'active', TRUE);
-        $this->assertHTMLMatch('<div>Div section with a strong word <p><strong>%1%</strong></p></div>');
-        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
+        $this->assertHTMLMatch('<div>Div section with a strong word <strong>%1%</strong></div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar();
 
         // Do the same to an italic keyword
         $this->useTest(5);
@@ -462,8 +462,8 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('Quote', 'active', TRUE);
-        $this->assertHTMLMatch('<div>Div section with an italic word <p><em>%1%</em></p></div>');
-        $this->checkStatusOfFormatIconsInTheTopToolbar('active');
+        $this->assertHTMLMatch('<div>Div section with an italic word <em>%1%</em></div>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar();
 
     }//end testApplyingQuoteInsideDiv()
 
@@ -475,7 +475,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
      */
     public function testApplyingDivInsideAnotherDiv()
     {
-        
+
         // Apply and remove the div
         $this->useTest(2);
         $this->selectKeyword(1);

@@ -1670,6 +1670,13 @@ ViperFormatPlugin.prototype = {
                     // Wrap element.
                     var newElem = document.createElement(type);
                     ViperUtil.insertBefore(selectedNode, newElem);
+
+                    if (type === 'blockquote') {
+                        var p = document.createElement('p');
+                        newElem.appendChild(p);
+                        newElem = p;
+                    }
+
                     newElem.appendChild(selectedNode);
                     this.viper.selectBookmark(bookmark);
                     range.selectNode(newElem);
@@ -1906,7 +1913,16 @@ ViperFormatPlugin.prototype = {
             } else {
                 // This is element is already the specified type remove the element.
                 while (element.firstChild) {
-                    ViperUtil.insertBefore(element, element.firstChild);
+                    if (isBlockQuote === true && ViperUtil.isTag(element.firstChild, 'p') === true) {
+                        // Also remove the P tags.
+                        while (element.firstChild.firstChild) {
+                            ViperUtil.insertBefore(element, element.firstChild.firstChild);
+                        }
+
+                        ViperUtil.remove(element.firstChild);
+                    } else {
+                        ViperUtil.insertBefore(element, element.firstChild);
+                    }
                 }
             }
 
