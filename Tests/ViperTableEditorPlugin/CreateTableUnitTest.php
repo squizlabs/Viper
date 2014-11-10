@@ -13,6 +13,8 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
      */
     public function testCreateTableWithoutHeaders()
     {
+        $this->useTest(1);
+
         $this->insertTable(1, 0);
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table style="width: 100%;" border="1"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
@@ -29,6 +31,8 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
      */
     public function testCreateTableWithLeftHeaders()
     {
+        $this->useTest(1);
+
         $this->insertTable(1, 1);
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table style="width: 100%;" border="1"><tbody><tr><th></th><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
@@ -45,6 +49,8 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
      */
     public function testCreateWithTopHeaders()
     {
+        $this->useTest(1);
+
         $this->insertTable(1);
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
@@ -61,6 +67,8 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
      */
     public function testCreateTableWithBothHeaders()
     {
+        $this->useTest(1);
+
         $this->insertTable(1, 3);
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><th></th><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
@@ -77,6 +85,8 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
      */
     public function testCreateTableStructure()
     {
+        $this->useTest(1);
+
         $this->insertTable(1);
         $this->clickCell(0);
 
@@ -107,6 +117,8 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
      */
     public function testCreateTableStructure2()
     {
+        $this->useTest(1);
+
         $this->insertTableWithSpecificId('test', 4, 5, 0, 1);
 
         $this->clickCell(0);
@@ -182,6 +194,8 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
      */
     public function testCreateTableInList()
     {
+        $this->useTest(1);
+
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.TAB');
 
@@ -200,6 +214,8 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
      */
     public function testReplaceParagraphWithTable()
     {
+        $this->useTest(1);
+
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('table');
@@ -216,6 +232,8 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
      */
     public function testReplaceWordWithTable()
     {
+        $this->useTest(1);
+
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('table');
         $this->clickButton('Insert Table', NULL, TRUE);
@@ -231,6 +249,8 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
      */
     public function testCreatingTableThenClickingUndo()
     {
+        $this->useTest(1);
+
         $this->insertTable(1);
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
         $this->assertTrue($this->topToolbarButtonExists('table', 'active'), 'Create table icon should be active in the toolbar');
@@ -253,6 +273,8 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
      */
     public function testReplacingParagraphWithTableThenClickingUndo()
     {
+        $this->useTest(1);
+
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('table');
@@ -269,6 +291,30 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         $this->assertTrue($this->topToolbarButtonExists('table', 'active'), 'Create table icon should be active in the toolbar');
 
     }//end testReplacingParagraphWithTableThenClickingUndo()
+
+
+    /**
+     * Test that you can replace a paragraph with a table and click undo.
+     *
+     * @return void
+     */
+    public function testInsertTablerAfterCuttingContent()
+    {
+        $this->useTest(2);
+        
+        $location = $this->findKeyword(1);
+        // Cut the content from the page
+        $this->selectKeyword(1, 2);
+        $this->cut(TRUE);
+        $this->sikuli->click($location);
+
+        // Insert a new table
+        $this->clickTopToolbarButton('table');
+        $this->clickButton('Insert Table', NULL, TRUE);
+        sleep(1);
+        $this->assertHTMLMatchNoHeaders('<h1>Insert Table</h1><p></p><table border="1" style="width:100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>Third paragraph</p>');
+
+    }//end testInsertTablerAfterCuttingContent()
 
 
 }//end class

@@ -13,6 +13,8 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
      */
     public function testColumnToolIconsCorrect()
     {
+        $this->useTest(1);
+
         $this->insertTable(1);
         $this->showTools(0, 'col');
 
@@ -36,6 +38,8 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
      */
     public function testChangingColumnWidth()
     {
+        $this->useTest(1);
+
         $this->insertTable(1);
 
         // Change the width of the first column and click Apply Changes
@@ -56,12 +60,41 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
 
 
     /**
+     * Test changing the width of columns and clicking undo and redo.
+     *
+     * @return void
+     */
+    public function testChangingColumnWidthAndClickingUndo()
+    {
+        $this->useTest(1);
+
+        $this->insertTable(1);
+
+        // Change the width of the first column
+        $this->showTools(0, 'col');
+        $this->clickField('Width');
+        $this->type('50');
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th style="width: 50px;"></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th style="width: 50px;"></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+
+    }//end testChangingColumnWidthAndClickingUndo()
+
+
+    /**
      * Test adding a new table without headers and then changing the settings of columns.
      *
      * @return void
      */
     public function testColumnsInANewTableWithoutHeaders()
     {
+        $this->useTest(1);
+
         $this->insertTable(1, 0);
         $this->clickCell(0);
         $this->type('One');
@@ -112,6 +145,8 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
      */
     public function testColumnsInANewTableWithLeftHeaders()
     {
+        $this->useTest(1);
+
         $this->insertTable(1, 1);
         $this->clickCell(0);
         $this->type('One');
@@ -171,6 +206,8 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
      */
     public function testColumnsInANewTableWithTopHeaders()
     {
+        $this->useTest(1);
+
         $this->insertTable(1);
         $this->clickCell(0);
         $this->type('One');
@@ -231,6 +268,8 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
     public function testColumnsInANewTableWithBothHeaders()
     {
 
+        $this->useTest(1);
+
         $this->insertTable(1, 3);
         $this->clickCell(0);
         $this->type('One');
@@ -290,6 +329,8 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
      */
     public function testColspanChangesWhenNewColumnAdded()
     {
+        $this->useTest(2);
+
         $this->showTools(5, 'col');
         $this->clickInlineToolbarButton('addRight');
         $this->clickInlineToolbarButton('addLeft');
@@ -309,6 +350,8 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
      */
     public function testColspanChangesWhenYouDeleteTheLastColumn()
     {
+        $this->useTest(3);
+
         $this->showTools(6, 'col');
         $this->clickInlineToolbarButton('delete');
         $this->assertHTMLMatchNoHeaders('<table style="width: 300px;" border="1" cellspacing="2" cellpadding="2"><tbody><tr><td style="width: 100px;" colspan="2">Survey</td><td rowspan="2">All Genders</td><td style="width: 100px;">By Gender</td></tr><tr><td></td><td></td><td>Male</td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>');
@@ -324,6 +367,8 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
      */
     public function testColspanChangesWhenYouDeleteTheFirstColumnOfMergedCell()
     {
+        $this->useTest(4);
+        
         $this->showTools(5, 'col');
         $this->clickInlineToolbarButton('delete');
         $this->assertHTMLMatchNoHeaders('<table style="width: 300px;" border="1" cellspacing="2" cellpadding="2"><tbody><tr><td style="width: 100px;" colspan="2">Survey</td><td rowspan="2">All Genders</td><td style="width: 100px;">By Gender</td></tr><tr><td></td><td></td><td>Females</td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>');
@@ -339,6 +384,8 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
      */
     public function testMoveIconsInTheColumnToolbar()
     {
+        $this->useTest(1);
+
         $this->insertTable(1);
         $this->showTools(0, 'col');
 
@@ -367,6 +414,8 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
      */
     public function testHeaderIdsRemovedWhenYouRemoveHeaderColumn()
     {
+        $this->useTest(1);
+
         $this->insertTableWithSpecificId('test', 3, 4, 1, 1);
 
         $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1"></th><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td></tr><tr><th id="testr2c1"></th><td headers="testr2c1"></td><td headers="testr2c1"></td><td headers="testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr3c1"></td><td headers="testr3c1"></td><td headers="testr3c1"></td></tr></tbody></table><p></p>');
@@ -391,6 +440,8 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
      */
     public function testUndoRedoForHeaderToNormalCellConversion()
     {
+        $this->useTest(1);
+
         $this->insertTableWithSpecificId('test', 3, 4, 1, 1);
 
         $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1"></th><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td></tr><tr><th id="testr2c1"></th><td headers="testr2c1"></td><td headers="testr2c1"></td><td headers="testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr3c1"></td><td headers="testr3c1"></td><td headers="testr3c1"></td></tr></tbody></table><p></p>');
@@ -418,6 +469,8 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
      */
     public function testInlineToolbarStaysOpenAfterMovingColumn()
     {
+        $this->useTest(1);
+
         $this->insertTable(1);
 
         // Test moving a column right

@@ -503,7 +503,12 @@ ViperKeyboardEditorPlugin.prototype = {
             ) {
                 var elem = document.createElement(defaultTagName);
                 ViperUtil.setHtml(elem, '<br />');
-                ViperUtil.insertBefore(startNode, elem);
+                if (startNode === viperElem.lastChild) {
+                    ViperUtil.insertAfter(startNode, elem);
+                } else {
+                    ViperUtil.insertBefore(startNode, elem);
+                }
+
                 range.selectNode(elem.firstChild);
                 range.collapse(true);
                 ViperSelection.addRange(range);
@@ -787,6 +792,9 @@ ViperKeyboardEditorPlugin.prototype = {
                             range.collapse(true);
                             ViperSelection.addRange(range);
                         }
+                    } else {
+                        var nonSelectableElements = ViperUtil.getElementsBetween(viperElement, startNode);
+                        ViperUtil.remove(nonSelectableElements);
                     }
 
                     if (startNode.nodeType === ViperUtil.TEXT_NODE
@@ -1274,6 +1282,26 @@ ViperKeyboardEditorPlugin.prototype = {
                     this.viper.fireNodesChanged();
                     this.viper.fireSelectionChanged();
                     return false;
+                } else if (
+                    !nodeSelection
+                    && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                    && range.startOffset === 0
+                    && range.endContainer.nodeType === ViperUtil.TEXT_NODE
+                    && range.endOffset === 0
+                    && range.startContainer !== range.endContainer
+                    && ViperUtil.getFirstBlockParent(range.startContainer) === ViperUtil.getFirstBlockParent(range.endContainer)
+                ) {
+                    // Handle <p>[<strong>text</strong><br />]more text</p>.
+                    var startContainer = range.startContainer;
+                    var endContainer   = range.endContainer;
+                    var elemsBetween   = ViperUtil.getElementsBetween(startContainer, endContainer);
+                    elemsBetween.push(startContainer);
+                    ViperUtil.remove(elemsBetween);
+
+                    range.setStart(endContainer, 0);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                    return false;
                 }
             }
 
@@ -1335,13 +1363,23 @@ ViperKeyboardEditorPlugin.prototype = {
                 }
             } else if (ViperUtil.isTag(startNode, 'br') === true
                 && startNode.parentNode
-                && startNode.parentNode.childNodes.length === 1
                 && ViperUtil.isBrowser('firefox') === true
             ) {
-                var tmpNode = document.createTextNode('');
-                startNode.parentNode.appendChild(tmpNode);
-                ViperUtil.remove(startNode);
-                range.setStart(tmpNode);
+                if (startNode.parentNode.childNodes.length === 1) {
+                    var tmpNode = document.createTextNode('');
+                    startNode.parentNode.appendChild(tmpNode);
+                    ViperUtil.remove(startNode);
+                    range.setStart(tmpNode);
+                } else if (startNode.nextSibling
+                    && startNode.nextSibling.nodeType === ViperUtil.TEXT_NODE
+                ) {
+                    // Handle <p><strong>[delete key * 2]t</strong><br />more text</p>.
+                    range.setStart(startNode.nextSibling, 0);
+                    range.collapse(true);
+                    ViperUtil.remove(startNode);
+                    ViperSelection.addRange(range);
+                    return false;
+                }
             }
         }//end if
 
@@ -1412,8 +1450,12 @@ ViperKeyboardEditorPlugin.prototype = {
                 }
             }
 
-            var parent = range.getStartNode().parentNode;
-            ViperUtil.remove(range.getStartNode().parentNode);
+            var parent = startNode.parentNode;
+            if (!startNode.nextSibling && !startNode.previousSibling) {
+               ViperUtil.remove(startNode.parentNode);
+            } else {
+                ViperUtil.remove(startNode);
+            }
 
             if (parent.childNodes.length === 0) {
                 ViperUtil.remove(parent);
@@ -1524,11 +1566,13 @@ ViperKeyboardEditorPlugin.prototype = {
                         var nextSelectable = range.getNextContainer(range.startContainer, null, true);
                         if (this.viper.isOutOfBounds(nextSelectable) === false) {
                             var nextParent = ViperUtil.getFirstBlockParent(nextSelectable);
-                            while (nextParent.firstChild) {
-                                startParent.appendChild(nextParent.firstChild);
-                            }
+                            if (startParent !== nextParent) {
+                                while (nextParent.firstChild) {
+                                    startParent.appendChild(nextParent.firstChild);
+                                }
 
-                            ViperUtil.remove(nextParent);
+                                ViperUtil.remove(nextParent);
+                            }
                         }
                     } else {
                         ViperUtil.remove(startParent);
