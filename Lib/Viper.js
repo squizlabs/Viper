@@ -3808,6 +3808,15 @@ Viper.prototype = {
                     ViperUtil.remove(span);
                 }
             }
+        } else if (range.startContainer
+            && range.endContainer
+            && range.endContainer.previousSibling === range.startContainer.nextSibling
+            && ViperUtil.isTag(range.startContainer.nextSibling, 'img') === true
+            && ViperUtil.isTag(range.endContainer.previousSibling, 'img') === true
+        ) {
+            // This is for early IE version where range is set before and after an image. Still want to just highlight
+            // the image element instead of using surroundContents below.
+            ViperUtil.addClass(range.startContainer.nextSibling, '__viper_selHighlight __viper_cleanOnly');
         } else {
             var attributes = {
                 cssClass: '__viper_selHighlight'
