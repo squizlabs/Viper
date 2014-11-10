@@ -2340,6 +2340,27 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
 
     /**
+     * Returns TRUE if the current browser/os matches the specified parameters.
+     *
+     * @param string $os      The OS the test runs for, NULL for any.
+     * @param string $browser The browser the test runs for, NULL for any.
+     *
+     * @return void
+     */
+    protected function isOSAndBrowser($os=NULL, $browser=NULL)
+    {
+        if ($os !== NULL && $os !== $this->sikuli->getOS()) {
+            return FALSE;
+        } else if ($browser !== NULL && $browser !== $this->sikuli->getBrowserid()) {
+            return FALSE;
+        }
+
+        return TRUE;
+
+    }//end isOSAndBrowser()
+
+
+    /**
      * Moves the mouse to the next line from its current position and clicks it.
      *
      * Note that the mouse must already be pointing to a line.
@@ -2351,6 +2372,93 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $this->sikuli->click($this->sikuli->mouseMoveOffset(0, 50));
 
     }//end clickNextLine()
+
+
+    /**
+     * Moves the mouse pointer to the specified location for the given element.
+     *
+     *
+     * @return void
+     */
+    protected function moveMouseToElement($selector, $position='bottom', $index=0)
+    {
+        $elemRect = $this->getBoundingRectangle($selector, $index);
+        $x        = ($elemRect['x1'] + ($elemRect['x2'] - $elemRect['x1']) / 2);
+
+        switch ($position) {
+            case 'bottom':
+                $y = ($elemRect['y2'] + 20);
+            break;
+
+            case 'top':
+                $y = ($elemRect['y1'] - 20);
+            break;
+        }
+
+        $loc = $this->sikuli->createLocation(
+            $this->sikuli->getPageXRelativeToScreen($x),
+            $this->sikuli->getPageYRelativeToScreen($y)
+        );
+        $this->sikuli->mouseMove($loc);
+
+    }//end moveMouseToElement()
+
+
+    /**
+     * Returns TRUE if the Cursor Assist plugin's line is visible.
+     *
+     * @param string  $relativeElement The selector for the relative element.
+     * @param string  $position        The position of the line relative to the element.
+     * @param integer $index           The element index of the resulting array.
+     *
+     * @return boolean
+     */
+    protected function isCursorAssistLineVisible($relativeElement=NULL, $position='bottom', $index=0)
+    {
+        $rect = $this->getBoundingRectangle('.ViperCursorAssistPlugin');
+        if (empty($rect) === FALSE) {
+            if ($relativeElement !== NULL) {
+                // Get the position  of the element.
+                $elemPos = $this->getBoundingRectangle($relativeElement, $index);
+
+                switch ($position) {
+                    case 'bottom':
+                        if ($rect['y2'] <= $elemPos['y2']) {
+                            return FALSE;
+                        }
+                    break;
+
+                    case 'top':
+                        if ($rect['y1'] >= $elemPos['y1']) {
+                            return FALSE;
+                        }
+                    break;
+
+                    default:
+                        throw new Exception('Position "'.$position.'" not supported.');
+                    break;
+                }//end switch
+
+            }//end if
+
+            return TRUE;
+        }//end if
+
+        return FALSE;
+
+    }//end isCursorAssistLineVisible()
+
+
+    /**
+     * Clicks the visible cursor assist line.
+     *
+     * @return void
+     */
+    protected function clickCursorAssistLine()
+    {
+        $this->clickElement('.ViperCursorAssistPlugin');
+
+    }//end clickCursorAssistLine()
 
 
 }//end class
