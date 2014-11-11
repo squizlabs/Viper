@@ -13,6 +13,7 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
      */
     public function testLinksNotAvailableInTable()
     {
+        $this->useTest(1);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled', TRUE), 'Link icon should be disabled.');
@@ -27,6 +28,8 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
      */
     public function testRemovingLinksInTable()
     {
+        $this->useTest(1);
+
         // Test remove link in inline toolbar
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
@@ -54,6 +57,8 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
      */
     public function testLinkToolsAvailableInTableCaption()
     {
+        $this->useTest(1);
+
         $this->sikuli->click($this->findKeyword(1));
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'), 'Link icon should not be active.');
 
@@ -74,6 +79,8 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
      */
     public function testLinksInCaptionUsingInlineToolbar()
     {
+        $this->useTest(1);
+
         // Test adding a link
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('link');
@@ -117,6 +124,8 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
      */
     public function testLinksInCaptionUsingTopToolbar()
     {
+        $this->useTest(1);
+
         // Test adding a link
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('link');
@@ -173,6 +182,8 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
      */
     public function testLinkToolsAvailableInTableHeader()
     {
+        $this->useTest(1);
+
         $this->sikuli->click($this->findKeyword(2));
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'), 'Link icon should not be active.');
 
@@ -199,6 +210,8 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
      */
     public function testLinksInHeaderUsingInlineToolbar()
     {
+        $this->useTest(1);
+
         // Test adding a link
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('link');
@@ -244,6 +257,8 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
      */
     public function testLinksInHeaderUsingTopToolbar()
     {
+        $this->useTest(1);
+
         // Test adding a link
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('link');
@@ -300,6 +315,8 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
      */
     public function testLinkToolsAvailableInTableFooter()
     {
+        $this->useTest(1);
+
         $this->sikuli->click($this->findKeyword(3));
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'), 'Link icon should not be active.');
 
@@ -326,6 +343,8 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
      */
     public function testLinksInFooterUsingInlineToolbar()
     {
+        $this->useTest(1);
+
         // Test adding a link
         $this->selectKeyword(3);
         $this->clickInlineToolbarButton('link');
@@ -369,6 +388,8 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
      */
     public function testLinksInFooterUsingTopToolbar()
     {
+        $this->useTest(1);
+
         // Test adding a link
         $this->selectKeyword(3);
         $this->clickTopToolbarButton('link');
@@ -425,6 +446,8 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
      */
     public function testLinkToolsAvailableInTableBody()
     {
+        $this->useTest(1);
+
         $this->sikuli->click($this->findKeyword(4));
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'), 'Link icon should not be active.');
 
@@ -451,6 +474,8 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
      */
     public function testLinksInBodyUsingInlineToolbar()
     {
+        $this->useTest(1);
+
         // Test adding a link
         $this->selectKeyword(4);
         $this->clickInlineToolbarButton('link');
@@ -494,6 +519,8 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
      */
     public function testLinksInBodyUsingTopToolbar()
     {
+        $this->useTest(1);
+
         // Test adding a link
         $this->selectKeyword(4);
         $this->clickTopToolbarButton('link');
@@ -541,6 +568,34 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td><a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">sapien vel %4%</a></td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testLinksInBodyUsingTopToolbar()
+
+
+    /**
+     * Test deleting an existing link and adding new content into the cell.
+     *
+     * @return void
+     */
+    public function testDeleteLinkAndAddNewContent()
+    {
+        // Highlight all of the content in the cell, deleting it and adding new content
+        $this->useTest(2);
+        $this->selectKeyword(1, 2);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('new content');
+        $this->assertHTMLMatchNoHeaders('<table><tbody><tr><th>Gate</th><th>Standard</th><th>Imp</th><th>Reviewer</th></tr><tr><td>Q1/Q2</td><td>new content</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table>');
+
+        // Highlight all of the content in the cell, deleting it and adding new content
+        $this->useTest(2);
+        $this->moveToKeyword(2, 'right');
+
+        for ($i = 1; $i <= 29; $i++) {
+            $this->sikuli->keyDown('Key.BACKSPACE');
+        }
+
+        $this->type('new content');
+        $this->assertHTMLMatchNoHeaders('<table><tbody><tr><th>Gate</th><th>Standard</th><th>Imp</th><th>Reviewer</th></tr><tr><td>Q1/Q2</td><td>new content</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table>');
+
+    }//end testDeleteLinkAndAddNewContent()
 
 
 }//end class
