@@ -821,12 +821,17 @@ Viper.prototype = {
         this.fireCallbacks('Viper:editableElementChanged', {element: elem});
 
         // Create a text field that is off screen that will handle tabbing in to Viper.
-        var tabTextfield  = document.createElement('input');
-        tabTextfield.type = 'text';
-        ViperUtil.setStyle(tabTextfield, 'left', '-9999px');
-        ViperUtil.setStyle(tabTextfield, 'top', '-9999px');
-        ViperUtil.setStyle(tabTextfield, 'position', 'absolute');
-        ViperUtil.insertBefore(this.element, tabTextfield);
+        var tabTextfield  = ViperUtil.getid(this.getId() + '-tabTextfield');
+        if (!tabTextfield) {
+            tabTextfield = document.createElement('input');
+            tabTextfield.type = 'text';
+            tabTextfield.id   = this.getId() + '-tabTextfield';
+            ViperUtil.setStyle(tabTextfield, 'left', '-9999px');
+            ViperUtil.setStyle(tabTextfield, 'top', '-9999px');
+            ViperUtil.setStyle(tabTextfield, 'position', 'absolute');
+            ViperUtil.insertBefore(this.element, tabTextfield);
+        }
+
         ViperUtil.addEvent(tabTextfield, 'focus', function(e) {
             tabTextfield.blur();
             self.setEnabled(true);
