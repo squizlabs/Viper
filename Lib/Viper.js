@@ -4245,6 +4245,22 @@ Viper.prototype = {
     _firefoxKeyDown: function(e)
     {
         if (e.which >= 37 && e.which <= 40) {
+            // Handle the case where selecting whole content and pressing right arrow key puts the caret outside of the
+            // last selected element. E.g. <p>test</p>*.
+            var range = this.getCurrentRange();
+            if (e.which >= 39
+                && range.startContainer === range.endContainer
+                && range.startOffset === 0
+                && range.endOffset >= range.startContainer.childNodes.length
+            ) {
+                var lastSelectable = range._getLastSelectableChild(range.startContainer.childNodes[range.endOffset - 1]);
+                if (lastSelectable && lastSelectable.nodeType === ViperUtil.TEXT_NODE) {
+                    range.setStart(lastSelectable, lastSelectable.data.length);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                }
+            }
+
             // Arrow keys.
             return;
         }
