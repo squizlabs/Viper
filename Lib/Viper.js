@@ -821,12 +821,17 @@ Viper.prototype = {
         this.fireCallbacks('Viper:editableElementChanged', {element: elem});
 
         // Create a text field that is off screen that will handle tabbing in to Viper.
-        var tabTextfield  = document.createElement('input');
-        tabTextfield.type = 'text';
-        ViperUtil.setStyle(tabTextfield, 'left', '-9999px');
-        ViperUtil.setStyle(tabTextfield, 'top', '-9999px');
-        ViperUtil.setStyle(tabTextfield, 'position', 'absolute');
-        ViperUtil.insertBefore(this.element, tabTextfield);
+        var tabTextfield  = ViperUtil.getid(this.getId() + '-tabTextfield');
+        if (!tabTextfield) {
+            tabTextfield = document.createElement('input');
+            tabTextfield.type = 'text';
+            tabTextfield.id   = this.getId() + '-tabTextfield';
+            ViperUtil.setStyle(tabTextfield, 'left', '-9999px');
+            ViperUtil.setStyle(tabTextfield, 'top', '-9999px');
+            ViperUtil.setStyle(tabTextfield, 'position', 'absolute');
+            ViperUtil.insertBefore(this.element, tabTextfield);
+        }
+
         ViperUtil.addEvent(tabTextfield, 'focus', function(e) {
             tabTextfield.blur();
             self.setEnabled(true);
@@ -4245,6 +4250,22 @@ Viper.prototype = {
     _firefoxKeyDown: function(e)
     {
         if (e.which >= 37 && e.which <= 40) {
+            // Handle the case where selecting whole content and pressing right arrow key puts the caret outside of the
+            // last selected element. E.g. <p>test</p>*.
+            var range = this.getCurrentRange();
+            if (e.which >= 39
+                && range.startContainer === range.endContainer
+                && range.startOffset === 0
+                && range.endOffset >= range.startContainer.childNodes.length
+            ) {
+                var lastSelectable = range._getLastSelectableChild(range.startContainer.childNodes[range.endOffset - 1]);
+                if (lastSelectable && lastSelectable.nodeType === ViperUtil.TEXT_NODE) {
+                    range.setStart(lastSelectable, lastSelectable.data.length);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                }
+            }
+
             // Arrow keys.
             return;
         }

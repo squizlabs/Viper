@@ -1365,7 +1365,20 @@ ViperKeyboardEditorPlugin.prototype = {
                 && startNode.parentNode
                 && ViperUtil.isBrowser('firefox') === true
             ) {
-                if (startNode.parentNode.childNodes.length === 1) {
+                var nextSelectable = range.getNextContainer(startNode, null, true, true);
+                if (nextSelectable) {
+                    var startParent = startNode.parentNode;
+                    if (startParent.childNodes.length === 1) {
+                        ViperUtil.remove(startParent);
+                    } else {
+                        ViperUtil.remove(startNode);
+                    }
+
+                    range.setStart(nextSelectable, 0);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                    return false;
+                } else if (startNode.parentNode.childNodes.length === 1) {
                     var tmpNode = document.createTextNode('');
                     startNode.parentNode.appendChild(tmpNode);
                     ViperUtil.remove(startNode);
