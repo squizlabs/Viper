@@ -29,7 +29,7 @@ class Viper_Tests_ViperCopyPastePlugin_ListsUnitTest extends AbstractViperUnitTe
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacSafari/Lists.txt');
                         break;
                     default:
-                        throw new Exception('Browser is not supported on osx');
+                        $this->fail('Testing for '.$this->sikuli->getBrowserid().' is not supported on osx for this test');
                 }//end switch
             case 'windows':
                 switch ($this->sikuli->getBrowserid()) {
@@ -52,7 +52,7 @@ class Viper_Tests_ViperCopyPastePlugin_ListsUnitTest extends AbstractViperUnitTe
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsIE11/Lists.txt');
                         break;
                     default:
-                        throw new Exception('Browser is not supported on windows');
+                        $this->fail('Testing for '.$this->sikuli->getBrowserid().' is not supported on Windows for this test');
                 }//end switch
         }//end switch
 
