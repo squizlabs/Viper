@@ -182,6 +182,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         }
 
         $this->sikuli = self::$_sikuli;
+        $this->sikuli->setFileGroup('_www');
 
         if (self::$_testRun !== TRUE) {
             try {
