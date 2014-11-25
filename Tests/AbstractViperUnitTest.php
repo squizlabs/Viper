@@ -177,12 +177,12 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                                          'width'  => 1270,
                                          'height' => 850,
                                         ),
+                              'fileGroupOwner' => '_www',
                              );
             self::$_sikuli = new PHPSikuliBrowser($browser, $options);
         }
 
         $this->sikuli = self::$_sikuli;
-        $this->sikuli->setFileGroup('_www');
 
         if (self::$_testRun !== TRUE) {
             try {
