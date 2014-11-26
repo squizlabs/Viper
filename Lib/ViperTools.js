@@ -1164,8 +1164,8 @@ ViperTools.prototype = {
         });
 
         ViperUtil.addEvent(toolbar, 'mouseup', function(e) {
-                ViperUtil.preventDefault(e);
-                return false;
+            ViperUtil.preventDefault(e);
+            return false;
         });
 
         var _update = false;
@@ -1956,6 +1956,22 @@ ViperTools.prototype = {
         this.viper.addElement(toolbar);
 
         return toolbar;
+
+    },
+
+    getVisibleToolbarRectangles: function()
+    {
+        var rects           = [];
+        var visibleToolbars = ViperUtil.getClass('ViperITP Viper-visible', this.viper.getElementHolder());
+        if (visibleToolbars.length === 0) {
+            return rects;
+        }
+
+        for (var i = 0; i < visibleToolbars.length; i++) {
+            rects.push(ViperUtil.getBoundingRectangle(visibleToolbars[i]));
+        }
+
+        return rects;
 
     },
 

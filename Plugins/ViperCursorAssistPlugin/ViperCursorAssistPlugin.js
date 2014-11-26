@@ -27,7 +27,7 @@ ViperCursorAssistPlugin.prototype = {
         var validElemsArray = validElems.split(',');
         var prevElement = null;
         var prevPos     = null;
-        this.viper.registerCallback('Viper:editableElementChanged', 'ViperCursorAssitPlugin', function() {
+        this.viper.registerCallback('Viper:editableElementChanged', 'ViperCursorAssistPlugin', function() {
             ViperUtil.addEvent(document, 'mousemove', function(e) {
                 clearTimeout(t);
                 t = setTimeout(function() {
@@ -103,10 +103,13 @@ ViperCursorAssistPlugin.prototype = {
                         dist = (height / 2);
                     }
 
+                    var relYPoint = null;
                     if (elemRect.y1 + dist > mousePos) {
                         sibling = 'previousSibling';
+                        relYPoint = elemRect.y1;
                     } else if (elemRect.y2 - dist < mousePos) {
                         sibling = 'nextSibling';
+                        relYPoint = elemRect.y2;
                     } else {
                         if (line) {
                             ViperUtil.remove(line);
@@ -119,6 +122,10 @@ ViperCursorAssistPlugin.prototype = {
                     }
 
                     if (prevElement === hoverElem && prevPos === sibling) {
+                        return;
+                    }
+
+                    if (self.isInToolbarBounds(relYPoint) === true) {
                         return;
                     }
 
@@ -228,6 +235,27 @@ ViperCursorAssistPlugin.prototype = {
                 }, 200);
             });
         });
+
+        this.viper.registerCallback('Viper:mouseDown', 'ViperCursorAssistPlugin', function() {
+            var line = ViperUtil.getid(self.viper.getId() + '-cursorAssist');
+            if (line) {
+                ViperUtil.remove(line);
+            }
+        });
+    },
+
+    isInToolbarBounds: function(yPoint)
+    {
+        var visibleToolbars = self.viper.ViperTools.getVisibleToolbarRectangles();
+        for (var i = 0; i < visibleToolbars.length; i++) {
+            if (yPoint >= (visibleToolbars[i].y1 - 15) && yPoint <= (visibleToolbars[i].y2 + 15)) {
+                console.info('between');
+                return true;;
+            }
+        }
+
+        return false;
+
     },
 
     isPluginElement: function(elem)
