@@ -15,7 +15,7 @@ class Viper_Tests_ViperCursorAssistPlugin_CursorAssistForImagesUnitTest extends 
     {
         $this->useTest(1);
 
-        $this->moveToKeyword(1);
+        $this->clickKeyword(1);
 
         $this->moveMouseToElement('img', 'top');
 
@@ -39,7 +39,7 @@ class Viper_Tests_ViperCursorAssistPlugin_CursorAssistForImagesUnitTest extends 
     {
         $this->useTest(2);
 
-        $this->moveToKeyword(1);
+        $this->clickKeyword(1);
 
         $this->moveMouseToElement('img', 'bottom');
 
