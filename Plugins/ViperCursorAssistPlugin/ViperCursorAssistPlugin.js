@@ -246,10 +246,9 @@ ViperCursorAssistPlugin.prototype = {
 
     isInToolbarBounds: function(yPoint)
     {
-        var visibleToolbars = self.viper.ViperTools.getVisibleToolbarRectangles();
+        var visibleToolbars = this.viper.ViperTools.getVisibleToolbarRectangles();
         for (var i = 0; i < visibleToolbars.length; i++) {
             if (yPoint >= (visibleToolbars[i].y1 - 15) && yPoint <= (visibleToolbars[i].y2 + 15)) {
-                console.info('between');
                 return true;;
             }
         }
