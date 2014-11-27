@@ -27,37 +27,39 @@ ViperCursorAssistPlugin.prototype = {
         var validElemsArray = validElems.split(',');
         var prevElement = null;
         var prevPos     = null;
+        var hover       = false;
+
+        var _removeLine = function(line, clearPrev) {
+            if (line) {
+                ViperUtil.remove(line);
+            }
+
+            hover = false;
+            if (clearPrev !== false) {
+                prevElement = null;
+                prevPos     = null;
+            }
+        };
+
         this.viper.registerCallback('Viper:editableElementChanged', 'ViperCursorAssistPlugin', function() {
             ViperUtil.addEvent(document, 'mousemove', function(e) {
                 clearTimeout(t);
                 t = setTimeout(function() {
                     var line = ViperUtil.getid(self.viper.getId() + '-cursorAssist');
                     var hoverElem = self.viper.getElementAtCoords(e.clientX, e.clientY);
-                    if (hoverElem && (hoverElem === line || hoverElem.parentNode.parentNode === line)) {
+                    if (hoverElem && (hover === true || hoverElem === line || hoverElem.parentNode.parentNode === line)) {
                         return;
                     }
 
                     if (!hoverElem || self.viper.isOutOfBounds(hoverElem) === true) {
-                        if (line) {
-                            ViperUtil.remove(line);
-                        }
-
-                        prevElement = null;
-                        prevPos     = null;
-
+                        _removeLine(line);
                         return;
                     }
 
                     if (ViperUtil.inArray(ViperUtil.getTagName(hoverElem), validElemsArray) !== true) {
                         var elems = ViperUtil.getParents(hoverElem, validElems, self.viper.getViperElement());
                         if (elems.length === 0) {
-                            if (line) {
-                                ViperUtil.remove(line);
-                            }
-
-                            prevElement = null;
-                            prevPos     = null;
-
+                            _removeLine(line);
                             return;
                         } else {
                             hoverElem = elems.shift();
@@ -67,13 +69,7 @@ ViperCursorAssistPlugin.prototype = {
                             ) {
                                 // Do not show the line if this is a nested list.
                                 if (ViperUtil.getParents(hoverElem, 'ul,ol', self.viper.getViperElement()).length > 0) {
-                                    if (line) {
-                                        ViperUtil.remove(line);
-                                    }
-
-                                    prevElement = null;
-                                    prevPos     = null;
-
+                                    _removeLine(line);
                                     return;
                                 }
                             }
@@ -111,13 +107,7 @@ ViperCursorAssistPlugin.prototype = {
                         sibling = 'nextSibling';
                         relYPoint = elemRect.y2;
                     } else {
-                        if (line) {
-                            ViperUtil.remove(line);
-                        }
-
-                        prevElement = null;
-                        prevPos = null;
-
+                        _removeLine(line);
                         return;
                     }
 
@@ -140,7 +130,7 @@ ViperCursorAssistPlugin.prototype = {
                             if (siblingElem.nodeType !== ViperUtil.TEXT_NODE) {
                                 if (ViperUtil.inArray(ViperUtil.getTagName(siblingElem), validElemsArray) !== true) {
                                     if (line) {
-                                        ViperUtil.remove(line);
+                                        _removeLine(line, false);
                                     }
 
                                     return false;
@@ -162,16 +152,23 @@ ViperCursorAssistPlugin.prototype = {
                     }
 
                     if (line) {
-                        ViperUtil.remove(line);
+                        _removeLine(line, false);
                     }
 
                     line    = document.createElement('div');
                     line.id = self.viper.getId() + '-cursorAssist';
                     ViperUtil.addClass(line, 'ViperCursorAssistPlugin');
                     ViperUtil.setHtml(line, '<span class="ViperCursorAssistPlugin-cursorText">Insert</span><span class="ViperCursorAssistPlugin-cursorLine"></span>');
+                    hover = false;
+
+                    ViperUtil.hover(line, function() {
+                        hover = true;
+                    }, function() {
+                        hover = false;
+                    });
 
                     ViperUtil.addEvent(line, 'mousedown', function() {
-                        ViperUtil.remove(line);
+                        _removeLine(line, false);
 
                         var p = document.createElement('p');
 
@@ -247,7 +244,7 @@ ViperCursorAssistPlugin.prototype = {
         this.viper.registerCallback('Viper:mouseDown', 'ViperCursorAssistPlugin', function() {
             var line = ViperUtil.getid(self.viper.getId() + '-cursorAssist');
             if (line) {
-                ViperUtil.remove(line);
+                _removeLine(line, false);
             }
         });
     },
