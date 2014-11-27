@@ -181,6 +181,14 @@ ViperCursorAssistPlugin.prototype = {
                             ViperUtil.setHtml(p, '<br/>');
                         }
 
+                        // Use the block parent element of img, object etc.
+                        if (ViperUtil.isBlockElement(hoverElem) === false || ViperUtil.isStubElement(hoverElem) === true) {
+                            var blockParent = ViperUtil.getFirstBlockParent(hoverElem, self.viper.getViperElement());
+                            if (blockParent) {
+                                hoverElem = blockParent;
+                            }
+                        }
+
                         if (sibling === 'previousSibling') {
                             ViperUtil.insertBefore(hoverElem, p);
                         } else {
@@ -205,7 +213,7 @@ ViperCursorAssistPlugin.prototype = {
 
                             self.viper.fireNodesChanged();
                             self.viper.fireSelectionChanged(null, true);
-                        }, 10)
+                        }, 10);
                     });
 
                     ViperUtil.removeClass(line, 'insertBetween');
