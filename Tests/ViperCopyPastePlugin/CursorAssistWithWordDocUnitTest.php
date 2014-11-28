@@ -37,7 +37,7 @@ class Viper_Tests_ViperCopyPastePlugin_CursorAssistWithWordDocUnitTest extends A
                     default:
                         throw new Exception('Browser is not supported on osx');
                 }//end switch
-            break;
+                break;
             case 'windows':
                 switch ($this->sikuli->getBrowserid()) {
                     case 'firefox':
@@ -61,7 +61,7 @@ class Viper_Tests_ViperCopyPastePlugin_CursorAssistWithWordDocUnitTest extends A
                     default:
                         throw new Exception('Browser is not supported on windows');
                 }//end switch
-            break;
+                break;
         }//end switch
 
         // Paste the word document in the content

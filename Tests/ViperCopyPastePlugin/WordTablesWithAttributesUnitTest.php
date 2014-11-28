@@ -31,6 +31,7 @@ class Viper_Tests_ViperCopyPastePlugin_WordTablesWithAttributesUnitTest extends 
                     default:
                         throw new Exception('Browser is not supported on osx');
                 }//end switch
+                break;
             case 'windows':
                 switch ($this->sikuli->getBrowserid()) {
                     case 'firefox':
@@ -54,6 +55,7 @@ class Viper_Tests_ViperCopyPastePlugin_WordTablesWithAttributesUnitTest extends 
                     default:
                         throw new Exception('Browser is not supported on windows');
                 }//end switch
+                break;
         }//end switch
 
         $this->selectKeyword(1);
