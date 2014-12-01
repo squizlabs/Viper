@@ -8,23 +8,26 @@
  * | this file please contact Squiz (www.squiz.com.au) so we may        |
  * | provide you a copy.                                                |
  * +--------------------------------------------------------------------+
- *
  */
 
 function ViperTools(viper)
 {
     this.viper = viper;
 
-    this._items = {};
+    this._items          = {};
     this._preventMouseUp = false;
 
     var self = this;
-    this.viper.registerCallback('Viper:mouseUp', 'ViperTools', function(e) {
-        if (self._preventMouseUp === true) {
-            self._preventMouseUp = false;
-            return false;
+    this.viper.registerCallback(
+        'Viper:mouseUp',
+        'ViperTools',
+        function(e) {
+            if (self._preventMouseUp === true) {
+                self._preventMouseUp = false;
+                return false;
+            }
         }
-    });
+    );
 
 }
 
@@ -53,6 +56,7 @@ ViperTools.prototype = {
         this.viper.removeCallback(null, id);
 
         this.viper.fireCallbacks('ViperTools:itemRemoved', id);
+
     },
 
     getItem: function(id)
@@ -70,10 +74,13 @@ ViperTools.prototype = {
             ViperUtil.addClass(elem, customClass);
         }
 
-        this.addItem(id, {
-            type: 'row',
-            element: elem
-        });
+        this.addItem(
+            id,
+            {
+                type: 'row',
+                element: elem
+            }
+        );
 
         return elem;
 
@@ -95,11 +102,14 @@ ViperTools.prototype = {
             ViperUtil.addClass(group, customClass);
         }
 
-        this.addItem(id, {
-            type: 'buttonGroup',
-            element: group,
-            buttons: []
-        });
+        this.addItem(
+            id,
+            {
+                type: 'buttonGroup',
+                element: group,
+                buttons: []
+            }
+        );
 
         return group;
 
@@ -160,105 +170,118 @@ ViperTools.prototype = {
         var preventMouseUp = false;
         var self           = this;
         if (clickAction) {
-            ViperUtil.addEvent(button, 'mousedown.' + this.viper.getEventNamespace(), function(e) {
-                if (ViperUtil.isBrowser('msie', '<11') === true) {
-                    // This block of code prevents IE moving user selection to the.
-                    // button element when clicked. When the button element is removed
-                    // and added back to DOM selection is not moved. Seriously, IE?
-                    if (button.previousSibling) {
-                        var sibling = button.previousSibling;
-                        button.parentNode.removeChild(button);
-                        ViperUtil.insertAfter(sibling, button);
-                    } else if (button.nextSibling) {
-                        var sibling = button.nextSibling;
-                        button.parentNode.removeChild(button);
-                        ViperUtil.insertBefore(sibling, button);
-                    } else {
-                        var parent = button.parentNode;
-                        button.parentNode.removeChild(button);
-                        parent.appendChild(button);
+            ViperUtil.addEvent(
+                button,
+                'mousedown.' + this.viper.getEventNamespace(),
+                function(e) {
+                    if (ViperUtil.isBrowser('msie', '<11') === true) {
+                        // This block of code prevents IE moving user selection to the.
+                        // button element when clicked. When the button element is removed
+                        // and added back to DOM selection is not moved. Seriously, IE?
+                        if (button.previousSibling) {
+                            var sibling = button.previousSibling;
+                            button.parentNode.removeChild(button);
+                            ViperUtil.insertAfter(sibling, button);
+                        } else if (button.nextSibling) {
+                            var sibling = button.nextSibling;
+                            button.parentNode.removeChild(button);
+                            ViperUtil.insertBefore(sibling, button);
+                        } else {
+                            var parent = button.parentNode;
+                            button.parentNode.removeChild(button);
+                            parent.appendChild(button);
+                        }
+                    }//end if
+
+                    self._preventMouseUp = true;
+                    ViperUtil.preventDefault(e);
+                    if (ViperUtil.hasClass(button, 'Viper-disabled') === true) {
+                        return false;
                     }
-                }//end if
 
-                self._preventMouseUp = true;
-                ViperUtil.preventDefault(e);
-                if (ViperUtil.hasClass(button, 'Viper-disabled') === true) {
-                    return false;
+                    setTimeout(
+                        function() {
+                            // Incase button is moved/removed during the click action.
+                            self._preventMouseUp = false;
+                        },
+                        200
+                    );
+
+                    self.viper.fireCallbacks('ViperTools:buttonClicked', id);
+                    return clickAction.call(this, e);
                 }
-
-                setTimeout(function() {
-                    // Incase button is moved/removed during the click action.
-                    self._preventMouseUp = false;
-                }, 200);
-
-                self.viper.fireCallbacks('ViperTools:buttonClicked', id);
-                return clickAction.call(this, e);
-            });
+            );
         }//end if
 
-        ViperUtil.addEvent(button, 'mouseup.' + this.viper.getEventNamespace(), function(e) {
-            mouseUpAction.call(this, e);
-            self._preventMouseUp = false;
-            ViperUtil.preventDefault(e);
-            return false;
-        });
+        ViperUtil.addEvent(
+            button,
+            'mouseup.' + this.viper.getEventNamespace(),
+            function(e) {
+                mouseUpAction.call(this, e);
+                self._preventMouseUp = false;
+                ViperUtil.preventDefault(e);
+                return false;
+            }
+        );
 
         if (isActive === true) {
             ViperUtil.addClass(button, 'Viper-active');
         }
 
-        this.addItem(id, {
-            type: 'button',
-            element: button,
-            setIconClass: function(iconClass)
+        this.addItem(
+            id,
             {
-                var btnIconElem = ViperUtil.getClass('Viper-buttonIcon', button);
-                if (btnIconElem.length === 0) {
-                    btnIconElem = document.createElement('span');
-                    ViperUtil.addClass(btnIconElem, 'Viper-buttonIcon');
-                    ViperUtil.insertBefore(button.firstChild, btnIconElem);
-                } else {
-                    btnIconElem = btnIconElem[0];
-                    btnIconElem.className = 'Viper-buttonIcon';
-                }
-
-                ViperUtil.addClass(btnIconElem, iconClass);
-            },
-            setButtonShortcut: function(key)
-            {
-                var extraTitleAttr = ' (' + key + ')';
-                if (extraTitleAttr.indexOf('CTRL') >= 0) {
-                    if (navigator.platform.indexOf('Mac') >= 0) {
-                        extraTitleAttr = extraTitleAttr.replace('CTRL', 'CMD');
+                type: 'button',
+                element: button,
+                setIconClass: function(iconClass) {
+                    var btnIconElem = ViperUtil.getClass('Viper-buttonIcon', button);
+                    if (btnIconElem.length === 0) {
+                        btnIconElem = document.createElement('span');
+                        ViperUtil.addClass(btnIconElem, 'Viper-buttonIcon');
+                        ViperUtil.insertBefore(button.firstChild, btnIconElem);
+                    } else {
+                        btnIconElem           = btnIconElem[0];
+                        btnIconElem.className = 'Viper-buttonIcon';
                     }
-                }
 
-                button.setAttribute('title', titleAttr + extraTitleAttr);
-
-                self.viper.registerCallback('Viper:keyDown', 'ViperTools-' + id, function(e) {
-                    if (self.viper.isKey(e, key) === true) {
-                        if (ViperUtil.hasClass(button, 'Viper-disabled') !== true) {
-                            clickAction.call(e, button);
+                    ViperUtil.addClass(btnIconElem, iconClass);
+                },
+                setButtonShortcut: function(key) {
+                    var extraTitleAttr = ' (' + key + ')';
+                    if (extraTitleAttr.indexOf('CTRL') >= 0) {
+                        if (navigator.platform.indexOf('Mac') >= 0) {
+                            extraTitleAttr = extraTitleAttr.replace('CTRL', 'CMD');
                         }
-
-                        return false;
                     }
-                });
-            },
-            setMouseUpAction: function(callback)
-            {
-                mouseUpAction = callback;
-            },
-            isEnabled: function()
-            {
-                return !this._disabled;
-            },
-            isActive: function()
-            {
-                return ViperUtil.hasClass(button, 'Viper-active');
-            },
-            _disabled: disabled
-        });
+
+                    button.setAttribute('title', titleAttr + extraTitleAttr);
+
+                    self.viper.registerCallback(
+                        'Viper:keyDown',
+                        'ViperTools-' + id,
+                        function(e) {
+                            if (self.viper.isKey(e, key) === true) {
+                                if (ViperUtil.hasClass(button, 'Viper-disabled') !== true) {
+                                    clickAction.call(e, button);
+                                }
+
+                                return false;
+                            }
+                        }
+                    );
+                },
+                setMouseUpAction: function(callback) {
+                    mouseUpAction = callback;
+                },
+                isEnabled: function() {
+                    return !this._disabled;
+                },
+                isActive: function() {
+                    return ViperUtil.hasClass(button, 'Viper-active');
+                },
+                _disabled: disabled
+            }
+        );
 
         return button;
 
@@ -352,6 +375,7 @@ ViperTools.prototype = {
     createTextbox: function(id, label, value, action, required, expandable, desc, events, labelWidth)
     {
         return this._createTextbox(id, label, value, action, required, expandable, desc, events, labelWidth);
+
     },
 
     createTextarea: function(id, label, value, required, desc, events, labelWidth, rows, cols)
@@ -443,9 +467,13 @@ ViperTools.prototype = {
             // the caret is placed to the start of the field instead of the end,
             // so when the mouse is used to focus in to the field we do not move it
             // to the end of the textbox.
-            ViperUtil.addEvent(input, 'mousedown', function(e) {
-                moveCaretToEnd = false;
-            });
+            ViperUtil.addEvent(
+                input,
+                'mousedown',
+                function(e) {
+                    moveCaretToEnd = false;
+                }
+            );
         }
 
         // IE paste fix.
@@ -456,76 +484,93 @@ ViperTools.prototype = {
                 input.value = window.clipboardData.getData("Text");
                 return false;
             }
-
         };
 
         var self = this;
-        ViperUtil.addEvent(input, 'focus', function(e) {
-            ViperUtil.addClass(textBox, 'Viper-focused');
-            self.viper.highlightSelection();
+        ViperUtil.addEvent(
+            input,
+            'focus',
+            function(e) {
+                ViperUtil.addClass(textBox, 'Viper-focused');
+                self.viper.highlightSelection();
 
-            if (ViperUtil.isBrowser('msie') === true) {
-                if (moveCaretToEnd === true) {
-                    setTimeout(function() {
-                        if (ViperUtil.isBrowser('msie', '>=11') === true) {
-                            var textRange = input.createTextRange();
-                            textRange.move('character', input.value.length)
-                            textRange.select();
-                        } else {
-                            input.focus();
-                            // Set the caret to the end of the textfield.
-                            input.value = input.value;
-                        }
-                    }, 10);
+                if (ViperUtil.isBrowser('msie') === true) {
+                    if (moveCaretToEnd === true) {
+                        setTimeout(
+                            function() {
+                                if (ViperUtil.isBrowser('msie', '>=11') === true) {
+                                    var textRange = input.createTextRange();
+                                    textRange.move('character', input.value.length)
+                                    textRange.select();
+                                } else {
+                                    input.focus();
+                                    // Set the caret to the end of the textfield.
+                                    input.value = input.value;
+                                }
+                            },
+                            10
+                        );
+                    }
+
+                    moveCaretToEnd = true;
+                } else {
+                    // Set the caret to the end of the textfield.
+                    input.value = input.value;
+                }//end if
+
+                if (ViperUtil.isBrowser('firefox') === true) {
+                    setTimeout(
+                        function() {
+                            input.selectionStart = input.value.length;
+                        },
+                        2
+                    );
                 }
-
-                moveCaretToEnd = true;
-            } else {
-                // Set the caret to the end of the textfield.
-                input.value = input.value;
             }
+        );
 
-            if (ViperUtil.isBrowser('firefox') === true) {
-                setTimeout(function() {
-                    input.selectionStart = input.value.length;
-                }, 2);
+        ViperUtil.addEvent(
+            input,
+            'blur',
+            function() {
+                ViperUtil.removeClass(textBox, 'Viper-active');
             }
-        });
+        );
 
-        ViperUtil.addEvent(input, 'blur', function() {
-            ViperUtil.removeClass(textBox, 'Viper-active');
-        });
-
-        var changed = false;
+        var changed          = false;
         var _addActionButton = function() {
             var actionIcon = document.createElement('span');
             ViperUtil.addClass(actionIcon, 'Viper-textbox-action');
             main.appendChild(actionIcon);
-            ViperUtil.addEvent(actionIcon, 'click', function() {
-                if (ViperUtil.hasClass(textBox, 'Viper-actionRevert') === true) {
-                    input.value = value;
-                    ViperUtil.removeClass(textBox, 'Viper-actionRevert');
-                    ViperUtil.addClass(textBox, 'Viper-actionClear');
-                    actionIcon.setAttribute('title', 'Clear this value');
-                } else if (ViperUtil.hasClass(textBox, 'Viper-actionClear') === true) {
-                    value = input.value;
-                    input.value = '';
-                    ViperUtil.removeClass(textBox, 'Viper-actionClear');
+            ViperUtil.addEvent(
+                actionIcon,
+                'click',
+                function() {
+                    if (ViperUtil.hasClass(textBox, 'Viper-actionRevert') === true) {
+                        input.value = value;
+                        ViperUtil.removeClass(textBox, 'Viper-actionRevert');
+                        ViperUtil.addClass(textBox, 'Viper-actionClear');
+                        actionIcon.setAttribute('title', 'Clear this value');
+                    } else if (ViperUtil.hasClass(textBox, 'Viper-actionClear') === true) {
+                        value       = input.value;
+                        input.value = '';
+                        ViperUtil.removeClass(textBox, 'Viper-actionClear');
 
-                    if (value) {
-                        ViperUtil.addClass(textBox, 'Viper-actionRevert');
-                        actionIcon.setAttribute('title', 'Revert to original value');
-                        if (required === true) {
+                        if (value) {
+                            ViperUtil.addClass(textBox, 'Viper-actionRevert');
+                            actionIcon.setAttribute('title', 'Revert to original value');
+                            if (required === true) {
+                                ViperUtil.addClass(textBox, 'Viper-required');
+                            }
+                        } else if (required === true) {
                             ViperUtil.addClass(textBox, 'Viper-required');
+                            ViperUtil.setStyle(actionIcon, 'display', 'none');
                         }
-                    } else if (required === true) {
-                        ViperUtil.addClass(textBox, 'Viper-required');
-                        ViperUtil.setStyle(actionIcon, 'display', 'none');
-                    }
-                }
+                    }//end if
 
-                self.viper.fireCallbacks('ViperTools:changed:' + id);
-            });
+                    self.viper.fireCallbacks('ViperTools:changed:' + id);
+                }
+            );
 
             return actionIcon;
         };
@@ -536,83 +581,11 @@ ViperTools.prototype = {
             ViperUtil.addClass(textBox, 'Viper-actionClear');
         }
 
-        ViperUtil.addEvent(input, 'keyup', function(e) {
-            ViperUtil.addClass(textBox, 'Viper-focused');
-
-            if (isTextArea !== true) {
-                var actionIcon = ViperUtil.getClass('Viper-textbox-action', main);
-                if (actionIcon.length === 0) {
-                    actionIcon = _addActionButton();
-                } else {
-                    actionIcon = actionIcon[0];
-                }
-            }
-
-            ViperUtil.setStyle(actionIcon, 'display', 'block');
-            ViperUtil.setStyle(actionIcon, 'visibility', 'visible');
-
-            ViperUtil.removeClass(textBox, 'Viper-actionClear');
-            ViperUtil.removeClass(textBox, 'Viper-actionRevert');
-
-            if (input.value !== value && value !== '') {
-                // Show the revert icon.
-                if (isTextArea !== true) {
-                    actionIcon.setAttribute('title', 'Revert to original value');
-                    ViperUtil.addClass(textBox, 'Viper-actionRevert');
-                }
-
-                ViperUtil.removeClass(textBox, 'Viper-required');
-            } else if (input.value !== '') {
-                if (isTextArea !== true) {
-                    actionIcon.setAttribute('title', 'Clear this value');
-                    ViperUtil.addClass(textBox, 'Viper-actionClear');
-                }
-
-                ViperUtil.removeClass(textBox, 'Viper-required');
-            } else {
-                if (isTextArea !== true) {
-                    ViperUtil.setStyle(actionIcon, 'display', 'none');
-                }
-
-                if (required === true) {
-                    ViperUtil.addClass(textBox, 'Viper-required');
-                }
-            }
-
-            if ((e.which !== 13 || isTextArea === true) && (input.value !== value)) {
-                self.viper.fireCallbacks('ViperTools:changed:' + id);
-            }
-
-            // Action.
-            if (action && e.which === 13) {
-                self.viper.focus();
-                action.call(input, input.value);
-            } else if (!action && e.which === 13 && isTextArea !== true && (ViperUtil.isBrowser('chrome') || ViperUtil.isBrowser('safari'))) {
-                var forms = ViperUtil.getParents(main, 'form', self.viper.getViperElement());
-                if (forms.length > 0 && ViperUtil.getTag('input', forms[0]).length > 2) {
-                    return forms[0].onsubmit();
-                }
-            }
-        });
-
-        if (events) {
-            for (var eventType in events) {
-                ViperUtil.addEvent(input, eventType, events[eventType]);
-            }
-        }
-
-        this.addItem(id, {
-            type: 'textbox',
-            element: textBox,
-            input: input,
-            label: labelEl,
-            required: required,
-            getValue: function() {
-                return input.value;
-            },
-            setValue: function(newValue, isInitialValue) {
-                input.value = newValue;
-                value       = newValue;
+        ViperUtil.addEvent(
+            input,
+            'keyup',
+            function(e) {
+                ViperUtil.addClass(textBox, 'Viper-focused');
 
                 if (isTextArea !== true) {
                     var actionIcon = ViperUtil.getClass('Viper-textbox-action', main);
@@ -621,62 +594,138 @@ ViperTools.prototype = {
                     } else {
                         actionIcon = actionIcon[0];
                     }
-
-                    ViperUtil.setStyle(actionIcon, 'display', 'block');
                 }
+
+                ViperUtil.setStyle(actionIcon, 'display', 'block');
+                ViperUtil.setStyle(actionIcon, 'visibility', 'visible');
 
                 ViperUtil.removeClass(textBox, 'Viper-actionClear');
                 ViperUtil.removeClass(textBox, 'Viper-actionRevert');
 
-                if (isTextArea !== true) {
-                    if (input.value !== value && value !== '') {
-                        // Show the revert icon.
+                if (input.value !== value && value !== '') {
+                    // Show the revert icon.
+                    if (isTextArea !== true) {
                         actionIcon.setAttribute('title', 'Revert to original value');
                         ViperUtil.addClass(textBox, 'Viper-actionRevert');
-                        ViperUtil.removeClass(textBox, 'Viper-required');
-                    } else if (input.value !== '') {
+                    }
+
+                    ViperUtil.removeClass(textBox, 'Viper-required');
+                } else if (input.value !== '') {
+                    if (isTextArea !== true) {
                         actionIcon.setAttribute('title', 'Clear this value');
                         ViperUtil.addClass(textBox, 'Viper-actionClear');
-                        ViperUtil.removeClass(textBox, 'Viper-required');
-                    } else {
-                        ViperUtil.setStyle(actionIcon, 'display', 'none');
-                        if (required === true) {
-                            ViperUtil.addClass(textBox, 'Viper-required');
-                        }
                     }
-                }
 
-                if (isInitialValue === false) {
-                    self.viper.fireCallbacks('ViperTools:changed:' + id);
-                }
-            },
-            disable: function()
-            {
-                ViperUtil.addClass(textBox, 'Viper-disabled');
-                input.setAttribute('disabled', true);
-                input.blur();
-            },
-            enable: function()
-            {
-                ViperUtil.removeClass(textBox, 'Viper-disabled');
-                input.removeAttribute('disabled');
-            },
-            setRequired: function(required)
-            {
-                if (required === true) {
-                    input.setAttribute('placeholder', _('required'));
+                    ViperUtil.removeClass(textBox, 'Viper-required');
+                } else {
+                    if (isTextArea !== true) {
+                        ViperUtil.setStyle(actionIcon, 'display', 'none');
+                    }
 
-                    if (ViperUtil.trim(input.value) === '') {
+                    if (required === true) {
                         ViperUtil.addClass(textBox, 'Viper-required');
                     }
-                } else {
-                    ViperUtil.removeClass(textBox, 'Viper-required');
-                    input.removeAttribute('placeholder');
+                }//end if
+
+                if ((e.which !== 13 || isTextArea === true) && (input.value !== value)) {
+                    self.viper.fireCallbacks('ViperTools:changed:' + id);
                 }
 
-                this.required = required;
+                // Action.
+                if (action && e.which === 13) {
+                    self.viper.focus();
+                    action.call(input, input.value);
+                } else if (!action && e.which === 13 && isTextArea !== true && (ViperUtil.isBrowser('chrome') || ViperUtil.isBrowser('safari'))) {
+                    var forms = ViperUtil.getParents(main, 'form', self.viper.getViperElement());
+                    if (forms.length > 0 && ViperUtil.getTag('input', forms[0]).length > 2) {
+                        return forms[0].onsubmit();
+                    }
+                }
             }
-        });
+        );
+
+        if (events) {
+            for (var eventType in events) {
+                ViperUtil.addEvent(input, eventType, events[eventType]);
+            }
+        }
+
+        this.addItem(
+            id,
+            {
+                type: 'textbox',
+                element: textBox,
+                input: input,
+                label: labelEl,
+                required: required,
+                getValue: function() {
+                    return input.value;
+                },
+                setValue: function(newValue, isInitialValue) {
+                    input.value = newValue;
+                    value       = newValue;
+
+                    if (isTextArea !== true) {
+                        var actionIcon = ViperUtil.getClass('Viper-textbox-action', main);
+                        if (actionIcon.length === 0) {
+                            actionIcon = _addActionButton();
+                        } else {
+                            actionIcon = actionIcon[0];
+                        }
+
+                        ViperUtil.setStyle(actionIcon, 'display', 'block');
+                    }
+
+                    ViperUtil.removeClass(textBox, 'Viper-actionClear');
+                    ViperUtil.removeClass(textBox, 'Viper-actionRevert');
+
+                    if (isTextArea !== true) {
+                        if (input.value !== value && value !== '') {
+                            // Show the revert icon.
+                            actionIcon.setAttribute('title', 'Revert to original value');
+                            ViperUtil.addClass(textBox, 'Viper-actionRevert');
+                            ViperUtil.removeClass(textBox, 'Viper-required');
+                        } else if (input.value !== '') {
+                            actionIcon.setAttribute('title', 'Clear this value');
+                            ViperUtil.addClass(textBox, 'Viper-actionClear');
+                            ViperUtil.removeClass(textBox, 'Viper-required');
+                        } else {
+                            ViperUtil.setStyle(actionIcon, 'display', 'none');
+                            if (required === true) {
+                                ViperUtil.addClass(textBox, 'Viper-required');
+                            }
+                        }
+                    }
+
+                    if (isInitialValue === false) {
+                        self.viper.fireCallbacks('ViperTools:changed:' + id);
+                    }
+                },
+                disable: function() {
+                    ViperUtil.addClass(textBox, 'Viper-disabled');
+                    input.setAttribute('disabled', true);
+                    input.blur();
+                },
+                enable: function() {
+                    ViperUtil.removeClass(textBox, 'Viper-disabled');
+                    input.removeAttribute('disabled');
+                },
+                setRequired: function(required) {
+                    if (required === true) {
+                        input.setAttribute('placeholder', _('required'));
+
+                        if (ViperUtil.trim(input.value) === '') {
+                            ViperUtil.addClass(textBox, 'Viper-required');
+                        }
+                    } else {
+                        ViperUtil.removeClass(textBox, 'Viper-required');
+                        input.removeAttribute('placeholder');
+                    }
+
+                    this.required = required;
+                }
+            }
+        );
 
         return textBox;
 
@@ -758,8 +807,8 @@ ViperTools.prototype = {
             ViperUtil.addClass(labelElem, 'Viper-active');
         }
 
-        var checkbox  = document.createElement('input');
-        checkbox.type = 'checkbox';
+        var checkbox     = document.createElement('input');
+        checkbox.type    = 'checkbox';
         checkbox.checked = checked || false;
 
         var checkboxSwitch = document.createElement('span');
@@ -784,59 +833,70 @@ ViperTools.prototype = {
             // IE does not trigger the click event for input when the label
             // element is clicked, so add the click event to label element and change
             // the checkbox state.
-            ViperUtil.addEvent(labelElem, 'click', function() {
-                checkbox.checked = !checkbox.checked;
+            ViperUtil.addEvent(
+                labelElem,
+                'click',
+                function() {
+                    checkbox.checked = !checkbox.checked;
 
-                if (checkbox.checked === true) {
-                    ViperUtil.addClass(labelElem, 'Viper-active');
-                } else {
-                    ViperUtil.removeClass(labelElem, 'Viper-active');
+                    if (checkbox.checked === true) {
+                        ViperUtil.addClass(labelElem, 'Viper-active');
+                    } else {
+                        ViperUtil.removeClass(labelElem, 'Viper-active');
+                    }
+
+                    if (changeCallback) {
+                        changeCallback.call(this, checkbox.checked);
+                    }
+
+                    self.viper.fireCallbacks('ViperTools:changed:' + id);
+                    self.viper.highlightSelection();
                 }
-
-                if (changeCallback) {
-                    changeCallback.call(this, checkbox.checked);
-                }
-
-                self.viper.fireCallbacks('ViperTools:changed:' + id);
-                self.viper.highlightSelection();
-            });
+            );
         } else {
-            ViperUtil.addEvent(checkbox, 'click', function() {
-                if (checkbox.checked === true) {
-                    ViperUtil.addClass(labelElem, 'Viper-active');
-                } else {
-                    ViperUtil.removeClass(labelElem, 'Viper-active');
+            ViperUtil.addEvent(
+                checkbox,
+                'click',
+                function() {
+                    if (checkbox.checked === true) {
+                        ViperUtil.addClass(labelElem, 'Viper-active');
+                    } else {
+                        ViperUtil.removeClass(labelElem, 'Viper-active');
+                    }
+
+                    if (changeCallback) {
+                        changeCallback.call(this, checkbox.checked);
+                    }
+
+                    self.viper.fireCallbacks('ViperTools:changed:' + id);
                 }
+            );
+        }//end if
 
-                if (changeCallback) {
-                    changeCallback.call(this, checkbox.checked);
-                }
+        this.addItem(
+            id,
+            {
+                type: 'checkbox',
+                element: labelElem,
+                input: checkbox,
+                getValue: function() {
+                    return checkbox.checked;
+                },
+                setValue: function(checked, isInitialValue) {
+                    checkbox.checked = checked;
 
-                self.viper.fireCallbacks('ViperTools:changed:' + id);
-            });
-        }
+                    if (checked === true) {
+                        ViperUtil.addClass(labelElem, 'Viper-active');
+                    } else {
+                        ViperUtil.removeClass(labelElem, 'Viper-active');
+                    }
 
-        this.addItem(id, {
-            type: 'checkbox',
-            element: labelElem,
-            input: checkbox,
-            getValue: function() {
-                return checkbox.checked;
-            },
-            setValue: function(checked, isInitialValue) {
-                checkbox.checked = checked;
-
-                if (checked === true) {
-                    ViperUtil.addClass(labelElem, 'Viper-active');
-                } else {
-                    ViperUtil.removeClass(labelElem, 'Viper-active');
-                }
-
-                if (changeCallback && isInitialValue !== true) {
-                    changeCallback.call(this, checked, true);
+                    if (changeCallback && isInitialValue !== true) {
+                        changeCallback.call(this, checked, true);
+                    }
                 }
             }
-        });
+        );
 
         return labelElem;
 
@@ -846,7 +906,7 @@ ViperTools.prototype = {
     /**
      * Creates a radio button.
      *
-     * @parma {string}  name    The name of the group the radio button belongs to.
+     * @param {string}  name    The name of the group the radio button belongs to.
      * @param {string}  value   The value of the radio button.
      * @param {string}  label   The label for the radio button.
      * @param {boolean} checked True if checked by default.
@@ -898,9 +958,11 @@ ViperTools.prototype = {
             ViperUtil.addClass(dragIcon, 'Viper-popup-dragIcon');
             header.appendChild(dragIcon);
 
-            ViperUtil.$(main).draggable({
-                handle: header
-            });
+            ViperUtil.$(main).draggable(
+                {
+                    handle: header
+                }
+            );
         }
 
         header.appendChild(document.createTextNode(title));
@@ -908,11 +970,15 @@ ViperTools.prototype = {
         var closeIcon = document.createElement('div');
         ViperUtil.addClass(closeIcon, 'Viper-popup-closeIcon');
         header.appendChild(closeIcon);
-        ViperUtil.addEvent(closeIcon, 'mousedown', function() {
-            self.closePopup(id, 'closeIcon');
-        });
+        ViperUtil.addEvent(
+            closeIcon,
+            'mousedown',
+            function() {
+                self.closePopup(id, 'closeIcon');
+            }
+        );
 
-        var fullScreen  = false;
+        var fullScreen = false;
 
         var originalOpenCallback = openCallback;
         openCallback = function() {
@@ -923,11 +989,15 @@ ViperTools.prototype = {
         }
 
         // Close popup when ESC key is pressed.
-        this.viper.registerCallback('Viper:keyUp', 'ViperTools', function(e) {
-            if (e.which === 27 && main.parentNode) {
-                self.closePopup(id);
+        this.viper.registerCallback(
+            'Viper:keyUp',
+            'ViperTools',
+            function(e) {
+                if (e.which === 27 && main.parentNode) {
+                    self.closePopup(id);
+                }
             }
-        });
+        );
 
         var showfullScreen = function() {
             var headerHeight  = ViperUtil.getElementHeight(header);
@@ -940,45 +1010,54 @@ ViperTools.prototype = {
             ViperUtil.setStyle(main, 'top', toolbarHeight + 'px');
             ViperUtil.setStyle(main, 'margin-left', 0);
             ViperUtil.setStyle(main, 'margin-top', 0);
-            ViperUtil.setStyle(midContent, 'width', windowDim.width - 20 + 'px');
-            ViperUtil.setStyle(midContent, 'height', windowDim.height - toolbarHeight - bottomHeight - headerHeight - topHeight - 10 + 'px');
+            ViperUtil.setStyle(midContent, 'width', (windowDim.width - 20) + 'px');
+            ViperUtil.setStyle(midContent, 'height', (windowDim.height - toolbarHeight - bottomHeight - headerHeight - topHeight - 10) + 'px');
             if (resizeCallback) {
                 resizeCallback.call(this);
             }
         };
 
         var currentSize = null;
-        ViperUtil.addEvent(header, 'safedblclick', function() {}, function() {
-            if (fullScreen !== true) {
-                fullScreen = true;
-                var mainCoords = ViperUtil.getElementCoords(main);
-                currentSize = {
-                    width: ViperUtil.getElementWidth(midContent),
-                    height: ViperUtil.getElementHeight(midContent),
-                    left: mainCoords.x,
-                    top: mainCoords.y
-                };
+        ViperUtil.addEvent(
+            header,
+            'safedblclick',
+            function() {},
+            function() {
+                if (fullScreen !== true) {
+                    fullScreen     = true;
+                    var mainCoords = ViperUtil.getElementCoords(main);
+                    currentSize    = {
+                        width: ViperUtil.getElementWidth(midContent),
+                        height: ViperUtil.getElementHeight(midContent),
+                        left: mainCoords.x,
+                        top: mainCoords.y
+                    };
 
-                showfullScreen();
-
-                ViperUtil.removeEvent(window, 'resize.ViperTools-popup-' + id);
-                ViperUtil.addEvent(window, 'resize.ViperTools-popup-' + id, function() {
-                    // Update the popup size since its in full screen.
                     showfullScreen();
-                });
-            } else {
-                ViperUtil.removeEvent(window, 'resize.ViperTools-popup-' + id);
 
-                fullScreen = false;
-                ViperUtil.setStyle(main, 'left', currentSize.left + 'px');
-                ViperUtil.setStyle(main, 'top', currentSize.top + 'px');
-                ViperUtil.setStyle(midContent, 'width', currentSize.width + 'px');
-                ViperUtil.setStyle(midContent, 'height', currentSize.height + 'px');
-                if (resizeCallback) {
-                    resizeCallback.call(this);
-                }
-            }//end if
-        });
+                    ViperUtil.removeEvent(window, 'resize.ViperTools-popup-' + id);
+                    ViperUtil.addEvent(
+                        window,
+                        'resize.ViperTools-popup-' + id,
+                        function() {
+                            // Update the popup size since its in full screen.
+                            showfullScreen();
+                        }
+                    );
+                } else {
+                    ViperUtil.removeEvent(window, 'resize.ViperTools-popup-' + id);
+
+                    fullScreen = false;
+                    ViperUtil.setStyle(main, 'left', currentSize.left + 'px');
+                    ViperUtil.setStyle(main, 'top', currentSize.top + 'px');
+                    ViperUtil.setStyle(midContent, 'width', currentSize.width + 'px');
+                    ViperUtil.setStyle(midContent, 'height', currentSize.height + 'px');
+                    if (resizeCallback) {
+                        resizeCallback.call(this);
+                    }
+                }//end if
+            }
+        );
 
         main.appendChild(header);
 
@@ -1001,45 +1080,55 @@ ViperTools.prototype = {
                 ViperUtil.setStyle(midContent, 'height', ui.size.height + 'px');
             };
 
-            ViperUtil.$(midContent).resizable({
-                handles: 'se',
-                resize: function(e, ui) {
-                    if (resizeCallback) {
-                        resizeCallback.call(this, e, ui);
-                    }
-                },
-                stop: function(e, ui) {
-                    if (resizeCallback) {
-                        resizeCallback.call(this, e, ui);
+            ViperUtil.$(midContent).resizable(
+                {
+                    handles: 'se',
+                    resize: function(e, ui) {
+                        if (resizeCallback) {
+                            resizeCallback.call(this, e, ui);
+                        }
+                    },
+                    stop: function(e, ui) {
+                        if (resizeCallback) {
+                            resizeCallback.call(this, e, ui);
+                        }
                     }
                 }
-            });
+            );
+        }//end if
 
-        }
-
-        this.addItem(id, {
-            type: 'popup',
-            element: main,
-            topContent: topContent,
-            midContent: midContent,
-            bottomContent: bottomContent,
-            openCallback: openCallback,
-            closeCallback: closeCallback,
-            showTop: function() {
-                ViperUtil.$(topContent).slideDown(null, function() {
-                    if (fullScreen === true) {
-                        showfullScreen();
-                    }
-                });
-            },
-            hideTop: function() {
-                ViperUtil.$(topContent).slideUp(null, function() {
-                    if (fullScreen === true) {
-                        showfullScreen();
-                    }
-                });
+        this.addItem(
+            id,
+            {
+                type: 'popup',
+                element: main,
+                topContent: topContent,
+                midContent: midContent,
+                bottomContent: bottomContent,
+                openCallback: openCallback,
+                closeCallback: closeCallback,
+                showTop: function() {
+                    ViperUtil.$(topContent).slideDown(
+                        null,
+                        function() {
+                            if (fullScreen === true) {
+                                showfullScreen();
+                            }
+                        }
+                    );
+                },
+                hideTop: function() {
+                    ViperUtil.$(topContent).slideUp(
+                        null,
+                        function() {
+                            if (fullScreen === true) {
+                                showfullScreen();
+                            }
+                        }
+                    );
+                }
             }
-        });
+        );
 
         return main;
 
@@ -1068,8 +1157,7 @@ ViperTools.prototype = {
         ViperUtil.setStyle(popupElement, 'visibility', 'hidden');
         this.viper.addElement(popupElement);
 
-        // Set the pos to be the middle of the screen
-        //var windowDim  = ViperUtil.getWindowDimensions();
+        // Set the pos to be the middle of the screen.
         var elementDim = ViperUtil.getBoundingRectangle(popupElement);
         var windowDim  = ViperUtil.getWindowDimensions();
 
@@ -1080,7 +1168,7 @@ ViperTools.prototype = {
         // If the popup is off the top of the screen then move it back down.
         var offScreenTop = (windowDim.height / 2) + marginTop
         if (offScreenTop < toolbarHieght) {
-            marginTop -= offScreenTop - toolbarHieght;
+            marginTop -= (offScreenTop - toolbarHieght);
         }
 
         if ((elementDim.y2 - elementDim.y1) > (windowDim.height - toolbarHieght)) {
@@ -1155,807 +1243,863 @@ ViperTools.prototype = {
             ViperUtil.addClass(toolbar, 'Viper-compact');
         }
 
-        ViperUtil.addEvent(toolbar, 'mousedown', function(e) {
-            var target = ViperUtil.getMouseEventTarget(e);
-            if (ViperUtil.isTag(target, 'input') !== true && ViperUtil.isTag(target, 'textarea') !== true) {
+        ViperUtil.addEvent(
+            toolbar,
+            'mousedown',
+            function(e) {
+                var target = ViperUtil.getMouseEventTarget(e);
+                if (ViperUtil.isTag(target, 'input') !== true && ViperUtil.isTag(target, 'textarea') !== true) {
+                    ViperUtil.preventDefault(e);
+                    return false;
+                }
+            }
+        );
+
+        ViperUtil.addEvent(
+            toolbar,
+            'mouseup',
+            function(e) {
                 ViperUtil.preventDefault(e);
                 return false;
             }
-        });
-
-        ViperUtil.addEvent(toolbar, 'mouseup', function(e) {
-                ViperUtil.preventDefault(e);
-                return false;
-        });
+        );
 
         var _update = false;
-        this.viper.registerCallback('Viper:selectionChanged', id, function(range) {
-            if (self.viper.rangeInViperBounds(range) === false) {
-                return;
-            }
+        this.viper.registerCallback(
+            'Viper:selectionChanged',
+            id,
+            function(range) {
+                if (self.viper.rangeInViperBounds(range) === false) {
+                    return;
+                }
 
-            if (range.collapsed === true && _update !== true) {
-                self.getItem(id).hide();
-                return;
-            }
+                if (range.collapsed === true && _update !== true) {
+                    self.getItem(id).hide();
+                    return;
+                }
 
-            // Update the toolbar position, contents and lineage for this new selection.
-            self.getItem(id).update(range);
-        });
+                // Update the toolbar position, contents and lineage for this new selection.
+                self.getItem(id).update(range);
+            }
+        );
 
         // Add scroll event to iframes so that the toolbar is closed when the
         // scroll is happening.
-        this.viper.registerCallback('Viper:editableElementChanged', id, function() {
-            var elemDoc = self.viper.getViperElementDocument();
-            if (elemDoc !== document) {
-                var t = null;
-                var toolbar = self.getItem(id);
-                ViperUtil.removeEvent(elemDoc.defaultView, 'scroll.' + id);
-                ViperUtil.addEvent(elemDoc.defaultView, 'scroll.' + id, function(e) {
-                    if (toolbar.isVisible() === true) {
-                        toolbar.hide();
-                    }
+        this.viper.registerCallback(
+            'Viper:editableElementChanged',
+            id,
+            function() {
+                var elemDoc = self.viper.getViperElementDocument();
+                if (elemDoc !== document) {
+                    var t       = null;
+                    var toolbar = self.getItem(id);
+                    ViperUtil.removeEvent(elemDoc.defaultView, 'scroll.' + id);
+                    ViperUtil.addEvent(
+                        elemDoc.defaultView,
+                        'scroll.' + id,
+                        function(e) {
+                            if (toolbar.isVisible() === true) {
+                                toolbar.hide();
+                            }
 
-                    clearTimeout(t);
-                    t = setTimeout(function() {
-                        ViperUtil.removeClass(toolbar.element, 'scrolling');
-                        self.getItem(id).update();
-                    }, 300);
-                });
+                            clearTimeout(t);
+                            t = setTimeout(
+                                function() {
+                                    ViperUtil.removeClass(toolbar.element, 'scrolling');
+                                    self.getItem(id).update();
+                                },
+                                300
+                            );
+                        }
+                    );
+                }//end if
             }
-        });
+        );
 
-        this.viper.registerCallback('Viper:clickedOutside', id, function(range) {
-            self.getItem(id).hide();
-        });
+        this.viper.registerCallback(
+            'Viper:clickedOutside',
+            id,
+            function(range) {
+                self.getItem(id).hide();
+            }
+        );
 
-        this.viper.registerCallback(['Viper:mouseDown', 'ViperHistoryManager:undo'], id, function(data) {
-            _update = false;
-            if (data && data.target) {
-                var target = ViperUtil.getMouseEventTarget(data);
-                if (target === toolbar || ViperUtil.isChildOf(target, toolbar) === true) {
-                    if (ViperUtil.isTag(target, 'input') === true
-                        || ViperUtil.isTag(target, 'textarea') === true
+        this.viper.registerCallback(
+            ['Viper:mouseDown',
+            'ViperHistoryManager:undo'],
+            id,
+            function(data) {
+                _update = false;
+                if (data && data.target) {
+                    var target = ViperUtil.getMouseEventTarget(data);
+                    if (target === toolbar || ViperUtil.isChildOf(target, toolbar) === true) {
+                        if (ViperUtil.isTag(target, 'input') === true
+                            || ViperUtil.isTag(target, 'textarea') === true
+                        ) {
+                            // Allow event to bubble so the input element can get focus etc.
+                            return true;
+                        }
+
+                        return false;
+                    } else if (elementTypes
+                        && ViperUtil.inArray(ViperUtil.getTagName(target), elementTypes) === true
                     ) {
-                        // Allow event to bubble so the input element can get focus etc.
-                        return true;
-                    }
-
-                    return false;
-                } else if (elementTypes
-                    && ViperUtil.inArray(ViperUtil.getTagName(target), elementTypes) === true
-                ) {
-                    self.getItem(id).update(null, target);
-                    return;
-                } else if (ViperUtil.inArray(ViperUtil.getTagName(target), self.getItem(id)._keepOpenTagList) === true) {
-                    _update = true;
-                    return;
-                } else {
-                    var allParents = ViperUtil.getParents(target, null, self.viper.getViperElement());
-                    for (var i = 0; i < allParents.length; i++) {
-                        if (ViperUtil.inArray(ViperUtil.getTagName(allParents[i]), self.getItem(id)._keepOpenTagList) === true) {
-                            _update = true;
-                            return;
+                        self.getItem(id).update(null, target);
+                        return;
+                    } else if (ViperUtil.inArray(ViperUtil.getTagName(target), self.getItem(id)._keepOpenTagList) === true) {
+                        _update = true;
+                        return;
+                    } else {
+                        var allParents = ViperUtil.getParents(target, null, self.viper.getViperElement());
+                        for (var i = 0; i < allParents.length; i++) {
+                            if (ViperUtil.inArray(ViperUtil.getTagName(allParents[i]), self.getItem(id)._keepOpenTagList) === true) {
+                                _update = true;
+                                return;
+                            }
                         }
-                    }
 
-                    var parents = ViperUtil.getSurroundingParents(target);
-                    for (var i = 0; i < parents.length; i++) {
-                        if (ViperUtil.inArray(ViperUtil.getTagName(parents[i]), self.getItem(id)._keepOpenTagList) === true) {
-                            _update = true;
-                            return;
+                        var parents = ViperUtil.getSurroundingParents(target);
+                        for (var i = 0; i < parents.length; i++) {
+                            if (ViperUtil.inArray(ViperUtil.getTagName(parents[i]), self.getItem(id)._keepOpenTagList) === true) {
+                                _update = true;
+                                return;
+                            }
                         }
-                    }
-                }
+                    }//end if
+                }//end if
+
+                self.getItem(id).hide();
             }
+        );
 
-            self.getItem(id).hide();
-        });
-
-        var tools = this;
+        var tools          = this;
         var buttonElements = null;
-        this.addItem(id, {
-            type: 'toolbar',
-            element: toolbar,
-            addButton: function(button, index) {
-                if (ViperUtil.isset(index) === true && toolsContainer.childNodes.length > index) {
-                    if (index < 0) {
-                        index = toolsContainer.childNodes.length + index;
+        this.addItem(
+            id,
+            {
+                type: 'toolbar',
+                element: toolbar,
+                addButton: function(button, index) {
+                    if (ViperUtil.isset(index) === true && toolsContainer.childNodes.length > index) {
                         if (index < 0) {
-                            index = 0;
+                            index = toolsContainer.childNodes.length + index;
+                            if (index < 0) {
+                                index = 0;
+                            }
                         }
+
+                        ViperUtil.insertBefore(toolsContainer.childNodes[index], button);
+                    } else {
+                        toolsContainer.appendChild(button);
+                    }
+                },
+                showButton: function(buttonid, disabled) {
+                    if (tools.getItem(buttonid).type !== 'button') {
+                        throw new Error('Invalid button for showButton(): ' + buttonid);
                     }
 
-                    ViperUtil.insertBefore(toolsContainer.childNodes[index], button);
-                } else {
-                    toolsContainer.appendChild(button);
-                }
+                    this._buttonShown = true;
 
-            },
-            showButton: function(buttonid, disabled) {
-                if (tools.getItem(buttonid).type !== 'button') {
-                    throw new Error('Invalid button for showButton(): ' + buttonid);
-                }
+                    var button = self.getItem(buttonid);
+                    ViperUtil.removeClass(button.element, 'ViperITP-button-hidden');
+                    ViperUtil.removeClass(button.element.parentNode, 'ViperITP-button-hidden');
 
-                this._buttonShown = true;
-
-                var button = self.getItem(buttonid);
-                ViperUtil.removeClass(button.element, 'ViperITP-button-hidden');
-                ViperUtil.removeClass(button.element.parentNode, 'ViperITP-button-hidden');
-
-                if (disabled === true) {
-                    self.disableButton(buttonid);
-                } else {
-                    self.enableButton(buttonid);
-                }
-            },
-            update: function(range, element) {
-                if (!updateCallback || self.viper.isEnabled() === false) {
-                    return;
-                }
-
-                var selectedNode = element || null;
-                range = range || self.viper.getViperRange();
-
-                if (!selectedNode) {
-                    if (elementTypes && elementTypes.length > 0) {
+                    if (disabled === true) {
+                        self.disableButton(buttonid);
+                    } else {
+                        self.enableButton(buttonid);
+                    }
+                },
+                update: function(range, element) {
+                    if (!updateCallback || self.viper.isEnabled() === false) {
                         return;
                     }
-                }
 
-                var activeSection   = this._activeSection;
-                if (range.collapsed === true) {
-                    // Clicking inside a link element etc should not activate the
-                    // sub section again.
-                    activeSection = null;
-                }
+                    var selectedNode = element || null;
+                    range            = range || self.viper.getViperRange();
 
-                this.closeActiveSubsection(true);
-
-                this._buttonShown     = false;
-                this._subSectionShown = false;
-                this.resetButtons();
-
-                if (buttonElements === null) {
-                    // Store the original button structure in to buttonElements
-                    // so that we can re construct it here in the next update call.
-                    // This must be done as the updateCallback may remove buttons
-                    // from the toolbar using showButton, showButtonGroup methods.
-                    buttonElements = [];
-                    for (var node = toolsContainer.firstChild; node; node = node.nextSibling) {
-                        if (ViperUtil.hasClass(node, 'Viper-buttonGroup') === true) {
-                            var groupButtons = [node];
-                            for (var button = node.firstChild; button; button = button.nextSibling) {
-                                groupButtons.push(button);
-                            }
-
-                            buttonElements.push(groupButtons);
-                        } else if (ViperUtil.hasClass('Viper-button') === true) {
-                          buttonElements.push(node);
+                    if (!selectedNode) {
+                        if (elementTypes && elementTypes.length > 0) {
+                            return;
                         }
                     }
-                } else {
-                    while(toolsContainer.firstChild) {
-                        toolsContainer.removeChild(toolsContainer.firstChild);
+
+                    var activeSection = this._activeSection;
+                    if (range.collapsed === true) {
+                        // Clicking inside a link element etc should not activate the
+                        // sub section again.
+                        activeSection = null;
                     }
 
-                    for (var i = 0; i < buttonElements.length; i++) {
-                        if (buttonElements[i].length) {
-                            for (var j = 1; j < buttonElements[i].length; j++) {
-                                buttonElements[i][0].appendChild(buttonElements[i][j]);
+                    this.closeActiveSubsection(true);
+
+                    this._buttonShown     = false;
+                    this._subSectionShown = false;
+                    this.resetButtons();
+
+                    if (buttonElements === null) {
+                        // Store the original button structure in to buttonElements
+                        // so that we can re construct it here in the next update call.
+                        // This must be done as the updateCallback may remove buttons
+                        // from the toolbar using showButton, showButtonGroup methods.
+                        buttonElements = [];
+                        for (var node = toolsContainer.firstChild; node; node = node.nextSibling) {
+                            if (ViperUtil.hasClass(node, 'Viper-buttonGroup') === true) {
+                                var groupButtons = [node];
+                                for (var button = node.firstChild; button; button = button.nextSibling) {
+                                    groupButtons.push(button);
+                                }
+
+                                buttonElements.push(groupButtons);
+                            } else if (ViperUtil.hasClass('Viper-button') === true) {
+                                buttonElements.push(node);
                             }
-
-                            toolsContainer.appendChild(buttonElements[i][0]);
-                        } else {
-                            toolsContainer.appendChild(buttonElements[i]);
                         }
-                    }
-                }
+                    } else {
+                        while (toolsContainer.firstChild) {
+                            toolsContainer.removeChild(toolsContainer.firstChild);
+                        }
 
-                updateCallback.call(this, range, selectedNode, activeSection !== null);
+                        for (var i = 0; i < buttonElements.length; i++) {
+                            if (buttonElements[i].length) {
+                                for (var j = 1; j < buttonElements[i].length; j++) {
+                                    buttonElements[i][0].appendChild(buttonElements[i][j]);
+                                }
 
-                var buttonsToRemove = ViperUtil.getClass('ViperITP-button-hidden', toolsContainer);
-                for (var i = 0; i < buttonsToRemove.length; i++) {
-                    buttonsToRemove[i].parentNode.removeChild(buttonsToRemove[i]);
-                }
-
-                if (this._buttonShown === true || this._subSectionShown === true) {
-                    this.updatePosition(range, selectedNode);
-                } else {
-                    this.hide();
-                }
-
-                if (activeSection) {
-                    this.toggleSubSection(activeSection);
-                }
-
-            },
-
-            resetButtons: function() {
-                ViperUtil.removeClass(toolbar, 'Viper-subSectionVisible');
-                ViperUtil.addClass(ViperUtil.getClass('Viper-buttonGroup', toolsContainer), 'ViperITP-button-hidden');
-
-                var buttons = ViperUtil.getClass('Viper-button', toolsContainer);
-                ViperUtil.addClass(buttons, 'ViperITP-button-hidden');
-                ViperUtil.removeClass(buttons, 'Viper-selected');
-                ViperUtil.removeClass(buttons, 'Viper-active');
-            },
-
-            hide: function() {
-                if (this._onHideCallback) {
-                    if (this._onHideCallback.call(this) === false) {
-                        return false;
-                    }
-                }
-
-                this.closeActiveSubsection(true);
-                this._activeSection = null;
-                ViperUtil.removeClass(toolbar, 'Viper-visible');
-
-                // Disable all subsection action buttons.
-                for (subsectionid in this._subSectionActionWidgets) {
-                    tools.disableButton(subsectionid + '-applyButton');
-                }
-
-                return true;
-
-            },
-
-            isVisible: function() {
-                return ViperUtil.hasClass(toolbar, 'Viper-visible');
-            },
-
-            /**
-             * Adds the given element as a sub section of the toolbar.
-             *
-             * @param {string} id       The id of the new sub section.
-             * @param {DOMNode} element The DOMNode to convert to sub section.
-             *
-             * @return {DOMNode} The element that was passed in.
-             */
-            makeSubSection: function(id, element, onOpenCallback, onCloseCallback) {
-                if (!element) {
-                    return false;
-                }
-
-                var subSection = document.createElement('div');
-                var form       = document.createElement('form');
-
-                subSection.appendChild(form);
-                form.appendChild(element);
-                form.onsubmit = function() {
-                    return false;
-                };
-
-                var submitBtn = document.createElement('input');
-                submitBtn.type = 'submit';
-                ViperUtil.setStyle(submitBtn, 'display', 'none');
-                form.appendChild(submitBtn);
-
-                ViperUtil.addClass(subSection, 'Viper-subSection');
-
-                this._subSections[id] = subSection;
-
-                subSectionContainer.appendChild(subSection);
-
-                tools.addItem(id, {
-                    type: 'VITPSubSection',
-                    element: subSection,
-                    form: form,
-                    _onOpenCallback: onOpenCallback,
-                    _onCloseCallback: onCloseCallback
-                });
-
-                return subSection;
-
-            },
-
-            /**
-             * Sets the specified button to toggle the given sub section.
-             *
-             * @param {string} buttonid     Id of the button.
-             * @param {string} subSectionid Id of the sub section.
-             */
-            setSubSectionButton: function(buttonid, subSectionid) {
-                if (!this._subSections[subSectionid]) {
-                    // Throw exception not a valid sub section id.
-                    throw new Error('Invalid sub section id: ' + subSectionid);
-                    return false;
-                }
-
-                var button = tools.getItem(buttonid).element;
-                var self   = this;
-
-                this._subSectionButtons[subSectionid] = buttonid;
-
-                ViperUtil.removeEvent(button, 'mousedown');
-                ViperUtil.addEvent(button, 'mousedown', function(e) {
-                    if (ViperUtil.isBrowser('msie', '<11') === true) {
-                        // This block of code prevents IE moving user selection to the.
-                        // button element when clicked. When the button element is removed
-                        // and added back to DOM selection is not moved. Seriously, IE?
-                        if (button.previousSibling) {
-                            var sibling = button.previousSibling;
-                            button.parentNode.removeChild(button);
-                            ViperUtil.insertAfter(sibling, button);
-                        } else if (button.nextSibling) {
-                            var sibling = button.nextSibling;
-                            button.parentNode.removeChild(button);
-                            ViperUtil.insertBefore(sibling, button);
-                        } else {
-                            var parent = button.parentNode;
-                            button.parentNode.removeChild(button);
-                            parent.appendChild(button);
+                                toolsContainer.appendChild(buttonElements[i][0]);
+                            } else {
+                                toolsContainer.appendChild(buttonElements[i]);
+                            }
                         }
                     }//end if
 
-                    // Set the subSection to visible and hide rest of the sub sections.
-                    self.toggleSubSection(subSectionid);
+                    updateCallback.call(this, range, selectedNode, activeSection !== null);
 
-                    ViperUtil.preventDefault(e);
-                });
-
-            },
-
-            /**
-             * Toggles the visibility of the specified sub section.
-             *
-             * @param {string} subSectionid The if of the sub section.
-             */
-            toggleSubSection: function(subSectionid, ignoreCallbacks)
-            {
-                var subSection = this._subSections[subSectionid];
-                if (!subSection) {
-                    return false;
-                }
-
-                if (this._activeSection) {
-                    var activeSubSection = this._activeSection;
-                    this.closeActiveSubsection(ignoreCallbacks);
-                    if (subSectionid === activeSubSection) {
-                        return;
+                    var buttonsToRemove = ViperUtil.getClass('ViperITP-button-hidden', toolsContainer);
+                    for (var i = 0; i < buttonsToRemove.length; i++) {
+                        buttonsToRemove[i].parentNode.removeChild(buttonsToRemove[i]);
                     }
-                }
 
-                // Make sure all Viper-active has been removed from all sub sections
-                // at this point.
-                ViperUtil.removeClass(ViperUtil.getClass('Viper-subSection Viper-active', subSectionContainer), 'Viper-active');
-
-                if (this._subSectionButtons[subSectionid]) {
-                    var subSectionButton = tools.getItem(this._subSectionButtons[subSectionid]).element;
-                    if (ViperUtil.hasClass(subSectionButton, 'ViperITP-button-hidden') === true) {
-                        this._activeSection = null;
-                        return;
+                    if (this._buttonShown === true || this._subSectionShown === true) {
+                        this.updatePosition(range, selectedNode);
+                    } else {
+                        this.hide();
                     }
-                }
 
-                if (ignoreCallbacks !== true) {
-                    var openCallback = tools.getItem(subSectionid)._onOpenCallback;
-                    if (openCallback) {
-                        openCallback.call(this);
+                    if (activeSection) {
+                        this.toggleSubSection(activeSection);
                     }
-                }
+                },
 
-                // Make the button selected.
-                ViperUtil.addClass(subSectionButton, 'Viper-selected');
+                resetButtons: function() {
+                    ViperUtil.removeClass(toolbar, 'Viper-subSectionVisible');
+                    ViperUtil.addClass(ViperUtil.getClass('Viper-buttonGroup', toolsContainer), 'ViperITP-button-hidden');
 
-                ViperUtil.addClass(subSection, 'Viper-active');
-                ViperUtil.addClass(toolbar, 'Viper-subSectionVisible');
-                this._activeSection = subSectionid;
-                this._updateSubSectionArrowPos();
+                    var buttons = ViperUtil.getClass('Viper-button', toolsContainer);
+                    ViperUtil.addClass(buttons, 'ViperITP-button-hidden');
+                    ViperUtil.removeClass(buttons, 'Viper-selected');
+                    ViperUtil.removeClass(buttons, 'Viper-active');
+                },
 
-                var self = this;
-                setTimeout(function() {
-                    self.focusSubSection();
-                }, 50);
-
-                this._subSectionShown = true;
-
-                var subSectionForm = tools.getItem(subSectionid).form;
-                ViperUtil.removeEvent(document, 'keydown.' + id);
-                ViperUtil.addEvent(document, 'keydown.' + id, function(e) {
-                    if (subSectionForm && e.which === 13 && ViperUtil.isTag(e.target, 'textarea') === false) {
-                        return subSectionForm.onsubmit();
-                    }
-                });
-
-            },
-
-            focusSubSection: function()
-            {
-                try {
-                    var subSection    = this._subSections[this._activeSection];
-                    var inputElements = ViperUtil.getTag('input[type=text], textarea', subSection);
-                    if (inputElements.length > 0) {
-                        inputElements[0].focus();
-                        ViperUtil.removeClass(inputElements[0].parentNode.parentNode.parentNode, 'Viper-active');
-
-                        if (ViperUtil.isBrowser('msie') === false) {
-                            tools.viper.highlightSelection();
-                        } else {
-                            setTimeout(function() {
-                                inputElements[0].focus();
-                            }, 10);
+                hide: function() {
+                    if (this._onHideCallback) {
+                        if (this._onHideCallback.call(this) === false) {
+                            return false;
                         }
                     }
-                } catch (e) {}
 
-            },
+                    this.closeActiveSubsection(true);
+                    this._activeSection = null;
+                    ViperUtil.removeClass(toolbar, 'Viper-visible');
 
-            closeActiveSubsection: function(ignoreCallbacks)
-            {
-                if (this._activeSection) {
-                    var prevSubSection = this._subSections[this._activeSection];
-                    if (prevSubSection) {
-                        ViperUtil.removeClass(prevSubSection, 'Viper-active');
-
-                        if (this._subSectionButtons[this._activeSection]) {
-                            ViperUtil.removeClass(tools.getItem(this._subSectionButtons[this._activeSection]).element, 'Viper-selected');
-                        }
-
-                        if (ignoreCallbacks !== true) {
-                            var closeCallback = tools.getItem(this._activeSection)._onCloseCallback;
-                            if (closeCallback) {
-                                closeCallback.call(this);
-                            }
-                        }
-
-                        ViperUtil.removeClass(toolbar, 'Viper-subSectionVisible');
-                        this._activeSection = null;
-
-                        ViperUtil.removeEvent(document, 'keydown.' + id);
-                        return;
-                    }
-                }
-            },
-
-            /**
-             *
-             *
-             * @param {string}   subSectionid The id of the sub section.
-             * @param {function} action       The function to call when the sub section action
-             *                                is triggered.
-             * @param {array}    widgetids    The id of widgets that will cause the action
-             *                                button to be activated when they are changed.
-             *
-             * @return void
-             */
-            setSubSectionAction: function(subSectionid, action, widgetids)
-            {
-                widgetids      = widgetids || [];
-                var subSection = tools.getItem(subSectionid);
-                if (!subSection) {
-                    return;
-                }
-
-                subSection.form.onsubmit = function(e) {
-                    if (e) {
-                        ViperUtil.preventDefault(e);
+                    // Disable all subsection action buttons.
+                    for (subsectionid in this._subSectionActionWidgets) {
+                        tools.disableButton(subsectionid + '-applyButton');
                     }
 
-                    var button = tools.getItem(subSectionid + '-applyButton');
-                    if (button.isEnabled() === false) {
+                    return true;
+                },
+
+                isVisible: function() {
+                    return ViperUtil.hasClass(toolbar, 'Viper-visible');
+                },
+
+                /**
+                 * Adds the given element as a sub section of the toolbar.
+                 *
+                 * @param {string} id       The id of the new sub section.
+                 * @param {DOMNode} element The DOMNode to convert to sub section.
+                 *
+                 * @return {DOMNode} The element that was passed in.
+                 */
+                makeSubSection: function(id, element, onOpenCallback, onCloseCallback) {
+                    if (!element) {
                         return false;
                     }
 
-                    tools.viper.focus();
+                    var subSection = document.createElement('div');
+                    var form       = document.createElement('form');
 
-                    if (ViperUtil.isBrowser('msie') === false) {
-                        try {
-                            action.call(this);
-                        } catch (e) {
-                            console.error('Sub Section Action threw exception:' + e.message);
+                    subSection.appendChild(form);
+                    form.appendChild(element);
+                    form.onsubmit = function() {
+                        return false;
+                    };
+
+                    var submitBtn  = document.createElement('input');
+                    submitBtn.type = 'submit';
+                    ViperUtil.setStyle(submitBtn, 'display', 'none');
+                    form.appendChild(submitBtn);
+
+                    ViperUtil.addClass(subSection, 'Viper-subSection');
+
+                    this._subSections[id] = subSection;
+
+                    subSectionContainer.appendChild(subSection);
+
+                    tools.addItem(
+                        id,
+                        {
+                            type: 'VITPSubSection',
+                            element: subSection,
+                            form: form,
+                            _onOpenCallback: onOpenCallback,
+                            _onCloseCallback: onCloseCallback
                         }
-                    } else {
-                        // IE needs this timeout so focus works <3..
-                        setTimeout(function() {
+                    );
+
+                    return subSection;
+                },
+
+                /**
+                 * Sets the specified button to toggle the given sub section.
+                 *
+                 * @param {string} buttonid     Id of the button.
+                 * @param {string} subSectionid Id of the sub section.
+                 */
+                setSubSectionButton: function(buttonid, subSectionid) {
+                    if (!this._subSections[subSectionid]) {
+                        // Throw exception not a valid sub section id.
+                        throw new Error('Invalid sub section id: ' + subSectionid);
+                        return false;
+                    }
+
+                    var button = tools.getItem(buttonid).element;
+                    var self   = this;
+
+                    this._subSectionButtons[subSectionid] = buttonid;
+
+                    ViperUtil.removeEvent(button, 'mousedown');
+                    ViperUtil.addEvent(
+                        button,
+                        'mousedown',
+                        function(e) {
+                            if (ViperUtil.isBrowser('msie', '<11') === true) {
+                                // This block of code prevents IE moving user selection to the.
+                                // button element when clicked. When the button element is removed
+                                // and added back to DOM selection is not moved. Seriously, IE?
+                                if (button.previousSibling) {
+                                    var sibling = button.previousSibling;
+                                    button.parentNode.removeChild(button);
+                                    ViperUtil.insertAfter(sibling, button);
+                                } else if (button.nextSibling) {
+                                    var sibling = button.nextSibling;
+                                    button.parentNode.removeChild(button);
+                                    ViperUtil.insertBefore(sibling, button);
+                                } else {
+                                    var parent = button.parentNode;
+                                    button.parentNode.removeChild(button);
+                                    parent.appendChild(button);
+                                }
+                            }//end if
+
+                            // Set the subSection to visible and hide rest of the sub sections.
+                            self.toggleSubSection(subSectionid);
+
+                            ViperUtil.preventDefault(e);
+                        }
+                    );
+                },
+
+                /**
+                 * Toggles the visibility of the specified sub section.
+                 *
+                 * @param {string} subSectionid The if of the sub section.
+                 */
+                toggleSubSection: function(subSectionid, ignoreCallbacks) {
+                    var subSection = this._subSections[subSectionid];
+                    if (!subSection) {
+                        return false;
+                    }
+
+                    if (this._activeSection) {
+                        var activeSubSection = this._activeSection;
+                        this.closeActiveSubsection(ignoreCallbacks);
+                        if (subSectionid === activeSubSection) {
+                            return;
+                        }
+                    }
+
+                    // Make sure all Viper-active has been removed from all sub sections
+                    // at this point.
+                    ViperUtil.removeClass(ViperUtil.getClass('Viper-subSection Viper-active', subSectionContainer), 'Viper-active');
+
+                    if (this._subSectionButtons[subSectionid]) {
+                        var subSectionButton = tools.getItem(this._subSectionButtons[subSectionid]).element;
+                        if (ViperUtil.hasClass(subSectionButton, 'ViperITP-button-hidden') === true) {
+                            this._activeSection = null;
+                            return;
+                        }
+                    }
+
+                    if (ignoreCallbacks !== true) {
+                        var openCallback = tools.getItem(subSectionid)._onOpenCallback;
+                        if (openCallback) {
+                            openCallback.call(this);
+                        }
+                    }
+
+                    // Make the button selected.
+                    ViperUtil.addClass(subSectionButton, 'Viper-selected');
+
+                    ViperUtil.addClass(subSection, 'Viper-active');
+                    ViperUtil.addClass(toolbar, 'Viper-subSectionVisible');
+                    this._activeSection = subSectionid;
+                    this._updateSubSectionArrowPos();
+
+                    var self = this;
+                    setTimeout(
+                        function() {
+                            self.focusSubSection();
+                        },
+                        50
+                    );
+
+                    this._subSectionShown = true;
+
+                    var subSectionForm = tools.getItem(subSectionid).form;
+                    ViperUtil.removeEvent(document, 'keydown.' + id);
+                    ViperUtil.addEvent(
+                        document,
+                        'keydown.' + id,
+                        function(e) {
+                            if (subSectionForm && e.which === 13 && ViperUtil.isTag(e.target, 'textarea') === false) {
+                                return subSectionForm.onsubmit();
+                            }
+                        }
+                    );
+                },
+
+                focusSubSection: function() {
+                    try {
+                        var subSection    = this._subSections[this._activeSection];
+                        var inputElements = ViperUtil.getTag('input[type=text], textarea', subSection);
+                        if (inputElements.length > 0) {
+                            inputElements[0].focus();
+                            ViperUtil.removeClass(inputElements[0].parentNode.parentNode.parentNode, 'Viper-active');
+
+                            if (ViperUtil.isBrowser('msie') === false) {
+                                tools.viper.highlightSelection();
+                            } else {
+                                setTimeout(
+                                    function() {
+                                        inputElements[0].focus();
+                                    },
+                                    10
+                                );
+                            }
+                        }
+                    } catch (e) {
+                    }
+                },
+
+                closeActiveSubsection: function(ignoreCallbacks) {
+                    if (this._activeSection) {
+                        var prevSubSection = this._subSections[this._activeSection];
+                        if (prevSubSection) {
+                            ViperUtil.removeClass(prevSubSection, 'Viper-active');
+
+                            if (this._subSectionButtons[this._activeSection]) {
+                                ViperUtil.removeClass(tools.getItem(this._subSectionButtons[this._activeSection]).element, 'Viper-selected');
+                            }
+
+                            if (ignoreCallbacks !== true) {
+                                var closeCallback = tools.getItem(this._activeSection)._onCloseCallback;
+                                if (closeCallback) {
+                                    closeCallback.call(this);
+                                }
+                            }
+
+                            ViperUtil.removeClass(toolbar, 'Viper-subSectionVisible');
+                            this._activeSection = null;
+
+                            ViperUtil.removeEvent(document, 'keydown.' + id);
+                            return;
+                        }
+                    }//end if
+                },
+
+                /**
+                 *
+                 *
+                 * @param {string}   subSectionid The id of the sub section.
+                 * @param {function} action       The function to call when the sub section action
+                 *                                is triggered.
+                 * @param {array}    widgetids    The id of widgets that will cause the action
+                 *                                button to be activated when they are changed.
+                 *
+                 * @return void
+                 */
+                setSubSectionAction: function(subSectionid, action, widgetids) {
+                    widgetids      = widgetids || [];
+                    var subSection = tools.getItem(subSectionid);
+                    if (!subSection) {
+                        return;
+                    }
+
+                    subSection.form.onsubmit = function(e) {
+                        if (e) {
+                            ViperUtil.preventDefault(e);
+                        }
+
+                        var button = tools.getItem(subSectionid + '-applyButton');
+                        if (button.isEnabled() === false) {
+                            return false;
+                        }
+
+                        tools.viper.focus();
+
+                        if (ViperUtil.isBrowser('msie') === false) {
                             try {
                                 action.call(this);
                             } catch (e) {
                                 console.error('Sub Section Action threw exception:' + e.message);
                             }
-                        }, 2);
+                        } else {
+                            // IE needs this timeout so focus works <3..
+                            setTimeout(
+                                function() {
+                                    try {
+                                        action.call(this);
+                                    } catch (e) {
+                                        console.error('Sub Section Action threw exception:' + e.message);
+                                    }
+                                },
+                                2
+                            );
+                        }
+
+                        tools.disableButton(subSectionid + '-applyButton');
+
+                        return false;
+                    };
+
+                    var button = tools.createButton(subSectionid + '-applyButton', _('Apply Changes'), _('Apply Changes'), '', subSection.form.onsubmit, true);
+                    subSection.element.appendChild(button);
+
+                    this.addSubSectionActionWidgets(subSectionid, widgetids);
+                },
+
+                addSubSectionActionWidgets: function(subSectionid, widgetids) {
+                    if (!this._subSectionActionWidgets[subSectionid]) {
+                        this._subSectionActionWidgets[subSectionid] = [];
                     }
 
-                    tools.disableButton(subSectionid + '-applyButton');
+                    var self = this;
+                    for (var i = 0; i < widgetids.length; i++) {
+                        this._subSectionActionWidgets[subSectionid].push(widgetids[i]);
 
-                    return false;
-                };
+                        (function(widgetid) {
+                            tools.viper.registerCallback(
+                                'ViperTools:changed:' + widgetid,
+                                'ViperToolbarPlugin',
+                                function() {
+                                    var subSectionWidgets = self._subSectionActionWidgets[subSectionid];
+                                    var c      = subSectionWidgets.length;
+                                    var enable = true;
+                                    for (var j = 0; j < c; j++) {
+                                        var widget = tools.getItem(subSectionWidgets[j]);
+                                        if (widget.required === true && ViperUtil.trim(widget.getValue()) === '') {
+                                            enable = false;
+                                            break;
+                                        }
+                                    }
 
-                var button = tools.createButton(subSectionid + '-applyButton', _('Apply Changes'), _('Apply Changes'), '', subSection.form.onsubmit, true);
-                subSection.element.appendChild(button);
+                                    if (enable === true) {
+                                        tools.enableButton(subSectionid + '-applyButton');
+                                    } else {
+                                        tools.disableButton(subSectionid + '-applyButton');
+                                    }
+                                }
+                            );
+                        }) (widgetids[i]);
+                    }//end for
+                },
 
-                this.addSubSectionActionWidgets(subSectionid, widgetids);
+                addKeepOpenTag: function(tagName) {
+                    this._keepOpenTagList.push(tagName);
+                },
 
-            },
+                orderButtons: function(buttonOrder) {
+                    // Get all the buttons from the container.
+                    var buttons = ViperUtil.getClass('Viper-button', toolsContainer);
+                    var c       = buttons.length;
 
-            addSubSectionActionWidgets: function(subSectionid, widgetids)
-            {
-                if (!this._subSectionActionWidgets[subSectionid]) {
-                    this._subSectionActionWidgets[subSectionid] = [];
-                }
+                    if (c === 0) {
+                        return;
+                    }
 
-                var self  = this;
-                for (var i = 0; i < widgetids.length; i++) {
-                    this._subSectionActionWidgets[subSectionid].push(widgetids[i]);
+                    // Clear the buttons container contents.
+                    while (toolsContainer.firstChild) {
+                        toolsContainer.removeChild(toolsContainer.firstChild);
+                    }
 
-                    (function(widgetid) {
-                        tools.viper.registerCallback('ViperTools:changed:' + widgetid, 'ViperToolbarPlugin', function() {
-                            var subSectionWidgets = self._subSectionActionWidgets[subSectionid];
-                            var c = subSectionWidgets.length;
-                            var enable = true;
-                            for (var j = 0; j < c; j++) {
-                                var widget = tools.getItem(subSectionWidgets[j]);
-                                if (widget.required === true && ViperUtil.trim(widget.getValue()) === '') {
-                                    enable = false;
-                                    break;
+                    // Get the button ids and their elements.
+                    var addedButtons = {};
+                    for (var i = 0; i < c; i++) {
+                        var button       = buttons[i];
+                        var id           = button.id.toLowerCase().replace(self.viper.getId().toLowerCase() + '-vitp', '');
+                        addedButtons[id] = button;
+                    }
+
+                    var bc = buttonOrder.length;
+                    for (var i = 0; i < bc; i++) {
+                        var button = buttonOrder[i];
+                        if (typeof button === 'string') {
+                            button = button.toLowerCase();
+                            if (addedButtons[button]) {
+                                // Button is included in the setting, add it to the toolbar.
+                                this.addButton(addedButtons[button]);
+                            }
+                        } else {
+                            var gc      = button.length;
+                            var groupid = null;
+                            for (var j = 0; j < gc; j++) {
+                                if (addedButtons[button[j].toLowerCase()]) {
+                                    if (groupid === null) {
+                                        // Create the group.
+                                        groupid      = 'ViperInlineToolbarPlugin:buttons:' + i;
+                                        groupElement = self.createButtonGroup(groupid);
+                                        this.addButton(groupElement);
+                                    }
+
+                                    // Button is included in the setting, add it to group.
+                                    self.addButtonToGroup('vitp' + ViperUtil.ucFirst(button[j]), groupid);
                                 }
                             }
+                        }//end if
+                    }//end for
+                },
+                hideToolsSection: function() {
+                    ViperUtil.setStyle(toolsContainer, 'display', 'none');
+                    ViperUtil.addClass(toolbar, 'Viper-noTools');
+                },
+                setOnHideCallback: function(callback) {
+                    this._onHideCallback = callback;
+                },
+                _subSections: {},
+                _activeSection: null,
+                _subSectionButtons: {},
+                _subSectionActionWidgets: {},
+                _buttonShown: false,
+                _subSectionShown: false,
+                _verticalPosUpdateOnly: false,
+                _keepOpenTagList: [],
+                _onHideCallback: null,
+                updatePosition: function(range, selectedNode) {
+                    range = range || tools.viper.getViperRange();
 
-                            if (enable === true) {
-                                tools.enableButton(subSectionid + '-applyButton');
-                            } else {
-                                tools.disableButton(subSectionid + '-applyButton');
-                            }
-                        });
-                    }) (widgetids[i]);
-                }//end for
-
-            },
-
-            addKeepOpenTag: function(tagName) {
-                this._keepOpenTagList.push(tagName);
-
-            },
-
-            orderButtons: function(buttonOrder) {
-                // Get all the buttons from the container.
-                var buttons = ViperUtil.getClass('Viper-button', toolsContainer);
-                var c       = buttons.length;
-
-                if (c === 0) {
-                    return;
-                }
-
-                // Clear the buttons container contents.
-                while(toolsContainer.firstChild) {
-                    toolsContainer.removeChild(toolsContainer.firstChild);
-                }
-
-                // Get the button ids and their elements.
-                var addedButtons = {};
-                for (var i = 0; i < c; i++) {
-                    var button = buttons[i];
-                    var id     = button.id.toLowerCase().replace(self.viper.getId().toLowerCase() + '-vitp', '');
-                    addedButtons[id] = button;
-                }
-
-                var bc = buttonOrder.length;
-                for (var i = 0; i < bc; i++) {
-                    var button = buttonOrder[i];
-                    if (typeof button === 'string') {
-                        button = button.toLowerCase();
-                        if (addedButtons[button]) {
-                            // Button is included in the setting, add it to the toolbar.
-                            this.addButton(addedButtons[button]);
-                        }
+                    var rangeCoords  = null;
+                    var selectedNode = selectedNode || range.getNodeSelection(range);
+                    if (selectedNode !== null) {
+                        rangeCoords = this.getElementCoords(selectedNode);
                     } else {
-                        var gc           = button.length;
-                        var groupid      = null;
-                        for (var j = 0; j < gc; j++) {
-                            if (addedButtons[button[j].toLowerCase()]) {
-                                if (groupid === null) {
-                                    // Create the group.
-                                    groupid      = 'ViperInlineToolbarPlugin:buttons:' + i;
-                                    groupElement = self.createButtonGroup(groupid);
-                                    this.addButton(groupElement);
-                                }
+                        rangeCoords = range.rangeObj.getBoundingClientRect();
+                    }
 
-                                // Button is included in the setting, add it to group.
-                                self.addButtonToGroup('vitp' + ViperUtil.ucFirst(button[j]), groupid);
+                    if (!rangeCoords || (rangeCoords.left === 0 && rangeCoords.top === 0 && ViperUtil.isBrowser('firefox') === true)) {
+                        if (range.collapsed === true) {
+                            var span = document.createElement('span');
+                            tools.viper.insertNodeAtCaret(span);
+                            rangeCoords = this.getElementCoords(span);
+                            ViperUtil.remove(span);
+
+                            if (!rangeCoords) {
+                                return;
                             }
-                        }
-                    }
-                }
+                        } else {
+                            var startNode = range.getStartNode();
+                            var endNode   = range.getEndNode();
+                            if (!startNode || !endNode) {
+                                return;
+                            }
 
-            },
-            hideToolsSection: function() {
-                ViperUtil.setStyle(toolsContainer, 'display', 'none');
-                ViperUtil.addClass(toolbar, 'Viper-noTools');
-            },
-            setOnHideCallback: function(callback) {
-                this._onHideCallback = callback;
-            },
-            _subSections: {},
-            _activeSection: null,
-            _subSectionButtons: {},
-            _subSectionActionWidgets: {},
-            _buttonShown: false,
-            _subSectionShown: false,
-            _verticalPosUpdateOnly: false,
-            _keepOpenTagList: [],
-            _onHideCallback: null,
-            updatePosition: function(range, selectedNode) {
-                range = range || tools.viper.getViperRange();
-
-                var rangeCoords  = null;
-                var selectedNode = selectedNode || range.getNodeSelection(range);
-                if (selectedNode !== null) {
-                    rangeCoords = this.getElementCoords(selectedNode);
-                } else {
-                    rangeCoords = range.rangeObj.getBoundingClientRect();
-                }
-
-                if (!rangeCoords || (rangeCoords.left === 0 && rangeCoords.top === 0 && ViperUtil.isBrowser('firefox') === true)) {
-                    if (range.collapsed === true) {
-                        var span = document.createElement('span');
-                        tools.viper.insertNodeAtCaret(span);
-                        rangeCoords = this.getElementCoords(span);
-                        ViperUtil.remove(span);
-
-                        if (!rangeCoords) {
-                            return;
-                        }
-                    } else {
-                        var startNode = range.getStartNode();
-                        var endNode   = range.getEndNode();
-                        if (!startNode || !endNode) {
-                            return;
-                        }
-
-                        if (startNode.nodeType === ViperUtil.TEXT_NODE
-                            && startNode.data.indexOf("\n") === 0
-                            && endNode.nodeType === ViperUtil.TEXT_NODE
-                            && range.endOffset === endNode.data.length
-                        ) {
-                            range.setStart(endNode, endNode.data.length);
-                            range.collapse(true);
-                            rangeCoords = range.rangeObj.getBoundingClientRect();
-                        }
-                    }
-                }
-
-                if (!rangeCoords || (rangeCoords.bottom === 0 && rangeCoords.height === 0 && rangeCoords.left === 0)) {
-                    if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true) {
-                        // Webkit bug workaround. https://bugs.webkit.org/show_bug.cgi?id=65324.
-                        // OK.. Yet another fix. With the latest Google Chrome (17.0.963.46)
-                        // the !rangeCoords check started to fail because its no longer
-                        // returning null for a collapsed range, instead all values are set to 0.
-
-                        var startNode = range.getStartNode();
-                        if (startNode.nodeType === ViperUtil.TEXT_NODE) {
-                            if (range.startOffset <= startNode.data.length) {
-                                range.setEnd(startNode, (range.startOffset + 1));
-                                rangeCoords = range.rangeObj.getBoundingClientRect();
+                            if (startNode.nodeType === ViperUtil.TEXT_NODE
+                                && startNode.data.indexOf("\n") === 0
+                                && endNode.nodeType === ViperUtil.TEXT_NODE
+                                && range.endOffset === endNode.data.length
+                            ) {
+                                range.setStart(endNode, endNode.data.length);
                                 range.collapse(true);
-                                if (rangeCoords) {
-                                    rangeCoords.right = rangeCoords.left;
-                                }
-                            } else if (range.startOffset > 0) {
-                                range.setStart(startNode, (range.startOffset - 1));
                                 rangeCoords = range.rangeObj.getBoundingClientRect();
-                                range.collapse(false);
-                                if (rangeCoords) {
-                                    rangeCoords.right = rangeCoords.left;
+                            }
+                        }//end if
+                    }//end if
+
+                    if (!rangeCoords || (rangeCoords.bottom === 0 && rangeCoords.height === 0 && rangeCoords.left === 0)) {
+                        if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true) {
+                            // Webkit bug workaround. https://bugs.webkit.org/show_bug.cgi?id=65324.
+                            // OK.. Yet another fix. With the latest Google Chrome (17.0.963.46)
+                            // the !rangeCoords check started to fail because its no longer
+                            // returning null for a collapsed range, instead all values are set to 0.
+                            var startNode = range.getStartNode();
+                            if (startNode.nodeType === ViperUtil.TEXT_NODE) {
+                                if (range.startOffset <= startNode.data.length) {
+                                    range.setEnd(startNode, (range.startOffset + 1));
+                                    rangeCoords = range.rangeObj.getBoundingClientRect();
+                                    range.collapse(true);
+                                    if (rangeCoords) {
+                                        rangeCoords.right = rangeCoords.left;
+                                    }
+                                } else if (range.startOffset > 0) {
+                                    range.setStart(startNode, (range.startOffset - 1));
+                                    rangeCoords = range.rangeObj.getBoundingClientRect();
+                                    range.collapse(false);
+                                    if (rangeCoords) {
+                                        rangeCoords.right = rangeCoords.left;
+                                    }
                                 }
                             }
-                        }
-                    } else {
-                        // Point to top of Viper element.
-                        rangeCoords        = this.getElementCoords(tools.viper.getViperElement());
-                        rangeCoords.bottom = (rangeCoords.top + 10);
+                        } else {
+                            // Point to top of Viper element.
+                            rangeCoords        = this.getElementCoords(tools.viper.getViperElement());
+                            rangeCoords.bottom = (rangeCoords.top + 10);
+                        }//end if
                     }//end if
-                }//end if
 
-                var frameOffset = {x: 0, y: 0};
-                if (Viper.document !== document && Viper.document.defaultView.frameElement) {
-                    // Viper element is inside an iframe, need to adjust the position.
-                    frameOffset      = tools.viper.getDocumentOffset();
-                    var newCoords    = {};
-                    newCoords.bottom = (rangeCoords.bottom + frameOffset.y);
-                    newCoords.top    = (rangeCoords.top + frameOffset.y);
-                    newCoords.bottom = (rangeCoords.bottom + frameOffset.y);
-                    newCoords.left   = (rangeCoords.left + frameOffset.x);
-                    newCoords.right  = (rangeCoords.right + frameOffset.x);
-                    newCoords.height = rangeCoords.height;
-                    newCoords.width  = rangeCoords.width;
-                    rangeCoords      = newCoords;
-                }
-
-                var scrollCoords = ViperUtil.getScrollCoords();
-
-                ViperUtil.addClass(toolbar, 'Viper-calcWidth');
-                ViperUtil.setStyle(toolbar, 'width', 'auto');
-                var toolbarWidth  = ViperUtil.getElementWidth(toolbar);
-                ViperUtil.removeClass(toolbar, 'Viper-calcWidth');
-                ViperUtil.setStyle(toolbar, 'width', toolbarWidth + 'px');
-
-                var viperElemCoords = this.getElementCoords(tools.viper.getViperElement());
-                var elemWindowDim   = ViperUtil.getWindowDimensions(Viper.document.defaultView);
-                var mainWindowDim   = ViperUtil.getWindowDimensions();
-
-                if (this._verticalPosUpdateOnly !== true) {
-                    var left = ((rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x) - (toolbarWidth / 2));
-                    ViperUtil.removeClass(toolbar, 'Viper-orientationLeft Viper-orientationRight');
-
-                    if (left > (elemWindowDim.width + frameOffset.x)) {
-                        // Dont go off screen, point to the editable element.
-                        left = viperElemCoords.left;
+                    var frameOffset = {x: 0, y: 0};
+                    if (Viper.document !== document && Viper.document.defaultView.frameElement) {
+                        // Viper element is inside an iframe, need to adjust the position.
+                        frameOffset      = tools.viper.getDocumentOffset();
+                        var newCoords    = {};
+                        newCoords.bottom = (rangeCoords.bottom + frameOffset.y);
+                        newCoords.top    = (rangeCoords.top + frameOffset.y);
+                        newCoords.bottom = (rangeCoords.bottom + frameOffset.y);
+                        newCoords.left   = (rangeCoords.left + frameOffset.x);
+                        newCoords.right  = (rangeCoords.right + frameOffset.x);
+                        newCoords.height = rangeCoords.height;
+                        newCoords.width  = rangeCoords.width;
+                        rangeCoords      = newCoords;
                     }
 
-                    if (left < 0) {
-                        left += (toolbarWidth / 2);
-                        ViperUtil.addClass(toolbar, 'Viper-orientationLeft');
-                    } else if (left + toolbarWidth > mainWindowDim.width) {
-                        left -= (toolbarWidth / 2);
-                        ViperUtil.addClass(toolbar, 'Viper-orientationRight');
+                    var scrollCoords = ViperUtil.getScrollCoords();
+
+                    ViperUtil.addClass(toolbar, 'Viper-calcWidth');
+                    ViperUtil.setStyle(toolbar, 'width', 'auto');
+                    var toolbarWidth = ViperUtil.getElementWidth(toolbar);
+                    ViperUtil.removeClass(toolbar, 'Viper-calcWidth');
+                    ViperUtil.setStyle(toolbar, 'width', toolbarWidth + 'px');
+
+                    var viperElemCoords = this.getElementCoords(tools.viper.getViperElement());
+                    var elemWindowDim   = ViperUtil.getWindowDimensions(Viper.document.defaultView);
+                    var mainWindowDim   = ViperUtil.getWindowDimensions();
+
+                    if (this._verticalPosUpdateOnly !== true) {
+                        var left = ((rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x) - (toolbarWidth / 2));
+                        ViperUtil.removeClass(toolbar, 'Viper-orientationLeft Viper-orientationRight');
+
+                        if (left > (elemWindowDim.width + frameOffset.x)) {
+                            // Dont go off screen, point to the editable element.
+                            left = viperElemCoords.left;
+                        }
+
+                        if (left < 0) {
+                            left += (toolbarWidth / 2);
+                            ViperUtil.addClass(toolbar, 'Viper-orientationLeft');
+                        } else if (left + toolbarWidth > mainWindowDim.width) {
+                            left -= (toolbarWidth / 2);
+                            ViperUtil.addClass(toolbar, 'Viper-orientationRight');
+                        }
+
+                        ViperUtil.setStyle(toolbar, 'left', left + 'px');
                     }
 
-                    ViperUtil.setStyle(toolbar, 'left', left + 'px');
-                }
+                    var top = (rangeCoords.bottom + margin + scrollCoords.y);
 
-                var top = (rangeCoords.bottom + margin + scrollCoords.y);
-
-                if (top === 0) {
-                    this.hide();
-                    return;
-                } else if (((top + 50) > (mainWindowDim.height + scrollCoords.y)) || (top > elemWindowDim.height + scrollCoords.y + frameOffset.y)) {
-                    this.hide();
-                    return;
-                } else if (top < viperElemCoords.top && Viper.document === document) {
-                    top = (viperElemCoords.top + 50);
-                    if (left < viperElemCoords.left && this._verticalPosUpdateOnly !== true) {
-                        ViperUtil.setStyle(toolbar, 'left', viperElemCoords.left  + 50 + 'px');
+                    if (top === 0) {
+                        this.hide();
+                        return;
+                    } else if (((top + 50) > (mainWindowDim.height + scrollCoords.y)) || (top > elemWindowDim.height + scrollCoords.y + frameOffset.y)) {
+                        this.hide();
+                        return;
+                    } else if (top < viperElemCoords.top && Viper.document === document) {
+                        top = (viperElemCoords.top + 50);
+                        if (left < viperElemCoords.left && this._verticalPosUpdateOnly !== true) {
+                            ViperUtil.setStyle(toolbar, 'left', viperElemCoords.left + 50 + 'px');
+                        }
+                    } else if (Viper.document !== document && top < tools.viper.getDocumentOffset().y) {
+                        this.hide();
+                        return;
                     }
-                } else if (Viper.document !== document && top < tools.viper.getDocumentOffset().y) {
-                    this.hide();
-                    return;
+
+                    ViperUtil.setStyle(toolbar, 'top', top + 'px');
+                    ViperUtil.addClass(toolbar, 'Viper-visible');
+                },
+                setVerticalUpdateOnly: function(verticalOnly) {
+                    this._verticalPosUpdateOnly = verticalOnly;
+                },
+                _updateSubSectionArrowPos: function() {
+                    if (!this._activeSection) {
+                        return;
+                    }
+
+                    var button = this._subSectionButtons[this._activeSection];
+                    if (!button) {
+                        return;
+                    }
+
+                    button = tools.getItem(button).element;
+                    if (!button) {
+                        return;
+                    }
+
+                    var buttonRect = ViperUtil.getBoundingRectangle(button);
+                    var toolbarPos = ViperUtil.getBoundingRectangle(toolbar);
+                    var xPos       = (buttonRect.x1 - toolbarPos.x1 + ((buttonRect.x2 - buttonRect.x1) / 2));
+                    ViperUtil.setStyle(subSectionContainer.firstChild, 'left', xPos + 'px');
+                },
+                getElementCoords: function(element) {
+                    var elemRect     = ViperUtil.getBoundingRectangle(element);
+                    var scrollCoords = ViperUtil.getScrollCoords(element.ownerDocument.defaultView);
+                    return {
+                        left: (elemRect.x1 - scrollCoords.x),
+                        right: (elemRect.x2 - scrollCoords.x),
+                        top: (elemRect.y1 - scrollCoords.y),
+                        bottom: (elemRect.y2 - scrollCoords.y)
+                    };
                 }
-
-                ViperUtil.setStyle(toolbar, 'top', top + 'px');
-                ViperUtil.addClass(toolbar, 'Viper-visible');
-
-            },
-            setVerticalUpdateOnly: function(verticalOnly) {
-                this._verticalPosUpdateOnly = verticalOnly;
-            },
-            _updateSubSectionArrowPos: function() {
-                if (!this._activeSection) {
-                    return;
-                }
-
-                var button = this._subSectionButtons[this._activeSection];
-                if (!button) {
-                    return;
-                }
-
-                button = tools.getItem(button).element;
-                if (!button) {
-                    return;
-                }
-
-                var buttonRect = ViperUtil.getBoundingRectangle(button);
-                var toolbarPos = ViperUtil.getBoundingRectangle(toolbar);
-                var xPos       = (buttonRect.x1 - toolbarPos.x1 + ((buttonRect.x2 - buttonRect.x1) / 2));
-                ViperUtil.setStyle(subSectionContainer.firstChild, 'left', xPos + 'px');
-
-            },
-            getElementCoords: function(element) {
-                var elemRect     = ViperUtil.getBoundingRectangle(element);
-                var scrollCoords = ViperUtil.getScrollCoords(element.ownerDocument.defaultView);
-                return {
-                    left: (elemRect.x1 - scrollCoords.x),
-                    right: (elemRect.x2 - scrollCoords.x),
-                    top: (elemRect.y1 - scrollCoords.y),
-                    bottom: (elemRect.y2 - scrollCoords.y)
-                };
-
             }
-        });
+        );
 
         this.viper.addElement(toolbar);
 
         return toolbar;
+
+    },
+
+    getVisibleToolbarRectangles: function()
+    {
+        var rects           = [];
+        var visibleToolbars = ViperUtil.getClass('ViperITP Viper-visible', this.viper.getElementHolder());
+        if (visibleToolbars.length === 0) {
+            return rects;
+        }
+
+        for (var i = 0; i < visibleToolbars.length; i++) {
+            rects.push(ViperUtil.getBoundingRectangle(visibleToolbars[i]));
+        }
+
+        return rects;
 
     },
 
@@ -1973,57 +2117,71 @@ ViperTools.prototype = {
         if (element && element !== 'mouse') {
             // Show tooltip on hover.
             var timer = null;
-            ViperUtil.hover(element, function() {
-                timer = setTimeout(function() {
-                    self.getItem(id).show(element);
-                }, 500);
-            }, function() {
-                clearTimeout(timer);
-                self.getItem(id).hide();
-            });
-        } else if (element === 'mouse') {
-            ViperUtil.addEvent(document, 'mousemove', function(e) {
-                mouseX = e.pageX;
-                mouseY = e.pageY;
-
-                if (visible !== true) {
-                    return;
+            ViperUtil.hover(
+                element,
+                function() {
+                    timer = setTimeout(
+                        function() {
+                            self.getItem(id).show(element);
+                        },
+                        500
+                    );
+                },
+                function() {
+                    clearTimeout(timer);
+                    self.getItem(id).hide();
                 }
+            );
+        } else if (element === 'mouse') {
+            ViperUtil.addEvent(
+                document,
+                'mousemove',
+                function(e) {
+                    mouseX = e.pageX;
+                    mouseY = e.pageY;
 
-                ViperUtil.setStyle(tooltip, 'left', mouseX + 'px');
-                ViperUtil.setStyle(tooltip, 'top', mouseY + 'px');
-            });
-        }
+                    if (visible !== true) {
+                        return;
+                    }
 
-
-        this.addItem(id, {
-            type: 'tooltip',
-            element: tooltip,
-            show: function(elem) {
-                if (elem && elem.nodeType) {
-                    // Show tooltip on this element.
-                    var rect = ViperUtil.getBoundingRectangle(elem);
-
-                    ViperUtil.setStyle(tooltip, 'left', rect.x2 + 'px');
-                    ViperUtil.setStyle(tooltip, 'top', rect.y2 + 'px');
-
-                    self.viper.addElement(tooltip);
-                    visible = true;
-                } else if (elem === 'mouse' || element === 'mouse') {
-                    // Follow the mouse pointer.
                     ViperUtil.setStyle(tooltip, 'left', mouseX + 'px');
                     ViperUtil.setStyle(tooltip, 'top', mouseY + 'px');
-                    self.viper.addElement(tooltip);
-                    visible = true;
                 }
-            },
-            hide: function() {
-                visible = false;
-                if (tooltip.parentNode) {
-                    tooltip.parentNode.removeChild(tooltip);
+            );
+        }//end if
+
+
+        this.addItem(
+            id,
+            {
+                type: 'tooltip',
+                element: tooltip,
+                show: function(elem) {
+                    if (elem && elem.nodeType) {
+                        // Show tooltip on this element.
+                        var rect = ViperUtil.getBoundingRectangle(elem);
+
+                        ViperUtil.setStyle(tooltip, 'left', rect.x2 + 'px');
+                        ViperUtil.setStyle(tooltip, 'top', rect.y2 + 'px');
+
+                        self.viper.addElement(tooltip);
+                        visible = true;
+                    } else if (elem === 'mouse' || element === 'mouse') {
+                        // Follow the mouse pointer.
+                        ViperUtil.setStyle(tooltip, 'left', mouseX + 'px');
+                        ViperUtil.setStyle(tooltip, 'top', mouseY + 'px');
+                        self.viper.addElement(tooltip);
+                        visible = true;
+                    }
+                },
+                hide: function() {
+                    visible = false;
+                    if (tooltip.parentNode) {
+                        tooltip.parentNode.removeChild(tooltip);
+                    }
                 }
             }
-        });
+        );
 
         return tooltip;
 

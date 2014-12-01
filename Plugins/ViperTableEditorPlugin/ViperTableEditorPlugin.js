@@ -1190,17 +1190,6 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-    __updateInnerContainer: function(cell, type, activeSubSection)
-    {
-        var callbackData = {
-            toolbar: this,
-            cell: cell,
-            type: type
-        };
-        this.viper.fireCallbacks('ViperTableEditorPlugin:updateToolbar', callbackData);
-
-    },
-
     _createCellProperties: function()
     {
         var self               = this;
