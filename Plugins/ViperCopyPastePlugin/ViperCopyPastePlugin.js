@@ -128,15 +128,13 @@ ViperCopyPastePlugin.prototype = {
                     } else if (files === 0) {
                         var file = e.clipboardData.items[files];
                         var blob  = file.getAsFile();
-                        var reader = new FileReader();
-                        var itemsCount = e.clipboardData.items.length;
-                        reader.onload = function(event) {
+                        self.readPastedImage(blob, function() {
                             var base64   = event.target.result;
                             pasteContent = '<img src="' + base64 + '"/>';
                             ViperUtil.setHtml(self.pasteElement, pasteContent);
                             self._handleFormattedPasteValue((self.pasteType === 'formattedClean'));
-                        };
-                        reader.readAsDataURL(blob);
+                        });
+
                         ViperUtil.preventDefault(e);
                         return false;
                     }
@@ -421,6 +419,19 @@ ViperCopyPastePlugin.prototype = {
                 ViperUtil.preventDefault(e);
             });
         }
+
+    },
+
+    readPastedImage: function(file, callback)
+    {
+        var reader = new FileReader();
+        reader.onload = function (event) {
+            var image = new Image();
+            image.src = event.target.result;
+            callback.call(this, image, file);
+        };
+
+        reader.readAsDataURL(file);
 
     },
 
