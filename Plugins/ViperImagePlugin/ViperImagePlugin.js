@@ -216,6 +216,10 @@ ViperImagePlugin.prototype = {
             ViperSelection.addRange(range);
         }
 
+        if (this.viper.rangeInViperBounds(range) === false) {
+            range = this.viper.getViperRange();
+        }
+
         var bookmark = this.viper.createBookmark(range);
 
         var elems = ViperUtil.getElementsBetween(bookmark.start, bookmark.end);
@@ -241,6 +245,24 @@ ViperImagePlugin.prototype = {
         this.viper.removeBookmark(bookmark);
 
         ViperSelection.removeAllRanges();
+
+        if (ViperUtil.isBrowser('msie', '>=11') === true) {
+            var selectable = img.nextSibling;
+            if (!img.nextSibling) {
+                selectable = document.createTextNode(' ');
+                ViperUtil.insertAfter(img, selectable);
+            } else if (img.nextSibling.nodeType !== ViperUtil.TEXT_NODE) {
+                selectable = range.getFirstSelectableChild(img.nextSibling);
+                if (selectable) {
+                    selectable = document.createTextNode(' ');
+                    ViperUtil.insertAfter(img, selectable);
+                }
+            }
+
+            range.setStart(selectable, 1);
+            range.collapse(true);
+            ViperSelection.addRange(range);
+        }
 
         this.viper.fireSelectionChanged();
         this.viper.fireNodesChanged([this.viper.getViperElement()]);
