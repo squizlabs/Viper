@@ -892,7 +892,7 @@ MatrixImagePlugin.prototype = {
                 // display the warning message to ask user to create asset
                 $('<div />', {
                     "class": 'VipperDroppedImage-msgBox',
-                    }).html(_('Low resolution preview.') + '<br/>' + _('Upload the image to use it in content.')).insertBefore('.Viper-imageUploadRow');              
+                    }).html(_('Low resolution preview.') + '<br/>' + _('Upload the image to use it in the content.')).insertBefore('.Viper-imageUploadRow');              
 
             }
         }
