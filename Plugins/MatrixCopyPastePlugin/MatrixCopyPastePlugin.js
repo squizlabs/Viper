@@ -1,5 +1,7 @@
 function MatrixCopyPastePlugin(viper)
 {
+    ViperUtil.inherits('MatrixCopyPastePlugin', 'ViperCopyPastePlugin');
+    ViperCopyPastePlugin.call(this, viper);
     this.viper = viper;
 
 }
@@ -7,6 +9,8 @@ function MatrixCopyPastePlugin(viper)
 MatrixCopyPastePlugin.prototype = {
     init: function()
     {
+        ViperCopyPastePlugin.prototype.init.call(this);
+
         var tags = {
             'a': ['href'],
             'img': ['src']
@@ -48,6 +52,39 @@ MatrixCopyPastePlugin.prototype = {
                 }
             }
         });
-    }
+    },
+
+
+
+    readPastedImage: function(file, callback)
+    {
+        var reader = new FileReader();
+        var self = this;
+        reader.onload = function (event) {
+            var image = new Image();
+            image.src = event.target.result;
+
+            var matrixImagePlugin = self.viper.ViperPluginManager.getPlugin('MatrixImagePlugin');
+            // store the image in temp array
+            var newLength = matrixImagePlugin.storeDroppedImageToUpload(image);
+
+            // create a preview image
+            var preview_img = new Image();
+            preview_img.src = matrixImagePlugin.imageToDataUri(image, image.width, image.height, 10);
+            preview_img.width = image.width;
+            preview_img.height = image.height;
+            preview_img.className = 'Viper-imagePaste';
+            preview_img.id = 'Viper-imagePaster-' + (newLength - 1);
+            preview_img.setAttribute('data-filename', '');
+            preview_img.setAttribute('data-id', newLength - 1);
+
+            // insert a preview
+            var range = self.viper.getViperRange();
+            matrixImagePlugin._rangeToImage(range, preview_img);
+        };
+
+        reader.readAsDataURL(file);
+
+    },
 
 };

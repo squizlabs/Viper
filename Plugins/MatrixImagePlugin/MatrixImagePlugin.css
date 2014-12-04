@@ -101,3 +101,96 @@
 .uploadImageForm input {
 	font-size: 1.49em;
 }
+
+/*  drag and drop image preview styles */
+
+@keyframes border-pulsate {
+    to {
+        border-color: #FFF;
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes border-pulsate {
+    to {
+        border-color: #FFF;
+        opacity: 1;
+    }
+}
+
+@-moz-keyframes border-pulsate {
+    to {
+        border-color: #FFF;
+        opacity: 1;
+    }
+}
+
+@keyframes upload-error {
+    0%  { transform: rotateZ(0deg)}
+    5%  { transform: rotateZ(-2deg)}
+    10% { transform: rotateZ(2deg)}
+    15% { transform: rotateZ(-2deg)}
+    20% { transform: rotateZ(2deg)}
+    25% { transform: rotateZ(0deg)}
+    to  { transform: rotateZ(0deg)}
+}
+
+@-webkit-keyframes upload-error {
+    0%  { -webkit-transform: rotateZ(0deg)}
+    5%  { -webkit-transform: rotateZ(-2deg)}
+    10% { -webkit-transform: rotateZ(2deg)}
+    15% { -webkit-transform: rotateZ(-2deg)}
+    20% { -webkit-transform: rotateZ(2deg)}
+    25% { -webkit-transform: rotateZ(0deg)}
+    to  { -webkit-transform: rotateZ(0deg)}
+}
+
+@-moz-keyframes upload-error {
+    0%  { -moz-transform: rotateZ(0deg)}
+    5%  { -moz-transform: rotateZ(-2deg)}
+    10% { -moz-transform: rotateZ(2deg)}
+    15% { -moz-transform: rotateZ(-2deg)}
+    20% { -moz-transform: rotateZ(2deg)}
+    25% { -moz-transform: rotateZ(0deg)}
+    to  { -moz-transform: rotateZ(0deg)}
+}
+
+    /* Image Treatments for Droppepd Image */
+
+.Viper-imagePaste {
+    border: 2px dashed #2b7ce0;
+    padding: 2px;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.Viper-imagePaste.imagePaste-loading {
+    border-color: #ef981b;
+    border-style: solid;
+    opacity: 0.9;
+    animation: border-pulsate 0.4s ease-out infinite alternate;
+    -webkit-animation: border-pulsate 0.4s ease-out infinite alternate;
+    -moz-animation: border-pulsate 0.4s ease-out infinite alternate;
+}
+
+.Viper-imagePaste.imagePaste-error {
+    border-color: #e33030;
+    animation: upload-error 2s ease-out infinite;
+    -webkit-animation: upload-error 2s ease-out infinite;
+    -moz-animation: upload-error 2s ease-out infinite;
+}
+
+.VipperDroppedImage-msgBox {
+    margin: 0.4em 0 0.6em;
+    border-radius: 0.4em;
+    border: 1px solid #747379;
+    color: #cacad1;
+    padding: 0.3em 0.3em 0.3em 50px;
+    text-shadow: none;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-align: left;
+    background-image: url(../../Images/icon-bubble-warning.png);
+    background-repeat: no-repeat;
+    background-position: 4% 50%;
+}
