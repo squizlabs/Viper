@@ -410,7 +410,7 @@ ViperCopyPastePlugin.prototype = {
                 // Remove the original selected content. Note that we must use bookmark instead of range as the content
                 // gets updated by pasteContent method. Also this content deletion cannot be done before inserting it to
                 // new location as it moves the content and changes the drop location.
-                if (selectedNode) {
+                if (selectedNode && selectedNode !== self.viper.getViperElement()) {
                     ViperUtil.remove(selectedNode);
                 } else if (bookmark) {
                     self.viper.removeBookmark(bookmark);
