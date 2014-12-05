@@ -233,6 +233,8 @@ MatrixImagePlugin.prototype = {
                     return;
                 }
 
+                // if there is previous image preview specific settings, remove them
+                self._resetDroppedImageUpload();
 
                 // if File API is supported, load preview
                 if (window.File && window.FileReader && this.files && this.files[0]) {
@@ -526,6 +528,17 @@ MatrixImagePlugin.prototype = {
         if(url == null) return;
         var matrixPrefix = null;
         var self = this;
+        var uploadForm = null;
+        if(prefix.indexOf('vitp') > -1) {
+            uploadForm = this._inlineUploadForm;
+            matrixPrefix = 'vitpMatrixImagePlugin';
+
+        }
+        else {
+            uploadForm = this._uploadForm;
+            matrixPrefix = 'MatrixImagePlugin';
+
+        }
 
         // if we are in the uploading process, don't submit the upload again
         // this prevents Viper setting extra onsubmit event to all forms in the plugin
@@ -533,20 +546,14 @@ MatrixImagePlugin.prototype = {
             return;
         }
 
+        // if we are not uploading a image preview
+        // remove the css class so it won't be a preview anymore
+        if(!uploadForm.find('input[name=base64]').val()) {
+            this._removeDroppedImageStatus();
+        }
 
         // start the upload process
         if (url.indexOf("file://") === 0) {
-            var uploadForm = null;
-            if(prefix.indexOf('vitp') > -1) {
-                uploadForm = this._inlineUploadForm;
-                matrixPrefix = 'vitpMatrixImagePlugin';
-
-            }
-            else {
-                uploadForm = this._uploadForm;
-                matrixPrefix = 'MatrixImagePlugin';
-
-            }
 
             //let's just set the file name from what user inputs
             var filename = url.replace('file://', '');
@@ -623,6 +630,7 @@ MatrixImagePlugin.prototype = {
     var tools       = this.viper.ViperTools;
     var urlField    = tools.getItem(idPrefix + ':urlInput'), altField    = tools.getItem(idPrefix + ':altInput');
     var parentNodeField    = tools.getItem(idPrefix + ':parentRootNode');
+    var self = this;
 
     // if it's for parent node seleciton, allow all types
     var allowedTypes = [];
@@ -676,6 +684,8 @@ MatrixImagePlugin.prototype = {
                 else {
                     urlField.setValue(data.assetid,false);
                     altField.setValue(data.attributes.alt,false);
+                    self._resetDroppedImageUpload();
+
                 }
             }
             });
@@ -747,6 +757,7 @@ MatrixImagePlugin.prototype = {
                 else {
                     urlField.setValue(selectedAsset.id,false);
                     altField.setValue(altText,false);
+                    self._resetDroppedImageUpload();
                 }
             }
         });
@@ -897,13 +908,23 @@ MatrixImagePlugin.prototype = {
             }
         }
         else {
+                // remove those image preview specific settings from plugin interface
+                this._resetDroppedImageUpload();
+        }
+    },
+
+
+    _resetDroppedImageUpload: function() {
                 // chaneg the apply button text  back to 'Apply Changes'
                 var applyButton1 = this.viper.ViperTools.getItem('ViperImagePlugin:bubbleSubSection-applyButton');
                 var applyButton2 = this.viper.ViperTools.getItem('vitpImagePlugin-infoSubsection-applyButton');
                 $(applyButton1.element).html(_('Apply Changes'));
                 $(applyButton2.element).html(_('Apply Changes'));
-
-        }
+                // hide the warning message
+                $('.VipperDroppedImage-msgBox').hide();
+                // remove the base64 image from upload form
+                this._inlineUploadForm.find('input[name=base64]').val('');
+                this._uploadForm.find('input[name=base64]').val('');
     },
 
     _replacePreviewWithOriginal: function(previewId, assetId, alt, title) {
@@ -943,6 +964,20 @@ MatrixImagePlugin.prototype = {
             $(image).addClass('imagePaste-error');
             $(image).attr('data-error', errorMessage)
         }
+    },
+
+    _removeDroppedImageStatus: function(previewId, errorMessage) {
+        // is this a dropped in image preview?
+        var image = this._resizeImage;
+        if (ViperUtil.isBrowser('msie', '<11') === true) {
+            image = this._ieImageResize;
+        }
+        if(image && image.className && image.className.match(/(?:^|\s)Viper-imagePaste(?!\S)/)) {
+                $(image).removeClass('imagePaste-error');
+                $(image).removeClass('imagePaste-loading');
+                $(image).removeClass('Viper-imagePaste');
+        }
     }
+
 
 };
