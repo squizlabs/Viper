@@ -85,6 +85,6 @@ MatrixCopyPastePlugin.prototype = {
 
         reader.readAsDataURL(file);
 
-    },
+    }
 
 };
