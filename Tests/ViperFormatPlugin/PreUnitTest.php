@@ -191,6 +191,7 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractFormatsUnitTest
         
         // Check that when you click the active pre icon in the inline toolbar, it is changed to paragraph.
         $this->useTest(1);
+        sleep(1);
         $this->selectKeyword(1);
         sleep(2);
         $this->selectInlineToolbarLineageItem(0);
