@@ -2342,7 +2342,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 case 'safari':
                     // Use the shortcut menu to select the menu option and then move the mouse up to cut.
                     $this->sikuli->keyDown('c');
+                    sleep(2);
                     $this->sikuli->keyDown('Key.UP');
+                    sleep(2);
                     $this->sikuli->keyDown('Key.ENTER');
                 break;
 
