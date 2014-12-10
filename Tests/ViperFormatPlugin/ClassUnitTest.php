@@ -937,6 +937,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         // Start creating the class for the first selection
         $this->selectKeyword(1);
+        sleep(2);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('class');
 
@@ -989,6 +990,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         // Start creating the class for the first selection
         $this->selectKeyword(1);
+        sleep(2);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('id');
 
@@ -1043,6 +1045,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         // Select class and make changes without saving
         $this->selectKeyword(1);
+        sleep(2);
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->type('222');
         $this->selectKeyword(2);

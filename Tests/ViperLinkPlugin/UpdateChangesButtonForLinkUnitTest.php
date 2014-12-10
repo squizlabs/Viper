@@ -16,6 +16,7 @@ class Viper_Tests_ViperLinkPlugin_UpdateChangesButtonForLinkUnitTest extends Abs
 
         // Start creating the link for the first selection
         $this->selectKeyword(1);
+        sleep(2);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
 
@@ -76,6 +77,7 @@ class Viper_Tests_ViperLinkPlugin_UpdateChangesButtonForLinkUnitTest extends Abs
 
         // Start creating the link for the first selection
         $this->selectKeyword(1);
+        sleep(2);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
 

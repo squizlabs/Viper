@@ -405,6 +405,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
 
         // Start creating the anchor for the first selection
         $this->selectKeyword(1);
+        sleep(2);
         $this->clickInlineToolbarButton('anchorID');
         $this->type('id');
 
@@ -457,6 +458,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
 
         // Start creating the anchor for the first selection
         $this->selectKeyword(1);
+        sleep(2);
         $this->clickInlineToolbarButton('anchorID');
         $this->type('id');
 
@@ -511,6 +513,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
 
         // Select anchor and make changes without saving
         $this->selectKeyword(1);
+        sleep(2);
         $this->clickInlineToolbarButton('anchorID', 'active');
         $this->type('222');
         $this->selectKeyword(2);
