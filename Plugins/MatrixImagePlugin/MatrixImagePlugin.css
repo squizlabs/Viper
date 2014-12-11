@@ -79,7 +79,7 @@
     height: 10px;
     margin: 0 auto;
     padding: 2px;
-    width: 277px;
+    width: 98%;
 }
 
 .uploadImage-progressIndicator .uploadImage-progress-bar span {
@@ -102,69 +102,24 @@
 	font-size: 1.49em;
 }
 
-/*  drag and drop image preview styles */
 
-@keyframes border-pulsate {
-    to {
-        border-color: #FFF;
-        opacity: 1;
-    }
+.Viper-imageUploadFileRow {
+    display: none;
+    min-width:300px;
 }
 
-@-webkit-keyframes border-pulsate {
-    to {
-        border-color: #FFF;
-        opacity: 1;
-    }
-}
 
-@-moz-keyframes border-pulsate {
-    to {
-        border-color: #FFF;
-        opacity: 1;
-    }
-}
 
-@keyframes upload-error {
-    0%  { transform: rotateZ(0deg)}
-    5%  { transform: rotateZ(-2deg)}
-    10% { transform: rotateZ(2deg)}
-    15% { transform: rotateZ(-2deg)}
-    20% { transform: rotateZ(2deg)}
-    25% { transform: rotateZ(0deg)}
-    to  { transform: rotateZ(0deg)}
-}
+/* Image Treatments for Droppepd Image */
 
-@-webkit-keyframes upload-error {
-    0%  { -webkit-transform: rotateZ(0deg)}
-    5%  { -webkit-transform: rotateZ(-2deg)}
-    10% { -webkit-transform: rotateZ(2deg)}
-    15% { -webkit-transform: rotateZ(-2deg)}
-    20% { -webkit-transform: rotateZ(2deg)}
-    25% { -webkit-transform: rotateZ(0deg)}
-    to  { -webkit-transform: rotateZ(0deg)}
-}
-
-@-moz-keyframes upload-error {
-    0%  { -moz-transform: rotateZ(0deg)}
-    5%  { -moz-transform: rotateZ(-2deg)}
-    10% { -moz-transform: rotateZ(2deg)}
-    15% { -moz-transform: rotateZ(-2deg)}
-    20% { -moz-transform: rotateZ(2deg)}
-    25% { -moz-transform: rotateZ(0deg)}
-    to  { -moz-transform: rotateZ(0deg)}
-}
-
-    /* Image Treatments for Droppepd Image */
-
-.Viper-imagePaste {
+[data-imagepaste="true"] {
+    /* Styles */
     border: 2px dashed #2b7ce0;
     padding: 2px;
     border-radius: 8px;
     box-sizing: border-box;
 }
-
-.Viper-imagePaste.imagePaste-loading {
+[data-imagepaste-status="loading"] {
     border-color: #ef981b;
     border-style: solid;
     opacity: 0.9;
@@ -172,12 +127,11 @@
     -webkit-animation: border-pulsate 0.4s ease-out infinite alternate;
     -moz-animation: border-pulsate 0.4s ease-out infinite alternate;
 }
-
-.Viper-imagePaste.imagePaste-error {
+[data-imagepaste-status="error"] {
     border-color: #e33030;
-    animation: upload-error 2s ease-out infinite;
-    -webkit-animation: upload-error 2s ease-out infinite;
-    -moz-animation: upload-error 2s ease-out infinite;
+    animation: upload-error 2s ease-out;
+    -webkit-animation: upload-error 2s ease-out;
+    -moz-animation: upload-error 2s ease-out;
 }
 
 .VipperDroppedImage-msgBox {
@@ -193,4 +147,54 @@
     background-image: url(../../Images/icon-bubble-warning.png);
     background-repeat: no-repeat;
     background-position: 4% 50%;
+}
+
+
+
+
+/* drag and drop image preview styles */
+@keyframes border-pulsate {
+to {
+border-color: #FFF;
+opacity: 1;
+}
+}
+@-webkit-keyframes border-pulsate {
+to {
+border-color: #FFF;
+opacity: 1;
+}
+}
+@-moz-keyframes border-pulsate {
+to {
+border-color: #FFF;
+opacity: 1;
+}
+}
+@keyframes upload-error {
+0% { transform: rotateZ(0deg)}
+5% { transform: rotateZ(-2deg)}
+10% { transform: rotateZ(2deg)}
+15% { transform: rotateZ(-2deg)}
+20% { transform: rotateZ(2deg)}
+25% { transform: rotateZ(0deg)}
+to { transform: rotateZ(0deg)}
+}
+@-webkit-keyframes upload-error {
+0% { -webkit-transform: rotateZ(0deg)}
+5% { -webkit-transform: rotateZ(-2deg)}
+10% { -webkit-transform: rotateZ(2deg)}
+15% { -webkit-transform: rotateZ(-2deg)}
+20% { -webkit-transform: rotateZ(2deg)}
+25% { -webkit-transform: rotateZ(0deg)}
+to { -webkit-transform: rotateZ(0deg)}
+}
+@-moz-keyframes upload-error {
+0% { -moz-transform: rotateZ(0deg)}
+5% { -moz-transform: rotateZ(-2deg)}
+10% { -moz-transform: rotateZ(2deg)}
+15% { -moz-transform: rotateZ(-2deg)}
+20% { -moz-transform: rotateZ(2deg)}
+25% { -moz-transform: rotateZ(0deg)}
+to { -moz-transform: rotateZ(0deg)}
 }
