@@ -68,6 +68,7 @@ class Viper_Tests_ViperImagePlugin_UpdateChangesButtonForImageUnitTest extends A
 
         $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
         sleep(2);
+        $this->clickField('URL');
         $this->clickField('Image is decorative');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         sleep(1);
