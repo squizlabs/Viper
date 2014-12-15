@@ -752,9 +752,9 @@ ViperKeyboardEditorPlugin.prototype = {
     {
         var range = this.viper.getViperRange();
 
-        if (ViperUtil.isBrowser('chrome') === true) {
+        if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true) {
             // Latest Chrome versions have strange issue with all content deletion, handle it in another method.
-            return this._handleDeleteForChrome(e, range);
+            return this._handleDeleteForWebkit(e, range);
         }
 
         if (e.which === 46) {
@@ -1409,7 +1409,7 @@ ViperKeyboardEditorPlugin.prototype = {
 
     },
 
-    _handleDeleteForChrome: function(e, range)
+    _handleDeleteForWebkit: function(e, range)
     {
         if (this._handleBackspaceAtStartOfLi(e, range) === false) {
             return false;

@@ -298,7 +298,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
      *
      * @return void
      */
-    public function testInsertTablerAfterCuttingContent()
+    public function testInsertTableAfterCuttingContent()
     {
         $this->useTest(2);
         
@@ -314,7 +314,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         sleep(1);
         $this->assertHTMLMatchNoHeaders('<h1>Insert Table</h1><p></p><table border="1" style="width:100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>Third paragraph</p>');
 
-    }//end testInsertTablerAfterCuttingContent()
+    }//end testInsertTableAfterCuttingContent()
 
 
 }//end class

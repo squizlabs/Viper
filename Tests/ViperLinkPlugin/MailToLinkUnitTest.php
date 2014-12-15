@@ -153,7 +153,9 @@ class Viper_Tests_ViperLinkPlugin_MailToLinkUnitTest extends AbstractViperUnitTe
         $this->sikuli->keyDown('Key.CMD + c');
         sleep(2);
         $this->clickTopToolbarButton('link');
+        sleep(2);
         $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
         $this->sikuli->keyDown('Key.TAB');
         sleep(1);
         $this->type('Subject');

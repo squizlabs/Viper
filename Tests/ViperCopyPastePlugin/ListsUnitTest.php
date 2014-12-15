@@ -31,6 +31,7 @@ class Viper_Tests_ViperCopyPastePlugin_ListsUnitTest extends AbstractViperUnitTe
                     default:
                         $this->fail('Testing for '.$this->sikuli->getBrowserid().' is not supported on osx for this test');
                 }//end switch
+                break;
             case 'windows':
                 switch ($this->sikuli->getBrowserid()) {
                     case 'firefox':
@@ -54,6 +55,7 @@ class Viper_Tests_ViperCopyPastePlugin_ListsUnitTest extends AbstractViperUnitTe
                     default:
                         $this->fail('Testing for '.$this->sikuli->getBrowserid().' is not supported on Windows for this test');
                 }//end switch
+                break;
         }//end switch
 
         $this->selectKeyword(1);
