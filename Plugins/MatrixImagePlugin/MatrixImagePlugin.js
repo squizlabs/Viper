@@ -664,7 +664,7 @@ MatrixImagePlugin.prototype = {
     // if it's for parent node seleciton, allow all types
     var allowedTypes = [];
     if(!forParentNode) {
-        allowedTypes = ['image', 'thumbnail', 'image_variety'];
+        allowedTypes = ['image', 'thumbnail', 'image_variety', 'physical_file'];
     }
 
    
@@ -763,7 +763,7 @@ MatrixImagePlugin.prototype = {
                         }
                     }
                     if(!valid) {
-                        alert(EasyEditLocalise.translate('You have selected a %1 asset. Only image, thumbnail or image variety assets can be selected.',selectedAsset.attribute('type_code')));
+                        alert(EasyEditLocalise._('You have selected a %1 asset. Only image, thumbnail or image variety assets can be selected.',selectedAsset.attribute('type_code')));
                         return;
                     }
                 }
