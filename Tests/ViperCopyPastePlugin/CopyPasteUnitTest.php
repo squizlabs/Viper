@@ -313,6 +313,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + c');
         sleep(1);
         $this->moveToKeyword(2, 'right');
@@ -335,6 +336,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + c');
         sleep(1);
         $this->moveToKeyword(4, 'right');
