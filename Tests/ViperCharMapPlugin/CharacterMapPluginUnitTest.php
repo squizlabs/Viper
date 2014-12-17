@@ -31,7 +31,7 @@ class Viper_Tests_ViperCharMapPlugin_CharacterMapPluginUnitTest extends Abstract
         sleep(1);
 
         // Insert char.
-        $char = $this->findImage('ViperCharMapPlugin-symbolChar-3', 'table.VCMP-table.Viper-visible td', 9);
+        $char = $this->findImage('ViperCharMapPlugin-symbolChar-17', 'table.VCMP-table.Viper-visible td', 17);
         $this->sikuli->click($char);
 
         // Change to Mathematics char list.
@@ -50,7 +50,7 @@ class Viper_Tests_ViperCharMapPlugin_CharacterMapPluginUnitTest extends Abstract
         $char = $this->findImage('ViperCharMapPlugin-symbolChar-5', 'table.VCMP-table.Viper-visible td', 10);
         $this->sikuli->click($char);
 
-        $this->assertHTMLMatch('<p>LOREM XAX&para;§ä&times;฿ dolor</p><p>sit amet<strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>LOREM XAX&para;§ç&times;฿ dolor</p><p>sit amet<strong>WoW</strong></p>');
 
     }//end testOpeningCharacterMap()
 
