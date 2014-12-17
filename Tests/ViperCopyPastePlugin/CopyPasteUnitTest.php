@@ -17,14 +17,14 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->useTest(1);
 
         $this->selectKeyword(1);
-        sleep(1);
+        sleep(2);
         $this->sikuli->keyDown('Key.CMD + c');
         $this->sikuli->keyDown('Key.CMD + v');
         $this->type('A');
-        sleep(1);
+        sleep(2);
         $this->sikuli->keyDown('Key.CMD + v');
         $this->type('B');
-        sleep(1);
+        sleep(2);
         $this->sikuli->keyDown('Key.CMD + v');
         $this->type('C');
 
