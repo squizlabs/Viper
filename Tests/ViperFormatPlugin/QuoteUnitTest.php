@@ -852,6 +852,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->assertHTMLMatch('<blockquote><p>Heading for the page %1%</p></blockquote><p>First paragraph on the page</p><p>Second paragraph on the page</p>');
 
         $this->moveToKeyword(1, 'right');
+        sleep(2);
         $this->type(' New content');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('More new content');

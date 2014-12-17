@@ -656,6 +656,7 @@ class Viper_Tests_ViperFormatPlugin_PreUnitTest extends AbstractFormatsUnitTest
         $this->assertHTMLMatch('<pre>Heading for the page %1%</pre><p>First paragraph on the page</p><p>Second paragraph on the page</p>');
 
         $this->moveToKeyword(1, 'right');
+        sleep(2);
         $this->type(' New content');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.ENTER');
