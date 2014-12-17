@@ -1964,7 +1964,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         $fieldRegion  = $this->sikuli->extendRight($fieldLabel, 400);
         $actionImage  = $this->getBrowserImagePath().'/textField_action_clear.png';
-        $actionButton = $this->sikuli->find($actionImage, $fieldRegion);
+        $actionButton = $this->sikuli->find($actionImage, $fieldRegion, 0.6);
 
         $this->sikuli->click($actionButton);
 
