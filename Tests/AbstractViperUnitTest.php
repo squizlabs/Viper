@@ -2339,6 +2339,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
                 case 'chrome':
                 case 'chromium':
+                case 'chromeCanary':
                 case 'safari':
                     // Use the shortcut menu to select the menu option and then move the mouse up to cut.
                     $this->sikuli->keyDown('c');

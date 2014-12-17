@@ -11,10 +11,15 @@
 
     $browsers = array(
                  'firefox',
+                 'firefoxNightly',
                  'safari',
                  'chrome',
+                 'chromium',
+                 'chromeCanary',
                  'ie8',
                  'ie9',
+                 'ie10',
+                 'ie11',
                 );
 
     // Browsers.
