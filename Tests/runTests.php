@@ -109,6 +109,11 @@
             $phpunitCMD .= $unitTests;
         }
 
+        // Dummy test that will run test calibration.
+        if (trim($test, '/') === 'testCalibrateTests') {
+            putenv('VIPER_TEST_CALIBRATE=TRUE');
+        }
+
         if ($test !== NULL) {
             $phpunitCMD .= ' --filter "'.$test.'"';
             putenv('VIPER_TEST_FILTER='.$test);
