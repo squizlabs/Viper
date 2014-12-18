@@ -413,6 +413,14 @@ MatrixImagePlugin.prototype = {
 
                         // if it's a image preview, we have to locate the preview image and replace it
                         if(response.image_preview_id) {
+                            var image = self._resizeImage;
+                            if (ViperUtil.isBrowser('msie', '<11') === true) {
+                                   image = self._ieImageResize;
+                            }
+                            // remove the low resolution warning, only if we are viewing the current completed image
+                            if(image && image.dataset.id && image.dataset.id == response.image_preview_id) {
+                                $('.VipperDroppedImage-msgBox').remove();
+                            }
                             self._replacePreviewWithOriginal(response.image_preview_id, response.assetid, response.alt, response.title);
                         }
                         else {
@@ -928,9 +936,13 @@ MatrixImagePlugin.prototype = {
                 var applyButton2 = this.viper.ViperTools.getItem('vitpImagePlugin-infoSubsection-applyButton');
                 $(applyButton1.element).html(_('Upload Image'));
                 $(applyButton2.element).html(_('Upload Image'));
-                // enable the apply button
-                this.viper.ViperTools.enableButton('ViperImagePlugin:bubbleSubSection-applyButton');
-                this.viper.ViperTools.enableButton('vitpImagePlugin-infoSubsection-applyButton');
+
+
+                // enable the apply button (only if we are not in uploading status)
+                if(!image.dataset.imagepasteStatus || image.dataset.imagepasteStatus != 'loading') {
+                    this.viper.ViperTools.enableButton('ViperImagePlugin:bubbleSubSection-applyButton');
+                    this.viper.ViperTools.enableButton('vitpImagePlugin-infoSubsection-applyButton');
+                }
 
                 // display previous upload error message
                 var errorMessage = image.dataset.error;
