@@ -426,8 +426,13 @@ MatrixImagePlugin.prototype = {
                         else {
                             // otherwise just set the current selected image tag
                             self.setUrlFieldValue(response.assetid);
-                            ViperImagePlugin.prototype._setImageAttributes.call(self, 'ViperImagePlugin');
-                            ViperImagePlugin.prototype._setImageAttributes.call(self, 'vitpImagePlugin');
+                            if(prefix.match('vitp')){
+                                ViperImagePlugin.prototype._setImageAttributes.call(self, 'vitpImagePlugin');
+                            }
+                            else {
+                                ViperImagePlugin.prototype._setImageAttributes.call(self, 'ViperImagePlugin');
+                            }
+                            
                         }
 
                         // refresh asset map
