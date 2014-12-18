@@ -30,7 +30,7 @@ class Viper_Tests_ViperImagePlugin_UpdateChangesButtonForImageUnitTest extends A
         $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE));
 
         $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
-        sleep(1);
+        sleep(2);
         $this->clickField('Image is decorative');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         sleep(1);
@@ -67,7 +67,8 @@ class Viper_Tests_ViperImagePlugin_UpdateChangesButtonForImageUnitTest extends A
         $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE));
 
         $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
-        sleep(1);
+        sleep(2);
+        $this->clickField('URL');
         $this->clickField('Image is decorative');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         sleep(1);

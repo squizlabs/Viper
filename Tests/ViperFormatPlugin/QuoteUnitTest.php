@@ -849,14 +849,14 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('formats', NULL);
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
-        $this->assertHTMLMatch('<blockquote><p>Heading for the page %1%</p></blockquote><p>First paragraph on the page</p><p>Second paragraph on the page</p>');
+        $this->assertHTMLMatch('<p>Top paragraph</p><blockquote><p>Heading for the page %1%</p></blockquote><p>First paragraph on the page</p><p>Second paragraph on the page</p>');
 
         $this->moveToKeyword(1, 'right');
         $this->type(' New content');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('More new content');
 
-        $this->assertHTMLMatch('<blockquote><p>Heading for the page %1% New content</p><p>More new content</p></blockquote><p>First paragraph on the page</p><p>Second paragraph on the page</p>');
+        $this->assertHTMLMatch('<p>Top paragraph</p><blockquote><p>Heading for the page %1% New content</p><p>More new content</p></blockquote><p>First paragraph on the page</p><p>Second paragraph on the page</p>');
 
     }//end testChaningHeadingToQuote()
 

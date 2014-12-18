@@ -11,10 +11,15 @@
 
     $browsers = array(
                  'firefox',
+                 'firefoxNightly',
                  'safari',
                  'chrome',
+                 'chromium',
+                 'chromeCanary',
                  'ie8',
                  'ie9',
+                 'ie10',
+                 'ie11',
                 );
 
     // Browsers.
@@ -102,6 +107,11 @@
 
         if ($unitTests !== NULL) {
             $phpunitCMD .= $unitTests;
+        }
+
+        // Dummy test that will run test calibration.
+        if (trim($test, '/') === 'testCalibrateTests') {
+            putenv('VIPER_TEST_CALIBRATE=TRUE');
         }
 
         if ($test !== NULL) {

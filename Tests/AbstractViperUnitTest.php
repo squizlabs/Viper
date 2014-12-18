@@ -1964,7 +1964,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         $fieldRegion  = $this->sikuli->extendRight($fieldLabel, 400);
         $actionImage  = $this->getBrowserImagePath().'/textField_action_clear.png';
-        $actionButton = $this->sikuli->find($actionImage, $fieldRegion);
+        $actionButton = $this->sikuli->find($actionImage, $fieldRegion, 0.6);
 
         $this->sikuli->click($actionButton);
 
@@ -2339,6 +2339,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
                 case 'chrome':
                 case 'chromium':
+                case 'chromeCanary':
                 case 'safari':
                     // Use the shortcut menu to select the menu option and then move the mouse up to cut.
                     $this->sikuli->keyDown('c');
