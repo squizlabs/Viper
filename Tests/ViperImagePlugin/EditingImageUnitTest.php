@@ -21,6 +21,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->clearFieldValue('URL');
         $this->type($this->getTestURL('/ViperImagePlugin/Images/hero-shot.jpg'));
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->clickInlineToolbarButton('image', 'selected');
         $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt=""/></p><p>LABS is ORSM</p>');
 
@@ -31,6 +32,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->clearFieldValue('URL');
         $this->type($this->getTestURL('/ViperImagePlugin/Images/hero-shot.jpg'));
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->clickInlineToolbarButton('image', 'selected');
         $this->assertHTMLMatch('<h1>Image with alt no title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="testalt"/></p><p>LABS is ORSM</p>');
 
@@ -53,6 +55,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->clearFieldValue('URL');
         $this->type($this->getTestURL('/ViperImagePlugin/Images/hero-shot.jpg'));
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->clickTopToolbarButton('image', 'selected');
         $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt=""/></p><p>LABS is ORSM</p>');
 
@@ -63,6 +66,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->clearFieldValue('URL');
         $this->type($this->getTestURL('/ViperImagePlugin/Images/hero-shot.jpg'));
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->clickTopToolbarButton('image', 'selected');
         $this->assertHTMLMatch('<h1>Image with alt no title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="testalt"/></p><p>LABS is ORSM</p>');
 
