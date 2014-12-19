@@ -44,7 +44,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->type($this->getTestURL('/ViperImagePlugin/Images/hero-shot.jpg'));
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->clickInlineToolbarButton('image', 'selected');
-        $this->assertHTMLMatch('<h1>Image with alt and title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="testalt" title="testtitle"/></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image with alt and title</h1><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="testalt" title="testtitle"/></p><p>%1% XuT</p><p>LABS is ORSM</p>');
 
         // Using the top toolbar
 
@@ -78,7 +78,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->type($this->getTestURL('/ViperImagePlugin/Images/hero-shot.jpg'));
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->clickTopToolbarButton('image', 'selected');
-        $this->assertHTMLMatch('<h1>Image with alt and title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="testalt" title="testtitle"/></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image with alt and title</h1><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="testalt" title="testtitle"/></p><p>%1% XuT</p><p>LABS is ORSM</p>');
 
     }//end testEditingTheURLForAnImage()
 
@@ -159,7 +159,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->clearFieldValue('Alt');
         $this->type('Alt tag');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<h1>Image with alt and title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" title="testtitle"/></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image with alt and title</h1><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" title="testtitle"/></p><p>%1% XuT</p><p>LABS is ORSM</p>');
 
         // Edit image with alt and title using top toolbar
         $this->useTest(3);
@@ -168,7 +168,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->clearFieldValue('Alt');
         $this->type('Alt tag');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<h1>Image with alt and title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" title="testtitle"/></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image with alt and title</h1><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" title="testtitle"/></p><p>%1% XuT</p><p>LABS is ORSM</p>');
 
     }//end testEditingAltTagForAnImage()
 
@@ -265,7 +265,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->clearFieldValue('Title');
         $this->type('Title tag');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<h1>Image with alt and title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="testalt" title="Title tag"/></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image with alt and title</h1><<p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="testalt" title="Title tag"/></p><p>%1% XuT</p><p>LABS is ORSM</p>');
 
         // Using top toolbar
         $this->useTest(3);
@@ -274,7 +274,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->clearFieldValue('Title');
         $this->type('Title tag');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<h1>Image with alt and title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="testalt" title="Title tag"/></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image with alt and title</h1><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="testalt" title="Title tag"/></p><p>%1% XuT</p><p>LABS is ORSM</p>');
 
     }//end testEditingTitleTagForAnImage()
 
@@ -300,7 +300,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
 
         $this->type('Title tag');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<h1>Image with alt and title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="testalt" title="Title tag"/></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image with alt and title</h1><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="testalt" title="Title tag"/></p><p>%1% XuT</p><p>LABS is ORSM</p>');
 
         // Using top toolbar
         $this->useTest(3);
@@ -316,7 +316,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         
         $this->type('Title tag');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<h1>Image with alt and title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="testalt" title="Title tag"/></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image with alt and title</h1><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="testalt" title="Title tag"/><p>%1% XuT</p></p><p>LABS is ORSM</p>');
 
     }//end testBackspaceForTitleField()
 
@@ -385,7 +385,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->clickInlineToolbarButton('image', 'active');
         $this->clickField('Image is decorative');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<h1>Image with alt and title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt=""/></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image with alt and title</h1><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt=""/></p><p>%1% XuT</p><p>LABS is ORSM</p>');
 
         // Using top toolbar with image that has alt and title
         $this->useTest(3);
@@ -393,7 +393,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->clickTopToolbarButton('image', 'active');
         $this->clickField('Image is decorative');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<h1>Image with alt and title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt=""/></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image with alt and title</h1><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt=""/></p><p>%1% XuT</p><p>LABS is ORSM</p>');
 
         // Using inline toolbar with image that has title only
         $this->useTest(4);
