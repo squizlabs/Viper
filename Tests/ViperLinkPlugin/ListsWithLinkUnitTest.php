@@ -162,6 +162,7 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
