@@ -23,6 +23,7 @@ class Viper_Tests_ViperCharMapPlugin_CharacterMapPluginUnitTest extends Abstract
         $this->sikuli->click($char);
 
         // Insert char.
+        sleep(2);
         $char = $this->findImage('ViperCharMapPlugin-symbolChar-2', 'table.VCMP-table.Viper-visible td', 11);
         $this->sikuli->click($char);
 
