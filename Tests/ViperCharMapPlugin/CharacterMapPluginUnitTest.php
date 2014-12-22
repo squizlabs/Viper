@@ -24,8 +24,8 @@ class Viper_Tests_ViperCharMapPlugin_CharacterMapPluginUnitTest extends Abstract
 
         // Insert char.
         sleep(2);
-        $char = $this->findImage('ViperCharMapPlugin-symbolChar-2', 'table.VCMP-table.Viper-visible td', 11);
-        $this->sikuli->click($char);
+        //$char = $this->findImage('ViperCharMapPlugin-symbolChar-2', 'table.VCMP-table.Viper-visible td', 11);
+        //$this->sikuli->click($char);
 
         // Change to Latin char list.
         $this->sikuli->click($this->findImage('ViperCharMapPlugin-latinList', 'ul.VCMP-list li', 1));
