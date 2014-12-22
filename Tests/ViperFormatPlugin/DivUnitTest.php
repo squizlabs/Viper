@@ -433,6 +433,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         sleep(2);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('Quote', 'active', TRUE);
+        sleep(1);
         $this->assertHTMLMatch('<p>First paragraph</p><div>%1% xtn dolor</div>');
         $this->checkStatusOfFormatIconsInTheTopToolbar();
 
