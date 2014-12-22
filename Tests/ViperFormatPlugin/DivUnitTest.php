@@ -430,6 +430,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
 
         // Remove Quote
         $this->selectKeyword(1);
+        sleep(2);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('Quote', 'active', TRUE);
         $this->assertHTMLMatch('<p>First paragraph</p><div>%1% xtn dolor</div>');
