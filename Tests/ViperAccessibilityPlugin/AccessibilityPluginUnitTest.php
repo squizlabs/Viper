@@ -111,15 +111,18 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
 
         // Click alt field.
         $this->clickField('Alt');
+        sleep(2);
         $this->type('alt');
 
         // Click title field.
         $this->clickField('Title');
+        sleep(2);
         $this->type('test');
         sleep(4);
 
         // Click Apply Changes.
         $bubble = $this->getActiveBubble();
+        sleep(1);
         $this->clickButton('Apply Changes', NULL, TRUE, $bubble);
         sleep(8);
 
