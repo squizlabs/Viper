@@ -51,7 +51,7 @@ class Viper_Tests_ViperCharMapPlugin_CharacterMapPluginUnitTest extends Abstract
         $char = $this->findImage('ViperCharMapPlugin-symbolChar-5', 'table.VCMP-table.Viper-visible td', 10);
         $this->sikuli->click($char);
 
-        $this->assertHTMLMatch('<p>LOREM XAX&para;§ç&times;฿ dolor</p><p>sit amet<strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>LOREM XAX&para;ç&times;฿ dolor</p><p>sit amet<strong>WoW</strong></p>');
 
     }//end testOpeningCharacterMap()
 
