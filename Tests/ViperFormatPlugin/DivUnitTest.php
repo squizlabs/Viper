@@ -199,7 +199,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-div', 'active');
         $this->clickTopToolbarButton('DIV', 'active', TRUE);
-        $this->assertHTMLMatch('<p>First paragraph</p><p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+        $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
         $this->checkStatusOfFormatIconsInTheTopToolbar('active');
 
     }//end testClickingActiveDivIconsInToolbar()
@@ -672,7 +672,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->clickInlineToolbarButton('formats-div', 'active');
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn dolor</p></blockquote>');
+        $this->assertHTMLMatch('<p>First paragraph</p><blockquote><p>%1% xtn dolor</p></blockquote>');
 
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('formats-blockquote', 'active');
@@ -692,7 +692,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
-        $this->assertHTMLMatch('<div>%1% xtn dolor</div>');
+        $this->assertHTMLMatch('<p>First paragraph</p><div>%1% xtn dolor</div>');
 
     }//end testChangingADivToAQuote()
 
