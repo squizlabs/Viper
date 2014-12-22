@@ -24,8 +24,8 @@ class Viper_Tests_ViperCharMapPlugin_CharacterMapPluginUnitTest extends Abstract
 
         // Insert char.
         sleep(2);
-        //$char = $this->findImage('ViperCharMapPlugin-symbolChar-2', 'table.VCMP-table.Viper-visible td', 11);
-        //$this->sikuli->click($char);
+        $char = $this->findImage('ViperCharMapPlugin-symbolChar-2', 'table.VCMP-table.Viper-visible td', 11);
+        $this->sikuli->click($char);
 
         // Change to Latin char list.
         $this->sikuli->click($this->findImage('ViperCharMapPlugin-latinList', 'ul.VCMP-list li', 1));
@@ -51,7 +51,7 @@ class Viper_Tests_ViperCharMapPlugin_CharacterMapPluginUnitTest extends Abstract
         $char = $this->findImage('ViperCharMapPlugin-symbolChar-5', 'table.VCMP-table.Viper-visible td', 10);
         $this->sikuli->click($char);
 
-        $this->assertHTMLMatch('<p>LOREM XAX&para;ç&times;฿ dolor</p><p>sit amet<strong>WoW</strong></p>');
+        $this->assertHTMLMatch('<p>LOREM XAX&para;§ç&times;฿ dolor</p><p>sit amet<strong>WoW</strong></p>');
 
     }//end testOpeningCharacterMap()
 
