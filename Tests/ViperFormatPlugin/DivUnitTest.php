@@ -810,13 +810,13 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->clickTopToolbarButton('formats');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
         $this->assertHTMLMatch('<div><p>%1% first paragraph</p><p>Second paragraph %2%</p><p>%3% third paragraph</p><p>fourth paragraph %4%</p></div>');
-        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', 'active', NULL, 'disabled');
 
         $this->selectKeyword(3, 4);
         $this->clickTopToolbarButton('formats');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
         $this->assertHTMLMatch('<div><p>%1% first paragraph</p><p>Second paragraph %2%</p><div><p>%3% third paragraph</p><p>fourth paragraph %4%</p></div></div>');
-        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', 'active', NULL, 'disabled');
 
         // Apply div around four paragraphs and then the top two
         $this->useTest(11);
@@ -824,13 +824,13 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->clickTopToolbarButton('formats');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
         $this->assertHTMLMatch('<div><p>%1% first paragraph</p><p>Second paragraph %2%</p><p>%3% third paragraph</p><p>fourth paragraph %4%</p></div>');
-        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', 'active', NULL, 'disabled');
 
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('formats');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
         $this->assertHTMLMatch('<div><div><p>%1% first paragraph</p><p>Second paragraph %2%</p></div><p>%3% third paragraph</p><p>fourth paragraph %4%</p></div>');
-        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', 'active', NULL, 'disabled');
 
     }//end testApplyDivsAroundMultipleParagraphs()
 

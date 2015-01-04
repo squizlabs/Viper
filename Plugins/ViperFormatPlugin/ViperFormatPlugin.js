@@ -1720,7 +1720,9 @@ ViperFormatPlugin.prototype = {
                 if (elements[i].nodeType === ViperUtil.TEXT_NODE && ViperUtil.isBlank(ViperUtil.trim(elements[i].data)) === true) {
                     continue;
                 } else if (ViperUtil.isBlockElement(elements[i]) === true) {
-                    parents.push(elements[i]);
+                    if (ViperUtil.inArray(elements[i], parents) === false) {
+                        parents.push(elements[i]);
+                    }
                 } else {
                     var parent    = ViperUtil.getFirstBlockParent(elements[i]);
                     if (parent && ViperUtil.inArray(parent, parents) === false) {
