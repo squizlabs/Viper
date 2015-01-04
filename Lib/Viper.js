@@ -5470,8 +5470,6 @@ Viper.prototype = {
         var specialCharcodes = {
             '8211': '&ndash;',
             '8212': '&mdash;',
-            '8216': '\'',
-            '8217': '\'',
             '8226': '*'
         };
 
