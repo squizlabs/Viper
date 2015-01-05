@@ -19,9 +19,9 @@ class Viper_Tests_Core_SpecialQuotesUnitTest extends AbstractViperUnitTest
         sleep(2);
         $this->sikuli->keyDown('Key.CMD + a');
         $this->sikuli->keyDown('Key.DELETE');
-        $this->type('<p>First &rdquo;style&rdquo; and  &ldquo;second&ldquo; style</p>');
+        $this->type('<p>First &rdquo;style&rdquo;</p><p>Second &ldquo;style&ldquo;</p><p>Third &bdquo;style&bdquo;</p><p>Fourth &sbquo;style&sbquo;</p><p>Fifth &lsquo;style&lsquo;</p>');
         $this->clickButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p>First &rdquo;style&rdquo; and  &ldquo;second&ldquo; style</p>');
+        $this->assertHTMLMatch('<p>First &rdquo;style&rdquo;</p><p>Second &ldquo;style&ldquo;</p><p>Third &bdquo;style&bdquo;</p><p>Fourth &sbquo;style&sbquo;</p><p>Fifth &lsquo;style&lsquo;</p>');
 
     }//end testSepcialQuotes()
 
