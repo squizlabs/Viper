@@ -14,6 +14,7 @@ class Viper_Tests_Core_SpecialQuotesUnitTest extends AbstractViperUnitTest
     {
         
         $this->moveToKeyword(1);
+        sleep(2);
         $this->clickTopToolbarButton('sourceView');
         sleep(2);
         $this->sikuli->keyDown('Key.CMD + a');
