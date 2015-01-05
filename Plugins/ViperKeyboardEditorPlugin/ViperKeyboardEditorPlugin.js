@@ -1459,7 +1459,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 return false;
             }
 
-            var selectable = range.getNextContainer(startNode, null, true);
+            var selectable = range.getNextContainer(startNode, null, true, true);
             if (!selectable || this.viper.isOutOfBounds(selectable) === true) {
                 selectable = range.getPreviousContainer(startNode, null, true);
                 if (!selectable || this.viper.isOutOfBounds(selectable) === true) {
