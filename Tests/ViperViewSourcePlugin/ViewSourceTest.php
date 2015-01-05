@@ -1,8 +1,8 @@
 <?php
 
-require_once 'AbstractViperViewSourcePluginUnitTest.php';
+require_once 'AbstractViperUnitTest.php';
 
-class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperViewSourcePluginUnitTest
+class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperUnitTest
 {
 
 
