@@ -135,6 +135,10 @@ ViperLinkPlugin.prototype = {
      */
     validateEmail: function(email)
     {
+        // add a simple check here to avoid heavy check below
+        if(email.match(/@/g) === null)
+        	return false;
+        
         var regExStr = '^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.([a-z][a-z]+)|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$';
 
         var regExp = new RegExp(regExStr, 'i');
