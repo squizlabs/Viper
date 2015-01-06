@@ -191,7 +191,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('formats-div', 'active');
         $this->clickInlineToolbarButton('DIV', 'active', TRUE);
-        $this->assertHTMLMatch('<p>%1% xtn dolor</p>');
+        $this->assertHTMLMatch('<p>First paragraph</p><p>%1% xtn dolor</p>');
         $this->checkStatusOfFormatIconsInTheInlineToolbar('active');
 
         // Check that when you click the active div icon in the top toolbar, it is changed to a paragraph.
@@ -270,10 +270,10 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
 
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertHTMLMatch('<div><strong>%1%</strong> xtn dolor</div>');
+        $this->assertHTMLMatch('<p>First paragraph</p><div><strong>%1%</strong> xtn dolor</div>');
 
         $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertHTMLMatch('<div>%1% xtn dolor</div>');
+        $this->assertHTMLMatch('<p>First paragraph</p><div>%1% xtn dolor</div>');
 
     }//end testApplyingBoldToWordInDiv()
 
@@ -289,10 +289,10 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
 
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + i');
-        $this->assertHTMLMatch('<div><em>%1%</em> xtn dolor</div>');
+        $this->assertHTMLMatch('<p>First paragraph</p><div><em>%1%</em> xtn dolor</div>');
 
         $this->sikuli->keyDown('Key.CMD + i');
-        $this->assertHTMLMatch('<div>%1% xtn dolor</div>');
+        $this->assertHTMLMatch('<p>First paragraph</p><div>%1% xtn dolor</div>');
 
     }//end testApplyingItalicToWordInDiv()
 
@@ -312,13 +312,13 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->assertTrue($this->topToolbarButtonExists('formats-div'), 'DIV format icon should appear in the top toolbar');
         $this->clickTopToolbarButton('formats-div');
         $this->clickTopToolbarButton('P', NULL, TRUE);
-        $this->assertHTMLMatch('<div><p>%1%</p> xtn dolor</div>');
+        $this->assertHTMLMatch('<p>First paragraph</p><div><p>%1%</p> xtn dolor</div>');
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->clickTopToolbarButton('P', 'active', TRUE);
-        $this->assertHTMLMatch('<div>%1% xtn dolor</div>');
+        $this->assertHTMLMatch('<p>First paragraph</p><div>%1% xtn dolor</div>');
         $this->checkStatusOfFormatIconsInTheTopToolbar();
 
         // Do the same to a bold keyword
@@ -369,13 +369,13 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->assertTrue($this->topToolbarButtonExists('formats-div'), 'DIV format icon should appear in the top toolbar');
         $this->clickTopToolbarButton('formats-div');
         $this->clickTopToolbarButton('PRE', NULL, TRUE);
-        $this->assertHTMLMatch('<div><pre>%1%</pre> xtn dolor</div>');
+        $this->assertHTMLMatch('<p>First paragraph</p><div><pre>%1%</pre> xtn dolor</div>');
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-pre', 'active');
         $this->clickTopToolbarButton('PRE', 'active', TRUE);
-        $this->assertHTMLMatch('<div>%1% xtn dolor</div>');
+        $this->assertHTMLMatch('<p>First paragraph</p><div>%1% xtn dolor</div>');
         $this->checkStatusOfFormatIconsInTheTopToolbar();
 
         // Do the same to a bold keyword
@@ -426,13 +426,15 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->assertTrue($this->topToolbarButtonExists('formats-div'), 'DIV format icon should appear in the top toolbar');
         $this->clickTopToolbarButton('formats-div');
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
-        $this->assertHTMLMatch('<div><blockquote><p>%1%</p></blockquote> xtn dolor</div>');
+        $this->assertHTMLMatch('<p>First paragraph</p><div><blockquote><p>%1%</p></blockquote> xtn dolor</div>');
 
         // Remove Quote
         $this->selectKeyword(1);
+        sleep(2);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('Quote', 'active', TRUE);
-        $this->assertHTMLMatch('<div>%1% xtn dolor</div>');
+        sleep(1);
+        $this->assertHTMLMatch('<p>First paragraph</p><div>%1% xtn dolor</div>');
         $this->checkStatusOfFormatIconsInTheTopToolbar();
 
         // Do the same to a bold keyword
@@ -483,13 +485,13 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->assertTrue($this->topToolbarButtonExists('formats-div'), 'DIV format icon should appear in the top toolbar');
         $this->clickTopToolbarButton('formats-div');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
-        $this->assertHTMLMatch('<div><div>%1%</div> xtn dolor</div>');
+        $this->assertHTMLMatch('<p>First paragraph</p><div><div>%1%</div> xtn dolor</div>');
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-div', 'active');
         $this->clickTopToolbarButton('DIV', 'active', TRUE);
-        $this->assertHTMLMatch('<div>%1% xtn dolor</div>');
+        $this->assertHTMLMatch('<p>First paragraph</p><div>%1% xtn dolor</div>');
         $this->checkStatusOfFormatIconsInTheTopToolbar();
 
         // Do the same to a bold keyword
@@ -600,11 +602,11 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->clickInlineToolbarButton('formats-div', 'active');
         $this->clickInlineToolbarButton('P', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheInlineToolbar('active', NULL, NULL, NULL);
-        $this->assertHTMLMatch('<p>%1% xtn dolor</p>');
+        $this->assertHTMLMatch('<p>First paragraph</p><p>%1% xtn dolor</p>');
 
         $this->clickInlineToolbarButton('DIV', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, 'active', NULL, NULL);
-        $this->assertHTMLMatch('<div>%1% xtn dolor</div>');
+        $this->assertHTMLMatch('<p>First paragraph</p><div>%1% xtn dolor</div>');
 
         // Using top toolbar
         $this->useTest(2);
@@ -613,11 +615,11 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->clickTopToolbarButton('formats-div', 'active');
         $this->clickTopToolbarButton('P', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
-        $this->assertHTMLMatch('<p>%1% xtn dolor</p>');
+        $this->assertHTMLMatch('<p>First paragraph</p><p>%1% xtn dolor</p>');
 
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
-        $this->assertHTMLMatch('<div>%1% xtn dolor</div>');
+        $this->assertHTMLMatch('<p>First paragraph</p><div>%1% xtn dolor</div>');
 
     }//end testChangingADivToAParagraph()
 
@@ -636,11 +638,11 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->clickInlineToolbarButton('formats-div', 'active');
         $this->clickInlineToolbarButton('PRE', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, NULL, 'active');
-        $this->assertHTMLMatch('<pre>%1% xtn dolor</pre>');
+        $this->assertHTMLMatch('<p>First paragraph</p><pre>%1% xtn dolor</pre>');
 
         $this->clickInlineToolbarButton('DIV', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, 'active', NULL, NULL);
-        $this->assertHTMLMatch('<div>%1% xtn dolor</div>');
+        $this->assertHTMLMatch('<p>First paragraph</p><div>%1% xtn dolor</div>');
 
         // Using top toolbar
         $this->useTest(2);
@@ -649,11 +651,11 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->clickTopToolbarButton('formats-div', 'active');
         $this->clickTopToolbarButton('PRE', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, 'active');
-        $this->assertHTMLMatch('<pre>%1% xtn dolor</pre>');
+        $this->assertHTMLMatch('<p>First paragraph</p><pre>%1% xtn dolor</pre>');
 
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
-        $this->assertHTMLMatch('<div>%1% xtn dolor</div>');
+        $this->assertHTMLMatch('<p>First paragraph</p><div>%1% xtn dolor</div>');
 
     }//end testChangingADivToAPre()
 
@@ -672,12 +674,12 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->clickInlineToolbarButton('formats-div', 'active');
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, NULL, 'active', NULL);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn dolor</p></blockquote>');
+        $this->assertHTMLMatch('<p>First paragraph</p><blockquote><p>%1% xtn dolor</p></blockquote>');
 
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('formats-blockquote', 'active');
         $this->clickInlineToolbarButton('DIV', NULL, TRUE);
-        $this->assertHTMLMatch('<div>%1% xtn dolor</div>');
+        $this->assertHTMLMatch('<p>First paragraph</p><div>%1% xtn dolor</div>');
 
         // Using top toolbar
         $this->useTest(2);
@@ -686,13 +688,13 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->clickTopToolbarButton('formats-div', 'active');
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
-        $this->assertHTMLMatch('<blockquote><p>%1% xtn dolor</p></blockquote>');
+        $this->assertHTMLMatch('<p>First paragraph</p><blockquote><p>%1% xtn dolor</p></blockquote>');
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
-        $this->assertHTMLMatch('<div>%1% xtn dolor</div>');
+        $this->assertHTMLMatch('<p>First paragraph</p><div>%1% xtn dolor</div>');
 
     }//end testChangingADivToAQuote()
 
@@ -808,13 +810,13 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->clickTopToolbarButton('formats');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
         $this->assertHTMLMatch('<div><p>%1% first paragraph</p><p>Second paragraph %2%</p><p>%3% third paragraph</p><p>fourth paragraph %4%</p></div>');
-        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', 'active', NULL, 'disabled');
 
         $this->selectKeyword(3, 4);
         $this->clickTopToolbarButton('formats');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
         $this->assertHTMLMatch('<div><p>%1% first paragraph</p><p>Second paragraph %2%</p><div><p>%3% third paragraph</p><p>fourth paragraph %4%</p></div></div>');
-        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', 'active', NULL, 'disabled');
 
         // Apply div around four paragraphs and then the top two
         $this->useTest(11);
@@ -822,13 +824,13 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->clickTopToolbarButton('formats');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
         $this->assertHTMLMatch('<div><p>%1% first paragraph</p><p>Second paragraph %2%</p><p>%3% third paragraph</p><p>fourth paragraph %4%</p></div>');
-        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', 'active', NULL, 'disabled');
 
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('formats');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
         $this->assertHTMLMatch('<div><div><p>%1% first paragraph</p><p>Second paragraph %2%</p></div><p>%3% third paragraph</p><p>fourth paragraph %4%</p></div>');
-        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, 'active', NULL, NULL);
+        $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', 'active', NULL, 'disabled');
 
     }//end testApplyDivsAroundMultipleParagraphs()
 
