@@ -474,6 +474,65 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsTest extends AbstractVip
 
     }//end testRemovingAllItemUsingBackspace()
 
+
+    /**
+     * Test removing all items in the list using backspace
+     *
+     * @return void
+     */
+    public function testAddAndRemoveNewBulletsToList()
+    {
+        //Test unordered list
+        $this->useTest(5);
+
+        // Create list
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('%2% new list');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->assertHTMLMatch('<p>Adding and Removing Bullets %1%</p><ul><li>%2% new list</li></ul>');
+
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Adding and Removing Bullets %1%</p><<ul><li></li><li></li><li></li><li>%2% new list</li></ul>');
+
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Adding and Removing Bullets %1%</p><<ul><li></li><li></li><li>%2% new list</li></ul>');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Adding and Removing Bullets %1%</p><<ul><li></li><li>%2% new list</li></ul>');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Adding and Removing Bullets %1%</p><<ul><li>%2% new list</li></ul>');
+
+        //Test ordered list
+        $this->useTest(5);
+
+        // Create list
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('%2% new list');
+        $this->clickTopToolbarButton('listOL');
+        $this->assertHTMLMatch('<p>Adding and Removing Bullets %1%</p><ol><li>%2% new list</li></ol>');
+
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Adding and Removing Bullets %1%</p><<ol><li></li><li></li><li></li><li>%2% new list</li></ol>');
+
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Adding and Removing Bullets %1%</p><<ol><li></li><li></li><li>%2% new list</li></ol>');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Adding and Removing Bullets %1%</p><<ol><li></li><li>%2% new list</li></ol>');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Adding and Removing Bullets %1%</p><<ol><li>%2% new list</li></ol>');
+
+    }//end testAddAndRemoveNewBulletsToList()
+
+
 }//end class
 
 ?>
