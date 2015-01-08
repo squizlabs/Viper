@@ -8,3 +8,7 @@
 .Viper-internalLink .Viper-subSectionRow.Viper-includeSummaryRow {
     display: block;
 }
+
+.Viper-subSectionRow.Viper-useDestinationRow {
+    display: none;
+}

@@ -2,7 +2,7 @@ function MatrixLinkPlugin(viper)
 {
     ViperUtil.inherits('MatrixLinkPlugin', 'ViperLinkPlugin');
     ViperLinkPlugin.call(this, viper);
-
+    this._assetTypeCode    = null;
 }
 
 MatrixLinkPlugin.prototype = {
@@ -96,7 +96,16 @@ MatrixLinkPlugin.prototype = {
         var newWindowRow = tools.getItem(idPrefix + ':newWindowRow').element;
         ViperUtil.insertBefore(newWindowRow, includeSummaryRow);
 
-        tools.getItem('ViperLinkPlugin:vtp:link').addSubSectionActionWidgets('ViperLinkPlugin:vtp:linkSubSection', ['ViperLinkPlugin:vtp:anchor', 'ViperLinkPlugin:vtp:includeSummary']);
+
+        // The link to destination checkbox.
+        var useDestination = tools.createCheckbox(idPrefix + ':useDestination', 'Use Link Destination', false);
+        var useDestinationRow = tools.createRow(idPrefix + ':useDestinationRow', 'Viper-useDestinationRow');
+        useDestinationRow.appendChild(useDestination);
+
+        // Insert it after URL option
+        ViperUtil.insertAfter(urlRow, useDestinationRow);
+
+        tools.getItem('ViperLinkPlugin:vtp:link').addSubSectionActionWidgets('ViperLinkPlugin:vtp:linkSubSection', ['ViperLinkPlugin:vtp:anchor', 'ViperLinkPlugin:vtp:includeSummary', 'ViperLinkPlugin:vtp:useDestination']);
 
         return contents;
 
@@ -109,7 +118,7 @@ MatrixLinkPlugin.prototype = {
         var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
         inlineToolbarPlugin.getToolbar().addSubSectionActionWidgets(
             'ViperLinkPlugin:vitp:link',
-            ['ViperLinkPlugin:vitp:anchor', 'ViperLinkPlugin:vitp:includeSummary']
+            ['ViperLinkPlugin:vitp:anchor', 'ViperLinkPlugin:vitp:includeSummary', 'ViperLinkPlugin:vitp:useDestination']
         );
 
     },
@@ -126,11 +135,31 @@ MatrixLinkPlugin.prototype = {
             href    = './?a=' + href;
         }
 
+
+
+        // Use Destination keyword if required
+        var useDestination = this.viper.ViperTools.getItem(idPrefix + ':useDestination').getValue();
+        if(this._assetTypeCode && useDestination) {
+            if(this._assetTypeCode == 'link') {
+                var href = '%globals_asset_attribute_link_url:' + assetid + '%';
+            }
+            else if (this._assetTypeCode == 'page_redirect') {
+                var href = '%globals_asset_attribute_redirect_url:' + assetid + '%';
+            }
+        }
+
+        // Mark this link as special link
+        if(this._assetTypeCode && (this._assetTypeCode === 'link' || this._assetTypeCode === 'page_redirect')) {
+            link.setAttribute('data-linktype', this._assetTypeCode);
+        }
+
+
         // Anchor.
         var anchorVal = this.viper.ViperTools.getItem(idPrefix + ':anchor').getValue();
         if (anchorVal) {
             href += '#' + anchorVal;
         }
+
 
         link.setAttribute('href', href);
 
@@ -143,20 +172,33 @@ MatrixLinkPlugin.prototype = {
             link.appendChild(document.createTextNode(' %asset_summary_' + assetid + '%'));
         }
 
+
     },
 
     updateBubbleFields: function(link)
     {
         ViperLinkPlugin.prototype.updateBubbleFields.call(this, link);
 
+        if(!link) return;
+
         var tools = this.viper.ViperTools;
         var main  = tools.getItem('ViperLinkPlugin:vtp:link').element;
+        var urlValue = tools.getItem('ViperLinkPlugin:vtp:url').getValue();
+
+        // if this link is marked as special type link, we have to enable t he Use Destination box
+        if(link.dataset.linktype) {
+            this._assetTypeCode = link.dataset.linktype;
+        }
+        else {
+            this._assetTypeCode = null;
+        }
+        this.enableUseDestinationCheckbox(this._assetTypeCode, false);
 
         // Url value may need to be updated if the link is internal.
-        var urlValue = tools.getItem('ViperLinkPlugin:vtp:url').getValue();
-        if (urlValue.indexOf('./?a=') === 0) {
+        if (urlValue.indexOf('./?a=') === 0 || urlValue.indexOf('%globals_') === 0) {
             // Remove the ./?a= prefix.
             urlValue = urlValue.replace('./?a=', '');
+
 
             // Internal URL.
             ViperUtil.removeClass(main, 'Viper-emailLink');
@@ -177,6 +219,15 @@ MatrixLinkPlugin.prototype = {
                 anchorValue = urlValue.substr((anchorIndex + 1));
                 urlValue    = urlValue.substr(0, anchorIndex);
             }
+
+            // Redirect link keyword
+            var assetid = this.isURLLinkKeyword(urlValue);
+            if(assetid) {
+                urlValue = assetid;
+                // enable the Use Destination Link check box
+                this.enableUseDestinationCheckbox(this._assetTypeCode, true);
+            }
+
 
             tools.getItem('ViperLinkPlugin:vtp:anchor').setValue(anchorValue);
             tools.getItem('ViperLinkPlugin:vtp:url').setValue(urlValue);
@@ -187,6 +238,8 @@ MatrixLinkPlugin.prototype = {
             ViperUtil.removeClass(main, 'Viper-internalLink');
         }//end if
 
+
+
     },
 
     updateInlineToolbarFields: function(link)
@@ -195,10 +248,20 @@ MatrixLinkPlugin.prototype = {
 
         var tools = this.viper.ViperTools;
         var main  = tools.getItem('ViperLinkPlugin:vitp:link').element;
+        var urlValue = tools.getItem('ViperLinkPlugin:vitp:url').getValue();
+
+
+        // if this link is marked as special type link, we have to enable t he Use Destination box
+        if(link && link.dataset && link.dataset.linktype) {
+            this._assetTypeCode = link.dataset.linktype;
+        }
+        else {
+            this._assetTypeCode = null;
+        }
+        this.enableUseDestinationCheckbox(this._assetTypeCode, false);
 
         // Url value may need to be updated if the link is internal.
-        var urlValue = tools.getItem('ViperLinkPlugin:vitp:url').getValue();
-        if (urlValue.indexOf('./?a=') === 0) {
+        if (urlValue.indexOf('./?a=') === 0 || urlValue.indexOf('%globals_') === 0) {
             // Remove the ./?a= prefix.
             urlValue = urlValue.replace('./?a=', '');
 
@@ -221,6 +284,15 @@ MatrixLinkPlugin.prototype = {
                 anchorValue = urlValue.substr((anchorIndex + 1));
                 urlValue    = urlValue.substr(0, anchorIndex);
             }
+
+            // Redirect link keyword
+            var assetid = this.isURLLinkKeyword(urlValue);
+            if(assetid) {
+                urlValue = assetid;
+                // enable the Use Destination Link check box
+                this.enableUseDestinationCheckbox(this._assetTypeCode, true);
+            }
+
 
             tools.getItem('ViperLinkPlugin:vitp:anchor').setValue(anchorValue);
             tools.getItem('ViperLinkPlugin:vitp:url').setValue(urlValue);
@@ -234,6 +306,34 @@ MatrixLinkPlugin.prototype = {
     },
 
     /**
+     * If the href is a Link/Redirect page keyword, return the tagret asset id
+     * @param {string} urlValue         The href of the link to check
+     */
+    isURLLinkKeyword: function(urlValue)
+    {
+        if(urlValue.indexOf('%globals_asset_attribute_link_url:') === 0) {
+            // set type code
+            this._assetTypeCode = 'link';
+            var re = /\%globals_asset_attribute_link_url:([0-9]+)\%/;
+            var matches = urlValue.match(re);
+            if(matches[1]) {
+                return matches[1];
+            }
+        }
+        else if (urlValue.indexOf('%globals_asset_attribute_redirect_url:') === 0) {
+            this._assetTypeCode = 'page_redirect';
+            var re = /\%globals_asset_attribute_redirect_url:([0-9]+)\%/;
+            var matches = urlValue.match(re);
+            if(matches[1]) {
+                return matches[1];
+            }
+
+        }
+
+        return null;
+    },
+
+    /**
      * Pick an asset from the asset finder
      * @param {string} idPrefix         The prefix assigned to the plugin
      */
@@ -241,6 +341,7 @@ MatrixLinkPlugin.prototype = {
     {
 	var tools       = this.viper.ViperTools;
 	var urlField    = tools.getItem(idPrefix + ':url').element;
+    var self = this;
 
 	// if in Matrix backend mode
 	if(typeof EasyEditAssetManager === 'undefined') {
@@ -274,6 +375,11 @@ MatrixLinkPlugin.prototype = {
 			if(typeof data.assetid !== 'undefined') {
 			    closeOnExit();
 			    tools.getItem(idPrefix + ':url').setValue(data.assetid,false);
+                // enable the use destination option if required
+                if(data.typecode) {
+                    self._assetTypeCode = data.typecode;
+                    self.enableUseDestinationCheckbox(self._assetTypeCode, true);
+                }
 			}
 		    });
 		    // close use me mode if user clicks anywhere
@@ -297,12 +403,51 @@ MatrixLinkPlugin.prototype = {
 		EasyEditAssetFinder.init({
 		    focusAssetId: focusId,
 		    callback: function(selectedAsset){
-			tools.getItem(idPrefix + ':url').setValue(selectedAsset.id,false);
+    			tools.getItem(idPrefix + ':url').setValue(selectedAsset.id,false);
+                // enable the use destination option if required
+                self._assetTypeCode = selectedAsset.attr.type_code;
+                self.enableUseDestinationCheckbox(self._assetTypeCode, true);
 		    }
 		});
 	    });
 	}
     },
+
+    /**
+     * Show the Use Destination checkbox if required (for Link and Redirect Page asset)
+     * @param {string} type_code      The type code of selected asset
+     * @param {boolean} value       Set the value
+     */
+    enableUseDestinationCheckbox: function(type_code, value)
+    {
+        var tools = this.viper.ViperTools;
+        if(type_code == 'link' || type_code == 'page_redirect') {
+           // $('.Viper-useDestinationRow').show();
+            var label = _('Use Link Destination');
+            if(type_code == 'page_redirect') {
+                label = _('Use Redirect Link Destination');
+            }
+
+            
+            $(tools.getItem('ViperLinkPlugin:vitp:useDestination').element).find('.Viper-checkbox-title').html(label);
+            $(tools.getItem('ViperLinkPlugin:vitp:useDestinationRow').element).show();
+            
+            $(tools.getItem('ViperLinkPlugin:vtp:useDestination').element).find('.Viper-checkbox-title').html(label);
+            $(tools.getItem('ViperLinkPlugin:vtp:useDestinationRow').element).show();
+
+            
+            tools.getItem('ViperLinkPlugin:vitp:useDestination').setValue(value);
+            tools.getItem('ViperLinkPlugin:vtp:useDestination').setValue(value);
+        }
+        else {
+            $(tools.getItem('ViperLinkPlugin:vtp:useDestinationRow').element).hide();
+            $(tools.getItem('ViperLinkPlugin:vitp:useDestinationRow').element).hide();
+            tools.getItem('ViperLinkPlugin:vitp:useDestination').setValue(false);
+            tools.getItem('ViperLinkPlugin:vtp:useDestination').setValue(false);
+        }
+    },
+
+
 
     /**
      * Check to see if the element clicked is a part of the plugin. Here we need to
