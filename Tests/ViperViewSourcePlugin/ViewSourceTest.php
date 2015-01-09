@@ -6,7 +6,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperUnit
 {
 
 
-   /**
+    /**
      * Test that you can open and close the source editor.
      *
      * @return void
@@ -42,7 +42,36 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperUnit
     }//end testOpenAndCloseSourceEditor()
 
 
-   /**
+    /**
+     * Test that empty html reamin in the code after you view the source of the page.
+     *
+     * @return void
+     */
+    public function testEmptyTagsInSourceCode()
+    {
+        // Test empty li tags in a list
+        $this->moveToKeyword(3, 'left');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton('sourceView');
+        sleep(2);
+        $this->clickButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>Lorem %1% dolor</p><p><strong>%2%</strong> sit amet</p><ul><li></li><li></li><li>%3% test <em>XuT</em></li></ul>');
+        
+        // Test empty p tags in a list
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton('sourceView');
+        sleep(2);
+        $this->clickButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>Lorem %1% dolor</p><p></p><p></p><p><strong>%2%</strong> sit amet</p><ul><li></li><li></li><li>%3% test <em>XuT</em></li></ul>');
+        
+    }//end testEmptyTagsInSourceCode()
+
+
+    /**
      * Test that Viper is responsive after you close the source editor.
      *
      * @return void
@@ -59,12 +88,12 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperUnit
         $this->sikuli->keyDown('Key.CMD + i');
         $this->sikuli->click($this->findKeyword(1));
         $this->sikuli->click($this->findKeyword(3));
-        $this->assertHTMLMatch('<p>Lorem <em>%1%</em> dolor</p><p><strong>%2%</strong> sit amet</p><p>%3% p <em>XuT</em></p>');
+        $this->assertHTMLMatch('<p>Lorem dolor <em>%1%</em></p><p><strong>%2%</strong> sit amet</p><p>%3% test <em>XuT</em></p>');
 
     }//end testEditingAfterClosingSourceEditor()
 
 
-   /**
+    /**
      * Test that you can edit the source code.
      *
      * @return void
@@ -85,7 +114,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperUnit
     }//end testEditingTheSourceCode()
 
 
-   /**
+    /**
      * Test that you can edit the source code, click close but apply the changes.
      *
      * @return void
@@ -110,7 +139,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperUnit
     }//end testEditingClosingTheWindowWithApplyingChanges()
 
 
-   /**
+    /**
      * Test that you can edit the source code and then discard the changes.
      *
      * @return void
@@ -130,12 +159,12 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperUnit
 
         $this->clickButton('Discard', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>Lorem %1% dolor</p><p><strong>%2%</strong> sit amet</p><p>%3% p <em>XuT</em></p>');
+        $this->assertHTMLMatch('<p>Lorem dolor %1%</p><p><strong>%2%</strong> sit amet</p><p>%3% test <em>XuT</em></p>');
 
     }//end testEditingAndDiscardingChanges()
 
 
-   /**
+    /**
      * Test that you can open source view in a new window.
      *
      * @return void
@@ -153,12 +182,12 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperUnit
 
         $this->clickButton('Close Window', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>Lorem %1% dolor</p><p><strong>%2%</strong> sit amet</p><p>%3% p <em>XuT</em></p>');
+        $this->assertHTMLMatch('<p>Lorem dolor %1%</p><p><strong>%2%</strong> sit amet</p><p>%3% test <em>XuT</em></p>');
 
     }//end testOpeningSourceViewInNewWindow()
 
 
-   /**
+    /**
      * Test that you can open source view in a new window and edit it.
      *
      * @return void
@@ -185,7 +214,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperUnit
     }//end testOpeningSourceViewInNewWindowAndEditing()
 
 
-   /**
+    /**
      * Test that you can still edit the content once you deleted some the source code.
      *
      * @return void
@@ -209,7 +238,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperUnit
 
         $this->clickButton('Apply Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>Lorem %1% dolor</p>');
+        $this->assertHTMLMatch('<p>Lorem dolor %1%</p>');
 
         $this->selectKeyword(1);
         $this->assertEquals('%1%', $this->getSelectedText(), 'Keyword is not selected');
