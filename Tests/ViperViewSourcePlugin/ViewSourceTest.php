@@ -291,12 +291,13 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperUnit
 
 
     /**
-     * Test that when you add script tags into the source code, Viper strips them out
+     * Test different types of tags in Viper
      *
      * @return void
      */
-    public function testAddingScriptTagsInSourceCode()
+    public function testAddingDifferentTagsInSourceCode()
     {
+        // Test that script tags are removed when they are entered in source code
         $this->moveToKeyword(2);
         $this->clickTopToolbarButton('sourceView');
 
@@ -312,11 +313,27 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperUnit
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('<canvas id="myCanvas"></canvas><script></script>');
         $this->clickButton('Apply Changes', NULL, TRUE);
-
         $this->assertHTMLMatch('<p><canvas id="myCanvas"></canvas></p>');
 
-    }//end testAddingScriptTagsInSourceCode()
+        // Test form and text area tags remain when they are entered in source code.
+        $this->clickTopToolbarButton('sourceView');
 
+        // Check to make sure the source editor appears.
+        try {
+            $image = $this->findImage('dragPopupIcon', '.Viper-popup-dragIcon');
+        } catch (Exception $e) {
+            $this->fail('Source editor did not appear on the screen');
+        }
+
+        // Embed script tags
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('<form><label>Dave</label><input type="text"><textarea rows="5"></textarea><input type="submit" value="submit"></form>');
+        $this->clickButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<form><label>Dave</label><input type="text" /><textarea rows="5"></textarea><input type="submit" value="submit" /></form>');
+
+
+    }//end testAddingDifferentTagsInSourceCode()
 
 }//end class
 
