@@ -67,6 +67,40 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
 
     /**
+     * Test partial copy and paste.
+     *
+     * @return void
+     */
+    public function testPartialCopyPaste()
+    {
+        // Test coping some content and pasting over the top of existing content
+        $this->useTest(2);
+
+        $this->selectKeyword(2);
+        sleep(2);
+        $this->sikuli->keyDown('Key.CMD + c');
+        
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + v');
+
+        $this->assertHTMLMatch('<p>This is some content to %2% test partial copy and paste. It %2% needs to be a really long paragraph.</p>');
+
+        // Test coping some content and pasting it somewhere else in the existing content
+        $this->useTest(2);
+
+        $this->selectKeyword(2);
+        sleep(2);
+        $this->sikuli->keyDown('Key.CMD + c');
+        
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.CMD + v');
+
+        $this->assertHTMLMatch('<p>This is some content to %2%%1% test partial copy and paste. It %2% needs to be a really long paragraph.</p>');
+
+    }//end testPartialCopyPaste()
+
+
+    /**
      * Test that right click menu and paste works.
      *
      * @return void
@@ -192,147 +226,13 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
 
     /**
-     * Test copying and pasting different block elements.
-     *
-     * @return void
-     */
-    public function testCopyPasteBlockElements()
-    {
-        // Test paragraph
-        $this->useTest(2);
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->sikuli->keyDown('Key.CMD + c');
-        sleep(1);
-        $this->moveToKeyword(4, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.CMD + v');
-        sleep(1);
-        $this->assertHTMLMatch('<p>This is a paragraph section %1%</p><div>This is a div section %2%</div><pre>This is a pre section %3%</pre><blockquote><p>This is a quote section %4%</p></blockquote><p>This is a paragraph section %1%</p>');
-
-        // Test div
-        $this->useTest(2);
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->sikuli->keyDown('Key.CMD + c');
-        sleep(1);
-        $this->moveToKeyword(4, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.CMD + v');
-        sleep(1);
-        $this->assertHTMLMatch('<p>This is a paragraph section %1%</p><div>This is a div section %2%</div><pre>This is a pre section %3%</pre><blockquote><p>This is a quote section %4%</p></blockquote><div>This is a div section %2%</div>');
-
-        // Test pre
-        $this->useTest(2);
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->sikuli->keyDown('Key.CMD + c');
-        sleep(1);
-        $this->moveToKeyword(4, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.CMD + v');
-        sleep(1);
-        $this->assertHTMLMatch('<p>This is a paragraph section %1%</p><div>This is a div section %2%</div><pre>This is a pre section %3%</pre><blockquote><p>This is a quote section %4%</p></blockquote><pre>This is a pre section %3%</pre>');
-
-        // Test quote
-        $this->useTest(2);
-        $this->selectKeyword(4);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->sikuli->keyDown('Key.CMD + c');
-        sleep(1);
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.CMD + v');
-        sleep(1);
-        $this->assertHTMLMatch('<p>This is a paragraph section %1%</p><blockquote><p>This is a quote section %4%</p></blockquote><div>This is a div section %2%</div><pre>This is a pre section %3%</pre><blockquote><p>This is a quote section %4%</p></blockquote>');
-
-    }//end testCopyPasteBlockElements()
-
-
-    /**
-     * Test copy and pasting a heading.
-     *
-     * @return void
-     */
-    public function testCopyPasteHeading()
-    {
-        $this->useTest(3);
-
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->sikuli->keyDown('Key.CMD + c');
-        sleep(1);
-        $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.CMD + v');
-        sleep(1);
-        $this->assertHTMLMatch('<h1>Heading One %1%</h1><p>This is a paragraph %2%</p><h1>Heading One %1%</h1><h2>Heading Two %3%</h2><p>This is another paragraph %4%</p>');
-
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->sikuli->keyDown('Key.CMD + c');
-        sleep(1);
-        $this->moveToKeyword(4, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.CMD + v');
-        sleep(1);
-        $this->assertHTMLMatch('<h1>Heading One %1%</h1><p>This is a paragraph %2%</p><h1>Heading One %1%</h1><h2>Heading Two %3%</h2><p>This is another paragraph %4%</p><h2>Heading Two %3%</h2>');
-
-    }//end testCopyPasteHeading()
-
-
-    /**
-     * Test copy and pasting an image.
-     *
-     * @return void
-     */
-    public function testCopyPasteImage()
-    {
-        $this->useTest(4);
-
-        $this->clickElement('img', 0);
-        $this->sikuli->keyDown('Key.CMD + c');
-        sleep(1);
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.CMD + v');
-        sleep(1);
-        $this->assertHTMLMatch('<p>First paragraph</p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" /><p>This is the second paragraph in the content of the page %1%</p><p></p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" />');
-
-    }//end testCopyPasteImage()
-
-
-    /**
-     * Test copy and pasting acroynm, abbreviation and language.
-     *
-     * @return void
-     */
-    public function testCopyPasteLanguageSettings()
-    {
-        $this->useTest(5);
-
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        sleep(1);
-        $this->sikuli->keyDown('Key.CMD + c');
-        sleep(1);
-        $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.CMD + v');
-        sleep(1);
-        $this->assertHTMLMatch('<p>%1% This is the <span lang="en">first</span> <acronym title="abc">paragraph</acronym> in the <abbr title="def">content</abbr> of the page %2%</p><p>This is the second one %2%</p><p>%1% This is the <span lang="en">first</span> <acronym title="abc">paragraph</acronym> in the <abbr title="def">content</abbr> of the page %2%</p>');
-
-    }//end testCopyPasteLanguageSettings()
-
-
-    /**
      * Test copy and pasting direction settings.
      *
      * @return void
      */
     public function testCopyPasteDirectionSettings()
     {
-        $this->useTest(6);
+        $this->useTest(3);
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
