@@ -70,7 +70,7 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
-        $this->sikuli->keyDown('Key.LEFT');
+        //$this->sikuli->keyDown('Key.LEFT');
         sleep(2);
         $this->clickTopToolbarButton('insertHr');
         $this->type('%4% new content');
