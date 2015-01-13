@@ -13,13 +13,14 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteInTablesUnitTest extends Abstrac
     {
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
-        sleep(1);
+        sleep(2);
         $this->sikuli->keyDown('Key.CMD + c');
+        sleep(1);
 
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.CMD + v');
-        sleep(1);
+        sleep(2);
 
         $this->removeTableHeaders();
         sleep(1);
