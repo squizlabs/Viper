@@ -389,7 +389,11 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
     {
         // Apply left justify
         $this->useTest(5);
-        $this->selectKeyword(1, 2);
+        $this->moveToKeyword(1, 'left');
+        sleep(1);
+        $this->sikuli->keyDown('Key.DOWN');
+        $this->sikuli->keyDown('Key.DOWN');
+        $this->sikuli->keyDown('Key.DOWN');
         sleep(1);
         $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyLeft');
