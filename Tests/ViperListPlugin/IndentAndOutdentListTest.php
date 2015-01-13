@@ -426,21 +426,31 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListTest extends AbstractViper
 
         $this->moveToKeyword(2);
         $this->sikuli->keyDown('Key.TAB');
+        sleep(1);
         $this->sikuli->keyDown('Key.DOWN');
+        sleep(1);
         $this->sikuli->keyDown('Key.TAB');
+        sleep(1);
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item<ul><li>second item %2%</li><li>third %3% item</li></ul></li></ul>');
 
         $this->sikuli->keyDown('Key.UP');
+        sleep(1);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
+        sleep(1);
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%<ul><li>third %3% item</li></ul></li></ul>');
 
         $this->sikuli->keyDown('Key.TAB');
+        sleep(1);
         $this->sikuli->keyDown('Key.DOWN');
+        sleep(1);
         $this->sikuli->keyDown('Key.TAB');
+        sleep(1);
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item<ul><li>second item %2%<ul><li>third %3% item</li></ul></li></ul></li></ul>');
 
         $this->sikuli->keyDown('Key.UP');
+        sleep(1);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
+        sleep(1);
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%<ul><li>third %3% item</li></ul></li></ul>');
 
         //Test ordered list
