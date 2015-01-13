@@ -458,21 +458,31 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListTest extends AbstractViper
 
         $this->moveToKeyword(2);
         $this->sikuli->keyDown('Key.TAB');
+        sleep(1);
         $this->sikuli->keyDown('Key.DOWN');
+        sleep(1);
         $this->sikuli->keyDown('Key.TAB');
+        sleep(1);
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item<ol><li>second item %2%</li><li>third %3% item</li></ol></li></ol>');
 
         $this->sikuli->keyDown('Key.UP');
+        sleep(1);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
+        sleep(1);
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>second item %2%<ol><li>third %3% item</li></ol></li></ol>');
 
         $this->sikuli->keyDown('Key.TAB');
+        sleep(1);
         $this->sikuli->keyDown('Key.DOWN');
+        sleep(1);
         $this->sikuli->keyDown('Key.TAB');
+        sleep(1);
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item<ol><li>second item %2%<ol><li>third %3% item</li></ol></li></ol></li></ol>');
 
         $this->sikuli->keyDown('Key.UP');
+        sleep(1);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
+        sleep(1);
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>second item %2%<ol><li>third %3% item</li></ol></li></ol>');
 
     }//end testListKeyboardNavForList()
