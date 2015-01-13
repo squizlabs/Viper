@@ -66,11 +66,7 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->useTest(1);
 
         // Add hr
-        $this->moveToKeyword(2, 'left');
-        $this->sikuli->keyDown('Key.LEFT');
-        $this->sikuli->keyDown('Key.LEFT');
-        $this->sikuli->keyDown('Key.LEFT');
-        //$this->sikuli->keyDown('Key.LEFT');
+        $this->moveToKeyword(1, 'left');
         sleep(2);
         $this->clickTopToolbarButton('insertHr');
         $this->type('%4% new content');
