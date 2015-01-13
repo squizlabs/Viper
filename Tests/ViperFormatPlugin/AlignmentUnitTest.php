@@ -391,10 +391,11 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         $this->useTest(5);
         $this->moveToKeyword(1, 'left');
         sleep(1);
-        $this->sikuli->keyDown('Key.DOWN');
-        $this->sikuli->keyDown('Key.DOWN');
-        $this->sikuli->keyDown('Key.DOWN');
+        $this->sikuli->keyDown('Key.SHIFT + Key.DOWN');
+        $this->sikuli->keyDown('Key.SHIFT + Key.DOWN');
+        $this->sikuli->keyDown('Key.SHIFT + Key.DOWN');
         sleep(1);
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertHTMLMatch('<p style="text-align: left;">%1% test content</p><p style="text-align: left;">another paragraph</p><p style="text-align: left;">more test content %2%</p>');
