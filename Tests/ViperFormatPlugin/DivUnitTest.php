@@ -426,7 +426,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->assertTrue($this->topToolbarButtonExists('formats-div'), 'DIV format icon should appear in the top toolbar');
         $this->clickTopToolbarButton('formats-div');
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
-        //$this->assertHTMLMatch('<p>First paragraph</p><div>test <blockquote><p>%1%</p></blockquote> xtn dolor</div>');
+        $this->assertHTMLMatch('<p>First paragraph</p><div>test <blockquote><p>%1%</p></blockquote> xtn dolor</div>');
 
         // Remove Quote
         $this->selectKeyword(1);
