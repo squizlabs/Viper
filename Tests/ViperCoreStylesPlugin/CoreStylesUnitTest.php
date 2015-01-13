@@ -388,7 +388,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
         $this->selectKeyword(2);
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('this is new content');
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->assertHTMLMatch('<p>%1% this is new content %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testDeletingBoldAndItalicContent()
 
