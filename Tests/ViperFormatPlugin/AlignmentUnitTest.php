@@ -390,6 +390,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         // Apply left justify
         $this->useTest(5);
         $this->selectKeyword(1, 2);
+        sleep(1);
         $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertHTMLMatch('<p style="text-align: left;">%1% test content</p><p style="text-align: left;">another paragraph</p><p style="text-align: left;">more test content %2%</p>');
