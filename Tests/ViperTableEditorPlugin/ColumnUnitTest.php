@@ -75,6 +75,7 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->clickField('Width');
         $this->type('50');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->moveToKeyword(1);
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th style="width: 50px;"></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
         $this->clickTopToolbarButton('historyUndo');
