@@ -122,6 +122,7 @@ class Viper_Tests_ViperListPlugin_CopyPasteListTest extends AbstractViperListPlu
         sleep(1);
         $this->assertHTMLMatch('<p>First list:</p><ul><li>item 1</li><li>%1% item 2</li><li>item 3 %2%</li><li>item 4</li></ul><p>Second list:</p><ol><li>item 1</li><li>XCX item 2</li><li>item 3 XDX</li><li>XAX item 2</li><li>item 3 XBX</li><li>item 4</li></ol>');
 
+        $this->useTest(5);
         $this->selectKeyword(3, 4);
         $this->sikuli->keyDown('Key.CMD + c');
         sleep(1);
@@ -131,7 +132,7 @@ class Viper_Tests_ViperListPlugin_CopyPasteListTest extends AbstractViperListPlu
         sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
-        $this->assertHTMLMatch('<p>First list:</p><ul><li>item 1</li><li>XAX item 2</li><li>item 3 XBX</li><li>XCX item 2</li><li>item 3 XDX</li><li>item 4</li></ul><p>Second list:</p><ol><li>item 1</li><li>XCX item 2</li><li>item 3 XDX</li><li>XAX item 2</li><li>item 3 XBX</li><li>item 4</li></ol>');
+        $this->assertHTMLMatch('<p>First list:</p><ul><li>item 1</li><li>%1% item 2</li><li>item 3 %2%</li><li>%3% item 2</li><li>item 3 %4%</li><li>item 4</li></ul><p>Second list:</p><ol><li>item 1</li><li>%3% item 2</li><li>item 3 %4%</li><li>item 4</li></ol>');
 
     }//end testCopyAndPastePartOfListIntoAnotherList()
 
