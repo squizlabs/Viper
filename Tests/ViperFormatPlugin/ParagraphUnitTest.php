@@ -653,13 +653,13 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('bold');
-        $this->assertHTMLMatch('<p>Paragraph above</p><p><strong>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae %2%.</strong></p><p>Paragraph below</p>');
+        $this->assertHTMLMatch('<p><strong>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae %2%.</strong></p>');
 
         // Delete content and add new content
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->type('This is a new paragraph on the page');
-        $this->assertHTMLMatch('<p>Paragraph above</p><p>This is a new paragraph on the page</p><p>Paragraph below</p>');
+        $this->assertHTMLMatch('<p>This is a new paragraph on the page</p>');
 
     }//end testDeletingBoldParagraph()
 
