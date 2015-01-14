@@ -381,13 +381,15 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
         // CApply bold and italic formatting
         $this->selectKeyword(2);
         $this->sikuli->keyDown('Key.CMD + i');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + b');
+        sleep(1);
         $this->assertHTMLMatch('<p>%1% <em><strong>%2%</strong></em> %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         // Delete bold word and italic and replace with new content
         $this->selectKeyword(2);
         $this->sikuli->keyDown('Key.DELETE');
-        $this->type('this is new content ');
+        $this->type('this is new content');
         $this->assertHTMLMatch('<p>%1% this is new content %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testDeletingBoldAndItalicContent()
