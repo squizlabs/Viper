@@ -12,6 +12,8 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
      */
     public function testAllStyles()
     {
+        $this->useTest(1);
+
         $this->selectKeyword(1);
 
         $this->clickTopToolbarButton('bold');
@@ -51,6 +53,8 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
      */
     public function testStyleTags()
     {
+        $this->useTest(1);
+
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + b');
 
@@ -69,6 +73,8 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
      */
     public function testMultiParaRemoveStyles()
     {
+        $this->useTest(1);
+
         $this->selectKeyword(1, 4);
         $this->sikuli->keyDown('Key.CMD + b');
         $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
@@ -99,6 +105,8 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
      */
     public function testSelectParaFromToolbarLineageAfterStyling()
     {
+        $this->useTest(1);
+
         $this->selectKeyword(1, 3);
         $this->sikuli->keyDown('Key.CMD + b');
         $this->sikuli->keyDown('Key.CMD + i');
@@ -122,6 +130,8 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
      */
     public function testBoldAndItalic()
     {
+        $this->useTest(1);
+
         $this->selectKeyword(1);
 
         //Add bold and italics
@@ -156,6 +166,8 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
      */
     public function testStartAndStopStyleWithShortcut()
     {
+        $this->useTest(1);
+
         $this->moveToKeyword(1, 'right');
 
         $this->sikuli->keyDown('Key.CMD + b');
@@ -195,6 +207,8 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
      */
     public function testStartAndStopStyleWithButtons()
     {
+        $this->useTest(1);
+
         $this->moveToKeyword(1, 'right');
 
         $this->clickTopToolbarButton('bold');
@@ -234,6 +248,8 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
      */
     public function testStartAndStopStylesInActiveStyles()
     {
+        $this->useTest(1);
+
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + i');
@@ -274,6 +290,8 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
      */
     public function testStopStyleAtTheEndOfStyleTag()
     {
+        $this->useTest(1);
+
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + i');
@@ -300,6 +318,8 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
      */
     public function testStartingStylesForNewParagraph()
     {
+        $this->useTest(1);
+
         // Test using keyboard shortcuts
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.ENTER');
@@ -330,6 +350,8 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
      */
     public function testStartingAndStoppingStylesAfterWordThatIsStyled()
     {
+        $this->useTest(1);
+
         // Test using keyboard shortcuts
         $this->moveToKeyword(4, 'right');
         $this->sikuli->keyDown('Key.CMD + i');
@@ -378,19 +400,25 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
      */
     public function testDeletingBoldAndItalicContent()
     {
-        // CApply bold and italic formatting
-        $this->selectKeyword(2);
-        $this->sikuli->keyDown('Key.CMD + i');
-        sleep(1);
-        $this->sikuli->keyDown('Key.CMD + b');
-        sleep(1);
-        $this->assertHTMLMatch('<p>%1% <em><strong>%2%</strong></em> %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
-
-        // Delete bold word and italic and replace with new content
+        // Test using forward delete
+        $this->useTest(2);
         $this->selectKeyword(2);
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('this is new content');
-        $this->assertHTMLMatch('<p>%1% this is new content %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->assertHTMLMatch('<p>%1% this is new content %3%</p>');
+
+        // Test using backspace
+        $this->useTest(2);
+        $this->selectKeyword(2);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('this is new content');
+        $this->assertHTMLMatch('<p>%1% this is new content %3%</p>');
+
+        // Test selecting the content and typing over it keeps the formatting.
+        $this->useTest(2);
+        $this->selectKeyword(2);
+        $this->type('this is new content');
+        $this->assertHTMLMatch('<p>%1% <em><strong>this is new content</strong></em> %3%</p>');
 
     }//end testDeletingBoldAndItalicContent()
 
