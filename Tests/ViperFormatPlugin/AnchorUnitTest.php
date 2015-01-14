@@ -339,7 +339,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->revertFieldValue('ID');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>test content <span id="test1">%1%</span> more test content <span id="test">%2%</span></p>');
+        $this->assertHTMLMatch('<p>test content <span id="test1">%1%</span> more test content %2%</p>');
 
     }//end testRevertAnchorValueIcon()
 
