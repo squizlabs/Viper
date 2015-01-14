@@ -387,7 +387,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
         // Delete bold word and italic and replace with new content
         $this->selectKeyword(2);
         $this->sikuli->keyDown('Key.DELETE');
-        $this->type('this is new content');
+        $this->type('this is new content ');
         $this->assertHTMLMatch('<p>%1% this is new content %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testDeletingBoldAndItalicContent()
