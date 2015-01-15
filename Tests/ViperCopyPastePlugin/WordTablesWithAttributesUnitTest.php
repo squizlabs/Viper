@@ -22,8 +22,14 @@ class Viper_Tests_ViperCopyPastePlugin_WordTablesWithAttributesUnitTest extends 
                     case 'firefox':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacFirefox/WordTablesWithAttributes.txt');
                         break;
+                    case 'firefoxNightly':
+                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacFirefoxNightly/WordTablesWithAttributes.txt');
+                        break;
                     case 'chrome':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacGoogleChrome/WordTablesWithAttributes.txt');
+                        break;
+                    case 'chromeCanary':
+                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacGoogleChromeCanary/WordTablesWithAttributes.txt');
                         break;
                     case 'safari':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacSafari/WordTablesWithAttributes.txt');

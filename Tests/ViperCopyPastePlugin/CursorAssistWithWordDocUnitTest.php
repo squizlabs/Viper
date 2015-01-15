@@ -30,7 +30,7 @@ class Viper_Tests_ViperCopyPastePlugin_CursorAssistWithWordDocUnitTest extends A
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacGoogleChrome/CursorAssistWithWordDoc.txt');
                         break;
                     case 'chromeCanary':
-                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacChromeCanary/CursorAssistWithWordDoc.txt');
+                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacGoogleChromeCanary/CursorAssistWithWordDoc.txt');
                         break;
                     case 'safari':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacSafari/CursorAssistWithWordDoc.txt');

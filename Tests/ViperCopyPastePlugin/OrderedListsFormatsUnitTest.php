@@ -22,8 +22,14 @@ class Viper_Tests_ViperCopyPastePlugin_OrderedListsFormatsUnitTest extends Abstr
                     case 'firefox':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacFirefox/OrderedListsFormats.txt');
                         break;
+                    case 'firefoxNightly':
+                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacFirefoxNightly/OrderedListsFormats.txt');
+                        break;
                     case 'chrome':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacGoogleChrome/OrderedListsFormats.txt');
+                        break;
+                     case 'chromeCanary':
+                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacGoogleChromeCanary/OrderedListsFormats.txt');
                         break;
                     case 'safari':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacSafari/OrderedListsFormats.txt');

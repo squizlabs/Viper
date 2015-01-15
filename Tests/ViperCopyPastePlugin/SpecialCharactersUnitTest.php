@@ -22,8 +22,14 @@ class Viper_Tests_ViperCopyPastePlugin_SpecialCharactersUnitTest extends Abstrac
                     case 'firefox':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacFirefox/SpecialCharacters.txt');
                         break;
+                    case 'firefoxNightly':
+                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacFirefoxNightly/SpecialCharacters.txt');
+                        break;
                     case 'chrome':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacGoogleChrome/SpecialCharacters.txt');
+                        break;
+                    case 'chromeCanary':
+                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacGoogleChromeCanary/SpecialCharacters.txt');
                         break;
                     case 'safari':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacSafari/SpecialCharacters.txt');
