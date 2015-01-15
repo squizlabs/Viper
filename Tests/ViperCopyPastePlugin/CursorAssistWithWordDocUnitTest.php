@@ -14,6 +14,7 @@ class Viper_Tests_ViperCopyPastePlugin_CursorAssistWithWordDocUnitTest extends A
     {
         $this->useTest(1);
 
+
         $testFile = '';
 
         switch ($this->sikuli->getOS()) {
@@ -29,7 +30,7 @@ class Viper_Tests_ViperCopyPastePlugin_CursorAssistWithWordDocUnitTest extends A
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacGoogleChrome/CursorAssistWithWordDoc.txt');
                         break;
                     case 'chromeCanary':
-                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacGoogleChromium/CursorAssistWithWordDoc.txt');
+                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacChromeCanary/CursorAssistWithWordDoc.txt');
                         break;
                     case 'safari':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacSafari/CursorAssistWithWordDoc.txt');
@@ -65,6 +66,7 @@ class Viper_Tests_ViperCopyPastePlugin_CursorAssistWithWordDocUnitTest extends A
         }//end switch
 
         // Paste the word document in the content
+        sleep(5);
         $this->selectKeyword(1);
         $this->pasteFromURL($testFile);
         $this->assertHTMLMatch('<p>This is some basic content to test copy and paste when using the cursor assist feature in viper.</p><table border="1" style="width: 100%;"><tbody><tr><td><p>Cell 1</p></td><td><p>Cell 2</p></td><td><p>Cell 3</p></td></tr><tr><td><p>Cell 4</p></td><td><p>Cell 5</p></td><td><p>Cell 6</p></td></tr></tbody></table>');
