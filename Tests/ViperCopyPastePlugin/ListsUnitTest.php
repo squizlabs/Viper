@@ -12,8 +12,6 @@ class Viper_Tests_ViperCopyPastePlugin_ListsUnitTest extends AbstractViperUnitTe
      */
     public function testLists()
     {
-        $this->useTest(1);
-
         $testFile = '';
 
         switch ($this->sikuli->getOS()) {
