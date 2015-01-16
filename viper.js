@@ -69,6 +69,7 @@ Viper.prototype = {
     getId: function()
     {
         return this.id;
+
     },
 
     _processOptions: function(options, callback)
@@ -132,7 +133,7 @@ Viper.prototype = {
 
     },
 
-
+    
     setSettings: function(settings, clean)
     {
         if (clean === true) {
@@ -194,7 +195,7 @@ Viper.prototype = {
         }
 
         if (!src) {
-            src  = this.getViperPath().replace(/\/build$/, '') + '/build/Translation/' + code + '.js';
+            src = this.getViperPath().replace(/\/build$/, '') + '/build/Translation/' + code + '.js';
         }
 
         if (ViperTranslation.isLoaded(code) === false && src) {
@@ -209,7 +210,7 @@ Viper.prototype = {
 
     },
 
-
+    
     init: function()
     {
         this.ViperTools          = new ViperTools(this);
@@ -237,7 +238,7 @@ Viper.prototype = {
 
     },
 
-
+    
     addElement: function(element)
     {
         if (!element) {
@@ -255,7 +256,7 @@ Viper.prototype = {
     _createElementHolder: function()
     {
         var holder = document.createElement('div');
-        document.body.appendChild(holder);
+        Viper.document.body.appendChild(holder);
 
         // Add browser type.
         var browser = ViperUtil.getBrowserType();
@@ -280,7 +281,7 @@ Viper.prototype = {
 
     },
 
-
+    
     setMode: function(mode)
     {
         if (mode === 'inline') {
@@ -291,7 +292,7 @@ Viper.prototype = {
 
     },
 
-
+    
     getBrowserType: function()
     {
         if (this._browserType === null) {
@@ -306,6 +307,7 @@ Viper.prototype = {
                     } else {
                         this._browserType = tests[i];
                     }
+
                     return this._browserType;
                 }
             }
@@ -317,7 +319,7 @@ Viper.prototype = {
 
     },
 
-
+    
     getBrowserVersion: function()
     {
         var browsers = ['MSIE', 'Trident', 'Chrome', 'Safari', 'Firefox'];
@@ -359,7 +361,7 @@ Viper.prototype = {
 
     },
 
-
+    
     getViperPath: function()
     {
         // TODO: This path may need to be set incase a different file name is used.
@@ -368,16 +370,14 @@ Viper.prototype = {
         var c       = scripts.length;
         for (var i = 0; i < c; i++) {
             if (scripts[i].src) {
-                if (scripts[i].src.match(/\/Lib\/Viper\.js/)) {
-                    // library, so we can extract the path and include the rest.
-                    path = scripts[i].src.replace(/\/Lib\/Viper\.js/,'');
+                if (scripts[i].src.match(/\/Lib\/Viper\.js.*/)) {
+                    path = scripts[i].src.replace(/\/Lib\/Viper\.js.*/,'');
                     break;
-                } else if (scripts[i].src.match(/\/viper-combined\.js/)) {
-                    // library, so we can extract the path and include the rest.
-                    path = scripts[i].src.replace(/\/viper-combined\.js/,'');
+                } else if (scripts[i].src.match(/\/viper-combined\.js.*/)) {
+                    path = scripts[i].src.replace(/\/viper-combined\.js.*/,'');
                     break;
-                } else if (scripts[i].src.match(/\/viper\.js/)) {
-                    path = scripts[i].src.replace(/\/viper\.js/,'');
+                } else if (scripts[i].src.match(/\/viper\.js.*/)) {
+                    path = scripts[i].src.replace(/\/viper\.js.*/,'');
                     break;
                 }
             }
@@ -387,18 +387,20 @@ Viper.prototype = {
 
     },
 
-    loadScript: function(src, callback, timeout) {
+    loadScript: function(src, callback, timeout)
+    {
         var t = null;
         if (timeout) {
             t = setTimeout(callback, timeout);
         }
 
-        var script    = document.createElement('script');
+        var script = document.createElement('script');
         script.onload = function() {
             clearTimeout(t);
             script.onload = null;
             script.onreadystatechange = null;
             callback.call(this);
+
         };
 
         script.onreadystatechange = function() {
@@ -407,6 +409,7 @@ Viper.prototype = {
                 script.onreadystatechange = null;
                 script.onload();
             }
+
         }
 
         script.src = src;
@@ -416,6 +419,7 @@ Viper.prototype = {
         } else {
             document.getElementsByTagName('head')[0].appendChild(script);
         }
+
     },
 
     getEventNamespace: function()
@@ -424,7 +428,7 @@ Viper.prototype = {
 
     },
 
-
+    
     _addEvents: function(elem)
     {
         if (!elem) {
@@ -494,6 +498,57 @@ Viper.prototype = {
             }
         });
 
+        ViperUtil.addEvent(elem, 'dragover.' + namespace, function(e) {
+            ViperUtil.preventDefault(e);
+            return false;
+        });
+        ViperUtil.addEvent(elem, 'dragenter.' + namespace, function(e) {
+            ViperUtil.preventDefault(e);
+            return false;
+        });
+
+        ViperUtil.addEvent(elem, 'drop.' + namespace, function(e) {
+            ViperUtil.preventDefault(e);
+
+            // Get the range using the mouse pointer (drop location).
+            var range        = self.getRangeFromCoords(e.originalEvent.clientX, e.originalEvent.clientY);
+            var dataTransfer = e.originalEvent.dataTransfer;
+
+            // Call the callback functions with dataTransfer object, range and original event.
+            if (self.fireCallbacks('Viper:dropped', {dataTransfer: dataTransfer, range: range, e: e}) === false) {
+                return false;
+            }
+
+            var textPlain = null;
+            for (var i = 0; i < dataTransfer.types.length; i++) {
+                try {
+                    var data = {
+                        data: dataTransfer.getData(dataTransfer.types[i]),
+                        range: range
+                    };
+                } catch (e) {
+                    continue;
+                }
+
+                if (dataTransfer.types[i] === 'text/plain' || dataTransfer.types[i] === 'Text') {
+                    textPlain = data;
+                }
+
+                // Fire callbacks for each data type.
+                if (self.fireCallbacks('Viper:dropped:' + dataTransfer.types[i], data) === false) {
+                    return false;
+                }
+            }
+
+            // Nothing handled this drop try text/plain.
+            if (textPlain !== null && textPlain.data) {
+                ViperSelection.addRange(range);
+                self.insertNodeAtCaret(document.createTextNode(textPlain.data));
+            }
+
+            return false;
+        });
+
         ViperUtil.addEvent(elem, 'focus.' + namespace, function(e) {
             if (self.fireCallbacks('Viper:viperElementFocused') === false) {
                 return;
@@ -502,7 +557,7 @@ Viper.prototype = {
             self.highlightToSelection();
         });
 
-        if (navigator.userAgent.match(/iPad/i) != null) {
+        if (navigator.userAgent.match(/iPad/i) !== null) {
             // On the iPad we need to detect selection changes every few ms.
             setInterval(function() {
                 self.fireSelectionChanged();
@@ -524,7 +579,7 @@ Viper.prototype = {
 
     },
 
-
+    
     _removeEvents: function(elem)
     {
         if (!elem) {
@@ -535,9 +590,9 @@ Viper.prototype = {
 
     },
 
-
-     setEnabled: function(enabled)
-     {
+    
+    setEnabled: function(enabled)
+    {
         this._viperRange = null;
 
         if (enabled === true && this.enabled === false) {
@@ -640,14 +695,14 @@ Viper.prototype = {
 
     },
 
-
+    
     isEnabled: function()
     {
         return this.enabled;
 
     },
 
-
+    
     setEditableElement: function(elem)
     {
         var self = this;
@@ -693,12 +748,17 @@ Viper.prototype = {
         this.fireCallbacks('Viper:editableElementChanged', {element: elem});
 
         // Create a text field that is off screen that will handle tabbing in to Viper.
-        var tabTextfield  = document.createElement('input');
-        tabTextfield.type = 'text';
-        ViperUtil.setStyle(tabTextfield, 'left', '-9999px');
-        ViperUtil.setStyle(tabTextfield, 'top', '-9999px');
-        ViperUtil.setStyle(tabTextfield, 'position', 'absolute');
-        ViperUtil.insertBefore(this.element, tabTextfield);
+        var tabTextfield  = ViperUtil.getid(this.getId() + '-tabTextfield');
+        if (!tabTextfield) {
+            tabTextfield = document.createElement('input');
+            tabTextfield.type = 'text';
+            tabTextfield.id   = this.getId() + '-tabTextfield';
+            ViperUtil.setStyle(tabTextfield, 'left', '-9999px');
+            ViperUtil.setStyle(tabTextfield, 'top', '-9999px');
+            ViperUtil.setStyle(tabTextfield, 'position', 'absolute');
+            ViperUtil.insertBefore(this.element, tabTextfield);
+        }
+
         ViperUtil.addEvent(tabTextfield, 'focus', function(e) {
             tabTextfield.blur();
             self.setEnabled(true);
@@ -752,14 +812,6 @@ Viper.prototype = {
             return;
         }
 
-        this._document = elem.ownerDocument;
-        Viper.document = this._document;
-        if (this._document.defaultView) {
-            Viper.window = this._document.defaultView;
-        } else {
-            Viper.window = window;
-        }
-
         if (ViperUtil.isBrowser('msie') === true) {
             // Find iframe elements for youtube.com videos to add wmode=opaque to query
             // string so that the video does not sit on top of the editor window in IE.
@@ -809,7 +861,7 @@ Viper.prototype = {
                 if (!blockTag) {
                     ViperUtil.setHtml(elem, '');
                 } else {
-                    ViperUtil.setHtml(elem, '<' + blockTag +'>&nbsp;</' + blockTag  + '>');
+                    ViperUtil.setHtml(elem, '<' + blockTag + '>&nbsp;</' + blockTag + '>');
                 }
 
                 try {
@@ -817,7 +869,9 @@ Viper.prototype = {
                     range.setEnd(elem.firstChild, 0);
                     range.collapse(false);
                     ViperSelection.addRange(range);
-                } catch (e) {}
+                } catch (e) {
+                    // Ignore.
+                }
             }
         } else {
             var cleanedContent = this.cleanHTML(content);
@@ -855,12 +909,11 @@ Viper.prototype = {
                     }
 
                     p.appendChild(child);
-
-                }
+                }//end for
 
                 ViperUtil.remove(nodesToRemove);
 
-                var range = this.getCurrentRange();
+                var range           = this.getCurrentRange();
                 var firstSelectable = range._getFirstSelectableChild(elem);
                 if (!firstSelectable && elem.childNodes.length > 0) {
                     for (var i = 0; i < elem.childNodes.length; i++) {
@@ -917,8 +970,8 @@ Viper.prototype = {
             }
 
             if (this._subElementActive !== true) {
-                this._mainElem = this.element;
-                this.element = elem;
+                this._mainElem         = this.element;
+                this.element           = elem;
                 this._subElementActive = true;
                 this.element.setAttribute('contentEditable', true);
                 ViperUtil.setStyle(this.element, 'outline', 'none');
@@ -929,8 +982,8 @@ Viper.prototype = {
             this.element.setAttribute('contentEditable', false);
             ViperUtil.setStyle(this.element, 'outline', 'invert');
             this._removeEvents();
-            var pelem              = this.element;
-            this.element           = this._mainElem;
+            var pelem    = this.element;
+            this.element = this._mainElem;
             this._subElementActive = false;
             this._mainElem         = null;
             this.fireCallbacks('subElementDisabled', pelem);
@@ -970,16 +1023,16 @@ Viper.prototype = {
 
     },
 
-
+    
     getCurrentRange: function()
     {
-        var range =  ViperSelection.getRangeAt(0);
+        var range          = ViperSelection.getRangeAt(0);
         this._currentRange = range.cloneRange();
         return range;
 
     },
 
-
+    
     getViperRange: function()
     {
         if (ViperUtil.isBrowser('msie') === false) {
@@ -996,12 +1049,12 @@ Viper.prototype = {
 
     resetViperRange: function(range)
     {
-        range = range || null;
+        range            = range || null;
         this._viperRange = range;
 
     },
 
-
+    
     selectElement: function(element)
     {
         var range = this.getViperRange();
@@ -1015,7 +1068,7 @@ Viper.prototype = {
         range = range || this.getViperRange();
 
         var nodeSelection = range.getNodeSelection();
-        var node = this.fireCallbacks('Viper:getNodeSelection', {range: range});
+        var node          = this.fireCallbacks('Viper:getNodeSelection', {range: range});
 
         if (node) {
             nodeSelection = node;
@@ -1025,7 +1078,7 @@ Viper.prototype = {
 
     },
 
-
+    
     setAttribute: function(element, attribute, value)
     {
         if (!element || !element.setAttribute) {
@@ -1062,15 +1115,14 @@ Viper.prototype = {
                     ViperSelection.addRange(range);
                     this.resetViperRange(range);
                 }
-            }
-
+            }//end if
         } else if (value) {
             element.setAttribute(attribute, value);
-        }
+        }//end if
 
     },
 
-
+    
     getWholeElementSelection: function(range)
     {
         range = range || this.getViperRange();
@@ -1119,14 +1171,14 @@ Viper.prototype = {
                 }
 
                 return parent;
-            }
-        }
+            }//end if
+        }//end if
 
         return null;
 
     },
 
-
+    
     selectNodeToNode: function(start, end)
     {
         var range = this.getViperRange();
@@ -1151,7 +1203,7 @@ Viper.prototype = {
 
     },
 
-
+    
     moveCaretAway: function(sourceElement)
     {
         var range = this.getViperRange();
@@ -1160,11 +1212,10 @@ Viper.prototype = {
     },
 
 
-
+    
     getCaretCoords: function()
     {
         // TODO: Change this to range coords.
-
         var coords = {};
         try {
             var bookmark = this.createBookmark();
@@ -1184,7 +1235,44 @@ Viper.prototype = {
     },
 
 
+    
+    getRangeFromCoords: function(x, y)
+    {
+        var range = null;
+        if (document.caretRangeFromPoint) {
+            // Webkit.
+            var rangeObj = document.caretRangeFromPoint(x, y);
+            range        = new ViperMozRange(rangeObj);
+        } else if (document.caretPositionFromPoint) {
+            // Firefox.
+            var rangeObj = document.caretPositionFromPoint(x, y);
+            range        = this.getCurrentRange().cloneRange();
+            range.setStart(rangeObj.offsetNode, rangeObj.offset);
+            range.collapse(true);
+        } else if (document.body.createTextRange) {
+            var rangeObj = document.body.createTextRange();
+            try {
+                rangeObj.moveToPoint(x, y);
+            } catch (e) {
+            }
 
+            range = new ViperIERange(rangeObj);
+
+            if (Viper.document.createRange) {
+                rangeObj         = Viper.document.createRange();
+                var ieToMozRange = new ViperMozRange(rangeObj);
+                ieToMozRange.setStart(range.startContainer, range.startOffset);
+                ieToMozRange.collapse(true);
+                range = ieToMozRange;
+            }
+        }//end if
+
+        return range;
+
+    },
+
+
+    
     getElementAtCoords: function(x, y)
     {
         var elem = null;
@@ -1222,10 +1310,11 @@ Viper.prototype = {
             range = document.body.createTextRange();
             try {
                 range.moveToPoint(x, y);
-            } catch (e) {}
+            } catch (e) {
+            }
 
             elem = range.parentElement();
-        }
+        }//end if
 
         return elem;
 
@@ -1245,10 +1334,10 @@ Viper.prototype = {
                 continue;
             }
 
-            var coords    = ViperUtil.getElementCoords(frameElem);
-            offset.x += coords.x;
-            offset.y += coords.y;
-            doc = frameElem.ownerDocument;
+            var coords = ViperUtil.getElementCoords(frameElem);
+            offset.x  += coords.x;
+            offset.y  += coords.y;
+            doc        = frameElem.ownerDocument;
         }
 
         return offset;
@@ -1263,7 +1352,7 @@ Viper.prototype = {
     },
 
 
-
+    
     rangeInViperBounds: function(range)
     {
         range = range || this.getCurrentRange();
@@ -1275,7 +1364,7 @@ Viper.prototype = {
 
     },
 
-
+    
     isOutOfBounds: function(element)
     {
         if (element === this.element || ViperUtil.isChildOf(element, this.element) === true) {
@@ -1288,7 +1377,7 @@ Viper.prototype = {
 
     },
 
-
+    
     insertNodeAtCaret: function(node)
     {
         var range = this.getCurrentRange();
@@ -1346,24 +1435,24 @@ Viper.prototype = {
             } else {
                 newRange = range;
 
-                 if (newRange.collapsed === true
-                     && newRange.startContainer.parentNode
-                     && newRange.startContainer.parentNode.firstChild.nodeType === ViperUtil.TEXT_NODE
-                     && newRange.startContainer.parentNode.firstChild === newRange.startContainer.parentNode.lastChild
-                     && ViperUtil.trim(newRange.startContainer.parentNode.firstChild.data) === ''
-                 ) {
-                     newRange.setStart(newRange.startContainer.parentNode.firstChild, 0);
-                     newRange.collapse(true);
-                     newRange.startContainer.parentNode.firstChild.data = '';
-                 } else if (newRange.collapsed === true
-                     && ViperUtil.isStubElement(newRange.startContainer) === true
-                 ) {
-                     var tmpTextNode = Viper.document.createTextNode('');
-                     ViperUtil.insertBefore(newRange.startContainer, tmpTextNode);
-                     ViperUtil.remove(newRange.startContainer);
-                     newRange.setStart(tmpTextNode, 0);
-                     newRange.collapse(true);
-                 }
+                if (newRange.collapsed === true
+                    && newRange.startContainer.parentNode
+                    && newRange.startContainer.parentNode.firstChild.nodeType === ViperUtil.TEXT_NODE
+                    && newRange.startContainer.parentNode.firstChild === newRange.startContainer.parentNode.lastChild
+                    && ViperUtil.trim(newRange.startContainer.parentNode.firstChild.data) === ''
+                ) {
+                    newRange.setStart(newRange.startContainer.parentNode.firstChild, 0);
+                    newRange.collapse(true);
+                    newRange.startContainer.parentNode.firstChild.data = '';
+                } else if (newRange.collapsed === true
+                    && ViperUtil.isStubElement(newRange.startContainer) === true
+                ) {
+                    var tmpTextNode = Viper.document.createTextNode('');
+                    ViperUtil.insertBefore(newRange.startContainer, tmpTextNode);
+                    ViperUtil.remove(newRange.startContainer);
+                    newRange.setStart(tmpTextNode, 0);
+                    newRange.collapse(true);
+                }
             }//end if
 
             if (this.fireCallbacks('Viper:nodesInserted', {node: newNode, range: newRange}) === false) {
@@ -1435,7 +1524,7 @@ Viper.prototype = {
 
     },
 
-
+    
     ctmInsertNodeAtCaret: function(range, node)
     {
         if (ViperChangeTracker.isTracking() === true) {
@@ -1511,7 +1600,7 @@ Viper.prototype = {
 
     },
 
-
+    
     insertTextAtCaret: function(text)
     {
         if (typeof text !== 'string') {
@@ -1522,7 +1611,7 @@ Viper.prototype = {
 
     },
 
-
+    
     _getNodeOffset: function(node)
     {
         var nodes = node.parentNode.childNodes;
@@ -1572,7 +1661,7 @@ Viper.prototype = {
 
     },
 
-
+    
     getTextContentFromElements: function(elements)
     {
         var text = [];
@@ -2119,7 +2208,7 @@ Viper.prototype = {
 
     },
 
-
+    
     surroundContents: function(tag, attributes, range, keepSelection)
     {
         range = range || this.getCurrentRange();
@@ -2142,10 +2231,10 @@ Viper.prototype = {
             tag = 'span';
         }
 
-       var startContainer = range.getStartNode();
-       var endContainer   = range.getEndNode();
+        var startContainer = range.getStartNode();
+        var endContainer   = range.getEndNode();
 
-       if (startContainer === endContainer) {
+        if (startContainer === endContainer) {
             // Selected contents from same node.
             if (startContainer.nodeType === ViperUtil.TEXT_NODE) {
                 // Selection is a text node.
@@ -2281,6 +2370,7 @@ Viper.prototype = {
                     while (rangeContents.firstChild) {
                         newElement.appendChild(rangeContents.firstChild);
                     }
+
                     newElement.appendChild(bookmark.end);
                 } else if (otag !== 'span'
                     && bookmark.end.nextSibling
@@ -2307,12 +2397,12 @@ Viper.prototype = {
                     while (rangeContents.firstChild) {
                         newElement.appendChild(rangeContents.firstChild);
                     }
-                }
+                }//end if
 
                 this._setWrapperElemAttributes(newElement, attributes);
 
                 // Remove same nested tags.
-                var nestedTags = ViperUtil.getTag(otag, newElement);
+                var nestedTags      = ViperUtil.getTag(otag, newElement);
                 var nestedTagsCount = nestedTags.length;
                 for (var i = 0; i < nestedTagsCount; i++) {
                     if (this.isBookmarkElement(nestedTags[i]) === true || otag === 'span') {
@@ -2362,7 +2452,7 @@ Viper.prototype = {
 
                 endContainer = Viper.document.createTextNode('');
                 ViperUtil.insertAfter(bookmark.end, endContainer);
-            }
+            }//end if
 
             if (!startContainer) {
                 // If the bookmark.end is at the end of another tag move it outside.
@@ -2413,7 +2503,7 @@ Viper.prototype = {
 
     },
 
-
+    
     _wrapElement: function(parent, tag, callback, attributes)
     {
         if (!parent) {
@@ -2424,6 +2514,7 @@ Viper.prototype = {
             if (callback) {
                 callback.call(this, parent);
             }
+
             return;
         }
 
@@ -2476,7 +2567,7 @@ Viper.prototype = {
                     if (callback) {
                         callback.call(this, elem);
                     }
-                }
+                }//end if
             } else if (parent.previousSibling
                 && ViperUtil.isTag(parent.previousSibling, tag) === true
                 && !ViperUtil.attr(parent.previousSibling, 'viperbookmark')
@@ -2520,7 +2611,7 @@ Viper.prototype = {
                     }
 
                     parent.parentNode.removeChild(parent);
-                }
+                }//end if
             } else {
                 // Because the node contains block level elements
                 // we have to find the non block elements and wrap content around them.
@@ -2557,7 +2648,7 @@ Viper.prototype = {
     },
 
 
-
+    
     removeTagFromChildren: function(parent, tag, incParent)
     {
         var c          = parent.childNodes.length;
@@ -2654,7 +2745,6 @@ Viper.prototype = {
             return;
         }
 
-
         // Bookmark and get the top style parents.
         var bookmark       = this.createBookmark(range);
         var startTopParent = startParents.pop();
@@ -2719,7 +2809,7 @@ Viper.prototype = {
 
             ViperUtil.insertBefore(startTopParent, div.childNodes);
 
-            if (end.firstChild ) {
+            if (end.firstChild) {
                 if (ViperUtil.isBlank(ViperUtil.getNodeTextContent(end)) !== true) {
                     ViperUtil.insertBefore(startTopParent, end);
                 } else {
@@ -2810,7 +2900,7 @@ Viper.prototype = {
 
     },
 
-
+    
     setCaretAfterNode: function(node)
     {
         if (!node || !node.parentNode) {
@@ -2838,7 +2928,7 @@ Viper.prototype = {
 
     },
 
-
+    
     setCaretBeforeNode: function(node)
     {
         if (!node || !node.parentNode) {
@@ -2927,7 +3017,7 @@ Viper.prototype = {
 
     },
 
-
+    
     insertAfter: function(node, newNode)
     {
         // Fire beforeInsertAfter.
@@ -2939,7 +3029,7 @@ Viper.prototype = {
 
     },
 
-
+    
     insertBefore: function(node, newNode)
     {
         // Fire beforeInsertAfter.
@@ -2965,7 +3055,11 @@ Viper.prototype = {
             || ViperUtil.getElementsBetween(bookmark.start, bookmark.end).length === 0
         ) {
             // Bookmark is collapsed.
-            if (bookmark.end.nextSibling) {
+            // Pick the best node to select. Make sure that if next sibling is block element the previous sibling is not
+            // then use the previous sibling.
+            if (bookmark.end.nextSibling
+                && (ViperUtil.isBlockElement(bookmark.end.nextSibling) === false || !bookmark.start.previousSibling || ViperUtil.isBlockElement(bookmark.start.previousSibling))
+            ) {
                 if ((ViperUtil.isTag(bookmark.end.nextSibling, 'span') !== true || ViperUtil.hasClass(bookmark.end.nextSibling, 'viperBookmark') === false)) {
                     startPos = ViperUtil.getFirstChildTextNode(bookmark.end.nextSibling);
                 } else {
@@ -2996,7 +3090,7 @@ Viper.prototype = {
             }
 
             if (bookmark.end.previousSibling) {
-                endPos    = ViperUtil.getLastChildTextNode(bookmark.end.previousSibling);
+                endPos = ViperUtil.getLastChildTextNode(bookmark.end.previousSibling);
                 if (endPos.data) {
                     endOffset = endPos.data.length;
                 }
@@ -3064,7 +3158,7 @@ Viper.prototype = {
                             ViperUtil.remove(startPos.nextSibling);
                         }
                     }
-                }
+                }//end if
 
                 ViperSelection.removeAllRanges();
                 range.setEnd(endPos, endOffset);
@@ -3072,7 +3166,7 @@ Viper.prototype = {
                 range.setEnd(endPos, endOffset);
                 range.setStart(startPos, startOffset);
             }//end if
-        }
+        }//end if
 
         try {
             ViperSelection.addRange(range);
@@ -3082,7 +3176,7 @@ Viper.prototype = {
 
     },
 
-
+    
     getBookmark: function(parent, type)
     {
         var bookmarks = ViperUtil.getClass('viperBookmark_' + type, parent);
@@ -3112,7 +3206,7 @@ Viper.prototype = {
 
     },
 
-
+    
     removeBookmark: function(bookmark)
     {
         if (!bookmark.start || !bookmark.end) {
@@ -3120,7 +3214,7 @@ Viper.prototype = {
         }
 
         var viperElement = this.getViperElement();
-        var elems = ViperUtil.getElementsBetween(bookmark.start, bookmark.end);
+        var elems        = ViperUtil.getElementsBetween(bookmark.start, bookmark.end);
         elems.push(bookmark.start, bookmark.end);
         var parents = ViperUtil.$(elems).parents();
 
@@ -3186,7 +3280,7 @@ Viper.prototype = {
                 range.setStart(firstSelectable, 0);
                 range.setEnd(lastSelectable, lastSelectable.data.length);
             }
-        }
+        }//end if
 
         // Collapse to the end of range.
         range.collapse(false);
@@ -3311,7 +3405,7 @@ Viper.prototype = {
 
     },
 
-
+    
     splitNodeAtBookmark: function(tag, bookmark, copyMidTags)
     {
         if (!bookmark) {
@@ -3422,7 +3516,7 @@ Viper.prototype = {
 
     },
 
-
+    
     highlightSelection: function()
     {
         var highlights = ViperUtil.getClass('__viper_selHighlight', this.element);
@@ -3442,20 +3536,35 @@ Viper.prototype = {
             selectedNode = null;
         }
 
-        if (selectedNode && selectedNode.nodeType == ViperUtil.ELEMENT_NODE) {
+        if (selectedNode && selectedNode.nodeType === ViperUtil.ELEMENT_NODE) {
             ViperUtil.addClass(selectedNode, '__viper_selHighlight __viper_cleanOnly');
         } else if (range.collapsed === true) {
             var span = document.createElement('span');
             ViperUtil.addClass(span, '__viper_selHighlight');
             ViperUtil.setStyle(span, 'border-right', '1px solid #000');
-            range.insertNode(span);
-            var parentNode = span.parentNode;
+
+            if (ViperUtil.isStubElement(range.startContainer) === false) {
+                range.insertNode(span);
+                var parentNode = span.parentNode;
+            } else {
+                parentNode = range.startContainer.parentNode;
+            }
+
             if (parentNode) {
                 var tagName = ViperUtil.getTagName(parentNode);
                 if (ViperUtil.inArray(tagName, ['table', 'tbody', 'tr']) === true) {
                     ViperUtil.remove(span);
                 }
             }
+        } else if (range.startContainer
+            && range.endContainer
+            && range.endContainer.previousSibling === range.startContainer.nextSibling
+            && ViperUtil.isTag(range.startContainer.nextSibling, 'img') === true
+            && ViperUtil.isTag(range.endContainer.previousSibling, 'img') === true
+        ) {
+            // This is for early IE version where range is set before and after an image. Still want to just highlight
+            // the image element instead of using surroundContents below.
+            ViperUtil.addClass(range.startContainer.nextSibling, '__viper_selHighlight __viper_cleanOnly');
         } else {
             var attributes = {
                 cssClass: '__viper_selHighlight'
@@ -3464,7 +3573,7 @@ Viper.prototype = {
             var span = document.createElement('span');
             span.setAttribute('class', '__viper_selHighlight');
             this.surroundContents('span', attributes, range, true);
-        }
+        }//end if
 
     },
 
@@ -3656,7 +3765,8 @@ Viper.prototype = {
 
             try {
                 range = this.adjustRange(range);
-            } catch (e) {}
+            } catch (e) {
+            }
         }
 
         if (!this._prevRange
@@ -3673,7 +3783,7 @@ Viper.prototype = {
 
     },
 
-
+    
     isKey: function(e, keys)
     {
         var eKeys = [];
@@ -3752,7 +3862,7 @@ Viper.prototype = {
 
     isInputKey: function(e)
     {
-         if ((e.which !== 0 || e.keyCode === 46)
+        if ((e.which !== 0 || e.keyCode === 46)
             && e.ctrlKey !== true
             && e.altKey !== true
             && e.metaKey !== true
@@ -3765,14 +3875,14 @@ Viper.prototype = {
 
     },
 
-
+    
     isSpecialKey: function(e)
     {
         return ViperUtil.inArray(e.which, this._specialKeys);
 
     },
 
-
+    
     addSpecialKey: function(keyCode)
     {
         this._specialKeys.push(keyCode);
@@ -3780,10 +3890,10 @@ Viper.prototype = {
     },
 
 
-
+    
     _keyDownRangeCollapsed: true,
 
-
+    
     keyDown: function(e)
     {
         this._viperRange = null;
@@ -3819,7 +3929,7 @@ Viper.prototype = {
             // the track changes is activated or no plugin is direcly modifying it.
             if (this.isSpecialKey(e) === false) {
                 if (ViperUtil.isBrowser('firefox') === true) {
-                    this._firefoxKeyDown();
+                    this._firefoxKeyDown(e);
                 } else if ((this.isKey(e, 'backspace') === true || this.isKey(e, 'delete') === true)
                     && (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true || ViperUtil.isBrowser('msie') === true)
                 ) {
@@ -3846,12 +3956,33 @@ Viper.prototype = {
             // Prevent browser history triger on Windows and Linux.
             ViperUtil.preventDefault(e);
             return false;
-        }
+        }//end if
 
     },
 
-    _firefoxKeyDown: function()
+    _firefoxKeyDown: function(e)
     {
+        if (e.which >= 37 && e.which <= 40) {
+            // Handle the case where selecting whole content and pressing right arrow key puts the caret outside of the
+            // last selected element. E.g. <p>test</p>*.
+            var range = this.getCurrentRange();
+            if (e.which >= 39
+                && range.startContainer === range.endContainer
+                && range.startOffset === 0
+                && range.endOffset >= range.startContainer.childNodes.length
+            ) {
+                var lastSelectable = range._getLastSelectableChild(range.startContainer.childNodes[range.endOffset - 1]);
+                if (lastSelectable && lastSelectable.nodeType === ViperUtil.TEXT_NODE) {
+                    range.setStart(lastSelectable, lastSelectable.data.length);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                }
+            }
+
+            // Arrow keys.
+            return;
+        }
+
         var range = this.getCurrentRange();
         var elem  = this.getViperElement();
         if (elem.childNodes.length === 0
@@ -3875,14 +4006,25 @@ Viper.prototype = {
             range.setStart(textNode, 0);
             range.collapse(true);
             ViperSelection.addRange(range);
+        } else {
+            var startNode = range.getStartNode();
+            var endNode   = range.getEndNode();
+            if (startNode && startNode === endNode && startNode.nodeType === ViperUtil.ELEMENT_NODE) {
+                var firstChild = range._getFirstSelectableChild(startNode);
+                if (firstChild) {
+                    range.setStart(firstChild, 0);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                }
+            }
         }
+
 
         // When element is empty Firefox puts <br _moz_dirty="" type="_moz">
         // in to the element which stops text typing, so remove the br tag
         // and add an empty text node and set the range to that node.
         if (range.startContainer === range.endContainer
-            && ViperUtil.isTag(range.startContainer, 'br') === true)
-        {
+            && ViperUtil.isTag(range.startContainer, 'br') === true) {
             var textNode = document.createTextNode('');
             ViperUtil.insertAfter(range.startContainer, textNode);
             ViperUtil.remove(range.startContainer);
@@ -3894,7 +4036,7 @@ Viper.prototype = {
     },
 
 
-
+    
     keyPress: function(e)
     {
         if (this._preventKeyPress === true || this.enabled !== true) {
@@ -3905,7 +4047,7 @@ Viper.prototype = {
         // Check that keyCode is not 0 as Firefox fires keyPress for arrow keys which
         // have key code of 0.
         if (e.which !== 0 && ViperChangeTracker.isTracking() === true) {
-             if (e.which === ViperUtil.DOM_VK_DELETE) {
+            if (e.which === ViperUtil.DOM_VK_DELETE) {
                 // Handle delete OP here because some browsers (e.g. Chrome, IE) does not
                 // fire keyPress when DELETE is held down.
                 this.deleteContents();
@@ -3932,7 +4074,7 @@ Viper.prototype = {
             this.fireCallbacks('Viper:charInsert', String.fromCharCode(e.which));
 
             var resetContent = false;
-            var range = this.getCurrentRange();
+            var range        = this.getCurrentRange();
             if (range.startOffset === 0
                 && range.endContainer === this.element
                 && range.endOffset === (this.element.childNodes.length - 1)
@@ -3958,7 +4100,7 @@ Viper.prototype = {
                 && range.endOffset >= this.element.childNodes.length
             ) {
                 resetContent = true;
-            }
+            }//end if
 
             var nodeSelection = null;
             if (resetContent !== true) {
@@ -3995,7 +4137,7 @@ Viper.prototype = {
                         case 'ol':
                             // Must create a new tag before setting the content.
                             var defaultTagName = this.getDefaultBlockTag();
-                            var defTag = null;
+                            var defTag         = null;
                             if (defaultTagName !== '') {
                                 defTag = document.createElement(defaultTagName);
                                 ViperUtil.setHtml(defTag, String.fromCharCode(e.which));
@@ -4015,7 +4157,8 @@ Viper.prototype = {
                         case 'tr':
                         case 'li':
                             // Tags that can be handled by browser.
-                            return true;
+                        return true;
+
                         break;
 
                         default:
@@ -4041,7 +4184,7 @@ Viper.prototype = {
                     this.fireNodesChanged([range.getStartNode()]);
                     return false;
                 } else if (range.startContainer === range.endContainer
-                    && ViperUtil.isTag(range.startContainer, 'br')  === true
+                    && ViperUtil.isTag(range.startContainer, 'br') === true
                     && range.collapsed === true
                     && range.startOffset === 0
                 ) {
@@ -4051,12 +4194,12 @@ Viper.prototype = {
                     ViperUtil.remove(range.startContainer);
                     range.setStart(textNode, 0);
                     range.collapse(true);
-                }
-            }
+                }//end if
+            }//end if
 
             this.fireNodesChanged([range.getStartNode()]);
             return true;
-        }
+        }//end if
 
         return true;
 
@@ -4136,7 +4279,8 @@ Viper.prototype = {
                 var range = null;
                 try {
                     range = self.adjustRange();
-                } catch (e) {}
+                } catch (e) {
+                }
 
                 // Delay calling the fireSelectionChanged to get the updated range.
                 self.fireSelectionChanged(range);
@@ -4172,7 +4316,8 @@ Viper.prototype = {
             var range = null;
             try {
                 range = self.adjustRange();
-            } catch (e) {}
+            } catch (e) {
+            }
 
             if (range.collapsed === true && ViperUtil.isBrowser('msie') === true) {
                 // If clicked inside the previous selection then IE takes a lot
@@ -4189,7 +4334,7 @@ Viper.prototype = {
 
     },
 
-
+    
     adjustRange: function(range)
     {
         range = range || this.getViperRange();
@@ -4208,9 +4353,9 @@ Viper.prototype = {
         if (!endNode && range.startContainer && range.startContainer.nodeType === ViperUtil.ELEMENT_NODE) {
             var lastSelectable = range._getLastSelectableChild(range.startContainer);
             if (lastSelectable) {
-                endNode = lastSelectable;
+                endNode            = lastSelectable;
                 range.endContainer = endNode;
-                range.endOffset = endNode.data.length;
+                range.endOffset    = endNode.data.length;
                 ViperSelection.addRange(range);
             }
         }
@@ -4254,7 +4399,7 @@ Viper.prototype = {
                 // In Webkit, when a whole paragraph is selected sometimes the range
                 // starts from the beginning of the next paragraph causing range to
                 // span two paragraphs.. If this is the case then move the range...
-                var lastSelectable  = range._getLastSelectableChild(endNode.parentNode.previousSibling.previousSibling);
+                var lastSelectable = range._getLastSelectableChild(endNode.parentNode.previousSibling.previousSibling);
                 if (lastSelectable) {
                     range.setEnd(lastSelectable, lastSelectable.data.length);
                     ViperSelection.addRange(range);
@@ -4321,8 +4466,8 @@ Viper.prototype = {
                 this.fireCallbacks('Viper:focused');
             } catch (e) {
                 // Catch the IE error: Can't move focus to control because its invisible.
-            }
-        }
+            }//end try
+        }//end if
 
     },
 
@@ -4554,7 +4699,7 @@ Viper.prototype = {
 
         var callback = callbacks.shift();
         if (callback) {
-            var self   = this;
+            var self = this;
             try {
                 var retVal = callback.call(this, data, function(retVal) {
                     self._fireCallbacks(callbacks, data, doneCallback, retVal);
@@ -4582,7 +4727,6 @@ Viper.prototype = {
         } else if (this.callbacks[type]) {
             if (namespace) {
                 if (this.callbacks[type].namespaces[namespace]) {
-                    //this.callbacks[type].namespaces[namespace] = [];
                     delete this.callbacks[type].namespaces[namespace];
                 }
             } else {
@@ -4594,7 +4738,7 @@ Viper.prototype = {
     },
 
 
-
+    
     getHtml: function(elem, settings)
     {
         elem = elem || this.element;
@@ -4659,7 +4803,7 @@ Viper.prototype = {
 
     },
 
-
+    
     getContents: function(elem)
     {
         elem = elem || this.element;
@@ -4711,7 +4855,7 @@ Viper.prototype = {
 
     },
 
-
+    
     setContents: function(contents)
     {
         if (typeof contents === 'string') {
@@ -4726,7 +4870,7 @@ Viper.prototype = {
 
     },
 
-
+    
     setHtml: function(contents, callback)
     {
         var clone = Viper.document.createElement('div');
@@ -4772,7 +4916,7 @@ Viper.prototype = {
 
     cleanHTML: function(content, attrBlacklist)
     {
-        attrBlacklist  = attrBlacklist || ['sizset'];
+        attrBlacklist = attrBlacklist || ['sizset'];
 
         content = content.replace(/<(p|div|h1|h2|h3|h4|h5|h6|li)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>\s*/ig, "<$1$2>");
         content = content.replace(/\s*<\/(p|div|h1|h2|h3|h4|h5|h6|li)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "</$1$2>");
@@ -4784,7 +4928,7 @@ Viper.prototype = {
         content = this.replaceEntities(content);
 
         // Regex to get list of HTML tags.
-        var subRegex  = '\\s+([:\\w]+)(?:\\s*=\\s*("(?:[^"]+)?"|\'(?:[^\']+)?\'|[^\'">\\s]+))?';
+        var subRegex = '\\s+([:\\w]+)(?:\\s*=\\s*("(?:[^"]+)?"|\'(?:[^\']+)?\'|[^\'">\\s]+))?';
 
         // Regex to get list of attributes in an HTML tag.
         var tagRegex  = new RegExp('(<[\\w:]+)(?:' + subRegex + ')+\\s*(\/?>)', 'g');
@@ -4828,7 +4972,7 @@ Viper.prototype = {
 
     },
 
-
+    
     cleanDOM: function(elem, tagName)
     {
         if (!elem) {
@@ -4841,7 +4985,7 @@ Viper.prototype = {
 
         this._cleanDOM(elem, tagName, true);
 
-        var range = this.getViperRange();
+        var range    = this.getViperRange();
         var lastElem = range._getLastSelectableChild(elem);
         if (lastElem && lastElem.nodeType === ViperUtil.TEXT_NODE) {
             lastElem.data = ViperUtil.rtrim(lastElem.data.replace(/(&nbsp;)*$/, ''));
@@ -4880,7 +5024,7 @@ Viper.prototype = {
 
         if (node.nodeType === ViperUtil.ELEMENT_NODE) {
             var tagName = node.tagName.toLowerCase();
-            if (tag && tag != tagName) {
+            if (tag && tag !== tagName) {
                 return;
             }
 
@@ -5007,10 +5151,6 @@ Viper.prototype = {
         var specialCharcodes = {
             '8211': '&ndash;',
             '8212': '&mdash;',
-            '8216': '\'',
-            '8217': '\'',
-            '8220': '"',
-            '8221': '"',
             '8226': '*'
         };
 
@@ -5091,7 +5231,7 @@ var ViperChangeTracker = {
     _tmpData: {},
     _currentUserid: null,
 
-
+    
     init: function(viper, trackChanges)
     {
         var self       = this;
@@ -5169,7 +5309,7 @@ var ViperChangeTracker = {
 
     },
 
-
+    
     reLoad: function()
     {
         this.cleanUp();
@@ -5199,7 +5339,7 @@ var ViperChangeTracker = {
 
     },
 
-
+    
     cleanUp: function()
     {
         this._changes     = {};
@@ -5220,14 +5360,14 @@ var ViperChangeTracker = {
 
     },
 
-
+    
     hasChanges: function()
     {
         return (ViperUtil.isEmpty(this._changes) !== true);
 
     },
 
-
+    
     isTracking: function()
     {
         var tracking = (this._viper._subElementActive !== true && this._tracking === true);
@@ -5235,7 +5375,7 @@ var ViperChangeTracker = {
 
     },
 
-
+    
     isTrackingNode: function(node, ctNodeType)
     {
         if (node && node.nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.hasClass(node, this._nodeClassName) === true) {
@@ -5341,7 +5481,7 @@ var ViperChangeTracker = {
 
     },
 
-
+    
     isNodeTypeVisible: function(ctNodeType)
     {
         if (ViperUtil.isset(this._nodeTypeVisibility[ctNodeType]) === true && this._nodeTypeVisibility[ctNodeType] !== true) {
@@ -5881,7 +6021,7 @@ var ViperChangeTracker = {
     },
 
 
-
+    
     _positionInfoBox: function(infoBox, dim, show)
     {
         var height  = 0;
@@ -6086,7 +6226,7 @@ var ViperChangeTracker = {
 
     },
 
-
+    
     addNodeToChange: function(changeid, ctNode, replaceNode)
     {
         if (this._batchChangeid !== null) {
@@ -6207,7 +6347,7 @@ var ViperChangeTracker = {
 
     },
 
-
+    
     setDescriptionCallback: function(ctnType, callback)
     {
         this._descCallbacks[ctnType] = callback;
@@ -6484,7 +6624,7 @@ var ViperChangeTracker = {
 
     },
 
-
+    
     removeTrackChanges: function(node, nodeOnly)
     {
         if (ViperChangeTracker.isTracking() !== true) {
@@ -6541,7 +6681,7 @@ var ViperChangeTracker = {
 
     },
 
-
+    
     setCTData: function(node, type, value)
     {
         if (!node || !type) {
@@ -6620,7 +6760,7 @@ var ViperChangeTracker = {
 
     },
 
-
+     
     getTrackingInfo: function(elem)
     {
         var info    = null;
@@ -6695,25 +6835,25 @@ function ViperDOMRange(rangeObj)
 {
     this.rangeObj = rangeObj;
 
-
+    
     this.startContainer = null;
 
-
+    
     this.endContainer = null;
 
-
+    
     this.startOffset = 0;
 
-
+    
     this.endOffset = 0;
 
-
+    
     this.collapsed = true;
 
-
+    
     this.commonAncestorContainer = null;
 
-
+    
     this.anchorToStart = 'undefined';
 
 }
@@ -6743,91 +6883,91 @@ ViperDOMRange.LINE_UNIT = 'line';
 
 ViperDOMRange.prototype = {
 
-
+    
     setStart: function(node, offset) {},
 
-
+    
     setEnd: function(node, offset) {},
 
-
+    
     setStartBefore: function(node) {},
 
-
+    
     setStartAfter: function(node) {},
 
-
+    
     setEndBefore: function(node) {},
 
-
+    
     setEndAfter: function(node) {},
 
-
+    
     selectNode: function(node) {},
 
-
+    
     selectNodeContents: function(node) {},
 
-
+    
     surroundContents: function(node) {},
 
-
+    
     collapse: function(toStart) {},
 
     // Range Comparisons.
-
+    
     compareBoundaryPoints: function(how, sourceRange) {},
 
     // Extract Content.
-
+    
     deleteContents: function() {},
 
-
+    
     extractContents: function() {},
 
-
+    
     cloneContents: function() {},
 
     // Inserting.
-
+    
     insertNode: function(node) {},
 
     // Misc.
-
+    
     cloneRange: function() {},
 
-
+    
     toString: function() {},
 
-
+    
     detach: function() {},
 
+    
 
-
-
+    
     getCommonElement: function () {},
 
-
+    
     moveStart: function(unitType, units) {},
 
-
+    
     moveEnd: function(unitType, units) {},
 
-
+    
     setAnchor: function(toStart) {},
 
-
+    
     setFocus: function(node, offset) {},
 
-
+    
     moveFocus: function(unitType, units) {},
 
-
+    
     getRangeCoords: function(toStart) {},
 
-
+    
     getBoundingClientRect: function() {},
 
-
+    
     getPreviousContainer: function(container, skippedBlockElem, skipEmptyNodes, brIsSelectable)
     {
         if (!container) {
@@ -6891,7 +7031,7 @@ ViperDOMRange.prototype = {
 
     },
 
-
+    
     getNextContainer: function(container, skippedBlockElem, skipSpaceTextNodes, brIsSelectable)
     {
         if (!container) {
@@ -6927,7 +7067,10 @@ ViperDOMRange.prototype = {
         }
 
         var selChild = this._getFirstSelectableChild(container, brIsSelectable);
-        if (selChild !== null && (skipSpaceTextNodes !== true || ViperUtil.trim(selChild.data) !== '')) {
+        if (selChild !== null
+            && (brIsSelectable === true && ViperUtil.isTag(selChild, 'br') === true)
+            || (skipSpaceTextNodes !== true || ViperUtil.trim(selChild.data) !== '')
+        ) {
             return selChild;
         }
 
@@ -7112,10 +7255,10 @@ ViperDOMRange.prototype = {
 
     },
 
-
+    
     _nodeSel: {},
 
-
+    
     clearNodeSelectionCache: function()
     {
         this._nodeSel = {};
@@ -7460,7 +7603,7 @@ function ViperHistoryManager(viper)
 
 ViperHistoryManager.prototype = {
 
-
+    
     add: function(source, action)
     {
         if (this._ignoreAdd === true) {
@@ -7546,7 +7689,7 @@ ViperHistoryManager.prototype = {
 
     },
 
-
+    
     undo: function()
     {
         if (this.viper._subElementActive === true) {
@@ -7643,7 +7786,7 @@ ViperHistoryManager.prototype = {
 
     },
 
-
+    
     clear: function()
     {
         this.undoHistory = [];
@@ -7739,7 +7882,7 @@ ViperHistoryManager.prototype = {
 
     },
 
-
+    
     begin: function()
     {
         this.batchCount++;
@@ -7750,7 +7893,7 @@ ViperHistoryManager.prototype = {
 
     },
 
-
+    
     end: function()
     {
         this.batchCount--;
@@ -7790,16 +7933,16 @@ function ViperIERange(rangeObj)
     this._prevHeight    = null;
     this._prevContainer = null;
 
-
+    
     ViperDOMRange.START_TO_START = 'StartToStart';
 
-
+    
     ViperDOMRange.START_TO_END = 'StartToEnd';
 
-
+    
     ViperDOMRange.END_TO_END = 'EndToEnd';
 
-
+    
     ViperDOMRange.END_TO_START = 'EndToStart';
 
 }
@@ -7816,7 +7959,7 @@ ViperIERange._prevRange = {
 ViperIERange.prototype = {
 
 
-
+    
     _initContainerInfo: function()
     {
         var clone  = this.rangeObj.duplicate();
@@ -7890,7 +8033,7 @@ ViperIERange.prototype = {
     },
 
     // Range Select Modifiers.
-
+    
     setStart: function(node, offset)
     {
         if (document.activeElement && ViperUtil.isTag(document.activeElement, 'input')) {
@@ -7933,7 +8076,7 @@ ViperIERange.prototype = {
 
     },
 
-
+    
     setEnd: function(node, offset)
     {
         if (document.activeElement && ViperUtil.isTag(document.activeElement, 'input')) {
@@ -7976,7 +8119,7 @@ ViperIERange.prototype = {
 
     },
 
-
+    
     setStartBefore: function(node)
     {
         // Looks like Firefox setStartBefore() method sets the range to
@@ -7986,18 +8129,18 @@ ViperIERange.prototype = {
 
     },
 
-
+    
     setStartAfter: function(node)
     {
         var next = this.getNextContainer(node);
         this.setStart(next, 0);
-
+        
         this._setCollapsed();
         this._setCommonAncestorContainer();
 
     },
 
-
+    
     setEndBefore: function(node)
     {
         var previous = this.getPreviousContainer(node);
@@ -8015,14 +8158,14 @@ ViperIERange.prototype = {
 
     },
 
-
+    
     setEndAfter: function(node)
     {
         this.setEnd(node.parentNode, this.getNodeIndex(node) + 1);
 
     },
 
-
+    
     selectNode: function(node)
     {
         if (node.nodeType === ViperUtil.TEXT_NODE) {
@@ -8068,7 +8211,7 @@ ViperIERange.prototype = {
 
     },
 
-
+    
     selectNodeContents: function(node)
     {
         if (node.nodeType === ViperUtil.TEXT_NODE) {
@@ -8084,7 +8227,7 @@ ViperIERange.prototype = {
 
     },
 
-
+    
     surroundContents: function(node)
     {
         var contents = this.extractContents();
@@ -8093,7 +8236,7 @@ ViperIERange.prototype = {
 
     },
 
-
+    
     collapse: function(toStart)
     {
         this.rangeObj.collapse(toStart);
@@ -8110,7 +8253,7 @@ ViperIERange.prototype = {
     },
 
     // Range Comparisons.
-
+    
     compareBoundaryPoints: function(how, sourceRange)
     {
         return this.rangeObj.compareEndPoints(how, sourceRange.rangeObj);
@@ -8118,7 +8261,7 @@ ViperIERange.prototype = {
     },
 
     // Extract Content.
-
+    
     deleteContents: function()
     {
         if (this.startContainer === this.endContainer
@@ -8149,7 +8292,7 @@ ViperIERange.prototype = {
 
     },
 
-
+    
     extractContents: function()
     {
         var fragment = Viper.document.createDocumentFragment();
@@ -8186,7 +8329,7 @@ ViperIERange.prototype = {
 
     },
 
-
+    
     cloneContents: function()
     {
         var fragment = this.createDocumentFragment(this.rangeObj.htmlText);
@@ -8195,7 +8338,7 @@ ViperIERange.prototype = {
     },
 
     // Inserting.
-
+    
     insertNode: function(node)
     {
         var before = null;
@@ -8237,7 +8380,7 @@ ViperIERange.prototype = {
     },
 
     // Misc.
-
+    
     cloneRange: function()
     {
         var range = new ViperIERange(this.rangeObj.duplicate());
@@ -8252,7 +8395,7 @@ ViperIERange.prototype = {
 
     },
 
-
+    
     detach: function()
     {
         this.rangeObj = null;
@@ -8277,7 +8420,7 @@ ViperIERange.prototype = {
 
     },
 
-
+    
     _setCollapsed: function()
     {
         if (this.startContainer === this.endContainer && this.startOffset === this.endOffset) {
@@ -8288,7 +8431,7 @@ ViperIERange.prototype = {
 
     },
 
-
+    
     _setCommonAncestorContainer: function()
     {
         if (this.startContainer === this.endContainer) {
@@ -8299,7 +8442,7 @@ ViperIERange.prototype = {
 
     },
 
-
+    
     _getContainerInfo: function(textRange)
     {
         var element = textRange.parentElement();
@@ -8411,7 +8554,7 @@ ViperIERange.prototype = {
 
     },
 
-
+    
     _getCharOffsetWithinParent: function(node, offset)
     {
         // NEW Version: 08-01-09 (Thanks to Mozile).
@@ -8451,7 +8594,7 @@ ViperIERange.prototype = {
     },
 
 
-
+    
     moveStart: function(unitType, units, updateInfo)
     {
         switch (unitType) {
@@ -8488,7 +8631,7 @@ ViperIERange.prototype = {
 
     },
 
-
+    
     moveEnd: function(unitType, units)
     {
         switch (unitType) {
@@ -8517,7 +8660,7 @@ ViperIERange.prototype = {
 
     },
 
-
+    
     _moveLine: function(moveStart, units)
     {
         // Clone the range and work with cloned range.
@@ -8615,7 +8758,7 @@ ViperIERange.prototype = {
 
     },
 
-
+    
     getCommonElement: function()
     {
         var parentEl = this.rangeObj.parentElement();
@@ -8643,7 +8786,7 @@ ViperIERange.prototype = {
 
     },
 
-
+    
     getRangeCoords: function(toStart)
     {
         var clone = this.cloneRange();
@@ -8711,7 +8854,7 @@ ViperIERange.prototype = {
 
 
 
-
+    
     getBoundingClientRect: function()
     {
         return this.rangeObj.getBoundingClientRect();
@@ -8732,7 +8875,7 @@ ViperIERange.prototype = {
 
     },
 
-
+    
     toString: function()
     {
         var text = this.rangeObj.text;
@@ -8761,23 +8904,23 @@ function ViperMozRange(rangeObj)
 
     this.posSpan = Viper.document.createElement('span');
 
-
+    
     ViperDOMRange.START_TO_START = Range.START_TO_START;
 
-
+    
     ViperDOMRange.START_TO_END = Range.END_TO_START;
 
-
+    
     ViperDOMRange.END_TO_END = Range.END_TO_END;
 
-
+    
     ViperDOMRange.END_TO_START = Range.START_TO_END;
 
 }
 
 ViperMozRange.prototype = {
 
-
+    
     setStart: function(node, offset)
     {
         this.rangeObj.setStart(node, offset);
@@ -8795,7 +8938,7 @@ ViperMozRange.prototype = {
 
     },
 
-
+    
     setEnd: function(node, offset)
     {
         this.rangeObj.setEnd(node, offset);
@@ -8812,7 +8955,7 @@ ViperMozRange.prototype = {
 
     },
 
-
+    
     setStartBefore: function(node)
     {
         this.rangeObj.setStartBefore(node);
@@ -8826,7 +8969,7 @@ ViperMozRange.prototype = {
 
     },
 
-
+    
     setStartAfter: function(node)
     {
         this.rangeObj.setStartAfter(node);
@@ -8840,7 +8983,7 @@ ViperMozRange.prototype = {
 
     },
 
-
+    
     setEndBefore: function(node)
     {
         this.rangeObj.setEndBefore(node);
@@ -8854,7 +8997,7 @@ ViperMozRange.prototype = {
 
     },
 
-
+    
     setEndAfter: function(node)
     {
         this.rangeObj.setEndAfter(node);
@@ -8868,7 +9011,7 @@ ViperMozRange.prototype = {
 
     },
 
-
+    
     selectNode: function(node)
     {
         this.rangeObj.selectNode(node);
@@ -8883,7 +9026,7 @@ ViperMozRange.prototype = {
 
     },
 
-
+    
     selectNodeContents: function(node)
     {
         this.rangeObj.selectNodeContents(node);
@@ -8897,7 +9040,7 @@ ViperMozRange.prototype = {
 
     },
 
-
+    
     surroundContents: function(node)
     {
         this.rangeObj.surroundContents(node);
@@ -8912,7 +9055,7 @@ ViperMozRange.prototype = {
 
     },
 
-
+    
     collapse: function(toStart)
     {
         this.rangeObj.collapse(toStart);
@@ -8929,7 +9072,7 @@ ViperMozRange.prototype = {
     },
 
     // Range Comparisons.
-
+    
     compareBoundaryPoints: function(how, sourceRange)
     {
         return this.rangeObj.compareBoundaryPoints(how, sourceRange.rangeObj);
@@ -8937,7 +9080,7 @@ ViperMozRange.prototype = {
     },
 
     // Extract Content.
-
+    
     deleteContents: function(viperElem, defaultTagName)
     {
         var startContainer = this.startContainer;
@@ -9032,7 +9175,7 @@ ViperMozRange.prototype = {
 
     },
 
-
+    
     extractContents: function()
     {
         return this.rangeObj.extractContents();
@@ -9061,7 +9204,7 @@ ViperMozRange.prototype = {
 
     },
 
-
+    
     cloneContents: function()
     {
         return this.rangeObj.cloneContents();
@@ -9069,7 +9212,7 @@ ViperMozRange.prototype = {
     },
 
     // Inserting.
-
+    
     insertNode: function(node)
     {
         if (this.startContainer.nodeType === ViperUtil.ELEMENT_NODE) {
@@ -9106,7 +9249,7 @@ ViperMozRange.prototype = {
     },
 
     // Misc.
-
+    
     cloneRange: function()
     {
         var clone = this.rangeObj.cloneRange();
@@ -9114,14 +9257,14 @@ ViperMozRange.prototype = {
 
     },
 
-
+    
     toString: function()
     {
         return this.rangeObj.toString();
 
     },
 
-
+    
     detach: function()
     {
         this.rangeObj.detach();
@@ -9165,7 +9308,7 @@ ViperMozRange.prototype = {
 
     },
 
-
+    
     getRangeCoords: function(toStart)
     {
         var clone = this.rangeObj.cloneRange();
@@ -9340,7 +9483,7 @@ ViperMozRange.prototype = {
 
     },
 
-
+    
     getStartOffset: function(incSpaces)
     {
         if (incSpaces === true) {
@@ -9738,7 +9881,7 @@ ViperPluginManager.prototype = {
         for (var i = 0; i < c; i++) {
             var pluginName     = '';
             var pluginSettings = null;
-            if (typeof plugin === 'object') {
+            if (typeof plugins[i] === 'object') {
                 pluginName     = plugins[i].name;
                 pluginSettings = plugins[i].settings;
             } else {
@@ -9812,7 +9955,7 @@ ViperPluginManager.prototype = {
 
     },
 
-
+    
     removePlugin: function(pluginName)
     {
         if (this._plugins[pluginName]) {
@@ -9832,7 +9975,7 @@ ViperPluginManager.prototype = {
 
     },
 
-
+    
     removePlugins: function(pluginNames)
     {
         if (!pluginNames) {
@@ -9848,7 +9991,7 @@ ViperPluginManager.prototype = {
 
     },
 
-
+    
     getPlugin: function(name)
     {
         return this._plugins[name];
@@ -9904,7 +10047,7 @@ var ViperSelection = {
 
     _viper: null,
 
-
+    
     _getSelection: function()
     {
         if (Viper.document.selection) {
@@ -9919,7 +10062,7 @@ var ViperSelection = {
 
     },
 
-
+    
     createRange: function()
     {
          var rangeObj = null;
@@ -9935,7 +10078,7 @@ var ViperSelection = {
 
     },
 
-
+    
     getRangeAt: function(pos)
     {
         this._selection = ViperSelection._getSelection();
@@ -9969,7 +10112,7 @@ var ViperSelection = {
 
     },
 
-
+    
     addRange: function(range)
     {
         this._selection = ViperSelection._getSelection();
@@ -10028,16 +10171,20 @@ function ViperTools(viper)
 {
     this.viper = viper;
 
-    this._items = {};
+    this._items          = {};
     this._preventMouseUp = false;
 
     var self = this;
-    this.viper.registerCallback('Viper:mouseUp', 'ViperTools', function(e) {
-        if (self._preventMouseUp === true) {
-            self._preventMouseUp = false;
-            return false;
+    this.viper.registerCallback(
+        'Viper:mouseUp',
+        'ViperTools',
+        function(e) {
+            if (self._preventMouseUp === true) {
+                self._preventMouseUp = false;
+                return false;
+            }
         }
-    });
+    );
 
 }
 
@@ -10066,6 +10213,7 @@ ViperTools.prototype = {
         this.viper.removeCallback(null, id);
 
         this.viper.fireCallbacks('ViperTools:itemRemoved', id);
+
     },
 
     getItem: function(id)
@@ -10083,16 +10231,19 @@ ViperTools.prototype = {
             ViperUtil.addClass(elem, customClass);
         }
 
-        this.addItem(id, {
-            type: 'row',
-            element: elem
-        });
+        this.addItem(
+            id,
+            {
+                type: 'row',
+                element: elem
+            }
+        );
 
         return elem;
 
     },
 
-
+    
     createButtonGroup: function(id, customClass)
     {
         var group = document.createElement('div');
@@ -10102,18 +10253,21 @@ ViperTools.prototype = {
             ViperUtil.addClass(group, customClass);
         }
 
-        this.addItem(id, {
-            type: 'buttonGroup',
-            element: group,
-            buttons: []
-        });
+        this.addItem(
+            id,
+            {
+                type: 'buttonGroup',
+                element: group,
+                buttons: []
+            }
+        );
 
         return group;
 
     },
 
 
-
+    
     createButton: function(id, content, titleAttr, customClass, clickAction, disabled, isActive)
     {
         if (!content) {
@@ -10153,105 +10307,118 @@ ViperTools.prototype = {
         var preventMouseUp = false;
         var self           = this;
         if (clickAction) {
-            ViperUtil.addEvent(button, 'mousedown.' + this.viper.getEventNamespace(), function(e) {
-                if (ViperUtil.isBrowser('msie', '<11') === true) {
-                    // This block of code prevents IE moving user selection to the.
-                    // button element when clicked. When the button element is removed
-                    // and added back to DOM selection is not moved. Seriously, IE?
-                    if (button.previousSibling) {
-                        var sibling = button.previousSibling;
-                        button.parentNode.removeChild(button);
-                        ViperUtil.insertAfter(sibling, button);
-                    } else if (button.nextSibling) {
-                        var sibling = button.nextSibling;
-                        button.parentNode.removeChild(button);
-                        ViperUtil.insertBefore(sibling, button);
-                    } else {
-                        var parent = button.parentNode;
-                        button.parentNode.removeChild(button);
-                        parent.appendChild(button);
+            ViperUtil.addEvent(
+                button,
+                'mousedown.' + this.viper.getEventNamespace(),
+                function(e) {
+                    if (ViperUtil.isBrowser('msie', '<11') === true) {
+                        // This block of code prevents IE moving user selection to the.
+                        // button element when clicked. When the button element is removed
+                        // and added back to DOM selection is not moved. Seriously, IE?
+                        if (button.previousSibling) {
+                            var sibling = button.previousSibling;
+                            button.parentNode.removeChild(button);
+                            ViperUtil.insertAfter(sibling, button);
+                        } else if (button.nextSibling) {
+                            var sibling = button.nextSibling;
+                            button.parentNode.removeChild(button);
+                            ViperUtil.insertBefore(sibling, button);
+                        } else {
+                            var parent = button.parentNode;
+                            button.parentNode.removeChild(button);
+                            parent.appendChild(button);
+                        }
+                    }//end if
+
+                    self._preventMouseUp = true;
+                    ViperUtil.preventDefault(e);
+                    if (ViperUtil.hasClass(button, 'Viper-disabled') === true) {
+                        return false;
                     }
-                }//end if
 
-                self._preventMouseUp = true;
-                ViperUtil.preventDefault(e);
-                if (ViperUtil.hasClass(button, 'Viper-disabled') === true) {
-                    return false;
+                    setTimeout(
+                        function() {
+                            // Incase button is moved/removed during the click action.
+                            self._preventMouseUp = false;
+                        },
+                        200
+                    );
+
+                    self.viper.fireCallbacks('ViperTools:buttonClicked', id);
+                    return clickAction.call(this, e);
                 }
-
-                setTimeout(function() {
-                    // Incase button is moved/removed during the click action.
-                    self._preventMouseUp = false;
-                }, 200);
-
-                self.viper.fireCallbacks('ViperTools:buttonClicked', id);
-                return clickAction.call(this, e);
-            });
+            );
         }//end if
 
-        ViperUtil.addEvent(button, 'mouseup.' + this.viper.getEventNamespace(), function(e) {
-            mouseUpAction.call(this, e);
-            self._preventMouseUp = false;
-            ViperUtil.preventDefault(e);
-            return false;
-        });
+        ViperUtil.addEvent(
+            button,
+            'mouseup.' + this.viper.getEventNamespace(),
+            function(e) {
+                mouseUpAction.call(this, e);
+                self._preventMouseUp = false;
+                ViperUtil.preventDefault(e);
+                return false;
+            }
+        );
 
         if (isActive === true) {
             ViperUtil.addClass(button, 'Viper-active');
         }
 
-        this.addItem(id, {
-            type: 'button',
-            element: button,
-            setIconClass: function(iconClass)
+        this.addItem(
+            id,
             {
-                var btnIconElem = ViperUtil.getClass('Viper-buttonIcon', button);
-                if (btnIconElem.length === 0) {
-                    btnIconElem = document.createElement('span');
-                    ViperUtil.addClass(btnIconElem, 'Viper-buttonIcon');
-                    ViperUtil.insertBefore(button.firstChild, btnIconElem);
-                } else {
-                    btnIconElem = btnIconElem[0];
-                    btnIconElem.className = 'Viper-buttonIcon';
-                }
-
-                ViperUtil.addClass(btnIconElem, iconClass);
-            },
-            setButtonShortcut: function(key)
-            {
-                var extraTitleAttr = ' (' + key + ')';
-                if (extraTitleAttr.indexOf('CTRL') >= 0) {
-                    if (navigator.platform.indexOf('Mac') >= 0) {
-                        extraTitleAttr = extraTitleAttr.replace('CTRL', 'CMD');
+                type: 'button',
+                element: button,
+                setIconClass: function(iconClass) {
+                    var btnIconElem = ViperUtil.getClass('Viper-buttonIcon', button);
+                    if (btnIconElem.length === 0) {
+                        btnIconElem = document.createElement('span');
+                        ViperUtil.addClass(btnIconElem, 'Viper-buttonIcon');
+                        ViperUtil.insertBefore(button.firstChild, btnIconElem);
+                    } else {
+                        btnIconElem           = btnIconElem[0];
+                        btnIconElem.className = 'Viper-buttonIcon';
                     }
-                }
 
-                button.setAttribute('title', titleAttr + extraTitleAttr);
-
-                self.viper.registerCallback('Viper:keyDown', 'ViperTools-' + id, function(e) {
-                    if (self.viper.isKey(e, key) === true) {
-                        if (ViperUtil.hasClass(button, 'Viper-disabled') !== true) {
-                            clickAction.call(e, button);
+                    ViperUtil.addClass(btnIconElem, iconClass);
+                },
+                setButtonShortcut: function(key) {
+                    var extraTitleAttr = ' (' + key + ')';
+                    if (extraTitleAttr.indexOf('CTRL') >= 0) {
+                        if (navigator.platform.indexOf('Mac') >= 0) {
+                            extraTitleAttr = extraTitleAttr.replace('CTRL', 'CMD');
                         }
-
-                        return false;
                     }
-                });
-            },
-            setMouseUpAction: function(callback)
-            {
-                mouseUpAction = callback;
-            },
-            isEnabled: function()
-            {
-                return !this._disabled;
-            },
-            isActive: function()
-            {
-                return ViperUtil.hasClass(button, 'Viper-active');
-            },
-            _disabled: disabled
-        });
+
+                    button.setAttribute('title', titleAttr + extraTitleAttr);
+
+                    self.viper.registerCallback(
+                        'Viper:keyDown',
+                        'ViperTools-' + id,
+                        function(e) {
+                            if (self.viper.isKey(e, key) === true) {
+                                if (ViperUtil.hasClass(button, 'Viper-disabled') !== true) {
+                                    clickAction.call(e, button);
+                                }
+
+                                return false;
+                            }
+                        }
+                    );
+                },
+                setMouseUpAction: function(callback) {
+                    mouseUpAction = callback;
+                },
+                isEnabled: function() {
+                    return !this._disabled;
+                },
+                isActive: function() {
+                    return ViperUtil.hasClass(button, 'Viper-active');
+                },
+                _disabled: disabled
+            }
+        );
 
         return button;
 
@@ -10273,13 +10440,21 @@ ViperTools.prototype = {
 
     setButtonInactive: function(buttonid)
     {
-        ViperUtil.removeClass(this.getItem(buttonid).element, 'Viper-active');
+        var button = this.getItem(buttonid);
+        if (!button) {
+            return;
+        }
+
+        ViperUtil.removeClass(button.element, 'Viper-active');
 
     },
 
     setButtonActive: function(buttonid)
     {
         var button = this.getItem(buttonid);
+        if (!button) {
+            return;
+        }
 
         ViperUtil.addClass(button.element, 'Viper-active');
         this.enableButton(buttonid);
@@ -10289,7 +10464,7 @@ ViperTools.prototype = {
     enableButton: function(buttonid)
     {
         var buttonObj = this.getItem(buttonid);
-        if (buttonObj.isEnabled() === true) {
+        if (!buttonObj || buttonObj.isEnabled() === true) {
             return;
         }
 
@@ -10324,10 +10499,11 @@ ViperTools.prototype = {
 
     },
 
-
+    
     createTextbox: function(id, label, value, action, required, expandable, desc, events, labelWidth)
     {
         return this._createTextbox(id, label, value, action, required, expandable, desc, events, labelWidth);
+
     },
 
     createTextarea: function(id, label, value, required, desc, events, labelWidth, rows, cols)
@@ -10419,9 +10595,13 @@ ViperTools.prototype = {
             // the caret is placed to the start of the field instead of the end,
             // so when the mouse is used to focus in to the field we do not move it
             // to the end of the textbox.
-            ViperUtil.addEvent(input, 'mousedown', function(e) {
-                moveCaretToEnd = false;
-            });
+            ViperUtil.addEvent(
+                input,
+                'mousedown',
+                function(e) {
+                    moveCaretToEnd = false;
+                }
+            );
         }
 
         // IE paste fix.
@@ -10432,75 +10612,93 @@ ViperTools.prototype = {
                 input.value = window.clipboardData.getData("Text");
                 return false;
             }
-
         };
 
         var self = this;
-        ViperUtil.addEvent(input, 'focus', function(e) {
-            ViperUtil.addClass(textBox, 'Viper-focused');
-            self.viper.highlightSelection();
+        ViperUtil.addEvent(
+            input,
+            'focus',
+            function(e) {
+                ViperUtil.addClass(textBox, 'Viper-focused');
+                self.viper.highlightSelection();
 
-            if (ViperUtil.isBrowser('msie') === true) {
-                if (moveCaretToEnd === true) {
-                    setTimeout(function() {
-                        if (ViperUtil.isBrowser('msie', '>=11') === true) {
-                            var textRange = input.createTextRange();
-                            textRange.move('character', input.value.length)
-                            textRange.select();
-                        } else {
-                            input.focus();
-                            // Set the caret to the end of the textfield.
-                            input.value = input.value;
-                        }
-                    }, 10);
+                if (ViperUtil.isBrowser('msie') === true) {
+                    if (moveCaretToEnd === true) {
+                        setTimeout(
+                            function() {
+                                if (ViperUtil.isBrowser('msie', '>=11') === true) {
+                                    var textRange = input.createTextRange();
+                                    textRange.move('character', input.value.length)
+                                    textRange.select();
+                                } else {
+                                    input.focus();
+                                    // Set the caret to the end of the textfield.
+                                    input.value = input.value;
+                                }
+                            },
+                            10
+                        );
+                    }
+
+                    moveCaretToEnd = true;
+                } else {
+                    // Set the caret to the end of the textfield.
+                    input.value = input.value;
+                }//end if
+
+                if (ViperUtil.isBrowser('firefox') === true) {
+                    setTimeout(
+                        function() {
+                            input.selectionStart = input.value.length;
+                        },
+                        2
+                    );
                 }
-
-                moveCaretToEnd = true;
-            } else {
-                // Set the caret to the end of the textfield.
-                input.value = input.value;
             }
+        );
 
-            if (ViperUtil.isBrowser('firefox') === true) {
-                setTimeout(function() {
-                    input.selectionStart = input.value.length;
-                }, 2);
+        ViperUtil.addEvent(
+            input,
+            'blur',
+            function() {
+                ViperUtil.removeClass(textBox, 'Viper-active');
             }
-        });
+        );
 
-        ViperUtil.addEvent(input, 'blur', function() {
-            ViperUtil.removeClass(textBox, 'Viper-active');
-        });
-
-        var changed = false;
+        var changed          = false;
         var _addActionButton = function() {
             var actionIcon = document.createElement('span');
             ViperUtil.addClass(actionIcon, 'Viper-textbox-action');
             main.appendChild(actionIcon);
-            ViperUtil.addEvent(actionIcon, 'click', function() {
-                if (ViperUtil.hasClass(textBox, 'Viper-actionRevert') === true) {
-                    input.value = value;
-                    ViperUtil.removeClass(textBox, 'Viper-actionRevert');
-                    ViperUtil.addClass(textBox, 'Viper-actionClear');
-                    actionIcon.setAttribute('title', 'Clear this value');
-                } else if (ViperUtil.hasClass(textBox, 'Viper-actionClear') === true) {
-                    input.value = '';
-                    ViperUtil.removeClass(textBox, 'Viper-actionClear');
+            ViperUtil.addEvent(
+                actionIcon,
+                'click',
+                function() {
+                    if (ViperUtil.hasClass(textBox, 'Viper-actionRevert') === true) {
+                        input.value = value;
+                        ViperUtil.removeClass(textBox, 'Viper-actionRevert');
+                        ViperUtil.addClass(textBox, 'Viper-actionClear');
+                        actionIcon.setAttribute('title', 'Clear this value');
+                    } else if (ViperUtil.hasClass(textBox, 'Viper-actionClear') === true) {
+                        value       = input.value;
+                        input.value = '';
+                        ViperUtil.removeClass(textBox, 'Viper-actionClear');
 
-                    if (value) {
-                        ViperUtil.addClass(textBox, 'Viper-actionRevert');
-                        actionIcon.setAttribute('title', 'Revert to original value');
-                        if (required === true) {
+                        if (value) {
+                            ViperUtil.addClass(textBox, 'Viper-actionRevert');
+                            actionIcon.setAttribute('title', 'Revert to original value');
+                            if (required === true) {
+                                ViperUtil.addClass(textBox, 'Viper-required');
+                            }
+                        } else if (required === true) {
                             ViperUtil.addClass(textBox, 'Viper-required');
+                            ViperUtil.setStyle(actionIcon, 'display', 'none');
                         }
-                    } else if (required === true) {
-                        ViperUtil.addClass(textBox, 'Viper-required');
-                        ViperUtil.setStyle(actionIcon, 'display', 'none');
-                    }
-                }
+                    }//end if
 
-                self.viper.fireCallbacks('ViperTools:changed:' + id);
-            });
+                    self.viper.fireCallbacks('ViperTools:changed:' + id);
+                }
+            );
 
             return actionIcon;
         };
@@ -10511,83 +10709,11 @@ ViperTools.prototype = {
             ViperUtil.addClass(textBox, 'Viper-actionClear');
         }
 
-        ViperUtil.addEvent(input, 'keyup', function(e) {
-            ViperUtil.addClass(textBox, 'Viper-focused');
-
-            if (isTextArea !== true) {
-                var actionIcon = ViperUtil.getClass('Viper-textbox-action', main);
-                if (actionIcon.length === 0) {
-                    actionIcon = _addActionButton();
-                } else {
-                    actionIcon = actionIcon[0];
-                }
-            }
-
-            ViperUtil.setStyle(actionIcon, 'display', 'block');
-            ViperUtil.setStyle(actionIcon, 'visibility', 'visible');
-
-            ViperUtil.removeClass(textBox, 'Viper-actionClear');
-            ViperUtil.removeClass(textBox, 'Viper-actionRevert');
-
-            if (input.value !== value && value !== '') {
-                // Show the revert icon.
-                if (isTextArea !== true) {
-                    actionIcon.setAttribute('title', 'Revert to original value');
-                    ViperUtil.addClass(textBox, 'Viper-actionRevert');
-                }
-
-                ViperUtil.removeClass(textBox, 'Viper-required');
-            } else if (input.value !== '') {
-                if (isTextArea !== true) {
-                    actionIcon.setAttribute('title', 'Clear this value');
-                    ViperUtil.addClass(textBox, 'Viper-actionClear');
-                }
-
-                ViperUtil.removeClass(textBox, 'Viper-required');
-            } else {
-                if (isTextArea !== true) {
-                    ViperUtil.setStyle(actionIcon, 'display', 'none');
-                }
-
-                if (required === true) {
-                    ViperUtil.addClass(textBox, 'Viper-required');
-                }
-            }
-
-            if ((e.which !== 13 || isTextArea === true) && (input.value !== value)) {
-                self.viper.fireCallbacks('ViperTools:changed:' + id);
-            }
-
-            // Action.
-            if (action && e.which === 13) {
-                self.viper.focus();
-                action.call(input, input.value);
-            } else if (!action && e.which === 13 && isTextArea !== true && (ViperUtil.isBrowser('chrome') || ViperUtil.isBrowser('safari'))) {
-                var forms = ViperUtil.getParents(main, 'form', self.viper.getViperElement());
-                if (forms.length > 0 && ViperUtil.getTag('input', forms[0]).length > 2) {
-                    return forms[0].onsubmit();
-                }
-            }
-        });
-
-        if (events) {
-            for (var eventType in events) {
-                ViperUtil.addEvent(input, eventType, events[eventType]);
-            }
-        }
-
-        this.addItem(id, {
-            type: 'textbox',
-            element: textBox,
-            input: input,
-            label: labelEl,
-            required: required,
-            getValue: function() {
-                return input.value;
-            },
-            setValue: function(newValue, isInitialValue) {
-                input.value = newValue;
-                value       = newValue;
+        ViperUtil.addEvent(
+            input,
+            'keyup',
+            function(e) {
+                ViperUtil.addClass(textBox, 'Viper-focused');
 
                 if (isTextArea !== true) {
                     var actionIcon = ViperUtil.getClass('Viper-textbox-action', main);
@@ -10596,62 +10722,138 @@ ViperTools.prototype = {
                     } else {
                         actionIcon = actionIcon[0];
                     }
-
-                    ViperUtil.setStyle(actionIcon, 'display', 'block');
                 }
+
+                ViperUtil.setStyle(actionIcon, 'display', 'block');
+                ViperUtil.setStyle(actionIcon, 'visibility', 'visible');
 
                 ViperUtil.removeClass(textBox, 'Viper-actionClear');
                 ViperUtil.removeClass(textBox, 'Viper-actionRevert');
 
-                if (isTextArea !== true) {
-                    if (input.value !== value && value !== '') {
-                        // Show the revert icon.
+                if (input.value !== value && value !== '') {
+                    // Show the revert icon.
+                    if (isTextArea !== true) {
                         actionIcon.setAttribute('title', 'Revert to original value');
                         ViperUtil.addClass(textBox, 'Viper-actionRevert');
-                        ViperUtil.removeClass(textBox, 'Viper-required');
-                    } else if (input.value !== '') {
+                    }
+
+                    ViperUtil.removeClass(textBox, 'Viper-required');
+                } else if (input.value !== '') {
+                    if (isTextArea !== true) {
                         actionIcon.setAttribute('title', 'Clear this value');
                         ViperUtil.addClass(textBox, 'Viper-actionClear');
-                        ViperUtil.removeClass(textBox, 'Viper-required');
-                    } else {
-                        ViperUtil.setStyle(actionIcon, 'display', 'none');
-                        if (required === true) {
-                            ViperUtil.addClass(textBox, 'Viper-required');
-                        }
                     }
-                }
 
-                if (isInitialValue === false) {
-                    self.viper.fireCallbacks('ViperTools:changed:' + id);
-                }
-            },
-            disable: function()
-            {
-                ViperUtil.addClass(textBox, 'Viper-disabled');
-                input.setAttribute('disabled', true);
-                input.blur();
-            },
-            enable: function()
-            {
-                ViperUtil.removeClass(textBox, 'Viper-disabled');
-                input.removeAttribute('disabled');
-            },
-            setRequired: function(required)
-            {
-                if (required === true) {
-                    input.setAttribute('placeholder', _('required'));
+                    ViperUtil.removeClass(textBox, 'Viper-required');
+                } else {
+                    if (isTextArea !== true) {
+                        ViperUtil.setStyle(actionIcon, 'display', 'none');
+                    }
 
-                    if (ViperUtil.trim(input.value) === '') {
+                    if (required === true) {
                         ViperUtil.addClass(textBox, 'Viper-required');
                     }
-                } else {
-                    ViperUtil.removeClass(textBox, 'Viper-required');
-                    input.removeAttribute('placeholder');
+                }//end if
+
+                if ((e.which !== 13 || isTextArea === true) && (input.value !== value)) {
+                    self.viper.fireCallbacks('ViperTools:changed:' + id);
                 }
 
-                this.required = required;
+                // Action.
+                if (action && e.which === 13) {
+                    self.viper.focus();
+                    action.call(input, input.value);
+                } else if (!action && e.which === 13 && isTextArea !== true && (ViperUtil.isBrowser('chrome') || ViperUtil.isBrowser('safari'))) {
+                    var forms = ViperUtil.getParents(main, 'form', self.viper.getViperElement());
+                    if (forms.length > 0 && ViperUtil.getTag('input', forms[0]).length > 2) {
+                        return forms[0].onsubmit();
+                    }
+                }
             }
-        });
+        );
+
+        if (events) {
+            for (var eventType in events) {
+                ViperUtil.addEvent(input, eventType, events[eventType]);
+            }
+        }
+
+        this.addItem(
+            id,
+            {
+                type: 'textbox',
+                element: textBox,
+                input: input,
+                label: labelEl,
+                required: required,
+                getValue: function() {
+                    return input.value;
+                },
+                setValue: function(newValue, isInitialValue) {
+                    input.value = newValue;
+                    value       = newValue;
+
+                    if (isTextArea !== true) {
+                        var actionIcon = ViperUtil.getClass('Viper-textbox-action', main);
+                        if (actionIcon.length === 0) {
+                            actionIcon = _addActionButton();
+                        } else {
+                            actionIcon = actionIcon[0];
+                        }
+
+                        ViperUtil.setStyle(actionIcon, 'display', 'block');
+                    }
+
+                    ViperUtil.removeClass(textBox, 'Viper-actionClear');
+                    ViperUtil.removeClass(textBox, 'Viper-actionRevert');
+
+                    if (isTextArea !== true) {
+                        if (input.value !== value && value !== '') {
+                            // Show the revert icon.
+                            actionIcon.setAttribute('title', 'Revert to original value');
+                            ViperUtil.addClass(textBox, 'Viper-actionRevert');
+                            ViperUtil.removeClass(textBox, 'Viper-required');
+                        } else if (input.value !== '') {
+                            actionIcon.setAttribute('title', 'Clear this value');
+                            ViperUtil.addClass(textBox, 'Viper-actionClear');
+                            ViperUtil.removeClass(textBox, 'Viper-required');
+                        } else {
+                            ViperUtil.setStyle(actionIcon, 'display', 'none');
+                            if (required === true) {
+                                ViperUtil.addClass(textBox, 'Viper-required');
+                            }
+                        }
+                    }
+
+                    if (isInitialValue === false) {
+                        self.viper.fireCallbacks('ViperTools:changed:' + id);
+                    }
+                },
+                disable: function() {
+                    ViperUtil.addClass(textBox, 'Viper-disabled');
+                    input.setAttribute('disabled', true);
+                    input.blur();
+                },
+                enable: function() {
+                    ViperUtil.removeClass(textBox, 'Viper-disabled');
+                    input.removeAttribute('disabled');
+                },
+                setRequired: function(required) {
+                    if (required === true) {
+                        input.setAttribute('placeholder', _('required'));
+
+                        if (ViperUtil.trim(input.value) === '') {
+                            ViperUtil.addClass(textBox, 'Viper-required');
+                        }
+                    } else {
+                        ViperUtil.removeClass(textBox, 'Viper-required');
+                        input.removeAttribute('placeholder');
+                    }
+
+                    this.required = required;
+                }
+            }
+        );
 
         return textBox;
 
@@ -10668,7 +10870,7 @@ ViperTools.prototype = {
 
     },
 
-
+    
     setFieldErrors: function(itemid, errors)
     {
         var item = this.getItem(itemid);
@@ -10708,7 +10910,7 @@ ViperTools.prototype = {
 
     },
 
-
+    
     createCheckbox: function(id, label, checked, changeCallback)
     {
         var labelElem = document.createElement('label');
@@ -10718,8 +10920,8 @@ ViperTools.prototype = {
             ViperUtil.addClass(labelElem, 'Viper-active');
         }
 
-        var checkbox  = document.createElement('input');
-        checkbox.type = 'checkbox';
+        var checkbox     = document.createElement('input');
+        checkbox.type    = 'checkbox';
         checkbox.checked = checked || false;
 
         var checkboxSwitch = document.createElement('span');
@@ -10744,66 +10946,77 @@ ViperTools.prototype = {
             // IE does not trigger the click event for input when the label
             // element is clicked, so add the click event to label element and change
             // the checkbox state.
-            ViperUtil.addEvent(labelElem, 'click', function() {
-                checkbox.checked = !checkbox.checked;
+            ViperUtil.addEvent(
+                labelElem,
+                'click',
+                function() {
+                    checkbox.checked = !checkbox.checked;
 
-                if (checkbox.checked === true) {
-                    ViperUtil.addClass(labelElem, 'Viper-active');
-                } else {
-                    ViperUtil.removeClass(labelElem, 'Viper-active');
+                    if (checkbox.checked === true) {
+                        ViperUtil.addClass(labelElem, 'Viper-active');
+                    } else {
+                        ViperUtil.removeClass(labelElem, 'Viper-active');
+                    }
+
+                    if (changeCallback) {
+                        changeCallback.call(this, checkbox.checked);
+                    }
+
+                    self.viper.fireCallbacks('ViperTools:changed:' + id);
+                    self.viper.highlightSelection();
                 }
-
-                if (changeCallback) {
-                    changeCallback.call(this, checkbox.checked);
-                }
-
-                self.viper.fireCallbacks('ViperTools:changed:' + id);
-                self.viper.highlightSelection();
-            });
+            );
         } else {
-            ViperUtil.addEvent(checkbox, 'click', function() {
-                if (checkbox.checked === true) {
-                    ViperUtil.addClass(labelElem, 'Viper-active');
-                } else {
-                    ViperUtil.removeClass(labelElem, 'Viper-active');
+            ViperUtil.addEvent(
+                checkbox,
+                'click',
+                function() {
+                    if (checkbox.checked === true) {
+                        ViperUtil.addClass(labelElem, 'Viper-active');
+                    } else {
+                        ViperUtil.removeClass(labelElem, 'Viper-active');
+                    }
+
+                    if (changeCallback) {
+                        changeCallback.call(this, checkbox.checked);
+                    }
+
+                    self.viper.fireCallbacks('ViperTools:changed:' + id);
                 }
+            );
+        }//end if
 
-                if (changeCallback) {
-                    changeCallback.call(this, checkbox.checked);
-                }
+        this.addItem(
+            id,
+            {
+                type: 'checkbox',
+                element: labelElem,
+                input: checkbox,
+                getValue: function() {
+                    return checkbox.checked;
+                },
+                setValue: function(checked, isInitialValue) {
+                    checkbox.checked = checked;
 
-                self.viper.fireCallbacks('ViperTools:changed:' + id);
-            });
-        }
+                    if (checked === true) {
+                        ViperUtil.addClass(labelElem, 'Viper-active');
+                    } else {
+                        ViperUtil.removeClass(labelElem, 'Viper-active');
+                    }
 
-        this.addItem(id, {
-            type: 'checkbox',
-            element: labelElem,
-            input: checkbox,
-            getValue: function() {
-                return checkbox.checked;
-            },
-            setValue: function(checked, isInitialValue) {
-                checkbox.checked = checked;
-
-                if (checked === true) {
-                    ViperUtil.addClass(labelElem, 'Viper-active');
-                } else {
-                    ViperUtil.removeClass(labelElem, 'Viper-active');
-                }
-
-                if (changeCallback && isInitialValue !== true) {
-                    changeCallback.call(this, checked, true);
+                    if (changeCallback && isInitialValue !== true) {
+                        changeCallback.call(this, checked, true);
+                    }
                 }
             }
-        });
+        );
 
         return labelElem;
 
     },
 
 
-
+    
     createRadiobutton: function(name, value, label, checked)
     {
         var labelElem = document.createElement('label');
@@ -10849,9 +11062,11 @@ ViperTools.prototype = {
             ViperUtil.addClass(dragIcon, 'Viper-popup-dragIcon');
             header.appendChild(dragIcon);
 
-            ViperUtil.$(main).draggable({
-                handle: header
-            });
+            ViperUtil.$(main).draggable(
+                {
+                    handle: header
+                }
+            );
         }
 
         header.appendChild(document.createTextNode(title));
@@ -10859,11 +11074,15 @@ ViperTools.prototype = {
         var closeIcon = document.createElement('div');
         ViperUtil.addClass(closeIcon, 'Viper-popup-closeIcon');
         header.appendChild(closeIcon);
-        ViperUtil.addEvent(closeIcon, 'mousedown', function() {
-            self.closePopup(id, 'closeIcon');
-        });
+        ViperUtil.addEvent(
+            closeIcon,
+            'mousedown',
+            function() {
+                self.closePopup(id, 'closeIcon');
+            }
+        );
 
-        var fullScreen  = false;
+        var fullScreen = false;
 
         var originalOpenCallback = openCallback;
         openCallback = function() {
@@ -10874,11 +11093,15 @@ ViperTools.prototype = {
         }
 
         // Close popup when ESC key is pressed.
-        this.viper.registerCallback('Viper:keyUp', 'ViperTools', function(e) {
-            if (e.which === 27 && main.parentNode) {
-                self.closePopup(id);
+        this.viper.registerCallback(
+            'Viper:keyUp',
+            'ViperTools',
+            function(e) {
+                if (e.which === 27 && main.parentNode) {
+                    self.closePopup(id);
+                }
             }
-        });
+        );
 
         var showfullScreen = function() {
             var headerHeight  = ViperUtil.getElementHeight(header);
@@ -10891,45 +11114,54 @@ ViperTools.prototype = {
             ViperUtil.setStyle(main, 'top', toolbarHeight + 'px');
             ViperUtil.setStyle(main, 'margin-left', 0);
             ViperUtil.setStyle(main, 'margin-top', 0);
-            ViperUtil.setStyle(midContent, 'width', windowDim.width - 20 + 'px');
-            ViperUtil.setStyle(midContent, 'height', windowDim.height - toolbarHeight - bottomHeight - headerHeight - topHeight - 10 + 'px');
+            ViperUtil.setStyle(midContent, 'width', (windowDim.width - 20) + 'px');
+            ViperUtil.setStyle(midContent, 'height', (windowDim.height - toolbarHeight - bottomHeight - headerHeight - topHeight - 10) + 'px');
             if (resizeCallback) {
                 resizeCallback.call(this);
             }
         };
 
         var currentSize = null;
-        ViperUtil.addEvent(header, 'safedblclick', function() {}, function() {
-            if (fullScreen !== true) {
-                fullScreen = true;
-                var mainCoords = ViperUtil.getElementCoords(main);
-                currentSize = {
-                    width: ViperUtil.getElementWidth(midContent),
-                    height: ViperUtil.getElementHeight(midContent),
-                    left: mainCoords.x,
-                    top: mainCoords.y
-                };
+        ViperUtil.addEvent(
+            header,
+            'safedblclick',
+            function() {},
+            function() {
+                if (fullScreen !== true) {
+                    fullScreen     = true;
+                    var mainCoords = ViperUtil.getElementCoords(main);
+                    currentSize    = {
+                        width: ViperUtil.getElementWidth(midContent),
+                        height: ViperUtil.getElementHeight(midContent),
+                        left: mainCoords.x,
+                        top: mainCoords.y
+                    };
 
-                showfullScreen();
-
-                ViperUtil.removeEvent(window, 'resize.ViperTools-popup-' + id);
-                ViperUtil.addEvent(window, 'resize.ViperTools-popup-' + id, function() {
-                    // Update the popup size since its in full screen.
                     showfullScreen();
-                });
-            } else {
-                ViperUtil.removeEvent(window, 'resize.ViperTools-popup-' + id);
 
-                fullScreen = false;
-                ViperUtil.setStyle(main, 'left', currentSize.left + 'px');
-                ViperUtil.setStyle(main, 'top', currentSize.top + 'px');
-                ViperUtil.setStyle(midContent, 'width', currentSize.width + 'px');
-                ViperUtil.setStyle(midContent, 'height', currentSize.height + 'px');
-                if (resizeCallback) {
-                    resizeCallback.call(this);
-                }
-            }//end if
-        });
+                    ViperUtil.removeEvent(window, 'resize.ViperTools-popup-' + id);
+                    ViperUtil.addEvent(
+                        window,
+                        'resize.ViperTools-popup-' + id,
+                        function() {
+                            // Update the popup size since its in full screen.
+                            showfullScreen();
+                        }
+                    );
+                } else {
+                    ViperUtil.removeEvent(window, 'resize.ViperTools-popup-' + id);
+
+                    fullScreen = false;
+                    ViperUtil.setStyle(main, 'left', currentSize.left + 'px');
+                    ViperUtil.setStyle(main, 'top', currentSize.top + 'px');
+                    ViperUtil.setStyle(midContent, 'width', currentSize.width + 'px');
+                    ViperUtil.setStyle(midContent, 'height', currentSize.height + 'px');
+                    if (resizeCallback) {
+                        resizeCallback.call(this);
+                    }
+                }//end if
+            }
+        );
 
         main.appendChild(header);
 
@@ -10952,45 +11184,55 @@ ViperTools.prototype = {
                 ViperUtil.setStyle(midContent, 'height', ui.size.height + 'px');
             };
 
-            ViperUtil.$(midContent).resizable({
-                handles: 'se',
-                resize: function(e, ui) {
-                    if (resizeCallback) {
-                        resizeCallback.call(this, e, ui);
-                    }
-                },
-                stop: function(e, ui) {
-                    if (resizeCallback) {
-                        resizeCallback.call(this, e, ui);
+            ViperUtil.$(midContent).resizable(
+                {
+                    handles: 'se',
+                    resize: function(e, ui) {
+                        if (resizeCallback) {
+                            resizeCallback.call(this, e, ui);
+                        }
+                    },
+                    stop: function(e, ui) {
+                        if (resizeCallback) {
+                            resizeCallback.call(this, e, ui);
+                        }
                     }
                 }
-            });
+            );
+        }//end if
 
-        }
-
-        this.addItem(id, {
-            type: 'popup',
-            element: main,
-            topContent: topContent,
-            midContent: midContent,
-            bottomContent: bottomContent,
-            openCallback: openCallback,
-            closeCallback: closeCallback,
-            showTop: function() {
-                ViperUtil.$(topContent).slideDown(null, function() {
-                    if (fullScreen === true) {
-                        showfullScreen();
-                    }
-                });
-            },
-            hideTop: function() {
-                ViperUtil.$(topContent).slideUp(null, function() {
-                    if (fullScreen === true) {
-                        showfullScreen();
-                    }
-                });
+        this.addItem(
+            id,
+            {
+                type: 'popup',
+                element: main,
+                topContent: topContent,
+                midContent: midContent,
+                bottomContent: bottomContent,
+                openCallback: openCallback,
+                closeCallback: closeCallback,
+                showTop: function() {
+                    ViperUtil.$(topContent).slideDown(
+                        null,
+                        function() {
+                            if (fullScreen === true) {
+                                showfullScreen();
+                            }
+                        }
+                    );
+                },
+                hideTop: function() {
+                    ViperUtil.$(topContent).slideUp(
+                        null,
+                        function() {
+                            if (fullScreen === true) {
+                                showfullScreen();
+                            }
+                        }
+                    );
+                }
             }
-        });
+        );
 
         return main;
 
@@ -11019,8 +11261,7 @@ ViperTools.prototype = {
         ViperUtil.setStyle(popupElement, 'visibility', 'hidden');
         this.viper.addElement(popupElement);
 
-        // Set the pos to be the middle of the screen
-        //var windowDim  = ViperUtil.getWindowDimensions();
+        // Set the pos to be the middle of the screen.
         var elementDim = ViperUtil.getBoundingRectangle(popupElement);
         var windowDim  = ViperUtil.getWindowDimensions();
 
@@ -11031,7 +11272,7 @@ ViperTools.prototype = {
         // If the popup is off the top of the screen then move it back down.
         var offScreenTop = (windowDim.height / 2) + marginTop
         if (offScreenTop < toolbarHieght) {
-            marginTop -= offScreenTop - toolbarHieght;
+            marginTop -= (offScreenTop - toolbarHieght);
         }
 
         if ((elementDim.y2 - elementDim.y1) > (windowDim.height - toolbarHieght)) {
@@ -11106,781 +11347,837 @@ ViperTools.prototype = {
             ViperUtil.addClass(toolbar, 'Viper-compact');
         }
 
-        ViperUtil.addEvent(toolbar, 'mousedown', function(e) {
-            var target = ViperUtil.getMouseEventTarget(e);
-            if (ViperUtil.isTag(target, 'input') !== true && ViperUtil.isTag(target, 'textarea') !== true) {
+        ViperUtil.addEvent(
+            toolbar,
+            'mousedown',
+            function(e) {
+                var target = ViperUtil.getMouseEventTarget(e);
+                if (ViperUtil.isTag(target, 'input') !== true && ViperUtil.isTag(target, 'textarea') !== true) {
+                    ViperUtil.preventDefault(e);
+                    return false;
+                }
+            }
+        );
+
+        ViperUtil.addEvent(
+            toolbar,
+            'mouseup',
+            function(e) {
                 ViperUtil.preventDefault(e);
                 return false;
             }
-        });
-
-        ViperUtil.addEvent(toolbar, 'mouseup', function(e) {
-                ViperUtil.preventDefault(e);
-                return false;
-        });
+        );
 
         var _update = false;
-        this.viper.registerCallback('Viper:selectionChanged', id, function(range) {
-            if (self.viper.rangeInViperBounds(range) === false) {
-                return;
-            }
+        this.viper.registerCallback(
+            'Viper:selectionChanged',
+            id,
+            function(range) {
+                if (self.viper.rangeInViperBounds(range) === false) {
+                    return;
+                }
 
-            if (range.collapsed === true && _update !== true) {
-                self.getItem(id).hide();
-                return;
-            }
+                if (range.collapsed === true && _update !== true) {
+                    self.getItem(id).hide();
+                    return;
+                }
 
-            // Update the toolbar position, contents and lineage for this new selection.
-            self.getItem(id).update(range);
-        });
+                // Update the toolbar position, contents and lineage for this new selection.
+                self.getItem(id).update(range);
+            }
+        );
 
         // Add scroll event to iframes so that the toolbar is closed when the
         // scroll is happening.
-        this.viper.registerCallback('Viper:editableElementChanged', id, function() {
-            var elemDoc = self.viper.getViperElementDocument();
-            if (elemDoc !== document) {
-                var t = null;
-                var toolbar = self.getItem(id);
-                ViperUtil.removeEvent(elemDoc.defaultView, 'scroll.' + id);
-                ViperUtil.addEvent(elemDoc.defaultView, 'scroll.' + id, function(e) {
-                    if (toolbar.isVisible() === true) {
-                        toolbar.hide();
-                    }
+        this.viper.registerCallback(
+            'Viper:editableElementChanged',
+            id,
+            function() {
+                var elemDoc = self.viper.getViperElementDocument();
+                if (elemDoc !== document) {
+                    var t       = null;
+                    var toolbar = self.getItem(id);
+                    ViperUtil.removeEvent(elemDoc.defaultView, 'scroll.' + id);
+                    ViperUtil.addEvent(
+                        elemDoc.defaultView,
+                        'scroll.' + id,
+                        function(e) {
+                            if (toolbar.isVisible() === true) {
+                                toolbar.hide();
+                            }
 
-                    clearTimeout(t);
-                    t = setTimeout(function() {
-                        ViperUtil.removeClass(toolbar.element, 'scrolling');
-                        self.getItem(id).update();
-                    }, 300);
-                });
+                            clearTimeout(t);
+                            t = setTimeout(
+                                function() {
+                                    ViperUtil.removeClass(toolbar.element, 'scrolling');
+                                    self.getItem(id).update();
+                                },
+                                300
+                            );
+                        }
+                    );
+                }//end if
             }
-        });
+        );
 
-        this.viper.registerCallback('Viper:clickedOutside', id, function(range) {
-            self.getItem(id).hide();
-        });
+        this.viper.registerCallback(
+            'Viper:clickedOutside',
+            id,
+            function(range) {
+                self.getItem(id).hide();
+            }
+        );
 
-        this.viper.registerCallback(['Viper:mouseDown', 'ViperHistoryManager:undo'], id, function(data) {
-            _update = false;
-            if (data && data.target) {
-                var target = ViperUtil.getMouseEventTarget(data);
-                if (target === toolbar || ViperUtil.isChildOf(target, toolbar) === true) {
-                    if (ViperUtil.isTag(target, 'input') === true
-                        || ViperUtil.isTag(target, 'textarea') === true
+        this.viper.registerCallback(
+            ['Viper:mouseDown',
+            'ViperHistoryManager:undo'],
+            id,
+            function(data) {
+                _update = false;
+                if (data && data.target) {
+                    var target = ViperUtil.getMouseEventTarget(data);
+                    if (target === toolbar || ViperUtil.isChildOf(target, toolbar) === true) {
+                        if (ViperUtil.isTag(target, 'input') === true
+                            || ViperUtil.isTag(target, 'textarea') === true
+                        ) {
+                            // Allow event to bubble so the input element can get focus etc.
+                            return true;
+                        }
+
+                        return false;
+                    } else if (elementTypes
+                        && ViperUtil.inArray(ViperUtil.getTagName(target), elementTypes) === true
                     ) {
-                        // Allow event to bubble so the input element can get focus etc.
-                        return true;
-                    }
-
-                    return false;
-                } else if (elementTypes
-                    && ViperUtil.inArray(ViperUtil.getTagName(target), elementTypes) === true
-                ) {
-                    self.getItem(id).update(null, target);
-                    return;
-                } else if (ViperUtil.inArray(ViperUtil.getTagName(target), self.getItem(id)._keepOpenTagList) === true) {
-                    _update = true;
-                    return;
-                } else {
-                    var allParents = ViperUtil.getParents(target, null, self.viper.getViperElement());
-                    for (var i = 0; i < allParents.length; i++) {
-                        if (ViperUtil.inArray(ViperUtil.getTagName(allParents[i]), self.getItem(id)._keepOpenTagList) === true) {
-                            _update = true;
-                            return;
+                        self.getItem(id).update(null, target);
+                        return;
+                    } else if (ViperUtil.inArray(ViperUtil.getTagName(target), self.getItem(id)._keepOpenTagList) === true) {
+                        _update = true;
+                        return;
+                    } else {
+                        var allParents = ViperUtil.getParents(target, null, self.viper.getViperElement());
+                        for (var i = 0; i < allParents.length; i++) {
+                            if (ViperUtil.inArray(ViperUtil.getTagName(allParents[i]), self.getItem(id)._keepOpenTagList) === true) {
+                                _update = true;
+                                return;
+                            }
                         }
-                    }
 
-                    var parents = ViperUtil.getSurroundingParents(target);
-                    for (var i = 0; i < parents.length; i++) {
-                        if (ViperUtil.inArray(ViperUtil.getTagName(parents[i]), self.getItem(id)._keepOpenTagList) === true) {
-                            _update = true;
-                            return;
+                        var parents = ViperUtil.getSurroundingParents(target);
+                        for (var i = 0; i < parents.length; i++) {
+                            if (ViperUtil.inArray(ViperUtil.getTagName(parents[i]), self.getItem(id)._keepOpenTagList) === true) {
+                                _update = true;
+                                return;
+                            }
                         }
-                    }
-                }
+                    }//end if
+                }//end if
+
+                self.getItem(id).hide();
             }
+        );
 
-            self.getItem(id).hide();
-        });
-
-        var tools = this;
+        var tools          = this;
         var buttonElements = null;
-        this.addItem(id, {
-            type: 'toolbar',
-            element: toolbar,
-            addButton: function(button, index) {
-                if (ViperUtil.isset(index) === true && toolsContainer.childNodes.length > index) {
-                    if (index < 0) {
-                        index = toolsContainer.childNodes.length + index;
+        this.addItem(
+            id,
+            {
+                type: 'toolbar',
+                element: toolbar,
+                addButton: function(button, index) {
+                    if (ViperUtil.isset(index) === true && toolsContainer.childNodes.length > index) {
                         if (index < 0) {
-                            index = 0;
+                            index = toolsContainer.childNodes.length + index;
+                            if (index < 0) {
+                                index = 0;
+                            }
                         }
+
+                        ViperUtil.insertBefore(toolsContainer.childNodes[index], button);
+                    } else {
+                        toolsContainer.appendChild(button);
+                    }
+                },
+                showButton: function(buttonid, disabled) {
+                    if (tools.getItem(buttonid).type !== 'button') {
+                        throw new Error('Invalid button for showButton(): ' + buttonid);
                     }
 
-                    ViperUtil.insertBefore(toolsContainer.childNodes[index], button);
-                } else {
-                    toolsContainer.appendChild(button);
-                }
+                    this._buttonShown = true;
 
-            },
-            showButton: function(buttonid, disabled) {
-                if (tools.getItem(buttonid).type !== 'button') {
-                    throw new Error('Invalid button for showButton(): ' + buttonid);
-                }
+                    var button = self.getItem(buttonid);
+                    ViperUtil.removeClass(button.element, 'ViperITP-button-hidden');
+                    ViperUtil.removeClass(button.element.parentNode, 'ViperITP-button-hidden');
 
-                this._buttonShown = true;
-
-                var button = self.getItem(buttonid);
-                ViperUtil.removeClass(button.element, 'ViperITP-button-hidden');
-                ViperUtil.removeClass(button.element.parentNode, 'ViperITP-button-hidden');
-
-                if (disabled === true) {
-                    self.disableButton(buttonid);
-                } else {
-                    self.enableButton(buttonid);
-                }
-            },
-            update: function(range, element) {
-                if (!updateCallback || self.viper.isEnabled() === false) {
-                    return;
-                }
-
-                var selectedNode = element || null;
-                range = range || self.viper.getViperRange();
-
-                if (!selectedNode) {
-                    if (elementTypes && elementTypes.length > 0) {
+                    if (disabled === true) {
+                        self.disableButton(buttonid);
+                    } else {
+                        self.enableButton(buttonid);
+                    }
+                },
+                update: function(range, element) {
+                    if (!updateCallback || self.viper.isEnabled() === false) {
                         return;
                     }
-                }
 
-                var activeSection   = this._activeSection;
-                if (range.collapsed === true) {
-                    // Clicking inside a link element etc should not activate the
-                    // sub section again.
-                    activeSection = null;
-                }
+                    var selectedNode = element || null;
+                    range            = range || self.viper.getViperRange();
 
-                this.closeActiveSubsection(true);
-
-                this._buttonShown     = false;
-                this._subSectionShown = false;
-                this.resetButtons();
-
-                if (buttonElements === null) {
-                    // Store the original button structure in to buttonElements
-                    // so that we can re construct it here in the next update call.
-                    // This must be done as the updateCallback may remove buttons
-                    // from the toolbar using showButton, showButtonGroup methods.
-                    buttonElements = [];
-                    for (var node = toolsContainer.firstChild; node; node = node.nextSibling) {
-                        if (ViperUtil.hasClass(node, 'Viper-buttonGroup') === true) {
-                            var groupButtons = [node];
-                            for (var button = node.firstChild; button; button = button.nextSibling) {
-                                groupButtons.push(button);
-                            }
-
-                            buttonElements.push(groupButtons);
-                        } else if (ViperUtil.hasClass('Viper-button') === true) {
-                          buttonElements.push(node);
+                    if (!selectedNode) {
+                        if (elementTypes && elementTypes.length > 0) {
+                            return;
                         }
                     }
-                } else {
-                    while(toolsContainer.firstChild) {
-                        toolsContainer.removeChild(toolsContainer.firstChild);
+
+                    var activeSection = this._activeSection;
+                    if (range.collapsed === true) {
+                        // Clicking inside a link element etc should not activate the
+                        // sub section again.
+                        activeSection = null;
                     }
 
-                    for (var i = 0; i < buttonElements.length; i++) {
-                        if (buttonElements[i].length) {
-                            for (var j = 1; j < buttonElements[i].length; j++) {
-                                buttonElements[i][0].appendChild(buttonElements[i][j]);
+                    this.closeActiveSubsection(true);
+
+                    this._buttonShown     = false;
+                    this._subSectionShown = false;
+                    this.resetButtons();
+
+                    if (buttonElements === null) {
+                        // Store the original button structure in to buttonElements
+                        // so that we can re construct it here in the next update call.
+                        // This must be done as the updateCallback may remove buttons
+                        // from the toolbar using showButton, showButtonGroup methods.
+                        buttonElements = [];
+                        for (var node = toolsContainer.firstChild; node; node = node.nextSibling) {
+                            if (ViperUtil.hasClass(node, 'Viper-buttonGroup') === true) {
+                                var groupButtons = [node];
+                                for (var button = node.firstChild; button; button = button.nextSibling) {
+                                    groupButtons.push(button);
+                                }
+
+                                buttonElements.push(groupButtons);
+                            } else if (ViperUtil.hasClass('Viper-button') === true) {
+                                buttonElements.push(node);
                             }
-
-                            toolsContainer.appendChild(buttonElements[i][0]);
-                        } else {
-                            toolsContainer.appendChild(buttonElements[i]);
                         }
-                    }
-                }
+                    } else {
+                        while (toolsContainer.firstChild) {
+                            toolsContainer.removeChild(toolsContainer.firstChild);
+                        }
 
-                updateCallback.call(this, range, selectedNode, activeSection !== null);
+                        for (var i = 0; i < buttonElements.length; i++) {
+                            if (buttonElements[i].length) {
+                                for (var j = 1; j < buttonElements[i].length; j++) {
+                                    buttonElements[i][0].appendChild(buttonElements[i][j]);
+                                }
 
-                var buttonsToRemove = ViperUtil.getClass('ViperITP-button-hidden', toolsContainer);
-                for (var i = 0; i < buttonsToRemove.length; i++) {
-                    buttonsToRemove[i].parentNode.removeChild(buttonsToRemove[i]);
-                }
-
-                if (this._buttonShown === true || this._subSectionShown === true) {
-                    this.updatePosition(range, selectedNode);
-                } else {
-                    this.hide();
-                }
-
-                if (activeSection) {
-                    this.toggleSubSection(activeSection);
-                }
-
-            },
-
-            resetButtons: function() {
-                ViperUtil.removeClass(toolbar, 'Viper-subSectionVisible');
-                ViperUtil.addClass(ViperUtil.getClass('Viper-buttonGroup', toolsContainer), 'ViperITP-button-hidden');
-
-                var buttons = ViperUtil.getClass('Viper-button', toolsContainer);
-                ViperUtil.addClass(buttons, 'ViperITP-button-hidden');
-                ViperUtil.removeClass(buttons, 'Viper-selected');
-                ViperUtil.removeClass(buttons, 'Viper-active');
-            },
-
-            hide: function() {
-                if (this._onHideCallback) {
-                    if (this._onHideCallback.call(this) === false) {
-                        return false;
-                    }
-                }
-
-                this.closeActiveSubsection(true);
-                this._activeSection = null;
-                ViperUtil.removeClass(toolbar, 'Viper-visible');
-
-                // Disable all subsection action buttons.
-                for (subsectionid in this._subSectionActionWidgets) {
-                    tools.disableButton(subsectionid + '-applyButton');
-                }
-
-                return true;
-
-            },
-
-            isVisible: function() {
-                return ViperUtil.hasClass(toolbar, 'Viper-visible');
-            },
-
-
-            makeSubSection: function(id, element, onOpenCallback, onCloseCallback) {
-                if (!element) {
-                    return false;
-                }
-
-                var subSection = document.createElement('div');
-                var form       = document.createElement('form');
-
-                subSection.appendChild(form);
-                form.appendChild(element);
-                form.onsubmit = function() {
-                    return false;
-                };
-
-                var submitBtn = document.createElement('input');
-                submitBtn.type = 'submit';
-                ViperUtil.setStyle(submitBtn, 'display', 'none');
-                form.appendChild(submitBtn);
-
-                ViperUtil.addClass(subSection, 'Viper-subSection');
-
-                this._subSections[id] = subSection;
-
-                subSectionContainer.appendChild(subSection);
-
-                tools.addItem(id, {
-                    type: 'VITPSubSection',
-                    element: subSection,
-                    form: form,
-                    _onOpenCallback: onOpenCallback,
-                    _onCloseCallback: onCloseCallback
-                });
-
-                return subSection;
-
-            },
-
-
-            setSubSectionButton: function(buttonid, subSectionid) {
-                if (!this._subSections[subSectionid]) {
-                    // Throw exception not a valid sub section id.
-                    throw new Error('Invalid sub section id: ' + subSectionid);
-                    return false;
-                }
-
-                var button = tools.getItem(buttonid).element;
-                var self   = this;
-
-                this._subSectionButtons[subSectionid] = buttonid;
-
-                ViperUtil.removeEvent(button, 'mousedown');
-                ViperUtil.addEvent(button, 'mousedown', function(e) {
-                    if (ViperUtil.isBrowser('msie', '<11') === true) {
-                        // This block of code prevents IE moving user selection to the.
-                        // button element when clicked. When the button element is removed
-                        // and added back to DOM selection is not moved. Seriously, IE?
-                        if (button.previousSibling) {
-                            var sibling = button.previousSibling;
-                            button.parentNode.removeChild(button);
-                            ViperUtil.insertAfter(sibling, button);
-                        } else if (button.nextSibling) {
-                            var sibling = button.nextSibling;
-                            button.parentNode.removeChild(button);
-                            ViperUtil.insertBefore(sibling, button);
-                        } else {
-                            var parent = button.parentNode;
-                            button.parentNode.removeChild(button);
-                            parent.appendChild(button);
+                                toolsContainer.appendChild(buttonElements[i][0]);
+                            } else {
+                                toolsContainer.appendChild(buttonElements[i]);
+                            }
                         }
                     }//end if
 
-                    // Set the subSection to visible and hide rest of the sub sections.
-                    self.toggleSubSection(subSectionid);
+                    updateCallback.call(this, range, selectedNode, activeSection !== null);
 
-                    ViperUtil.preventDefault(e);
-                });
-
-            },
-
-
-            toggleSubSection: function(subSectionid, ignoreCallbacks)
-            {
-                var subSection = this._subSections[subSectionid];
-                if (!subSection) {
-                    return false;
-                }
-
-                if (this._activeSection) {
-                    var activeSubSection = this._activeSection;
-                    this.closeActiveSubsection(ignoreCallbacks);
-                    if (subSectionid === activeSubSection) {
-                        return;
+                    var buttonsToRemove = ViperUtil.getClass('ViperITP-button-hidden', toolsContainer);
+                    for (var i = 0; i < buttonsToRemove.length; i++) {
+                        buttonsToRemove[i].parentNode.removeChild(buttonsToRemove[i]);
                     }
-                }
 
-                // Make sure all Viper-active has been removed from all sub sections
-                // at this point.
-                ViperUtil.removeClass(ViperUtil.getClass('Viper-subSection Viper-active', subSectionContainer), 'Viper-active');
-
-                if (this._subSectionButtons[subSectionid]) {
-                    var subSectionButton = tools.getItem(this._subSectionButtons[subSectionid]).element;
-                    if (ViperUtil.hasClass(subSectionButton, 'ViperITP-button-hidden') === true) {
-                        this._activeSection = null;
-                        return;
+                    if (this._buttonShown === true || this._subSectionShown === true) {
+                        this.updatePosition(range, selectedNode);
+                    } else {
+                        this.hide();
                     }
-                }
 
-                if (ignoreCallbacks !== true) {
-                    var openCallback = tools.getItem(subSectionid)._onOpenCallback;
-                    if (openCallback) {
-                        openCallback.call(this);
+                    if (activeSection) {
+                        this.toggleSubSection(activeSection);
                     }
-                }
+                },
 
-                // Make the button selected.
-                ViperUtil.addClass(subSectionButton, 'Viper-selected');
+                resetButtons: function() {
+                    ViperUtil.removeClass(toolbar, 'Viper-subSectionVisible');
+                    ViperUtil.addClass(ViperUtil.getClass('Viper-buttonGroup', toolsContainer), 'ViperITP-button-hidden');
 
-                ViperUtil.addClass(subSection, 'Viper-active');
-                ViperUtil.addClass(toolbar, 'Viper-subSectionVisible');
-                this._activeSection = subSectionid;
-                this._updateSubSectionArrowPos();
+                    var buttons = ViperUtil.getClass('Viper-button', toolsContainer);
+                    ViperUtil.addClass(buttons, 'ViperITP-button-hidden');
+                    ViperUtil.removeClass(buttons, 'Viper-selected');
+                    ViperUtil.removeClass(buttons, 'Viper-active');
+                },
 
-                var self = this;
-                setTimeout(function() {
-                    self.focusSubSection();
-                }, 50);
-
-                this._subSectionShown = true;
-
-                var subSectionForm = tools.getItem(subSectionid).form;
-                ViperUtil.removeEvent(document, 'keydown.' + id);
-                ViperUtil.addEvent(document, 'keydown.' + id, function(e) {
-                    if (subSectionForm && e.which === 13 && ViperUtil.isTag(e.target, 'textarea') === false) {
-                        return subSectionForm.onsubmit();
-                    }
-                });
-
-            },
-
-            focusSubSection: function()
-            {
-                try {
-                    var subSection    = this._subSections[this._activeSection];
-                    var inputElements = ViperUtil.getTag('input[type=text], textarea', subSection);
-                    if (inputElements.length > 0) {
-                        inputElements[0].focus();
-                        ViperUtil.removeClass(inputElements[0].parentNode.parentNode.parentNode, 'Viper-active');
-
-                        if (ViperUtil.isBrowser('msie') === false) {
-                            tools.viper.highlightSelection();
-                        } else {
-                            setTimeout(function() {
-                                inputElements[0].focus();
-                            }, 10);
+                hide: function() {
+                    if (this._onHideCallback) {
+                        if (this._onHideCallback.call(this) === false) {
+                            return false;
                         }
                     }
-                } catch (e) {}
 
-            },
+                    this.closeActiveSubsection(true);
+                    this._activeSection = null;
+                    ViperUtil.removeClass(toolbar, 'Viper-visible');
 
-            closeActiveSubsection: function(ignoreCallbacks)
-            {
-                if (this._activeSection) {
-                    var prevSubSection = this._subSections[this._activeSection];
-                    if (prevSubSection) {
-                        ViperUtil.removeClass(prevSubSection, 'Viper-active');
-
-                        if (this._subSectionButtons[this._activeSection]) {
-                            ViperUtil.removeClass(tools.getItem(this._subSectionButtons[this._activeSection]).element, 'Viper-selected');
-                        }
-
-                        if (ignoreCallbacks !== true) {
-                            var closeCallback = tools.getItem(this._activeSection)._onCloseCallback;
-                            if (closeCallback) {
-                                closeCallback.call(this);
-                            }
-                        }
-
-                        ViperUtil.removeClass(toolbar, 'Viper-subSectionVisible');
-                        this._activeSection = null;
-
-                        ViperUtil.removeEvent(document, 'keydown.' + id);
-                        return;
-                    }
-                }
-            },
-
-
-            setSubSectionAction: function(subSectionid, action, widgetids)
-            {
-                widgetids      = widgetids || [];
-                var subSection = tools.getItem(subSectionid);
-                if (!subSection) {
-                    return;
-                }
-
-                subSection.form.onsubmit = function(e) {
-                    if (e) {
-                        ViperUtil.preventDefault(e);
+                    // Disable all subsection action buttons.
+                    for (subsectionid in this._subSectionActionWidgets) {
+                        tools.disableButton(subsectionid + '-applyButton');
                     }
 
-                    var button = tools.getItem(subSectionid + '-applyButton');
-                    if (button.isEnabled() === false) {
+                    return true;
+                },
+
+                isVisible: function() {
+                    return ViperUtil.hasClass(toolbar, 'Viper-visible');
+                },
+
+                
+                makeSubSection: function(id, element, onOpenCallback, onCloseCallback) {
+                    if (!element) {
                         return false;
                     }
 
-                    tools.viper.focus();
+                    var subSection = document.createElement('div');
+                    var form       = document.createElement('form');
 
-                    if (ViperUtil.isBrowser('msie') === false) {
-                        try {
-                            action.call(this);
-                        } catch (e) {
-                            console.error('Sub Section Action threw exception:' + e.message);
+                    subSection.appendChild(form);
+                    form.appendChild(element);
+                    form.onsubmit = function() {
+                        return false;
+                    };
+
+                    var submitBtn  = document.createElement('input');
+                    submitBtn.type = 'submit';
+                    ViperUtil.setStyle(submitBtn, 'display', 'none');
+                    form.appendChild(submitBtn);
+
+                    ViperUtil.addClass(subSection, 'Viper-subSection');
+
+                    this._subSections[id] = subSection;
+
+                    subSectionContainer.appendChild(subSection);
+
+                    tools.addItem(
+                        id,
+                        {
+                            type: 'VITPSubSection',
+                            element: subSection,
+                            form: form,
+                            _onOpenCallback: onOpenCallback,
+                            _onCloseCallback: onCloseCallback
                         }
-                    } else {
-                        // IE needs this timeout so focus works <3..
-                        setTimeout(function() {
+                    );
+
+                    return subSection;
+                },
+
+                
+                setSubSectionButton: function(buttonid, subSectionid) {
+                    if (!this._subSections[subSectionid]) {
+                        // Throw exception not a valid sub section id.
+                        throw new Error('Invalid sub section id: ' + subSectionid);
+                        return false;
+                    }
+
+                    var button = tools.getItem(buttonid).element;
+                    var self   = this;
+
+                    this._subSectionButtons[subSectionid] = buttonid;
+
+                    ViperUtil.removeEvent(button, 'mousedown');
+                    ViperUtil.addEvent(
+                        button,
+                        'mousedown',
+                        function(e) {
+                            if (ViperUtil.isBrowser('msie', '<11') === true) {
+                                // This block of code prevents IE moving user selection to the.
+                                // button element when clicked. When the button element is removed
+                                // and added back to DOM selection is not moved. Seriously, IE?
+                                if (button.previousSibling) {
+                                    var sibling = button.previousSibling;
+                                    button.parentNode.removeChild(button);
+                                    ViperUtil.insertAfter(sibling, button);
+                                } else if (button.nextSibling) {
+                                    var sibling = button.nextSibling;
+                                    button.parentNode.removeChild(button);
+                                    ViperUtil.insertBefore(sibling, button);
+                                } else {
+                                    var parent = button.parentNode;
+                                    button.parentNode.removeChild(button);
+                                    parent.appendChild(button);
+                                }
+                            }//end if
+
+                            // Set the subSection to visible and hide rest of the sub sections.
+                            self.toggleSubSection(subSectionid);
+
+                            ViperUtil.preventDefault(e);
+                        }
+                    );
+                },
+
+                
+                toggleSubSection: function(subSectionid, ignoreCallbacks) {
+                    var subSection = this._subSections[subSectionid];
+                    if (!subSection) {
+                        return false;
+                    }
+
+                    if (this._activeSection) {
+                        var activeSubSection = this._activeSection;
+                        this.closeActiveSubsection(ignoreCallbacks);
+                        if (subSectionid === activeSubSection) {
+                            return;
+                        }
+                    }
+
+                    // Make sure all Viper-active has been removed from all sub sections
+                    // at this point.
+                    ViperUtil.removeClass(ViperUtil.getClass('Viper-subSection Viper-active', subSectionContainer), 'Viper-active');
+
+                    if (this._subSectionButtons[subSectionid]) {
+                        var subSectionButton = tools.getItem(this._subSectionButtons[subSectionid]).element;
+                        if (ViperUtil.hasClass(subSectionButton, 'ViperITP-button-hidden') === true) {
+                            this._activeSection = null;
+                            return;
+                        }
+                    }
+
+                    if (ignoreCallbacks !== true) {
+                        var openCallback = tools.getItem(subSectionid)._onOpenCallback;
+                        if (openCallback) {
+                            openCallback.call(this);
+                        }
+                    }
+
+                    // Make the button selected.
+                    ViperUtil.addClass(subSectionButton, 'Viper-selected');
+
+                    ViperUtil.addClass(subSection, 'Viper-active');
+                    ViperUtil.addClass(toolbar, 'Viper-subSectionVisible');
+                    this._activeSection = subSectionid;
+                    this._updateSubSectionArrowPos();
+
+                    var self = this;
+                    setTimeout(
+                        function() {
+                            self.focusSubSection();
+                        },
+                        50
+                    );
+
+                    this._subSectionShown = true;
+
+                    var subSectionForm = tools.getItem(subSectionid).form;
+                    ViperUtil.removeEvent(document, 'keydown.' + id);
+                    ViperUtil.addEvent(
+                        document,
+                        'keydown.' + id,
+                        function(e) {
+                            if (subSectionForm && e.which === 13 && ViperUtil.isTag(e.target, 'textarea') === false) {
+                                return subSectionForm.onsubmit();
+                            }
+                        }
+                    );
+                },
+
+                focusSubSection: function() {
+                    try {
+                        var subSection    = this._subSections[this._activeSection];
+                        var inputElements = ViperUtil.getTag('input[type=text], textarea', subSection);
+                        if (inputElements.length > 0) {
+                            inputElements[0].focus();
+                            ViperUtil.removeClass(inputElements[0].parentNode.parentNode.parentNode, 'Viper-active');
+
+                            if (ViperUtil.isBrowser('msie') === false) {
+                                tools.viper.highlightSelection();
+                            } else {
+                                setTimeout(
+                                    function() {
+                                        inputElements[0].focus();
+                                    },
+                                    10
+                                );
+                            }
+                        }
+                    } catch (e) {
+                    }
+                },
+
+                closeActiveSubsection: function(ignoreCallbacks) {
+                    if (this._activeSection) {
+                        var prevSubSection = this._subSections[this._activeSection];
+                        if (prevSubSection) {
+                            ViperUtil.removeClass(prevSubSection, 'Viper-active');
+
+                            if (this._subSectionButtons[this._activeSection]) {
+                                ViperUtil.removeClass(tools.getItem(this._subSectionButtons[this._activeSection]).element, 'Viper-selected');
+                            }
+
+                            if (ignoreCallbacks !== true) {
+                                var closeCallback = tools.getItem(this._activeSection)._onCloseCallback;
+                                if (closeCallback) {
+                                    closeCallback.call(this);
+                                }
+                            }
+
+                            ViperUtil.removeClass(toolbar, 'Viper-subSectionVisible');
+                            this._activeSection = null;
+
+                            ViperUtil.removeEvent(document, 'keydown.' + id);
+                            return;
+                        }
+                    }//end if
+                },
+
+                
+                setSubSectionAction: function(subSectionid, action, widgetids) {
+                    widgetids      = widgetids || [];
+                    var subSection = tools.getItem(subSectionid);
+                    if (!subSection) {
+                        return;
+                    }
+
+                    subSection.form.onsubmit = function(e) {
+                        if (e) {
+                            ViperUtil.preventDefault(e);
+                        }
+
+                        var button = tools.getItem(subSectionid + '-applyButton');
+                        if (button.isEnabled() === false) {
+                            return false;
+                        }
+
+                        tools.viper.focus();
+
+                        if (ViperUtil.isBrowser('msie') === false) {
                             try {
                                 action.call(this);
                             } catch (e) {
                                 console.error('Sub Section Action threw exception:' + e.message);
                             }
-                        }, 2);
+                        } else {
+                            // IE needs this timeout so focus works <3..
+                            setTimeout(
+                                function() {
+                                    try {
+                                        action.call(this);
+                                    } catch (e) {
+                                        console.error('Sub Section Action threw exception:' + e.message);
+                                    }
+                                },
+                                2
+                            );
+                        }
+
+                        tools.disableButton(subSectionid + '-applyButton');
+
+                        return false;
+                    };
+
+                    var button = tools.createButton(subSectionid + '-applyButton', _('Apply Changes'), _('Apply Changes'), '', subSection.form.onsubmit, true);
+                    subSection.element.appendChild(button);
+
+                    this.addSubSectionActionWidgets(subSectionid, widgetids);
+                },
+
+                addSubSectionActionWidgets: function(subSectionid, widgetids) {
+                    if (!this._subSectionActionWidgets[subSectionid]) {
+                        this._subSectionActionWidgets[subSectionid] = [];
                     }
 
-                    tools.disableButton(subSectionid + '-applyButton');
+                    var self = this;
+                    for (var i = 0; i < widgetids.length; i++) {
+                        this._subSectionActionWidgets[subSectionid].push(widgetids[i]);
 
-                    return false;
-                };
+                        (function(widgetid) {
+                            tools.viper.registerCallback(
+                                'ViperTools:changed:' + widgetid,
+                                'ViperToolbarPlugin',
+                                function() {
+                                    var subSectionWidgets = self._subSectionActionWidgets[subSectionid];
+                                    var c      = subSectionWidgets.length;
+                                    var enable = true;
+                                    for (var j = 0; j < c; j++) {
+                                        var widget = tools.getItem(subSectionWidgets[j]);
+                                        if (widget.required === true && ViperUtil.trim(widget.getValue()) === '') {
+                                            enable = false;
+                                            break;
+                                        }
+                                    }
 
-                var button = tools.createButton(subSectionid + '-applyButton', _('Apply Changes'), _('Apply Changes'), '', subSection.form.onsubmit, true);
-                subSection.element.appendChild(button);
+                                    if (enable === true) {
+                                        tools.enableButton(subSectionid + '-applyButton');
+                                    } else {
+                                        tools.disableButton(subSectionid + '-applyButton');
+                                    }
+                                }
+                            );
+                        }) (widgetids[i]);
+                    }//end for
+                },
 
-                this.addSubSectionActionWidgets(subSectionid, widgetids);
+                addKeepOpenTag: function(tagName) {
+                    this._keepOpenTagList.push(tagName);
+                },
 
-            },
+                orderButtons: function(buttonOrder) {
+                    // Get all the buttons from the container.
+                    var buttons = ViperUtil.getClass('Viper-button', toolsContainer);
+                    var c       = buttons.length;
 
-            addSubSectionActionWidgets: function(subSectionid, widgetids)
-            {
-                if (!this._subSectionActionWidgets[subSectionid]) {
-                    this._subSectionActionWidgets[subSectionid] = [];
-                }
+                    if (c === 0) {
+                        return;
+                    }
 
-                var self  = this;
-                for (var i = 0; i < widgetids.length; i++) {
-                    this._subSectionActionWidgets[subSectionid].push(widgetids[i]);
+                    // Clear the buttons container contents.
+                    while (toolsContainer.firstChild) {
+                        toolsContainer.removeChild(toolsContainer.firstChild);
+                    }
 
-                    (function(widgetid) {
-                        tools.viper.registerCallback('ViperTools:changed:' + widgetid, 'ViperToolbarPlugin', function() {
-                            var subSectionWidgets = self._subSectionActionWidgets[subSectionid];
-                            var c = subSectionWidgets.length;
-                            var enable = true;
-                            for (var j = 0; j < c; j++) {
-                                var widget = tools.getItem(subSectionWidgets[j]);
-                                if (widget.required === true && ViperUtil.trim(widget.getValue()) === '') {
-                                    enable = false;
-                                    break;
+                    // Get the button ids and their elements.
+                    var addedButtons = {};
+                    for (var i = 0; i < c; i++) {
+                        var button       = buttons[i];
+                        var id           = button.id.toLowerCase().replace(self.viper.getId().toLowerCase() + '-vitp', '');
+                        addedButtons[id] = button;
+                    }
+
+                    var bc = buttonOrder.length;
+                    for (var i = 0; i < bc; i++) {
+                        var button = buttonOrder[i];
+                        if (typeof button === 'string') {
+                            button = button.toLowerCase();
+                            if (addedButtons[button]) {
+                                // Button is included in the setting, add it to the toolbar.
+                                this.addButton(addedButtons[button]);
+                            }
+                        } else {
+                            var gc      = button.length;
+                            var groupid = null;
+                            for (var j = 0; j < gc; j++) {
+                                if (addedButtons[button[j].toLowerCase()]) {
+                                    if (groupid === null) {
+                                        // Create the group.
+                                        groupid      = 'ViperInlineToolbarPlugin:buttons:' + i;
+                                        groupElement = self.createButtonGroup(groupid);
+                                        this.addButton(groupElement);
+                                    }
+
+                                    // Button is included in the setting, add it to group.
+                                    self.addButtonToGroup('vitp' + ViperUtil.ucFirst(button[j]), groupid);
                                 }
                             }
+                        }//end if
+                    }//end for
+                },
+                hideToolsSection: function() {
+                    ViperUtil.setStyle(toolsContainer, 'display', 'none');
+                    ViperUtil.addClass(toolbar, 'Viper-noTools');
+                },
+                setOnHideCallback: function(callback) {
+                    this._onHideCallback = callback;
+                },
+                _subSections: {},
+                _activeSection: null,
+                _subSectionButtons: {},
+                _subSectionActionWidgets: {},
+                _buttonShown: false,
+                _subSectionShown: false,
+                _verticalPosUpdateOnly: false,
+                _keepOpenTagList: [],
+                _onHideCallback: null,
+                updatePosition: function(range, selectedNode) {
+                    range = range || tools.viper.getViperRange();
 
-                            if (enable === true) {
-                                tools.enableButton(subSectionid + '-applyButton');
-                            } else {
-                                tools.disableButton(subSectionid + '-applyButton');
-                            }
-                        });
-                    }) (widgetids[i]);
-                }//end for
-
-            },
-
-            addKeepOpenTag: function(tagName) {
-                this._keepOpenTagList.push(tagName);
-
-            },
-
-            orderButtons: function(buttonOrder) {
-                // Get all the buttons from the container.
-                var buttons = ViperUtil.getClass('Viper-button', toolsContainer);
-                var c       = buttons.length;
-
-                if (c === 0) {
-                    return;
-                }
-
-                // Clear the buttons container contents.
-                while(toolsContainer.firstChild) {
-                    toolsContainer.removeChild(toolsContainer.firstChild);
-                }
-
-                // Get the button ids and their elements.
-                var addedButtons = {};
-                for (var i = 0; i < c; i++) {
-                    var button = buttons[i];
-                    var id     = button.id.toLowerCase().replace(self.viper.getId().toLowerCase() + '-vitp', '');
-                    addedButtons[id] = button;
-                }
-
-                var bc = buttonOrder.length;
-                for (var i = 0; i < bc; i++) {
-                    var button = buttonOrder[i];
-                    if (typeof button === 'string') {
-                        button = button.toLowerCase();
-                        if (addedButtons[button]) {
-                            // Button is included in the setting, add it to the toolbar.
-                            this.addButton(addedButtons[button]);
-                        }
+                    var rangeCoords  = null;
+                    var selectedNode = selectedNode || range.getNodeSelection(range);
+                    if (selectedNode !== null) {
+                        rangeCoords = this.getElementCoords(selectedNode);
                     } else {
-                        var gc           = button.length;
-                        var groupid      = null;
-                        for (var j = 0; j < gc; j++) {
-                            if (addedButtons[button[j].toLowerCase()]) {
-                                if (groupid === null) {
-                                    // Create the group.
-                                    groupid      = 'ViperInlineToolbarPlugin:buttons:' + i;
-                                    groupElement = self.createButtonGroup(groupid);
-                                    this.addButton(groupElement);
-                                }
+                        rangeCoords = range.rangeObj.getBoundingClientRect();
+                    }
 
-                                // Button is included in the setting, add it to group.
-                                self.addButtonToGroup('vitp' + ViperUtil.ucFirst(button[j]), groupid);
+                    if (!rangeCoords || (rangeCoords.left === 0 && rangeCoords.top === 0 && ViperUtil.isBrowser('firefox') === true)) {
+                        if (range.collapsed === true) {
+                            var span = document.createElement('span');
+                            tools.viper.insertNodeAtCaret(span);
+                            rangeCoords = this.getElementCoords(span);
+                            ViperUtil.remove(span);
+
+                            if (!rangeCoords) {
+                                return;
                             }
-                        }
-                    }
-                }
+                        } else {
+                            var startNode = range.getStartNode();
+                            var endNode   = range.getEndNode();
+                            if (!startNode || !endNode) {
+                                return;
+                            }
 
-            },
-            hideToolsSection: function() {
-                ViperUtil.setStyle(toolsContainer, 'display', 'none');
-                ViperUtil.addClass(toolbar, 'Viper-noTools');
-            },
-            setOnHideCallback: function(callback) {
-                this._onHideCallback = callback;
-            },
-            _subSections: {},
-            _activeSection: null,
-            _subSectionButtons: {},
-            _subSectionActionWidgets: {},
-            _buttonShown: false,
-            _subSectionShown: false,
-            _verticalPosUpdateOnly: false,
-            _keepOpenTagList: [],
-            _onHideCallback: null,
-            updatePosition: function(range, selectedNode) {
-                range = range || tools.viper.getViperRange();
-
-                var rangeCoords  = null;
-                var selectedNode = selectedNode || range.getNodeSelection(range);
-                if (selectedNode !== null) {
-                    rangeCoords = this.getElementCoords(selectedNode);
-                } else {
-                    rangeCoords = range.rangeObj.getBoundingClientRect();
-                }
-
-                if (!rangeCoords || (rangeCoords.left === 0 && rangeCoords.top === 0 && ViperUtil.isBrowser('firefox') === true)) {
-                    if (range.collapsed === true) {
-                        var span = document.createElement('span');
-                        tools.viper.insertNodeAtCaret(span);
-                        rangeCoords = this.getElementCoords(span);
-                        ViperUtil.remove(span);
-
-                        if (!rangeCoords) {
-                            return;
-                        }
-                    } else {
-                        var startNode = range.getStartNode();
-                        var endNode   = range.getEndNode();
-                        if (!startNode || !endNode) {
-                            return;
-                        }
-
-                        if (startNode.nodeType === ViperUtil.TEXT_NODE
-                            && startNode.data.indexOf("\n") === 0
-                            && endNode.nodeType === ViperUtil.TEXT_NODE
-                            && range.endOffset === endNode.data.length
-                        ) {
-                            range.setStart(endNode, endNode.data.length);
-                            range.collapse(true);
-                            rangeCoords = range.rangeObj.getBoundingClientRect();
-                        }
-                    }
-                }
-
-                if (!rangeCoords || (rangeCoords.bottom === 0 && rangeCoords.height === 0 && rangeCoords.left === 0)) {
-                    if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true) {
-                        // Webkit bug workaround. https://bugs.webkit.org/show_bug.cgi?id=65324.
-                        // OK.. Yet another fix. With the latest Google Chrome (17.0.963.46)
-                        // the !rangeCoords check started to fail because its no longer
-                        // returning null for a collapsed range, instead all values are set to 0.
-
-                        var startNode = range.getStartNode();
-                        if (startNode.nodeType === ViperUtil.TEXT_NODE) {
-                            if (range.startOffset <= startNode.data.length) {
-                                range.setEnd(startNode, (range.startOffset + 1));
-                                rangeCoords = range.rangeObj.getBoundingClientRect();
+                            if (startNode.nodeType === ViperUtil.TEXT_NODE
+                                && startNode.data.indexOf("\n") === 0
+                                && endNode.nodeType === ViperUtil.TEXT_NODE
+                                && range.endOffset === endNode.data.length
+                            ) {
+                                range.setStart(endNode, endNode.data.length);
                                 range.collapse(true);
-                                if (rangeCoords) {
-                                    rangeCoords.right = rangeCoords.left;
-                                }
-                            } else if (range.startOffset > 0) {
-                                range.setStart(startNode, (range.startOffset - 1));
                                 rangeCoords = range.rangeObj.getBoundingClientRect();
-                                range.collapse(false);
-                                if (rangeCoords) {
-                                    rangeCoords.right = rangeCoords.left;
+                            }
+                        }//end if
+                    }//end if
+
+                    if (!rangeCoords || (rangeCoords.bottom === 0 && rangeCoords.height === 0 && rangeCoords.left === 0)) {
+                        if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true) {
+                            // Webkit bug workaround. https://bugs.webkit.org/show_bug.cgi?id=65324.
+                            // OK.. Yet another fix. With the latest Google Chrome (17.0.963.46)
+                            // the !rangeCoords check started to fail because its no longer
+                            // returning null for a collapsed range, instead all values are set to 0.
+                            var startNode = range.getStartNode();
+                            if (startNode.nodeType === ViperUtil.TEXT_NODE) {
+                                if (range.startOffset <= startNode.data.length) {
+                                    range.setEnd(startNode, (range.startOffset + 1));
+                                    rangeCoords = range.rangeObj.getBoundingClientRect();
+                                    range.collapse(true);
+                                    if (rangeCoords) {
+                                        rangeCoords.right = rangeCoords.left;
+                                    }
+                                } else if (range.startOffset > 0) {
+                                    range.setStart(startNode, (range.startOffset - 1));
+                                    rangeCoords = range.rangeObj.getBoundingClientRect();
+                                    range.collapse(false);
+                                    if (rangeCoords) {
+                                        rangeCoords.right = rangeCoords.left;
+                                    }
                                 }
                             }
-                        }
-                    } else {
-                        // Point to top of Viper element.
-                        rangeCoords        = this.getElementCoords(tools.viper.getViperElement());
-                        rangeCoords.bottom = (rangeCoords.top + 10);
+                        } else {
+                            // Point to top of Viper element.
+                            rangeCoords        = this.getElementCoords(tools.viper.getViperElement());
+                            rangeCoords.bottom = (rangeCoords.top + 10);
+                        }//end if
                     }//end if
-                }//end if
 
-                var frameOffset = {x: 0, y: 0};
-                if (Viper.document !== document && Viper.document.defaultView.frameElement) {
-                    // Viper element is inside an iframe, need to adjust the position.
-                    frameOffset      = tools.viper.getDocumentOffset();
-                    var newCoords    = {};
-                    newCoords.bottom = (rangeCoords.bottom + frameOffset.y);
-                    newCoords.top    = (rangeCoords.top + frameOffset.y);
-                    newCoords.bottom = (rangeCoords.bottom + frameOffset.y);
-                    newCoords.left   = (rangeCoords.left + frameOffset.x);
-                    newCoords.right  = (rangeCoords.right + frameOffset.x);
-                    newCoords.height = rangeCoords.height;
-                    newCoords.width  = rangeCoords.width;
-                    rangeCoords      = newCoords;
-                }
-
-                var scrollCoords = ViperUtil.getScrollCoords();
-
-                ViperUtil.addClass(toolbar, 'Viper-calcWidth');
-                ViperUtil.setStyle(toolbar, 'width', 'auto');
-                var toolbarWidth  = ViperUtil.getElementWidth(toolbar);
-                ViperUtil.removeClass(toolbar, 'Viper-calcWidth');
-                ViperUtil.setStyle(toolbar, 'width', toolbarWidth + 'px');
-
-                var viperElemCoords = this.getElementCoords(tools.viper.getViperElement());
-                var elemWindowDim   = ViperUtil.getWindowDimensions(Viper.document.defaultView);
-                var mainWindowDim   = ViperUtil.getWindowDimensions();
-
-                if (this._verticalPosUpdateOnly !== true) {
-                    var left = ((rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x) - (toolbarWidth / 2));
-                    ViperUtil.removeClass(toolbar, 'Viper-orientationLeft Viper-orientationRight');
-
-                    if (left > (elemWindowDim.width + frameOffset.x)) {
-                        // Dont go off screen, point to the editable element.
-                        left = viperElemCoords.left;
+                    var frameOffset = {x: 0, y: 0};
+                    if (Viper.document !== document && Viper.document.defaultView.frameElement) {
+                        // Viper element is inside an iframe, need to adjust the position.
+                        frameOffset      = tools.viper.getDocumentOffset();
+                        var newCoords    = {};
+                        newCoords.bottom = (rangeCoords.bottom + frameOffset.y);
+                        newCoords.top    = (rangeCoords.top + frameOffset.y);
+                        newCoords.bottom = (rangeCoords.bottom + frameOffset.y);
+                        newCoords.left   = (rangeCoords.left + frameOffset.x);
+                        newCoords.right  = (rangeCoords.right + frameOffset.x);
+                        newCoords.height = rangeCoords.height;
+                        newCoords.width  = rangeCoords.width;
+                        rangeCoords      = newCoords;
                     }
 
-                    if (left < 0) {
-                        left += (toolbarWidth / 2);
-                        ViperUtil.addClass(toolbar, 'Viper-orientationLeft');
-                    } else if (left + toolbarWidth > mainWindowDim.width) {
-                        left -= (toolbarWidth / 2);
-                        ViperUtil.addClass(toolbar, 'Viper-orientationRight');
+                    var scrollCoords = ViperUtil.getScrollCoords();
+
+                    ViperUtil.addClass(toolbar, 'Viper-calcWidth');
+                    ViperUtil.setStyle(toolbar, 'width', 'auto');
+                    var toolbarWidth = ViperUtil.getElementWidth(toolbar);
+                    ViperUtil.removeClass(toolbar, 'Viper-calcWidth');
+                    ViperUtil.setStyle(toolbar, 'width', toolbarWidth + 'px');
+
+                    var viperElemCoords = this.getElementCoords(tools.viper.getViperElement());
+                    var elemWindowDim   = ViperUtil.getWindowDimensions(Viper.document.defaultView);
+                    var mainWindowDim   = ViperUtil.getWindowDimensions();
+
+                    if (this._verticalPosUpdateOnly !== true) {
+                        var left = ((rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x) - (toolbarWidth / 2));
+                        ViperUtil.removeClass(toolbar, 'Viper-orientationLeft Viper-orientationRight');
+
+                        if (left > (elemWindowDim.width + frameOffset.x)) {
+                            // Dont go off screen, point to the editable element.
+                            left = viperElemCoords.left;
+                        }
+
+                        if (left < 0) {
+                            left += (toolbarWidth / 2);
+                            ViperUtil.addClass(toolbar, 'Viper-orientationLeft');
+                        } else if (left + toolbarWidth > mainWindowDim.width) {
+                            left -= (toolbarWidth / 2);
+                            ViperUtil.addClass(toolbar, 'Viper-orientationRight');
+                        }
+
+                        ViperUtil.setStyle(toolbar, 'left', left + 'px');
                     }
 
-                    ViperUtil.setStyle(toolbar, 'left', left + 'px');
-                }
+                    var top = (rangeCoords.bottom + margin + scrollCoords.y);
 
-                var top = (rangeCoords.bottom + margin + scrollCoords.y);
-
-                if (top === 0) {
-                    this.hide();
-                    return;
-                } else if (((top + 50) > (mainWindowDim.height + scrollCoords.y)) || (top > elemWindowDim.height + scrollCoords.y + frameOffset.y)) {
-                    this.hide();
-                    return;
-                } else if (top < viperElemCoords.top && Viper.document === document) {
-                    top = (viperElemCoords.top + 50);
-                    if (left < viperElemCoords.left && this._verticalPosUpdateOnly !== true) {
-                        ViperUtil.setStyle(toolbar, 'left', viperElemCoords.left  + 50 + 'px');
+                    if (top === 0) {
+                        this.hide();
+                        return;
+                    } else if (((top + 50) > (mainWindowDim.height + scrollCoords.y)) || (top > elemWindowDim.height + scrollCoords.y + frameOffset.y)) {
+                        this.hide();
+                        return;
+                    } else if (top < viperElemCoords.top && Viper.document === document) {
+                        top = (viperElemCoords.top + 50);
+                        if (left < viperElemCoords.left && this._verticalPosUpdateOnly !== true) {
+                            ViperUtil.setStyle(toolbar, 'left', viperElemCoords.left + 50 + 'px');
+                        }
+                    } else if (Viper.document !== document && top < tools.viper.getDocumentOffset().y) {
+                        this.hide();
+                        return;
                     }
-                } else if (Viper.document !== document && top < tools.viper.getDocumentOffset().y) {
-                    this.hide();
-                    return;
+
+                    ViperUtil.setStyle(toolbar, 'top', top + 'px');
+                    ViperUtil.addClass(toolbar, 'Viper-visible');
+                },
+                setVerticalUpdateOnly: function(verticalOnly) {
+                    this._verticalPosUpdateOnly = verticalOnly;
+                },
+                _updateSubSectionArrowPos: function() {
+                    if (!this._activeSection) {
+                        return;
+                    }
+
+                    var button = this._subSectionButtons[this._activeSection];
+                    if (!button) {
+                        return;
+                    }
+
+                    button = tools.getItem(button).element;
+                    if (!button) {
+                        return;
+                    }
+
+                    var buttonRect = ViperUtil.getBoundingRectangle(button);
+                    var toolbarPos = ViperUtil.getBoundingRectangle(toolbar);
+                    var xPos       = (buttonRect.x1 - toolbarPos.x1 + ((buttonRect.x2 - buttonRect.x1) / 2));
+                    ViperUtil.setStyle(subSectionContainer.firstChild, 'left', xPos + 'px');
+                },
+                getElementCoords: function(element) {
+                    var elemRect     = ViperUtil.getBoundingRectangle(element);
+                    var scrollCoords = ViperUtil.getScrollCoords(element.ownerDocument.defaultView);
+                    return {
+                        left: (elemRect.x1 - scrollCoords.x),
+                        right: (elemRect.x2 - scrollCoords.x),
+                        top: (elemRect.y1 - scrollCoords.y),
+                        bottom: (elemRect.y2 - scrollCoords.y)
+                    };
                 }
-
-                ViperUtil.setStyle(toolbar, 'top', top + 'px');
-                ViperUtil.addClass(toolbar, 'Viper-visible');
-
-            },
-            setVerticalUpdateOnly: function(verticalOnly) {
-                this._verticalPosUpdateOnly = verticalOnly;
-            },
-            _updateSubSectionArrowPos: function() {
-                if (!this._activeSection) {
-                    return;
-                }
-
-                var button = this._subSectionButtons[this._activeSection];
-                if (!button) {
-                    return;
-                }
-
-                button = tools.getItem(button).element;
-                if (!button) {
-                    return;
-                }
-
-                var buttonRect = ViperUtil.getBoundingRectangle(button);
-                var toolbarPos = ViperUtil.getBoundingRectangle(toolbar);
-                var xPos       = (buttonRect.x1 - toolbarPos.x1 + ((buttonRect.x2 - buttonRect.x1) / 2));
-                ViperUtil.setStyle(subSectionContainer.firstChild, 'left', xPos + 'px');
-
-            },
-            getElementCoords: function(element) {
-                var elemRect     = ViperUtil.getBoundingRectangle(element);
-                var scrollCoords = ViperUtil.getScrollCoords(element.ownerDocument.defaultView);
-                return {
-                    left: (elemRect.x1 - scrollCoords.x),
-                    right: (elemRect.x2 - scrollCoords.x),
-                    top: (elemRect.y1 - scrollCoords.y),
-                    bottom: (elemRect.y2 - scrollCoords.y)
-                };
-
             }
-        });
+        );
 
         this.viper.addElement(toolbar);
 
         return toolbar;
+
+    },
+
+    getVisibleToolbarRectangles: function()
+    {
+        var rects           = [];
+        var visibleToolbars = ViperUtil.getClass('ViperITP Viper-visible', this.viper.getElementHolder());
+        if (visibleToolbars.length === 0) {
+            return rects;
+        }
+
+        for (var i = 0; i < visibleToolbars.length; i++) {
+            rects.push(ViperUtil.getBoundingRectangle(visibleToolbars[i]));
+        }
+
+        return rects;
 
     },
 
@@ -11898,57 +12195,71 @@ ViperTools.prototype = {
         if (element && element !== 'mouse') {
             // Show tooltip on hover.
             var timer = null;
-            ViperUtil.hover(element, function() {
-                timer = setTimeout(function() {
-                    self.getItem(id).show(element);
-                }, 500);
-            }, function() {
-                clearTimeout(timer);
-                self.getItem(id).hide();
-            });
-        } else if (element === 'mouse') {
-            ViperUtil.addEvent(document, 'mousemove', function(e) {
-                mouseX = e.pageX;
-                mouseY = e.pageY;
-
-                if (visible !== true) {
-                    return;
+            ViperUtil.hover(
+                element,
+                function() {
+                    timer = setTimeout(
+                        function() {
+                            self.getItem(id).show(element);
+                        },
+                        500
+                    );
+                },
+                function() {
+                    clearTimeout(timer);
+                    self.getItem(id).hide();
                 }
+            );
+        } else if (element === 'mouse') {
+            ViperUtil.addEvent(
+                document,
+                'mousemove',
+                function(e) {
+                    mouseX = e.pageX;
+                    mouseY = e.pageY;
 
-                ViperUtil.setStyle(tooltip, 'left', mouseX + 'px');
-                ViperUtil.setStyle(tooltip, 'top', mouseY + 'px');
-            });
-        }
+                    if (visible !== true) {
+                        return;
+                    }
 
-
-        this.addItem(id, {
-            type: 'tooltip',
-            element: tooltip,
-            show: function(elem) {
-                if (elem && elem.nodeType) {
-                    // Show tooltip on this element.
-                    var rect = ViperUtil.getBoundingRectangle(elem);
-
-                    ViperUtil.setStyle(tooltip, 'left', rect.x2 + 'px');
-                    ViperUtil.setStyle(tooltip, 'top', rect.y2 + 'px');
-
-                    self.viper.addElement(tooltip);
-                    visible = true;
-                } else if (elem === 'mouse' || element === 'mouse') {
-                    // Follow the mouse pointer.
                     ViperUtil.setStyle(tooltip, 'left', mouseX + 'px');
                     ViperUtil.setStyle(tooltip, 'top', mouseY + 'px');
-                    self.viper.addElement(tooltip);
-                    visible = true;
                 }
-            },
-            hide: function() {
-                visible = false;
-                if (tooltip.parentNode) {
-                    tooltip.parentNode.removeChild(tooltip);
+            );
+        }//end if
+
+
+        this.addItem(
+            id,
+            {
+                type: 'tooltip',
+                element: tooltip,
+                show: function(elem) {
+                    if (elem && elem.nodeType) {
+                        // Show tooltip on this element.
+                        var rect = ViperUtil.getBoundingRectangle(elem);
+
+                        ViperUtil.setStyle(tooltip, 'left', rect.x2 + 'px');
+                        ViperUtil.setStyle(tooltip, 'top', rect.y2 + 'px');
+
+                        self.viper.addElement(tooltip);
+                        visible = true;
+                    } else if (elem === 'mouse' || element === 'mouse') {
+                        // Follow the mouse pointer.
+                        ViperUtil.setStyle(tooltip, 'left', mouseX + 'px');
+                        ViperUtil.setStyle(tooltip, 'top', mouseY + 'px');
+                        self.viper.addElement(tooltip);
+                        visible = true;
+                    }
+                },
+                hide: function() {
+                    visible = false;
+                    if (tooltip.parentNode) {
+                        tooltip.parentNode.removeChild(tooltip);
+                    }
                 }
             }
-        });
+        );
 
         return tooltip;
 
@@ -12055,7 +12366,7 @@ var ViperUtil = {
 
     },
 
-
+    
     remove: function(element)
     {
         if (element) {
@@ -12064,35 +12375,35 @@ var ViperUtil = {
 
     },
 
-
+    
     insertBefore: function(before, elem)
     {
         ViperUtil.$(before).before(elem);
 
     },
 
-
+    
     insertAfter: function(after, elem)
     {
         ViperUtil.$(after).after(elem);
 
     },
 
-
+    
     addClass: function(element, classNames)
     {
         ViperUtil.$(element).addClass(classNames);
 
     },
 
-
+    
     removeClass: function(element, classNames)
     {
         ViperUtil.$(element).removeClass(classNames);
 
     },
 
-
+    
     setStyle: function(element, property, value)
     {
         if (element) {
@@ -12101,7 +12412,7 @@ var ViperUtil = {
 
     },
 
-
+    
     getTag: function(tagName, startElement, onlyChildren)
     {
         var ret;
@@ -12120,7 +12431,7 @@ var ViperUtil = {
 
     },
 
-
+    
     setHtml: function(element, content)
     {
         if (element) {
@@ -12129,14 +12440,14 @@ var ViperUtil = {
 
     },
 
-
+    
     getHtml: function(element)
     {
         return ViperUtil.$(element).html();
 
     },
 
-
+    
     isBlockElement: function(element)
     {
         if (!element) {
@@ -12195,7 +12506,7 @@ var ViperUtil = {
 
     },
 
-
+    
     isStubElement: function(element)
     {
         if (element) {
@@ -12231,7 +12542,7 @@ var ViperUtil = {
 
     },
 
-
+    
     ltrim: function (str, trimChars)
     {
         trimChars = trimChars || '\\s';
@@ -12239,7 +12550,7 @@ var ViperUtil = {
 
     },
 
-
+    
     rtrim: function (str, trimChars)
     {
         trimChars = trimChars || '\\s';
@@ -12248,7 +12559,7 @@ var ViperUtil = {
     },
 
 
-
+    
     trim: function(value, trimChars)
     {
         return ViperUtil.ltrim(ViperUtil.rtrim(value, trimChars), trimChars);
@@ -12261,7 +12572,7 @@ var ViperUtil = {
 
     },
 
-
+    
     isBlank: function(value)
     {
         if (!value || /^\s*$/.test(value)) {
@@ -12312,7 +12623,7 @@ var ViperUtil = {
 
     },
 
-
+    
     addEvent: function(elements, type, callback, data)
     {
         if (elements) {
@@ -12327,7 +12638,7 @@ var ViperUtil = {
 
     },
 
-
+    
     removeEvent: function(elements, type, func)
     {
         if (elements) {
@@ -12353,7 +12664,7 @@ var ViperUtil = {
 
     },
 
-
+    
     trigger: function(elements, type, data)
     {
         if (elements) {
@@ -12370,7 +12681,7 @@ var ViperUtil = {
 
     },
 
-
+    
     preventDefault: function(e)
     {
         e.preventDefault();
@@ -12378,7 +12689,7 @@ var ViperUtil = {
 
     },
 
-
+    
     getMouseEventTarget: function(evt)
     {
        var ret = null;
@@ -12392,7 +12703,7 @@ var ViperUtil = {
 
     },
 
-
+    
     getClass: function(className, startElement, tagName, onlyChildren)
     {
         var ret;
@@ -12417,21 +12728,21 @@ var ViperUtil = {
 
     },
 
-
+    
     hasClass: function(element, className)
     {
         return ViperUtil.$(element).hasClass(className);
 
     },
 
-
+    
     getStyle: function(element, property)
     {
         return ViperUtil.$(element).css(property);
 
     },
 
-
+    
     getComputedStyle: function (el, styleName)
     {
         if (styleName) {
@@ -12491,7 +12802,7 @@ var ViperUtil = {
 
     },
 
-
+    
     getSurroundingParents: function(node, tagName, blockElementsOnly, stopElem)
     {
         var parents = [];
@@ -12533,7 +12844,7 @@ var ViperUtil = {
 
     },
 
-
+    
     isChildOf: function(el, parent, stopElem)
     {
         try {
@@ -12566,7 +12877,7 @@ var ViperUtil = {
 
     },
 
-
+    
     getElementsBetween: function(fromElem, toElem)
     {
         var elements = [];
@@ -12624,11 +12935,18 @@ var ViperUtil = {
         var lastParent = parentElems[(parentElems.length - 1)];
         elements       = ViperUtil.arrayMerge(elements, ViperUtil.getElementsBetween(lastParent, toElem));
 
+        if (lastParent.firstChild === lastParent.lastChild
+            && lastParent.firstChild === fromElem
+            && lastParent !== toElem
+        ) {
+           elements.push(lastParent);
+        }
+
         return elements;
 
     },
 
-
+    
     getSiblings: function(element, dir, elementNodesOnly, stopElem)
     {
         if (elementNodesOnly === true) {
@@ -12664,7 +12982,7 @@ var ViperUtil = {
 
     },
 
-
+    
     arrayMerge: function (array1, array2)
     {
         // We won't maintain the index if array1 is a JS array because if it tries to
@@ -12689,7 +13007,7 @@ var ViperUtil = {
 
     },
 
-
+    
     foreach: function(value, cb)
     {
         if (value instanceof Array) {
@@ -12713,7 +13031,7 @@ var ViperUtil = {
 
     },
 
-
+    
     attr: function(elements, key, val)
     {
         if (ViperUtil.isset(val) === true) {
@@ -12730,7 +13048,7 @@ var ViperUtil = {
 
     },
 
-
+    
     getBoundingRectangle: function(element)
     {
         // Retrieve the coordinates and dimensions of the element.
@@ -12749,7 +13067,7 @@ var ViperUtil = {
 
     },
 
-
+    
     getNodeTextContent: function(node)
     {
        return ViperUtil.$(node).text();
@@ -12764,7 +13082,7 @@ var ViperUtil = {
 
     },
 
-
+    
     getid: function(id, startElement)
     {
         if (!startElement) {
@@ -12776,7 +13094,7 @@ var ViperUtil = {
 
     },
 
-
+    
     empty: function(element)
     {
         if (element) {
@@ -12836,7 +13154,7 @@ var ViperUtil = {
 
     },
 
-
+    
     getElementHeight: function(element, inner)
     {
         if (inner === true) {
@@ -12847,7 +13165,7 @@ var ViperUtil = {
 
     },
 
-
+    
     getElementWidth: function(element, inner)
     {
         if (inner === true) {
@@ -12868,7 +13186,7 @@ var ViperUtil = {
 
     },
 
-
+    
     getWindowDimensions: function(win)
     {
         win = win || window;
@@ -12913,7 +13231,7 @@ var ViperUtil = {
 
     },
 
-
+    
     getScrollCoords: function(win)
     {
         win = win || window;
@@ -12944,7 +13262,7 @@ var ViperUtil = {
 
     },
 
-
+    
     getScrollbarWidth: function()
     {
         if (ViperUtil._scrollBarWidth) {
@@ -12993,7 +13311,7 @@ var ViperUtil = {
 
     },
 
-
+    
     getElementCoords: function(element, relative)
     {
         var offset = ViperUtil.$(element).offset();
@@ -13025,7 +13343,7 @@ var ViperUtil = {
 
     },
 
-
+    
     getXPath: function(node)
     {
         var path = '';
@@ -13072,7 +13390,7 @@ var ViperUtil = {
 
     },
 
-
+    
     getNodeFromXPath: function(path)
     {
         if (document.evaluate) {
@@ -13085,7 +13403,7 @@ var ViperUtil = {
     },
 
 
-
+    
     getNodeFromPath: function(path)
     {
         var paths  = path.split('/');
@@ -13103,7 +13421,7 @@ var ViperUtil = {
 
     },
 
-
+    
     getNodeFromPathSegment: function(parent, path)
     {
         var pos = path.match(/\[(\d+)\]/);
@@ -13153,7 +13471,7 @@ var ViperUtil = {
     },
 
 
-
+    
     getDocuments: function()
     {
         var docs = [document];
@@ -13166,7 +13484,7 @@ var ViperUtil = {
 
     },
 
-
+    
     getIFrameDocument: function(iframe)
     {
         var doc = null;
@@ -13186,7 +13504,7 @@ var ViperUtil = {
 
     },
 
-
+    
     sprintf: function(str)
     {
         var c = arguments.length;
@@ -13248,14 +13566,14 @@ var ViperUtil = {
 
     },
 
-
+    
     setNodeTextContent: function(node, txt)
     {
        return ViperUtil.$(node).text(txt);
 
     },
 
-
+    
     _inherited: {},
     inherits: function(child, parent)
     {
@@ -13301,7 +13619,7 @@ var ViperUtil = {
 
     },
 
-
+    
     inArray: function(needle, haystack, typeSensitive)
     {
         if (ViperUtil.isset(typeSensitive) === false) {
@@ -13321,7 +13639,7 @@ var ViperUtil = {
 
     },
 
-
+    
     arraySearch: function(needle, haystack)
     {
         var length = haystack.length;
@@ -13345,7 +13663,7 @@ var ViperUtil = {
 
     },
 
-
+    
     arrayDiff: function(array1, array2, firstOnly)
     {
         var al  = array1.length;
@@ -13369,7 +13687,7 @@ var ViperUtil = {
 
     },
 
-
+    
     ellipsize: function(value, length)
     {
         // Type validation.
@@ -13458,6 +13776,13 @@ var ViperUtil = {
         977: '&thetasym;', //  ϑ
         978: '&upsih;',    //  ϒ
         982: '&piv;',      //  ϖ
+        8216: '&lsquo;',   //  ‘
+        8217: '&rsquo;',   //  ’
+        8218: '&sbquo;',   //  ‚
+        8220: '&ldquo;',   //  “
+        8221: '&rdquo;',   //  ”
+        8222: '&bdquo;',   //  „
+        8223: '&ldquo;',   //  “
         8226: '&bull;',    //  *
         8230: '&hellip;',  //  …
         8242: '&prime;',   //  ′
@@ -13679,7 +14004,7 @@ var ViperUtil = {
 
     },
 
-
+    
     replaceCommonNamedEntities: function(html)
     {
         var newHtml = '';
@@ -13770,7 +14095,7 @@ var ViperUtil = {
 
     },
 
-
+    
     addToQueryString: function(url, addQueries)
     {
         var mergedUrl        = '';
@@ -13800,7 +14125,7 @@ var ViperUtil = {
 
     },
 
-
+    
     queryString: function(url)
     {
         var result    = {};
@@ -13837,7 +14162,7 @@ var ViperUtil = {
 
     },
 
-
+    
     getURLAnchor: function(url)
     {
         if (typeof url === 'string') {
@@ -13876,7 +14201,7 @@ var ViperUtil = {
 
     },
 
-
+    
     camelCase: function(property)
     {
         // Regular expression to find the next hyphen followed by a letter and to
@@ -13892,7 +14217,7 @@ var ViperUtil = {
 
     },
 
-
+    
     getBrowserType: function()
     {
         if (ViperUtil._browserType === null) {
@@ -13918,7 +14243,7 @@ var ViperUtil = {
 
     },
 
-
+    
     getBrowserVersion: function()
     {
         if (ViperUtil._browserVersion !== null) {
@@ -13965,7 +14290,7 @@ var ViperUtil = {
 
     },
 
-
+    
     isBrowser: function(browser, version)
     {
         if (ViperUtil.getBrowserType() !== browser) {
@@ -14032,7 +14357,7 @@ var ViperUtil = {
 
     },
 
-
+    
     cloneNode: function(node)
     {
         // Clone the element so we dont modify the actual contents.
@@ -14050,7 +14375,7 @@ var ViperUtil = {
 
     },
 
-
+    
     dcall: function(c)
     {
         if (!ViperUtil._dcall) {
@@ -14096,12 +14421,13 @@ var HTMLCSAuditor = new function()
     var _doc      = null;
     var _messages = [];
     var _page     = 1;
+    var _sbWidth  = null;
 
     var self = this;
 
     this.pointerContainer = null;
 
-
+    
     var buildSummaryButton = function(id, className, title, onclick) {
         var button       = _doc.createElement('div');
         button.id        = id;
@@ -14126,7 +14452,7 @@ var HTMLCSAuditor = new function()
         return button;
     };
 
-
+    
     var buildCheckbox = function(id, title, checked, disabled, onclick) {
         if (checked === undefined) {
             checked = false;
@@ -14177,7 +14503,7 @@ var HTMLCSAuditor = new function()
         return label;
     };
 
-
+    
     var buildRadioButton = function(groupName, value, title, checked) {
         if (checked === undefined) {
             checked = false;
@@ -14203,7 +14529,7 @@ var HTMLCSAuditor = new function()
         return label;
     };
 
-
+    
     var buildHeaderSection = function(standard, wrapper) {
         var header       = _doc.createElement('div');
         header.className = _prefix + 'header';
@@ -14269,7 +14595,7 @@ var HTMLCSAuditor = new function()
         return header;
     };
 
-
+    
     var buildSummarySection = function(errors, warnings, notices) {
         var summary       = _doc.createElement('div');
         summary.className = _prefix + 'summary';
@@ -14345,7 +14671,7 @@ var HTMLCSAuditor = new function()
         return summary;
     };
 
-
+    
     var buildDetailSummarySection = function(issue, totalIssues) {
         var summary       = _doc.createElement('div');
         summary.className = _prefix + 'summary-detail';
@@ -14460,7 +14786,7 @@ var HTMLCSAuditor = new function()
         return summary;
     };
 
-
+    
     var buildIssueListSection = function(messages) {
         var issueListWidth = (Math.ceil(messages.length / 5) * 300);
         var issueList      = _doc.createElement('div');
@@ -15089,7 +15415,7 @@ var HTMLCSAuditor = new function()
 
     };
 
-
+    
     var _includeScript = function(src, callback) {
         var script    = document.createElement('script');
         script.onload = function() {
@@ -15334,7 +15660,7 @@ var HTMLCSAuditor = new function()
         return standards;
     };
 
-
+    
     this.run = function(standard, source, options) {
         var standards       = this.getStandardList();
         var standardsToLoad = [];
@@ -15723,8 +16049,8 @@ var HTMLCSAuditor = new function()
 
         getScrollbarWidth: function(elem)
         {
-            if (this.scrollBarWidth) {
-                return this.scrollBarWidth;
+            if (_sbWidth !== null) {
+                return _sbWidth;
             }
 
             doc = elem.ownerDocument;
@@ -15765,8 +16091,9 @@ var HTMLCSAuditor = new function()
 
             // Pixel width of the scroller.
             var scrollBarWidth = (widthNoScrollBar - widthWithScrollBar);
-            // Set the DOM variable so we don't have to run this again.
-            this.scrollBarWidth = scrollBarWidth;
+            
+            // Set the auditor-level variable so we don't have to run this again.
+            _sbWidth = scrollBarWidth;
             return scrollBarWidth;
 
         },
@@ -16155,13 +16482,13 @@ var HTMLCS = new function()
     var _messages     = [];
     var _msgOverrides = {};
 
-
+    
     this.ERROR   = 1;
     this.WARNING = 2;
     this.NOTICE  = 3;
 
-
-    this.process = function(standard, content, callback) {
+    
+    this.process = function(standard, content, callback, failCallback) {
         // Clear previous runs.
         _standards    = {};
         _sniffs       = [];
@@ -16177,12 +16504,12 @@ var HTMLCS = new function()
         } else {
             this.loadStandard(standard, function() {
                 HTMLCS.run(callback, content);
-            });
+            }, failCallback);
         }
     };
 
-
-    this.loadStandard = function(standard, callback) {
+    
+    this.loadStandard = function(standard, callback, failCallback) {
         if (!standard) {
             return false;
         }
@@ -16190,10 +16517,10 @@ var HTMLCS = new function()
         _includeStandard(standard, function() {
             _standard = standard;
             callback.call(this);
-        });
+        }, failCallback);
     };
 
-
+    
     this.run = function(callback, content) {
         var element      = null;
         var loadingFrame = false;
@@ -16267,7 +16594,7 @@ var HTMLCS = new function()
         }
     };
 
-
+    
     this.isFullDoc = function(content) {
         var fullDoc = false;
         if (typeof content === 'string') {
@@ -16286,7 +16613,7 @@ var HTMLCS = new function()
         return fullDoc;
     }
 
-
+    
     this.addMessage = function(type, element, msg, code, data) {
         code = _getMessageCode(code);
 
@@ -16299,12 +16626,12 @@ var HTMLCS = new function()
         });
     };
 
-
+    
     this.getMessages = function() {
         return _messages.concat([]);
     };
 
-
+    
     var _run = function(elements, topElement, callback) {
         var topMsgs = [];
         while (elements.length > 0) {
@@ -16343,7 +16670,7 @@ var HTMLCS = new function()
         }
     };
 
-
+    
     var _processSniffs = function(element, sniffs, topElement, callback) {
         while (sniffs.length > 0) {
             var sniff     = sniffs.shift();
@@ -16370,8 +16697,8 @@ var HTMLCS = new function()
         }
     };
 
-
-    var _includeStandard = function(standard, callback, options) {
+    
+    var _includeStandard = function(standard, callback, failCallback, options) {
         if (standard.indexOf('http') !== 0) {
             standard = _getStandardPath(standard);
         }//end id
@@ -16381,17 +16708,17 @@ var HTMLCS = new function()
         var ruleSet = window['HTMLCS_' + parts[(parts.length - 2)]];
         if (ruleSet) {
             // Already included.
-            _registerStandard(standard, callback, options);
+            _registerStandard(standard, callback, failCallback, options);
         } else {
             _includeScript(standard, function() {
                 // Script is included now register the standard.
-                _registerStandard(standard, callback, options);
-            });
+                _registerStandard(standard, callback, failCallback, options);
+            }, failCallback);
         }//end if
     };
 
-
-    var _registerStandard = function(standard, callback, options) {
+    
+    var _registerStandard = function(standard, callback, failCallback, options) {
         // Get the object name.
         var parts = standard.split('/');
 
@@ -16429,11 +16756,11 @@ var HTMLCS = new function()
 
         // Register the sniffs for this standard.
         var sniffs = ruleSet.sniffs.slice(0, ruleSet.sniffs.length);
-        _registerSniffs(standard, sniffs, callback);
+        _registerSniffs(standard, sniffs, callback, failCallback);
     };
 
-
-    var _registerSniffs = function(standard, sniffs, callback) {
+    
+    var _registerSniffs = function(standard, sniffs, callback, failCallback) {
         if (sniffs.length === 0) {
             callback.call(this);
             return;
@@ -16442,12 +16769,12 @@ var HTMLCS = new function()
         // Include and register sniffs.
         var sniff = sniffs.shift();
         _loadSniffFile(standard, sniff, function() {
-            _registerSniffs(standard, sniffs, callback);
-        });
+            _registerSniffs(standard, sniffs, callback, failCallback);
+        }, failCallback);
     };
 
-
-    var _loadSniffFile = function(standard, sniff, callback) {
+    
+    var _loadSniffFile = function(standard, sniff, callback, failCallback) {
         if (typeof sniff === 'string') {
             var sniffObj = _getSniff(standard, sniff);
             var cb       = function() {
@@ -16459,7 +16786,7 @@ var HTMLCS = new function()
             if (sniffObj) {
                 cb();
             } else {
-                _includeScript(_getSniffPath(standard, sniff), cb);
+                _includeScript(_getSniffPath(standard, sniff), cb, failCallback);
             }
         } else {
             // Including a whole other standard.
@@ -16472,14 +16799,14 @@ var HTMLCS = new function()
                 }
 
                 callback.call(this);
-            }, {
+            }, failCallback, {
                 exclude: sniff.exclude,
                 include: sniff.include
             });
         }
     };
 
-
+    
     var _registerSniff = function(standard, sniff) {
         // Get the sniff object.
         var sniffObj = _getSniff(standard, sniff);
@@ -16505,7 +16832,7 @@ var HTMLCS = new function()
         _sniffs.push(sniffObj);
     };
 
-
+    
     var _getSniffPath = function(standard, sniff) {
         var parts = standard.split('/');
         parts.pop();
@@ -16513,7 +16840,7 @@ var HTMLCS = new function()
         return path;
     };
 
-
+    
     var _getStandardPath = function(standard)
     {
         // Get the include path of a local standard.
@@ -16537,7 +16864,7 @@ var HTMLCS = new function()
 
     };
 
-
+    
     var _getSniff = function(standard, sniff) {
         var name = 'HTMLCS_';
         name    += _standards[standard].name + '_Sniffs_';
@@ -16551,19 +16878,27 @@ var HTMLCS = new function()
         return window[name];
     };
 
-
+    
     var _getMessageCode = function(code) {
         code = _standard + '.' + _currentSniff._name + '.' + code;
         return code;
     };
 
-
-    var _includeScript = function(src, callback) {
+    
+    var _includeScript = function(src, callback, failCallback) {
         var script    = document.createElement('script');
         script.onload = function() {
             script.onload = null;
             script.onreadystatechange = null;
             callback.call(this);
+        };
+
+        script.onerror = function() {
+            script.onload = null;
+            script.onreadystatechange = null;
+            if (failCallback) {
+                failCallback.call(this);
+            }
         };
 
         script.onreadystatechange = function() {
@@ -16582,7 +16917,7 @@ var HTMLCS = new function()
         }
     };
 
-
+    
     var _getAllTags = function(element) {
         element      = element || document;
         var elements = element.getElementsByTagName('*');
@@ -16597,12 +16932,12 @@ var HTMLCS = new function()
     };
 
     this.util = new function() {
-
+        
         this.trim = function(string) {
             return string.replace(/^\s*(.*)\s*$/g, '$1');
         };
 
-
+        
         this.isStringEmpty = function(string) {
             if (typeof string !== 'string') {
                 return true;
@@ -16621,7 +16956,7 @@ var HTMLCS = new function()
             return empty;
         };
 
-
+        
         this.getElementWindow = function(element)
         {
             if (element.ownerDocument) {
@@ -16641,7 +16976,7 @@ var HTMLCS = new function()
 
         };
 
-
+        
         this.style = function(element) {
             var computedStyle = null;
             var window        = this.getElementWindow(element);
@@ -16655,7 +16990,7 @@ var HTMLCS = new function()
             return computedStyle;
         };
 
-
+        
         this.isHidden = function(element) {
             var hidden = false;
 
@@ -16678,7 +17013,7 @@ var HTMLCS = new function()
             return hidden;
         };
 
-
+        
         this.isInDocument = function(element) {
             // Check whether the element is in the document, by looking up its
             // DOM tree for a document object.
@@ -16695,7 +17030,7 @@ var HTMLCS = new function()
             return true;
         };
 
-
+        
         this.contains = function(parent, child) {
             var contained = false;
 
@@ -16722,7 +17057,7 @@ var HTMLCS = new function()
             return contained;
         };
 
-
+        
         this.isLayoutTable = function(table) {
             var th = table.querySelector('th');
             if (th === null) {
@@ -16732,7 +17067,7 @@ var HTMLCS = new function()
             return false;
         };
 
-
+        
         this.contrastRatio = function(colour1, colour2) {
             var ratio = (0.05 + this.relativeLum(colour1)) / (0.05 + this.relativeLum(colour2));
             if (ratio < 1) {
@@ -16742,7 +17077,7 @@ var HTMLCS = new function()
             return ratio;
         };
 
-
+        
         this.relativeLum = function(colour) {
             if (colour.charAt) {
                 var colour = this.colourStrToRGB(colour);
@@ -16761,7 +17096,7 @@ var HTMLCS = new function()
             return lum;
         }
 
-
+        
         this.colourStrToRGB = function(colour) {
             colour = colour.toLowerCase();
 
@@ -16793,7 +17128,7 @@ var HTMLCS = new function()
             return colour;
         };
 
-
+        
         this.RGBtoColourStr = function(colour) {
             colourStr = '#';
             colour.red   = Math.round(colour.red * 255);
@@ -16825,7 +17160,7 @@ var HTMLCS = new function()
             return colourStr;
         };
 
-
+        
         this.sRGBtoHSV = function(colour) {
             // If this is a string, then convert to a colour structure.
             if (colour.charAt) {
@@ -16865,7 +17200,7 @@ var HTMLCS = new function()
             return hsvColour;
         };
 
-
+        
         this.HSVtosRGB = function(hsvColour) {
             var colour = {
                 red: 0,
@@ -16924,7 +17259,7 @@ var HTMLCS = new function()
             return colour;
         };
 
-
+        
         this.getElementTextContent = function(element, includeAlt)
         {
             if (includeAlt === undefined) {
@@ -16964,7 +17299,7 @@ var HTMLCS = new function()
             return text;
         };
 
-
+        
         this.testTableHeaders = function(element)
         {
             var retval = {
@@ -17118,7 +17453,7 @@ var HTMLCS = new function()
             return retval;
         };
 
-
+        
         this.getCellHeaders = function(table) {
             if (typeof table !== 'object') {
                 return null;
@@ -17272,7 +17607,7 @@ window.HTMLCS_Section508 = {
 
 
 var HTMLCS_Section508_Sniffs_A = {
-
+    
     register: function()
     {
         return [
@@ -17287,7 +17622,7 @@ var HTMLCS_Section508_Sniffs_A = {
 
     },
 
-
+    
     process: function(element, top)
     {
         if (element === top) {
@@ -17305,7 +17640,7 @@ var HTMLCS_Section508_Sniffs_A = {
         }
     },
 
-
+    
     testNullAltText: function(top)
     {
         var errors = {
@@ -17412,7 +17747,7 @@ var HTMLCS_Section508_Sniffs_A = {
         return errors;
     },
 
-
+    
     addNullAltTextResults: function(top)
     {
         var errors = this.testNullAltText(top);
@@ -17521,7 +17856,7 @@ var HTMLCS_Section508_Sniffs_A = {
         return errors;
     },
 
-
+    
     addMediaAlternativesResults: function(top)
     {
         var errors = HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_1_1_1_1.testMediaTextAlternatives(top);
@@ -17551,7 +17886,7 @@ var HTMLCS_Section508_Sniffs_A = {
 
 
 var HTMLCS_Section508_Sniffs_B = {
-
+    
     register: function()
     {
         return [
@@ -17563,7 +17898,7 @@ var HTMLCS_Section508_Sniffs_B = {
 
     },
 
-
+    
     process: function(element, top)
     {
         var nodeName = element.nodeName.toLowerCase();
@@ -17576,14 +17911,14 @@ var HTMLCS_Section508_Sniffs_B = {
 
 
 var HTMLCS_Section508_Sniffs_C = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'Ensure that any information conveyed using colour alone is also available without colour, such as through context or markup.', 'Colour');
@@ -17594,14 +17929,14 @@ var HTMLCS_Section508_Sniffs_C = {
 
 
 var HTMLCS_Section508_Sniffs_D = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         if (element === top) {
@@ -17620,7 +17955,7 @@ var HTMLCS_Section508_Sniffs_D = {
         }
     },
 
-
+    
     testPresentationMarkup: function(top)
     {
         // Presentation tags that should have no place in modern HTML.
@@ -17666,14 +18001,14 @@ var HTMLCS_Section508_Sniffs_D = {
 
 
 var HTMLCS_Section508_Sniffs_G = {
-
+    
     register: function()
     {
         return ['table'];
 
     },
 
-
+    
     process: function(element, top)
     {
         // If no table headers, emit notice about the table.
@@ -17687,14 +18022,14 @@ var HTMLCS_Section508_Sniffs_G = {
 
 
 var HTMLCS_Section508_Sniffs_H = {
-
+    
     register: function()
     {
         return ['table'];
 
     },
 
-
+    
     process: function(table, top)
     {
         var headersAttr = HTMLCS.util.testTableHeaders(table);
@@ -17728,7 +18063,7 @@ var HTMLCS_Section508_Sniffs_H = {
 
 
 var HTMLCS_Section508_Sniffs_I = {
-
+    
     register: function()
     {
         return [
@@ -17739,7 +18074,7 @@ var HTMLCS_Section508_Sniffs_I = {
 
     },
 
-
+    
     process: function(element, top)
     {
         var nodeName   = element.nodeName.toLowerCase();
@@ -17759,14 +18094,14 @@ var HTMLCS_Section508_Sniffs_I = {
 
 
 var HTMLCS_Section508_Sniffs_J = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         // The term in Sec. 508 is "flicker" rather than flash.
@@ -17777,14 +18112,14 @@ var HTMLCS_Section508_Sniffs_J = {
 
 
 var HTMLCS_Section508_Sniffs_K = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'If this page cannot be made compliant, a text-only page with equivalent information or functionality should be provided. The alternative page needs to be updated in line with this page\'s content.', 'AltVersion');
@@ -17795,14 +18130,14 @@ var HTMLCS_Section508_Sniffs_K = {
 
 
 var HTMLCS_Section508_Sniffs_L = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         if (element === top) {
@@ -17901,7 +18236,7 @@ var HTMLCS_Section508_Sniffs_L = {
         return errors;
     },
 
-
+    
     testKeyboard: function(top)
     {
         // Testing for elements that have explicit attributes for mouse-specific
@@ -17943,7 +18278,7 @@ var HTMLCS_Section508_Sniffs_L = {
 
 
 var HTMLCS_Section508_Sniffs_M = {
-
+    
     register: function()
     {
         return [
@@ -17957,7 +18292,7 @@ var HTMLCS_Section508_Sniffs_M = {
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'If external media requires a plugin or application to view, ensure a link is provided to a plugin or application that complies with Section 508 accessibility requirements for applications.', 'PluginLink');
@@ -17968,14 +18303,14 @@ var HTMLCS_Section508_Sniffs_M = {
 
 
 var HTMLCS_Section508_Sniffs_N = {
-
+    
     register: function()
     {
         return ['form'];
 
     },
 
-
+    
     process: function(element, top)
     {
         var nodeName = element.nodeName.toLowerCase();
@@ -17991,7 +18326,7 @@ var HTMLCS_Section508_Sniffs_N = {
 
 
 var HTMLCS_Section508_Sniffs_O = {
-
+    
     register: function()
     {
         return [
@@ -18002,7 +18337,7 @@ var HTMLCS_Section508_Sniffs_O = {
 
     },
 
-
+    
     process: function(element, top)
     {
         if (element === top) {
@@ -18046,7 +18381,7 @@ var HTMLCS_Section508_Sniffs_O = {
 
 
 var HTMLCS_Section508_Sniffs_P = {
-
+    
     register: function()
     {
         return [
@@ -18056,7 +18391,7 @@ var HTMLCS_Section508_Sniffs_P = {
 
     },
 
-
+    
     process: function(element, top)
     {
         if (element === top) {
@@ -18284,7 +18619,7 @@ window.HTMLCS_WCAG2AAA = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_1_1_1_1 = {
-
+    
     register: function()
     {
         return [
@@ -18294,7 +18629,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_1_1_1_1 = {
 
     },
 
-
+    
     process: function(element, top)
     {
         if (element === top) {
@@ -18312,7 +18647,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_1_1_1_1 = {
         }//end if
     },
 
-
+    
     addNullAltTextResults: function(top)
     {
         var errors = this.testNullAltText(top);
@@ -18354,7 +18689,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_1_1_1_1 = {
         }
     },
 
-
+    
     testNullAltText: function(top)
     {
         var errors = {
@@ -18461,14 +18796,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_1_1_1_1 = {
         return errors;
     },
 
-
+    
     testLongdesc: function(element)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'If this image cannot be fully described in a short text alternative, ensure a long text alternative is also available, such as in the body text or through a link.', 'G73,G74');
 
     },
 
-
+    
     testLinkStutter: function(element)
     {
         if (element.parentNode.nodeName.toLowerCase() === 'a') {
@@ -18554,7 +18889,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_1_1_1_1 = {
         }//end if
     },
 
-
+    
     addMediaAlternativesResults: function(top)
     {
         var errors = this.testMediaTextAlternatives(top);
@@ -18647,7 +18982,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_1_1_1_1 = {
         return errors;
     },
 
-
+    
     _getLinkAltText: function(anchor)
     {
         var anchor = anchor.cloneNode(true);
@@ -18681,7 +19016,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_1_1_1_1 = {
         return alt;
     },
 
-
+    
     _getPreviousSiblingElement: function(element, tagName, immediate) {
         if (tagName === undefined) {
             tagName = null;
@@ -18721,7 +19056,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_1_1_1_1 = {
         return prevNode;
     },
 
-
+    
     _getNextSiblingElement: function(element, tagName, immediate) {
         if (tagName === undefined) {
             tagName = null;
@@ -18765,7 +19100,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_1_1_1_1 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_1 = {
-
+    
     register: function()
     {
         return [
@@ -18779,7 +19114,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_1 = {
 
     },
 
-
+    
     process: function(element, top)
     {
         var nodeName = element.nodeName.toLowerCase();
@@ -18798,7 +19133,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_1 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_2 = {
-
+    
     register: function()
     {
         return [
@@ -18810,7 +19145,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_2 = {
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'If this embedded object contains pre-recorded synchronised media and is not provided as an alternative for text content, check that captions are provided for audio content.', 'G87,G93');
@@ -18821,7 +19156,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_2 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_3 = {
-
+    
     register: function()
     {
         return [
@@ -18833,7 +19168,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_3 = {
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'If this embedded object contains pre-recorded synchronised media and is not provided as an alternative for text content, check that an audio description of its video, and/or an alternative text version of the content is provided.', 'G69,G78,G173,G8');
@@ -18844,7 +19179,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_3 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_4 = {
-
+    
     register: function()
     {
         return [
@@ -18856,7 +19191,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_4 = {
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'If this embedded object contains synchronised media, check that captions are provided for live audio content.', 'G9,G87,G93');
@@ -18867,7 +19202,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_4 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_5 = {
-
+    
     register: function()
     {
         return [
@@ -18879,7 +19214,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_5 = {
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'If this embedded object contains pre-recorded synchronised media, check that an audio description is provided for its video content.', 'G78,G173,G8');
@@ -18890,7 +19225,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_5 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_6 = {
-
+    
     register: function()
     {
         return [
@@ -18902,7 +19237,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_6 = {
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'If this embedded object contains pre-recorded synchronised media, check that a sign language interpretation is provided for its audio.', 'G54,G81');
@@ -18913,7 +19248,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_6 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_7 = {
-
+    
     register: function()
     {
         return [
@@ -18925,7 +19260,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_7 = {
 
     },
 
-
+    
     process: function(element, top)
     {
         // Check for elements that could potentially contain video.
@@ -18937,7 +19272,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_7 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_8 = {
-
+    
     register: function()
     {
         return [
@@ -18949,7 +19284,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_8 = {
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'If this embedded object contains pre-recorded synchronised media or video-only content, check that an alternative text version of the content is provided.', 'G69,G159');
@@ -18960,7 +19295,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_8 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_9 = {
-
+    
     register: function()
     {
         return [
@@ -18973,7 +19308,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_2_1_2_9 = {
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'If this embedded object contains live audio-only content, check that an alternative text version of the content is provided.', 'G150,G151,G157');
@@ -19009,7 +19344,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
 
     },
 
-
+    
     process: function(element, top)
     {
         var nodeName = element.nodeName.toLowerCase();
@@ -19063,13 +19398,13 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
         }//end if
     },
 
-
+    
     testEmptyDupeLabelForAttrs: function(top)
     {
         this._labelNames = {};
         var labels = top.getElementsByTagName('label');
         for (var i = 0; i < labels.length; i++) {
-            if ((labels[i].hasAttribute('for') === true) && (labels[i].getAttribute('for') !== '')) {
+            if (labels[i].getAttribute('for') !== null) {
                 var labelFor = labels[i].getAttribute('for');
                 if ((this._labelNames[labelFor]) && (this._labelNames[labelFor] !== null)) {
                     this._labelNames[labelFor] = null;
@@ -19099,14 +19434,12 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
                         }
                     }
                 }
-            } else {
-                HTMLCS.addMessage(HTMLCS.ERROR, labels[i], 'Label found without a "for" attribute, and therefore not explicitly associated with a form control.', 'H44.NoForAttr');
-            }//end if
+            }
         }//end for
     },
 
-
-    testLabelsOnInputs: function(element, top)
+    
+    testLabelsOnInputs: function(element, top, muteErrors)
     {
         var nodeName  = element.nodeName.toLowerCase();
         var inputType = nodeName;
@@ -19118,96 +19451,133 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
             }
         }
 
-        var isNoLabelControl = false;
-        if (/^(submit|reset|image|hidden|button)$/.test(inputType.toLowerCase()) === true) {
-            isNoLabelControl = true;
+        var hasLabel = false;
+        var addToLabelList = function(found) {
+            if (!hasLabel) hasLabel = {};
+            hasLabel[found] = true;
+        };
+
+        // Firstly, work out whether it needs a label.
+        var needsLabel = false;
+        var labelPos   = 'left';
+        var inputType  = inputType.toLowerCase();
+        if ((inputType === 'select' || inputType === 'textarea')) {
+            needsLabel = true;
+        } else if (/^(radio|checkbox|text|file|password)$/.test(inputType) === true) {
+            needsLabel = true;
         }
 
-        this._labelNames = {};
-        var labels = top.getElementsByTagName('label');
-        for (var i = 0; i < labels.length; i++) {
-            if (labels[i].hasAttribute('for') === true) {
-                var labelFor = labels[i].getAttribute('for');
-                this._labelNames[labelFor] = labels[i];
-            }//end if
-        }//end for
+        if (element.getAttribute('hidden') !== null) {
+            needsLabel = false;
+        }
 
-        if ((element.hasAttribute('id') === false) && (isNoLabelControl === false)) {
-            // There is no id attribute at all on the control.
-            if (element.hasAttribute('title') === true) {
-                if (/^\s*$/.test(element.getAttribute('title')) === true) {
-                    // But the title attribute is empty. Whoops.
-                    HTMLCS.addMessage(HTMLCS.ERROR, element, 'Form control without a label contains an empty title attribute. The title attribute should identify the purpose of the control.', 'H65.3');
-                }
+        // Find an explicit label.
+        var explicitLabel = element.ownerDocument.querySelector('label[for="' + element.id + '"]');
+        if (explicitLabel) {
+            addToLabelList('explicit');
+        }
+
+        // Find an implicit label.
+        var implicitLabel = element.parentNode;
+        if (implicitLabel && (implicitLabel.nodeName.toLowerCase() === 'label')) {
+            addToLabelList('implicit');
+        }
+
+        // Find a title attribute.
+        var title = element.getAttribute('title');
+        if (title !== null) {
+            if ((/^\s*$/.test(title) === true) && (needsLabel === true)) {
+                HTMLCS.addMessage(
+                    HTMLCS.WARNING,
+                    element,
+                    'This form control has a "title" attribute that is empty or contains only spaces. It will be ignored for labelling test purposes.',
+                    'H65'
+                );
             } else {
-                HTMLCS.addMessage(HTMLCS.ERROR, element, 'Form control does not have an ID, therefore it cannot have an explicit label.', 'H44.NoId');
-            }//end if
-        } else {
-            var id = element.getAttribute('id');
-            if (!this._labelNames[id]) {
-                // There is no label for this form control. For certain types of
-                // input, "no label" is not an error.
-                if (isNoLabelControl === false) {
-                    // If there is a title, we presume that H65 applies - the label
-                    // element cannot be used, and the title should be used as the
-                    // descriptive label instead.
-                    if (element.hasAttribute('title') === true) {
-                        if (/^\s*$/.test(element.getAttribute('title')) === true) {
-                            // But the title attribute is empty. Whoops.
-                            HTMLCS.addMessage(HTMLCS.ERROR, element, 'Form control without a label contains an empty title attribute. The title attribute should identify the purpose of the control.', 'H65.3');
-                        } else {
-                            // Manual check required as to the title. Making this a
-                            // warning because a manual tester also needs to confirm
-                            // that a label element is not feasible for the control.
-                            HTMLCS.addMessage(HTMLCS.WARNING, element, 'Check that the title attribute identifies the purpose of the control, and that a label element is not appropriate.', 'H65');
-                        }
-                    } else {
-                        HTMLCS.addMessage(HTMLCS.ERROR, element, 'Form control does not have an explicit label or title attribute, identifying the purpose of the control.', 'H44.2');
-                    }
-                }
+                addToLabelList('title');
+            }
+        }
+
+        // Find an aria-label attribute.
+        var ariaLabel = element.getAttribute('aria-label');
+        if (ariaLabel !== null) {
+            if ((/^\s*$/.test(ariaLabel) === true) && (needsLabel === true)) {
+                HTMLCS.addMessage(
+                    HTMLCS.WARNING,
+                    element,
+                    'This form control has an "aria-label" attribute that is empty or contains only spaces. It will be ignored for labelling test purposes.',
+                    'ARIA6'
+                );
             } else {
-                // There is a label for a form control that should not have a label,
-                // because the label is provided through other means (value of select
-                // reset, alt on image submit, button's content), or there is no
-                // visible field (hidden).
-                if (isNoLabelControl === true) {
-                    HTMLCS.addMessage(HTMLCS.ERROR, element, 'Label element should not be used for this type of form control.', 'H44.NoLabelAllowed');
-                } else {
-                    var labelOnRight = false;
-                    if (/^(checkbox|radio)$/.test(inputType) === true) {
-                        labelOnRight = true;
-                    }
+                addToLabelList('aria-label');
+            }
+        }
 
-                    // Work out the position of the element in comparison to its
-                    // label. A positive number means the element comes after the
-                    // label (correct where label is on left). Negative means element
-                    // is before the label (correct for "label on right").
-                    if (element.compareDocumentPosition) {
-                        // Firefox, Opera, IE 9+ standards mode.
-                        var pos = element.compareDocumentPosition(this._labelNames[id]);
-                        if ((pos & 0x02) === 0x02) {
-                            // Label precedes element.
-                            var posDiff = 1;
-                        } else if ((pos & 0x04) === 0x04) {
-                            // Label follows element.
-                            var posDiff = -1;
-                        }
-                    } else if (element.sourceIndex) {
-                        // IE < 9.
-                        var posDiff = element.sourceIndex - this._labelNames[id].sourceIndex;
-                    }
+        // Find an aria-labelledby attribute.
+        var ariaLabelledBy = element.getAttribute('aria-labelledby');
+        if (ariaLabelledBy && (/^\s*$/.test(ariaLabelledBy) === false)) {
+            var labelledByIds = ariaLabelledBy.split(/\s+/);
+            var ok = true;
 
-                    if ((labelOnRight === true) && (posDiff > 0)) {
-                        HTMLCS.addMessage(HTMLCS.ERROR, element, 'The label element for this control should be placed after this element.', 'H44.1.After');
-                    } else if ((labelOnRight === false) && (posDiff < 0)) {
-                        HTMLCS.addMessage(HTMLCS.ERROR, element, 'The label element for this control should be placed before this element.', 'H44.1.Before');
-                    }
-                }//end if
+            // First check that all of the IDs (space separated) are present and correct.
+            for (x in labelledByIds) {
+                var labelledByElement = element.ownerDocument.querySelector('#' + labelledByIds[x]);
+                if (!labelledByElement) {
+                    HTMLCS.addMessage(
+                        HTMLCS.WARNING,
+                        element,
+                        'This form control contains an aria-labelledby attribute, however it includes an ID "' + labelledByIds[x] + '" that does not exist on an element. The aria-labelledby attribute will be ignored for labelling test purposes.',
+                        'ARIA16,ARIA9'
+                    );
+                    ok = false;
+                }
+            }
+
+            // We are all OK, add as a successful label technique.
+            if (ok === true) {
+                addToLabelList('aria-labelledby');
+            }
+        }
+
+        if (!(muteErrors === true)) {
+            if ((hasLabel !== false) && (needsLabel === false)) {
+                // Note that it is okay for buttons to have aria-labelledby or
+                // aria-label, or title. The former two override the button text,
+                // while title is a lower priority than either: the button text,
+                // and in submit/reset cases, the localised name for the words
+                // "Submit" and "Reset".
+                // http://www.w3.org/TR/html-aapi/#accessible-name-and-description-calculation
+                if (inputType === 'hidden') {
+                    HTMLCS.addMessage(
+                        HTMLCS.WARNING,
+                        element,
+                        'This hidden form field is labelled in some way. There should be no need to label a hidden form field.',
+                        'F68.Hidden'
+                    );
+                } else if (element.getAttribute('hidden') !== null) {
+                    HTMLCS.addMessage(
+                        HTMLCS.WARNING,
+                        element,
+                        'This form field is intended to be hidden (using the "hidden" attribute), but is also labelled in some way. There should be no need to label a hidden form field.',
+                        'F68.HiddenAttr'
+                    );
+                }
+            } else if ((hasLabel === false) && (needsLabel === true)) {
+                // Needs label.
+                HTMLCS.addMessage(
+                    HTMLCS.ERROR,
+                    element,
+                    'This form field should be labelled in some way.' + ' ' +
+                    'Use the label element (either with a "for" attribute or wrapped around the form field), or "title", "aria-label" or "aria-labelledby" attributes as appropriate.',
+                    'F68'
+                );
             }//end if
-        }//end if
+        }
+
+        return hasLabel;
     },
 
-
+    
     testPresentationMarkup: function(top)
     {
         // Presentation tags that should have no place in modern HTML.
@@ -19227,7 +19597,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
         }
     },
 
-
+    
     testNonSemanticHeading: function(element)
     {
         // Test for P|DIV > STRONG|EM|other inline styling, when said inline
@@ -19246,7 +19616,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
         }
     },
 
-
+    
     testTableHeaders: function(table)
     {
         var headersAttr = HTMLCS.util.testTableHeaders(table);
@@ -19329,7 +19699,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
         }
     },
 
-
+    
     _testTableScopeAttrs: function(table)
     {
         var elements = {
@@ -19390,7 +19760,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
         return retval;
     },
 
-
+    
     testTableCaptionSummary: function(table) {
         var summary   = table.getAttribute('summary') || '';
         var captionEl = table.getElementsByTagName('caption');
@@ -19430,7 +19800,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
         }//end if
     },
 
-
+    
     testFieldsetLegend: function(fieldset) {
         var legend = fieldset.querySelector('legend');
 
@@ -19439,7 +19809,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
         }
     },
 
-
+    
     testOptgroup: function(select) {
         var optgroup = select.querySelector('optgroup');
 
@@ -19449,7 +19819,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
         }
     },
 
-
+    
     testRequiredFieldsets: function(form) {
         var optionInputs = form.querySelectorAll('input[type=radio], input[type=checkbox]');
         var usedNames     = {};
@@ -19485,7 +19855,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
         }//end for
     },
 
-
+    
     testListsWithBreaks: function(element) {
         var firstBreak = element.querySelector('br');
         var items      = [];
@@ -19561,7 +19931,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
         }
     },
 
-
+    
     testEmptyHeading: function(element) {
         var text = element.textContent;
 
@@ -19574,7 +19944,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
         }
     },
 
-
+    
     testUnstructuredNavLinks: function(element)
     {
         var nodeName    = element.nodeName.toLowerCase();
@@ -19605,7 +19975,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1 = {
         }//end if
     },
 
-
+    
     testGeneralTable: function(table) {
         if (HTMLCS.util.isLayoutTable(table) === true) {
             HTMLCS.addMessage(HTMLCS.NOTICE, table, 'This table appears to be a layout table. If it is meant to instead be a data table, ensure header cells are identified using th elements.', 'LayoutTable');
@@ -19628,7 +19998,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1_A = {
 
     },
 
-
+    
     process: function(element, top)
     {
         var sniff = HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1;
@@ -19653,7 +20023,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1_AAA = {
 
     },
 
-
+    
     process: function(element, top)
     {
         var sniff = HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1;
@@ -19668,14 +20038,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1_AAA = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_2 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'Check that the content is ordered in a meaningful sequence when linearised, such as when style sheets are disabled.', 'G57');
@@ -19686,14 +20056,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_2 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_3 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'Where instructions are provided for understanding the content, do not rely on sensory characteristics alone (such as shape, size or location) to describe objects.', 'G96');
@@ -19704,14 +20074,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_3 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_1 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'Check that any information conveyed using colour alone is also available in text, or through other visual cues.', 'G14,G182');
@@ -19722,7 +20092,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_1 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_2 = {
-
+    
     register: function()
     {
         return [
@@ -19736,7 +20106,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_2 = {
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'If this element contains audio that plays automatically for longer than 3 seconds, check that there is the ability to pause, stop or mute the audio.', 'F23');
@@ -19747,14 +20117,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_2 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_3 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         if (element === top) {
@@ -19762,19 +20132,21 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_3 = {
 
             for (var i = 0; i < failures.length; i++) {
                 var element   = failures[i].element;
-
+                
                 var decimals  = 2;
                 var value     = (Math.round(failures[i].value * Math.pow(10, decimals)) / Math.pow(10, decimals));
                 var required  = failures[i].required;
                 var recommend = failures[i].recommendation;
                 var hasBgImg  = failures[i].hasBgImage || false;
+                var bgColour   = failures[i].bgColour || false;
+                var isAbsolute = failures[i].isAbsolute || false;
 
                 // If the values would look identical, add decimals to the value.
                 while (required === value) {
                     decimals++;
                     value = (Math.round(failures[i].value * Math.pow(10, decimals)) / Math.pow(10, decimals));
                 }
-
+                
                 if (required === 4.5) {
                     var code = 'G18';
                 } else if (required === 3.0) {
@@ -19795,7 +20167,10 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_3 = {
                     recommendText = ' Recommendation: change ' + recommendText.join(', ') + '.';
                 }
 
-                if (hasBgImg === true) {
+                if (isAbsolute === true) {
+                    code += '.Abs';
+                    HTMLCS.addMessage(HTMLCS.WARNING, element, 'This element is absolutely positioned and the background color can not be determined. Ensure the contrast ratio between the text and all covered parts of the background are at least ' + required + ':1.', code);
+                } else if (hasBgImg === true) {
                     code += '.BgImage';
                     HTMLCS.addMessage(HTMLCS.WARNING, element, 'This element\'s text is placed on a background image. Ensure the contrast ratio between the text and all covered parts of the image are at least ' + required + ':1.', code);
                 } else {
@@ -19845,11 +20220,18 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_3_Contrast = {
                     var style = HTMLCS.util.style(node);
 
                     if (style) {
-                        var bgColour = style.backgroundColor;
-                        var hasBgImg = false;
-
-                        if (style.backgroundImage !== 'none') {
+                        var bgColour  = style.backgroundColor;
+                        var foreColour = style.color;
+                        var bgElement = node;
+                        var hasBgImg  = false;
+                        var isAbsolute = false;
+                        
+			if (style.backgroundImage !== 'none') {
                             hasBgImg = true;
+                        }
+                        
+                        if (style.position == 'absolute') {
+                            isAbsolute = true;
                         }
 
                         var parent = node.parentNode;
@@ -19880,6 +20262,9 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_3_Contrast = {
                             if (parentStyle.backgroundImage !== 'none') {
                                 hasBgImg = true;
                             }
+                            if (parentStyle.position == 'absolute') {
+                                isAbsolute = true;
+                            }
 
                             parent = parent.parentNode;
                         }//end while
@@ -19896,6 +20281,15 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_3_Contrast = {
                                 hasBgImage: true
                             });
                             continue;
+                        } else if (isAbsolute === true) {
+                            failures.push({
+                                element: node,
+                                colour: foreColour,
+                                bgColour: undefined,
+                                value: undefined,
+                                required: reqRatio,
+                                isAbsolute: true
+                            });
                         } else if ((bgColour === 'transparent') || (bgColour === 'rgba(0, 0, 0, 0)')) {
                             // If the background colour is still transparent, this is probably
                             // a fragment with which we cannot reliably make a statement about
@@ -20058,14 +20452,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_3_Contrast = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_3_F24 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         // Test for background/foreground stuff.
@@ -20075,7 +20469,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_3_F24 = {
         }
     },
 
-
+    
     testColourComboFail: function(element)
     {
         var hasFg = element.hasAttribute('color');
@@ -20110,14 +20504,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_3_F24 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_4 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'Check that text can be resized without assistive technology up to 200 percent without loss of content or functionality.', 'G142');
@@ -20128,14 +20522,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_4 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_5 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         var imgObj = top.querySelector('img');
@@ -20150,14 +20544,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_5 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_6 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         if (element === top) {
@@ -20165,7 +20559,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_6 = {
 
             for (var i = 0; i < failures.length; i++) {
                 var element   = failures[i].element;
-
+                
                 var decimals  = 2;
                 var value     = (Math.round(failures[i].value * Math.pow(10, decimals)) / Math.pow(10, decimals));
                 var required  = failures[i].required;
@@ -20213,7 +20607,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_6 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_7 = {
-
+    
     register: function()
     {
         return [
@@ -20226,7 +20620,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_7 = {
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'For pre-recorded audio-only content in this element that is primarily speech (such as narration), any background sounds should be muteable, or be at least 20 dB (or about 4 times) quieter than the speech.', 'G56');
@@ -20237,14 +20631,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_7 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_8 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         // This Success Criterion has five prongs, and each should be thrown as a
@@ -20261,14 +20655,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_8 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_9 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         var imgObj = top.querySelector('img');
@@ -20282,14 +20676,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_4_1_4_9 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_1_2_1_1 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         // Testing for elements that have explicit attributes for mouse-specific
@@ -20333,7 +20727,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_1_2_1_1 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_1_2_1_2 = {
-
+    
     register: function()
     {
         return [
@@ -20344,7 +20738,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_1_2_1_2 = {
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.WARNING, element, 'Check that this applet or plugin provides the ability to move the focus away from itself when using the keyboard.', 'F10');
@@ -20355,14 +20749,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_1_2_1_2 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_2_2_2_1 = {
-
+    
     register: function()
     {
         return ['meta'];
 
     },
 
-
+    
     process: function(element, top)
     {
         // Meta refresh testing under H76/F41. Fails if a non-zero timeout is provided.
@@ -20389,7 +20783,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_2_2_2_1 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_2_2_2_2 = {
-
+    
     register: function()
     {
         return [
@@ -20399,7 +20793,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_2_2_2_2 = {
 
     },
 
-
+    
     process: function(element, top)
     {
         if (element === top) {
@@ -20425,14 +20819,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_2_2_2_2 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_2_2_2_3 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'Check that timing is not an essential part of the event or activity presented by the content, except for non-interactive synchronized media and real-time events.', 'G5');
@@ -20443,14 +20837,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_2_2_2_3 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_2_2_2_4 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'Check that all interruptions (including updates to content) can be postponed or suppressed by the user, except interruptions involving an emergency.', 'SCR14');
@@ -20461,14 +20855,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_2_2_2_4 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_2_2_2_5 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'If this Web page is part of a set of Web pages with an inactivity time limit, check that an authenticated user can continue the activity without loss of data after re-authenticating.', 'G105,G181');
@@ -20479,14 +20873,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_2_2_2_5 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_3_2_3_1 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         // The "small" flashing area is deliberately vague - users should see
@@ -20504,14 +20898,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_3_2_3_1 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_3_2_3_2 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'Check that no component of the content flashes more than three times in any 1-second period.', 'G19');
@@ -20522,7 +20916,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_3_2_3_2 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_1 = {
-
+    
     register: function()
     {
         return [
@@ -20534,7 +20928,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_1 = {
 
     },
 
-
+    
     process: function(element, top)
     {
         if (element === top) {
@@ -20555,7 +20949,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_1 = {
         }
     },
 
-
+    
     testIframeTitle: function(element)
     {
         var nodeName = element.nodeName.toLowerCase();
@@ -20576,13 +20970,13 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_1 = {
         }//end if
     },
 
-
+    
     testGenericBypassMsg: function(top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'Ensure that any common navigation elements can be bypassed; for instance, by use of skip links, header elements, or ARIA landmark roles.', 'G1,G123,G124,H69');
     },
 
-
+    
     testSameDocFragmentLinks: function(element, top)
     {
         if (element.hasAttribute('href') === true) {
@@ -20621,14 +21015,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_1 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_2 = {
-
+    
     register: function()
     {
         return ['html'];
 
     },
 
-
+    
     process: function(element, top)
     {
         // Find a head first.
@@ -20672,14 +21066,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_2 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_3 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         if (element === top) {
@@ -20695,14 +21089,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_3 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_4 = {
-
+    
     register: function()
     {
         return ['a'];
 
     },
 
-
+    
     process: function(element, top)
     {
         if (element.hasAttribute('title') === true) {
@@ -20717,14 +21111,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_4 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_5 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'If this Web page is not part of a linear process, check that there is more than one way of locating this Web page within a set of Web pages.', 'G125,G64,G63,G161,G126,G185');
@@ -20735,14 +21129,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_5 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_6 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'Check that headings and labels describe topic or purpose.', 'G130,G131');
@@ -20753,14 +21147,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_6 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_7 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         // Fire this notice if there appears to be an input field or link on the page
@@ -20778,14 +21172,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_7 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_8 = {
-
+    
     register: function()
     {
         return ['link'];
 
     },
 
-
+    
     process: function(element, top)
     {
         var linkParentName = element.parentNode.nodeName.toLowerCase();
@@ -20811,14 +21205,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_8 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_9 = {
-
+    
     register: function()
     {
         return ['a'];
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'Check that text of the link describes the purpose of the link.', 'H30');
@@ -20829,14 +21223,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle2_Guideline2_4_2_4_9 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_1_3_1_1 = {
-
+    
     register: function()
     {
         return ['html'];
 
     },
 
-
+    
     process: function(element, top)
     {
         if ((element.hasAttribute('lang') === false) && (element.hasAttribute('xml:lang') === false)) {
@@ -20862,7 +21256,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_1_3_1_1 = {
     },
 
 
-
+    
     isValidLanguageTag: function(langTag)
     {
         // Allow irregular or private-use tags starting with 'i' or 'x'.
@@ -20912,14 +21306,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_1_3_1_1 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_1_3_1_2 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         // Generic message for changes in language.
@@ -20964,14 +21358,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_1_3_1_2 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_1_3_1_3 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'Check that there is a mechanism available for identifying specific definitions of words or phrases used in an unusual or restricted way, including idioms and jargon.', 'H40,H54,H60,G62,G70');
@@ -20982,14 +21376,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_1_3_1_3 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_1_3_1_4 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'Check that a mechanism for identifying the expanded form or meaning of abbreviations is available.', 'G102,G55,G62,H28,G97');
@@ -21000,14 +21394,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_1_3_1_4 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_1_3_1_5 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'Where the content requires reading ability more advanced than the lower secondary education level, supplemental content or an alternative version should be provided.', 'G86,G103,G79,G153,G160');
@@ -21018,14 +21412,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_1_3_1_5 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_1_3_1_6 = {
-
+    
     register: function()
     {
         return ['ruby'];
 
     },
 
-
+    
     process: function(element, top)
     {
         var rb = element.querySelectorAll('rb');
@@ -21053,7 +21447,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_1_3_1_6 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_2_3_2_1 = {
-
+    
     register: function()
     {
         return [
@@ -21065,7 +21459,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_2_3_2_1 = {
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'Check that a change of context does not occur when this input field receives focus.', 'G107');
@@ -21076,14 +21470,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_2_3_2_1 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_2_3_2_2 = {
-
+    
     register: function()
     {
         return ['form'];
 
     },
 
-
+    
     process: function(element, top)
     {
         var nodeName = element.nodeName.toLowerCase();
@@ -21093,7 +21487,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_2_3_2_2 = {
         }
     },
 
-
+    
     checkFormSubmitButton: function(form)
     {
         // Test for one of the three types of submit buttons.
@@ -21108,14 +21502,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_2_3_2_2 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_2_3_2_3 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'Check that navigational mechanisms that are repeated on multiple Web pages occur in the same relative order each time they are repeated, unless a change is initiated by the user.', 'G61');
@@ -21126,14 +21520,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_2_3_2_3 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_2_3_2_4 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, top, 'Check that components that have the same functionality within this Web page are identified consistently in the set of Web pages to which it belongs.', 'G197');
@@ -21144,14 +21538,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_2_3_2_4 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_2_3_2_5 = {
-
+    
     register: function()
     {
         return ['a'];
 
     },
 
-
+    
     process: function(element, top)
     {
         var nodeName = element.nodeName.toLowerCase();
@@ -21161,7 +21555,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_2_3_2_5 = {
         }
     },
 
-
+    
     checkNewWindowTarget: function(link)
     {
         var hasTarget = link.hasAttribute('target');
@@ -21178,14 +21572,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_2_3_2_5 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_3_3_3_1 = {
-
+    
     register: function()
     {
         return ['form'];
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'If an input error is automatically detected in this form, check that the item(s) in error are identified and the error(s) are described to the user in text.', 'G83,G84,G85');
@@ -21195,14 +21589,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_3_3_3_1 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_3_3_3_2 = {
-
+    
     register: function()
     {
         return ['form'];
 
     },
 
-
+    
     process: function(element, top)
     {
         // Only the generic message will be displayed here. If there were problems
@@ -21215,14 +21609,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_3_3_3_2 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_3_3_3_3 = {
-
+    
     register: function()
     {
         return ['form'];
 
     },
 
-
+    
     process: function(element, top)
     {
         // Only G177 (about providing suggestions) is flagged as a technique.
@@ -21234,14 +21628,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_3_3_3_3 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_3_3_3_4 = {
-
+    
     register: function()
     {
         return ['form'];
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'If this form would bind a user to a financial or legal commitment, modify/delete user-controllable data, or submit test responses, ensure that submissions are either reversible, checked for input errors, and/or confirmed by the user.', 'G98,G99,G155,G164,G168.LegalForms');
@@ -21251,14 +21645,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_3_3_3_4 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_3_3_3_5 = {
-
+    
     register: function()
     {
         return ['form'];
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'Check that context-sensitive help is available for this form, at a Web-page and/or control level.', 'G71,G184,G193');
@@ -21268,14 +21662,14 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_3_3_3_5 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_3_3_3_6 = {
-
+    
     register: function()
     {
         return ['form'];
 
     },
 
-
+    
     process: function(element, top)
     {
         HTMLCS.addMessage(HTMLCS.NOTICE, element, 'Check that submissions to this form are either reversible, checked for input errors, and/or confirmed by the user.', 'G98,G99,G155,G164,G168.AllForms');
@@ -21285,7 +21679,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle3_Guideline3_3_3_3_6 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle4_Guideline4_1_4_1_1 = {
-
+    
     register: function()
     {
         return [
@@ -21294,7 +21688,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle4_Guideline4_1_4_1_1 = {
 
     },
 
-
+    
     process: function(element, top)
     {
         if (element === top) {
@@ -21318,20 +21712,24 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle4_Guideline4_1_4_1_1 = {
 
 
 var HTMLCS_WCAG2AAA_Sniffs_Principle4_Guideline4_1_4_1_2 = {
-
+    
     register: function()
     {
         return ['_top'];
 
     },
 
-
+    
     process: function(element, top)
     {
         if (element === top) {
-            var errors = this.processFormControls(top);
-            for (var i = 0; i < errors.length; i++) {
-                HTMLCS.addMessage(HTMLCS.ERROR, errors[i].element, errors[i].msg, 'H91.' + errors[i].subcode);
+            var messages = this.processFormControls(top);
+            for (var i = 0; i < messages.errors.length; i++) {
+                HTMLCS.addMessage(HTMLCS.ERROR, messages.errors[i].element, messages.errors[i].msg, 'H91.' + messages.errors[i].subcode);
+            }
+
+            for (var i = 0; i < messages.warnings.length; i++) {
+                HTMLCS.addMessage(HTMLCS.WARNING, messages.warnings[i].element, messages.warnings[i].msg, 'H91.' + messages.warnings[i].subcode);
             }
 
             this.addProcessLinksMessages(top);
@@ -21425,8 +21823,8 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle4_Guideline4_1_4_1_2 = {
                     }
                 }//end if
             } else {
-                if (/^\s*$/.test(content) === true) {
-                    // Href provided, but no content.
+                if (nameFound === false) {
+                    // Href provided, but no content or title.
                     // We only fire this message when there are no images in the content.
                     // A link around an image with no alt text is already covered in SC
                     // 1.1.1 (test H30).
@@ -21444,6 +21842,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle4_Guideline4_1_4_1_2 = {
     {
         var elements = top.querySelectorAll('button, fieldset, input, select, textarea');
         var errors   = [];
+        var warnings = [];
 
         var requiredNames = {
             button: ['@title', '_content'],
@@ -21498,29 +21897,13 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle4_Guideline4_1_4_1_2 = {
                             break;
                         }
                     } else if (requiredName === 'label') {
-                        // Label element.
-                        if ((element.hasAttribute('id')) && (/^\s*$/.test(element.getAttribute('id')) === false)) {
-                            if (/^\-?[A-Za-z][A-Za-z0-9\-_]*$/.test(element.getAttribute('id')) === true) {
-                                var label = top.querySelector('label[for=' + element.getAttribute('id') + ']');
-                                if (label !== null) {
-                                    break;
-                                }
-                            } else {
-                                // Characters not suitable for querySelector. Use slower method.
-                                var labels = top.getElementsByTagName('label');
-                                var found  = false;
-                                for (var x = 0; x < labels.length; x++) {
-                                    if ((labels[x].hasAttribute('for') === true) && (labels[x].getAttribute('for') === element.getAttribute('id'))) {
-                                        found = true;
-                                        break;
-                                    }
-                                }//end for
-
-                                if (found === true) {
-                                    break;
-                                }
-                            }//end if
-                        }//end if
+                        // Label element. Re-use the label associating
+                        // functions in SC 1.3.1.
+                        var hasLabel = HTMLCS_WCAG2AAA_Sniffs_Principle1_Guideline1_3_1_3_1.testLabelsOnInputs(element, top, true);
+                        if (hasLabel !== false) {
+                            found = true;
+                            break;
+                        }
                     } else if (requiredName.charAt(0) === '@') {
                         // Attribute.
                         requiredName = requiredName.substr(1, requiredName.length);
@@ -21578,7 +21961,7 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle4_Guideline4_1_4_1_2 = {
                     valueFound = true;
                 }
             } else if (requiredValue === 'option_selected') {
-                // Select lists need a selected Option element.
+                // Select lists are recommended to have a selected Option element.
                 if (element.hasAttribute('multiple') === false) {
                     var selected = element.querySelector('option[selected]');
                     if (selected !== null) {
@@ -21603,27 +21986,46 @@ var HTMLCS_WCAG2AAA_Sniffs_Principle4_Guideline4_1_4_1_2 = {
                     msgNodeType = nodeName.substr(6) + ' input element';
                 }
 
+                var msg = 'This ' + msgNodeType + ' does not have a value available to an accessibility API.';
+                
                 var builtAttr = '';
+                var warning   = false;
                 if (requiredValue === '_content') {
-                    builtAttr = 'by adding content to the element';
+                    builtAttr = ' Add one by adding content to the element.';
                 } else if (requiredValue === 'option_selected') {
-                    builtAttr = 'by adding a "selected" attribute to one of its options';
+                    // Change the message instead. The value is only undefined in HTML 4/XHTML 1;
+                    // in HTML5 the first option in a single select dropdown is automatically selected.
+                    // Because of this, it should also be sent out as a warning, not an error.
+                    warning = true;
+                    msg = 'This ' + msgNodeType + ' does not have an initially selected option.' + ' ' +
+                        'Depending on your HTML version, the value exposed to an accessibility API may be undefined.';
                 } else if (requiredValue.charAt(0) === '@') {
-                    builtAttr = 'using the ' + requiredValue + ' attribute';
+                    builtAttr = ' A value is exposed using the "' + requiredValue + '" attribute.';
                 } else {
-                    builtAttr = 'using the ' + requiredValue + ' element';
+                    builtAttr = ' A value is exposed using the "' + requiredValue + '" element.';
                 }
 
-                var msg = 'This ' + msgNodeType + ' does not have a value available to an accessibility API. Add one ' + builtAttr + '.';
-                errors.push({
-                    element: element,
-                    msg: msg,
-                    subcode: (msgSubCode + '.Value')
-                });
+                msg += builtAttr;
+                if (warning === false) {
+                    errors.push({
+                        element: element,
+                        msg: msg,
+                        subcode: (msgSubCode + '.Value')
+                    });
+                } else {
+                    warnings.push({
+                        element: element,
+                        msg: msg,
+                        subcode: (msgSubCode + '.Value')
+                    });
+                }
             }//end if
         }//end for
 
-        return errors;
+        return {
+            errors: errors,
+            warnings: warnings
+        };
     }
 };
 
@@ -23119,7 +23521,7 @@ ViperAccessibilityPlugin.prototype = {
 
     },
 
-
+    
     includeScript: function(src, callback) {
         var script    = document.createElement('script');
         script.onload = function() {
@@ -23154,7 +23556,7 @@ ViperAccessibilityPlugin.prototype = {
         }
     },
 
-
+    
     includeCss: function(href) {
         if (ViperUtil.inArray(href, this._includedCSS) === true) {
             return;
@@ -23456,6 +23858,19 @@ ViperCopyPastePlugin.prototype = {
             return self.keyDown(e);
         });
 
+        this.viper.registerCallback('Viper:dropped:text/html', 'ViperCopyPastePlugin', function(data) {
+            if (!data.data) {
+                return;
+            }
+
+            ViperSelection.addRange(data.range);
+            var div = document.createElement('div');
+            ViperUtil.setHtml(div, data.data);
+            self._beforePaste();
+            self._handleFormattedPasteValue(false, div);
+            return false;
+        });
+
         if (this._isMSIE === true) {
             this.pasteElement = this._createPasteDiv();
         }
@@ -23491,7 +23906,7 @@ ViperCopyPastePlugin.prototype = {
         }
 
         var self = this;
-        if (this._isMSIE !== true && this._isFirefox !== true && this._isSafari !== true) {
+        if (this._isMSIE !== true && this._isSafari !== true) {
             elem.onpaste = function(e) {
                 if (!e.clipboardData) {
                     return;
@@ -23499,9 +23914,13 @@ ViperCopyPastePlugin.prototype = {
 
                 var dataType = null;
                 if (e.clipboardData.types) {
-                    if (ViperUtil.inArray('text/html', e.clipboardData.types) === true) {
+                    if (ViperUtil.inArray('text/html', e.clipboardData.types) === true
+                        && e.clipboardData.getData('text/html').length !== 0
+                    ) {
                         dataType = 'text/html';
-                    } else if (ViperUtil.inArray('text/plain', e.clipboardData.types) === true) {
+                    } else if (ViperUtil.inArray('text/plain', e.clipboardData.types) === true
+                        && e.clipboardData.getData('text/plain').length !== 0
+                    ) {
                         dataType = 'text/plain';
                     }
                 }
@@ -23512,11 +23931,25 @@ ViperCopyPastePlugin.prototype = {
                         dataType = 'text/html';
                     }
 
+                    var files = ViperUtil.arraySearch('Files', e.clipboardData.types);
+
                     self.pasteElement = self._createPasteDiv();
-                    var pasteContent = e.clipboardData.getData(dataType);
+                    var pasteContent  = e.clipboardData.getData(dataType);
                     if (dataType === 'text/plain') {
                         pasteContent = pasteContent.replace(/\r\n/g, '<br />');
                         pasteContent = pasteContent.replace(/\n/g, '<br />');
+                    } else if (files === 0) {
+                        var file = e.clipboardData.items[files];
+                        var blob  = file.getAsFile();
+                        self.readPastedImage(blob, function() {
+                            var base64   = event.target.result;
+                            pasteContent = '<img src="' + base64 + '"/>';
+                            ViperUtil.setHtml(self.pasteElement, pasteContent);
+                            self._handleFormattedPasteValue((self.pasteType === 'formattedClean'));
+                        });
+
+                        ViperUtil.preventDefault(e);
+                        return false;
                     }
 
                     ViperUtil.setHtml(self.pasteElement, pasteContent);
@@ -23790,7 +24223,7 @@ ViperCopyPastePlugin.prototype = {
                 // Remove the original selected content. Note that we must use bookmark instead of range as the content
                 // gets updated by pasteContent method. Also this content deletion cannot be done before inserting it to
                 // new location as it moves the content and changes the drop location.
-                if (selectedNode) {
+                if (selectedNode && selectedNode !== self.viper.getViperElement()) {
                     ViperUtil.remove(selectedNode);
                 } else if (bookmark) {
                     self.viper.removeBookmark(bookmark);
@@ -23799,6 +24232,19 @@ ViperCopyPastePlugin.prototype = {
                 ViperUtil.preventDefault(e);
             });
         }
+
+    },
+
+    readPastedImage: function(file, callback)
+    {
+        var reader = new FileReader();
+        reader.onload = function (event) {
+            var image = new Image();
+            image.src = event.target.result;
+            callback.call(this, image, file);
+        };
+
+        reader.readAsDataURL(file);
 
     },
 
@@ -23938,7 +24384,7 @@ ViperCopyPastePlugin.prototype = {
 
     keyDown: function (e)
     {
-        if (this._isMSIE === true || this._isFirefox === true || this._isSafari === true) {
+        if (this._isMSIE === true || this._isSafari === true) {
             if (e.metaKey === true || e.ctrlKey === true) {
                 if (e.keyCode === 86) {
                     // CTRL/CMD + V.
@@ -24293,8 +24739,21 @@ ViperCopyPastePlugin.prototype = {
             return;
         }
 
+        var fragment = null;
         var range    = this.rangeObj || this.viper.getCurrentRange();
-        var fragment = range.createDocumentFragment(html);
+        if (ViperUtil.isBrowser('chrome') === true
+            && range.startContainer === range.endContainer
+            && ViperUtil.isTag(range.startContainer, 'br') === true
+        ) {
+            // Workaround for Chrome not being able to create fragment "in br".
+            var tmpTextNode = document.createTextNode('');
+            var rangeClone  = range.cloneRange();
+            rangeClone.setStart(tmpTextNode);
+            rangeClone.collapse(true);
+            fragment = rangeClone.createDocumentFragment(html);
+        } else {
+            fragment = range.createDocumentFragment(html);
+        }
 
         var convertTags = this.convertTags;
         if (stripTags === true && this.convertTags !== null) {
@@ -24452,8 +24911,11 @@ ViperCopyPastePlugin.prototype = {
                             && ViperUtil.isTag(prevBlock, 'li') === true
                         ) {
                             // If this list is being pasted inside another list use its items instead.
+                            var insAfter = prevBlock;
                             while (ctNode.firstChild) {
-                                ViperUtil.insertAfter(prevBlock, ctNode.firstChild);
+                                var firstChild = ctNode.firstChild;
+                                ViperUtil.insertAfter(insAfter, firstChild);
+                                insAfter = firstChild;
                             }
                         } else {
                             ViperUtil.insertAfter(prevBlock, ctNode);
@@ -25361,8 +25823,9 @@ ViperCopyPastePlugin.prototype = {
 
     _getListType: function(elem, listTypes)
     {
-        var style = elem.getAttribute('style');
-        if (!style || style.indexOf('mso-list') === -1) {
+        var style     = elem.getAttribute('style');
+        var className = elem.getAttribute('class') || '';
+        if (!style || (style.indexOf('mso-list') === -1 && className.indexOf('MsoList') === -1)) {
             return null;
         }
 
@@ -25376,17 +25839,19 @@ ViperCopyPastePlugin.prototype = {
             ViperUtil.foreach(listTypes[k], function(j) {
                 ViperUtil.foreach(listTypes[k][j], function(m) {
                     if ((new RegExp(listTypes[k][j][m])).test(elContent) === true) {
-                        var html = ViperUtil.getHtml(elem);
-                        html     = html.replace(/\n/mg, ' ');
+                        var origHtml = ViperUtil.getHtml(elem);
+                        var html = origHtml.replace(/\n/mg, ' ');
                         html     = ViperUtil.trim(html);
                         html     = html.replace(/^(&nbsp;)+/m, '');
                         html     = html.replace(/(&nbsp;)+$/m, '');
                         html     = ViperUtil.trim(html);
                         html     = html.replace(new RegExp(listTypes[k][j][m]), '');
+
                         info = {
                             html: html,
                             listType: k,
-                            listStyle: j
+                            listStyle: j,
+                            origHtml: origHtml
                         };
 
                         // Break from loop.
@@ -25419,6 +25884,8 @@ ViperCopyPastePlugin.prototype = {
         var li         = null;
         var newList    = true;
         var prevType   = null;
+        var styleToLvl = {};
+        var prevCssStyle = null;
 
         var circleCharsArray = [111, 167, 183, 216, 222, 223, 252, 8721, 8226];
         var circleChars      = [];
@@ -25451,22 +25918,44 @@ ViperCopyPastePlugin.prototype = {
             if (listTypeInfo === null) {
                 // Next list item will be the start of a new list.
                 newList = true;
+                styleToLvl = {};
+                prevLevel = null;
                 continue;
             }
 
-            var listType   = listTypeInfo.listType;
-            var listStyle  = listTypeInfo.listStyle;
-            var level      = (pEl.getAttribute('style') || '').match(/level([\d])+/mi);
+            var listType  = listTypeInfo.listType;
+            var listStyle = listTypeInfo.listStyle;
+            var level     = (pEl.getAttribute('style') || '').match(/level([\d])+/mi);
+            var cssStyle  = pEl.getAttribute('style');
             ViperUtil.setHtml(pEl, listTypeInfo.html);
 
+            if (listType === 'ol' && listTypeInfo.origHtml.indexOf('v') === 0) {
+                // Change the list type to ul.
+                // TODO: Might have to check font-family here incase this is part of a OL list a -> z.
+                listType = 'ul';
+            }
+
             if (!level) {
-                level = 1;
+                level = prevLevel || 1;
             } else {
                 level = level[1];
             }
 
             if (prevType !== listType && level === prevLevel) {
                 newList = true;
+            } else if (ViperUtil.isBrowser('safari') === true) {
+                if (prevCssStyle !== cssStyle) {
+                    if (styleToLvl[cssStyle]) {
+                        level = styleToLvl[cssStyle];
+                    } else {
+                        level++;
+                        styleToLvl[cssStyle] = level;
+                    }
+                } else if (styleToLvl[cssStyle]) {
+                    level = styleToLvl[cssStyle];
+                }
+
+                prevCssStyle = cssStyle;
             }
 
             prevType = listType;
@@ -25629,6 +26118,12 @@ ViperCopyPastePlugin.prototype = {
         content = content.replace(/<(meta|link|base)[^>]+>/gi, "");
         content = content.replace(/<title[\s\S]*?<\/title>/gi, '');
         content = content.replace(/<style[\s\S]*?<\/style>/gi, '');
+
+        // Remove everything after <!--EndFragment--> on Chrome.
+        var pos = content.indexOf('<!--EndFragment-->');
+        if (pos > 0) {
+            content = content.substr(0, pos);
+        }
 
         // Comments.
         content = content.replace(/<!--(.|\s)*?-->/gi, '');
@@ -25803,23 +26298,23 @@ ViperCoreStylesPlugin.prototype = {
             toolbarPlugin.addButton(hr);
 
             callbackType = 'ViperToolbarPlugin:updateToolbar';
-        }//end if
 
-        this.viper.registerCallback(callbackType, 'ViperCoreStylesPlugin', function(data) {
-            var range = data;
-            if (data.range) {
-                range = data.range;
-            }
-
-            self._updateToolbarButtonStates(toolbarButtons, range);
-
-            if (self._onChangeAddStyle.length > 0) {
-                var style = null;
-                while (style = self._onChangeAddStyle.shift()) {
-                    self.viper.ViperTools.setButtonInactive(self._buttons[style]);
+            this.viper.registerCallback(callbackType, 'ViperCoreStylesPlugin', function(data) {
+                var range = data;
+                if (data.range) {
+                    range = data.range;
                 }
-            }
-        });
+
+                self._updateToolbarButtonStates(toolbarButtons, range);
+
+                if (self._onChangeAddStyle.length > 0) {
+                    var style = null;
+                    while (style = self._onChangeAddStyle.shift()) {
+                        self.viper.ViperTools.setButtonInactive(self._buttons[style]);
+                    }
+                }
+            });
+        }//end if
 
         this.viper.registerCallback('Viper:keyPress', 'ViperCoreStylesPlugin', function(e) {
             if (self._onChangeAddStyle.length > 0 && self.viper.isInputKey(e) === true) {
@@ -26456,7 +26951,7 @@ ViperCoreStylesPlugin.prototype = {
 
     },
 
-
+    
     setJustifyChangeTrackInfo: function(node)
     {
         if (node && ViperChangeTracker.isTrackingNode(node) === false) {
@@ -26646,12 +27141,16 @@ ViperCoreStylesPlugin.prototype = {
                 return false;
             }
 
+            var continueElement = null;
             if (!bookmark || elem !== bookmark.start) {
                 if (elem.nodeType === ViperUtil.ELEMENT_NODE) {
                     ViperUtil.removeAttr(elem, 'style');
                     ViperUtil.removeAttr(elem, 'class');
 
                     if (elem.attributes.length === 0 && ViperUtil.isTag(elem, 'span') === true) {
+                        // Set the continueElement to be the first child of this element as it will be removed and
+                        // we want to continue walking DOM from the first child element.
+                        continueElement = elem.firstChild;
                         while (elem.firstChild) {
                             ViperUtil.insertBefore(elem, elem.firstChild);
                         }
@@ -26667,6 +27166,8 @@ ViperCoreStylesPlugin.prototype = {
             if (nodeSelection && elem === stopElem) {
                 return false;
             }
+
+            return continueElement;
         });
 
         if (bookmark) {
@@ -27180,9 +27681,10 @@ ViperCoreStylesPlugin.prototype = {
         var startNode    = null;
         var endNode      = null;
 
-        if (!selectedNode) {
-            startNode = range.getStartNode();
-            endNode   = range.getEndNode();
+        if (!selectedNode || selectedNode === this.viper.getViperElement()) {
+            startNode    = range.getStartNode();
+            endNode      = range.getEndNode();
+            selectedNode = null;
         } else {
             startNode = selectedNode;
         }
@@ -27352,37 +27854,39 @@ ViperCursorAssistPlugin.prototype = {
         var validElemsArray = validElems.split(',');
         var prevElement = null;
         var prevPos     = null;
-        this.viper.registerCallback('Viper:editableElementChanged', 'ViperCursorAssitPlugin', function() {
+        var hover       = false;
+
+        var _removeLine = function(line, clearPrev) {
+            if (line) {
+                ViperUtil.remove(line);
+            }
+
+            hover = false;
+            if (clearPrev !== false) {
+                prevElement = null;
+                prevPos     = null;
+            }
+        };
+
+        this.viper.registerCallback('Viper:editableElementChanged', 'ViperCursorAssistPlugin', function() {
             ViperUtil.addEvent(document, 'mousemove', function(e) {
                 clearTimeout(t);
                 t = setTimeout(function() {
                     var line = ViperUtil.getid(self.viper.getId() + '-cursorAssist');
                     var hoverElem = self.viper.getElementAtCoords(e.clientX, e.clientY);
-                    if (hoverElem && (hoverElem === line || hoverElem.parentNode.parentNode === line)) {
+                    if (hoverElem && (hover === true || hoverElem === line || hoverElem.parentNode.parentNode === line)) {
                         return;
                     }
 
                     if (!hoverElem || self.viper.isOutOfBounds(hoverElem) === true) {
-                        if (line) {
-                            ViperUtil.remove(line);
-                        }
-
-                        prevElement = null;
-                        prevPos     = null;
-
+                        _removeLine(line);
                         return;
                     }
 
                     if (ViperUtil.inArray(ViperUtil.getTagName(hoverElem), validElemsArray) !== true) {
                         var elems = ViperUtil.getParents(hoverElem, validElems, self.viper.getViperElement());
                         if (elems.length === 0) {
-                            if (line) {
-                                ViperUtil.remove(line);
-                            }
-
-                            prevElement = null;
-                            prevPos     = null;
-
+                            _removeLine(line);
                             return;
                         } else {
                             hoverElem = elems.shift();
@@ -27392,13 +27896,7 @@ ViperCursorAssistPlugin.prototype = {
                             ) {
                                 // Do not show the line if this is a nested list.
                                 if (ViperUtil.getParents(hoverElem, 'ul,ol', self.viper.getViperElement()).length > 0) {
-                                    if (line) {
-                                        ViperUtil.remove(line);
-                                    }
-
-                                    prevElement = null;
-                                    prevPos     = null;
-
+                                    _removeLine(line);
                                     return;
                                 }
                             }
@@ -27428,22 +27926,23 @@ ViperCursorAssistPlugin.prototype = {
                         dist = (height / 2);
                     }
 
+                    var relYPoint = null;
                     if (elemRect.y1 + dist > mousePos) {
                         sibling = 'previousSibling';
+                        relYPoint = elemRect.y1;
                     } else if (elemRect.y2 - dist < mousePos) {
                         sibling = 'nextSibling';
+                        relYPoint = elemRect.y2;
                     } else {
-                        if (line) {
-                            ViperUtil.remove(line);
-                        }
-
-                        prevElement = null;
-                        prevPos = null;
-
+                        _removeLine(line);
                         return;
                     }
 
                     if (prevElement === hoverElem && prevPos === sibling) {
+                        return;
+                    }
+
+                    if (self.isInToolbarBounds(relYPoint) === true) {
                         return;
                     }
 
@@ -27458,7 +27957,7 @@ ViperCursorAssistPlugin.prototype = {
                             if (siblingElem.nodeType !== ViperUtil.TEXT_NODE) {
                                 if (ViperUtil.inArray(ViperUtil.getTagName(siblingElem), validElemsArray) !== true) {
                                     if (line) {
-                                        ViperUtil.remove(line);
+                                        _removeLine(line, false);
                                     }
 
                                     return false;
@@ -27480,16 +27979,23 @@ ViperCursorAssistPlugin.prototype = {
                     }
 
                     if (line) {
-                        ViperUtil.remove(line);
+                        _removeLine(line, false);
                     }
 
                     line    = document.createElement('div');
                     line.id = self.viper.getId() + '-cursorAssist';
                     ViperUtil.addClass(line, 'ViperCursorAssistPlugin');
                     ViperUtil.setHtml(line, '<span class="ViperCursorAssistPlugin-cursorText">Insert</span><span class="ViperCursorAssistPlugin-cursorLine"></span>');
+                    hover = false;
+
+                    ViperUtil.hover(line, function() {
+                        hover = true;
+                    }, function() {
+                        hover = false;
+                    });
 
                     ViperUtil.addEvent(line, 'mousedown', function() {
-                        ViperUtil.remove(line);
+                        _removeLine(line, false);
 
                         var p = document.createElement('p');
 
@@ -27497,6 +28003,14 @@ ViperCursorAssistPlugin.prototype = {
                             ViperUtil.setHtml(p, '&nbsp;');
                         } else {
                             ViperUtil.setHtml(p, '<br/>');
+                        }
+
+                        // Use the block parent element of img, object etc.
+                        if (ViperUtil.isBlockElement(hoverElem) === false || ViperUtil.isStubElement(hoverElem) === true) {
+                            var blockParent = ViperUtil.getFirstBlockParent(hoverElem, self.viper.getViperElement());
+                            if (blockParent) {
+                                hoverElem = blockParent;
+                            }
                         }
 
                         if (sibling === 'previousSibling') {
@@ -27523,7 +28037,7 @@ ViperCursorAssistPlugin.prototype = {
 
                             self.viper.fireNodesChanged();
                             self.viper.fireSelectionChanged(null, true);
-                        }, 10)
+                        }, 10);
                     });
 
                     ViperUtil.removeClass(line, 'insertBetween');
@@ -27553,6 +28067,26 @@ ViperCursorAssistPlugin.prototype = {
                 }, 200);
             });
         });
+
+        this.viper.registerCallback('Viper:mouseDown', 'ViperCursorAssistPlugin', function() {
+            var line = ViperUtil.getid(self.viper.getId() + '-cursorAssist');
+            if (line) {
+                _removeLine(line, false);
+            }
+        });
+    },
+
+    isInToolbarBounds: function(yPoint)
+    {
+        var visibleToolbars = this.viper.ViperTools.getVisibleToolbarRectangles();
+        for (var i = 0; i < visibleToolbars.length; i++) {
+            if (yPoint >= (visibleToolbars[i].y1 - 15) && yPoint <= (visibleToolbars[i].y2 + 15)) {
+                return true;;
+            }
+        }
+
+        return false;
+
     },
 
     isPluginElement: function(elem)
@@ -28702,6 +29236,8 @@ ViperFormatPlugin.prototype = {
 
             this.viper.fireCallbacks('ViperFormatPlugin:elementAttributeSet', {element: selectedNode, oldValue: oldVal, newValue:value});
             return;
+        } else if (ViperUtil.trim(value) === '') {
+            return;
         }
 
         // Wrap the selection with span tag.
@@ -28908,7 +29444,7 @@ ViperFormatPlugin.prototype = {
 
     },
 
-
+    
     getFormatButtonStatuses: function(element)
     {
         var statuses = {
@@ -29139,7 +29675,7 @@ ViperFormatPlugin.prototype = {
 
     },
 
-
+    
     handleFormat: function(type)
     {
         var lineage         = this._inlineToolbar.getLineage();
@@ -29218,6 +29754,13 @@ ViperFormatPlugin.prototype = {
                     // Wrap element.
                     var newElem = document.createElement(type);
                     ViperUtil.insertBefore(selectedNode, newElem);
+
+                    if (type === 'blockquote') {
+                        var p = document.createElement('p');
+                        newElem.appendChild(p);
+                        newElem = p;
+                    }
+
                     newElem.appendChild(selectedNode);
                     this.viper.selectBookmark(bookmark);
                     range.selectNode(newElem);
@@ -29261,7 +29804,9 @@ ViperFormatPlugin.prototype = {
                 if (elements[i].nodeType === ViperUtil.TEXT_NODE && ViperUtil.isBlank(ViperUtil.trim(elements[i].data)) === true) {
                     continue;
                 } else if (ViperUtil.isBlockElement(elements[i]) === true) {
-                    parents.push(elements[i]);
+                    if (ViperUtil.inArray(elements[i], parents) === false) {
+                        parents.push(elements[i]);
+                    }
                 } else {
                     var parent    = ViperUtil.getFirstBlockParent(elements[i]);
                     if (parent && ViperUtil.inArray(parent, parents) === false) {
@@ -29454,7 +29999,16 @@ ViperFormatPlugin.prototype = {
             } else {
                 // This is element is already the specified type remove the element.
                 while (element.firstChild) {
-                    ViperUtil.insertBefore(element, element.firstChild);
+                    if (isBlockQuote === true && ViperUtil.isTag(element.firstChild, 'p') === true) {
+                        // Also remove the P tags.
+                        while (element.firstChild.firstChild) {
+                            ViperUtil.insertBefore(element, element.firstChild.firstChild);
+                        }
+
+                        ViperUtil.remove(element.firstChild);
+                    } else {
+                        ViperUtil.insertBefore(element, element.firstChild);
+                    }
                 }
             }
 
@@ -29931,6 +30485,37 @@ ViperImagePlugin.prototype = {
             }
         );
 
+        this.viper.registerCallback('Viper:dropped', 'ViperImagePlugin', function(data) {
+            for (var i = 0; i < data.dataTransfer.files.length; i++) {
+                self.readDroppedImage(data.dataTransfer.files[i], function(image, file) {
+                    self.insertDroppedImage(image, data.range, file);
+                });
+            }
+        });
+
+    },
+
+    readDroppedImage: function(file, callback)
+    {
+        var reader = new FileReader();
+        reader.onload = function (event) {
+            var image = new Image();
+            image.src = event.target.result;
+            callback.call(this, image, file);
+        };
+
+        reader.readAsDataURL(file);
+
+    },
+
+    insertDroppedImage: function(image, range, fileInfo)
+    {
+        fileInfo    = fileInfo || {};
+        range       = range || this.viper.getViperRange();
+        image.alt   = fileInfo.name || '';
+
+        this._rangeToImage(range, image);
+
     },
 
     moveImage: function(image, range)
@@ -29966,7 +30551,11 @@ ViperImagePlugin.prototype = {
             ViperSelection.addRange(range);
         }
 
-        var bookmark = this.viper.createBookmark();
+        if (this.viper.rangeInViperBounds(range) === false) {
+            range = this.viper.getViperRange();
+        }
+
+        var bookmark = this.viper.createBookmark(range);
 
         var elems = ViperUtil.getElementsBetween(bookmark.start, bookmark.end);
         for (var i = 0; i < elems.length; i++) {
@@ -29991,6 +30580,24 @@ ViperImagePlugin.prototype = {
         this.viper.removeBookmark(bookmark);
 
         ViperSelection.removeAllRanges();
+
+        if (ViperUtil.isBrowser('msie', '>=11') === true) {
+            var selectable = img.nextSibling;
+            if (!img.nextSibling) {
+                selectable = document.createTextNode(' ');
+                ViperUtil.insertAfter(img, selectable);
+            } else if (img.nextSibling.nodeType !== ViperUtil.TEXT_NODE) {
+                selectable = range.getFirstSelectableChild(img.nextSibling);
+                if (selectable) {
+                    selectable = document.createTextNode(' ');
+                    ViperUtil.insertAfter(img, selectable);
+                }
+            }
+
+            range.setStart(selectable, 1);
+            range.collapse(true);
+            ViperSelection.addRange(range);
+        }
 
         this.viper.fireSelectionChanged();
         this.viper.fireNodesChanged([this.viper.getViperElement()]);
@@ -30196,7 +30803,16 @@ ViperImagePlugin.prototype = {
         }
 
         this._updateToolbars(image);
-        this.showImageResizeHandles(image);
+
+        var self = this;
+        var imageLoaded = function() {
+            // only add hadnles when image is fully loaded
+            self.showImageResizeHandles(image);
+            self.viper.fireSelectionChanged(null, true);
+        };
+
+        image.onload  = imageLoaded;
+        image.onerror = imageLoaded;
 
     },
 
@@ -30209,6 +30825,11 @@ ViperImagePlugin.prototype = {
 
     _updateToolbar: function(image, toolbarPrefix)
     {
+        var toolbar = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+        if (!toolbar) {
+            return;
+        }
+
         var tools = this.viper.ViperTools;
 
         if (image && ViperUtil.isTag(image, 'img') === true) {
@@ -30349,15 +30970,19 @@ ViperImagePlugin.prototype = {
     _updateInlineToolbar: function(data)
     {
         var nodeSelection = data.nodeSelection || data.range.getNodeSelection();
+        var self          = this;
 
         this.hideImageResizeHandles();
         if (nodeSelection && ViperUtil.isTag(nodeSelection, 'img') === true) {
             this._resizeImage = nodeSelection;
             data.toolbar.showButton('vitpImage');
             data.toolbar.showButton('vitpImageMove');
+            nodeSelection.onload = function() {
+                self.showImageResizeHandles(nodeSelection);
+                self._inlineToolbar.update(null, nodeSelection);
+            };
 
             this.viper.ViperTools.setButtonActive('vitpImage');
-
             this.showImageResizeHandles(nodeSelection);
             this._updateToolbars(nodeSelection);
         }
@@ -30719,7 +31344,7 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
-
+    
     updateToolbar: function(range, nodeSelection, hasActiveSection)
     {
         if (this._lineageClicked !== true) {
@@ -30776,7 +31401,7 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
-
+    
     _updateInnerContainer: function(range, lineage, nodeSelection)
     {
         if (!lineage || lineage.length === 0) {
@@ -30799,7 +31424,7 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
-
+    
     getReadableTagName: function(tagName)
     {
         switch (tagName) {
@@ -30861,7 +31486,7 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
-
+    
     selectLineageItem: function(index)
     {
         var tags = ViperUtil.getTag('li', this._lineage);
@@ -30896,7 +31521,7 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
-
+    
     _updateLineage: function(lineage, selIndex)
     {
         // Remove the contents of the lineage container.
@@ -31091,7 +31716,7 @@ ViperInlineToolbarPlugin.prototype = {
 
     },
 
-
+    
     _getSelectionLineage: function(range, nodeSelection)
     {
         range             = range || this.viper.getViperRange();
@@ -31690,7 +32315,7 @@ ViperKeyboardEditorPlugin.prototype = {
             var startNode   = range.getStartNode();
             var blockParent = null;
             if (!startNode) {
-                if (range.startContainer.childNodes.length <= range.startOffset) {
+                if (range.startContainer.childNodes.length <= range.startOffset && range.startOffset !== 0) {
                     startNode = range.startContainer.childNodes[(range.startContainer.childNodes.length - 1)];
                 } else {
                     startNode = range.startContainer;
@@ -31802,7 +32427,12 @@ ViperKeyboardEditorPlugin.prototype = {
             ) {
                 var elem = document.createElement(defaultTagName);
                 ViperUtil.setHtml(elem, '<br />');
-                ViperUtil.insertBefore(startNode, elem);
+                if (startNode === viperElem.lastChild) {
+                    ViperUtil.insertAfter(startNode, elem);
+                } else {
+                    ViperUtil.insertBefore(startNode, elem);
+                }
+
                 range.selectNode(elem.firstChild);
                 range.collapse(true);
                 ViperSelection.addRange(range);
@@ -32046,9 +32676,9 @@ ViperKeyboardEditorPlugin.prototype = {
     {
         var range = this.viper.getViperRange();
 
-        if (ViperUtil.isBrowser('chrome') === true) {
+        if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true) {
             // Latest Chrome versions have strange issue with all content deletion, handle it in another method.
-            return this._handleDeleteForChrome(e, range);
+            return this._handleDeleteForWebkit(e, range);
         }
 
         if (e.which === 46) {
@@ -32086,6 +32716,9 @@ ViperKeyboardEditorPlugin.prototype = {
                             range.collapse(true);
                             ViperSelection.addRange(range);
                         }
+                    } else {
+                        var nonSelectableElements = ViperUtil.getElementsBetween(viperElement, startNode);
+                        ViperUtil.remove(nonSelectableElements);
                     }
 
                     if (startNode.nodeType === ViperUtil.TEXT_NODE
@@ -32457,12 +33090,17 @@ ViperKeyboardEditorPlugin.prototype = {
             if (firstBlock
                 && ViperUtil.isTag(firstBlock, 'li') === true
                 && firstSelectable === range.startContainer
+                && !firstSelectable.previousSibling
             ) {
                  // Check if there is a parent element with a selectable.
                 var prevSelectable = range.getPreviousContainer(firstSelectable, null, true, true);
                 if (prevSelectable) {
                     while (firstBlock.lastChild) {
                         ViperUtil.insertAfter(prevSelectable, firstBlock.lastChild);
+                    }
+
+                    if (ViperUtil.isTag(prevSelectable, 'br') === true) {
+                        ViperUtil.remove(prevSelectable);
                     }
 
                     var firstBlockParent = firstBlock.parentNode;
@@ -32547,14 +33185,51 @@ ViperKeyboardEditorPlugin.prototype = {
                 return this._removeContentFromStartToEndOfContainers(range);
             } else if (ViperUtil.isBrowser('firefox') === true) {
                 var nodeSelection = range.getNodeSelection();
-                if (nodeSelection && ViperUtil.isBlockElement(nodeSelection) === true && ViperUtil.isStubElement(nodeSelection) === false) {
+                if (nodeSelection
+                    && ViperUtil.isStubElement(nodeSelection) === false
+                    && ViperUtil.isTag(nodeSelection, 'td') === false
+                    && ViperUtil.isTag(nodeSelection, 'th') === false
+                ) {
                     // When a block element is selected and removed in Firefox it leaves the content as <p>NULL CHAR</p>.
                     // Handle the deletion here.
-                    this.viper.moveCaretAway(nodeSelection);
+                    range = this.viper.moveCaretAway(nodeSelection);
                     ViperUtil.remove(nodeSelection);
+                    if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                        && range.startContainer.data === ' '
+                        && range.startContainer.previousSibling
+                        && range.startContainer.previousSibling.nodeType !== ViperUtil.TEXT_NODE
+                    ) {
+                        // If content is '<em>test</em> <strong>content</strong>' and the sourceElement is
+                        // the strong tag then change the space to non breaking space to prevent caret moving in to <em>.
+                        range.startContainer.data = String.fromCharCode(160);
+                        range.setStart(range.startContainer, range.startContainer.data.length);
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+                    }
+
                     ViperUtil.preventDefault(e);
                     this.viper.fireNodesChanged();
                     this.viper.fireSelectionChanged();
+                    return false;
+                } else if (
+                    !nodeSelection
+                    && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                    && range.startOffset === 0
+                    && range.endContainer.nodeType === ViperUtil.TEXT_NODE
+                    && range.endOffset === 0
+                    && range.startContainer !== range.endContainer
+                    && ViperUtil.getFirstBlockParent(range.startContainer) === ViperUtil.getFirstBlockParent(range.endContainer)
+                ) {
+                    // Handle <p>[<strong>text</strong><br />]more text</p>.
+                    var startContainer = range.startContainer;
+                    var endContainer   = range.endContainer;
+                    var elemsBetween   = ViperUtil.getElementsBetween(startContainer, endContainer);
+                    elemsBetween.push(startContainer);
+                    ViperUtil.remove(elemsBetween);
+
+                    range.setStart(endContainer, 0);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
                     return false;
                 }
             }
@@ -32617,13 +33292,36 @@ ViperKeyboardEditorPlugin.prototype = {
                 }
             } else if (ViperUtil.isTag(startNode, 'br') === true
                 && startNode.parentNode
-                && startNode.parentNode.childNodes.length === 1
                 && ViperUtil.isBrowser('firefox') === true
             ) {
-                var tmpNode = document.createTextNode('');
-                startNode.parentNode.appendChild(tmpNode);
-                ViperUtil.remove(startNode);
-                range.setStart(tmpNode);
+                var nextSelectable = range.getNextContainer(startNode, null, true, true);
+                if (nextSelectable) {
+                    var startParent = startNode.parentNode;
+                    if (startParent.childNodes.length === 1) {
+                        ViperUtil.remove(startParent);
+                    } else {
+                        ViperUtil.remove(startNode);
+                    }
+
+                    range.setStart(nextSelectable, 0);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                    return false;
+                } else if (startNode.parentNode.childNodes.length === 1) {
+                    var tmpNode = document.createTextNode('');
+                    startNode.parentNode.appendChild(tmpNode);
+                    ViperUtil.remove(startNode);
+                    range.setStart(tmpNode);
+                } else if (startNode.nextSibling
+                    && startNode.nextSibling.nodeType === ViperUtil.TEXT_NODE
+                ) {
+                    // Handle <p><strong>[delete key * 2]t</strong><br />more text</p>.
+                    range.setStart(startNode.nextSibling, 0);
+                    range.collapse(true);
+                    ViperUtil.remove(startNode);
+                    ViperSelection.addRange(range);
+                    return false;
+                }
             }
         }//end if
 
@@ -32640,7 +33338,7 @@ ViperKeyboardEditorPlugin.prototype = {
 
     },
 
-    _handleDeleteForChrome: function(e, range)
+    _handleDeleteForWebkit: function(e, range)
     {
         if (this._handleBackspaceAtStartOfLi(e, range) === false) {
             return false;
@@ -32685,7 +33383,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 return false;
             }
 
-            var selectable = range.getNextContainer(startNode, null, true);
+            var selectable = range.getNextContainer(startNode, null, true, true);
             if (!selectable || this.viper.isOutOfBounds(selectable) === true) {
                 selectable = range.getPreviousContainer(startNode, null, true);
                 if (!selectable || this.viper.isOutOfBounds(selectable) === true) {
@@ -32694,8 +33392,12 @@ ViperKeyboardEditorPlugin.prototype = {
                 }
             }
 
-            var parent = range.getStartNode().parentNode;
-            ViperUtil.remove(range.getStartNode().parentNode);
+            var parent = startNode.parentNode;
+            if (!startNode.nextSibling && !startNode.previousSibling) {
+               ViperUtil.remove(startNode.parentNode);
+            } else {
+                ViperUtil.remove(startNode);
+            }
 
             if (parent.childNodes.length === 0) {
                 ViperUtil.remove(parent);
@@ -32770,6 +33472,7 @@ ViperKeyboardEditorPlugin.prototype = {
                     if (defaultTagName !== '') {
                         ViperUtil.setHtml(nodeSelection, '');
                         this.viper.initEditableElement();
+                        range = this.viper.getCurrentRange();
                     } else {
                         ViperUtil.setHtml(nodeSelection, '<br />');
                     }
@@ -32805,11 +33508,13 @@ ViperKeyboardEditorPlugin.prototype = {
                         var nextSelectable = range.getNextContainer(range.startContainer, null, true);
                         if (this.viper.isOutOfBounds(nextSelectable) === false) {
                             var nextParent = ViperUtil.getFirstBlockParent(nextSelectable);
-                            while (nextParent.firstChild) {
-                                startParent.appendChild(nextParent.firstChild);
-                            }
+                            if (startParent !== nextParent) {
+                                while (nextParent.firstChild) {
+                                    startParent.appendChild(nextParent.firstChild);
+                                }
 
-                            ViperUtil.remove(nextParent);
+                                ViperUtil.remove(nextParent);
+                            }
                         }
                     } else {
                         ViperUtil.remove(startParent);
@@ -32847,7 +33552,41 @@ ViperKeyboardEditorPlugin.prototype = {
                 this.viper.fireSelectionChanged(null, true);
                 return false;
             }
+        } else if (range.collapsed === false
+            && range.getNodeSelection()
+        ) {
+            var nodeSelection = range.getNodeSelection();
+            if (nodeSelection
+                && ViperUtil.isStubElement(nodeSelection) === false
+                && ViperUtil.isTag(nodeSelection, 'td') === false
+                && ViperUtil.isTag(nodeSelection, 'th') === false
+            ) {
+                // Handle deletion of a whole bold/italic/etc tag.
+                range = this.viper.moveCaretAway(nodeSelection);
+                ViperUtil.remove(nodeSelection);
+                if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                    && range.startContainer.data === ' '
+                    && range.startContainer.previousSibling
+                    && range.startContainer.previousSibling.nodeType !== ViperUtil.TEXT_NODE
+                ) {
+                    // Fix for Chrome.. If content is '<em>test</em> <strong>content</strong>' and the sourceElement is
+                    // the strong tag then change the space to non breaking space to prevent caret moving in to <em>.
+                    range.startContainer.data = String.fromCharCode(160);
+                    range.setStart(range.startContainer, range.startContainer.data.length);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                }
+
+                ViperUtil.preventDefault(e);
+
+                this.viper.fireNodesChanged();
+                this.viper.fireSelectionChanged(null, true);
+                return false;
+            }
+
         }//end if
+
+
 
     },
 
@@ -33123,7 +33862,7 @@ ViperKeyboardEditorPlugin.prototype = {
         return false;
     },
 
-
+    
     handleSoftEnter: function(e)
     {
         if (e) {
@@ -33160,7 +33899,7 @@ ViperKeyboardEditorPlugin.prototype = {
         if (range.collapsed === false) {
             var viperElement    = this.viper.getViperElement();
             var firstSelectable = range._getFirstSelectableChild(viperElement);
-            if (firstSelectable === range.startContainer || (viperElement === range.startContainer && range.startOffset === 0)) {
+            if ((firstSelectable === range.startContainer || viperElement === range.startContainer) && range.startOffset === 0) {
                 var lastSelectable  = range._getLastSelectableChild(viperElement);
                 if ((range.endContainer === viperElement && range.endOffset >= viperElement.childNodes.length)
                     || (range.endContainer === lastSelectable && range.endOffset === lastSelectable.data.length)
@@ -33604,7 +34343,7 @@ ViperLangToolsPlugin.prototype = {
 
     },
 
-
+    
     getSurroundingParents: function(node, tagName)
     {
         if (!node) {
@@ -34003,23 +34742,15 @@ ViperLinkPlugin.prototype = {
 
     },
 
-
+    
     validateEmail: function(email)
     {
-        var regExStr = '^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.([a-z][a-z]+)|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$';
+        // add a simple check here to avoid heavy check below
+        if(email.match(/@/g) === null)
+            return false;
 
-        var regExp = new RegExp(regExStr, 'i');
-
-        // Finally run the regular expression.
-        var matches = email.match(regExp);
-        if (matches === null) {
-            var emailValid = false;
-        } else {
-            var emailValid = true;
-        }
-
-        return emailValid;
-
+        var regExStr = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return regExStr.test(email);
     },
 
     updateLinkAttributes: function(link, idPrefix)
@@ -34111,7 +34842,10 @@ ViperLinkPlugin.prototype = {
         }
 
         if (node && node.nodeType === ViperUtil.ELEMENT_NODE) {
-            if (ViperUtil.isStubElement(node) === true) {
+            if (ViperUtil.isStubElement(node) === true
+                || ViperUtil.isTag(node, 'ul') === true
+                || ViperUtil.isTag(node, 'ol') === true
+            ) {
                 ViperUtil.insertBefore(node, a);
                 a.appendChild(node);
             } else {
@@ -34478,15 +35212,6 @@ ViperLinkPlugin.prototype = {
         var self          = this;
         var range         = data.range;
         var currentIsLink = false;
-
-        // Check if we need to show the link options.
-        if ((ViperUtil.isTag(data.lineage[data.current], 'img') !== true
-            && ViperUtil.isBlockElement(data.lineage[data.current]) === true)
-            || ViperUtil.inArray(ViperUtil.getTagName(data.lineage[data.current]), ('thead,tfoot'.split(','))) === true
-        ) {
-            return false;
-        }
-
         var startNode     = null;
         var endNode       = null;
         var nodeSelection = range.getNodeSelection();
@@ -35355,8 +36080,13 @@ ViperListPlugin.prototype = {
             }
         } else {
             var elems = ViperUtil.getElementsBetween(startNode, endNode);
-            elems.unshift(startNode);
-            elems.push(endNode);
+            if (ViperUtil.inArray(startNode, elems) === false) {
+                elems.unshift(startNode);
+            }
+
+            if (ViperUtil.inArray(endNode, elems) === false) {
+                elems.push(endNode);
+            }
 
             var c = elems.length;
             for (var i = 0; i < c; i++) {
@@ -35372,7 +36102,10 @@ ViperListPlugin.prototype = {
                         listItems.push(li);
                     }
                 } else {
-                    listItems.push(elems[i]);
+                    if (li && ViperUtil.inArray(elems[i], listItems) === false) {
+                        listItems.push(elems[i]);
+                    }
+
                     if (expand === true) {
                         listItems = listItems.concat(ViperUtil.getTag('li', elems[i]));
                     }
@@ -35925,7 +36658,7 @@ ViperListPlugin.prototype = {
 
     },
 
-
+    
     splitListAtItem: function(li)
     {
         var siblings = [];
@@ -35976,7 +36709,7 @@ ViperListPlugin.prototype = {
 
     },
 
-
+    
     convertElement: function(elem, tagName, detached)
     {
         var newElem = document.createElement(tagName);
@@ -36150,7 +36883,7 @@ ViperListPlugin.prototype = {
 
     },
 
-
+    
     getItemContents: function(li)
     {
         var contentElements = [];
@@ -36267,7 +37000,7 @@ ViperListPlugin.prototype = {
             indent   = true;
         } else {
             var nodeSelection = range.getNodeSelection();
-            if (nodeSelection) {
+            if (nodeSelection && nodeSelection !== this.viper.getViperElement()) {
                 startNode = nodeSelection;
                 endNode   = null;
             }
@@ -36761,7 +37494,7 @@ ViperListPlugin.prototype = {
 
     },
 
-
+    
     _getListItem: function(element)
     {
         while (element && element !== this.viper.element) {
@@ -36869,7 +37602,7 @@ ViperListPlugin.prototype = {
 
     },
 
-
+    
     handleEnter: function(li)
     {
         var content = ViperUtil.getNodeTextContent(li);
@@ -37862,7 +38595,7 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
     return this;
   }
 
-
+  
 
 
 
@@ -38556,7 +39289,7 @@ ViperSourceViewPlugin.prototype = {
     },
 
 
-
+    
     _includeScript: function(src, callback) {
         var script    = document.createElement('script');
         script.onload = function() {
@@ -38824,7 +39557,11 @@ ViperTableEditorPlugin.prototype = {
                 if (!node) {
                     node = range.getEndNode();
                     if (!node) {
-                        return;
+                        if (range.startContainer !== range.endContainer) {
+                            return;
+                        } else {
+                            node = range.startContainer;
+                        }
                     }
                 }
 
@@ -39043,7 +39780,7 @@ ViperTableEditorPlugin.prototype = {
     },
 
 
-
+    
     showCellToolsIcon: function(cell, inTopBar)
     {
         if (!cell) {
@@ -39252,7 +39989,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-
+    
     updateToolbar: function(cell, type, activeSubSection)
     {
         this._activeSection = null;
@@ -39476,7 +40213,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-
+    
     _updatePosition: function(cell, verticalOnly)
     {
         var rangeCoords = this._toolbarWidget.getElementCoords(cell);
@@ -39742,17 +40479,6 @@ ViperTableEditorPlugin.prototype = {
         ViperUtil.hover(self._toolbarWidget.element, function() {
             ViperUtil.setStyle(hElem, 'display', 'block');
         }, function() {});
-
-    },
-
-    __updateInnerContainer: function(cell, type, activeSubSection)
-    {
-        var callbackData = {
-            toolbar: this,
-            cell: cell,
-            type: type
-        };
-        this.viper.fireCallbacks('ViperTableEditorPlugin:updateToolbar', callbackData);
 
     },
 
@@ -40182,7 +40908,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-
+    
     canMergeLeft: function(cell)
     {
         var cells   = this._getCellsExpanded();
@@ -40592,7 +41318,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-
+    
     canMoveColLeft: function(cell)
     {
          var colNum = this.getColNum(cell);
@@ -40889,7 +41615,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-
+    
     convertToHeader: function(cell, type, actualType)
     {
         var elem = cell;
@@ -40999,7 +41725,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-
+    
     convertToCell: function(cell, type, actualType)
     {
         var elem = cell;
@@ -41126,6 +41852,7 @@ ViperTableEditorPlugin.prototype = {
             var colCellPos = this.getCellPosition(colCell);
             if (colCellPos.col === cellPos.col) {
                 ViperUtil.setStyle(colCell, 'width', width);
+                this.tableUpdated();
                 return;
             }
         }
@@ -41173,7 +41900,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-
+    
     splitVertical: function(cell)
     {
         if (!cell || !cell.getAttribute('colspan')) {
@@ -41200,7 +41927,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-
+    
     splitHorizontal: function(cell)
     {
         var rowspan = this.getRowspan(cell);
@@ -41722,7 +42449,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-
+    
     _createToolbarEditorBubble: function()
     {
         var main = document.createElement('div');
@@ -42261,7 +42988,7 @@ ViperTableEditorPlugin.prototype = {
 
     },
 
-
+    
     getCell: function(row, cell)
     {
         if (ViperUtil.isset(cell) === false) {
@@ -42647,7 +43374,7 @@ ViperToolbarPlugin.prototype = {
 
     },
 
-
+    
     addButton: function(button)
     {
         if (!this._settingButtons) {
@@ -43385,7 +44112,7 @@ ViperTrackChangesPlugin.prototype = {
 
     },
 
-
+    
     addComment: function()
     {
         this.viper.focus();
