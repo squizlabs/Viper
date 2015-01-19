@@ -46,6 +46,9 @@ class Viper_Tests_ViperCopyPastePlugin_TextAlignmentUnitTest extends AbstractVip
                     case 'chrome':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsGoogleChrome/TextAlignment.txt');
                         break;
+                    case 'chromeCanary':
+                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsGoogleChromeCanary/TextAlignment.txt');
+                        break;
                     case 'ie8':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsIE8/TextAlignment.txt');
                         break;

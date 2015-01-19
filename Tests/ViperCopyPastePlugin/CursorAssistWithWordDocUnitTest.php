@@ -44,6 +44,9 @@ class Viper_Tests_ViperCopyPastePlugin_CursorAssistWithWordDocUnitTest extends A
                     case 'chrome':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsGoogleChrome/CursorAssistWithWordDoc.txt');
                         break;
+                    case 'chromeCanary':
+                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsGoogleChromeCanary/CursorAssistWithWordDoc.txt');
+                        break;
                     case 'ie8':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsIE8/CursorAssistWithWordDoc.txt');
                         break;

@@ -44,6 +44,9 @@ class Viper_Tests_ViperCopyPastePlugin_ListsUnitTest extends AbstractViperUnitTe
                     case 'chrome':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsGoogleChrome/Lists.txt');
                         break;
+                    case 'chromeCanary':
+                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsGoogleChromeCanary/Lists.txt');
+                        break;
                     case 'ie8':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsIE8/Lists.txt');
                         break;

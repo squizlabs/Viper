@@ -46,6 +46,9 @@ class Viper_Tests_ViperCopyPastePlugin_WordTableExamplesUnitTest extends Abstrac
                     case 'chrome':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsGoogleChrome/WordTableExamples.txt');
                         break;
+                    case 'chromeCanary':
+                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsGoogleChromeCanary/WordTableExamples.txt');
+                        break;
                     case 'ie8':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsIE8/WordTableExamples.txt');
                         break;
