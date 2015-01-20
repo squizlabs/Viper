@@ -20,14 +20,8 @@ class Viper_Tests_ViperCopyPastePlugin_ViperTestDocUnitTest extends AbstractVipe
                     case 'firefox':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacFirefox/ViperTestDoc.txt');
                         break;
-                    case 'firefoxNightly':
-                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacFirefoxNightly/ViperTestDoc.txt');
-                        break;
                     case 'chrome':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacGoogleChrome/ViperTestDoc.txt');
-                        break;
-                    case 'chromeCanary':
-                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacGoogleChromeCanary/ViperTestDoc.txt');
                         break;
                     case 'safari':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacSafari/ViperTestDoc.txt');
@@ -43,9 +37,6 @@ class Viper_Tests_ViperCopyPastePlugin_ViperTestDocUnitTest extends AbstractVipe
                         break;
                     case 'chrome':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsGoogleChrome/ViperTestDoc.txt');
-                        break;
-                    case 'chromeCanary':
-                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsGoogleChromeCanary/ViperTestDoc.txt');
                         break;
                     case 'ie8':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsIE8/ViperTestDoc.txt');

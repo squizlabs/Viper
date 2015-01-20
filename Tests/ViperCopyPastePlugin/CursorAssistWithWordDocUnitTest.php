@@ -20,14 +20,8 @@ class Viper_Tests_ViperCopyPastePlugin_CursorAssistWithWordDocUnitTest extends A
                     case 'firefox':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacFirefox/CursorAssistWithWordDoc.txt');
                         break;
-                    case 'firefoxNightly':
-                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacFirefoxNightly/CursorAssistWithWordDoc.txt');
-                        break;
                     case 'chrome':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacGoogleChrome/CursorAssistWithWordDoc.txt');
-                        break;
-                    case 'chromeCanary':
-                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacGoogleChromeCanary/CursorAssistWithWordDoc.txt');
                         break;
                     case 'safari':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacSafari/CursorAssistWithWordDoc.txt');
@@ -43,9 +37,6 @@ class Viper_Tests_ViperCopyPastePlugin_CursorAssistWithWordDocUnitTest extends A
                         break;
                     case 'chrome':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsGoogleChrome/CursorAssistWithWordDoc.txt');
-                        break;
-                    case 'chromeCanary':
-                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsGoogleChromeCanary/CursorAssistWithWordDoc.txt');
                         break;
                     case 'ie8':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsIE8/CursorAssistWithWordDoc.txt');

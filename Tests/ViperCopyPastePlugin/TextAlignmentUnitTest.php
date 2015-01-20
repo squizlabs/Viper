@@ -21,14 +21,8 @@ class Viper_Tests_ViperCopyPastePlugin_TextAlignmentUnitTest extends AbstractVip
                     case 'firefox':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacFirefox/TextAlignment.txt');
                         break;
-                    case 'firefoxNightly':
-                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacFirefoxNightly/TextAlignment.txt');
-                        break;
                     case 'chrome':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacGoogleChrome/TextAlignment.txt');
-                        break;
-                    case 'chromeCanary':
-                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacGoogleChromeCanary/TextAlignment.txt');
                         break;
                     case 'safari':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/MacSafari/TextAlignment.txt');
@@ -44,9 +38,6 @@ class Viper_Tests_ViperCopyPastePlugin_TextAlignmentUnitTest extends AbstractVip
                         break;
                     case 'chrome':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsGoogleChrome/TextAlignment.txt');
-                        break;
-                    case 'chromeCanary':
-                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsGoogleChromeCanary/TextAlignment.txt');
                         break;
                     case 'ie8':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsIE8/TextAlignment.txt');
