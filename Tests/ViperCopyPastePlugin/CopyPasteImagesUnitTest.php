@@ -19,7 +19,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteImagesUnitTest extends AbstractV
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
-        $this->assertHTMLMatch('<p>First paragraph</p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" /><p>This is the second paragraph in the content of the page %1%</p><p></p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" />');
+        $this->assertHTMLMatch('<p>First paragraph</p><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" /></p><p>This is the second paragraph in the content of the page %1%</p><p></p><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" /></p>');
 
     }//end testCopyPasteImage()
 
