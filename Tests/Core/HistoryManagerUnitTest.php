@@ -4,33 +4,6 @@ require_once 'AbstractViperUnitTest.php';
 
 class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
 {
-
-
-    /**
-     * Asserts that specified button state is valid.
-     *
-     * @param string  $button The button name.
-     * @param boolean $state  The state the button is in.
-     *
-     * @return void
-     */
-    private function _checkButtonState($button, $state)
-    {
-        if ($state === FALSE) {
-            $this->assertTrue(
-                $this->topToolbarButtonExists($button),
-                'The '.$button.' button should be disabled.'
-            );
-        } else {
-            $this->assertTrue(
-                $this->topToolbarButtonExists($button, $state),
-                'The '.$button.' button should be enabled.'
-            );
-        }
-
-    }//end _checkButtonState()
-
-
     /**
      * Test that Undo and Redo buttons are disabled when the page loads.
      *
@@ -38,7 +11,6 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
      */
     public function testOnLoadButtonsDisabled()
     {
-        $this->useTest(1);
         $this->topToolbarButtonExists('historyUndo', 'disabled');
         $this->topToolbarButtonExists('historyRedo', 'disabled');
 
@@ -52,7 +24,6 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
      */
     public function testUndoUsingKeyboardShortcut()
     {
-        $this->useTest(1);
         $this->moveToKeyword(1, 'right');
         $this->type(' test');
 
@@ -80,7 +51,6 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
      */
     public function testUndoUsingTopToolbar()
     {
-        $this->useTest(1);
         $this->moveToKeyword(1, 'right');
         $this->type(' test');
 
@@ -103,7 +73,6 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
      */
     public function testRedoUsingKeyboardShort()
     {
-        $this->useTest(1);
         $this->moveToKeyword(1, 'right');
         $this->type(' test');
 
@@ -129,7 +98,6 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
      */
     public function testRedoUsingTopToolbar()
     {
-        $this->useTest(1);
         $this->moveToKeyword(1, 'right');
         $this->type(' test');
 
@@ -154,7 +122,6 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
      */
     public function testMaxCharlimit()
     {
-        $this->useTest(1);
         $this->moveToKeyword(1, 'right');
 
         $chars = '';
@@ -190,7 +157,6 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
      */
     public function testUndoAndRedoIcons()
     {
-        $this->useTest(1);
         $this->findKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
@@ -233,7 +199,6 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
      */
     public function testUndoAndRedoUsingShortcuts()
     {
-        $this->useTest(1);
         $this->findKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
@@ -277,7 +242,6 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
      */
     public function testDeleteAllClickUndoAndClickRedo()
     {
-        $this->useTest(1);
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + a');
         $this->sikuli->keyDown('Key.DELETE');
@@ -311,7 +275,6 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
      */
     public function testDeleteAllClickUndoAndClickRedoUsingShortcuts()
     {
-        $this->useTest(1);
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + a');
         $this->sikuli->keyDown('Key.DELETE');
