@@ -1166,12 +1166,17 @@ ViperKeyboardEditorPlugin.prototype = {
             if (firstBlock
                 && ViperUtil.isTag(firstBlock, 'li') === true
                 && firstSelectable === range.startContainer
+                && !firstSelectable.previousSibling
             ) {
                  // Check if there is a parent element with a selectable.
                 var prevSelectable = range.getPreviousContainer(firstSelectable, null, true, true);
                 if (prevSelectable) {
                     while (firstBlock.lastChild) {
                         ViperUtil.insertAfter(prevSelectable, firstBlock.lastChild);
+                    }
+
+                    if (ViperUtil.isTag(prevSelectable, 'br') === true) {
+                        ViperUtil.remove(prevSelectable);
                     }
 
                     var firstBlockParent = firstBlock.parentNode;
@@ -1454,7 +1459,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 return false;
             }
 
-            var selectable = range.getNextContainer(startNode, null, true);
+            var selectable = range.getNextContainer(startNode, null, true, true);
             if (!selectable || this.viper.isOutOfBounds(selectable) === true) {
                 selectable = range.getPreviousContainer(startNode, null, true);
                 if (!selectable || this.viper.isOutOfBounds(selectable) === true) {

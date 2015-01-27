@@ -468,7 +468,16 @@ ViperImagePlugin.prototype = {
         }
 
         this._updateToolbars(image);
-        this.showImageResizeHandles(image);
+
+        var self = this;
+        var imageLoaded = function() {
+            // only add hadnles when image is fully loaded
+            self.showImageResizeHandles(image);
+            self.viper.fireSelectionChanged(null, true);
+        };
+
+        image.onload  = imageLoaded;
+        image.onerror = imageLoaded;
 
     },
 

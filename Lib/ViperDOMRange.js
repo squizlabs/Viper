@@ -544,7 +544,10 @@ ViperDOMRange.prototype = {
         }
 
         var selChild = this._getFirstSelectableChild(container, brIsSelectable);
-        if (selChild !== null && (skipSpaceTextNodes !== true || ViperUtil.trim(selChild.data) !== '')) {
+        if (selChild !== null
+            && (brIsSelectable === true && ViperUtil.isTag(selChild, 'br') === true)
+            || (skipSpaceTextNodes !== true || ViperUtil.trim(selChild.data) !== '')
+        ) {
             return selChild;
         }
 

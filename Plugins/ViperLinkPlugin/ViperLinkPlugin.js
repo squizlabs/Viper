@@ -128,27 +128,18 @@ ViperLinkPlugin.prototype = {
      *
      * Chose not to use a domain white list given .anything is on the way.  A feature
      * this regex currently does not support is <Name Part> of an email so add if
-     * needed.  This expression is based on Arluison Guillaume http://www.mi-ange.net/
-     * email regex.
+     * needed.
      *
      * @return boolean
      */
     validateEmail: function(email)
     {
-        var regExStr = '^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.([a-z][a-z]+)|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$';
+        // add a simple check here to avoid heavy check below
+        if(email.match(/@/g) === null)
+            return false;
 
-        var regExp = new RegExp(regExStr, 'i');
-
-        // Finally run the regular expression.
-        var matches = email.match(regExp);
-        if (matches === null) {
-            var emailValid = false;
-        } else {
-            var emailValid = true;
-        }
-
-        return emailValid;
-
+        var regExStr = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return regExStr.test(email);
     },
 
     updateLinkAttributes: function(link, idPrefix)

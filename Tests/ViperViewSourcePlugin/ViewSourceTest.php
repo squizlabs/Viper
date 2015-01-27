@@ -1,12 +1,12 @@
 <?php
 
-require_once 'AbstractViperViewSourcePluginUnitTest.php';
+require_once 'AbstractViperUnitTest.php';
 
-class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperViewSourcePluginUnitTest
+class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperUnitTest
 {
 
 
-   /**
+    /**
      * Test that you can open and close the source editor.
      *
      * @return void
@@ -42,7 +42,36 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
     }//end testOpenAndCloseSourceEditor()
 
 
-   /**
+    /**
+     * Test that empty html reamin in the code after you view the source of the page.
+     *
+     * @return void
+     */
+    public function testEmptyTagsInSourceCode()
+    {
+        // Test empty li tags in a list
+        $this->moveToKeyword(3, 'left');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton('sourceView');
+        sleep(2);
+        $this->clickButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>Lorem %1% dolor</p><p><strong>%2%</strong> sit amet</p><ul><li></li><li></li><li>%3% test <em>XuT</em></li></ul>');
+        
+        // Test empty p tags in a list
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton('sourceView');
+        sleep(2);
+        $this->clickButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>Lorem %1% dolor</p><p></p><p></p><p><strong>%2%</strong> sit amet</p><ul><li></li><li></li><li>%3% test <em>XuT</em></li></ul>');
+        
+    }//end testEmptyTagsInSourceCode()
+
+
+    /**
      * Test that Viper is responsive after you close the source editor.
      *
      * @return void
@@ -59,12 +88,12 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
         $this->sikuli->keyDown('Key.CMD + i');
         $this->sikuli->click($this->findKeyword(1));
         $this->sikuli->click($this->findKeyword(3));
-        $this->assertHTMLMatch('<p>Lorem <em>%1%</em> dolor</p><p><strong>%2%</strong> sit amet</p><p>%3% p <em>XuT</em></p>');
+        $this->assertHTMLMatch('<p>Lorem dolor <em>%1%</em></p><p><strong>%2%</strong> sit amet</p><p>%3% test <em>XuT</em></p>');
 
     }//end testEditingAfterClosingSourceEditor()
 
 
-   /**
+    /**
      * Test that you can edit the source code.
      *
      * @return void
@@ -85,7 +114,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
     }//end testEditingTheSourceCode()
 
 
-   /**
+    /**
      * Test that you can edit the source code, click close but apply the changes.
      *
      * @return void
@@ -110,7 +139,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
     }//end testEditingClosingTheWindowWithApplyingChanges()
 
 
-   /**
+    /**
      * Test that you can edit the source code and then discard the changes.
      *
      * @return void
@@ -130,12 +159,12 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
 
         $this->clickButton('Discard', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>Lorem %1% dolor</p><p><strong>%2%</strong> sit amet</p><p>%3% p <em>XuT</em></p>');
+        $this->assertHTMLMatch('<p>Lorem dolor %1%</p><p><strong>%2%</strong> sit amet</p><p>%3% test <em>XuT</em></p>');
 
     }//end testEditingAndDiscardingChanges()
 
 
-   /**
+    /**
      * Test that you can open source view in a new window.
      *
      * @return void
@@ -153,12 +182,12 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
 
         $this->clickButton('Close Window', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>Lorem %1% dolor</p><p><strong>%2%</strong> sit amet</p><p>%3% p <em>XuT</em></p>');
+        $this->assertHTMLMatch('<p>Lorem dolor %1%</p><p><strong>%2%</strong> sit amet</p><p>%3% test <em>XuT</em></p>');
 
     }//end testOpeningSourceViewInNewWindow()
 
 
-   /**
+    /**
      * Test that you can open source view in a new window and edit it.
      *
      * @return void
@@ -185,7 +214,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
     }//end testOpeningSourceViewInNewWindowAndEditing()
 
 
-   /**
+    /**
      * Test that you can still edit the content once you deleted some the source code.
      *
      * @return void
@@ -209,7 +238,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
 
         $this->clickButton('Apply Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>Lorem %1% dolor</p>');
+        $this->assertHTMLMatch('<p>Lorem dolor %1%</p>');
 
         $this->selectKeyword(1);
         $this->assertEquals('%1%', $this->getSelectedText(), 'Keyword is not selected');
@@ -262,12 +291,13 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
 
 
     /**
-     * Test that when you add script tags into the source code, Viper strips them out
+     * Test different types of tags in Viper
      *
      * @return void
      */
-    public function testAddingScriptTagsInSourceCode()
+    public function testAddingDifferentTagsInSourceCode()
     {
+        // Test that script tags are removed when they are entered in source code
         $this->moveToKeyword(2);
         $this->clickTopToolbarButton('sourceView');
 
@@ -283,11 +313,27 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperView
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('<canvas id="myCanvas"></canvas><script></script>');
         $this->clickButton('Apply Changes', NULL, TRUE);
-
         $this->assertHTMLMatch('<p><canvas id="myCanvas"></canvas></p>');
 
-    }//end testAddingScriptTagsInSourceCode()
+        // Test form and text area tags remain when they are entered in source code.
+        $this->clickTopToolbarButton('sourceView');
 
+        // Check to make sure the source editor appears.
+        try {
+            $image = $this->findImage('dragPopupIcon', '.Viper-popup-dragIcon');
+        } catch (Exception $e) {
+            $this->fail('Source editor did not appear on the screen');
+        }
+
+        // Embed script tags
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('<form><label>Dave</label><input type="text"><textarea rows="5"></textarea><input type="submit" value="submit"></form>');
+        $this->clickButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<form><label>Dave</label><input type="text" /><textarea rows="5"></textarea><input type="submit" value="submit" /></form>');
+
+
+    }//end testAddingDifferentTagsInSourceCode()
 
 }//end class
 

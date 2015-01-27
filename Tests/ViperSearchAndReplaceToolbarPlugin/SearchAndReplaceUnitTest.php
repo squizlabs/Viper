@@ -341,21 +341,25 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
         $this->clickTopToolbarButton('Replace All', NULL, TRUE);
 
         // Clear the search field
+        $this->clickField('Search');
         $this->clearFieldValue('Search');
         sleep(1);
         $this->assertEquals('', $this->getFieldValue('Search'), 'Search field should be empty');
 
         // Revernt the search field
+        $this->clickField('Search');
         $this->revertFieldValue('Search');
         sleep(1);
         $this->assertEquals('websites', $this->getFieldValue('Search'), 'Search field should not be empty');
 
         // Clear the replace field
+        $this->clickField('Replace');
         $this->clearFieldValue('Replace');
         sleep(1);
         $this->assertEquals('', $this->getFieldValue('Replace'), 'Replace field should be empty');
 
         // Revernt the search field
+        $this->clickField('Replace');
         $this->revertFieldValue('Replace');
         sleep(1);
         $this->assertEquals('test', $this->getFieldValue('Replace'), 'Replace field should not be empty');

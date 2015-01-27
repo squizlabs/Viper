@@ -12,8 +12,6 @@ class Viper_Tests_ViperCopyPastePlugin_OrderedListsFormatsUnitTest extends Abstr
      */
     public function testOrderedListsFormats()
     {
-        $this->useTest(1);
-
         $testFile = '';
 
         switch ($this->sikuli->getOS()) {
@@ -59,7 +57,10 @@ class Viper_Tests_ViperCopyPastePlugin_OrderedListsFormatsUnitTest extends Abstr
         }//end switch
 
         $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
         $this->pasteFromURL($testFile);
+        sleep(5);
 
        $this->assertHTMLMatch('<ol><li>First item</li><li>Second item</li><li>Third Item</li></ol><ol><li>First item</li><li>Second item</li><li>Third Item</li></ol><ol type="A"><li>First item</li><li>Second item</li><li>Third item</li></ol><ol type="a"><li>First item</li><li>Second item</li><li>Third item</li></ol><ol type="a"><li>First item</li><li>Second item</li><li>Third item</li></ol><ol type="I"><li>First item</li><li>Second item</li><li>Third item</li></ol><ol type="i"><li>First item</li><li>Second item</li><li>Third item</li></ol>');
 

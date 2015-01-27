@@ -16,6 +16,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
 
         $this->insertTable(1);
         $this->clickCell(0);
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('table', 'active'), 'Create table should be active');
         $this->clickTopToolbarButton('table', 'active');
 
