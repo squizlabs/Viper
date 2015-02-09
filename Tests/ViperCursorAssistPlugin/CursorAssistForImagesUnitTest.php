@@ -25,7 +25,7 @@ class Viper_Tests_ViperCursorAssistPlugin_CursorAssistForImagesUnitTest extends 
         // Click the cursor assit line and add new content above list
         $this->clickCursorAssistLine();
         $this->type('New content above the image');
-        $this->assertHTMLMatch('<p>New content above the image</p><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt=""/></p><p>%1%</p>');
+        $this->assertHTMLMatch('<p>New content above the image</p><p><img src="%url%/ViperImagePlugin/Images/editing.png" alt=""/></p><p>%1%</p>');
 
     }//end testCursorAssistAboveImage()
 
@@ -49,7 +49,7 @@ class Viper_Tests_ViperCursorAssistPlugin_CursorAssistForImagesUnitTest extends 
         // Click the cursor assit line and add new content above list
         $this->clickCursorAssistLine();
         $this->type('New content below the image');
-        $this->assertHTMLMatch('<p>%1%</p><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt=""/></p><p>New content below the image</p>');
+        $this->assertHTMLMatch('<p>%1%</p><p><img src="%url%/ViperImagePlugin/Images/editing.png" alt=""/></p><p>New content below the image</p>');
 
     }//end testCursorAssistBelowImage()
 

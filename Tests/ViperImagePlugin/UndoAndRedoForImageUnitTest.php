@@ -17,19 +17,19 @@ class Viper_Tests_ViperImagePlugin_UndoAndRedoForImageUnitTest extends AbstractV
         $this->selectKeyword(1);
 
         $this->clickTopToolbarButton('image');
-        $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/editing.png'));
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Alt tag');
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Title tag');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" title="Title tag"/> Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
+        $this->assertHTMLMatch('<p><img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" title="Title tag"/> Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
 
         $this->clickTopToolbarButton('historyUndo');
         $this->assertHTMLMatch('<p>%1% Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
 
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" title="Title tag"/> Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
+        $this->assertHTMLMatch('<p><img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" title="Title tag"/> Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
 
     }//end testUndoInsertingImage()
 
@@ -46,21 +46,21 @@ class Viper_Tests_ViperImagePlugin_UndoAndRedoForImageUnitTest extends AbstractV
         $this->selectKeyword(1);
 
         $this->clickTopToolbarButton('image');
-        $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/editing.png'));
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Alt tag');
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Title tag');
         $this->sikuli->keyDown('Key.ENTER');
         $this->clickTopToolbarButton('image', 'selected');
-        $this->assertHTMLMatch('<p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" title="Title tag"/> Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
+        $this->assertHTMLMatch('<p><img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" title="Title tag"/> Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
 
         $this->clickElement('img', 0);
         $this->sikuli->keyDown('Key.DELETE');
         $this->assertHTMLMatch('<p>Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
 
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" title="Title tag"/> Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
+        $this->assertHTMLMatch('<p><img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" title="Title tag"/> Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
 
     }//end testUndoDeletingAnInsertedImage()
 
@@ -78,32 +78,32 @@ class Viper_Tests_ViperImagePlugin_UndoAndRedoForImageUnitTest extends AbstractV
 
         // Insert first image
         $this->clickTopToolbarButton('image');
-        $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/editing.png'));
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Alt tag');
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Title tag');
         $this->sikuli->keyDown('Key.ENTER');
         $this->clickTopToolbarButton('image', 'selected');
-        $this->assertHTMLMatch('<p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" title="Title tag"/> Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
+        $this->assertHTMLMatch('<p><img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" title="Title tag"/> Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
 
         // Insert second image
         $this->moveToKeyword(2, 'right');
         $this->clickTopToolbarButton('image');
-        $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/editing.png'));
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Alt tag');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" title="Title tag"/> Content to test inserting images</p><p>Another paragraph in the content %2%<img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag"/></p>');
+        $this->assertHTMLMatch('<p><img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" title="Title tag"/> Content to test inserting images</p><p>Another paragraph in the content %2%<img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag"/></p>');
 
         // Delete first image
         $this->clickElement('img', 0);
         $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>Content to test inserting images</p><p>Another paragraph in the content %2%<img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" /></p>');
+        $this->assertHTMLMatch('<p>Content to test inserting images</p><p>Another paragraph in the content %2%<img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" /></p>');
 
         // Click undo
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag" title="Title tag"/> Content to test inserting images</p><p>Another paragraph in the content %2%<img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="Alt tag"/></p>');
+        $this->assertHTMLMatch('<p><img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" title="Title tag"/> Content to test inserting images</p><p>Another paragraph in the content %2%<img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag"/></p>');
 
     }//end testUndoAfterInsertingTwoImagesAndDeleteOne()
 
@@ -123,12 +123,11 @@ class Viper_Tests_ViperImagePlugin_UndoAndRedoForImageUnitTest extends AbstractV
         $this->clearFieldValue('URL');
         $this->type($this->getTestURL('/ViperImagePlugin/Images/hero-shot.jpg'));
         $this->sikuli->keyDown('Key.ENTER');
-        $this->clickInlineToolbarButton('image', 'selected');
         $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt=""/></p><p>LABS is ORSM</p>');
 
         // Click undo
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt=""/></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/editing.png" alt=""/></p><p>LABS is ORSM</p>');
 
         // Click redo
         $this->clickTopToolbarButton('historyRedo');
@@ -156,15 +155,15 @@ class Viper_Tests_ViperImagePlugin_UndoAndRedoForImageUnitTest extends AbstractV
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Title tag');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="Alt tag" src="%url%/ViperImagePlugin/Images/html-codesniffer.png" title="Title tag" /></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="Alt tag" src="%url%/ViperImagePlugin/Images/editing.png" title="Title tag" /></p><p>LABS is ORSM</p>');
 
         // Click undo
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt=""/></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/editing.png" alt=""/></p><p>LABS is ORSM</p>');
 
         // Click redo
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="Alt tag" src="%url%/ViperImagePlugin/Images/html-codesniffer.png" title="Title tag" /></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="Alt tag" src="%url%/ViperImagePlugin/Images/editing.png" title="Title tag" /></p><p>LABS is ORSM</p>');
 
     }//end testUndoEditingImage()
 
@@ -180,13 +179,13 @@ class Viper_Tests_ViperImagePlugin_UndoAndRedoForImageUnitTest extends AbstractV
 
         $this->clickElement('img', 0);
         $this->resizeImage(300);
-        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" height="280" src="%url%/ViperImagePlugin/Images/html-codesniffer.png" width="300" /></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" height="270" src="%url%/ViperImagePlugin/Images/editing.png" width="300" /></p><p>LABS is ORSM</p>');
 
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt=""/></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/editing.png" alt=""/></p><p>LABS is ORSM</p>');
 
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" height="280" src="%url%/ViperImagePlugin/Images/html-codesniffer.png" width="300" /></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" height="270" src="%url%/ViperImagePlugin/Images/editing.png" width="300" /></p><p>LABS is ORSM</p>');
 
     }//end testUndoResizeOfImage()
 
@@ -205,7 +204,7 @@ class Viper_Tests_ViperImagePlugin_UndoAndRedoForImageUnitTest extends AbstractV
         sleep(2);
         $this->resizeImage(300);
         sleep(2);
-        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" height="280" src="%url%/ViperImagePlugin/Images/html-codesniffer.png" width="300" /></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" height="270" src="%url%/ViperImagePlugin/Images/editing.png" width="300" /></p><p>LABS is ORSM</p>');
 
         // Delete the image
         $this->clickElement('img', 0);
@@ -214,7 +213,7 @@ class Viper_Tests_ViperImagePlugin_UndoAndRedoForImageUnitTest extends AbstractV
 
         // Undo and check that the resized image was inserted into the content
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" height="280" src="%url%/ViperImagePlugin/Images/html-codesniffer.png" width="300" /></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" height="270" src="%url%/ViperImagePlugin/Images/editing.png" width="300" /></p><p>LABS is ORSM</p>');
 
     }//end testResizeImageDeleteItAndClickUndo()
 
@@ -233,15 +232,15 @@ class Viper_Tests_ViperImagePlugin_UndoAndRedoForImageUnitTest extends AbstractV
         $this->sikuli->mouseMove($this->findKeyword(1));
         $this->sikuli->mouseMoveOffset(15, 0);
         $this->sikuli->click($this->sikuli->getMouseLocation());
-        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1%<img alt="" src="%url%/ViperImagePlugin/Images/html-codesniffer.png" /> XuT</p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1%<img alt="" src="%url%/ViperImagePlugin/Images/editing.png" /> XuT</p><p>LABS is ORSM</p>');
 
         // Undo the move
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt=""/></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/editing.png" alt=""/></p><p>LABS is ORSM</p>');
 
         // Redo the move
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1%<img alt="" src="%url%/ViperImagePlugin/Images/html-codesniffer.png" /> XuT</p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1%<img alt="" src="%url%/ViperImagePlugin/Images/editing.png" /> XuT</p><p>LABS is ORSM</p>');
 
     }//end testUndoMoveImage()
     

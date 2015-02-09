@@ -280,7 +280,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'));
         $this->clickTopToolbarButton('formats-p', 'active');
         $this->checkStatusOfFormatIconsInTheTopToolbar('active');
-        $this->assertEquals($this->replaceKeywords('%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.'), $this->getSelectedText(), 'Original selection is not selected');
+        $this->assertEquals($this->replaceKeywords('%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae %2%.'), $this->getSelectedText(), 'Original selection is not selected');
 
     }//end testSelectPAfterStylingShowsCorrectIcons()
 
@@ -368,7 +368,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-div', 'active');
         $this->clickTopToolbarButton('P', NULL, TRUE);
-        $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
+        $this->assertHTMLMatch('<p>%1% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae %2%.</p>');
 
     }//end testChangingAParagraphToADiv()
 

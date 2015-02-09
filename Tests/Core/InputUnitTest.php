@@ -287,6 +287,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->useTest(1);
 
         $this->moveToKeyword(1, 'right');
+        sleep(1);
 
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
@@ -295,7 +296,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('test');
-        $this->assertHTMLMatch('<p>test</p><p>EIB MOZ %2%</p>');
+        $this->assertHTMLMatch('<p>testEIB MOZ %2%</p>');
 
     }//end testShiftAndLeftArrow()
 

@@ -16,7 +16,7 @@ class Viper_Tests_ViperImagePlugin_UpdateChangesButtonForImageUnitTest extends A
         // Start creating the image for the first selection
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('image');
-        $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/editing.png'));
 
         // Click away from the image by selecting a new selection
         $this->selectKeyword(2);
@@ -29,12 +29,12 @@ class Viper_Tests_ViperImagePlugin_UpdateChangesButtonForImageUnitTest extends A
         $this->assertTrue($this->topToolbarButtonExists('image', 'selected'));
         $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE));
 
-        $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/editing.png'));
         sleep(2);
         $this->clickField('Image is decorative');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         sleep(1);
-        $this->assertHTMLMatch('<h1>Content without an Image</h1><p>%1% the first paragraph</p><p>The second paragraph on the page <img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /></p>');
+        $this->assertHTMLMatch('<h1>Content without an Image</h1><p>%1% the first paragraph</p><p>The second paragraph on the page <img src="'.$this->getTestURL('/ViperImagePlugin/Images/editing.png').'" alt="" /></p>');
 
     }//end testApplyChangesButtonWhenClickingAwayFromImagePopUp()
 
@@ -52,7 +52,7 @@ class Viper_Tests_ViperImagePlugin_UpdateChangesButtonForImageUnitTest extends A
         // Start creating the image for the first selection
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('image');
-        $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/editing.png'));
 
         // Close pop up without saving changes and make new select
         $this->clickTopToolbarButton('image', 'selected');
@@ -66,13 +66,13 @@ class Viper_Tests_ViperImagePlugin_UpdateChangesButtonForImageUnitTest extends A
         $this->assertTrue($this->topToolbarButtonExists('image', 'selected'));
         $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE));
 
-        $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/editing.png'));
         sleep(2);
         $this->clickField('URL');
         $this->clickField('Image is decorative');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         sleep(1);
-        $this->assertHTMLMatch('<h1>Content without an Image</h1><p>%1% the first paragraph</p><p>The second paragraph on the page <img src="'.$this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png').'" alt="" /></p>');
+        $this->assertHTMLMatch('<h1>Content without an Image</h1><p>%1% the first paragraph</p><p>The second paragraph on the page <img src="'.$this->getTestURL('/ViperImagePlugin/Images/editing.png').'" alt="" /></p>');
 
     }//end testApplyChangesButtonWhenClosingTheImagePopUp()
 

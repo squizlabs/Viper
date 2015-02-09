@@ -808,8 +808,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->useTest(1);
 
         // Copy content
-        $this->moveToKeyword(1, 'left');
-        $this->sikuli->keyDown('Key.CMD + a');
+        $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + c');
 
         // Insert table
@@ -820,7 +819,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->sikuli->keyDown('Key.DOWN');
         $this->sikuli->keyDown('Key.CMD + v');
 
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>Test %1%</p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p> %1%</p>');
 
     }//end testPastingContentAfterAnEmptyTable()
 
@@ -835,8 +834,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->useTest(1);
 
         // Copy content
-        $this->moveToKeyword(1, 'left');
-        $this->sikuli->keyDown('Key.CMD + a');
+        $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + c');
 
         // Insert table
@@ -854,7 +852,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->sikuli->keyDown('Key.DOWN');
         $this->sikuli->keyDown('Key.CMD + v');
 
-        $this->assertHTMLMatchNoHeaders('<p>Test XAX</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Cell 9</td><td>Cell 10</td><td>Cell 11</td></tr></tbody></table><p>Test %1%</p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td>Cell 9</td><td>Cell 10</td><td>Cell 11</td></tr></tbody></table><p> %1%</p>');
 
     }//end testPastingContentAfterATable()
 
@@ -917,21 +915,36 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testDeleteAndBackspaceInLastCellOfTable()
     {
-        $this->useTest(7);
+        $this->useTest(8);
 
         $this->clickCell(16);
 
         // When you press delete nothing should happen to the table
         $this->sikuli->keyDown('Key.DELETE');
+        sleep(1);
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->sikuli->keyDown('Key.DELETE');
+        sleep(1);
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->sikuli->keyDown('Key.DELETE');
+        sleep(1);
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
 
         $this->assertHTMLMatchNoHeaders('<table style="width: 300px;" border="1" cellspacing="2" cellpadding="2"><tbody><tr><td style="width: 100px;" colspan="2">Survey</td><td rowspan="2">All Genders</td><td style="width: 100px;" colspan="2">By Gender</td></tr><tr><td></td><td></td><td>Male</td><td>Females</td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         // When you press backsapce nothing should happen to the table
         $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
 
         $this->assertHTMLMatchNoHeaders('<table style="width: 300px;" border="1" cellspacing="2" cellpadding="2"><tbody><tr><td style="width: 100px;" colspan="2">Survey</td><td rowspan="2">All Genders</td><td style="width: 100px;" colspan="2">By Gender</td></tr><tr><td></td><td></td><td>Male</td><td>Females</td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>');
 

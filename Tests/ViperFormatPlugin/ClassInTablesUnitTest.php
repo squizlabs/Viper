@@ -24,6 +24,9 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->selectInlineToolbarLineageItem(1);
         $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be enabled');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon should be enabled in the inline toolbar');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be enabled');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon should be enabled in the inline toolbar');
 
         // Check icon in table header
         $this->moveToKeyword(2);
@@ -32,14 +35,17 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be enabled');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon should be enabled in the inline toolbar');
         $this->selectInlineToolbarLineageItem(3);
-        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'), 'Anchor icon should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('anchorID', 'active'), 'Anchor icon should be active in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be enabled');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon should be enabled in the inline toolbar');
         $this->selectInlineToolbarLineageItem(2);
-        $this->assertTrue($this->topToolbarButtonExists('anchorID'), 'Anchor icon should be enabled');
-        $this->assertTrue($this->inlineToolbarButtonExists('anchorID'), 'Anchor icon should be enabled in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be enabled');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon should be enabled in the inline toolbar');
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertTrue($this->topToolbarButtonExists('anchorID'), 'Anchor icon should be enabled');
-        $this->assertTrue($this->inlineToolbarButtonExists('anchorID'), 'Anchor icon should be enabled in the inline toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be enabled');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon should be enabled in the inline toolbar');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be enabled');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon should be enabled in the inline toolbar');
 
         // Check icon in the table body
         $this->moveToKeyword(4);
@@ -56,11 +62,13 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->selectInlineToolbarLineageItem(1);
         $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be enabled');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon should be enabled');
+        $this->selectInlineToolbarLineageItem(0);
+        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be enabled');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon should be enabled in the inline toolbar');
 
         // Check icon in the table footer
         $this->moveToKeyword(3);
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'disabled'), 'Class icon should be disabled');
-        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be enabled');
         $this->selectKeyword(3);
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon should be enabled in the inline toolbar');
         $this->selectInlineToolbarLineageItem(3);
@@ -70,6 +78,9 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be enabled');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon should be enabled in the inline toolbar');
         $this->selectInlineToolbarLineageItem(1);
+        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be enabled');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon should be enabled in the inline toolbar');
+        $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'Class icon should be enabled');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'Class icon should be enabled in the inline toolbar');
 
@@ -218,7 +229,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clearFieldValue('Class');;
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
-        $this->assertHTMLMatchNoHeaders($originalHTML);
+        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying and removing from content in the Thead
         $this->selectKeyword(2);
