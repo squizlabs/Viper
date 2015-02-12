@@ -88,9 +88,10 @@ MatrixImagePlugin.prototype = {
             $('.' + prefix + '-chooseLocationFields').css('display', 'none');     
             $('.uploadImage-progressIndicator').hide();
 
-            // reset choose location fields
-            // tools.getItem(prefix + ':useCurrentLocation').setValue(false);
-           // tools.getItem(prefix + ':parentRootNode').setValue('');
+            // disable the location selector
+            self.viper.ViperTools.getItem(prefix + ':parentRootNode').enable();
+            // enable the use current location checkbox
+            self.viper.ViperTools.getItem(prefix + ':useCurrentLocation').setValue(true);
 
             self._uploading = false;
 
@@ -181,9 +182,10 @@ MatrixImagePlugin.prototype = {
             $('.' + prefix + '-chooseLocationFields').css('display', 'none');     
             $('.uploadImage-progressIndicator').hide();
             
-            // reset choose location fields
-            //tools.getItem(prefix + ':useCurrentLocation').setValue(false);
-     //       tools.getItem(prefix + ':parentRootNode').setValue('');
+            // disable the location selector
+            self.viper.ViperTools.getItem(prefix + ':parentRootNode').enable();
+            // enable the use current location checkbox
+            self.viper.ViperTools.getItem(prefix + ':useCurrentLocation').setValue(true);
 
             self._uploading = false;
 
@@ -295,9 +297,9 @@ MatrixImagePlugin.prototype = {
                 }
 
                 // enable the location selector
-                self.viper.ViperTools.getItem(prefix + ':parentRootNode').enable();
-                // reseb the use current location checkbox
-                self.viper.ViperTools.getItem(prefix + ':useCurrentLocation').setValue(false);
+                self.viper.ViperTools.getItem(prefix + ':parentRootNode').disable();
+                // reset the use current location checkbox
+                self.viper.ViperTools.getItem(prefix + ':useCurrentLocation').setValue(true);
 
 
 
