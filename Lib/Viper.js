@@ -5405,6 +5405,10 @@ Viper.prototype = {
                     }
                 break;
 
+                case 'li':
+                    // Do not clean up.
+                break;
+
                 case 'strong':
                 case 'em':
                     if (ViperUtil.isTag(node.parentNode, tagName) === true) {
