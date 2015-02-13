@@ -767,7 +767,7 @@ ViperIERange.prototype = {
                 break;
 
                 case ViperUtil.ELEMENT_NODE:
-                    if (ViperUtil.isStubElement(node) === true) {
+                    if (ViperUtil.isStubElement(node) === true && ViperUtil.isTag(node, 'img') === false) {
                         // Note: |<BR>|
                         // Len:  1    2.
                         nodeLength = 2;
