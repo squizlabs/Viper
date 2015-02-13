@@ -654,6 +654,7 @@ Viper.prototype = {
     {
         this._viperRange = null;
 
+        var range = null;
         if (enabled === true && this.enabled === false) {
             this._addEvents();
             this.enabled = true;
@@ -662,7 +663,10 @@ Viper.prototype = {
 
             if (ViperUtil.isBrowser('msie', '<11') === true) {
                 try {
-                    this.element.focus();
+                    range = this.getCurrentRange();
+                    range.setStart(this.element, 0);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
                 } catch (e) {
                     // Most likely a hidden element.
                 }
@@ -670,7 +674,10 @@ Viper.prototype = {
                 this.focus();
             }
 
-            var range = this.getCurrentRange();
+            if (!range) {
+                range = this.getCurrentRange();
+            }
+
             if (this.rangeInViperBounds(range) === false) {
                 this.initEditableElement();
             }
