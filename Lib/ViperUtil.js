@@ -24,8 +24,18 @@ var ViperUtil = {
 
     isTag: function(node, tag)
     {
-        if (node && node.tagName && node.tagName.toLowerCase() === tag.toLowerCase()) {
-            return true;
+        if (typeof tag !== 'object') {
+            if (node && node.tagName && node.tagName.toLowerCase() === tag.toLowerCase()) {
+                return true;
+            }
+        } else if (node && node.tagName) {
+            var tagName = node.tagName.toLowerCase();
+            var ln      = tag.length;
+            for (var i = 0; i < ln; i++) {
+                if (tagName === tag[i].toLowerCase()) {
+                    return true;
+                }
+            }
         }
 
         return false;
