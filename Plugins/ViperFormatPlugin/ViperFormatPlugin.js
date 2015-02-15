@@ -1096,6 +1096,9 @@ ViperFormatPlugin.prototype = {
                     self._setAttributeForSelection('class', value);
                 }
 
+                // Set the current value as the initial value.
+                tools.getItem(prefix + 'class:input').setValue(value, true);
+
                 if (value) {
                     tools.setButtonActive(prefix + 'classBtn-' + type);
                 } else {
