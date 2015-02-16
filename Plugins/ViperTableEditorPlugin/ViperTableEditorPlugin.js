@@ -103,13 +103,15 @@ ViperTableEditorPlugin.prototype = {
                 Viper.document.execCommand("enableObjectResizing", false, false);
             }
 
-            var cell = self._getCellElement(data.target);
-            if (cell) {
-                var range = self.viper.getViperRange();
-                if (range.collapsed !== true) {
-                    // Collapse the range incase the mouse is being clicked on a selection.
-                    range.collapse(true);
-                    ViperSelection.addRange(range);
+            if (data && data.target) {
+                var cell = self._getCellElement(data.target);
+                if (cell) {
+                    var range = self.viper.getViperRange();
+                    if (range.collapsed !== true) {
+                        // Collapse the range incase the mouse is being clicked on a selection.
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+                    }
                 }
             }
 

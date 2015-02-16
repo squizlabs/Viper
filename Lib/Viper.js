@@ -5013,7 +5013,7 @@ Viper.prototype = {
                     self._fireCallbacks(callbacks, data, doneCallback, retVal);
                 });
             } catch (e) {
-                console.error(e);
+                console.error(e, callback);
             }
 
             return this._fireCallbacks(callbacks, data, doneCallback, retVal);
