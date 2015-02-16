@@ -3413,6 +3413,8 @@ Viper.prototype = {
             // IE may throw exception for hidden elements..
         }
 
+        return range;
+
     },
 
     /*

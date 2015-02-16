@@ -556,6 +556,29 @@ ViperCopyPastePlugin.prototype = {
                 // Add required wrapping table tags for the selected section.
                 switch (tableMatch[1]) {
                     case 'td':
+                        var re      = new RegExp(/<\/?(\w+)((\s+\w+(\s*=\s*(?:".*?"|'.*?'|[^'">\s]+))?)+\s*|\s*)\/?>/gim);
+                        var resCont = selectedContent;
+                        var count   = 0;
+                        while ((match = re.exec(selectedContent)) != null) {
+                            var rep = false;
+                            if (match[0].indexOf('<td ') === 0) {
+                                count++;
+                                rep = true;
+                            } else if (match[0].indexOf('</td>') === 0) {
+                                rep = true;
+                            }
+
+                            if (rep === true) {
+                                resCont = resCont.replace(match[0], '');
+                            }
+                        }
+
+                        if (count === 1) {
+                            selectedContent = resCont;
+                            break;
+                        }
+
+
                         selectedContent = '<tr>' + selectedContent + '</tr>';
 
                     default:
@@ -1083,6 +1106,18 @@ ViperCopyPastePlugin.prototype = {
                                 var firstChild = ctNode.firstChild;
                                 ViperUtil.insertAfter(insAfter, firstChild);
                                 insAfter = firstChild;
+                            }
+                        } else if (ViperUtil.isTag(ctNode, 'table') === true
+                            && ViperUtil.getParents(prevBlock, 'table').length > 0
+                        ) {
+                            // Pasting table inside a table is not allowed. Just paste the tables content.
+                            var tableContentTags = 'td,th,caption';
+                            var contentNodes = ViperUtil.getTag(tableContentTags, ctNode);
+                            while (contentNodes.length > 0) {
+                                var contentNode = contentNodes.pop();
+                                while (contentNode.childNodes.length > 0) {
+                                    ViperUtil.insertAfter(prevBlock, contentNode.lastChild);
+                                }
                             }
                         } else {
                             ViperUtil.insertAfter(prevBlock, ctNode);

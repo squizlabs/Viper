@@ -1093,7 +1093,6 @@ ViperKeyboardEditorPlugin.prototype = {
             } else if (!range.startContainer.previousSibling) {
                 return false;
             } else if (ViperUtil.isTag(range.startContainer, ['td', 'th']) === true) {
-                console.info(2)
                 return false;
             }
         }
@@ -1860,7 +1859,7 @@ ViperKeyboardEditorPlugin.prototype = {
             parent = p;
 
             // Update range.
-            this.viper.selectBookmark(bookmark);
+            range = this.viper.selectBookmark(bookmark);
         }//end if
 
         // If the selection is at the end of text node and has no next sibling
