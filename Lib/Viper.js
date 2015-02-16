@@ -2472,7 +2472,7 @@ Viper.prototype = {
         } else {
             var nodeSelection = range.getNodeSelection();
 
-            if (nodeSelection && ViperUtil.isBlockElement(nodeSelection) === false) {
+            if (nodeSelection && ViperUtil.isBlockElement(nodeSelection) === false && nodeSelection.nodeType !== ViperUtil.TEXT_NODE) {
                 var newElement = document.createElement(otag);
                 this._setWrapperElemAttributes(newElement, attributes);
 
