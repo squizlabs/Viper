@@ -962,8 +962,10 @@ Viper.prototype = {
             var defaultTagName = this.getDefaultBlockTag();
             if (defaultTagName) {
                 var nodesToRemove = [];
-                for (var i = 0; i < elem.childNodes.length; i++) {
-                    var child = elem.childNodes[i];
+                var childNode     = elem.firstChild;
+                while (childNode) {
+                    var child = childNode;
+                    childNode = child.nextSibling;
                     if ((ViperUtil.isBlockElement(child) === true && ViperUtil.isStubElement(child) === false)
                         || (child.nodeType !== ViperUtil.ELEMENT_NODE && child.nodeType !== ViperUtil.TEXT_NODE)
                         || ViperUtil.isTag(child, 'hr') === true
