@@ -384,6 +384,10 @@ ViperCopyPastePlugin.prototype = {
                     selectedContent = rangeClone.getHTMLContents()
                 }
 
+                if (!selectedContent) {
+                    return;
+                }
+
                 // Make sure partially selected lists, tables etc dont have broken HTML.
                 selectedContent = self._fixPartialSelection(selectedContent, rangeClone);
 
