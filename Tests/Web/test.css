@@ -190,3 +190,8 @@ h1,h2,h3,h4,h5,h6 {
     -ms-transition-duration: 0s !important;
     -webkit-transition-duration: 0s !important;
 }
+
+.ViperCursorAssistPlugin.insertBefore {
+    margin-top: -20px !important;
+}
+
