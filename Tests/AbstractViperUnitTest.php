@@ -961,7 +961,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function getTestURL($path='')
     {
-        return $this->_getBaseUrl().$path;
+        return $this->_getBaseUrl().$path.'?v='.self::$_viperVersion;
 
     }//end getTestURL()
 
