@@ -378,6 +378,8 @@ function useTest(id)
     viper.getHistoryManager().clear();
     viper.getHistoryManager().add();
 
+    ViperSelection.removeAllRanges();
+
 }
 
 function pasteFromURL(url)
