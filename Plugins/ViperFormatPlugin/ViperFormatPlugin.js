@@ -674,8 +674,14 @@ ViperFormatPlugin.prototype = {
             }
 
             var viperElement    = self.viper.getViperElement();
-            var lineage         = self._inlineToolbar.getLineage();
-            var currentLinIndex = self._inlineToolbar.getCurrentLineageIndex(true);
+            var lineage         = [];
+            var currentLinIndex = 0;
+
+            if (self._inlineToolbar) {
+                lineage         = self._inlineToolbar.getLineage();
+                currentLinIndex = self._inlineToolbar.getCurrentLineageIndex(true);
+            }
+
             var formatElement   = lineage[currentLinIndex];
 
             if (!nodeSelection || lineage[(lineage.length - 1)] !== nodeSelection) {
@@ -1599,8 +1605,13 @@ ViperFormatPlugin.prototype = {
      */
     handleFormat: function(type)
     {
-        var lineage         = this._inlineToolbar.getLineage();
-        var currentLinIndex = this._inlineToolbar.getCurrentLineageIndex();
+        var lineage         = [];
+        var currentLinIndex = 0;
+        if (this._inlineToolbar) {
+            lineage         = this._inlineToolbar.getLineage();
+            currentLinIndex = this._inlineToolbar.getCurrentLineageIndex();
+        }
+
         var range           = this.viper.getViperRange();
         var selectedNode    = selectedNode || range.getNodeSelection();
         var nodeSelection   = selectedNode;
@@ -1683,8 +1694,7 @@ ViperFormatPlugin.prototype = {
                     }
 
                     newElem.appendChild(selectedNode);
-                    this.viper.selectBookmark(bookmark);
-                    range.selectNode(newElem);
+                    range = this.viper.selectBookmark(bookmark);
                     ViperSelection.addRange(range);
                 } else {
                     var newElem = this._convertSingleElement(selectedNode, type);
