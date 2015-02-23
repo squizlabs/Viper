@@ -1659,6 +1659,11 @@ ViperKeyboardEditorPlugin.prototype = {
                 && ViperUtil.isTag(nodeSelection, 'td') === false
                 && ViperUtil.isTag(nodeSelection, 'th') === false
             ) {
+                var surroundingParents = ViperUtil.getSurroundingParents(nodeSelection);
+                if (surroundingParents.length > 0) {
+                    nodeSelection = surroundingParents.pop();
+                }
+
                 // Handle deletion of a whole bold/italic/etc tag.
                 range = this.viper.moveCaretAway(nodeSelection);
                 ViperUtil.remove(nodeSelection);
@@ -1671,6 +1676,28 @@ ViperKeyboardEditorPlugin.prototype = {
                     // the strong tag then change the space to non breaking space to prevent caret moving in to <em>.
                     range.startContainer.data = String.fromCharCode(160);
                     range.setStart(range.startContainer, range.startContainer.data.length);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                } else if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                    && range.startContainer.previousSibling
+                    && range.startContainer.previousSibling.nodeType === ViperUtil.TEXT_NODE
+                ) {
+                    // Join nodes.
+                    var length = range.startContainer.previousSibling.data.length;
+                    var prev   = range.startContainer.previousSibling;
+                    ViperUtil.remove(range.startContainer);
+                    if (prev.data.charAt(length - 1) === ' ' && range.startContainer.data.charAt(0) === ' ') {
+                        // When joining nodes end and start with a space character, Webkit seems to ignore the 2nd space.
+                        // Make sure 2nd space is converted to non breaking space character.
+                        prev.data += String.fromCharCode(160);
+                        if (range.startContainer.data.length > 1) {
+                            prev.data += range.startContainer.data.substring(1, range.startContainer.data.length);
+                        }
+                    } else {
+                        prev.data += range.startContainer.data;
+                    }
+
+                    range.setStart(prev, length);
                     range.collapse(true);
                     ViperSelection.addRange(range);
                 }
