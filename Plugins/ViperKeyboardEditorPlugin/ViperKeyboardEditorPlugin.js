@@ -954,7 +954,9 @@ ViperKeyboardEditorPlugin.prototype = {
                             prevParent.appendChild(currentParent.firstChild);
                         }
 
-                        ViperUtil.remove(currentParent);
+                        if (ViperUtil.isTag(currentParent, ['td', 'th']) === false) {
+                            ViperUtil.remove(currentParent);
+                        }
 
                         if (prevSelectable.nodeType === ViperUtil.TEXT_NODE) {
                             range.setStart(prevSelectable, prevSelectable.data.length);
@@ -1089,6 +1091,8 @@ ViperKeyboardEditorPlugin.prototype = {
 
                 return false;
             } else if (!range.startContainer.previousSibling) {
+                return false;
+            } else if (ViperUtil.isTag(range.startContainer, ['td', 'th']) === true) {
                 return false;
             }
         }
@@ -1371,9 +1375,13 @@ ViperKeyboardEditorPlugin.prototype = {
                 && ViperUtil.isBrowser('firefox') === true
             ) {
                 var nextSelectable = range.getNextContainer(startNode, null, true, true);
+                if (this.viper.isOutOfBounds(nextSelectable) === true) {
+                    return false;
+                }
+
                 if (nextSelectable) {
                     var startParent = startNode.parentNode;
-                    if (startParent.childNodes.length === 1) {
+                    if (startParent.childNodes.length === 1 && ViperUtil.isTag(startNode.parentNode, ['td', 'th']) === false) {
                         ViperUtil.remove(startParent);
                     } else {
                         ViperUtil.remove(startNode);
@@ -1503,16 +1511,30 @@ ViperKeyboardEditorPlugin.prototype = {
             if (currentParent !== prevParent && this.viper.isOutOfBounds(prevSelectable) === false) {
                 // Check if there are any other elements in between.
                 var elemsBetween = ViperUtil.getElementsBetween(prevParent, currentParent);
+                var removeParent = true;
                 if (elemsBetween.length > 0) {
-                    // There is at least one non block element in between.
-                    // Remove it.
-                    ViperUtil.remove(elemsBetween[(elemsBetween.length - 1)]);
+                    // There is at least one non block element in between. Remove it.
+                    for (var i = (elemsBetween.length - 1); i >= 0; i--) {
+                        var el = elemsBetween[(elemsBetween.length - 1)];
+                        if (el.nodeType !== ViperUtil.TEXT_NODE || ViperUtil.trim(el.data).length !== 0 ) {
+                            removeParent = false;
+                            break;
+                        }
+
+                        ViperUtil.remove(el);
+                    }
                 } else {
+                    removeParent = true;
+                }
+
+                if (removeParent === true) {
                     while (currentParent.firstChild) {
                         prevParent.appendChild(currentParent.firstChild);
                     }
 
-                    ViperUtil.remove(currentParent);
+                    if (ViperUtil.isTag(currentParent, ['td', 'th']) === false) {
+                        ViperUtil.remove(currentParent);
+                    }
 
                     if (prevSelectable.nodeType === ViperUtil.TEXT_NODE) {
                         range.setStart(prevSelectable, prevSelectable.data.length);
@@ -1837,7 +1859,7 @@ ViperKeyboardEditorPlugin.prototype = {
             parent = p;
 
             // Update range.
-            this.viper.selectBookmark(bookmark);
+            range = this.viper.selectBookmark(bookmark);
         }//end if
 
         // If the selection is at the end of text node and has no next sibling

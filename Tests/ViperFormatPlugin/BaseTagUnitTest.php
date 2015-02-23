@@ -99,7 +99,7 @@ class Viper_Tests_ViperFormatPlugin_BaseTagUnitTest extends AbstractFormatsUnitT
         $this->checkStatusOfFormatIconsInTheInlineToolbar('active', NULL, NULL, NULL);
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
         $this->clickTopToolbarButton('Quote', 'active', TRUE);
-        $this->assertHTMLMatch('<p>%1% %2%</p><div>test test</div>');
+        $this->assertHTMLMatch('XAX XBX     <div>test test</div>');
 
         $this->useTest(4);
         $this->selectKeyword(1, 2);
@@ -113,8 +113,8 @@ class Viper_Tests_ViperFormatPlugin_BaseTagUnitTest extends AbstractFormatsUnitT
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('Quote', 'active', TRUE);
-        $this->checkStatusOfFormatIconsInTheTopToolbar('active', NULL, NULL, NULL);
-        $this->assertHTMLMatch('<p>%1% %2%</p>');
+        $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, NULL, NULL);
+        $this->assertHTMLMatch('%1% %2%');
 
         $this->useTest(6);
         $this->selectKeyword(1);

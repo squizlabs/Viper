@@ -366,6 +366,23 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
 
 
     /**
+     * Skipped test.
+     *
+     * @param PHPUnit_Framework_Test $test The test object.
+     * @param Exception              $e    The exception.
+     * @param float                  $time Time of the error.
+     *
+     * @return void
+     */
+    public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    {
+        self::$_errorStreak = 0;
+        $this->_addResult($test, 'pass');
+
+    }//end addSkippedTest()
+
+
+    /**
      * A test ended.
      *
      * @param PHPUnit_Framework_Test $test The test that ended.
@@ -559,22 +576,6 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
         self::$_errorStreak = 0;
 
     }//end addIncompleteTest()
-
-
-    /**
-     * Skipped test.
-     *
-     * @param PHPUnit_Framework_Test $test The test object.
-     * @param Exception              $e    The exception.
-     * @param float                  $time Time of the error.
-     *
-     * @return void
-     */
-    public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time)
-    {
-        self::$_errorStreak = 0;
-
-    }//end addSkippedTest()
 
 
     /**

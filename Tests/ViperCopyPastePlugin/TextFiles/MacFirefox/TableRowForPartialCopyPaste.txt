@@ -7,25 +7,25 @@
 <meta name="ProgId" content="Word.Document">
 <meta name="Generator" content="Microsoft Word 14">
 <meta name="Originator" content="Microsoft Word 14">
-<link rel="File-List" href="file://localhost/Users/dsherwood/Library/Caches/TemporaryItems/msoclip/0/clip_filelist.xml">
+<link rel="File-List" href="file://localhost/Users/dsherwood/Library/Caches/TemporaryItems/msoclip/0clip_filelist.xml">
 <!--[if gte mso 9]><xml>
  <o:DocumentProperties>
   <o:Revision>0</o:Revision>
   <o:TotalTime>0</o:TotalTime>
   <o:Pages>1</o:Pages>
-  <o:Words>21</o:Words>
-  <o:Characters>123</o:Characters>
+  <o:Words>5</o:Words>
+  <o:Characters>31</o:Characters>
   <o:Company>Squiz Labs</o:Company>
   <o:Lines>1</o:Lines>
   <o:Paragraphs>1</o:Paragraphs>
-  <o:CharactersWithSpaces>143</o:CharactersWithSpaces>
+  <o:CharactersWithSpaces>35</o:CharactersWithSpaces>
   <o:Version>14.0</o:Version>
  </o:DocumentProperties>
  <o:OfficeDocumentSettings>
   <o:AllowPNG></o:AllowPNG>
  </o:OfficeDocumentSettings>
 </xml><![endif]-->
-<link rel="themeData" href="file://localhost/Users/dsherwood/Library/Caches/TemporaryItems/msoclip/0/clip_themedata.xml">
+<link rel="themeData" href="file://localhost/Users/dsherwood/Library/Caches/TemporaryItems/msoclip/0clip_themedata.xml">
 <!--[if gte mso 9]><xml>
  <w:WordDocument>
   <w:View>Normal</w:View>
@@ -335,13 +335,13 @@
     mso-font-pitch:fixed;
     mso-font-signature:1 134676480 16 0 131072 0;}
 @font-face
-    {font-family:"Cambria Math";
-    panose-1:2 4 5 3 5 4 6 3 2 4;
-    mso-font-charset:1;
+    {font-family:"ＭＳ 明朝";
+    panose-1:0 0 0 0 0 0 0 0 0 0;
+    mso-font-charset:128;
     mso-generic-font-family:roman;
     mso-font-format:other;
-    mso-font-pitch:variable;
-    mso-font-signature:0 0 0 0 0 0;}
+    mso-font-pitch:fixed;
+    mso-font-signature:1 134676480 16 0 131072 0;}
 @font-face
     {font-family:Cambria;
     panose-1:2 4 5 3 5 4 6 3 2 4;
@@ -440,46 +440,22 @@ table.MsoTableGrid
 
 <!--StartFragment-->
 
-<p class="MsoNormal"><span lang="EN-US">This is some basic content to test copy and
-paste when using the cursor assist feature in viper.<o:p></o:p></span></p>
-
-<p class="MsoNormal"><span lang="EN-US"><o:p>&nbsp;</o:p></span></p>
-
-<table class="MsoTableGrid" border="1" cellspacing="0" cellpadding="0" style="border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
- mso-yfti-tbllook:1184;mso-padding-alt:0cm 5.4pt 0cm 5.4pt">
- <tbody><tr style="mso-yfti-irow:0;mso-yfti-firstrow:yes">
-  <td width="142" valign="top" style="width:141.9pt;border:solid windowtext 1.0pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt">
-  <p class="MsoNormal"><span lang="EN-US">Cell 1<o:p></o:p></span></p>
+<table class="MsoTableGrid" style="border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;
+ mso-yfti-tbllook:1184;mso-padding-alt:0cm 5.4pt 0cm 5.4pt" border="1" cellpadding="0" cellspacing="0">
+ <tbody><tr style="mso-yfti-irow:0;mso-yfti-firstrow:yes;mso-yfti-lastrow:yes">
+  <td style="width:141.9pt;border:solid windowtext 1.0pt;
+  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt" valign="top" width="142">
+  <p class="MsoNormal"><span lang="EN-US">New Cell 1<o:p></o:p></span></p>
   </td>
-  <td width="142" valign="top" style="width:141.95pt;border:solid windowtext 1.0pt;
+  <td style="width:141.95pt;border:solid windowtext 1.0pt;
   border-left:none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
-  solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt">
-  <p class="MsoNormal"><span lang="EN-US">Cell 2<o:p></o:p></span></p>
+  solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt" valign="top" width="142">
+  <p class="MsoNormal"><span lang="EN-US">New Cell 2<o:p></o:p></span></p>
   </td>
-  <td width="142" valign="top" style="width:141.95pt;border:solid windowtext 1.0pt;
+  <td style="width:141.95pt;border:solid windowtext 1.0pt;
   border-left:none;mso-border-left-alt:solid windowtext .5pt;mso-border-alt:
-  solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt">
-  <p class="MsoNormal"><span lang="EN-US">Cell 3<o:p></o:p></span></p>
-  </td>
- </tr>
- <tr style="mso-yfti-irow:1;mso-yfti-lastrow:yes">
-  <td width="142" valign="top" style="width:141.9pt;border:solid windowtext 1.0pt;
-  border-top:none;mso-border-top-alt:solid windowtext .5pt;mso-border-alt:solid windowtext .5pt;
-  padding:0cm 5.4pt 0cm 5.4pt">
-  <p class="MsoNormal"><span lang="EN-US">Cell 4<o:p></o:p></span></p>
-  </td>
-  <td width="142" valign="top" style="width:141.95pt;border-top:none;border-left:
-  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt">
-  <p class="MsoNormal"><span lang="EN-US">Cell 5<o:p></o:p></span></p>
-  </td>
-  <td width="142" valign="top" style="width:141.95pt;border-top:none;border-left:
-  none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
-  mso-border-top-alt:solid windowtext .5pt;mso-border-left-alt:solid windowtext .5pt;
-  mso-border-alt:solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt">
-  <p class="MsoNormal"><span lang="EN-US">Cell 6<o:p></o:p></span></p>
+  solid windowtext .5pt;padding:0cm 5.4pt 0cm 5.4pt" valign="top" width="142">
+  <p class="MsoNormal"><span lang="EN-US">New Cell 3<o:p></o:p></span></p>
   </td>
  </tr>
 </tbody></table>

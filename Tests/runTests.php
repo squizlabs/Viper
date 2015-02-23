@@ -80,6 +80,7 @@
 
     foreach ($browsers as $browser) {
         $browser = trim($browser);
+        $browser = strtolower($browser);
         if (empty($browser) === TRUE) {
             continue;
         }

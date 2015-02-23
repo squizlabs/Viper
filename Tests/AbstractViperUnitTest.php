@@ -961,7 +961,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function getTestURL($path='')
     {
-        return $this->_getBaseUrl().$path;
+        return $this->_getBaseUrl().$path.'?v='.self::$_viperVersion;
 
     }//end getTestURL()
 
@@ -1790,7 +1790,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                     $this->sikuli->click($this->findKeyword(1));
                 }
 
-                $start = $this->sikuli->find($startKeywordImage, NULL, $this->getData('textSimmilarity'));
+                $start = $this->findKeyword($startKeyword);
             } catch (FindFailedException $e) {
                 throw new FindFailedException('Failed to find keyword '.$this->getKeyword($startKeyword));
             }
@@ -1798,7 +1798,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         $end = $start;
         if ($startKeyword !== $endKeyword) {
-            $end = $this->sikuli->find($this->_getKeywordImage($endKeyword), NULL, $this->getData('textSimmilarity'));
+            $end = $this->findKeyword($endKeyword);
         }
 
         $this->sikuli->click($start);

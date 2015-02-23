@@ -674,8 +674,14 @@ ViperFormatPlugin.prototype = {
             }
 
             var viperElement    = self.viper.getViperElement();
-            var lineage         = self._inlineToolbar.getLineage();
-            var currentLinIndex = self._inlineToolbar.getCurrentLineageIndex(true);
+            var lineage         = [];
+            var currentLinIndex = 0;
+
+            if (self._inlineToolbar) {
+                lineage         = self._inlineToolbar.getLineage();
+                currentLinIndex = self._inlineToolbar.getCurrentLineageIndex(true);
+            }
+
             var formatElement   = lineage[currentLinIndex];
 
             if (!nodeSelection || lineage[(lineage.length - 1)] !== nodeSelection) {
@@ -696,37 +702,39 @@ ViperFormatPlugin.prototype = {
                 || (ViperUtil.isTag(startNode, 'br') === false
                 && (startNode.nodeType === ViperUtil.TEXT_NODE && ViperUtil.trim(startNode.data) === '') === false))
             ) {
-                if (nodeSelection && nodeSelection === self.viper.getViperElement()) {
-                    tools.disableButton('anchor');
-                    tools.disableButton('class');
-                    tools.setButtonInactive('anchor');
-                    tools.setButtonInactive('class');
-                } else if (nodeSelection) {
-                    tools.enableButton('anchor');
-                    tools.enableButton('class');
-
-                    // Anchor.
-                    var attrId = self._getAttributeValue('id', nodeSelection);
-                    tools.getItem(prefix + 'anchor:input').setValue(attrId);
-                    if (attrId) {
-                        tools.setButtonActive('anchor');
-                    } else {
+                if (ViperUtil.isTag(nodeSelection, ['td', 'th']) === false) {
+                    if (nodeSelection && nodeSelection === self.viper.getViperElement()) {
+                        tools.disableButton('anchor');
+                        tools.disableButton('class');
                         tools.setButtonInactive('anchor');
-                    }
+                        tools.setButtonInactive('class');
+                    } else if (nodeSelection) {
+                        tools.enableButton('anchor');
+                        tools.enableButton('class');
 
-                    // Class.
-                    var attrClass = self._getAttributeValue('class', nodeSelection);
-                    tools.getItem(prefix + 'class:input').setValue(attrClass);
-                    if (attrClass) {
-                        tools.setButtonActive('class');
+                        // Anchor.
+                        var attrId = self._getAttributeValue('id', nodeSelection);
+                        tools.getItem(prefix + 'anchor:input').setValue(attrId);
+                        if (attrId) {
+                            tools.setButtonActive('anchor');
+                        } else {
+                            tools.setButtonInactive('anchor');
+                        }
+
+                        // Class.
+                        var attrClass = self._getAttributeValue('class', nodeSelection);
+                        tools.getItem(prefix + 'class:input').setValue(attrClass);
+                        if (attrClass) {
+                            tools.setButtonActive('class');
+                        } else {
+                            tools.setButtonInactive('class');
+                        }
                     } else {
+                        tools.getItem(prefix + 'class:input').setValue('');
+                        tools.getItem(prefix + 'anchor:input').setValue('');
+                        tools.setButtonInactive('anchor');
                         tools.setButtonInactive('class');
                     }
-                } else {
-                    tools.getItem(prefix + 'class:input').setValue('');
-                    tools.getItem(prefix + 'anchor:input').setValue('');
-                    tools.setButtonInactive('anchor');
-                    tools.setButtonInactive('class');
                 }
             }//end if
 
@@ -1093,6 +1101,9 @@ ViperFormatPlugin.prototype = {
                 } else {
                     self._setAttributeForSelection('class', value);
                 }
+
+                // Set the current value as the initial value.
+                tools.getItem(prefix + 'class:input').setValue(value, true);
 
                 if (value) {
                     tools.setButtonActive(prefix + 'classBtn-' + type);
@@ -1594,8 +1605,13 @@ ViperFormatPlugin.prototype = {
      */
     handleFormat: function(type)
     {
-        var lineage         = this._inlineToolbar.getLineage();
-        var currentLinIndex = this._inlineToolbar.getCurrentLineageIndex();
+        var lineage         = [];
+        var currentLinIndex = 0;
+        if (this._inlineToolbar) {
+            lineage         = this._inlineToolbar.getLineage();
+            currentLinIndex = this._inlineToolbar.getCurrentLineageIndex();
+        }
+
         var range           = this.viper.getViperRange();
         var selectedNode    = selectedNode || range.getNodeSelection();
         var nodeSelection   = selectedNode;
@@ -1678,8 +1694,7 @@ ViperFormatPlugin.prototype = {
                     }
 
                     newElem.appendChild(selectedNode);
-                    this.viper.selectBookmark(bookmark);
-                    range.selectNode(newElem);
+                    range = this.viper.selectBookmark(bookmark);
                     ViperSelection.addRange(range);
                 } else {
                     var newElem = this._convertSingleElement(selectedNode, type);

@@ -654,6 +654,7 @@ Viper.prototype = {
     {
         this._viperRange = null;
 
+        var range = null;
         if (enabled === true && this.enabled === false) {
             this._addEvents();
             this.enabled = true;
@@ -662,7 +663,10 @@ Viper.prototype = {
 
             if (ViperUtil.isBrowser('msie', '<11') === true) {
                 try {
-                    this.element.focus();
+                    range = this.getCurrentRange();
+                    range.setStart(this.element, 0);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
                 } catch (e) {
                     // Most likely a hidden element.
                 }
@@ -670,7 +674,10 @@ Viper.prototype = {
                 this.focus();
             }
 
-            var range = this.getCurrentRange();
+            if (!range) {
+                range = this.getCurrentRange();
+            }
+
             if (this.rangeInViperBounds(range) === false) {
                 this.initEditableElement();
             }
@@ -955,8 +962,10 @@ Viper.prototype = {
             var defaultTagName = this.getDefaultBlockTag();
             if (defaultTagName) {
                 var nodesToRemove = [];
-                for (var i = 0; i < elem.childNodes.length; i++) {
-                    var child = elem.childNodes[i];
+                var childNode     = elem.firstChild;
+                while (childNode) {
+                    var child = childNode;
+                    childNode = child.nextSibling;
                     if ((ViperUtil.isBlockElement(child) === true && ViperUtil.isStubElement(child) === false)
                         || (child.nodeType !== ViperUtil.ELEMENT_NODE && child.nodeType !== ViperUtil.TEXT_NODE)
                         || ViperUtil.isTag(child, 'hr') === true
@@ -1555,10 +1564,11 @@ Viper.prototype = {
 
             if (ViperUtil.trim(ViperUtil.getHtml(this.element)) === '') {
                 this.initEditableElement();
+
+                // Update the range var.
+                range = this.getCurrentRange();
             }
 
-            // Update the range var.
-            range = this.getCurrentRange();
             if (range.startContainer === range.endContainer && this.element === range.startContainer) {
                 // The whole editable element is selected. Need to remove everything
                 // and init its contents.
@@ -2465,7 +2475,7 @@ Viper.prototype = {
         } else {
             var nodeSelection = range.getNodeSelection();
 
-            if (nodeSelection && ViperUtil.isBlockElement(nodeSelection) === false) {
+            if (nodeSelection && ViperUtil.isBlockElement(nodeSelection) === false && nodeSelection.nodeType !== ViperUtil.TEXT_NODE) {
                 var newElement = document.createElement(otag);
                 this._setWrapperElemAttributes(newElement, attributes);
 
@@ -3405,6 +3415,8 @@ Viper.prototype = {
         } catch (e) {
             // IE may throw exception for hidden elements..
         }
+
+        return range;
 
     },
 
@@ -5004,7 +5016,7 @@ Viper.prototype = {
                     self._fireCallbacks(callbacks, data, doneCallback, retVal);
                 });
             } catch (e) {
-                console.error(e);
+                console.error(e, callback);
             }
 
             return this._fireCallbacks(callbacks, data, doneCallback, retVal);
@@ -5403,6 +5415,11 @@ Viper.prototype = {
                     if (html === '' || ViperUtil.trim(html.replace(/&nbsp;/g, '')) === '') {
                         ViperUtil.setHtml(node, '&nbsp;');
                     }
+                break;
+
+                case 'li':
+                case 'textarea':
+                    // Do not clean up.
                 break;
 
                 case 'strong':

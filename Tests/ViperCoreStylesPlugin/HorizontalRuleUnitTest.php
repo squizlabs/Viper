@@ -67,7 +67,7 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
 
         // Add hr
         $this->moveToKeyword(1, 'left');
-        sleep(1);
+        sleep(2);
         $this->clickTopToolbarButton('insertHr');
         $this->type('%4% new content');
         $this->assertHTMLMatch('<hr /><p>%4% new content%1% %2% dolor sit <em>amet</em> <strong>%3%</strong></p>');

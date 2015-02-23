@@ -384,6 +384,10 @@ ViperCopyPastePlugin.prototype = {
                     selectedContent = rangeClone.getHTMLContents()
                 }
 
+                if (!selectedContent) {
+                    return;
+                }
+
                 // Make sure partially selected lists, tables etc dont have broken HTML.
                 selectedContent = self._fixPartialSelection(selectedContent, rangeClone);
 
@@ -556,6 +560,29 @@ ViperCopyPastePlugin.prototype = {
                 // Add required wrapping table tags for the selected section.
                 switch (tableMatch[1]) {
                     case 'td':
+                        var re      = new RegExp(/<\/?(\w+)((\s+\w+(\s*=\s*(?:".*?"|'.*?'|[^'">\s]+))?)+\s*|\s*)\/?>/gim);
+                        var resCont = selectedContent;
+                        var count   = 0;
+                        while ((match = re.exec(selectedContent)) != null) {
+                            var rep = false;
+                            if (match[0].indexOf('<td ') === 0) {
+                                count++;
+                                rep = true;
+                            } else if (match[0].indexOf('</td>') === 0) {
+                                rep = true;
+                            }
+
+                            if (rep === true) {
+                                resCont = resCont.replace(match[0], '');
+                            }
+                        }
+
+                        if (count === 1) {
+                            selectedContent = resCont;
+                            break;
+                        }
+
+
                         selectedContent = '<tr>' + selectedContent + '</tr>';
 
                     default:
@@ -876,7 +903,8 @@ ViperCopyPastePlugin.prototype = {
         }
 
         // Generic cleanup.
-        html = this._cleanPaste(html);
+        html        = this._cleanPaste(html);
+        var preHtml = html;
 
         if (isViperContent === true) {
             // Content copied from Viper.
@@ -886,9 +914,10 @@ ViperCopyPastePlugin.prototype = {
             html = this._cleanGoogleDocsPaste(html);
         } else {
             // Word etc..
-            html = this._cleanWordPaste(html);
-            html = this._removeAttributes(html);
-            html = this._updateElements(html);
+            html    = this._cleanWordPaste(html);
+            html    = this._removeAttributes(html);
+            preHtml = html;
+            html    = this._updateElements(html);
         }
 
         var self = this;
@@ -897,12 +926,12 @@ ViperCopyPastePlugin.prototype = {
                 html = newHTML;
             }
 
-            self._pasteContent(html, stripTags, isViperContent);
+            self._pasteContent(html, stripTags, isViperContent, preHtml);
         });
 
     },
 
-    _pasteContent: function(html, stripTags, isViperContent)
+    _pasteContent: function(html, stripTags, isViperContent, preHtml)
     {
         if (this._iframe) {
             ViperUtil.remove(this._iframe);
@@ -1053,43 +1082,21 @@ ViperCopyPastePlugin.prototype = {
                 }
             }
 
-            var isPreTag = false;
             if (ViperUtil.getParents(prevBlock, 'pre', this.viper.getViperElement()).length > 0) {
-                isPreTag = true;
-            }
+                var textNode = document.createTextNode(preHtml);
+                ViperUtil.insertBefore(this._tmpNode, textNode);
+            } else {
+                var changeid  = ViperChangeTracker.startBatchChange('textAdded');
+                var prevChild = null;
+                var lastChild = null;
+                while (fragment.lastChild) {
+                    if (prevChild === fragment.lastChild) {
+                        break;
+                    }
 
-            var changeid  = ViperChangeTracker.startBatchChange('textAdded');
-            var prevChild = null;
-            var lastChild = null;
-            while (fragment.lastChild) {
-                if (prevChild === fragment.lastChild) {
-                    break;
-                }
-
-                prevChild = fragment.lastChild;
-                var ctNode = null;
-                if (ViperUtil.isBlockElement(fragment.lastChild) === true) {
-                    if (isPreTag === true) {
-                        // Convert br tags to new lines.
-                        var brTags = ViperUtil.getTag('br', ctNode);
-                        for (var i = 0; i < brTags.length; i++) {
-                            var textNode = document.createTextNode("\n");
-                            ViperUtil.insertBefore(brTags[i], textNode);
-                            ViperUtil.remove(brTags[i]);
-                        }
-
-                        // Pre tags cannot have block element as child, remove the block element.
-                        while (fragment.lastChild.lastChild) {
-                            ViperUtil.insertAfter(prevBlock, fragment.lastChild.lastChild);
-                        }
-
-                        ViperUtil.remove(fragment.lastChild);
-                        if (fragment.lastChild) {
-                            // Insert new line after block element.
-                            ViperUtil.insertAfter(prevBlock, document.createTextNode("\n"));
-                            ViperUtil.insertAfter(prevBlock, document.createTextNode("\n"));
-                        }
-                    } else {
+                    prevChild = fragment.lastChild;
+                    var ctNode = null;
+                    if (ViperUtil.isBlockElement(fragment.lastChild) === true) {
                         ctNode = fragment.lastChild;
                         ViperChangeTracker.addChange('textAdd', [ctNode]);
 
@@ -1104,34 +1111,46 @@ ViperCopyPastePlugin.prototype = {
                                 ViperUtil.insertAfter(insAfter, firstChild);
                                 insAfter = firstChild;
                             }
+                        } else if (ViperUtil.isTag(ctNode, 'table') === true
+                            && ViperUtil.getParents(prevBlock, 'table').length > 0
+                        ) {
+                            // Pasting table inside a table is not allowed. Just paste the tables content.
+                            var tableContentTags = 'td,th,caption';
+                            var contentNodes = ViperUtil.getTag(tableContentTags, ctNode);
+                            while (contentNodes.length > 0) {
+                                var contentNode = contentNodes.pop();
+                                while (contentNode.childNodes.length > 0) {
+                                    ViperUtil.insertAfter(prevBlock, contentNode.lastChild);
+                                }
+                            }
                         } else {
                             ViperUtil.insertAfter(prevBlock, ctNode);
                         }
-                    }
-                } else {
-                    ctNode = ViperChangeTracker.createCTNode('ins', 'textAdd', fragment.lastChild);
-                    ViperChangeTracker.addNodeToChange(changeid, ctNode);
-                    ViperUtil.insertAfter(prevBlock, ctNode);
-                }
-
-                if (lastChild === null) {
-                    lastChild = ctNode;
-                }
-            }
-
-            // Check that previous container is not empty.
-            if (prevBlock) {
-                prevCheckCont = ViperUtil.trim(ViperUtil.getNodeTextContent(prevBlock));
-                if (prevCheckCont === '' || (prevCheckCont.length === 1 && prevCheckCont.charCodeAt(0) === 160)) {
-                    if (ViperUtil.isChildOf(this._tmpNode, prevBlock) === true) {
-                        // Tmp node could be the child of this element (when paste is made in a new P tag for exammple).
-                        this._tmpNode = range._getLastSelectableChild(prevBlock.nextSibling);
-                        this._tmpNodeOffset = this._tmpNode.data.length;
+                    } else {
+                        ctNode = ViperChangeTracker.createCTNode('ins', 'textAdd', fragment.lastChild);
+                        ViperChangeTracker.addNodeToChange(changeid, ctNode);
+                        ViperUtil.insertAfter(prevBlock, ctNode);
                     }
 
-                    ViperUtil.remove(prevBlock);
+                    if (lastChild === null) {
+                        lastChild = ctNode;
+                    }
                 }
-            }
+
+                // Check that previous container is not empty.
+                if (prevBlock) {
+                    prevCheckCont = ViperUtil.trim(ViperUtil.getNodeTextContent(prevBlock));
+                    if (prevCheckCont === '' || (prevCheckCont.length === 1 && prevCheckCont.charCodeAt(0) === 160)) {
+                        if (ViperUtil.isChildOf(this._tmpNode, prevBlock) === true) {
+                            // Tmp node could be the child of this element (when paste is made in a new P tag for exammple).
+                            this._tmpNode = range._getLastSelectableChild(prevBlock.nextSibling);
+                            this._tmpNodeOffset = this._tmpNode.data.length;
+                        }
+
+                        ViperUtil.remove(prevBlock);
+                    }
+                }
+            }//end if
 
             if (lastChild) {
                 // Move the caret to the end of the last pasted content.
@@ -1144,32 +1163,29 @@ ViperCopyPastePlugin.prototype = {
 
             ViperChangeTracker.endBatchChange(changeid);
         } else {
-            var convertBrTags = false;
             if (ViperUtil.getParents(this._tmpNode, 'pre', this.viper.getViperElement()).length > 0) {
-                convertBrTags = true;
-            }
-
-            var changeid = ViperChangeTracker.startBatchChange('textAdded');
-            var ctNode   = null;
-            while (fragment.firstChild) {
-                if (fragment.firstChild === ctNode) {
-                    console.error('Failed to move nodes');
-                    break;
-                }
-
-                var child = fragment.firstChild;
-                if (convertBrTags === true && ViperUtil.isTag(child, 'br') === true) {
-                    // Convert this BR tag to a new line character.
-                    child = document.createTextNode("\n");
-                    ViperUtil.remove(fragment.firstChild);
-                }
-
-                ctNode = ViperChangeTracker.createCTNode('ins', 'textAdd', child);
+                var changeid = ViperChangeTracker.startBatchChange('textAdded');
+                var ctNode   = null;
+                var textNode = document.createTextNode(preHtml);
+                var ctNode = ViperChangeTracker.createCTNode('ins', 'textAdd', textNode);
                 ViperChangeTracker.addNodeToChange(changeid, ctNode);
                 ViperUtil.insertBefore(this._tmpNode, ctNode);
-            }
+            } else {
+                var changeid = ViperChangeTracker.startBatchChange('textAdded');
+                var ctNode   = null;
+                while (fragment.firstChild) {
+                    if (fragment.firstChild === ctNode) {
+                        console.error('Failed to move nodes');
+                        break;
+                    }
 
-            ViperChangeTracker.endBatchChange(changeid);
+                    var child = fragment.firstChild;
+                    ctNode = ViperChangeTracker.createCTNode('ins', 'textAdd', child);
+                    ViperChangeTracker.addNodeToChange(changeid, ctNode);
+                    ViperUtil.insertBefore(this._tmpNode, ctNode);
+                }
+                ViperChangeTracker.endBatchChange(changeid);
+            }
         }//end if
 
         this._updateSelection();

@@ -810,12 +810,12 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->clickTopToolbarButton('image');
-        $this->type($this->getTestURL('/ViperImagePlugin/Images/html-codesniffer.png'));
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/editing.png'));
         $this->clickField('Image is decorative');
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->moveToKeyword(2, 'right');
-        $this->assertHTMLMatch('<p>Content to test insert an image and add a class %1%</p><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="" /></p><p>Another paragraph</p><p>Another paragraph</p><p>End of content %2%</p>');
+        $this->assertHTMLMatch('<p>Content to test insert an image and add a class %1%</p><p><img src="%url%/ViperImagePlugin/Images/editing.png" alt="" /></p><p>Another paragraph</p><p>Another paragraph</p><p>End of content %2%</p>');
 
         // Add a class to the image
         $this->clickElement('img');
@@ -824,7 +824,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
         $this->moveToKeyword(2, 'right');
-        $this->assertHTMLMatch('<p>Content to test insert an image and add a class %1%</p><p><img src="%url%/ViperImagePlugin/Images/html-codesniffer.png" alt="" class="test"/></p><p>Another paragraph</p><p>Another paragraph</p><p>End of content %2%</p>');
+        $this->assertHTMLMatch('<p>Content to test insert an image and add a class %1%</p><p><img src="%url%/ViperImagePlugin/Images/editing.png" alt="" class="test"/></p><p>Another paragraph</p><p>Another paragraph</p><p>End of content %2%</p>');
 
         // Check that class icon is active for image
         $this->clickElement('img');
