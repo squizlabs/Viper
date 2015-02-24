@@ -770,9 +770,9 @@ ViperKeyboardEditorPlugin.prototype = {
         var defaultTagName  = this.viper.getDefaultBlockTag();
         var viperElement    = this.viper.getViperElement();
         var firstSelectable = range._getFirstSelectableChild(viperElement);
+        var startNode       = range.getStartNode();
 
         if (range.collapsed === true && e.keyCode === 8) {
-            var startNode = range.getStartNode();
             if (startNode && startNode.nodeType === ViperUtil.TEXT_NODE) {
                 var skippedBlockElem = [];
                 var node      = range.getPreviousContainer(startNode, skippedBlockElem, true, true);
@@ -917,12 +917,12 @@ ViperKeyboardEditorPlugin.prototype = {
             }//end if
         } else if (range.startOffset === 0
             && range.collapsed === true
-            && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+            && startNode.nodeType === ViperUtil.TEXT_NODE
             && ViperUtil.isBrowser('firefox') === true
         ) {
-            var firstBlock = ViperUtil.getFirstBlockParent(range.startContainer);
+            var firstBlock = ViperUtil.getFirstBlockParent(startNode);
             if (firstBlock
-                && range._getFirstSelectableChild(firstBlock) === range.startContainer
+                && range._getFirstSelectableChild(firstBlock) === startNode
                 && firstBlock.previousSibling
                 && ViperUtil.isStubElement(firstBlock.previousSibling) === true
             ) {
@@ -932,20 +932,20 @@ ViperKeyboardEditorPlugin.prototype = {
                 return false;
             } else if (e.keyCode === 8
                 && range.collapsed === true
-                && range.startContainer.nodeType === ViperUtil.TEXT_NODE
-                && (range.startOffset === 0 || (range.startOffset === 1 && range.startContainer.data.charAt(0) === ' '))
-                && (!range.startContainer.previousSibling || ViperUtil.isTag(range.startContainer.previousSibling, 'br') === true)
+                && startNode.nodeType === ViperUtil.TEXT_NODE
+                && (range.startOffset === 0 || (range.startOffset === 1 && startNode.data.charAt(0) === ' '))
+                && (!startNode.previousSibling || ViperUtil.isTag(startNode.previousSibling, 'br') === true)
             ) {
                 // At the start of an element. Check to see if the previous
                 // element is a part of another block element. If it is then
                 // join these elements.
-                var prevSelectable = range.getPreviousContainer(range.startContainer, null, true, true);
-                var currentParent  = ViperUtil.getFirstBlockParent(range.startContainer);
+                var prevSelectable = range.getPreviousContainer(startNode, null, true, true);
+                var currentParent  = ViperUtil.getFirstBlockParent(startNode);
                 var prevParent     = ViperUtil.getFirstBlockParent(prevSelectable);
                 if (currentParent !== prevParent && this.viper.isOutOfBounds(prevSelectable) === false) {
                     // Check if there are any other elements in between.
                     var elemsBetween = ViperUtil.getElementsBetween(prevParent, currentParent);
-                    if (elemsBetween.length > 0 && ViperUtil.isBlank(ViperUtil.trim(elemsBetween[0].data)) === false) {
+                    if (elemsBetween.length > 0 && elemsBetween[0].nodeType === ViperUtil.TEXT_NODE && ViperUtil.isBlank(ViperUtil.trim(elemsBetween[0].data)) === false) {
                         // There is at least one non block element in between.
                         // Remove it.
                         ViperUtil.remove(elemsBetween[(elemsBetween.length - 1)]);
@@ -1517,14 +1517,15 @@ ViperKeyboardEditorPlugin.prototype = {
                     for (var i = (elemsBetween.length - 1); i >= 0; i--) {
                         var el = elemsBetween[(elemsBetween.length - 1)];
                         if (el.nodeType !== ViperUtil.TEXT_NODE || ViperUtil.trim(el.data).length !== 0 ) {
-                            removeParent = false;
+                            if (ViperUtil.isTag(el, 'blockquote') !== true && ViperUtil.isTag(prevParent, 'p') === true) {
+                                removeParent = false;
+                            }
+
                             break;
                         }
 
                         ViperUtil.remove(el);
                     }
-                } else {
-                    removeParent = true;
                 }
 
                 if (removeParent === true) {
