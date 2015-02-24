@@ -5417,7 +5417,6 @@ Viper.prototype = {
                     }
                 break;
 
-                case 'li':
                 case 'textarea':
                     // Do not clean up.
                 break;
