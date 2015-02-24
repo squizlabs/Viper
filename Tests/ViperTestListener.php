@@ -199,7 +199,7 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
         $errMsg .= PHPUnit_Util_Filter::getFilteredStacktrace($e);
 
         $this->_addResult($test, $type, $errMsg);
-        $this->_screenshot($type, $test, $e);
+        //$this->_screenshot($type, $test, $e);
 
     }//end _addLog()
 
