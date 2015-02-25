@@ -550,7 +550,9 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsTest extends AbstractVip
 
         $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertEquals('<p>Adding and Removing Bullets %1%</p><ol><li></li><li></li><li></li><li>%2% new list</li></ol>', $this->_getHtmllWithBlankLiTags());
 
@@ -575,12 +577,17 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsTest extends AbstractVip
 
         $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->assertEquals('<p>Adding and Removing Bullets %1%</p><ol><li></li><li></li><li></li><li>%2% new list</li></ol>', $this->_getHtmllWithBlankLiTags());
 
         $this->sikuli->keyDown('Key.UP');
+        sleep(1);
         $this->sikuli->keyDown('Key.UP');
+        sleep(1);
         $this->sikuli->keyDown('Key.UP');
         $this->sikuli->keyDown('Key.DELETE');
         $this->assertEquals('<p>Adding and Removing Bullets %1%</p><ol><li></li><li></li><li>%2% new list</li></ol>', $this->_getHtmllWithBlankLiTags());
