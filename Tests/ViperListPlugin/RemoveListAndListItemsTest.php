@@ -503,9 +503,7 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsTest extends AbstractVip
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->assertEquals('<p>Adding and Removing Bullets %1%</p><ul><li></li><li></li><li>%2% new list</li></ul>', $this->_getHtmllWithBlankLiTags());
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
         $this->assertEquals('<p>Adding and Removing Bullets %1%</p><ul><li></li><li>%2% new list</li></ul>', $this->_getHtmllWithBlankLiTags());
-        $this->sikuli->keyDown('Key.BACKSPACE');
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->assertEquals('<p>Adding and Removing Bullets %1%</p><ul><li>%2% new list</li></ul>', $this->_getHtmllWithBlankLiTags());
 
@@ -557,11 +555,9 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsTest extends AbstractVip
         $this->assertEquals('<p>Adding and Removing Bullets %1%</p><ol><li></li><li></li><li></li><li>%2% new list</li></ol>', $this->_getHtmllWithBlankLiTags());
 
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
         $this->assertEquals('<p>Adding and Removing Bullets %1%</p><ol><li></li><li></li><li>%2% new list</li></ol>', $this->_getHtmllWithBlankLiTags());
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->assertEquals('<p>Adding and Removing Bullets %1%</p><ol><li></li><li>%2% new list</li></ol>', $this->_getHtmllWithBlankLiTags());
-        $this->sikuli->keyDown('Key.BACKSPACE');
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->assertEquals('<p>Adding and Removing Bullets %1%</p><ol><li>%2% new list</li></ol>', $this->_getHtmllWithBlankLiTags());
 
