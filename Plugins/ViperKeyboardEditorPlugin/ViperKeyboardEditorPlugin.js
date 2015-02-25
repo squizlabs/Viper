@@ -962,6 +962,11 @@ ViperKeyboardEditorPlugin.prototype = {
                         // Remove it.
                         ViperUtil.remove(elemsBetween[(elemsBetween.length - 1)]);
                     } else {
+                        // If prev parent has BR as last child, remove it.
+                        if (prevParent.lastChild && ViperUtil.isTag(prevParent.firstChild, 'br') === true) {
+                            ViperUtil.remove(prevParent.firstChild);
+                        }
+
                         while (currentParent.firstChild) {
                             prevParent.appendChild(currentParent.firstChild);
                         }
@@ -970,12 +975,7 @@ ViperKeyboardEditorPlugin.prototype = {
                             ViperUtil.remove(currentParent);
                         }
 
-                        if (prevSelectable.nodeType === ViperUtil.TEXT_NODE) {
-                            range.setStart(prevSelectable, prevSelectable.data.length);
-                        } else {
-                            range.setStartAfter(prevSelectable);
-                        }
-
+                        range.setStart(startNode, 0);
                         range.collapse(true);
                         ViperSelection.addRange(range);
                     }
