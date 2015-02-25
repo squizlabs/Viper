@@ -717,6 +717,18 @@ ViperKeyboardEditorPlugin.prototype = {
                 range.collapse(true);
                 ViperSelection.addRange(range);
                 return false;
+            } else if (ViperUtil.isBrowser('firefox') === true
+                && range.collapsed === true
+                && startNode.nodeType === ViperUtil.TEXT_NODE
+                && range.endOffset === startNode.data.length
+                && startNode.nextSibling
+                && ViperUtil.isTag(startNode.nextSibling, 'br')
+                && (!startNode.nextSibling.nextSibling || ViperUtil.isTag(startNode.nextSibling.nextSibling, 'br') === false)
+            ) {
+                // Handle XAX*<br>XBX<br>XCX.
+                // Pressing enter changes the content to: <p>XAX</p>*XBX<br>XCX.
+                // By adding an extra BR we keep it in the content.
+                ViperUtil.insertAfter(startNode, document.createElement('br'));
             }//end if
 
             setTimeout(function() {
