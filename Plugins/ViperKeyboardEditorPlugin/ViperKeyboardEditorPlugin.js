@@ -1018,24 +1018,15 @@ ViperKeyboardEditorPlugin.prototype = {
                             var elements = ViperUtil.getElementsBetween(startItem, endItem);
                             elements.push(startItem, endItem);
 
-                            // Find a new node we can put caret in.
-                            var newOffset = 0;
-                            var newSelContainer = range.getNextContainer(endNode, null, true);
-                            if (!newSelContainer || this.viper.isOutOfBounds(newSelContainer) === true) {
-                                // If out of bounds of Viper try getting the previous selectable.
-                                newSelContainer = range.getPreviousContainer(startNode, null, true);
-                                if (newSelContainer) {
-                                    newOffset = newSelContainer.data.length;
-                                }
-                            }
+                            var parent = startItem.parentNode;
+                            this.viper.moveCaretAway(startItem, true);
 
+                            // Remove list items.
                             ViperUtil.remove(elements);
 
-                            if (newSelContainer) {
-                                // Set the caret location.
-                                range.setStart(newSelContainer, newOffset);
-                                range.collapse(true);
-                                ViperSelection.addRange(range);
+                            // Remove the list element (ul,ol) if its now empty.
+                            if (ViperUtil.getTag('li', parent).length === 0) {
+                                ViperUtil.remove(parent);
                             }
 
                             this.viper.fireNodesChanged();
