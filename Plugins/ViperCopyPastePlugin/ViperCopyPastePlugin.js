@@ -93,7 +93,7 @@ ViperCopyPastePlugin.prototype = {
         }
 
         var self = this;
-        if (this._isMSIE !== true && this._isSafari !== true) {
+        if (this._isMSIE !== true) {
             elem.onpaste = function(e) {
                 if (!e.clipboardData) {
                     return;
@@ -598,7 +598,7 @@ ViperCopyPastePlugin.prototype = {
 
     keyDown: function (e)
     {
-        if (this._isMSIE === true || this._isSafari === true) {
+        if (this._isMSIE === true) {
             if (e.metaKey === true || e.ctrlKey === true) {
                 if (e.keyCode === 86) {
                     // CTRL/CMD + V.
@@ -1086,17 +1086,23 @@ ViperCopyPastePlugin.prototype = {
                 var textNode = document.createTextNode(preHtml);
                 ViperUtil.insertBefore(this._tmpNode, textNode);
             } else {
-                var changeid  = ViperChangeTracker.startBatchChange('textAdded');
-                var prevChild = null;
-                var lastChild = null;
+                var changeid    = ViperChangeTracker.startBatchChange('textAdded');
+                var prevChild   = null;
+                var lastChild   = null;
+                var prevWrapper = null;
                 while (fragment.lastChild) {
                     if (prevChild === fragment.lastChild) {
                         break;
                     }
 
+                    if (ViperUtil.isTag(fragment.lastChild, 'img') === true) {
+                        fragment.lastChild.src = fragment.lastChild.src.replace('%7E', '~');
+                    }
+
                     prevChild = fragment.lastChild;
                     var ctNode = null;
-                    if (ViperUtil.isBlockElement(fragment.lastChild) === true) {
+                    if (ViperUtil.isBlockElement(fragment.lastChild) === true && ViperUtil.isStubElement(fragment.lastChild) === false) {
+                        prevWrapper = null;
                         ctNode = fragment.lastChild;
                         ViperChangeTracker.addChange('textAdd', [ctNode]);
 
@@ -1127,7 +1133,21 @@ ViperCopyPastePlugin.prototype = {
                             ViperUtil.insertAfter(prevBlock, ctNode);
                         }
                     } else {
-                        ctNode = ViperChangeTracker.createCTNode('ins', 'textAdd', fragment.lastChild);
+                        // Text or stub element. If defaultTag is set then add wrap this node with the default tag.
+                        var defaultTag = this.viper.getDefaultBlockTag();
+                        ctNode         = fragment.lastChild;
+                        if (defaultTag && prevWrapper === null) {
+                            // No default tag was created before this so create a new one now.
+                            ctNode = document.createElement(defaultTag);
+                            ctNode.appendChild(fragment.lastChild);
+                            prevWrapper = ctNode;
+                        } else if (prevWrapper !== null) {
+                            // Use the previous sibling default tag which was created by above code.
+                            ViperUtil.insertBefore(prevWrapper.firstChild, fragment.lastChild);
+                            continue;
+                        }
+
+                        ctNode = ViperChangeTracker.createCTNode('ins', 'textAdd', ctNode);
                         ViperChangeTracker.addNodeToChange(changeid, ctNode);
                         ViperUtil.insertAfter(prevBlock, ctNode);
                     }
@@ -1144,7 +1164,11 @@ ViperCopyPastePlugin.prototype = {
                         if (ViperUtil.isChildOf(this._tmpNode, prevBlock) === true) {
                             // Tmp node could be the child of this element (when paste is made in a new P tag for exammple).
                             this._tmpNode = range._getLastSelectableChild(prevBlock.nextSibling);
-                            this._tmpNodeOffset = this._tmpNode.data.length;
+                            if (this._tmpNode) {
+                                this._tmpNodeOffset = this._tmpNode.data.length;
+                            } else {
+                                this._tmpNodeOffset = 0;
+                            }
                         }
 
                         ViperUtil.remove(prevBlock);

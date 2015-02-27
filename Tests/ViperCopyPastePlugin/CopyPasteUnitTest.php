@@ -35,6 +35,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->moveToKeyword(1);
         $this->sikuli->keyDown('Key.CMD + a');
         $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.DELETE');
         $this->type('%1% This is one line of content %2%');
         $this->selectKeyword(1, 2);
         sleep(1);

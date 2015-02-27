@@ -1330,10 +1330,11 @@ Viper.prototype = {
      * This method should be used when removing an element where caret is in.
      * If no valid elements found a new element will be created using the defaultBlockTag setting.
      */
-    moveCaretAway: function(sourceElement)
+    moveCaretAway: function(sourceElement, back)
     {
+        back      = back || false;
         var range = this.getViperRange();
-        return range.moveCaretAway(sourceElement, this.getViperElement(), this.getDefaultBlockTag());
+        return range.moveCaretAway(sourceElement, this.getViperElement(), this.getDefaultBlockTag(), back);
 
     },
 
@@ -5417,7 +5418,6 @@ Viper.prototype = {
                     }
                 break;
 
-                case 'li':
                 case 'textarea':
                     // Do not clean up.
                 break;

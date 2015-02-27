@@ -96,16 +96,16 @@ class Viper_Tests_Core_EmbeddingVideoUnitTest extends AbstractViperUnitTest
         // Embed the video using object tags
         $this->sikuli->keyDown('Key.CMD + a');
         $this->sikuli->keyDown('Key.DELETE');
-        $this->type('<object width="560" height="315"><param name="movie" value="http://www.youtube.com/v/f6ZSZbNfSpk?version=3&amp;hl=en_GB"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/f6ZSZbNfSpk?version=3&amp;hl=en_GB" type="application/x-shockwave-flash" width="560" height="315" allowscriptaccess="always" allowfullscreen="true"></embed></object>');
+        $this->type('<object width="560" height="315"><param name="movie" value="http://www.youtube.com/v/f6ZSZbNfSpk?version=3&amp;hl=en_GB"/><param name="allowFullScreen" value="true"/><param name="allowscriptaccess" value="always"/><embed src="http://www.youtube.com/v/f6ZSZbNfSpk?version=3&amp;hl=en_GB" type="application/x-shockwave-flash" width="560" height="315" allowscriptaccess="always" allowfullscreen="true"/></object>');
         $this->clickButton('Apply Changes', NULL, TRUE);
         sleep(5);
 
-        // Check that you can enter content after new video
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.ENTER');
+        // Check that you can enter content after new video.
+        $this->moveMouseToElement('object');
+        $this->clickCursorAssistLine();
         $this->type('This is a new paragraph after the video');
 
-        $this->assertHTMLMatch('<object width="560" height="315"><param name="movie" value="http://www.youtube.com/v/f6ZSZbNfSpk?version=3&amp;hl=en_GB"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/f6ZSZbNfSpk?version=3&amp;hl=en_GB" type="application/x-shockwave-flash" width="560" height="315" allowscriptaccess="always" allowfullscreen="true"></embed></object><p>This is a new paragraph after the video</p>');
+        $this->assertHTMLMatch('<object width="560" height="315"><param name="movie" value="http://www.youtube.com/v/f6ZSZbNfSpk?version=3&amp;hl=en_GB"/><param name="allowFullScreen" value="true"/><param name="allowscriptaccess" value="always"/><embed src="http://www.youtube.com/v/f6ZSZbNfSpk?version=3&amp;hl=en_GB" type="application/x-shockwave-flash" width="560" height="315" allowscriptaccess="always" allowfullscreen="true"/></object><p>This is a new paragraph after the video</p>');
 
     }//end testEmbeddingVideoWithObjectTags()
 

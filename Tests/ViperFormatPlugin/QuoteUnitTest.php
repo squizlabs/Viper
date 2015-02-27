@@ -34,7 +34,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
      */
     public function testApplingAndRemovingTheQuoteFormatWhenClickingInSection()
     {
-        
+
         // For a single line
         $this->useTest(1);
         $this->moveToKeyword(1);
@@ -144,7 +144,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
         $this->assertHTMLMatch('<blockquote><p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
         $this->checkStatusOfFormatIconsInTheTopToolbar(NULL, NULL, 'active', NULL);
-        
+
     }//end testApplingAndRemovingTheQuoteFormatWhenSelectingASection()
 
 
@@ -196,7 +196,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->selectInlineToolbarLineageItem(2);
         $this->assertFalse($this->inlineToolbarButtonExists('formats-blockquote', 'active'), 'Active quote icon should not appear in the inline toolbar');
         $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'disabled'), 'Disabled quote icon should appear in the top toolbar');
-        
+
     }//end testCheckWhenQuoteIconIsAvailableInToolbar()
 
 
@@ -207,7 +207,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
      */
     public function testClickingActiveQuoteIconsInToolbar()
     {
-        
+
         // Check that when you click the active quote icon in the inline toolbar, it is changed to paragraph.
         $this->useTest(3);
         $this->selectKeyword(1);
@@ -224,7 +224,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->clickTopToolbarButton('Quote', 'active', TRUE);
         $this->assertHTMLMatch('<p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p>');
         $this->checkStatusOfFormatIconsInTheTopToolbar('active');
-        
+
     }//end testClickingActiveQuoteIconsInToolbar()
 
 
@@ -258,7 +258,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->assertEquals($this->replaceKeywords('%1% xtn dolor'), $this->getSelectedText(), 'Original selection is not selected');
 
         // Apply bold and italics to a multi-line quote section
-        $this->useTest(2); 
+        $this->useTest(2);
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
@@ -795,7 +795,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
     {
         $this->useTest(2);
 
-        // Split the quote 
+        // Split the quote
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.ENTER');
@@ -808,7 +808,8 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<blockquote><p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<blockquote><p>%1%%2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
 
     }//end testSplittingOneQuoteIntoMultipleQuotes()
 
@@ -822,7 +823,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
     {
         $this->useTest(2);
 
-        // Split the paragraph 
+        // Split the paragraph
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('a');
