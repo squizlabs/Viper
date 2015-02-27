@@ -1647,7 +1647,12 @@ ViperFormatPlugin.prototype = {
             // Text node, get the first block parent.
             selectedNode = ViperUtil.getFirstBlockParent(selectedNode);
         } else if (!selectedNode && (range.collapsed === true || type.match(/^h\d$/))) {
-            selectedNode = ViperUtil.getFirstBlockParent(range.startContainer);
+            var startNode = range.getStartNode();
+            if (ViperUtil.isBlockElement(startNode) === true) {
+                selectedNode = startNode;
+            } else {
+                selectedNode = ViperUtil.getFirstBlockParent(range.startContainer);
+            }
         }
 
         if (selectedNode) {
