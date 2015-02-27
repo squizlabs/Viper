@@ -325,7 +325,7 @@ ViperCopyPastePlugin.prototype = {
         };
 
         // Handle cut event for Chrome.
-        if (ViperUtil.isBrowser('chrome') === true) {
+        if (ViperUtil.isBrowser('msie') !== true) {
             elem.oncut = function(e) {
                 var range = self.viper.getCurrentRange();
                 var selectedContent = '';
@@ -354,6 +354,11 @@ ViperCopyPastePlugin.prototype = {
                     range.deleteContents(self.viper.getViperElement(), self.viper.getDefaultBlockTag());
                     ViperSelection.addRange(range);
                 }
+
+                self.viper.fireCallbacks('Viper:cut');
+
+                self.viper.fireNodesChanged();
+                self.viper.fireSelectionChanged();
 
                 ViperUtil.preventDefault(e);
                 return false;
@@ -532,6 +537,24 @@ ViperCopyPastePlugin.prototype = {
         // Select the contents of the temp element.
         var firstChild = range._getFirstSelectableChild(tmp);
         var lastChild = range._getLastSelectableChild(tmp);
+        if (!firstChild) {
+            firstChild = document.createTextNode('');
+            if (tmp.firstChild.childNodes.length > 0) {
+                ViperUtil.insertBefore(tmp.firstChild.firstChild, firstChild);
+            } else {
+                ViperUtil.insertBefore(tmp.firstChild);
+            }
+        }
+
+        if (!lastChild) {
+            lastChild = document.createTextNode('');
+            if (tmp.lastChild.childNodes.length > 0) {
+                tmp.lastChild.appendChild(lastChild);
+            } else {
+                tmp.appendChild(lastChild);
+            }
+        }
+
         range.setEnd(lastChild, lastChild.data.length);
         range.setStart(firstChild, 0);
         ViperSelection.addRange(range);

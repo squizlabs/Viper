@@ -1103,44 +1103,19 @@ ViperKeyboardEditorPlugin.prototype = {
         if (range.collapsed === false) {
             var nodeSelection = range.getNodeSelection();
             if (nodeSelection) {
-                var parents = ViperUtil.getSurroundingParents(nodeSelection);
+                var parents = ViperUtil.getSurroundingParents(nodeSelection, null, null, this.viperElement);
                 if (parents.length > 0) {
-                    nodeSelection = parents.pop();
-                }
-
-                // A whole container is selected at the start of the editable container.
-                // Find good container to place the caret.
-                var next       = true;
-                var selectable = range.getNextContainer(nodeSelection, null, true, true);
-                if (!selectable) {
-                    next       = false;
-                    selectable = range.getPreviousContainer(nodeSelection, null, true, true);
-                }
-
-                if (!selectable) {
-                    // Create a new default container.
-                    var defaultTagName = this.viper.getDefaultBlockTag();
-                    var defTag = null;
-                    if (defaultTagName !== '') {
-                        defTag = document.createElement(defaultTagName);
-                        ViperUtil.setHtml(defTag, '<br/>');
+                    var topParent = parents.pop();
+                    if (topParent === this.viper.getViperElement()) {
+                        if (parents.length > 0) {
+                            nodeSelection = parents.pop();
+                        }
                     } else {
-                        defTag = document.createTextNode(' ');
+                        nodeSelection = topParent;
                     }
-
-                    ViperUtil.insertAfter(nodeSelection, defTag);
-                    ViperUtil.remove(nodeSelection);
-                    range.setStart(defTag, 0);
-                    range.collapse(true);
-                    ViperSelection.addRange(range);
-                    return false;
-                } else if (next === true) {
-                    range.setStart(selectable, 0);
-                    range.collapse(true);
-                } else {
-                    range.setStart(selectable, selectable.data.length);
-                    range.collapse(true);
                 }
+
+               this.viper.moveCaretAway(nodeSelection);
 
                 ViperUtil.remove(nodeSelection);
                 ViperSelection.addRange(range);
