@@ -199,7 +199,7 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
         $errMsg .= PHPUnit_Util_Filter::getFilteredStacktrace($e);
 
         $this->_addResult($test, $type, $errMsg);
-        $this->_screenshot($type, $test, $e);
+        //$this->_screenshot($type, $test, $e);
 
     }//end _addLog()
 
@@ -363,6 +363,23 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
         $this->_addLog('failure', $test, $e);
 
     }//end addFailure()
+
+
+    /**
+     * Skipped test.
+     *
+     * @param PHPUnit_Framework_Test $test The test object.
+     * @param Exception              $e    The exception.
+     * @param float                  $time Time of the error.
+     *
+     * @return void
+     */
+    public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time)
+    {
+        self::$_errorStreak = 0;
+        $this->_addResult($test, 'pass');
+
+    }//end addSkippedTest()
 
 
     /**
@@ -559,22 +576,6 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
         self::$_errorStreak = 0;
 
     }//end addIncompleteTest()
-
-
-    /**
-     * Skipped test.
-     *
-     * @param PHPUnit_Framework_Test $test The test object.
-     * @param Exception              $e    The exception.
-     * @param float                  $time Time of the error.
-     *
-     * @return void
-     */
-    public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time)
-    {
-        self::$_errorStreak = 0;
-
-    }//end addSkippedTest()
 
 
     /**

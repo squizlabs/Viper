@@ -614,30 +614,30 @@ ViperFormatPlugin.prototype = {
             // Need to have a time out here so that the inline toolbar has time to update it self as we use its lineage
             // to determine button statuses.
             setTimeout(function() {
-                updateToolbar(data);
+                updateToolbar();
             }, 10);
         });
 
-        var updateToolbar = function(data) {
-            data.range = self.viper.getCurrentRange();
+        var updateToolbar = function() {
+            var range = self.viper.getCurrentRange();
 
             // Make sure passed in range is still valud.
             try {
-                if (data.range) {
-                    if (data.range.startContainer) {
-                        data.range.startContainer.parentNode;
+                if (range) {
+                    if (range.startContainer) {
+                        range.startContainer.parentNode;
                     }
 
-                    if (data.range.endContainer) {
-                        data.range.endContainer.parentNode;
+                    if (range.endContainer) {
+                        range.endContainer.parentNode;
                     }
                 }
             } catch(e) {
             }
 
-            var nodeSelection = data.range.getNodeSelection(null, true);
-            var startNode = data.range.getStartNode();
-            var endNode   = data.range.getEndNode();
+            var nodeSelection = range.getNodeSelection(null, true);
+            var startNode = range.getStartNode();
+            var endNode   = range.getEndNode();
 
             if (!endNode) {
                 endNode = startNode;
@@ -648,15 +648,23 @@ ViperFormatPlugin.prototype = {
             }
 
             if ((!nodeSelection || nodeSelection.nodeType !== ViperUtil.ELEMENT_NODE || nodeSelection === self.viper.getViperElement())
-                && (data.range.collapsed === true || ViperUtil.getFirstBlockParent(startNode) !== ViperUtil.getFirstBlockParent(endNode))
-                || (startNode === endNode && ViperUtil.isTag(startNode, 'br') === true && data.range.collapsed === true)
-                || (ViperUtil.isBrowser('msie', '8') === true && data.range.collapsed === true && nodeSelection && ViperUtil.getHtml(nodeSelection) === '' && ViperUtil.isStubElement(nodeSelection) === false)
+                && (range.collapsed === true || ViperUtil.getFirstBlockParent(startNode) !== ViperUtil.getFirstBlockParent(endNode))
+                || (startNode === endNode && ViperUtil.isTag(startNode, 'br') === true && range.collapsed === true)
+                || (ViperUtil.isBrowser('msie', '8') === true && range.collapsed === true && nodeSelection && ViperUtil.getHtml(nodeSelection) === '' && ViperUtil.isStubElement(nodeSelection) === false)
             ) {
                 tools.disableButton('anchor');
                 tools.disableButton('class');
                 tools.setButtonInactive('anchor');
                 tools.setButtonInactive('class');
             } else if (nodeSelection && nodeSelection === self.viper.getViperElement()) {
+                tools.disableButton('anchor');
+                tools.disableButton('class');
+                tools.setButtonInactive('anchor');
+                tools.setButtonInactive('class');
+            } else if (nodeSelection
+                && range.collapsed === true
+                && nodeSelection.nodeType === ViperUtil.ELEMENT_NODE
+            ) {
                 tools.disableButton('anchor');
                 tools.disableButton('class');
                 tools.setButtonInactive('anchor');
@@ -668,14 +676,20 @@ ViperFormatPlugin.prototype = {
 
             if (!startNode
                 && !endNode
-                && data.range.startContainer === data.range.endContainer
+                && range.startContainer === range.endContainer
             ) {
-                startNode = data.range.startContainer;
+                startNode = range.startContainer;
             }
 
             var viperElement    = self.viper.getViperElement();
-            var lineage         = self._inlineToolbar.getLineage();
-            var currentLinIndex = self._inlineToolbar.getCurrentLineageIndex(true);
+            var lineage         = [];
+            var currentLinIndex = 0;
+
+            if (self._inlineToolbar) {
+                lineage         = self._inlineToolbar.getLineage();
+                currentLinIndex = self._inlineToolbar.getCurrentLineageIndex(true);
+            }
+
             var formatElement   = lineage[currentLinIndex];
 
             if (!nodeSelection || lineage[(lineage.length - 1)] !== nodeSelection) {
@@ -692,41 +706,43 @@ ViperFormatPlugin.prototype = {
             }
 
             if (nodeSelection
-                || (data.range.collapsed === false
+                || (range.collapsed === false
                 || (ViperUtil.isTag(startNode, 'br') === false
                 && (startNode.nodeType === ViperUtil.TEXT_NODE && ViperUtil.trim(startNode.data) === '') === false))
             ) {
-                if (nodeSelection && nodeSelection === self.viper.getViperElement()) {
-                    tools.disableButton('anchor');
-                    tools.disableButton('class');
-                    tools.setButtonInactive('anchor');
-                    tools.setButtonInactive('class');
-                } else if (nodeSelection) {
-                    tools.enableButton('anchor');
-                    tools.enableButton('class');
-
-                    // Anchor.
-                    var attrId = self._getAttributeValue('id', nodeSelection);
-                    tools.getItem(prefix + 'anchor:input').setValue(attrId);
-                    if (attrId) {
-                        tools.setButtonActive('anchor');
-                    } else {
+                if (ViperUtil.isTag(nodeSelection, ['td', 'th']) === false) {
+                    if (nodeSelection && nodeSelection === self.viper.getViperElement()) {
+                        tools.disableButton('anchor');
+                        tools.disableButton('class');
                         tools.setButtonInactive('anchor');
-                    }
+                        tools.setButtonInactive('class');
+                    } else if (nodeSelection && range.collapsed !== true) {
+                        tools.enableButton('anchor');
+                        tools.enableButton('class');
 
-                    // Class.
-                    var attrClass = self._getAttributeValue('class', nodeSelection);
-                    tools.getItem(prefix + 'class:input').setValue(attrClass);
-                    if (attrClass) {
-                        tools.setButtonActive('class');
+                        // Anchor.
+                        var attrId = self._getAttributeValue('id', nodeSelection);
+                        tools.getItem(prefix + 'anchor:input').setValue(attrId);
+                        if (attrId) {
+                            tools.setButtonActive('anchor');
+                        } else {
+                            tools.setButtonInactive('anchor');
+                        }
+
+                        // Class.
+                        var attrClass = self._getAttributeValue('class', nodeSelection);
+                        tools.getItem(prefix + 'class:input').setValue(attrClass);
+                        if (attrClass) {
+                            tools.setButtonActive('class');
+                        } else {
+                            tools.setButtonInactive('class');
+                        }
                     } else {
+                        tools.getItem(prefix + 'class:input').setValue('');
+                        tools.getItem(prefix + 'anchor:input').setValue('');
+                        tools.setButtonInactive('anchor');
                         tools.setButtonInactive('class');
                     }
-                } else {
-                    tools.getItem(prefix + 'class:input').setValue('');
-                    tools.getItem(prefix + 'anchor:input').setValue('');
-                    tools.setButtonInactive('anchor');
-                    tools.setButtonInactive('class');
                 }
             }//end if
 
@@ -741,7 +757,7 @@ ViperFormatPlugin.prototype = {
             // no selection and not in a blockquote with multiple paragraphs.
             if (nodeSelection) {
                 if (nodeSelection.nodeType === ViperUtil.TEXT_NODE) {
-                    if (data.range.collapsed === true) {
+                    if (range.collapsed === true) {
                         // Disable the heading tag if the selection is in a blockquote
                         // with multiple paragraph tags.
                         var blockquote = ViperUtil.getParents(nodeSelection, 'blockquote', self.viper.getViperElement());
@@ -763,7 +779,7 @@ ViperFormatPlugin.prototype = {
                         }
                     }
                 }
-            } else if (data.range.collapsed === true && formatElement) {
+            } else if (range.collapsed === true && formatElement) {
                 var firstBlock = ViperUtil.getFirstBlockParent(formatElement);
                 if (ViperUtil.inArray(ViperUtil.getTagName(firstBlock), ignoredTags) === false) {
                     var isBlockQuote = false;
@@ -784,7 +800,7 @@ ViperFormatPlugin.prototype = {
                 tools.setButtonInactive(prefix + 'heading:' + headingTags[i]);
             }
 
-            var headingElement = self.getTagFromRange(data.range, headingTags);
+            var headingElement = self.getTagFromRange(range, headingTags);
             if (headingElement) {
                 var tagName = ViperUtil.getTagName(headingElement);
                 tools.setButtonActive('headings');
@@ -804,10 +820,10 @@ ViperFormatPlugin.prototype = {
                 return parent;
             };
 
-            if (self._canEnableFormatButtons(startNode, nodeSelection, data.range) === true) {
+            if (self._canEnableFormatButtons(startNode, nodeSelection, range) === true) {
                 // Reset icon of the main toolbar button.
                 tools.getItem('formats').setIconClass('Viper-formats');
-                if (data.range.collapsed === true) {
+                if (range.collapsed === true) {
                     // If the range is collapsed then we need to get the most relevant
                     // parent. Which is the first block parent unless its a P tag
                     // inside a blockquote. Then it becomes the blockquote.
@@ -817,7 +833,7 @@ ViperFormatPlugin.prototype = {
                     tools.enableButton('formats');
 
                     // Set the main toolbar button icon.
-                    var parentTagName = ViperUtil.getTagName(parent, data.range);
+                    var parentTagName = ViperUtil.getTagName(parent, range);
                     if (formatButtons[parentTagName]) {
                         tools.getItem('formats').setIconClass('Viper-formats-' + parentTagName);
                     }
@@ -897,7 +913,7 @@ ViperFormatPlugin.prototype = {
                 } else {
                     // Its a text selection.
                     var startBlock    = ViperUtil.getFirstBlockParent(startNode);
-                    var commonParent  = self.getCommonFormatElement(data.range);
+                    var commonParent  = self.getCommonFormatElement(range);
 
                     if (commonParent && ViperUtil.isBlockElement(commonParent) === false) {
                         commonParent  = ViperUtil.getFirstBlockParent(commonParent);
@@ -967,7 +983,7 @@ ViperFormatPlugin.prototype = {
                         // then Blockquote is also allowed.
                         tools.enableButton('formats');
 
-                        var pOnly = self._selectionHasPTagsOnly(data.range);
+                        var pOnly = self._selectionHasPTagsOnly(range);
                         for (var tag in formatButtons) {
                             tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
 
@@ -984,7 +1000,7 @@ ViperFormatPlugin.prototype = {
 
                 // Pick the right button icon for disabled state as nothing can be
                 // changed.
-                if (data.range.collapsed === true) {
+                if (range.collapsed === true) {
                     var parent = getValidParent(startNode);
 
                     var parentTagName = ViperUtil.getTagName(parent);
@@ -1093,6 +1109,9 @@ ViperFormatPlugin.prototype = {
                 } else {
                     self._setAttributeForSelection('class', value);
                 }
+
+                // Set the current value as the initial value.
+                tools.getItem(prefix + 'class:input').setValue(value, true);
 
                 if (value) {
                     tools.setButtonActive(prefix + 'classBtn-' + type);
@@ -1594,8 +1613,13 @@ ViperFormatPlugin.prototype = {
      */
     handleFormat: function(type)
     {
-        var lineage         = this._inlineToolbar.getLineage();
-        var currentLinIndex = this._inlineToolbar.getCurrentLineageIndex();
+        var lineage         = [];
+        var currentLinIndex = 0;
+        if (this._inlineToolbar) {
+            lineage         = this._inlineToolbar.getLineage();
+            currentLinIndex = this._inlineToolbar.getCurrentLineageIndex();
+        }
+
         var range           = this.viper.getViperRange();
         var selectedNode    = selectedNode || range.getNodeSelection();
         var nodeSelection   = selectedNode;
@@ -1623,7 +1647,12 @@ ViperFormatPlugin.prototype = {
             // Text node, get the first block parent.
             selectedNode = ViperUtil.getFirstBlockParent(selectedNode);
         } else if (!selectedNode && (range.collapsed === true || type.match(/^h\d$/))) {
-            selectedNode = ViperUtil.getFirstBlockParent(range.startContainer);
+            var startNode = range.getStartNode();
+            if (ViperUtil.isBlockElement(startNode) === true) {
+                selectedNode = startNode;
+            } else {
+                selectedNode = ViperUtil.getFirstBlockParent(range.startContainer);
+            }
         }
 
         if (selectedNode) {
@@ -1678,8 +1707,7 @@ ViperFormatPlugin.prototype = {
                     }
 
                     newElem.appendChild(selectedNode);
-                    this.viper.selectBookmark(bookmark);
-                    range.selectNode(newElem);
+                    range = this.viper.selectBookmark(bookmark);
                     ViperSelection.addRange(range);
                 } else {
                     var newElem = this._convertSingleElement(selectedNode, type);

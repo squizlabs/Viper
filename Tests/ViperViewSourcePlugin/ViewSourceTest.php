@@ -43,35 +43,6 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperUnit
 
 
     /**
-     * Test that empty html reamin in the code after you view the source of the page.
-     *
-     * @return void
-     */
-    public function testEmptyTagsInSourceCode()
-    {
-        // Test empty li tags in a list
-        $this->moveToKeyword(3, 'left');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton('sourceView');
-        sleep(2);
-        $this->clickButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p>Lorem %1% dolor</p><p><strong>%2%</strong> sit amet</p><ul><li></li><li></li><li>%3% test <em>XuT</em></li></ul>');
-        
-        // Test empty p tags in a list
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton('sourceView');
-        sleep(2);
-        $this->clickButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p>Lorem %1% dolor</p><p></p><p></p><p><strong>%2%</strong> sit amet</p><ul><li></li><li></li><li>%3% test <em>XuT</em></li></ul>');
-        
-    }//end testEmptyTagsInSourceCode()
-
-
-    /**
      * Test that Viper is responsive after you close the source editor.
      *
      * @return void

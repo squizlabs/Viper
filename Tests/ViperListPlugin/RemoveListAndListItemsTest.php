@@ -496,16 +496,16 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsTest extends AbstractVip
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Adding and Removing Bullets %1%</p><ul><li></li><li></li><li></li><li>%2% new list</li></ul>');
+
+        $this->assertEquals('<p>Adding and Removing Bullets %1%</p><ul><li></li><li></li><li></li><li>%2% new list</li></ul>', $this->_getHtmllWithBlankLiTags());
 
         $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>Adding and Removing Bullets %1%</p><ul><li></li><li></li><li>%2% new list</li></ul>');
+        $this->assertEquals('<p>Adding and Removing Bullets %1%</p><ul><li></li><li></li><li>%2% new list</li></ul>', $this->_getHtmllWithBlankLiTags());
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>Adding and Removing Bullets %1%</p><ul><li></li><li>%2% new list</li></ul>');
+        $this->assertEquals('<p>Adding and Removing Bullets %1%</p><ul><li></li><li>%2% new list</li></ul>', $this->_getHtmllWithBlankLiTags());
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>Adding and Removing Bullets %1%</p><ul><li>%2% new list</li></ul>');
+        $this->assertEquals('<p>Adding and Removing Bullets %1%</p><ul><li>%2% new list</li></ul>', $this->_getHtmllWithBlankLiTags());
 
         //Test unordered list using forward delete
         $this->useTest(5);
@@ -523,18 +523,18 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsTest extends AbstractVip
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
-        $this->assertHTMLMatch('<p>Adding and Removing Bullets %1%</p><ul><li></li><li></li><li></li><li>%2% new list</li></ul>');
+        $this->assertEquals('<p>Adding and Removing Bullets %1%</p><ul><li></li><li></li><li></li><li>%2% new list</li></ul>', $this->_getHtmllWithBlankLiTags());
 
         $this->sikuli->keyDown('Key.UP');
         $this->sikuli->keyDown('Key.UP');
         $this->sikuli->keyDown('Key.UP');
         sleep(1);
         $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>Adding and Removing Bullets %1%</p><ul><li></li><li></li><li>%2% new list</li></ul>');
+        $this->assertEquals('<p>Adding and Removing Bullets %1%</p><ul><li></li><li></li><li>%2% new list</li></ul>', $this->_getHtmllWithBlankLiTags());
         $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>Adding and Removing Bullets %1%</p><ul><li></li><li>%2% new list</li></ul>');
+        $this->assertEquals('<p>Adding and Removing Bullets %1%</p><ul><li></li><li>%2% new list</li></ul>', $this->_getHtmllWithBlankLiTags());
         $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>Adding and Removing Bullets %1%</p><ul><li>%2% new list</li></ul>');
+        $this->assertEquals('<p>Adding and Removing Bullets %1%</p><ul><li>%2% new list</li></ul>', $this->_getHtmllWithBlankLiTags());
 
         //Test ordered list using backspace
         $this->useTest(5);
@@ -548,17 +548,18 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsTest extends AbstractVip
 
         $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Adding and Removing Bullets %1%</p><ol><li></li><li></li><li></li><li>%2% new list</li></ol>');
+        $this->assertEquals('<p>Adding and Removing Bullets %1%</p><ol><li></li><li></li><li></li><li>%2% new list</li></ol>', $this->_getHtmllWithBlankLiTags());
 
         $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertEquals('<p>Adding and Removing Bullets %1%</p><ol><li></li><li></li><li>%2% new list</li></ol>', $this->_getHtmllWithBlankLiTags());
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>Adding and Removing Bullets %1%</p><ol><li></li><li></li><li>%2% new list</li></ol>');
+        $this->assertEquals('<p>Adding and Removing Bullets %1%</p><ol><li></li><li>%2% new list</li></ol>', $this->_getHtmllWithBlankLiTags());
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>Adding and Removing Bullets %1%</p><ol><li></li><li>%2% new list</li></ol>');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>Adding and Removing Bullets %1%</p><ol><li>%2% new list</li></ol>');
+        $this->assertEquals('<p>Adding and Removing Bullets %1%</p><ol><li>%2% new list</li></ol>', $this->_getHtmllWithBlankLiTags());
 
         //Test ordered list using forward delete
         $this->useTest(5);
@@ -572,22 +573,41 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsTest extends AbstractVip
 
         $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Adding and Removing Bullets %1%</p><ol><li></li><li></li><li></li><li>%2% new list</li></ol>');
+        sleep(1);
+        $this->assertEquals('<p>Adding and Removing Bullets %1%</p><ol><li></li><li></li><li></li><li>%2% new list</li></ol>', $this->_getHtmllWithBlankLiTags());
 
         $this->sikuli->keyDown('Key.UP');
+        sleep(1);
         $this->sikuli->keyDown('Key.UP');
+        sleep(1);
         $this->sikuli->keyDown('Key.UP');
         $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>Adding and Removing Bullets %1%</p><ol><li></li><li></li><li>%2% new list</li></ol>');
+        $this->assertEquals('<p>Adding and Removing Bullets %1%</p><ol><li></li><li></li><li>%2% new list</li></ol>', $this->_getHtmllWithBlankLiTags());
         $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>Adding and Removing Bullets %1%</p><ol><li></li><li>%2% new list</li></ol>');
+        $this->assertEquals('<p>Adding and Removing Bullets %1%</p><ol><li></li><li>%2% new list</li></ol>', $this->_getHtmllWithBlankLiTags());
         $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>Adding and Removing Bullets %1%</p><ol><li>%2% new list</li></ol>');
+        $this->assertEquals('<p>Adding and Removing Bullets %1%</p><ol><li>%2% new list</li></ol>', $this->_getHtmllWithBlankLiTags());
 
     }//end testAddAndRemoveNewBulletsToList()
 
+
+    /**
+     * Get the content of Viper without stripping the blank LI tags.
+     *
+     * @return string
+     */
+    private function _getHtmllWithBlankLiTags()
+    {
+        $html = $this->sikuli->execJS('ViperUtil.getHtml(ViperUtil.getid(\'content\'))');
+        $html = str_replace('<br>', '', $html);
+
+        return $html;
+
+    }//end _getHtmllWithBlankLiTags
 
 }//end class
 

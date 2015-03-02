@@ -24,8 +24,18 @@ var ViperUtil = {
 
     isTag: function(node, tag)
     {
-        if (node && node.tagName && node.tagName.toLowerCase() === tag.toLowerCase()) {
-            return true;
+        if (typeof tag !== 'object') {
+            if (node && node.tagName && node.tagName.toLowerCase() === tag.toLowerCase()) {
+                return true;
+            }
+        } else if (node && node.tagName) {
+            var tagName = node.tagName.toLowerCase();
+            var ln      = tag.length;
+            for (var i = 0; i < ln; i++) {
+                if (tagName === tag[i].toLowerCase()) {
+                    return true;
+                }
+            }
         }
 
         return false;
@@ -812,13 +822,15 @@ var ViperUtil = {
         }
 
         var lastParent = parentElems[(parentElems.length - 1)];
-        elements       = ViperUtil.arrayMerge(elements, ViperUtil.getElementsBetween(lastParent, toElem));
+        if (lastParent) {
+            elements = ViperUtil.arrayMerge(elements, ViperUtil.getElementsBetween(lastParent, toElem));
 
-        if (lastParent.firstChild === lastParent.lastChild
-            && lastParent.firstChild === fromElem
-            && lastParent !== toElem
-        ) {
-           elements.push(lastParent);
+            if (lastParent.firstChild === lastParent.lastChild
+                && lastParent.firstChild === fromElem
+                && lastParent !== toElem
+            ) {
+               elements.push(lastParent);
+            }
         }
 
         return elements;

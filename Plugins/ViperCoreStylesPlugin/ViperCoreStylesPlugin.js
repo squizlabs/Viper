@@ -838,51 +838,28 @@ ViperCoreStylesPlugin.prototype = {
             var prev = keyboardEditorPlugin.splitAtRange(true, null);
         }
 
-        var nextSibling = prev.nextSibling;
-
         ViperUtil.insertAfter(prev, hr);
 
-        if (!nextSibling || ViperUtil.isBlockElement(nextSibling) === false) {
-            var p = document.createElement('p');
-            ViperUtil.setHtml(p, '&nbsp;');
-            ViperUtil.insertAfter(hr, p);
-            nextSibling = p;
-        } else {
-            if (ViperUtil.trim(ViperUtil.getNodeTextContent(nextSibling)) === '') {
-                ViperUtil.setHtml(nextSibling, '&nbsp;');
+        var nextSibling = hr.nextSibling;
 
-                var nextEmptyElem = nextSibling.nextSibling;
-                while (nextEmptyElem) {
-                    if (ViperUtil.isBlockElement(nextEmptyElem) === true) {
-                        var html = ViperUtil.getHtml(nextEmptyElem);
-                        if (html === '' || html === '<br>' || html === '&nbsp;') {
-                            // This is an empty block element that is after the next sibling.. remove it..
-                            nextEmptyElem.parentNode.removeChild(nextEmptyElem);
-                        }
+        if (nextSibling
+            && ViperUtil.trim(ViperUtil.getNodeTextContent(nextSibling)) === ''
+            && !nextSibling.firstElementChild
+        ) {
+            ViperUtil.remove(nextSibling);
+        }
 
-                        break;
-                    } else if (nextEmptyElem.nodeType === ViperUtil.TEXT_NODE && ViperUtil.trim(nextEmptyElem.data) !== '') {
-                        break;
-                    }
+        if (prev
+            && ViperUtil.trim(ViperUtil.getNodeTextContent(prev)) === ''
+            && !prev.firstElementChild
+        ) {
+            ViperUtil.remove(prev);
+        }
 
-                    nextEmptyElem = nextEmptyElem.nextSibling;
-                }
-            } else if (range.startOffset === 0
-                && (ViperUtil.trim(ViperUtil.getNodeTextContent(prev)) === ''
-                ||  ViperUtil.getHtml(prev) === '&nbsp;')
-            ) {
-                ViperUtil.remove(prev);
-            }
-        }//end if
-
-        var range = this.viper.getViperRange();
-        range.setStart(range._getFirstSelectableChild(nextSibling), 0);
-        range.collapse(true);
-        ViperSelection.addRange(range);
+        this.viper.moveCaretAway(hr);
 
         this.viper.fireNodesChanged('ViperCoreStylesPlugin:hr');
         this.viper.ViperHistoryManager.end();
-
         this.viper.fireSelectionChanged(null, true);
 
     },

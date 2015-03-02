@@ -289,7 +289,8 @@ function gActBubble()
 
 function gStringLoc(str)
 {
-    var loc = null;
+    var range = viper.getCurrentRange();
+    var loc   = null;
     if (window.find(str, true, false, true, true, true) === true) {
         loc = viper.getCurrentRange().rangeObj.getBoundingClientRect();
         loc = {
@@ -299,6 +300,9 @@ function gStringLoc(str)
             y2: loc.bottom
         };
     }
+
+    // Reset selection.
+    ViperSelection.addRange(range);
 
     return loc;
 
@@ -373,6 +377,8 @@ function useTest(id)
 
     viper.getHistoryManager().clear();
     viper.getHistoryManager().add();
+
+    ViperSelection.removeAllRanges();
 
 }
 

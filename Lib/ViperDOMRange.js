@@ -545,8 +545,8 @@ ViperDOMRange.prototype = {
 
         var selChild = this._getFirstSelectableChild(container, brIsSelectable);
         if (selChild !== null
-            && (brIsSelectable === true && ViperUtil.isTag(selChild, 'br') === true)
-            || (skipSpaceTextNodes !== true || ViperUtil.trim(selChild.data) !== '')
+            && ((brIsSelectable === true && ViperUtil.isTag(selChild, 'br') === true)
+            || (skipSpaceTextNodes !== true || ViperUtil.trim(selChild.data) !== ''))
         ) {
             return selChild;
         }
@@ -617,13 +617,24 @@ ViperDOMRange.prototype = {
 
     },
 
-    moveCaretAway: function(sourceElement, parentElement, defaultTagName)
+    moveCaretAway: function(sourceElement, parentElement, defaultTagName, back)
     {
         var next       = true;
-        var selectable = this.getNextContainer(sourceElement, null, true, true);
-        if (!selectable || (selectable !== parentElement && ViperUtil.isChildOf(selectable, parentElement) === false) === true) {
-            next       = false;
+        var selectable = null;
+
+        if (back === true) {
+            next = false;
             selectable = this.getPreviousContainer(sourceElement, null, true, true);
+            if (!selectable || (selectable !== parentElement && ViperUtil.isChildOf(selectable, parentElement) === false) === true) {
+                next       = true;
+                selectable = this.getNextContainer(sourceElement, null, true, true);
+            }
+        } else {
+            selectable = this.getNextContainer(sourceElement, null, true, true);
+            if (!selectable || (selectable !== parentElement && ViperUtil.isChildOf(selectable, parentElement) === false) === true) {
+                next       = false;
+                selectable = this.getPreviousContainer(sourceElement, null, true, true);
+            }
         }
 
         if (!selectable || (selectable !== parentElement && ViperUtil.isChildOf(selectable, parentElement) === false) === true) {
@@ -641,7 +652,7 @@ ViperDOMRange.prototype = {
             this.collapse(true);
             ViperSelection.addRange(this);
             return false;
-        } else if (next === true) {
+        } else if (next === true || selectable.nodeType !== ViperUtil.TEXT_NODE) {
             this.setStart(selectable, 0);
             this.collapse(true);
         } else {
