@@ -7,6 +7,7 @@ function MatrixImagePlugin(viper)
     this._inlineUploadForm    = null;
     this._uploading = false;
     this._droppedImageToUpload = [];
+    this._uploadId = 0;
 
 }
 
@@ -100,6 +101,20 @@ MatrixImagePlugin.prototype = {
 
         });
 
+        // when you click on a pasted image, pop up the upload menu directly
+        this.viper.registerCallback('Viper:mouseDown', 'MatrixImagePlugin', function(e) {
+            var target = ViperUtil.getMouseEventTarget(e);
+            self._ieImageResize = null;
+
+            if (ViperUtil.isTag(target, 'img') === true) {
+                if(target.dataset.imagepaste && target.dataset.imagepaste == 'true') {
+                    setTimeout(function(){ 
+                        $('#' + self.viper.getId() + '-vitpImage').mousedown(); 
+                    }, 250);
+                    
+                }
+            }
+        });
 
         return contents;
 
@@ -235,6 +250,7 @@ MatrixImagePlugin.prototype = {
         $form.append('<input type="hidden" name="base64" value="">');
         $form.append('<input type="hidden" name="file_name" value="">');
         $form.append('<input type="hidden" name="image_preview_id" value="">');
+        $form.append('<input type="hidden" name="upload_id" value="">');
         $form.append('<input type="button" id="'+ prefix + 'submit_file" style="display:none;" value="Upload File to Server">');
 
 
@@ -389,8 +405,8 @@ MatrixImagePlugin.prototype = {
 
                    
                     // if it's a image preview, we have to locate the preview image and replace it
-                    if(response.image_preview_id) {
-                        self._setDroppedImageErrorStatus(response.image_preview_id, response.error);
+                    if(response.image_preview_id && response.upload_id) {
+                        self._setDroppedImageErrorStatus(response.image_preview_id, response.error, response.upload_id);
                     }
                     else {
                         // no need to reset url field if it's a image preview to upload, user can just change file name in the url to try again
@@ -414,7 +430,7 @@ MatrixImagePlugin.prototype = {
                         uploadForm.get(0).reset();
 
                         // if it's a image preview, we have to locate the preview image and replace it
-                        if(response.image_preview_id) {
+                        if(response.image_preview_id && response.upload_id) {
                             var image = self._resizeImage;
                             if (ViperUtil.isBrowser('msie', '<11') === true) {
                                    image = self._ieImageResize;
@@ -423,7 +439,7 @@ MatrixImagePlugin.prototype = {
                             if(image && image.dataset.id && image.dataset.id == response.image_preview_id) {
                                 $('.VipperDroppedImage-msgBox').remove();
                             }
-                            self._replacePreviewWithOriginal(response.image_preview_id, response.assetid, response.alt, response.title);
+                            self._replacePreviewWithOriginal(response.image_preview_id, response.assetid, response.alt, response.title, response.upload_id);
                         }
                         else {
                             // otherwise just set the current selected image tag
@@ -602,6 +618,12 @@ MatrixImagePlugin.prototype = {
             //let's just set the file name from what user inputs
             var fileName   = tools.getItem(matrixPrefix + ':fileInput').getValue();
             uploadForm.find('input[name=file_name]').val(fileName);
+
+
+            // add a unique upload batch id
+            this._uploadId = this._uploadId + 1;
+            uploadForm.find('input[name=upload_id]').val(this._uploadId);
+
 
             // if we are about to upload a dropped image preview
             // we need to set CSS class
@@ -861,16 +883,6 @@ MatrixImagePlugin.prototype = {
             preview_img.setAttribute('data-filename', fileInfo.name || '');
             preview_img.setAttribute('data-id', newLength - 1);
 
-            // when click on this special preview image, just popup the inline image plugin
-            $(preview_img).mousedown(function(event) {
-                if(preview_img.dataset.imagepaste && preview_img.dataset.imagepaste == 'true') {
-                    setTimeout(function(){ 
-                        $('#' + self.viper.getId() + '-vitpImage').mousedown(); 
-                    }, 250);
-                    
-                }
-            })
-
             // insert a preview
             self._rangeToImage(range, preview_img);
         }
@@ -1010,8 +1022,9 @@ MatrixImagePlugin.prototype = {
                 $('.Viper-imageUploadFileRow').hide();
     },
 
-    _replacePreviewWithOriginal: function(previewId, assetId, alt, title) {
-        var image = $('[data-imagepaste="true"][data-id="' + previewId +'"]').get(0);
+    _replacePreviewWithOriginal: function(previewId, assetId, alt, title, uploadId) {
+        // is this a dropped in image preview?
+        var image = $('[data-imagepaste="true"][data-upload-id="' + uploadId +'"][data-id="' + previewId +'"]').get(0);
         if(image) {
             this.setImageURL(image, './?a=' + assetId);
             this.setImageAlt(image, alt);
@@ -1032,14 +1045,16 @@ MatrixImagePlugin.prototype = {
             image = this._ieImageResize;
         }
         if(image && image.dataset.imagepaste && image.dataset.imagepaste == 'true') {
-                $(image).attr('data-imagepaste-status', 'loading')
+                $(image).attr('data-imagepaste-status', 'loading');
+                $(image).attr('data-upload-id', this._uploadId);
         }
     },
 
 
 
-    _setDroppedImageErrorStatus: function(previewId, errorMessage) {
-        var image = $('[data-imagepaste="true"][data-id="' + previewId +'"]').get(0);
+    _setDroppedImageErrorStatus: function(previewId, errorMessage, uploadId) {
+         // is this a dropped in image preview?
+        var image = $('[data-imagepaste="true"][data-upload-id="' + uploadId +'"][data-id="' + previewId +'"]').get(0);
         if(image) {
             $(image).attr('data-imagepaste-status', 'error')
             $(image).attr('data-error', errorMessage)
@@ -1055,6 +1070,7 @@ MatrixImagePlugin.prototype = {
         if(image && image.dataset.imagepaste && image.dataset.imagepaste == 'true') {
                 $(image).removeAttr('data-imagepaste');
                 $(image).removeAttr('data-imagepaste-status');
+                $(image).removeAttr('data-upload-id');
         }
     }
 
