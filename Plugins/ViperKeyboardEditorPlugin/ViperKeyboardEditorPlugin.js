@@ -408,13 +408,11 @@ ViperKeyboardEditorPlugin.prototype = {
                 if (startNode.parentNode === blockParent
                     && startNode.nodeType === ViperUtil.TEXT_NODE
                     && ViperUtil.trim(startNode.data) === ''
+                    && (!startNode.previousSibling
+                    || startNode.previousSibling.data === "\n")
                 ) {
-                    if (startNode.nextSibling
-                        && !startNode.nextSibling.nextSibling
-                        && startNode.nextSibling.nodeType === ViperUtil.TEXT_NODE
-                        && ViperUtil.trim(startNode.nextSibling.data) === ''
-                    ) {
-                        ViperUtil.remove(startNode.nextSibling);
+                    while (startNode.nextSibling) {
+                       ViperUtil.remove(startNode.nextSibling);
                     }
 
                     ViperUtil.remove(startNode);

@@ -173,21 +173,21 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteFormatsUnitTest extends Abstract
         sleep(1);
         $this->type('First paste ');
         $this->sikuli->keyDown('Key.CMD + v');
-        $this->assertHTMLMatch('<p>First paragraph</p><pre>Lorum this is more content %1% to test %2% First paste Lorum this is more content %1% to test %2%</pre>');
+        $this->assertHTMLMatch('<p>First paragraph</p><pre>Lorum this is more content %1% to test %2% First paste &lt;pre&gt;Lorum this is more content %1% to test %2%&lt;/pre&gt;</pre>');
 
-        // Paste again to make sure the character is still there
+        // Paste again to make sure the character is still there.
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->type('Second paste ');
         $this->sikuli->keyDown('Key.CMD + v');
-        $this->assertHTMLMatch('<p>First paragraph</p><pre>Lorum this is more content %1% to test %2% First paste Lorum this is more content %1% to test %2% Second Paste Lorum this is more content %1% to test %2%</pre>');
+        $this->assertHTMLMatch('<p>First paragraph</p><pre>Lorum this is more content XAX to test XBX First paste &lt;pre&gt;Lorum this is more content XAX to test XBX&lt;/pre&gt; Second paste &lt;pre&gt;Lorum this is more content XAX to test XBX&lt;/pre&gt;   </pre>');
 
         // Paste again in a new pre section
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
-        $this->assertHTMLMatch('<p>First paragraph</p><pre>Lorum this is more content %1% to test %2% First paste Lorum this is more content %1% to test %2% Second paste Lorum this is more content %1% to test %2%</pre><pre>Lorum this is more content %1% to test %2%</pre>');
+        $this->assertHTMLMatch('<p>First paragraph</p><pre>Lorum this is more content XAX to test XBX First paste &lt;pre&gt;Lorum this is more content XAX to test XBX&lt;/pre&gt; Second paste &lt;pre&gt;Lorum this is more content XAX to test XBX&lt;/pre&gt;</pre><pre>Lorum this is more content XAX to test XBX</pre>');
 
     }//end testCopyAndPastePreFormat()
 
