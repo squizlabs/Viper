@@ -138,7 +138,7 @@ ViperCopyPastePlugin.prototype = {
                         ViperUtil.preventDefault(e);
                         return false;
                     }
-
+console.info(pasteContent)
                     ViperUtil.setHtml(self.pasteElement, pasteContent);
                     self._handleFormattedPasteValue((self.pasteType === 'formattedClean'));
                 } else {
@@ -1299,15 +1299,10 @@ ViperCopyPastePlugin.prototype = {
         ViperUtil.setHtml(tmp, content);
 
         var docParent = null;
-        if (ViperUtil.isBrowser('msie', '>=11') === true) {
-            docParent = tmp.firstChild;
-        } else if (ViperUtil.isBrowser('msie', '8') === true) {
+        if (ViperUtil.isBlockElement(tmp.firstChild) === true) {
             docParent = tmp;
         } else {
-            docParent = ViperUtil.find(tmp, '[id^="docs-internal-guid-"]');
-            if (docParent.length === 1) {
-                docParent = docParent[0];
-            }
+            docParent = tmp.firstChild;
         }
 
         tmp = docParent;
