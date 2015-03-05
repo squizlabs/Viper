@@ -138,7 +138,7 @@ ViperCopyPastePlugin.prototype = {
                         ViperUtil.preventDefault(e);
                         return false;
                     }
-console.info(pasteContent)
+
                     ViperUtil.setHtml(self.pasteElement, pasteContent);
                     self._handleFormattedPasteValue((self.pasteType === 'formattedClean'));
                 } else {
