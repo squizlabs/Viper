@@ -148,7 +148,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('insertHr', NULL));
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove', 'disabled'));
-        $this->assertTrue($this->topToolbarButtonExists('anchorID', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('charmap', NULL));
         $this->assertTrue($this->topToolbarButtonExists('searchReplace', NULL));
         $this->assertTrue($this->topToolbarButtonExists('langtools', 'disabled'));
@@ -179,7 +179,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('insertHr', NULL));
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove', 'disabled'));
-        $this->assertTrue($this->topToolbarButtonExists('anchorID', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('charmap', NULL));
         $this->assertTrue($this->topToolbarButtonExists('searchReplace', NULL));
         $this->assertTrue($this->topToolbarButtonExists('langtools', 'disabled'));
