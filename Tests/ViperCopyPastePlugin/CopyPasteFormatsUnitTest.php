@@ -193,6 +193,22 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteFormatsUnitTest extends Abstract
 
 
     /**
+     * Test pasting HTML into a Pre section.
+     *
+     * @return void
+     */
+    public function testPastingHtmlIntoPre()
+    {
+        $this->useTest(1);
+
+        $this->selectKeyword(1);
+        $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/CopyPasteFiles/HtmlCode.txt'));
+        $this->assertHTMLMatch('<p>First paragraph</p><pre>Lorum this is more content &lt;strong&gt;strong tags&lt;/strong&gt; &lt;ul&gt;&lt;li&gt;List item&lt;/li&gt;&lt;li&gt;List item&lt;/li&gt;&lt;/ul&gt;  to test XBX</pre>');
+        
+    }//end testPastingHtmlIntoPre()
+
+
+    /**
      * Test copying and pasting different block elements.
      *
      * @return void
