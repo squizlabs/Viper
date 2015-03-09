@@ -57,6 +57,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteInTablesUnitTest extends Abstrac
     {
         // Copy and paste content inside table
         $this->selectKeyword(2);
+        sleep(2);
         $this->selectInlineToolbarLineageItem(3);
         $this->sikuli->keyDown('Key.CMD + c');
         
@@ -81,6 +82,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteInTablesUnitTest extends Abstrac
 
         // Copy and paste a row from the table outside the table
         $this->selectKeyword(2);
+        sleep(2);
         $this->selectInlineToolbarLineageItem(2);
         $this->sikuli->keyDown('Key.CMD + c');
         
