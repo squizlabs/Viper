@@ -773,6 +773,22 @@ ViperKeyboardEditorPlugin.prototype = {
         }
 
         if (range.startOffset !== 0) {
+            if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                && range.collapsed === true
+                && ViperUtil.isBrowser('msie', '<11')
+            ) {
+                // Delete 1 char in IE.... This resolves the issue where <a href="" />T* backspace here sets the
+                // range to incorrect position..
+                range.startContainer.splitText(range.startOffset);
+                range.startContainer.data = range.startContainer.data.substring(0, range.startOffset - 1);
+                range.startContainer.data += range.startContainer.nextSibling.data;
+                ViperUtil.remove(range.startContainer.nextSibling);
+                range.setStart(range.startContainer, range.startOffset - 1)
+                range.collapse(true);
+                ViperSelection.addRange(range);
+                return false;
+            }
+
             // No need to handle any case where caret is not at the start of a node.
             return;
         }
