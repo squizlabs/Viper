@@ -541,6 +541,7 @@ ViperFormatPlugin.prototype = {
             this._updateDefinedStylesList();
         }
 
+        attrClass = ViperUtil.trim(attrClass);
         return attrClass;
 
     },
