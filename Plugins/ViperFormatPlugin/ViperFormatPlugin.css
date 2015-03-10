@@ -1,0 +1,62 @@
+.ViperFormatPlugin-stylePickerButton {
+    position: relative;
+    clear: both;
+    margin-bottom: 0.6em;
+    text-align: left;
+    text-shadow: none;
+    color: #FFF;
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid #393939;
+    border-radius: 0.4em 0.4em 0.4em 0.4em;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 0 rgba(255, 255, 255, 0.1);
+    font-size: 1.4em;
+    cursor: pointer;
+    padding: 0.5em 0;
+    text-align: center;
+}
+
+.ViperFormatPlugin-stylePickerButton:after {
+    content: "";
+    position: absolute;
+    background: transparent url(../../Images/viperToolsSprite.png) 0 -80px no-repeat;
+    width: 9px;
+    height: 14px;
+    right: 10px;
+    top: 50%;
+    margin-top: -7px;
+}
+
+.ViperFormatPlugin-stylePicker-title {
+    line-height: 30px;
+    text-shadow: none;
+    color: #b8b8b8;
+    font-size: 1.2em;
+    border-top: 1px solid #333;
+    box-shadow: 0 1px 0 #666 inset;
+    margin-top: 5px;
+}
+
+.ViperFormatPlugin-styleListItem.Viper-textbox-label {
+    text-shadow: none;
+}
+
+.ViperFormatPlugin-styleListItem-name {
+    font-size: 13px;
+    margin-left: 5px;
+}
+
+.ViperFormatPlugin-styleListItem-classes {
+    font-size: 11px;
+    color: #8B8B8B;
+    margin-left: 5px;
+}
+
+.ViperFormatPlugin-styleListItem-remove.Viper-textbox-action {
+    background-position: 0 -140px;
+    display: block;
+    opacity: 0.5;
+}
+
+.ViperFormatPlugin-styleListItem-remove.Viper-textbox-action:hover {
+    opacity: 1;
+}

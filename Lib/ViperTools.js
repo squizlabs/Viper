@@ -1719,6 +1719,8 @@ ViperTools.prototype = {
                         if (prevSubSection) {
                             ViperUtil.removeClass(prevSubSection, 'Viper-active');
 
+                            tools.viper.fireCallbacks('ViperToolbar:subsectionClosed', this._activeSection);
+
                             if (this._subSectionButtons[this._activeSection]) {
                                 ViperUtil.removeClass(tools.getItem(this._subSectionButtons[this._activeSection]).element, 'Viper-selected');
                             }
@@ -1812,14 +1814,14 @@ ViperTools.prototype = {
                         (function(widgetid) {
                             tools.viper.registerCallback(
                                 'ViperTools:changed:' + widgetid,
-                                'ViperToolbarPlugin',
+                                'ViperToolbarPlugin:' + id,
                                 function() {
                                     var subSectionWidgets = self._subSectionActionWidgets[subSectionid];
                                     var c      = subSectionWidgets.length;
                                     var enable = true;
                                     for (var j = 0; j < c; j++) {
                                         var widget = tools.getItem(subSectionWidgets[j]);
-                                        if (widget.required === true && ViperUtil.trim(widget.getValue()) === '') {
+                                        if (widget && widget.required === true && ViperUtil.trim(widget.getValue()) === '') {
                                             enable = false;
                                             break;
                                         }
@@ -2184,6 +2186,141 @@ ViperTools.prototype = {
         );
 
         return tooltip;
+
+    },
+
+    createPopoutPanel: function(id, contentElement) {
+        var panel = document.createElement('div');
+        ViperUtil.addClass(panel, 'Viper-popoutPanel ViperUtil-hidden');
+
+        if (contentElement) {
+            panel.appendChild(contentElement);
+        }
+
+        this.viper.addElement(panel);
+
+        // Positioning.
+        this.addItem(
+            id,
+            {
+                type: 'popoutPanel',
+                element: panel,
+                show: function(target) {
+                    ViperUtil.removeClass(panel, 'ViperUtil-hidden');
+                    ViperUtil.determinePosition(
+                        panel,
+                        {
+                            targetElement: target,
+                            position: 'right',
+                            arrowPositions: ['left.middle', 'left.top', 'left.bottom']
+                        }
+                    );
+                },
+                hide: function() {
+                    ViperUtil.addClass(panel, 'ViperUtil-hidden');
+                },
+                isOpen: function() {
+                    return !ViperUtil.hasClass(panel, 'ViperUtil-hidden');
+                }
+            }
+        );
+
+        return panel;
+
+    },
+
+    createSelectionList: function(id, listItems, itemClickedCallback) {
+        var self = this;
+        var list = document.createElement('ol');
+        ViperUtil.addClass(list, 'Viper-selectionList');
+
+        for (var itemid in listItems) {
+            var li = document.createElement('li');
+            ViperUtil.attr(li, 'data-id', itemid);
+
+            if (typeof listItems[itemid] === 'string') {
+                ViperUtil.setHtml(li, listItems[itemid]);
+            } else {
+                ViperUtil.setHtml(li, listItems[itemid].content);
+
+                if (listItems[itemid].selected === true) {
+                    ViperUtil.addClass(li, 'ViperUtil-selectionList-selected');
+                }
+            }
+
+            list.appendChild(li);
+        }
+
+        ViperUtil.addEvent(
+            list,
+            'click',
+            function (e) {
+                if (ViperUtil.isTag(e.target, 'li') === true) {
+                    ViperUtil.toggleClass(e.target, 'selected');
+                    self.viper.fireCallbacks('ViperTools:changed:' + id);
+                    if (itemClickedCallback) {
+                        itemClickedCallback.call(
+                            this,
+                            ViperUtil.attr(e.target, 'data-id'),
+                            ViperUtil.hasClass(e.target, 'selected'),
+                            e.target
+                        );
+                    }
+                }
+            }
+        );
+
+        ViperUtil.addEvent(
+            list,
+            'click',
+            function(e) {
+            }
+        );
+
+        this.addItem(
+            id,
+            {
+                type: 'selectionList',
+                element: list,
+                setSelectedItems: function(itemids, isInitialValue) {
+                    var items = ViperUtil.getTag('li', list);
+                    var ln = items.length;
+                    for (var i = 0; i < ln; i++) {
+                        if (ViperUtil.inArray(ViperUtil.attr(items[i], 'data-id'), itemids) === true) {
+                            ViperUtil.addClass(items[i], 'selected');
+                        } else {
+                            ViperUtil.removeClass(items[i], 'selected');
+                        }
+                    }
+
+                    if (isInitialValue !== true) {
+                        self.viper.fireCallbacks('ViperTools:changed:' + id);
+                    }
+                },
+                getSelectedItems: function() {
+                    var selectedItems = ViperUtil.getClass('selected', list);
+                    var items         = [];
+                    for (var i = 0; i < selectedItems.length; i++) {
+                        items.push(ViperUtil.attr(selectedItems[i], 'data-id'));
+                    }
+
+                    return items;
+                },
+                removeFromSelection: function(itemid) {
+                    var items = ViperUtil.getClass('selected', list);
+                    var ln = items.length;
+                    for (var i = 0; i < ln; i++) {
+                        if (ViperUtil.attr(items[i], 'data-id') === itemid) {
+                            ViperUtil.removeClass(items[i], 'selected');
+                            self.viper.fireCallbacks('ViperTools:changed:' + id);
+                            break;
+                        }
+                    }
+                }
+            }
+        );
+
+        return list;
 
     },
 

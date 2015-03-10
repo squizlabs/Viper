@@ -1565,10 +1565,9 @@ Viper.prototype = {
 
             if (ViperUtil.trim(ViperUtil.getHtml(this.element)) === '') {
                 this.initEditableElement();
-
-                // Update the range var.
-                range = this.getCurrentRange();
             }
+
+            range = this.getCurrentRange();
 
             if (range.startContainer === range.endContainer && this.element === range.startContainer) {
                 // The whole editable element is selected. Need to remove everything
@@ -5017,7 +5016,7 @@ Viper.prototype = {
                     self._fireCallbacks(callbacks, data, doneCallback, retVal);
                 });
             } catch (e) {
-                console.error(e, callback);
+                console.error(e, callback, e.stack);
             }
 
             return this._fireCallbacks(callbacks, data, doneCallback, retVal);

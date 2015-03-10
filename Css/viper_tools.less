@@ -1104,3 +1104,135 @@
     min-width: 39px;
   }
 }
+
+.Viper-popoutPanel {
+    position: absolute;
+    background: #54535A url(../../Images/bgTexture-dark1.gif) 0 0 repeat;
+    z-index: 1100;
+    border-radius: 5px;
+    border: 1px solid #222;
+    padding: 6px;
+}
+
+.Viper-popoutPanel:before {
+    right: 100%;
+    top: 50%;
+    border: solid transparent;
+    content: "";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(43, 43, 43, 0);
+    border-right-color: #2b2b2b;
+    border-width: 12px;
+    margin-top: -12px;
+}
+
+.Viper-popoutPanel.ViperUtil-arrowleft {
+    margin-left: 10px;
+}
+
+.Viper-popoutPanel.ViperUtil-arrowleft.ViperUtil-aligntop:before {
+    top: 0;
+}
+
+.Viper-popoutPanel.ViperUtil-arrowleft.ViperUtil-alignbottom:before {
+    top: 100%;
+    margin-top: -25px;
+}
+
+.Viper-popoutPanel.ViperUtil-alignbottom {
+    margin-top: -15px;
+}
+
+.Viper-popoutPanel.ViperUtil-arrowbottom {
+    margin-top: -12px;
+}
+
+.Viper-popoutPanel.ViperUtil-arrowtop {
+    margin-top: 12px;
+}
+
+.Viper-popoutPanel.ViperUtil-arrowtop:before {
+    top: -12px;
+    left: 50%;
+    border-color: rgba(43, 43, 43, 0);
+    border-bottom-color: #2b2b2b;
+    margin-left: -12px;
+}
+
+.Viper-popoutPanel.ViperUtil-arrowright:before {
+    left: 100%;
+    top: 50%;
+    border-color: rgba(43, 43, 43, 0);
+    border-left-color: #2b2b2b;
+    border-width: 12px;
+    margin-top: -12px;
+}
+
+.Viper-popoutPanel.ViperUtil-arrowright.ViperUtil-aligntop {
+    margin-top: 15px;
+}
+
+.Viper-popoutPanel.ViperUtil-arrowright.ViperUtil-aligntop:before {
+    top: 14px;
+}
+
+.Viper-popoutPanel.ViperUtil-arrowbottom {
+    top: 100%;
+    left: 50%;
+    border-color: rgba(43, 43, 43, 0);
+    border-top-color: #2b2b2b;
+    border-width: 12px;
+    margin-left: -12px;
+}
+
+
+.Viper-selectionList {
+    color: #FFF;
+    font-family: Arial,Sans Serif;
+    margin: 0;
+    font-size: 12px;
+    list-style: none;
+    box-shadow: 0 1px 0 #666;
+    margin-bottom: 30px;
+}
+
+.Viper-selectionList li {
+    padding: 6px 60px 6px 8px;
+    border-bottom: 1px solid #333;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.1) inset;
+    cursor: pointer;
+    position: relative;
+}
+
+.Viper-selectionList li:after {
+    content: "";
+    position: absolute;
+    border: 2px solid #666;
+    border-radius: 10px;
+    width: 14px;
+    height: 14px;
+    right: 5px;
+    margin-top: -9px;
+    top: 50%;
+}
+
+.Viper-selectionList li.selected:after {
+    background-color: #5A8BD0;
+    border-color: #5A8BD0;
+}
+
+.Viper-selectionList li:first-child {
+    box-shadow: none;
+}
+
+.Viper-selectionList li.selected {
+    background-color: rgba(0, 0, 0, 0.25);
+    color: #5A8BD0;
+}
+
+.ViperUtil-hidden {
+    display: none;
+}
