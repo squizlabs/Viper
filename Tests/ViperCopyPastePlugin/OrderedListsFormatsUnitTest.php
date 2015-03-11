@@ -38,12 +38,6 @@ class Viper_Tests_ViperCopyPastePlugin_OrderedListsFormatsUnitTest extends Abstr
                     case 'chrome':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsGoogleChrome/WordDocs/OrderedListsFormats.txt');
                         break;
-                    case 'ie8':
-                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsIE8/WordDocs/OrderedListsFormats.txt');
-                        break;
-                    case 'ie9':
-                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsIE9/WordDocs/OrderedListsFormats.txt');
-                        break;
                     case 'ie10':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsIE10/WordDocs/OrderedListsFormats.txt');
                         break;
