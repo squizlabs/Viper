@@ -1118,22 +1118,27 @@ ViperKeyboardEditorPlugin.prototype = {
         if (range.collapsed === false) {
             var nodeSelection = range.getNodeSelection();
             if (nodeSelection) {
-                var parents = ViperUtil.getSurroundingParents(nodeSelection, null, null, this.viperElement);
-                if (parents.length > 0) {
-                    var topParent = parents.pop();
-                    if (topParent === this.viper.getViperElement()) {
-                        if (parents.length > 0) {
-                            nodeSelection = parents.pop();
+                if (nodeSelection === this.viper.getViperElement()) {
+                    ViperUtil.setHtml(nodeSelection, '');
+                    this.viper.initEditableElement();
+                } else {
+                    var parents = ViperUtil.getSurroundingParents(nodeSelection, null, null, this.viperElement);
+                    if (parents.length > 0) {
+                        var topParent = parents.pop();
+                        if (topParent === this.viper.getViperElement()) {
+                            if (parents.length > 0) {
+                                nodeSelection = parents.pop();
+                            }
+                        } else {
+                            nodeSelection = topParent;
                         }
-                    } else {
-                        nodeSelection = topParent;
                     }
+
+                    this.viper.moveCaretAway(nodeSelection);
+                    ViperUtil.remove(nodeSelection);
+                    ViperSelection.addRange(range);
                 }
 
-               this.viper.moveCaretAway(nodeSelection);
-
-                ViperUtil.remove(nodeSelection);
-                ViperSelection.addRange(range);
                 this.viper.fireNodesChanged();
                 this.viper.fireSelectionChanged();
                 return false;
