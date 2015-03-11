@@ -713,12 +713,13 @@ ViperIERange.prototype = {
         var element = textRange.parentElement();
         var range   = element.ownerDocument.body.createTextRange();
         range.moveToElementText(element);
+
         try {
             range.setEndPoint("EndToStart", textRange);
         } catch (e) {
         }
 
-        var rangeLength = range.text.length;
+        var rangeLength = range.text.replace(/\r\n/g, '').length;
         var nodeLength  = 0;
 
         // Choose Direction.
@@ -734,7 +735,7 @@ ViperIERange.prototype = {
             } catch (e) {
             }
 
-            rangeLength = range.text.length;
+            rangeLength = range.text.replace(/\r\n/g, '').length;
         }
 
         // Loop through child nodes.
@@ -767,13 +768,7 @@ ViperIERange.prototype = {
                 break;
 
                 case ViperUtil.ELEMENT_NODE:
-                    if (ViperUtil.isStubElement(node) === true && ViperUtil.isTag(node, 'img') === false) {
-                        // Note: |<BR>|
-                        // Len:  1    2.
-                        nodeLength = 2;
-                    } else {
-                        nodeLength = node.innerText.length;
-                    }
+                    nodeLength = node.innerText.length;
 
                     if (direction === 1) {
                         range.moveStart("character", nodeLength);
@@ -783,11 +778,6 @@ ViperIERange.prototype = {
 
                     rangeLength = (rangeLength - nodeLength);
 
-                    // Note: rangeLength might go in to negative due to
-                    // stub elements. If a there is "t</strong><br/>Test"
-                    // then there will be another loop to get to the "Test"
-                    // however, because BR.length = 2, then some times
-                    // rangeLength becomes -2...
                     if (rangeLength < 0) {
                         rangeLength = 0;
                     }
@@ -851,7 +841,11 @@ ViperIERange.prototype = {
             if (tmpNode.nodeType === ViperUtil.ELEMENT_NODE) {
                 nodeLength = tmpNode.innerText.length;
                 if (ViperUtil.isStubElement(tmpNode) === true) {
-                    nodeLength = 1;
+                    if (ViperUtil.isBrowser('msie', '8') === true) {
+                        nodeLength = 1;
+                    } else {
+                        nodeLength = 2;
+                    }
                 } else if (ViperUtil.isBlockElement(tmpNode) === true) {
                     nodeLength++;
                 }
