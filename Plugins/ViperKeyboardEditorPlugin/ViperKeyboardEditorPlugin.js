@@ -498,6 +498,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 && startNode.nodeType === ViperUtil.ELEMENT_NODE
                 && (ViperUtil.isBrowser('firefox') !== true || !(ViperUtil.isTag(startNode, 'br') === true && (!blockParent || ViperUtil.isTag(blockParent, 'li') === true)))
                 && ViperUtil.isStubElement(startNode) === false
+                && ViperUtil.isBlockElement(startNode) === true
             ) {
                 var elem = document.createElement(defaultTagName);
                 ViperUtil.setHtml(elem, '<br />');
