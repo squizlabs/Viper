@@ -1141,7 +1141,7 @@ ViperCopyPastePlugin.prototype = {
                                 insAfter = firstChild;
                             }
                         } else if (ViperUtil.isTag(ctNode, 'table') === true
-                            && ViperUtil.getParents(prevBlock, 'table').length > 0
+                            && ViperUtil.getParents(prevBlock, 'table', this.viper.getViperElement()).length > 0
                         ) {
                             // Pasting table inside a table is not allowed. Just paste the tables content.
                             var tableContentTags = 'td,th,caption';
