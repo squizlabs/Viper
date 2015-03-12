@@ -60,7 +60,7 @@ class Viper_Tests_ViperLinkPlugin_ImageWithLinkUnitTest extends AbstractViperUni
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Squiz Labs');
         $this->sikuli->keyDown('Key.ENTER');        
-        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>XAX XuT</p><p><img alt="" height="167" src="http://localhost/~dsherwood/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" />Lorem ipsum dolor sit amet, consectetur<a href="www.squizlabs.com" title="Squiz Labs">XBX</a> elit. Curabitur lacinia nisl quis mattis laoreet. Donec convallis consectetur dolor. Vestibulum aliquam interdum sapien, eget placerat eros fringilla sed.</p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>XAX XuT</p><p><img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" />Lorem ipsum dolor sit amet, consectetur<a href="www.squizlabs.com" title="Squiz Labs">XBX</a> elit. Curabitur lacinia nisl quis mattis laoreet. Donec convallis consectetur dolor. Vestibulum aliquam interdum sapien, eget placerat eros fringilla sed.</p><p>LABS is ORSM</p>');
 
         // Using the top toolbar
         $this->useTest(2);
@@ -70,7 +70,7 @@ class Viper_Tests_ViperLinkPlugin_ImageWithLinkUnitTest extends AbstractViperUni
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Squiz Labs');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>XAX XuT</p><p><img alt="" height="167" src="http://localhost/~dsherwood/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" />Lorem ipsum dolor sit amet, consectetur<a href="www.squizlabs.com" title="Squiz Labs">XBX</a> elit. Curabitur lacinia nisl quis mattis laoreet. Donec convallis consectetur dolor. Vestibulum aliquam interdum sapien, eget placerat eros fringilla sed.</p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>XAX XuT</p><p><img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" />Lorem ipsum dolor sit amet, consectetur<a href="www.squizlabs.com" title="Squiz Labs">XBX</a> elit. Curabitur lacinia nisl quis mattis laoreet. Donec convallis consectetur dolor. Vestibulum aliquam interdum sapien, eget placerat eros fringilla sed.</p><p>LABS is ORSM</p>');
 
     }//end testLinkingContentInALineWithAnImage()
 
