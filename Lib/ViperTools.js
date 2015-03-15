@@ -2316,6 +2316,17 @@ ViperTools.prototype = {
                             break;
                         }
                     }
+                },
+                hideItem: function(itemid) {
+                    var item = this._getItem(itemid);
+                    ViperUtil.setStyle(item, 'display', 'none');
+                },
+                showItem: function(itemid) {
+                    var item = this._getItem(itemid);
+                    ViperUtil.setStyle(item, 'display', 'block');
+                },
+                _getItem: function(itemid) {
+                    return ViperUtil.find(list, '[data-id="' + itemid + '"]')[0];
                 }
             }
         );

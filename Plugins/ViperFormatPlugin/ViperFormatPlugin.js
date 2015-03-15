@@ -98,7 +98,25 @@ ViperFormatPlugin.prototype = {
 
     },
 
-    setSettings: function(settings) {
+    setSettings: function (settings) {
+        /*
+            Available settings:
+
+            styles:
+                Pre defined styles can be provided in following format:
+                styles: {
+                    'Friendly Name': 'class1 class2 ...',
+                    'Friendly Name 2': {
+                        classNames: 'class1 class2 ...',
+                        showFor: 'img,p',
+                        hideFor: '*'
+                    }
+                }
+
+                Notes:
+                    - To specify a text selection in the showFor and hideFor filters use "text-selection".
+        */
+
         if (settings.styles) {
             this._custStyles = settings.styles;
             ViperUtil.removeClass(this._stylePickerRow, 'ViperUtil-hidden');
@@ -106,8 +124,44 @@ ViperFormatPlugin.prototype = {
             var items    = {};
             var expanded = {};
             for (var name in this._custStyles) {
-                items[this._custStyles[name]] = name;
-                expanded[this._custStyles[name]] = this._custStyles[name].split(' ');
+                var classNames = '';
+                var showFor    = '';
+                var hideFor    = '';
+                if (typeof this._custStyles[name] === 'string') {
+                    classNames = this._custStyles[name].split(' ');
+                } else if (typeof this._custStyles[name] === 'object' && this._custStyles[name].classNames) {
+                    // Extra settings provided for this style.
+                    classNames = this._custStyles[name].classNames.split(' ');
+
+                    // If the showFor settings is not a * (show for everything) then get the list of tags to show for.
+                    // Note that showFor overrides the hideFor setting.
+                    if (this._custStyles[name].showFor) {
+                        if (this._custStyles[name].showFor === '*') {
+                            showFor = '*';
+                        } else {
+                            showFor = this._custStyles[name].showFor.split(',');
+                        }
+                    }
+
+                    // Hide for setting.
+                    if (this._custStyles[name].hideFor) {
+                        if (this._custStyles[name].hideFor === '*') {
+                            hideFor = '*';
+                        } else {
+                            hideFor = this._custStyles[name].hideFor.split(',');
+                        }
+                    }
+                } else {
+                    continue;
+                }
+
+                items[classNames] = name;
+
+                expanded[classNames] = {
+                    classNames: classNames,
+                    showFor: showFor,
+                    hideFor: hideFor
+                }
             }
 
             this._custStyleNames = items;
@@ -130,7 +184,7 @@ ViperFormatPlugin.prototype = {
             }
 
             panel.element.appendChild(listElement);
-        }
+        }//end if
 
     },
 
@@ -519,25 +573,47 @@ ViperFormatPlugin.prototype = {
         this._setAttributeForSelection('class', value);
     },
 
-    _getClassInitialValue: function(attrClass) {
+    _getClassInitialValue: function(attrClass, node) {
         var selectedItems = [];
         if (this._custStyles && attrClass) {
             // There are custom styles check if the selection matches any of those.
             var classNames = attrClass.split(' ');
             var listItems  = [];
             for (var custStyle in this._custStyles) {
-                var intersect = ViperUtil.arrayIntersect(this._custStyles[custStyle], classNames);
-                if (intersect.length === this._custStyles[custStyle].length) {
+                var intersect = ViperUtil.arrayIntersect(this._custStyles[custStyle].classNames, classNames);
+                if (intersect.length === this._custStyles[custStyle].classNames.length) {
                     selectedItems.push(custStyle);
 
                     // Remove these defined classes from the attrClass so it does not appear in the input.
-                    attrClass = this._removeDefinedStylesFromClass(attrClass, this._custStyles[custStyle]);
+                    attrClass = this._removeDefinedStylesFromClass(attrClass, this._custStyles[custStyle].classNames);
                 }
             }
         }
 
         if (this._custStyles) {
-            this.viper.ViperTools.getItem(this._styleListid).setSelectedItems(selectedItems, true);
+            var nodeTagName = ViperUtil.getTagName(node) || 'text-selection';
+            var list        = this.viper.ViperTools.getItem(this._styleListid);
+
+            // Filter the list of classes that should be shown depending on the showFor, and hideFor settings.
+            for (var classNames in this._custStyles) {
+                var hideFor = this._custStyles[classNames].hideFor;
+                var showFor = this._custStyles[classNames].showFor;
+
+                if ((hideFor
+                    && (hideFor === '*'
+                    || ViperUtil.inArray(nodeTagName, hideFor) === true))
+                    && (!showFor
+                    || ViperUtil.inArray(nodeTagName, showFor) === false)
+                ) {
+                    list.hideItem(classNames);
+                } else if (!showFor || showFor === '*' || ViperUtil.inArray(nodeTagName, showFor) === true) {
+                    list.showItem(classNames);
+                } else {
+                    list.hideItem(classNames);
+                }
+            }
+
+            list.setSelectedItems(selectedItems, true);
             this._updateDefinedStylesList();
         }
 
@@ -704,7 +780,7 @@ ViperFormatPlugin.prototype = {
                 tools.setButtonActive('vitpClass');
             }
 
-            attrClass = this._getClassInitialValue(attrClass);
+            attrClass = this._getClassInitialValue(attrClass, selectedNode);
 
             tools.getItem(prefix + 'anchor:input').setValue(attrId);
             tools.getItem(prefix + 'class:input').setValue(attrClass);
@@ -892,7 +968,7 @@ ViperFormatPlugin.prototype = {
 
                         // Class.
                         var attrClass = self._getAttributeValue('class', nodeSelection);
-                        attrClass = self._getClassInitialValue(attrClass);
+                        attrClass = self._getClassInitialValue(attrClass, nodeSelection);
                         tools.getItem(prefix + 'class:input').setValue(attrClass);
                         if (attrClass) {
                             tools.setButtonActive('class');
@@ -1306,7 +1382,7 @@ ViperFormatPlugin.prototype = {
             var styleListItem = document.createElement('div');
             ViperUtil.addClass(styleListItem, 'ViperFormatPlugin-styleListItem Viper-textbox-label');
             var content = '<div class="ViperFormatPlugin-styleListItem-name">' + this._custStyleNames[selectedItems[i]] + '</div>';
-            content    += '<div class="ViperFormatPlugin-styleListItem-classes">.' + this._custStyles[selectedItems[i]].join(' .') + '</div>';
+            content    += '<div class="ViperFormatPlugin-styleListItem-classes">.' + this._custStyles[selectedItems[i]].classNames.join(' .') + '</div>';
             content    += '<span class="ViperFormatPlugin-styleListItem-remove Viper-textbox-action" data-id="' + selectedItems[i] + '"></span>';
             ViperUtil.setHtml(styleListItem, content);
             listItems.push(styleListItem);
