@@ -681,6 +681,26 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
+     * Tests that you can split two a tags with a br tag or into two paragraphs.
+     *
+     * @return void
+     */
+    public function testSplittingTwoATags()
+    {
+        $this->useTest(8);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.SHIFT + Key.ENTER');
+        $this->assertHTMLMatch('<p><a href="#">Link %1%</a><br/><a href="#">Link %2%</a></p>');
+
+        $this->useTest(8);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p><a href="#">Link %1%</a></p><p><a href="#">Link %2%</a></p>');
+
+    }//end testSplittingTwoATags()
+
+
+    /**
      * Test that inputting text, creating new paragraphs etc work when no base tag is set.
      *
      * @return void

@@ -598,6 +598,39 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
     }//end testDeleteLinkAndAddNewContent()
 
 
+    /**
+     * Test removing links from the content in a table and clicking back into a table.
+     *
+     * @return void
+     */
+    public function testRemovingLinksAndClickIntoTable()
+    {
+        
+        // Test remove link using inline toolbar
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
+        $this->clickInlineToolbarButton('linkRemove');
+        $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong>ligula</strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        // Test deselecting content
+        $this->moveToKeyword(2);
+        $this->assertEquals('', $this->getSelectedText(), 'Nothing should be selected');
+
+        // Test remove link in top toolbar
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->clickTopToolbarButton('linkRemove');
+        $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong>ligula</strong>, vel molestie arcu</td></tr></tbody></table>');
+
+        // Test deselecting content
+        $this->moveToKeyword(2);
+        $this->assertEquals('', $this->getSelectedText(), 'Nothing should be selected');
+
+    }//end testRemovingLinksAndClickIntoTable()
+
 }//end class
 
 ?>
