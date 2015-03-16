@@ -155,9 +155,9 @@ ViperFormatPlugin.prototype = {
                     continue;
                 }
 
-                items[classNames] = name;
+                items[classNames.join(' ')] = name;
 
-                expanded[classNames] = {
+                expanded[classNames.join(' ')] = {
                     classNames: classNames,
                     showFor: showFor,
                     hideFor: hideFor
@@ -586,6 +586,31 @@ ViperFormatPlugin.prototype = {
 
                     // Remove these defined classes from the attrClass so it does not appear in the input.
                     attrClass = this._removeDefinedStylesFromClass(attrClass, this._custStyles[custStyle].classNames);
+                }
+            }
+
+            // Filter the selected classes array by most specific classes.
+            for (var i = (selectedItems.length - 1); i >= 0 ; i--) {
+                var isSubset = false;
+                for (var j = 0; j < selectedItems.length; j++) {
+                    if (i === j) {
+                        continue;
+                    }
+
+                    var intersect = ViperUtil.arrayIntersect(
+                        this._custStyles[selectedItems[j]].classNames,
+                        this._custStyles[selectedItems[i]].classNames
+                    );
+
+                    // Class names in j contains all the class names in i. Remove i from the list.
+                    if (intersect.length === this._custStyles[selectedItems[i]].classNames.length) {
+                        isSubset = true;
+                        break;
+                    }
+                }
+
+                if (isSubset === true) {
+                    ViperUtil.removeArrayIndex(selectedItems, i);
                 }
             }
         }

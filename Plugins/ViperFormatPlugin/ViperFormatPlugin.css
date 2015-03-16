@@ -46,9 +46,13 @@
 }
 
 .ViperFormatPlugin-styleListItem-classes {
-    font-size: 11px;
-    color: #8B8B8B;
-    margin-left: 5px;
+      font-size: 11px;
+      color: #8B8B8B;
+      margin-left: 5px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      width: 183px;
 }
 
 .ViperFormatPlugin-styleListItem-remove.Viper-textbox-action {
