@@ -167,8 +167,15 @@ ViperFormatPlugin.prototype = {
             this._custStyleNames = items;
             this._custStyles     = expanded;
 
-            var self        = this;
-            var tools       = this.viper.ViperTools;
+            var self  = this;
+            var tools = this.viper.ViperTools;
+
+            // If there is a list already remove it.
+            var listElement = tools.getItem(this._styleListid);
+            if (listElement) {
+                ViperUtil.remove(listElement.element);
+            }
+
             var listElement = tools.createSelectionList(
                 this._styleListid,
                 items,
