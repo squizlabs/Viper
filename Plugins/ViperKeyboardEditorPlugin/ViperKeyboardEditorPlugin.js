@@ -1958,9 +1958,9 @@ ViperKeyboardEditorPlugin.prototype = {
         // Insert the new element after the current parent.
         ViperUtil.insertAfter(parent, elem);
 
-        range.setStart(elem, 0);
-        range.setStart(elem, 0);
         try {
+            range.setStart(elem, 0);
+            range.setStart(elem, 0);
             range.moveStart('character', 1);
             range.moveStart('character', -1);
         } catch (e) {
