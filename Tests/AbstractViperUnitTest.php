@@ -1016,6 +1016,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $html     = str_replace('> <', '><', $html);
         $html     = str_replace(' <', '<', $html);
 
+        // Remove the Viper version from the end of URLs.
+        $pageHtml = preg_replace('#\?v=[\d\w]+"#', '"', $pageHtml);
+
         if ($html !== $pageHtml) {
             $pageHtml = $this->_orderTagAttributes($pageHtml);
             $html     = $this->_orderTagAttributes($html);

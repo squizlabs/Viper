@@ -390,6 +390,48 @@ class Viper_Tests_ViperLinkPlugin_CreateLinkUnitTest extends AbstractViperUnitTe
 
     }//end testCancellingCreatingLink()
 
+
+    /**
+     * Test creating a link in a block of text that contains an image.
+     *
+     * @return void
+     */
+    public function testCreateLinkInContentWithImage()
+    {
+        // Using the inline toolbar
+        $this->useTest(4);
+
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('link');
+        $this->assertTrue($this->inlineToolbarButtonExists('link', 'selected'), 'Toolbar button icon is not correct');
+        $this->type('http://www.squizlabs.com');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>Praesent quam nulla, porta nec nunc <a href="http://www.squizlabs.com">%1%</a>, scelerisque sodales sem. %2% tincidunt ligula vel leo gravida consectetur.<br /><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167"/></p><p>LABS is ORSM</p>');
+
+        $this->selectKeyword(2);
+        $this->clickInlineToolbarButton('link');
+        $this->type('http://www.squizlabs.com');
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>Praesent quam nulla, porta nec nunc <a href="http://www.squizlabs.com">%1%</a>, scelerisque sodales sem. <a href="http://www.squizlabs.com">%2%</a> tincidunt ligula vel leo gravida consectetur.<br /><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167"/></p><p>LABS is ORSM</p>');
+
+        // Using the top toolbar
+        $this->useTest(4);
+
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('link');
+        $this->assertTrue($this->topToolbarButtonExists('link', 'selected'), 'Toolbar button icon is not correct');
+        $this->type('http://www.squizlabs.com');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>Praesent quam nulla, porta nec nunc <a href="http://www.squizlabs.com">%1%</a>, scelerisque sodales sem. %2% tincidunt ligula vel leo gravida consectetur.<br /><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167"/></p><p>LABS is ORSM</p>');
+
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('link');
+        $this->type('http://www.squizlabs.com');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>Praesent quam nulla, porta nec nunc <a href="http://www.squizlabs.com">%1%</a>, scelerisque sodales sem. <a href="http://www.squizlabs.com">%2%</a> tincidunt ligula vel leo gravida consectetur.<br /><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167"/></p><p>LABS is ORSM</p>');
+
+    }//end testCreateLinkInContentWithImage()
+
 }//end class
 
 ?>

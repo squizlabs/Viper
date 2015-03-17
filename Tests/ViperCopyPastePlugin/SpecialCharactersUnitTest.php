@@ -102,12 +102,6 @@ class Viper_Tests_ViperCopyPastePlugin_SpecialCharactersUnitTest extends Abstrac
                     case 'chrome':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsGoogleChrome/GoogleDocs/SpecialCharacters.txt');
                         break;
-                    case 'ie8':
-                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsIE8/GoogleDocs/SpecialCharacters.txt');
-                        break;
-                    case 'ie9':
-                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsIE9/GoogleDocs/SpecialCharacters.txt');
-                        break;
                     case 'ie10':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsIE10/GoogleDocs/SpecialCharacters.txt');
                         break;

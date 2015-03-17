@@ -74,31 +74,35 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
      */
     public function testPartialCopyPaste()
     {
-        // Test coping some content and pasting over the top of existing content
+        // Test coping a word content and pasting over the top of an existing word
         $this->useTest(2);
-
         $this->selectKeyword(2);
         sleep(2);
         $this->sikuli->keyDown('Key.CMD + c');
-
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + v');
-
         sleep(1);
         $this->assertHTMLMatch('<p>This is some content to %2% test partial copy and paste. It %2% needs to be a really long paragraph.</p>');
 
-        // Test coping some content and pasting it somewhere else in the existing content
+        // Test coping a word content and pasting it somewhere else in the existing content
         $this->useTest(2);
-
         $this->selectKeyword(2);
         sleep(2);
         $this->sikuli->keyDown('Key.CMD + c');
-
         $this->moveToKeyword(1, 'left');
         $this->sikuli->keyDown('Key.CMD + v');
-
         sleep(1);
         $this->assertHTMLMatch('<p>This is some content to %2%%1% test partial copy and paste. It %2% needs to be a really long paragraph.</p>');
+
+        // Test coping a section of a paragraph and pasting over another section on the page 
+        $this->useTest(4);
+        $this->selectKeyword(1, 2);
+        sleep(2);
+        $this->sikuli->keyDown('Key.CMD + c');
+        $this->selectKeyword(3, 4);
+        $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
+        $this->assertHTMLMatch('<p>This is some content to %1% test partial copy and paste. It %2% needs to be a really long paragraph.</p><p>%1% test partial copy and paste. It %2%</p>');
 
     }//end testPartialCopyPaste()
 

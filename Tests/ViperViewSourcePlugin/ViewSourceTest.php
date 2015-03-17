@@ -306,6 +306,26 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperUnit
 
     }//end testAddingDifferentTagsInSourceCode()
 
+
+    /**
+     * Test that when you enter code without P tags but with BR tags that it wraps the code with P tags.
+     *
+     * @return void
+     */
+    public function testAddingCodeWithBrTags()
+    {
+        $this->moveToKeyword(2);
+        $this->clickTopToolbarButton('sourceView');
+        sleep(2);
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('Lead and Succeed with Middlesex University<br/>At Middlesex University, we give our graduates the confidence and skills to launch into');
+        $this->clickButton('Apply Changes', NULL, TRUE);
+
+        $this->assertHTMLMatch('<p>Lead and Succeed with Middlesex University<br/>At Middlesex University, we give our graduates the confidence and skills to launch into</p>');
+
+    }//end testAddingCodeWithBrTags()
+
 }//end class
 
 ?>

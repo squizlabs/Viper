@@ -1063,7 +1063,7 @@ ViperCopyPastePlugin.prototype = {
             // TODO: We should move handleEnter function to somewhere else and make it
             // a little bit more generic.
             var keyboardEditor = this.viper.ViperPluginManager.getPlugin('ViperKeyboardEditorPlugin');
-            var range = this.viper.getCurrentRange();
+            var range = this.viper.getViperRange();
             range.setEnd(this._tmpNode, 0);
             range.collapse(false);
 

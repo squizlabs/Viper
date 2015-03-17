@@ -498,6 +498,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 && startNode.nodeType === ViperUtil.ELEMENT_NODE
                 && (ViperUtil.isBrowser('firefox') !== true || !(ViperUtil.isTag(startNode, 'br') === true && (!blockParent || ViperUtil.isTag(blockParent, 'li') === true)))
                 && ViperUtil.isStubElement(startNode) === false
+                && ViperUtil.isBlockElement(startNode) === true
             ) {
                 var elem = document.createElement(defaultTagName);
                 ViperUtil.setHtml(elem, '<br />');
@@ -1117,22 +1118,27 @@ ViperKeyboardEditorPlugin.prototype = {
         if (range.collapsed === false) {
             var nodeSelection = range.getNodeSelection();
             if (nodeSelection) {
-                var parents = ViperUtil.getSurroundingParents(nodeSelection, null, null, this.viperElement);
-                if (parents.length > 0) {
-                    var topParent = parents.pop();
-                    if (topParent === this.viper.getViperElement()) {
-                        if (parents.length > 0) {
-                            nodeSelection = parents.pop();
+                if (nodeSelection === this.viper.getViperElement()) {
+                    ViperUtil.setHtml(nodeSelection, '');
+                    this.viper.initEditableElement();
+                } else {
+                    var parents = ViperUtil.getSurroundingParents(nodeSelection, null, null, this.viperElement);
+                    if (parents.length > 0) {
+                        var topParent = parents.pop();
+                        if (topParent === this.viper.getViperElement()) {
+                            if (parents.length > 0) {
+                                nodeSelection = parents.pop();
+                            }
+                        } else {
+                            nodeSelection = topParent;
                         }
-                    } else {
-                        nodeSelection = topParent;
                     }
+
+                    this.viper.moveCaretAway(nodeSelection);
+                    ViperUtil.remove(nodeSelection);
+                    ViperSelection.addRange(range);
                 }
 
-               this.viper.moveCaretAway(nodeSelection);
-
-                ViperUtil.remove(nodeSelection);
-                ViperSelection.addRange(range);
                 this.viper.fireNodesChanged();
                 this.viper.fireSelectionChanged();
                 return false;
@@ -1952,9 +1958,9 @@ ViperKeyboardEditorPlugin.prototype = {
         // Insert the new element after the current parent.
         ViperUtil.insertAfter(parent, elem);
 
-        range.setStart(elem, 0);
-        range.setStart(elem, 0);
         try {
+            range.setStart(elem, 0);
+            range.setStart(elem, 0);
             range.moveStart('character', 1);
             range.moveStart('character', -1);
         } catch (e) {
