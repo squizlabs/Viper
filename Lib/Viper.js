@@ -3123,9 +3123,17 @@ Viper.prototype = {
             // Next sibling is a textnode so move the caret to that node.
             node = node.nextSibling;
         } else {
-            // Create a new text node and set the caret to that node.
-            var text = Viper.document.createTextNode(String.fromCharCode(160));
-            ViperUtil.insertAfter(node, text);
+            var text = null;
+            if (node.nextSibling) {
+                text = ViperUtil.getFirstChildTextNode(node.nextSibling);
+            }
+
+            if (!text) {
+                // Create a new text node and set the caret to that node.
+                text = Viper.document.createTextNode(String.fromCharCode(160));
+                ViperUtil.insertAfter(node, text);
+            }
+
             node = text;
         }
 
