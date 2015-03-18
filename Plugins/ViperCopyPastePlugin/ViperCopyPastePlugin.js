@@ -588,7 +588,7 @@ ViperCopyPastePlugin.prototype = {
                         var count   = 0;
                         while ((match = re.exec(selectedContent)) != null) {
                             var rep = false;
-                            if (match[0].indexOf('<td ') === 0) {
+                            if (match[0].indexOf('<td') === 0) {
                                 count++;
                                 rep = true;
                             } else if (match[0].indexOf('</td>') === 0) {
