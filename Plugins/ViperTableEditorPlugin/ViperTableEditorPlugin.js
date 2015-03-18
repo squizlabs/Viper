@@ -936,44 +936,11 @@ ViperTableEditorPlugin.prototype = {
      */
     _updatePosition: function(cell, verticalOnly)
     {
-        var rangeCoords = this._toolbarWidget.getElementCoords(cell);
-
-        if (!rangeCoords) {
-            return;
-        }
-
-        var scrollCoords = ViperUtil.getScrollCoords();
-
+        var self    = this;
         var toolbar = this._toolbarWidget.element;
-
-        ViperUtil.addClass(toolbar, 'Viper-calcWidth');
-        ViperUtil.setStyle(toolbar, 'width', 'auto');
-        var toolbarWidth = ViperUtil.getElementWidth(toolbar);
-        ViperUtil.removeClass(toolbar, 'Viper-calcWidth');
-        ViperUtil.setStyle(toolbar, 'width', toolbarWidth + 'px');
-
-        var offset = this.viper.getDocumentOffset();
-        var left   = offset.x;
-        var top    = offset.y;
-        if (this._targetToolbarButton !== true) {
-            if (verticalOnly !== true) {
-                left += ((rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x) - (toolbarWidth / 2));
-                ViperUtil.setStyle(toolbar, 'left', left + 'px');
-            }
-
-            top += (rangeCoords.bottom + this._margin + scrollCoords.y);
-            ViperUtil.setStyle(toolbar, 'position', 'absolute');
-        } else {
-            var cellCoords = ViperUtil.getBoundingRectangle(this._tools.getItem('insertTable').element);
-            top  += cellCoords.y2 + 15 - scrollCoords.y;
-            left += ((cellCoords.x1 + ((cellCoords.x2 - cellCoords.x1) / 2) + scrollCoords.x) - (toolbarWidth / 2));
-
-            ViperUtil.setStyle(toolbar, 'left', left + 'px');
-            ViperUtil.setStyle(toolbar, 'position', 'fixed');
-        }
-
-        ViperUtil.setStyle(toolbar, 'top', top + 'px');
-        ViperUtil.addClass(toolbar, 'Viper-visible');
+        this.viper.ViperTools.updatePositionOfElement(toolbar, null, cell, function() {
+            self.hideToolbar();
+        });
 
     },
 

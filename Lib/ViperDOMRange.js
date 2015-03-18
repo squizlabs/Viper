@@ -902,7 +902,8 @@ ViperDOMRange.prototype = {
             && range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
             && range.startOffset === 0
             && range.endOffset === 0
-            && (range.startContainer.childNodes.length === 0 || ViperUtil.isStubElement(range.startContainer.childNodes[0]) === false)
+            && (range.startContainer.childNodes.length === 0
+            || (range.startContainer.childNodes.length === 1 && ViperUtil.isStubElement(range.startContainer.childNodes[0]) === false))
         ) {
             this._nodeSel.node = range.startContainer;
             return range.startContainer;

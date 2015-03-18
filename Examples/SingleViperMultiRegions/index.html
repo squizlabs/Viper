@@ -10,19 +10,16 @@
     <script type="text/javascript">
         var viper = null;
         ViperReadyCallback = function() {
-            viper = new Viper('test');
+            viper = new Viper('test', null, null, [ViperUtil.getid('content-1'), ViperUtil.getid('content-2')]);
 
-            viper.registerEditableElement(ViperUtil.getid('edit1'));
-            viper.registerEditableElement(ViperUtil.getid('edit2'));
-
-            ViperUtil.addEvent(ViperUtil.getClass('clickToEdit'), 'mousedown', function(e) {
+            ViperUtil.addEvent(ViperUtil.getClass('boxmsg'), 'mousedown', function(e) {
                 var target   = ViperUtil.getMouseEventTarget(e);
-                var editElem = ViperUtil.getid(target.id.replace('_', ''));
+                var editElem = target.parentNode;
 
                 ViperUtil.remove(target);
-                ViperUtil.showElement(editElem);
 
                 viper.setEditableElement(editElem);
+                viper.setEnabled(true);
                 viper.element.focus();
                 viper.focus();
 
@@ -31,6 +28,22 @@
             viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin']);
         };
     </script>
+    <style>
+        .editingBox {
+            height: 100px;
+            border: 1px solid #CCC;
+            padding: 5px;
+            margin: 20px 0;
+        }
+
+        .boxmsg {
+            height: 100%;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            line-height: 100px;
+        }
+    </style>
 </head>
 <body spellcheck="false">
 
@@ -48,92 +61,10 @@
     </ol>
 </div>
 
-<div id="content" spellcheck="false">
-    <h1>Simple Viper Example</h1>
-    <div class="container">
-        <div id="edit1" style="display:none;border:1px solid #000; padding:10px;"><p>&nbsp;</p></div>
-        <div class="clickToEdit" id="_edit1">Click to edit</div>
-    </div>
-    <div class="container">
-        <div id="edit2" style="display:none;border:1px solid #000; padding:10px;"><p>&nbsp;</p></div>
-        <div class="clickToEdit" id="_edit2">Click to edit</div>
-    </div>
-<div><h2>Accessibility Audit</h2></div>
+<div id="content-1" class="editingBox"><div class="boxmsg">Click to edit.</div></div>
+<div id="content-2" class="editingBox"><div class="boxmsg">Click to edit.</div></div>
 
-<p>The WCAG 2.0 guidelines are very technical by nature and can look daunting, so how do you know if your website really conforms to the guidelines? Well, Squiz has developed an Accessibility Audit package that will clearly identify all issues preventing your website from meeting the relevant A or AA standard. The Accessibility Audit package includes:</p>
 
-<ul>
-<li>Audit of Homepage and 6 Section Landing pages</li>
-<li>4 additional templates</li>
-<li>Audit of 20 additional pages for content</li>
-<li>Accessibility audit report</li>
-<li>Recommendations and action plan</li>
-<li>Squiz Matrix content accessibility guide</li>
-</ul>
-
-<h3>Accessibility Audit format</h3>
-
-<ul>
-<li>Validate HTML/CSS and review code of selected pages to A or AA standard</li>
-<li>Review colour contrast of selected pages</li>
-<li>Review content of selected pages for accessibility issues</li>
-<li>Compile error report with examples</li>
-<li>Propose recommendations to meet required Accessibility standard</li>
-</ul>
-
-<p>The results of the audit will be delivered in an easy to understand format with a clear action plan for bringing your website up to standard.</p>
-
-<p>Should your requirements differ from the services offered in the Accessibility Audit package, Squiz is most happy to customise the audit to suit your needs.</p>
-<div class="editable">
-<h2>One-day Training Course</h2>
-
-<p><em>Accessibility Techniques for Editors</em> : a new course focusing on the methods used to achieve accessible content.</p>
-
-<p>Book the MATR102 course online today.</p>
-
-<table border="1" cellpadding="2" cellspacing="3">
-    <caption><strong>Table 1.2:</strong> The table caption text goes here la</caption>
-    <thead>
-    <tr>
-        <th>Col1 Header</th>
-        <th>Col2 Header</th>
-        <th>Col3 Header</th>
-    </tr>
-    </thead>
-    <tfoot>
-    <tr>
-        <td colspan="3">Note: this is the table footer</td>
-    </tr>
-    </tfoot>
-    <tbody>
-    <tr>
-        <td>nec porta ante</td>
-        <td>sapien vel aliquet</td>
-        <td>
-            <ul>
-                <li>purus neque luctus ligula, vel molestie arcu</li>
-                <li>purus neque luctus</li>
-                <li>vel molestie arcu</li>
-            </ul>
-        </td>
-    </tr>
-    <tr>
-        <td>nec porta ante</td>
-        <td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td>
-    </tr>
-    <tr>
-        <td>nec <strong>porta</strong> ante</td>
-        <td>sapien vel aliquet</td>
-        <td id="x" rowspan="2">purus neque luctus ligula, vel molestie arcu</td>
-    </tr>
-    <tr>
-        <td colspan="2">sapien vel aliquet</td>
-    </tr>
-    </tbody>
-</table>
-</div>
-
-    </div><!-- #content -->
     </div>
     </div>
     </div>
