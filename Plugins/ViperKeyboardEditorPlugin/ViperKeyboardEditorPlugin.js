@@ -408,13 +408,11 @@ ViperKeyboardEditorPlugin.prototype = {
                 if (startNode.parentNode === blockParent
                     && startNode.nodeType === ViperUtil.TEXT_NODE
                     && ViperUtil.trim(startNode.data) === ''
+                    && (!startNode.previousSibling
+                    || startNode.previousSibling.data === "\n")
                 ) {
-                    if (startNode.nextSibling
-                        && !startNode.nextSibling.nextSibling
-                        && startNode.nextSibling.nodeType === ViperUtil.TEXT_NODE
-                        && ViperUtil.trim(startNode.nextSibling.data) === ''
-                    ) {
-                        ViperUtil.remove(startNode.nextSibling);
+                    while (startNode.nextSibling) {
+                       ViperUtil.remove(startNode.nextSibling);
                     }
 
                     ViperUtil.remove(startNode);
@@ -500,6 +498,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 && startNode.nodeType === ViperUtil.ELEMENT_NODE
                 && (ViperUtil.isBrowser('firefox') !== true || !(ViperUtil.isTag(startNode, 'br') === true && (!blockParent || ViperUtil.isTag(blockParent, 'li') === true)))
                 && ViperUtil.isStubElement(startNode) === false
+                && ViperUtil.isBlockElement(startNode) === true
             ) {
                 var elem = document.createElement(defaultTagName);
                 ViperUtil.setHtml(elem, '<br />');
@@ -775,6 +774,22 @@ ViperKeyboardEditorPlugin.prototype = {
         }
 
         if (range.startOffset !== 0) {
+            if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                && range.collapsed === true
+                && ViperUtil.isBrowser('msie', '<11')
+            ) {
+                // Delete 1 char in IE.... This resolves the issue where <a href="" />T* backspace here sets the
+                // range to incorrect position..
+                range.startContainer.splitText(range.startOffset);
+                range.startContainer.data = range.startContainer.data.substring(0, range.startOffset - 1);
+                range.startContainer.data += range.startContainer.nextSibling.data;
+                ViperUtil.remove(range.startContainer.nextSibling);
+                range.setStart(range.startContainer, range.startOffset - 1)
+                range.collapse(true);
+                ViperSelection.addRange(range);
+                return false;
+            }
+
             // No need to handle any case where caret is not at the start of a node.
             return;
         }
@@ -1103,22 +1118,27 @@ ViperKeyboardEditorPlugin.prototype = {
         if (range.collapsed === false) {
             var nodeSelection = range.getNodeSelection();
             if (nodeSelection) {
-                var parents = ViperUtil.getSurroundingParents(nodeSelection, null, null, this.viperElement);
-                if (parents.length > 0) {
-                    var topParent = parents.pop();
-                    if (topParent === this.viper.getViperElement()) {
-                        if (parents.length > 0) {
-                            nodeSelection = parents.pop();
+                if (nodeSelection === this.viper.getViperElement()) {
+                    ViperUtil.setHtml(nodeSelection, '');
+                    this.viper.initEditableElement();
+                } else {
+                    var parents = ViperUtil.getSurroundingParents(nodeSelection, null, null, this.viperElement);
+                    if (parents.length > 0) {
+                        var topParent = parents.pop();
+                        if (topParent === this.viper.getViperElement()) {
+                            if (parents.length > 0) {
+                                nodeSelection = parents.pop();
+                            }
+                        } else {
+                            nodeSelection = topParent;
                         }
-                    } else {
-                        nodeSelection = topParent;
                     }
+
+                    this.viper.moveCaretAway(nodeSelection);
+                    ViperUtil.remove(nodeSelection);
+                    ViperSelection.addRange(range);
                 }
 
-               this.viper.moveCaretAway(nodeSelection);
-
-                ViperUtil.remove(nodeSelection);
-                ViperSelection.addRange(range);
                 this.viper.fireNodesChanged();
                 this.viper.fireSelectionChanged();
                 return false;
@@ -1938,9 +1958,9 @@ ViperKeyboardEditorPlugin.prototype = {
         // Insert the new element after the current parent.
         ViperUtil.insertAfter(parent, elem);
 
-        range.setStart(elem, 0);
-        range.setStart(elem, 0);
         try {
+            range.setStart(elem, 0);
+            range.setStart(elem, 0);
             range.moveStart('character', 1);
             range.moveStart('character', -1);
         } catch (e) {
@@ -1997,6 +2017,8 @@ ViperKeyboardEditorPlugin.prototype = {
             this.viper.insertAfter(node.previousSibling, this.viper.createSpaceNode());
         } else if (!node.nextSibling && ViperUtil.isBlockElement(node.parentNode) === false) {
             ViperUtil.insertAfter(node.parentNode, node);
+        } else if (!node.previousSibling && node.nextSibling && node.nextSibling.nodeType === ViperUtil.TEXT_NODE) {
+            ViperUtil.insertBefore(node.parentNode, node);
         }
 
         this.viper.fireNodesChanged();

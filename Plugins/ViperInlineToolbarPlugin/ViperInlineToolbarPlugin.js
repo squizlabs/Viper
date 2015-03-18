@@ -593,6 +593,11 @@ ViperInlineToolbarPlugin.prototype = {
             parent = parent.parentNode;
 
             while (parent && parent !== viperElement) {
+                if (parent === document) {
+                    // Couldn't find the editable element (possibly changed or disabled).
+                    return [];
+                }
+
                 lineage.push(parent);
                 parent = parent.parentNode;
             }

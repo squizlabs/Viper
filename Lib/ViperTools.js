@@ -1220,7 +1220,6 @@ ViperTools.prototype = {
     createInlineToolbar: function(id, compact, elementTypes, updateCallback)
     {
         var self    = this;
-        var margin  = 15;
         var toolbar = document.createElement('div');
         var viper   = this.viper;
 
@@ -1907,143 +1906,10 @@ ViperTools.prototype = {
                 _keepOpenTagList: [],
                 _onHideCallback: null,
                 updatePosition: function(range, selectedNode) {
-                    range = range || tools.viper.getViperRange();
-
-                    var rangeCoords  = null;
-                    var selectedNode = selectedNode || range.getNodeSelection(range);
-                    if (selectedNode !== null) {
-                        rangeCoords = this.getElementCoords(selectedNode);
-                    } else {
-                        rangeCoords = range.rangeObj.getBoundingClientRect();
-                    }
-
-                    if (!rangeCoords || (rangeCoords.left === 0 && rangeCoords.top === 0 && ViperUtil.isBrowser('firefox') === true)) {
-                        if (range.collapsed === true) {
-                            var span = document.createElement('span');
-                            tools.viper.insertNodeAtCaret(span);
-                            rangeCoords = this.getElementCoords(span);
-                            ViperUtil.remove(span);
-
-                            if (!rangeCoords) {
-                                return;
-                            }
-                        } else {
-                            var startNode = range.getStartNode();
-                            var endNode   = range.getEndNode();
-                            if (!startNode || !endNode) {
-                                return;
-                            }
-
-                            if (startNode.nodeType === ViperUtil.TEXT_NODE
-                                && startNode.data.indexOf("\n") === 0
-                                && endNode.nodeType === ViperUtil.TEXT_NODE
-                                && range.endOffset === endNode.data.length
-                            ) {
-                                range.setStart(endNode, endNode.data.length);
-                                range.collapse(true);
-                                rangeCoords = range.rangeObj.getBoundingClientRect();
-                            }
-                        }//end if
-                    }//end if
-
-                    if (!rangeCoords || (rangeCoords.bottom === 0 && rangeCoords.height === 0 && rangeCoords.left === 0)) {
-                        if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true) {
-                            // Webkit bug workaround. https://bugs.webkit.org/show_bug.cgi?id=65324.
-                            // OK.. Yet another fix. With the latest Google Chrome (17.0.963.46)
-                            // the !rangeCoords check started to fail because its no longer
-                            // returning null for a collapsed range, instead all values are set to 0.
-                            var startNode = range.getStartNode();
-                            if (startNode.nodeType === ViperUtil.TEXT_NODE) {
-                                if (range.startOffset <= startNode.data.length) {
-                                    range.setEnd(startNode, (range.startOffset + 1));
-                                    rangeCoords = range.rangeObj.getBoundingClientRect();
-                                    range.collapse(true);
-                                    if (rangeCoords) {
-                                        rangeCoords.right = rangeCoords.left;
-                                    }
-                                } else if (range.startOffset > 0) {
-                                    range.setStart(startNode, (range.startOffset - 1));
-                                    rangeCoords = range.rangeObj.getBoundingClientRect();
-                                    range.collapse(false);
-                                    if (rangeCoords) {
-                                        rangeCoords.right = rangeCoords.left;
-                                    }
-                                }
-                            }
-                        } else {
-                            // Point to top of Viper element.
-                            rangeCoords        = this.getElementCoords(tools.viper.getViperElement());
-                            rangeCoords.bottom = (rangeCoords.top + 10);
-                        }//end if
-                    }//end if
-
-                    var frameOffset = {x: 0, y: 0};
-                    if (Viper.document !== document && Viper.document.defaultView.frameElement) {
-                        // Viper element is inside an iframe, need to adjust the position.
-                        frameOffset      = tools.viper.getDocumentOffset();
-                        var newCoords    = {};
-                        newCoords.bottom = (rangeCoords.bottom + frameOffset.y);
-                        newCoords.top    = (rangeCoords.top + frameOffset.y);
-                        newCoords.bottom = (rangeCoords.bottom + frameOffset.y);
-                        newCoords.left   = (rangeCoords.left + frameOffset.x);
-                        newCoords.right  = (rangeCoords.right + frameOffset.x);
-                        newCoords.height = rangeCoords.height;
-                        newCoords.width  = rangeCoords.width;
-                        rangeCoords      = newCoords;
-                    }
-
-                    var scrollCoords = ViperUtil.getScrollCoords();
-
-                    ViperUtil.addClass(toolbar, 'Viper-calcWidth');
-                    ViperUtil.setStyle(toolbar, 'width', 'auto');
-                    var toolbarWidth = ViperUtil.getElementWidth(toolbar);
-                    ViperUtil.removeClass(toolbar, 'Viper-calcWidth');
-                    ViperUtil.setStyle(toolbar, 'width', toolbarWidth + 'px');
-
-                    var viperElemCoords = this.getElementCoords(tools.viper.getViperElement());
-                    var elemWindowDim   = ViperUtil.getWindowDimensions(Viper.document.defaultView);
-                    var mainWindowDim   = ViperUtil.getWindowDimensions();
-
-                    if (this._verticalPosUpdateOnly !== true) {
-                        var left = ((rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x) - (toolbarWidth / 2));
-                        ViperUtil.removeClass(toolbar, 'Viper-orientationLeft Viper-orientationRight');
-
-                        if (left > (elemWindowDim.width + frameOffset.x)) {
-                            // Dont go off screen, point to the editable element.
-                            left = viperElemCoords.left;
-                        }
-
-                        if (left < 0) {
-                            left += (toolbarWidth / 2);
-                            ViperUtil.addClass(toolbar, 'Viper-orientationLeft');
-                        } else if (left + toolbarWidth > mainWindowDim.width) {
-                            left -= (toolbarWidth / 2);
-                            ViperUtil.addClass(toolbar, 'Viper-orientationRight');
-                        }
-
-                        ViperUtil.setStyle(toolbar, 'left', left + 'px');
-                    }
-
-                    var top = (rangeCoords.bottom + margin + scrollCoords.y);
-
-                    if (top === 0) {
-                        this.hide();
-                        return;
-                    } else if (((top + 50) > (mainWindowDim.height + scrollCoords.y)) || (top > elemWindowDim.height + scrollCoords.y + frameOffset.y)) {
-                        this.hide();
-                        return;
-                    } else if (top < viperElemCoords.top && Viper.document === document) {
-                        top = (viperElemCoords.top + 50);
-                        if (left < viperElemCoords.left && this._verticalPosUpdateOnly !== true) {
-                            ViperUtil.setStyle(toolbar, 'left', viperElemCoords.left + 50 + 'px');
-                        }
-                    } else if (Viper.document !== document && top < tools.viper.getDocumentOffset().y) {
-                        this.hide();
-                        return;
-                    }
-
-                    ViperUtil.setStyle(toolbar, 'top', top + 'px');
-                    ViperUtil.addClass(toolbar, 'Viper-visible');
+                    var _self = this;
+                    self.viper.ViperTools.updatePositionOfElement(toolbar, range, selectedNode, function() {
+                        _self.hide();
+                    });
                 },
                 setVerticalUpdateOnly: function(verticalOnly) {
                     this._verticalPosUpdateOnly = verticalOnly;
@@ -2068,16 +1934,6 @@ ViperTools.prototype = {
                     var xPos       = (buttonRect.x1 - toolbarPos.x1 + ((buttonRect.x2 - buttonRect.x1) / 2));
                     ViperUtil.setStyle(subSectionContainer.firstChild, 'left', xPos + 'px');
                 },
-                getElementCoords: function(element) {
-                    var elemRect     = ViperUtil.getBoundingRectangle(element);
-                    var scrollCoords = ViperUtil.getScrollCoords(element.ownerDocument.defaultView);
-                    return {
-                        left: (elemRect.x1 - scrollCoords.x),
-                        right: (elemRect.x2 - scrollCoords.x),
-                        top: (elemRect.y1 - scrollCoords.y),
-                        bottom: (elemRect.y2 - scrollCoords.y)
-                    };
-                }
             }
         );
 
@@ -2204,6 +2060,167 @@ ViperTools.prototype = {
 
         return scale;
 
+    },
+
+    updatePositionOfElement: function(element, range, selectedNode, hideCallback) {
+        var margin = 15;
+        var tools  = this.viper.ViperTools;
+        range = range || tools.viper.getViperRange();
+
+        var getElementCoords = function(element) {
+            var elemRect     = ViperUtil.getBoundingRectangle(element);
+            var scrollCoords = ViperUtil.getScrollCoords(element.ownerDocument.defaultView);
+            return {
+                left: (elemRect.x1 - scrollCoords.x),
+                right: (elemRect.x2 - scrollCoords.x),
+                top: (elemRect.y1 - scrollCoords.y),
+                bottom: (elemRect.y2 - scrollCoords.y)
+            };
+        };
+
+        var rangeCoords  = null;
+        var selectedNode = selectedNode || range.getNodeSelection(range);
+        if (selectedNode !== null) {
+            rangeCoords = getElementCoords(selectedNode);
+        } else {
+            rangeCoords = range.rangeObj.getBoundingClientRect();
+        }
+
+        if (!rangeCoords || (rangeCoords.left === 0 && rangeCoords.top === 0 && ViperUtil.isBrowser('firefox') === true)) {
+            if (range.collapsed === true) {
+                var span = document.createElement('span');
+                tools.viper.insertNodeAtCaret(span);
+                rangeCoords = getElementCoords(span);
+                ViperUtil.remove(span);
+
+                if (!rangeCoords) {
+                    return;
+                }
+            } else {
+                var startNode = range.getStartNode();
+                var endNode   = range.getEndNode();
+                if (!startNode || !endNode) {
+                    return;
+                }
+
+                if (startNode.nodeType === ViperUtil.TEXT_NODE
+                    && startNode.data.indexOf("\n") === 0
+                    && endNode.nodeType === ViperUtil.TEXT_NODE
+                    && range.endOffset === endNode.data.length
+                ) {
+                    range.setStart(endNode, endNode.data.length);
+                    range.collapse(true);
+                    rangeCoords = range.rangeObj.getBoundingClientRect();
+                }
+            }//end if
+        }//end if
+
+        if (!rangeCoords || (rangeCoords.bottom === 0 && rangeCoords.height === 0 && rangeCoords.left === 0)) {
+            if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true) {
+                // Webkit bug workaround. https://bugs.webkit.org/show_bug.cgi?id=65324.
+                // OK.. Yet another fix. With the latest Google Chrome (17.0.963.46)
+                // the !rangeCoords check started to fail because its no longer
+                // returning null for a collapsed range, instead all values are set to 0.
+                var startNode = range.getStartNode();
+                if (startNode.nodeType === ViperUtil.TEXT_NODE) {
+                    if (range.startOffset <= startNode.data.length) {
+                        range.setEnd(startNode, (range.startOffset + 1));
+                        rangeCoords = range.rangeObj.getBoundingClientRect();
+                        range.collapse(true);
+                        if (rangeCoords) {
+                            rangeCoords.right = rangeCoords.left;
+                        }
+                    } else if (range.startOffset > 0) {
+                        range.setStart(startNode, (range.startOffset - 1));
+                        rangeCoords = range.rangeObj.getBoundingClientRect();
+                        range.collapse(false);
+                        if (rangeCoords) {
+                            rangeCoords.right = rangeCoords.left;
+                        }
+                    }
+                }
+            } else {
+                // Point to top of Viper element.
+                rangeCoords        = getElementCoords(tools.viper.getViperElement());
+                rangeCoords.bottom = (rangeCoords.top + 10);
+            }//end if
+        }//end if
+
+        var frameOffset = {x: 0, y: 0};
+        if (Viper.document !== document && Viper.document.defaultView.frameElement) {
+            // Viper element is inside an iframe, need to adjust the position.
+            frameOffset      = tools.viper.getDocumentOffset();
+            var newCoords    = {};
+            newCoords.bottom = (rangeCoords.bottom + frameOffset.y);
+            newCoords.top    = (rangeCoords.top + frameOffset.y);
+            newCoords.bottom = (rangeCoords.bottom + frameOffset.y);
+            newCoords.left   = (rangeCoords.left + frameOffset.x);
+            newCoords.right  = (rangeCoords.right + frameOffset.x);
+            newCoords.height = rangeCoords.height;
+            newCoords.width  = rangeCoords.width;
+            rangeCoords      = newCoords;
+        }
+
+        var scrollCoords = ViperUtil.getScrollCoords();
+
+        ViperUtil.addClass(element, 'Viper-calcWidth');
+        ViperUtil.setStyle(element, 'width', 'auto');
+        var elementWidth = ViperUtil.getElementWidth(element);
+        ViperUtil.removeClass(element, 'Viper-calcWidth');
+        ViperUtil.setStyle(element, 'width', elementWidth + 'px');
+
+        var viperElemCoords = getElementCoords(tools.viper.getViperElement());
+        var elemWindowDim   = ViperUtil.getWindowDimensions(Viper.document.defaultView);
+        var mainWindowDim   = ViperUtil.getWindowDimensions();
+
+        if (this._verticalPosUpdateOnly !== true) {
+            var left = ((rangeCoords.left + ((rangeCoords.right - rangeCoords.left) / 2) + scrollCoords.x) - (elementWidth / 2));
+            ViperUtil.removeClass(element, 'Viper-orientationLeft Viper-orientationRight');
+
+            if (left > (elemWindowDim.width + frameOffset.x)) {
+                // Dont go off screen, point to the editable element.
+                left = viperElemCoords.left;
+            }
+
+            if (left < 0) {
+                left += (elementWidth / 2);
+                ViperUtil.addClass(element, 'Viper-orientationLeft');
+            } else if (left + elementWidth > mainWindowDim.width) {
+                left -= (elementWidth / 2);
+                ViperUtil.addClass(element, 'Viper-orientationRight');
+            }
+
+            ViperUtil.setStyle(element, 'left', left + 'px');
+        }
+
+        var top = (rangeCoords.bottom + margin + scrollCoords.y);
+
+        if (top === 0) {
+            if (hideCallback) {
+                hideCallback.call(this);
+            }
+            return;
+        } else if (((top + 50) > (mainWindowDim.height + scrollCoords.y)) || (top > elemWindowDim.height + scrollCoords.y + frameOffset.y)) {
+            if (hideCallback) {
+                hideCallback.call(this);
+            }
+
+            return;
+        } else if (top < viperElemCoords.top && Viper.document === document) {
+            top = (viperElemCoords.top + 50);
+            if (left < viperElemCoords.left && this._verticalPosUpdateOnly !== true) {
+                ViperUtil.setStyle(element, 'left', viperElemCoords.left + 50 + 'px');
+            }
+        } else if (Viper.document !== document && top < tools.viper.getDocumentOffset().y) {
+            if (hideCallback) {
+                hideCallback.call(this);
+            }
+
+            return;
+        }
+
+        ViperUtil.setStyle(element, 'top', top + 'px');
+        ViperUtil.addClass(element, 'Viper-visible');
     }
 
 };

@@ -1,0 +1,25 @@
+<B style="FONT-WEIGHT: normal">
+<P id=docs-internal-guid-af183501-d8e8-1cc7-2422-0ae6cf802052 style="MARGIN-BOTTOM: 0pt; MARGIN-TOP: 0pt; LINE-HEIGHT: 1.38" dir=ltr><SPAN style="FONT-SIZE: 15px; TEXT-DECORATION: none; FONT-FAMILY: Arial; FONT-VARIANT: normal; VERTICAL-ALIGN: baseline; FONT-WEIGHT: normal; COLOR: rgb(0,0,0); FONT-STYLE: normal; BACKGROUND-COLOR: transparent">This is some basic content to test copy and paste when using the cursor assist feature in viper.</SPAN></P>
+<P style="MARGIN-BOTTOM: 0pt; MARGIN-TOP: 0pt; LINE-HEIGHT: 1.38" dir=ltr><SPAN style="FONT-SIZE: 15px; TEXT-DECORATION: none; FONT-FAMILY: Arial; FONT-VARIANT: normal; VERTICAL-ALIGN: baseline; FONT-WEIGHT: normal; COLOR: rgb(0,0,0); FONT-STYLE: normal; BACKGROUND-COLOR: transparent"></SPAN></P>
+<DIV style="MARGIN-LEFT: 0pt" dir=ltr>
+<TABLE style="BORDER-COLLAPSE: collapse; border-image: none">
+<COLGROUP>
+<COL width=197>
+<COL width=197>
+<COL width=198></COLGROUP>
+<TBODY>
+<TR style="HEIGHT: 0px">
+<TD style="BORDER-TOP: rgb(0,0,0) 1px solid; BORDER-RIGHT: rgb(0,0,0) 1px solid; VERTICAL-ALIGN: top; BORDER-BOTTOM: rgb(0,0,0) 1px solid; PADDING-BOTTOM: 7px; PADDING-TOP: 7px; PADDING-LEFT: 7px; BORDER-LEFT: rgb(0,0,0) 1px solid; PADDING-RIGHT: 7px">
+<P style="MARGIN-BOTTOM: 0pt; MARGIN-TOP: 0pt; LINE-HEIGHT: 1.38" dir=ltr><SPAN style="FONT-SIZE: 15px; TEXT-DECORATION: none; FONT-FAMILY: Arial; FONT-VARIANT: normal; VERTICAL-ALIGN: baseline; FONT-WEIGHT: normal; COLOR: rgb(0,0,0); FONT-STYLE: normal; BACKGROUND-COLOR: transparent">Cell 1</SPAN></P></TD>
+<TD style="BORDER-TOP: rgb(0,0,0) 1px solid; BORDER-RIGHT: rgb(0,0,0) 1px solid; VERTICAL-ALIGN: top; BORDER-BOTTOM: rgb(0,0,0) 1px solid; PADDING-BOTTOM: 7px; PADDING-TOP: 7px; PADDING-LEFT: 7px; BORDER-LEFT: rgb(0,0,0) 1px solid; PADDING-RIGHT: 7px">
+<P style="MARGIN-BOTTOM: 0pt; MARGIN-TOP: 0pt; LINE-HEIGHT: 1.38" dir=ltr><SPAN style="FONT-SIZE: 15px; TEXT-DECORATION: none; FONT-FAMILY: Arial; FONT-VARIANT: normal; VERTICAL-ALIGN: baseline; FONT-WEIGHT: normal; COLOR: rgb(0,0,0); FONT-STYLE: normal; BACKGROUND-COLOR: transparent">Cell 2</SPAN></P></TD>
+<TD style="BORDER-TOP: rgb(0,0,0) 1px solid; BORDER-RIGHT: rgb(0,0,0) 1px solid; VERTICAL-ALIGN: top; BORDER-BOTTOM: rgb(0,0,0) 1px solid; PADDING-BOTTOM: 7px; PADDING-TOP: 7px; PADDING-LEFT: 7px; BORDER-LEFT: rgb(0,0,0) 1px solid; PADDING-RIGHT: 7px">
+<P style="MARGIN-BOTTOM: 0pt; MARGIN-TOP: 0pt; LINE-HEIGHT: 1.38" dir=ltr><SPAN style="FONT-SIZE: 15px; TEXT-DECORATION: none; FONT-FAMILY: Arial; FONT-VARIANT: normal; VERTICAL-ALIGN: baseline; FONT-WEIGHT: normal; COLOR: rgb(0,0,0); FONT-STYLE: normal; BACKGROUND-COLOR: transparent">Cell 3</SPAN></P></TD></TR>
+<TR style="HEIGHT: 0px">
+<TD style="BORDER-TOP: rgb(0,0,0) 1px solid; BORDER-RIGHT: rgb(0,0,0) 1px solid; VERTICAL-ALIGN: top; BORDER-BOTTOM: rgb(0,0,0) 1px solid; PADDING-BOTTOM: 7px; PADDING-TOP: 7px; PADDING-LEFT: 7px; BORDER-LEFT: rgb(0,0,0) 1px solid; PADDING-RIGHT: 7px">
+<P style="MARGIN-BOTTOM: 0pt; MARGIN-TOP: 0pt; LINE-HEIGHT: 1.38" dir=ltr><SPAN style="FONT-SIZE: 15px; TEXT-DECORATION: none; FONT-FAMILY: Arial; FONT-VARIANT: normal; VERTICAL-ALIGN: baseline; FONT-WEIGHT: normal; COLOR: rgb(0,0,0); FONT-STYLE: normal; BACKGROUND-COLOR: transparent">Cell 4</SPAN></P></TD>
+<TD style="BORDER-TOP: rgb(0,0,0) 1px solid; BORDER-RIGHT: rgb(0,0,0) 1px solid; VERTICAL-ALIGN: top; BORDER-BOTTOM: rgb(0,0,0) 1px solid; PADDING-BOTTOM: 7px; PADDING-TOP: 7px; PADDING-LEFT: 7px; BORDER-LEFT: rgb(0,0,0) 1px solid; PADDING-RIGHT: 7px">
+<P style="MARGIN-BOTTOM: 0pt; MARGIN-TOP: 0pt; LINE-HEIGHT: 1.38" dir=ltr><SPAN style="FONT-SIZE: 15px; TEXT-DECORATION: none; FONT-FAMILY: Arial; FONT-VARIANT: normal; VERTICAL-ALIGN: baseline; FONT-WEIGHT: normal; COLOR: rgb(0,0,0); FONT-STYLE: normal; BACKGROUND-COLOR: transparent">Cell 5</SPAN></P></TD>
+<TD style="BORDER-TOP: rgb(0,0,0) 1px solid; BORDER-RIGHT: rgb(0,0,0) 1px solid; VERTICAL-ALIGN: top; BORDER-BOTTOM: rgb(0,0,0) 1px solid; PADDING-BOTTOM: 7px; PADDING-TOP: 7px; PADDING-LEFT: 7px; BORDER-LEFT: rgb(0,0,0) 1px solid; PADDING-RIGHT: 7px">
+<P style="MARGIN-BOTTOM: 0pt; MARGIN-TOP: 0pt; LINE-HEIGHT: 1.38" dir=ltr><SPAN style="FONT-SIZE: 15px; TEXT-DECORATION: none; FONT-FAMILY: Arial; FONT-VARIANT: normal; VERTICAL-ALIGN: baseline; FONT-WEIGHT: normal; COLOR: rgb(0,0,0); FONT-STYLE: normal; BACKGROUND-COLOR: transparent">Cell 6</SPAN></P></TD></TR></TBODY></TABLE></DIV>
+<P style="MARGIN-BOTTOM: 0pt; MARGIN-TOP: 0pt; LINE-HEIGHT: 1.38" dir=ltr><SPAN style="FONT-SIZE: 15px; TEXT-DECORATION: none; FONT-FAMILY: Arial; FONT-VARIANT: normal; VERTICAL-ALIGN: baseline; FONT-WEIGHT: normal; COLOR: rgb(0,0,0); FONT-STYLE: normal; BACKGROUND-COLOR: transparent"></SPAN></P><BR><BR></B>
