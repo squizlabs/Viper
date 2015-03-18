@@ -5366,6 +5366,9 @@ Viper.prototype = {
             var tagName = node.tagName.toLowerCase();
             if (tag && tag !== tagName) {
                 return;
+            } else if (node.className !== '' || node.id !== '') {
+                // If the node has CSS classes or ID set then do not remove it.
+                return;
             }
 
             switch (tagName) {
