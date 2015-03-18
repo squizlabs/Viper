@@ -220,48 +220,49 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteFormatsUnitTest extends Abstract
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + c');
-        sleep(1);
-        $this->moveToKeyword(4, 'right');
+        sleep(2);
+        $this->moveToKeyword(5, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.CMD + v');
-        sleep(1);
-        $this->assertHTMLMatch('<p>This is a paragraph section %1%</p><div>This is a div section %2%</div><pre>This is a pre section %3%</pre><blockquote><p>This is a quote section %4%</p></blockquote><p>This is a paragraph section %1%</p>');
+        sleep(2);
+        $this->assertHTMLMatch('<p>This is a paragraph section %1%</p><div>This is a div section %2%</div><pre>This is a pre section %3%</pre><blockquote><p>This is a quote section %4%</p></blockquote><p>Space paragraph</p><p>Another paragraph %5%</p><p>This is a paragraph section %1%</p>');
 
         // Test div
         $this->useTest(5);
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + c');
-        sleep(1);
-        $this->moveToKeyword(4, 'right');
+        sleep(2);
+        $this->moveToKeyword(5, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.CMD + v');
-        sleep(1);
-        $this->assertHTMLMatch('<p>This is a paragraph section %1%</p><div>This is a div section %2%</div><pre>This is a pre section %3%</pre><blockquote><p>This is a quote section %4%</p></blockquote><div>This is a div section %2%</div>');
+        sleep(2);
+        $this->assertHTMLMatch('<p>This is a paragraph section %1%</p><div>This is a div section %2%</div><pre>This is a pre section %3%</pre><blockquote><p>This is a quote section %4%</p></blockquote><p>Space paragraph</p><p>Another paragraph %5%</p><div>This is a div section %2%</div>');
 
         // Test pre
         $this->useTest(5);
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + c');
-        sleep(1);
-        $this->moveToKeyword(4, 'right');
+        sleep(2);
+        $this->moveToKeyword(5, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.CMD + v');
-        sleep(1);
-        $this->assertHTMLMatch('<p>This is a paragraph section %1%</p><div>This is a div section %2%</div><pre>This is a pre section %3%</pre><blockquote><p>This is a quote section %4%</p></blockquote><pre>This is a pre section %3%</pre>');
+        sleep(2);
+        $this->assertHTMLMatch('<p>This is a paragraph section %1%</p><div>This is a div section %2%</div><pre>This is a pre section %3%</pre><blockquote><p>This is a quote section %4%</p></blockquote><p>Space paragraph</p><p>Another paragraph %5%</p><pre>This is a pre section %3%</pre>');
 
         // Test quote
         $this->useTest(5);
         $this->selectKeyword(4);
+        sleep(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + c');
-        sleep(1);
-        $this->moveToKeyword(1, 'right');
+        sleep(2);
+        $this->moveToKeyword(5, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.CMD + v');
-        sleep(1);
-        $this->assertHTMLMatch('<p>This is a paragraph section %1%</p><blockquote><p>This is a quote section %4%</p></blockquote><div>This is a div section %2%</div><pre>This is a pre section %3%</pre><blockquote><p>This is a quote section %4%</p></blockquote>');
+        sleep(2);
+        $this->assertHTMLMatch('<p>This is a paragraph section %1%</p><div>This is a div section %2%</div><pre>This is a pre section %3%</pre><blockquote><p>This is a quote section %4%</p></blockquote><p>Space paragraph</p><p>Another paragraph %5%</p><blockquote><p>This is a quote section %4%</p></blockquote>');
 
     }//end testCopyPasteBlockElements()
 
