@@ -27,7 +27,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $expected .= 'QWERTYUIOPASDFGHJKLZXCVBNM';
         $expected .= '~!@#$%^&amp;*()_+{}|:"&lt;&gt;? &nbsp; .';
 
-        $this->assertHTMLMatch('<p>'.$expected.'</p><p>EIB MOZ %2%</p>');
+        $this->assertHTMLMatch('<p>'.$expected.' EIB MOZ %2%</p>');
 
     }//end testTextType()
 
