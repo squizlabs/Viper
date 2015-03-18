@@ -324,7 +324,9 @@ ViperFormatPlugin.prototype = {
                 ['ViperToolbar:subsectionClosed', 'ViperToolbarPlugin:bubbleClosed'],
                 'ViperFormatPlugin',
                 function(sectionid) {
-                    if (sectionid.indexOf('ViperFormatPlugin:') === 0) {
+                    if (sectionid.indexOf('ViperFormatPlugin:') === 0
+                       || sectionid.indexOf('ViperTableEditor-Format-') === 0
+                    ) {
                         tools.getItem(self._popoutid).hide();
                     }
                 }
@@ -566,7 +568,7 @@ ViperFormatPlugin.prototype = {
 
     },
 
-    _updateClassAttribute: function(value) {
+    _updateClassAttribute: function(value, element) {
         if (this._custStyles) {
             // Check if any of the custom styles is selected.
             var tools          = this.viper.ViperTools;
@@ -577,7 +579,12 @@ ViperFormatPlugin.prototype = {
             }
         }
 
-        this._setAttributeForSelection('class', value);
+        if (element) {
+            this._setAttributeForElement(element, 'class', value);
+        } else {
+            this._setAttributeForSelection('class', value);
+        }
+
     },
 
     _getClassInitialValue: function(attrClass, node) {
@@ -1317,7 +1324,10 @@ ViperFormatPlugin.prototype = {
                 this.viper.ViperTools.setButtonInactive(prefix + 'classBtn-' + data.type);
             }
 
+            classAttribute = this._getClassInitialValue(classAttribute, element);
             this.viper.ViperTools.getItem(prefix + 'class:input').setValue(classAttribute);
+
+            //this._updateDefinedStylesList()
 
             data.toolbar.showButton(prefix + 'classBtn-' + data.type);
         }
@@ -1356,7 +1366,8 @@ ViperFormatPlugin.prototype = {
 
             var self = this;
             var tableEditorPlugin = this.viper.ViperPluginManager.getPlugin('ViperTableEditorPlugin');
-            toolbar.makeSubSection(prefix + 'class:subSection-' + type, this._getClassSection(prefix));
+            var classSection      = this._getClassSection(prefix);
+            toolbar.makeSubSection(prefix + 'class:subSection-' + type, classSection);
             toolbar.setSubSectionAction(prefix + 'class:subSection-' + type, function() {
                 var element  = tableEditorPlugin.getActiveCell();
                 switch (type) {
@@ -1373,12 +1384,8 @@ ViperFormatPlugin.prototype = {
                     break;
                 }
 
-                var value   = tools.getItem(prefix + 'class:input').getValue();
-                if (element) {
-                    self._setAttributeForElement(element, 'class', value);
-                } else {
-                    self._setAttributeForSelection('class', value);
-                }
+                var value = tools.getItem(prefix + 'class:input').getValue();
+                self._updateClassAttribute(value, element);
 
                 // Set the current value as the initial value.
                 tools.getItem(prefix + 'class:input').setValue(value, true);
@@ -1392,13 +1399,16 @@ ViperFormatPlugin.prototype = {
                 self.viper.fireNodesChanged();
             }, [prefix + 'class:input']);
 
+            tools.viper.registerCallback(
+                'ViperTools:changed:' + this._styleListid,
+                'ViperFormatPlugin-toolbar',
+                function() {
+                     tools.enableButton(toolbar.getActiveSection() + '-applyButton');
+                }
+            );
+
             toolbar.setSubSectionButton(prefix + 'classBtn-' + type, prefix + 'class:subSection-' + type);
         }//end if
-
-    },
-
-    getSelectedCustomStyles: function()
-    {
 
     },
 
