@@ -27,7 +27,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $expected .= 'QWERTYUIOPASDFGHJKLZXCVBNM';
         $expected .= '~!@#$%^&amp;*()_+{}|:"&lt;&gt;? &nbsp; .';
 
-        $this->assertHTMLMatch('<p>'.$expected.'</p><p>EIB MOZ %2%</p>');
+        $this->assertHTMLMatch('<p>'.$expected.' EIB MOZ %2%</p>');
 
     }//end testTextType()
 
@@ -148,7 +148,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('insertHr', NULL));
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove', 'disabled'));
-        $this->assertTrue($this->topToolbarButtonExists('anchorID', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('charmap', NULL));
         $this->assertTrue($this->topToolbarButtonExists('searchReplace', NULL));
         $this->assertTrue($this->topToolbarButtonExists('langtools', 'disabled'));
@@ -179,7 +179,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('insertHr', NULL));
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove', 'disabled'));
-        $this->assertTrue($this->topToolbarButtonExists('anchorID', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('charmap', NULL));
         $this->assertTrue($this->topToolbarButtonExists('searchReplace', NULL));
         $this->assertTrue($this->topToolbarButtonExists('langtools', 'disabled'));
@@ -678,6 +678,26 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<p><strong>XAX</strong></p><p>testtest</p><p>EIB MOZ %2%</p>');
 
     }//end testJoinParagraphsAndSplitAtEndOfTag()
+
+
+    /**
+     * Tests that you can split two a tags with a br tag or into two paragraphs.
+     *
+     * @return void
+     */
+    public function testSplittingTwoATags()
+    {
+        $this->useTest(8);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.SHIFT + Key.ENTER');
+        $this->assertHTMLMatch('<p><a href="#">Link %1%</a><br/><a href="#">Link %2%</a></p>');
+
+        $this->useTest(8);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p><a href="#">Link %1%</a></p><p><a href="#">Link %2%</a></p>');
+
+    }//end testSplittingTwoATags()
 
 
     /**

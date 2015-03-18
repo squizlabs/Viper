@@ -439,8 +439,13 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
 
         self::$_startTime = time();
         $filters          = getenv('VIPER_TEST_FILTER');
+        $range            = getenv('VIPER_TEST_RANGE');
 
-        if (empty($filters) === FALSE) {
+        if (empty($range) === false) {
+            $range = explode('-', $range);
+        }
+
+        if (empty($filters) === FALSE && $filters !== '//') {
             $filters = trim($filters, '/');
             $filters = explode('|', $filters);
             foreach ($filters as $filter) {
@@ -483,6 +488,26 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
                     }
                 }//end if
             }//end foreach
+        } else if (empty($range) === false) {
+            $rangeTests = array();
+            $tests      = $suite->tests();
+            $c          = 0;
+            foreach ($tests as $test) {
+                if (method_exists($test, 'tests') === TRUE) {
+                    foreach ($test->tests() as $testCase) {
+                        if ($c >= $range[1]) {
+                            break(2);
+                        } else if ($c >= $range[0]) {
+                            $rangeTests[] = $testCase;
+                        }
+
+                        $c++;
+                    }
+                }
+            }
+
+            $suite->setTests($rangeTests);
+            self::$_numTests = $suite->count();
         } else {
             self::$_numTests = $suite->count();
         }//end if

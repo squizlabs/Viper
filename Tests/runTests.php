@@ -2,7 +2,7 @@
 
     chdir(dirname(__FILE__));
 
-    $opts = getopt('b::u::t::cv', array('url::', 'built', 'log::', 'help'));
+    $opts = getopt('b::u::t::cv::', array('url::', 'built', 'log::', 'help', 'range::'));
 
     if (isset($opts['help']) === TRUE) {
         printHelp();
@@ -35,6 +35,11 @@
     $test = NULL;
     if (isset($opts['t']) === TRUE && empty($opts['t']) === FALSE) {
         $test = $opts['t'];
+    }
+
+    $range = null;
+    if (array_key_exists('range', $opts) === TRUE) {
+        $range = $opts['range'];
     }
 
     if (isset($opts['v']) === TRUE) {
@@ -118,6 +123,10 @@
         if ($test !== NULL) {
             $phpunitCMD .= ' --filter "'.$test.'"';
             putenv('VIPER_TEST_FILTER='.$test);
+        }
+
+        if ($range !== NULL) {
+            putenv('VIPER_TEST_RANGE='.$range);
         }
 
         if (empty($unitTests) === TRUE) {

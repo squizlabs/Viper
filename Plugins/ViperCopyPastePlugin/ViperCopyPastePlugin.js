@@ -588,7 +588,7 @@ ViperCopyPastePlugin.prototype = {
                         var count   = 0;
                         while ((match = re.exec(selectedContent)) != null) {
                             var rep = false;
-                            if (match[0].indexOf('<td ') === 0) {
+                            if (match[0].indexOf('<td') === 0) {
                                 count++;
                                 rep = true;
                             } else if (match[0].indexOf('</td>') === 0) {
@@ -1063,7 +1063,7 @@ ViperCopyPastePlugin.prototype = {
             // TODO: We should move handleEnter function to somewhere else and make it
             // a little bit more generic.
             var keyboardEditor = this.viper.ViperPluginManager.getPlugin('ViperKeyboardEditorPlugin');
-            var range = this.viper.getCurrentRange();
+            var range = this.viper.getViperRange();
             range.setEnd(this._tmpNode, 0);
             range.collapse(false);
 
@@ -1141,7 +1141,7 @@ ViperCopyPastePlugin.prototype = {
                                 insAfter = firstChild;
                             }
                         } else if (ViperUtil.isTag(ctNode, 'table') === true
-                            && ViperUtil.getParents(prevBlock, 'table').length > 0
+                            && ViperUtil.getParents(prevBlock, 'table', this.viper.getViperElement()).length > 0
                         ) {
                             // Pasting table inside a table is not allowed. Just paste the tables content.
                             var tableContentTags = 'td,th,caption';
@@ -1299,15 +1299,10 @@ ViperCopyPastePlugin.prototype = {
         ViperUtil.setHtml(tmp, content);
 
         var docParent = null;
-        if (ViperUtil.isBrowser('msie', '>=11') === true) {
-            docParent = tmp.firstChild;
-        } else if (ViperUtil.isBrowser('msie', '8') === true) {
+        if (ViperUtil.isBlockElement(tmp.firstChild) === true) {
             docParent = tmp;
         } else {
-            docParent = ViperUtil.find(tmp, '[id^="docs-internal-guid-"]');
-            if (docParent.length === 1) {
-                docParent = docParent[0];
-            }
+            docParent = tmp.firstChild;
         }
 
         tmp = docParent;

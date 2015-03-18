@@ -1185,6 +1185,7 @@ ViperFormatPlugin.prototype = {
             } else {
                 var attributes = {attributes: {}};
                 attributes.attributes[attr] = value;
+                range = this.viper.selectBookmark(bookmark);
                 this.viper.surroundContents('span', attributes, range);
                 range = this.viper.getViperRange();
 

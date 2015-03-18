@@ -143,7 +143,7 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
         $this->sikuli->click($this->findKeyword(1));
 
         // Open and copy the text file
-        $this->openFile($this->getTestURL().'/ViperAccessibilityPlugin/TableIdErrorCountExampleContent.txt', $this->sikuli->getBrowserName());
+        $this->openFile($this->getTestURL('/ViperAccessibilityPlugin/TableIdErrorCountExampleContent.txt'), $this->sikuli->getBrowserName());
         sleep(1);
 
         // Copy text.
