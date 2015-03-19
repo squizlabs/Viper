@@ -1619,14 +1619,17 @@ ViperFormatPlugin.prototype = {
             currentLinIndex = this._inlineToolbar.getCurrentLineageIndex();
         }
 
-        var range           = this.viper.getViperRange();
-        var selectedNode    = selectedNode || range.getNodeSelection();
-        var nodeSelection   = selectedNode;
-        var viperElement    = this.viper.getViperElement();
+        var range          = this.viper.getViperRange();
+        var selectedNode   = selectedNode || range.getNodeSelection();
+        var nodeSelection  = selectedNode;
+        var viperElement   = this.viper.getViperElement();
+        var formatElement  = null;
 
-        var formatElement   = lineage[currentLinIndex];
-        if (formatElement && formatElement.nodeType !== ViperUtil.TEXT_NODE) {
-            selectedNode = formatElement;
+        if (range.collapsed !== true && !selectedNode) {
+            formatElement = lineage[currentLinIndex];
+            if (formatElement && formatElement.nodeType !== ViperUtil.TEXT_NODE) {
+                selectedNode = formatElement;
+            }
         }
 
         if (selectedNode === viperElement) {
