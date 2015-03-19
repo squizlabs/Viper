@@ -710,39 +710,37 @@ ViperFormatPlugin.prototype = {
                 || (ViperUtil.isTag(startNode, 'br') === false
                 && (startNode.nodeType === ViperUtil.TEXT_NODE && ViperUtil.trim(startNode.data) === '') === false))
             ) {
-                if (ViperUtil.isTag(nodeSelection, ['td', 'th']) === false) {
-                    if (nodeSelection && nodeSelection === self.viper.getViperElement()) {
-                        tools.disableButton('anchor');
-                        tools.disableButton('class');
-                        tools.setButtonInactive('anchor');
-                        tools.setButtonInactive('class');
-                    } else if (nodeSelection && range.collapsed !== true) {
-                        tools.enableButton('anchor');
-                        tools.enableButton('class');
+                if (nodeSelection && nodeSelection === self.viper.getViperElement()) {
+                    tools.disableButton('anchor');
+                    tools.disableButton('class');
+                    tools.setButtonInactive('anchor');
+                    tools.setButtonInactive('class');
+                } else if (nodeSelection && range.collapsed !== true) {
+                    tools.enableButton('anchor');
+                    tools.enableButton('class');
 
-                        // Anchor.
-                        var attrId = self._getAttributeValue('id', nodeSelection);
-                        tools.getItem(prefix + 'anchor:input').setValue(attrId);
-                        if (attrId) {
-                            tools.setButtonActive('anchor');
-                        } else {
-                            tools.setButtonInactive('anchor');
-                        }
-
-                        // Class.
-                        var attrClass = self._getAttributeValue('class', nodeSelection);
-                        tools.getItem(prefix + 'class:input').setValue(attrClass);
-                        if (attrClass) {
-                            tools.setButtonActive('class');
-                        } else {
-                            tools.setButtonInactive('class');
-                        }
+                    // Anchor.
+                    var attrId = self._getAttributeValue('id', nodeSelection);
+                    tools.getItem(prefix + 'anchor:input').setValue(attrId);
+                    if (attrId) {
+                        tools.setButtonActive('anchor');
                     } else {
-                        tools.getItem(prefix + 'class:input').setValue('');
-                        tools.getItem(prefix + 'anchor:input').setValue('');
                         tools.setButtonInactive('anchor');
+                    }
+
+                    // Class.
+                    var attrClass = self._getAttributeValue('class', nodeSelection);
+                    tools.getItem(prefix + 'class:input').setValue(attrClass);
+                    if (attrClass) {
+                        tools.setButtonActive('class');
+                    } else {
                         tools.setButtonInactive('class');
                     }
+                } else {
+                    tools.getItem(prefix + 'class:input').setValue('');
+                    tools.getItem(prefix + 'anchor:input').setValue('');
+                    tools.setButtonInactive('anchor');
+                    tools.setButtonInactive('class');
                 }
             }//end if
 
