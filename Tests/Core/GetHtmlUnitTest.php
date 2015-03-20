@@ -2,7 +2,7 @@
 
 require_once 'AbstractViperUnitTest.php';
 
-class Viper_Tests_Core_GetHtmlTest extends AbstractViperUnitTest
+class Viper_Tests_Core_GetHtmlUnitTest extends AbstractViperUnitTest
 {
 
 

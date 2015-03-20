@@ -2,7 +2,7 @@
 
 require_once 'AbstractViperListPluginUnitTest.php';
 
-class Viper_Tests_ViperListPlugin_IndentAndOutdentListTest extends AbstractViperListPluginUnitTest
+class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractViperListPluginUnitTest
 {
 
     /**

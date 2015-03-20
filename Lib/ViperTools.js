@@ -1933,7 +1933,7 @@ ViperTools.prototype = {
                     var toolbarPos = ViperUtil.getBoundingRectangle(toolbar);
                     var xPos       = (buttonRect.x1 - toolbarPos.x1 + ((buttonRect.x2 - buttonRect.x1) / 2));
                     ViperUtil.setStyle(subSectionContainer.firstChild, 'left', xPos + 'px');
-                },
+                }
             }
         );
 
