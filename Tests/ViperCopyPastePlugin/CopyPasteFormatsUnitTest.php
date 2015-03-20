@@ -180,14 +180,14 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteFormatsUnitTest extends Abstract
         sleep(1);
         $this->type('Second paste ');
         $this->sikuli->keyDown('Key.CMD + v');
-        $this->assertHTMLMatch('<p>First paragraph</p><pre>Lorum this is more content XAX to test XBX First paste &lt;pre&gt;Lorum this is more content XAX to test XBX&lt;/pre&gt; Second paste &lt;pre&gt;Lorum this is more content XAX to test XBX&lt;/pre&gt;   </pre>');
+        $this->assertHTMLMatch('<p>First paragraph</p><pre>Lorum this is more content %1% to test %2% First paste &lt;pre&gt;Lorum this is more content %1% to test %2%&lt;/pre&gt; Second paste &lt;pre&gt;Lorum this is more content %1% to test %2%&lt;/pre&gt;   </pre>');
 
         // Paste again in a new pre section
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
-        $this->assertHTMLMatch('<p>First paragraph</p><pre>Lorum this is more content XAX to test XBX First paste &lt;pre&gt;Lorum this is more content XAX to test XBX&lt;/pre&gt; Second paste &lt;pre&gt;Lorum this is more content XAX to test XBX&lt;/pre&gt;</pre><pre>Lorum this is more content XAX to test XBX</pre>');
+        $this->assertHTMLMatch('<p>First paragraph</p><pre>Lorum this is more content %1% to test %2% First paste &lt;pre&gt;Lorum this is more content %1% to test %2%&lt;/pre&gt; Second paste &lt;pre&gt;Lorum this is more content %1% to test %2%&lt;/pre&gt;</pre><pre>Lorum this is more content %1% to test %2%</pre>');
 
     }//end testCopyAndPastePreFormat()
 
@@ -199,11 +199,29 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteFormatsUnitTest extends Abstract
      */
     public function testPastingHtmlIntoPre()
     {
-        $this->useTest(1);
-
-        $this->selectKeyword(1);
+        $this->useTest(7);
+        $this->selectKeyword(3);
         $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/CopyPasteFiles/HtmlCode.txt'));
-        $this->assertHTMLMatch('<p>First paragraph</p><pre>Lorum this is more content &lt;strong&gt;strong tags&lt;/strong&gt; &lt;ul&gt;&lt;li&gt;List item&lt;/li&gt;&lt;li&gt;List item&lt;/li&gt;&lt;/ul&gt;  to test XBX</pre>');
+        $this->assertHTMLMatch('<p>First paragraph<strong>%1% bold content %2%</strong></p><pre>Lorum this is more content &lt;strong&gt;strong tags&lt;/strong&gt; &lt;ul&gt;&lt;li&gt;List item&lt;/li&gt;&lt;li&gt;List item&lt;/li&gt;&lt;/ul&gt;  to test</pre>');
+
+        $this->useTest(7);
+        $this->selectKeyword(1, 2);
+        $this->sikuli->keyDown('Key.CMD + c');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton('formats-p', 'active');
+        $this->clickTopToolbarButton('PRE', NULL, TRUE);
+        $this->sikuli->keyDown('Key.CMD + v');
+        $this->assertHTMLMatch('<p>First paragraph<strong>%1% bold content %2%</strong></p><pre>&lt;strong&gt;%1% bold content %2%&lt;/strong&gt;</pre><pre>Lorum this is more content %3% to test</pre>');
+        $this->clickTopToolbarButton('P', NULL, TRUE);
+        $this->sikuli->keyDown('Key.CMD + v');
+        $this->assertHTMLMatch('<p>First paragraph<strong>%1% bold content %2%</strong></p><p>&lt;strong&gt;%1% bold content %2%&lt;/strong&gt;<strong>%1% bold content %2%</strong></p><pre>Lorum this is more content %3% to test</pre>');
+        $this->clickTopToolbarButton('PRE', NULL, TRUE);
+        $this->type(' ');
+        $this->sikuli->keyDown('Key.CMD + v');
+        $this->assertHTMLMatch('<p>First paragraph<strong>%1% bold content %2%</strong></p><pre>&lt;strong&gt;%1% bold content %2%&lt;/strong&gt;<strong>%1% bold content %2% &lt;strong&gt;%1% bold content %2%&lt;/strong&gt;</strong></pre><pre>Lorum this is more content %3% to test</pre>');
+        $this->clickTopToolbarButton('PRE', 'active', TRUE);
+        $this->assertHTMLMatch('<p>First paragraph<strong>%1% bold content %2%</strong></p><p>&lt;strong&gt;%1% bold content %2%&lt;/strong&gt;<strong>%1% bold content %2% &lt;strong&gt;%1% bold content %2%&lt;/strong&gt;</strong></p><pre>Lorum this is more content %3% to test</pre>');
         
     }//end testPastingHtmlIntoPre()
 

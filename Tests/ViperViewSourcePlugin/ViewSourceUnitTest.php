@@ -2,7 +2,7 @@
 
 require_once 'AbstractViperUnitTest.php';
 
-class Viper_Tests_ViperViewSourcePlugin_ViewSourceTest extends AbstractViperUnitTest
+class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViperUnitTest
 {
 
 
