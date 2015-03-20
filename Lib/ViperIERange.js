@@ -496,6 +496,7 @@ ViperIERange.prototype = {
             this.collapse(true);
         } else {
             this.rangeObj.execCommand('Delete');
+            this._clearRangeCache();
             this._initContainerInfo();
         }
 
@@ -1201,6 +1202,18 @@ ViperIERange.prototype = {
         // Remove char(13)char(10) (\r\n).
         text = text.replace(/\r\n/g, '');
         return text;
+
+    },
+
+    _clearRangeCache: function()
+    {
+        ViperIERange._prevRange = {
+            range: null,
+            startContainer: null,
+            endContainer: null,
+            startOffset: 0,
+            endOffset: 0
+        };
 
     }
 

@@ -2,7 +2,7 @@
 require_once 'AbstractViperListPluginUnitTest.php';
 
 
-class Viper_Tests_ViperListPlugin_HeadingsAndListsTest extends AbstractViperListPluginUnitTest
+class Viper_Tests_ViperListPlugin_HeadingsAndListsUnitTest extends AbstractViperListPluginUnitTest
 {
 
 
