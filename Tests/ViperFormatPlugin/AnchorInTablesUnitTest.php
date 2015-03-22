@@ -634,12 +634,23 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
 
         // Check the anchor icon in each cell
         $this->clickCell(0);
-        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->clickCell(1);
-        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->clickCell(2);
-        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->clickCell(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
+
+        // Add data and check icon again
+        $this->_addDataToTable();
+        $this->selectKeyword(2);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->selectKeyword(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->selectKeyword(4);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->selectKeyword(5);
         $this->assertTrue($this->topToolbarButtonExists('anchorID'));
 
         // Check icon when inserting a table with side header row
@@ -649,12 +660,23 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
 
         // Check the anchor icon in each cell
         $this->clickCell(0);
-        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->clickCell(1);
-        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->clickCell(2);
-        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->clickCell(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
+
+        // Add data and check icon again
+        $this->_addDataToTable();
+        $this->selectKeyword(2);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->selectKeyword(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->selectKeyword(4);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->selectKeyword(5);
         $this->assertTrue($this->topToolbarButtonExists('anchorID'));
 
         // Check icon when inserting a table with top header row
@@ -664,12 +686,23 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
 
         // Check the anchor icon in each cell
         $this->clickCell(0);
-        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->clickCell(1);
-        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->clickCell(2);
-        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->clickCell(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
+
+        // Add data and check icon again
+        $this->_addDataToTable();
+        $this->selectKeyword(2);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->selectKeyword(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->selectKeyword(4);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID'));
+        $this->selectKeyword(5);
         $this->assertTrue($this->topToolbarButtonExists('anchorID'));
 
         // Check icon when inserting a table with side and top header row
@@ -679,15 +712,45 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
 
         // Check the anchor icon in each cell
         $this->clickCell(0);
-        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->clickCell(1);
-        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->clickCell(2);
-        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->clickCell(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
+
+        // Add data and check icon again
+        $this->_addDataToTable();
+        $this->selectKeyword(2);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->selectKeyword(3);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->selectKeyword(4);
+        $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
+        $this->selectKeyword(5);
         $this->assertTrue($this->topToolbarButtonExists('anchorID'));
 
     }//end testAnchorIconInNewTable()
+
+
+    /**
+     * Adds content to the new tables.
+      *
+     * @return void
+    */
+    private function _addDataToTable()
+    {
+        $this->clickCell(0);
+        $this->type('%2%');
+        $this->clickCell(1);
+        $this->type('%3%');
+        $this->clickCell(2);
+        $this->type('%4%');
+        $this->clickCell(3);
+        $this->type('%5%');
+
+    }//end _addDataToTable()
 
 
     /**
@@ -705,6 +768,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        sleep(2);
         $this->assertTrue($this->topToolbarButtonExists('anchorID'));
         $this->selectInlineToolbarLineageItem(3);
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
@@ -712,6 +776,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        sleep(2);
         $this->assertTrue($this->topToolbarButtonExists('anchorID'));
         $this->selectInlineToolbarLineageItem(3);
         $this->assertTrue($this->topToolbarButtonExists('anchorID'));
@@ -719,6 +784,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        sleep(2);
         $this->assertTrue($this->topToolbarButtonExists('anchorID'));
         $this->selectInlineToolbarLineageItem(3);
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
@@ -726,6 +792,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        sleep(2);
         $this->assertTrue($this->topToolbarButtonExists('anchorID'));
         $this->selectInlineToolbarLineageItem(3);
         $this->assertTrue($this->topToolbarButtonExists('anchorID'));
@@ -738,6 +805,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        sleep(2);
         $this->assertTrue($this->topToolbarButtonExists('anchorID'));
         $this->selectInlineToolbarLineageItem(3);
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
@@ -745,6 +813,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        sleep(2);
         $this->assertTrue($this->topToolbarButtonExists('anchorID'));
         $this->selectInlineToolbarLineageItem(3);
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
@@ -752,6 +821,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        sleep(2);
         $this->assertTrue($this->topToolbarButtonExists('anchorID'));
         $this->selectInlineToolbarLineageItem(3);
         $this->assertTrue($this->topToolbarButtonExists('anchorID'));
@@ -759,6 +829,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        sleep(2);
         $this->assertTrue($this->topToolbarButtonExists('anchorID'));
         $this->selectInlineToolbarLineageItem(3);
         $this->assertTrue($this->topToolbarButtonExists('anchorID'));
@@ -771,6 +842,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        sleep(2);
         $this->assertTrue($this->topToolbarButtonExists('anchorID'));
         $this->selectInlineToolbarLineageItem(3);
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
@@ -778,6 +850,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        sleep(2);
         $this->assertTrue($this->topToolbarButtonExists('anchorID'));
         $this->selectInlineToolbarLineageItem(3);
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
@@ -785,6 +858,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        sleep(2);
         $this->assertTrue($this->topToolbarButtonExists('anchorID'));
         $this->selectInlineToolbarLineageItem(3);
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'active'));
@@ -792,6 +866,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'));
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        sleep(2);
         $this->assertTrue($this->topToolbarButtonExists('anchorID'));
         $this->selectInlineToolbarLineageItem(3);
         $this->assertTrue($this->topToolbarButtonExists('anchorID'));

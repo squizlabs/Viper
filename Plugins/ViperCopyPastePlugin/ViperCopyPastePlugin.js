@@ -93,7 +93,7 @@ ViperCopyPastePlugin.prototype = {
         }
 
         var self = this;
-        if (this._isMSIE !== true) {
+        if (this._isMSIE !== true && (this._isFirefox !== true || ViperUtil.isOS('windows') !== true)) {
             elem.onpaste = function(e) {
                 if (!e.clipboardData) {
                     return;
@@ -588,7 +588,7 @@ ViperCopyPastePlugin.prototype = {
                         var count   = 0;
                         while ((match = re.exec(selectedContent)) != null) {
                             var rep = false;
-                            if (match[0].indexOf('<td ') === 0) {
+                            if (match[0].indexOf('<td') === 0) {
                                 count++;
                                 rep = true;
                             } else if (match[0].indexOf('</td>') === 0) {
@@ -621,7 +621,7 @@ ViperCopyPastePlugin.prototype = {
 
     keyDown: function (e)
     {
-        if (this._isMSIE === true) {
+        if (this._isMSIE === true || (this._isFirefox === true && ViperUtil.isOS('windows') === true)) {
             if (e.metaKey === true || e.ctrlKey === true) {
                 if (e.keyCode === 86) {
                     // CTRL/CMD + V.

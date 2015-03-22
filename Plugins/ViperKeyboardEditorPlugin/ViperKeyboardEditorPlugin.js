@@ -2017,6 +2017,8 @@ ViperKeyboardEditorPlugin.prototype = {
             this.viper.insertAfter(node.previousSibling, this.viper.createSpaceNode());
         } else if (!node.nextSibling && ViperUtil.isBlockElement(node.parentNode) === false) {
             ViperUtil.insertAfter(node.parentNode, node);
+        } else if (!node.previousSibling && node.nextSibling && node.nextSibling.nodeType === ViperUtil.TEXT_NODE) {
+            ViperUtil.insertBefore(node.parentNode, node);
         }
 
         this.viper.fireNodesChanged();
