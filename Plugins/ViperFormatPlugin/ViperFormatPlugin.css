@@ -1,14 +1,14 @@
 .ViperFormatPlugin-stylePickerButton {
     position: relative;
     clear: both;
-    margin-bottom: 0.6em;
+    margin-bottom: 0.4em;
     text-align: left;
     text-shadow: none;
     color: #FFF;
     background-color: rgba(255, 255, 255, 0.06);
     border: 1px solid #393939;
-    border-radius: 0.4em 0.4em 0.4em 0.4em;
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 0 rgba(255, 255, 255, 0.1);
+    border-radius: 0.3em;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1) inset, 0 1px 0 rgba(255, 255, 255, 0.1);
     font-size: 1.4em;
     cursor: pointer;
     padding: 0.5em 0;
@@ -31,24 +31,38 @@
     text-shadow: none;
     color: #b8b8b8;
     font-size: 1.2em;
-    border-top: 1px solid #333;
-    box-shadow: 0 1px 0 #666 inset;
+    border-top: 1px solid #3b3b40;
+    box-shadow: 0 1px 0 #616161 inset;
     margin-top: 5px;
 }
 
-.ViperFormatPlugin-styleListItem.Viper-textbox-label {
+/* Style List Items */
+
+.ViperFormatPlugin-styleListItem {
+    position: relative;
+    background-color: #2b2b2b;
+    border: 1px solid #212121;
+    border-radius: 0.3em;
+    text-align: left;
+    padding: 0.6em 22px 0.4em 0.7em;
     text-shadow: none;
+    box-shadow:
+        0 1px 3px 0px rgba(0, 0, 0, 0.26),
+        inset 0 1px 0px 0px rgba(255, 255, 255, 0.08);
+}
+
+.ViperFormatPlugin-styleListItem + .ViperFormatPlugin-styleListItem {
+    margin-top: 0.4em;
 }
 
 .ViperFormatPlugin-styleListItem-name {
     font-size: 13px;
-    margin-left: 5px;
+    color: #5a8bd0;
 }
 
 .ViperFormatPlugin-styleListItem-classes {
       font-size: 11px;
-      color: #8B8B8B;
-      margin-left: 5px;
+      color: #7f7f81;
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;

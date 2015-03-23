@@ -617,7 +617,6 @@
     background-position: -@bgY-activeOffset @bgX;
 }
 
-
 // Viper Selections
 
 .__viper_selHighlight {
@@ -670,6 +669,7 @@
 .Viper-textbox.Viper-active .Viper-textbox-label {
     background: #205caf;
 }
+
 .Viper-textbox:after {
     display: block;
     content: "";
@@ -680,6 +680,7 @@
     position: relative;
     padding-right: 0.3em;
 }
+
 .Viper-textbox.Viper-actionRevert .Viper-textbox-main,
 .Viper-textbox.Viper-actionClear .Viper-textbox-main {
     padding-right: 22px;
@@ -711,6 +712,7 @@
         filter: ~"alpha(opacity = 40)";
     }
 }
+
 .Viper-textbox.Viper-active .Viper-textbox-title,
 .Viper-textbox.Viper-required.Viper-active .Viper-textbox-title {
     background-color: #366cb7;
@@ -799,6 +801,7 @@
     color: #111;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
 }
+
 .Viper-textbox-action,
 .Viper-textbox.Viper-required .Viper-textbox-main:after {
     display: none;
@@ -826,23 +829,28 @@
         display: none;
     }
 }
+
 .Viper-textbox.Viper-required .Viper-textbox-main:after {
     display: block;
     content: "";
     background-position: 0 -158px;
 }
+
 .Viper-textbox.Viper-required.Viper-active .Viper-textbox-main:after {
     background-position: 0 -215px;
 }
+
 .Viper-textbox.Viper-actionRevert .Viper-textbox-action,
 .Viper-textbox.Viper-actionClear .Viper-textbox-action {
     display: block;
     opacity: 0.6;
 }
+
 .Viper-textbox.Viper-actionRevert .Viper-textbox-action:hover,
 .Viper-textbox.Viper-actionClear .Viper-textbox-action:hover {
     opacity: 1;
 }
+
 .Viper-textbox.Viper-actionClear .Viper-textbox-action {
     background-position: 0 -140px;
 }
@@ -1077,6 +1085,7 @@
 }
 
 /* Viper Tooltip */
+
 .Viper-tooltip {
     position: absolute;
     max-width: 200px;
@@ -1104,6 +1113,8 @@
     min-width: 39px;
   }
 }
+
+// Viper Popout Panel
 
 .Viper-popoutPanel {
     position: absolute;
