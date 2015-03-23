@@ -1420,7 +1420,7 @@ ViperFormatPlugin.prototype = {
 
         for (var i = 0; i < selectedItems.length; i++) {
             var styleListItem = document.createElement('div');
-            ViperUtil.addClass(styleListItem, 'ViperFormatPlugin-styleListItem Viper-textbox-label');
+            ViperUtil.addClass(styleListItem, 'ViperFormatPlugin-styleListItem');
             var content = '<div class="ViperFormatPlugin-styleListItem-name">' + this._custStyleNames[selectedItems[i]] + '</div>';
             content    += '<div class="ViperFormatPlugin-styleListItem-classes">.' + this._custStyles[selectedItems[i]].classNames.join(' .') + '</div>';
             content    += '<span class="ViperFormatPlugin-styleListItem-remove Viper-textbox-action" data-id="' + selectedItems[i] + '"></span>';
