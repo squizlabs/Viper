@@ -59,9 +59,11 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteTableRowUnitTest extends Abstrac
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(2);
         sleep(2);
-        $this->pasteFromURL($textFileURL);
+
+        $this->pasteFromURL($testFile);
         sleep(5);
-        $this->assertHTMLMatch('<table style="width: 100%;" border="1"><thead><tr><th><p>Header 1</p></th><th><p>Header 2</p></th><th><p>Header 3</p></th></tr></thead><tbody><tr><td><p>Cell 1</p></td><td><p>Cell 2</p></td><td><p>Cell 3</p></td></tr><tr><td><p>Cell 4</p></td><td><p>Cell 5</p></td><td><p>Cell 6</p></td></tr><tr><td><p>Cell 7</p></td><td><p>Cell 8</p></td><td><p>Cell 9</p></td></tr></tbody></table>');
+        $this->removeTableHeaders();
+        $this->assertHTMLMatch('<table cellpadding="2" cellspacing="3"><thead><tr><th>Header 1</th><th>Header 2</th><th>Header 3</th></tr></thead><tbody><tr><td><p>New Cell 1</p></td><td><p>New Cell 2</p></td><td><p>New Cell 3</p></td></tr><tr><td>Cell 4</td><td>Cell 5</td><td>Cell 6</td></tr></tbody></table>');
 
     }//end testCopyPasteTableRow()
 
