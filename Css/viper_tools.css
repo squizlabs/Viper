@@ -1,3 +1,83 @@
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes appear-right {
+  0% {
+    transform: translateX(-12px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+@-webkit-keyframes appear-right {
+  0% {
+    -webkit-transform: translateX(-12px);
+  }
+  100% {
+    -webkit-transform: translateX(0);
+  }
+}
+@keyframes appear-left {
+  0% {
+    transform: translateX(12px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+@-webkit-keyframes appear-left {
+  0% {
+    -webkit-transform: translateX(12px);
+  }
+  100% {
+    -webkit-transform: translateX(0);
+  }
+}
+@keyframes appear-top {
+  0% {
+    transform: translateY(12px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+@-webkit-keyframes appear-top {
+  0% {
+    -webkit-transform: translateY(12px);
+  }
+  100% {
+    -webkit-transform: translateY(0);
+  }
+}
+@keyframes appear-bottom {
+  0% {
+    transform: translateY(-12px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+@-webkit-keyframes appear-bottom {
+  0% {
+    -webkit-transform: translateY(-12px);
+  }
+  100% {
+    -webkit-transform: translateY(0);
+  }
+}
 .Viper-button {
   position: relative;
   border-radius: 0.25em;
@@ -8,9 +88,10 @@
   margin-left: 0.3em;
   min-width: 29px;
   box-sizing: border-box;
-  -moz-box-sizing: border-box;
   padding: 0 0.5em;
   text-align: center;
+  transition: opacity 0.1s ease-out;
+  -webkit-transition: opacity 0.1s ease-out;
 }
 .Viper-browserVer-msie8 .Viper-button,
 .Viper-browserVer-msie9 .Viper-button {
@@ -35,7 +116,6 @@
 .Viper-browserVer-msie9 .Viper-button.Viper-headings {
   min-width: 18px;
 }
-/* Button Groups */
 .Viper-buttonGroup {
   display: inline-block;
   margin-left: 0.55em;
@@ -68,7 +148,7 @@
   background-color: #e9e9eb;
   border: none;
   color: #2b2b2b;
-  text-shadow: 0 1px 0 #FFF;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
   box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.55), 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 -1.8em 1.6em -1em rgba(0, 0, 0, 0.2) inset;
 }
 .Viper-browserVer-msie8 .Viper-themeDark .Viper-button,
@@ -78,7 +158,6 @@
 }
 .Viper-themeDark .Viper-button:hover {
   background-color: #dddddf;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 .Viper-themeDark .Viper-button.Viper-active,
 .Viper-themeDark .Viper-button.Viper-active:hover,
@@ -86,14 +165,14 @@
 .Viper-themeDark .Viper-button.Viper-selected:hover {
   background-color: #3784ee;
   color: #FFF;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
   box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.5) inset, 0 1px 0 rgba(255, 255, 255, 0.2), 0 -1px 1px -1px #000000 inset, 1px 0px 0 rgba(0, 0, 0, 0.25) inset, -1px 0px 0 rgba(0, 0, 0, 0.25) inset, 0 -1.6em 1.1em -1em #205caf inset;
 }
 .Viper-themeDark .Viper-button.Viper-selected,
 .Viper-themeDark .Viper-button.Viper-selected:hover {
   background: #54535a;
   border-color: #555;
-  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.5) inset, 0 1px 0 rgba(255, 255, 255, 0.2), 0 -1px 1px -1px #000000 inset, 1px 0px 0 rgba(0, 0, 0, 0.25) inset, -1px 0px 0 rgba(0, 0, 0, 0.25) inset, 0 1.5em 0.6em -1.3em rgba(0, 0, 0, 0.5) inset;
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.5) inset, 0 1px 0 rgba(255, 255, 255, 0.2), 0 -1px 1px -1px #000000 inset, 1px 0px 0 rgba(0, 0, 0, 0.25) inset, -1px 0px 0 rgba(0, 0, 0, 0.25) inset, 0 1.5em 0.6em -1.3em rgba(0, 0, 0, 0) inset;
 }
 .Viper-browserVer-msie8 .Viper-themeDark .Viper-buttonGroup {
   border-right: 1px solid #666;
@@ -137,11 +216,11 @@
 .Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected,
 .Viper-themeDark .Viper-buttonGroup .Viper-button + .Viper-button.Viper-selected {
   border-left-color: #222225;
-  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.5) inset, 0 1px 0 rgba(255, 255, 255, 0.2), 0 -1px 1px -1px #000000 inset, 0 1.5em 0.6em -1.3em rgba(0, 0, 0, 0.5) inset;
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.5) inset, 0 1px 0 rgba(255, 255, 255, 0.2), 0 -1px 1px -1px #000000 inset, 0 1.5em 0.6em -1.3em rgba(0, 0, 0, 0) inset;
 }
 .Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected:first-child {
   border-left-color: #555;
-  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.5) inset, 0 1px 0 rgba(255, 255, 255, 0.2), 0 -1px 1px -1px #000000 inset, 1px 0px 0 rgba(0, 0, 0, 0.25) inset, 0 1.5em 0.6em -1.3em rgba(0, 0, 0, 0.5) inset;
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.5) inset, 0 1px 0 rgba(255, 255, 255, 0.2), 0 -1px 1px -1px #000000 inset, 1px 0px 0 rgba(0, 0, 0, 0.25) inset, 0 1.5em 0.6em -1.3em rgba(0, 0, 0, 0) inset;
 }
 .Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button,
 .Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button.Viper-disabled:hover {
@@ -157,7 +236,7 @@
 }
 .Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button.Viper-selected {
   border-left-color: #333;
-  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.5) inset, 0 1px 0 rgba(255, 255, 255, 0.2), 0 -1px 1px -1px #000000 inset, 0 1.5em 0.6em -1.3em rgba(0, 0, 0, 0.5) inset;
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.5) inset, 0 1px 0 rgba(255, 255, 255, 0.2), 0 -1px 1px -1px #000000 inset, 0 1.5em 0.6em -1.3em rgba(0, 0, 0, 0) inset;
 }
 .Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active:last-child,
 .Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active:last-child.Viper-disabled:hover {
@@ -171,7 +250,7 @@
 .Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected:last-child,
 .Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active.Viper-selected:last-child,
 .Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active.Viper-selected.Viper-disabled:last-child {
-  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.5) inset, 0 1px 0 rgba(255, 255, 255, 0.2), 0 -1px 1px -1px #000000 inset, -1px 0px 0 rgba(0, 0, 0, 0.25) inset, 0 1.5em 0.6em -1.3em rgba(0, 0, 0, 0.5) inset !important;
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.5) inset, 0 1px 0 rgba(255, 255, 255, 0.2), 0 -1px 1px -1px #000000 inset, -1px 0px 0 rgba(0, 0, 0, 0.25) inset, 0 1.5em 0.6em -1.3em rgba(0, 0, 0, 0) inset !important;
 }
 /* Buttons */
 .Viper-buttonIcon {
@@ -959,14 +1038,12 @@
   color: #AAAAAA;
   text-shadow: 0 -1px 0 #000000;
 }
-/* .Viper-popup-top, */
 .Viper-popup-bottom,
 .Viper-popup-content {
   padding: 0.3em 1em 1em;
   background: url(../Images/bgTexture-dark1.gif) repeat 0 0 #54535a;
   text-shadow: none;
 }
-/* .Viper-popup-top, */
 .Viper-popup-bottom {
   position: relative;
   border-bottom-left-radius: 0.8em;
@@ -1036,7 +1113,6 @@
 .Viper-buttonGroup ViperITP-button-hidden {
   display: none;
 }
-/* Viper Tooltip */
 .Viper-tooltip {
   position: absolute;
   max-width: 200px;
@@ -1052,24 +1128,20 @@
   -moz-user-select: none;
   margin: 5px 0;
 }
-/* Small screen customisations */
-@media screen and (max-width: 768px) {
-  .Viper-popup,
-  .ViperITP,
-  .ViperTP-bar {
-    font-size: 13px !important;
-  }
-  .Viper-button {
-    min-width: 39px;
-  }
-}
 .Viper-popoutPanel {
   position: absolute;
-  background: #54535a url(../../Images/bgTexture-dark1.gif) 0 0 repeat;
+  display: none;
+  background-color: #434247;
   z-index: 1100;
   border-radius: 5px;
-  border: 1px solid #222;
-  padding: 6px;
+  border: 1px solid #2a2a2a;
+  padding: 0.3em;
+  animation-duration: 90ms;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+  -webkit-animation-duration: 90ms;
+  -webkit-animation-timing-function: ease-out;
+  -webkit-animation-fill-mode: forwards;
 }
 .Viper-popoutPanel:before {
   right: 100%;
@@ -1080,10 +1152,79 @@
   width: 0;
   position: absolute;
   pointer-events: none;
-  border-color: rgba(43, 43, 43, 0);
-  border-right-color: #2b2b2b;
+  border-color: transparent;
+  border-right-color: #2a2a2a;
   border-width: 12px;
   margin-top: -12px;
+}
+.Viper-popoutPanel.ViperUtil-visible {
+  display: block;
+}
+.Viper-popoutPanel.ViperUtil-visible.ViperUtil-arrowleft {
+  animation-name: fade-in, appear-right;
+  -webkit-animation-name: fade-in, appear-right;
+}
+.Viper-popoutPanel.ViperUtil-visible.ViperUtil-arrowright {
+  animation-name: fade-in, appear-left;
+  -webkit-animation-name: fade-in, appear-left;
+}
+.ViperITP.Viper-visible {
+  display: block;
+  animation-name: fade-in, appear-bottom;
+  -webkit-animation-name: fade-in, appear-bottom;
+}
+.Viper-selectionList {
+  color: #FFF;
+  font-family: Arial,Sans Serif;
+  margin: 0;
+  font-size: 12px;
+  list-style: none;
+  padding-left: 0;
+}
+.Viper-selectionList li {
+  padding: 6px 60px 6px 8px;
+  border-bottom: 1px solid #333;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.1s ease-out;
+}
+.Viper-selectionList li:before {
+  content: "";
+  position: absolute;
+  border: 2px solid #666;
+  border-radius: 10px;
+  width: 14px;
+  height: 14px;
+  right: 5px;
+  margin-top: -9px;
+  top: 50%;
+}
+.Viper-selectionList li.selected:before {
+  background-color: #5A8BD0;
+  border-color: #5A8BD0;
+}
+.Viper-selectionList li:after {
+  content: "";
+  opacity: 0;
+  transform: scale(0.1);
+  transition: transform 0.1s ease-out;
+}
+.Viper-selectionList li.selected {
+  background-color: rgba(0, 0, 0, 0.25);
+  color: #5A8BD0;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 #333236 inset;
+}
+.Viper-selectionList li.selected:after {
+  opacity: 1;
+  transform: scale(1);
+  position: absolute;
+  right: 8px;
+  width: 11px;
+  height: 9px;
+  top: 50%;
+  margin-top: -4px;
+  background: transparent url(../Images/viperToolsSprite.png) 0 -240px no-repeat;
 }
 .Viper-popoutPanel.ViperUtil-arrowleft {
   margin-left: 10px;
@@ -1132,46 +1273,4 @@
   border-top-color: #2b2b2b;
   border-width: 12px;
   margin-left: -12px;
-}
-.Viper-selectionList {
-  color: #FFF;
-  font-family: Arial,Sans Serif;
-  margin: 0;
-  font-size: 12px;
-  list-style: none;
-  box-shadow: 0 1px 0 #666;
-  margin-bottom: 30px;
-  padding-left: 0;
-}
-.Viper-selectionList li {
-  padding: 6px 60px 6px 8px;
-  border-bottom: 1px solid #333;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1) inset;
-  cursor: pointer;
-  position: relative;
-}
-.Viper-selectionList li:after {
-  content: "";
-  position: absolute;
-  border: 2px solid #666;
-  border-radius: 10px;
-  width: 14px;
-  height: 14px;
-  right: 5px;
-  margin-top: -9px;
-  top: 50%;
-}
-.Viper-selectionList li.selected:after {
-  background-color: #5A8BD0;
-  border-color: #5A8BD0;
-}
-.Viper-selectionList li:first-child {
-  box-shadow: none;
-}
-.Viper-selectionList li.selected {
-  background-color: rgba(0, 0, 0, 0.25);
-  color: #5A8BD0;
-}
-.ViperUtil-hidden {
-  display: none;
 }

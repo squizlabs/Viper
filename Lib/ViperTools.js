@@ -2051,7 +2051,7 @@ ViperTools.prototype = {
 
     createPopoutPanel: function(id, contentElement) {
         var panel = document.createElement('div');
-        ViperUtil.addClass(panel, 'Viper-popoutPanel ViperUtil-hidden');
+        ViperUtil.addClass(panel, 'Viper-popoutPanel');
 
         if (contentElement) {
             panel.appendChild(contentElement);
@@ -2066,7 +2066,7 @@ ViperTools.prototype = {
                 type: 'popoutPanel',
                 element: panel,
                 show: function(target) {
-                    ViperUtil.removeClass(panel, 'ViperUtil-hidden');
+                    ViperUtil.addClass(panel, 'ViperUtil-visible');
                     ViperUtil.determinePosition(
                         panel,
                         {
@@ -2077,10 +2077,10 @@ ViperTools.prototype = {
                     );
                 },
                 hide: function() {
-                    ViperUtil.addClass(panel, 'ViperUtil-hidden');
+                    ViperUtil.removeClass(panel, 'ViperUtil-visible');
                 },
                 isOpen: function() {
-                    return !ViperUtil.hasClass(panel, 'ViperUtil-hidden');
+                    return ViperUtil.hasClass(panel, 'ViperUtil-visible');
                 }
             }
         );
