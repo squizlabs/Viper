@@ -12,49 +12,49 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @var boolean
      */
-    protected $backupStaticAttributes = FALSE;
+    protected $backupStaticAttributes = false;
 
     /**
      * The sikuli object.
      *
      * @var object
      */
-    private static $_sikuli = NULL;
+    private static $_sikuli = null;
 
     /**
      * The sikuli object.
      *
      * @var object
      */
-    protected $sikuli = NULL;
+    protected $sikuli = null;
 
     /**
      * The test.html file content.
      *
      * @var string
      */
-    private static $_testContent = NULL;
+    private static $_testContent = null;
 
     /**
      * Set to TRUE then the first test has run.
      *
      * @var boolean
      */
-    private static $_testRun = FALSE;
+    private static $_testRun = false;
 
     /**
      * Name of the browser that the tests are running on.
      *
      * @var string
      */
-    private static $_browser = NULL;
+    private static $_browser = null;
 
     /**
      * Region object of the Viper Top toolbar.
      *
      * @var string
      */
-    private static $_topToolbar = NULL;
+    private static $_topToolbar = null;
 
     /**
      * The default similarity setting.
@@ -68,7 +68,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @var array
      */
-    private static $_data = NULL;
+    private static $_data = null;
 
     /**
      * Number of tests run.
@@ -117,17 +117,17 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         // Find the HTML file for this test.
         $testFileContent = '';
-        $jsPath          = NULL;
+        $jsPath          = null;
         $count           = count($paths);
         while ($count > 0) {
             $last     = array_pop($paths);
             $filePath = $baseDir.'/'.implode('/', $paths).'/'.$last.'.'.$type;
-            if (file_exists($filePath) === TRUE) {
+            if (file_exists($filePath) === true) {
                 return $filePath;
             } else if (count($paths) > 0) {
                 // Check for HTML file that has the same name as the directory.
                 $filePath = $baseDir.'/'.implode('/', $paths).'/'.$paths[(count($paths) - 1)].'.'.$type;
-                if (file_exists($filePath) === TRUE) {
+                if (file_exists($filePath) === true) {
                     return $filePath;
                 }
             }
@@ -135,7 +135,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $count = count($paths);
         }
 
-        return NULL;
+        return null;
 
     }//end _getTestFile()
 
@@ -155,7 +155,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         // Get the test HTML file.
         $htmlFilePath    = $this->_getTestFile('html');
         $testFileContent = '';
-        if ($htmlFilePath !== NULL) {
+        if ($htmlFilePath !== null) {
             $testFileContent = trim(file_get_contents($htmlFilePath));
             $testFileContent = $this->replaceKeywords($testFileContent);
         }
@@ -163,20 +163,20 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         // Get the test JS file.
         $jsFilePath = $this->_getTestFile('js');
         $jsInclude  = '';
-        if ($jsFilePath !== NULL) {
+        if ($jsFilePath !== null) {
             $jsFilePath = str_replace($baseDir, '../', $jsFilePath);
             $jsInclude  = '<script type="text/javascript" src="'.$jsFilePath.'"></script>';
         }
 
         parent::setUp();
 
-        if (self::$_sikuli === NULL) {
+        if (self::$_sikuli === null) {
             $browser       = getenv('VIPER_TEST_BROWSER');
             $options       = array(
-                              'size' => array(
-                                         'width'  => 1270,
-                                         'height' => 850,
-                                        ),
+                              'size'           => array(
+                                                   'width'  => 1270,
+                                                   'height' => 850,
+                                                  ),
                               'fileGroupOwner' => '_www',
                              );
             self::$_sikuli = new PHPSikuliBrowser($browser, $options);
@@ -184,7 +184,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         $this->sikuli = self::$_sikuli;
 
-        if (self::$_testRun !== TRUE) {
+        if (self::$_testRun !== true) {
             try {
                 // Press ESC incase there is an active screensaver.
                 $this->sikuli->keyDown('Key.ESC');
@@ -204,14 +204,14 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         }
 
         // Get the contents of the test file template.
-        if (self::$_testContent === NULL) {
+        if (self::$_testContent === null) {
             self::$_testContent = file_get_contents($baseDir.'/Web/test-template.html');
         }
 
         $viperInclude = '';
         if (getenv('VIPER_TEST_USE_BUILT_VIPER') === 'TRUE') {
             $path = dirname(dirname(__FILE__)).'/build/viper.js';
-            if (file_exists($path) === FALSE) {
+            if (file_exists($path) === false) {
                 throw new Exception('Could not find: '.$path);
             }
 
@@ -247,7 +247,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $contents = str_replace('__TEST_JS_INCLUDE__', $jsInclude, $contents);
         $contents = str_replace('__TEST_VIPER_VERSION__', self::$_viperVersion, $contents);
 
-        $dest     = $baseDir.'/tmp/test_tmp.html';
+        $dest = $baseDir.'/tmp/test_tmp.html';
         file_put_contents($dest, $contents);
 
         $this->sikuli->resize();
@@ -258,7 +258,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         }
 
         // Change browser and then change the URL.
-        if (self::$_testRun === TRUE) {
+        if (self::$_testRun === true) {
             // URL is already changed to the test runner, so just reload.
             $this->sikuli->setSetting('MinSimilarity', self::$_similarity);
             $this->reloadPage();
@@ -271,7 +271,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             // Turn off calibration incase of reconnection to Sikuli server.
             putenv('VIPER_TEST_CALIBRATE=FALSE');
 
-            if ($calibrate === 'TRUE' || file_exists($this->getBrowserImagePath()) === FALSE) {
+            if ($calibrate === 'TRUE' || file_exists($this->getBrowserImagePath()) === false) {
                 try {
                     $this->_calibrate();
                 } catch (Exception $e) {
@@ -280,18 +280,18 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 }
             }
 
-            /*$matches = $this->sikuli->findAll(dirname(__FILE__).'/Web/favicon.png', NULL, 0.9);
-            if (empty($matches) === FALSE) {
+            /*
+                $matches = $this->sikuli->findAll(dirname(__FILE__).'/Web/favicon.png', NULL, 0.9);
+                if (empty($matches) === FALSE) {
                 $match = array_pop($matches);
                 $this->sikuli->click($match);
             } else {*/
                 $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
-            //}
-
+            // }
             $this->sikuli->setAutoWaitTimeout(1);
             $this->_waitForViper();
 
-            self::$_testRun = TRUE;
+            self::$_testRun = true;
         }//end if
 
     }//end setUp()
@@ -319,8 +319,8 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     {
         $this->sikuli->execJS('clean()');
 
-        self::$_topToolbar = NULL;
-        self::$_testRun    = FALSE;
+        self::$_topToolbar = null;
+        self::$_testRun    = false;
 
         $this->sikuli->resetConnection();
         $this->sikuli->resize();
@@ -360,9 +360,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return string
      */
-    protected function getBrowserImagePath($browserid=NULL)
+    protected function getBrowserImagePath($browserid=null)
     {
-        if ($browserid === NULL) {
+        if ($browserid === null) {
             $browserid = $this->sikuli->getBrowserid();
         }
 
@@ -382,19 +382,19 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      * @return string
      * @throws Exception If the button icon does not exist.
      */
-    protected function getButtonIconPath($buttonName, $state=NULL)
+    protected function getButtonIconPath($buttonName, $state=null)
     {
         // Calibrate image recognition.
         $imgPath  = $this->getBrowserImagePath();
         $imgPath .= '/'.$buttonName;
 
-        if ($state !== NULL) {
+        if ($state !== null) {
             $imgPath .= '_'.$state;
         }
 
         $imgPath .= '.png';
 
-        if (file_exists($imgPath) === FALSE) {
+        if (file_exists($imgPath) === false) {
             throw new Exception('Button icon not found: '.$imgPath);
         }
 
@@ -413,17 +413,16 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        if ($this->sikuli !== NULL) {
-
+        if ($this->sikuli !== null) {
             // Check if there were any JS errors.
             $jsErrors = $this->sikuli->getJSErrors();
-            if (empty($jsErrors) === FALSE) {
+            if (empty($jsErrors) === false) {
                 $msgs = array();
                 foreach ($jsErrors as $error) {
                     $msg  = 'JavaScript error detected: '.$error['errorMsg'].' in '.$error['url'];
                     $msg .= ' on line '.$error['lineNumber'];
 
-                    if (empty($error['stackTrace']) === FALSE) {
+                    if (empty($error['stackTrace']) === false) {
                         $msg .= "\n\nStack:\n".$error['stackTrace'];
                     }
 
@@ -434,7 +433,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             }
 
             $this->sikuli->clearVars();
-        }
+        }//end if
 
     }//end tearDown()
 
@@ -447,7 +446,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     public static function tearDownAfterClass()
     {
         $path = dirname(__FILE__).'/test_tmp.html';
-        if (file_exists($path) === TRUE) {
+        if (file_exists($path) === true) {
             // Remove the tmp file.
             unlink($path);
         }
@@ -483,7 +482,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $this->sikuli->setAutoWaitTimeout(4, $this->getTopToolbar());
 
         // Make sure page is loaded.
-        if ($this->topToolbarButtonExists('bold', 'disabled') === FALSE) {
+        if ($this->topToolbarButtonExists('bold', 'disabled') === false) {
             // Try to go to the test URL again. Do not refresh incase browser has navigated to another URL.
             $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
             $this->_waitForViper($retries - 1);
@@ -516,7 +515,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $imgPath = $this->getBrowserImagePath();
         $images  = glob($imgPath.'/*.png');
         foreach ($images as $image) {
-            if (is_file($image) === TRUE) {
+            if (is_file($image) === true) {
                 unlink($image);
             }
         }
@@ -544,8 +543,8 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         // Calibrate image recognition.
         $imgPath = $this->getBrowserImagePath();
 
-        if (file_exists($imgPath) === FALSE) {
-            mkdir($imgPath, 0755, TRUE);
+        if (file_exists($imgPath) === false) {
+            mkdir($imgPath, 0755, true);
         }
 
         $this->sikuli->execJS('calibrate("keywords")');
@@ -559,7 +558,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $region     = $this->sikuli->getRegionOnPage($textRect);
             $coordsText = $this->sikuli->getX($region).'-'.$this->sikuli->getY($region);
 
-            if (isset($coords[$coordsText]) === TRUE) {
+            if (isset($coords[$coordsText]) === true) {
                 throw new Exception('Text match conflict between '.$coords[$coordsText].' and '.$id);
             }
 
@@ -571,7 +570,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         }
 
         $tests          = 5;
-        $pass           = FALSE;
+        $pass           = false;
         $textSimilarity = 0.98;
 
         do {
@@ -582,11 +581,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
                     // Test that captured images can be found on the page.
                     for ($i = 1; $i <= $count; $i++) {
-                        $this->sikuli->find($this->_getKeywordImage($i), NULL, $textSimilarity);
+                        $this->sikuli->find($this->_getKeywordImage($i), null, $textSimilarity);
                     }
                 }
 
-                $pass = TRUE;
+                $pass = true;
             } catch (Exception $e) {
                 if ($textSimilarity < 0.85) {
                     throw new Exception('Text similarity test dropped below minimum threshold (85%)');
@@ -594,7 +593,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
                 $textSimilarity -= 0.01;
             }
-        } while ($pass !== TRUE);
+        } while ($pass !== true);
 
         $this->addData('textSimmilarity', $textSimilarity);
 
@@ -615,8 +614,8 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $baseDir = dirname(__FILE__);
         $imgPath = $this->getBrowserImagePath();
 
-        if (file_exists($imgPath) === FALSE) {
-            mkdir($imgPath, 0755, TRUE);
+        if (file_exists($imgPath) === false) {
+            mkdir($imgPath, 0755, true);
         }
 
         $cssContents = file_get_contents($baseDir.'/../Css/viper_tools.css');
@@ -718,7 +717,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                      );
         foreach ($dupeIcons as $dupeIcon) {
             $btnIndex = array_search($dupeIcon, $buttonNames);
-            if ($btnIndex !== FALSE) {
+            if ($btnIndex !== false) {
                 unset($buttonNames[$btnIndex]);
             }
         }
@@ -734,10 +733,10 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
                     $testImage = $imgPath.'/'.$buttonName.'.png';
                     try {
-                        $region = $this->sikuli->find($testImage, NULL, $similarity);
+                        $region = $this->sikuli->find($testImage, null, $similarity);
                         $loc    = $this->sikuli->getX($region).'-'.$this->sikuli->getY($region);
 
-                        if (isset($regions[$loc]) === TRUE) {
+                        if (isset($regions[$loc]) === true) {
                             throw new Exception('Image match conflict between '.$regions[$loc].' and '.$buttonName);
                         }
 
@@ -769,16 +768,16 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     protected function addData($varName, $value)
     {
         $path = dirname(__FILE__).'/tmp/'.$this->sikuli->getBrowserid();
-        if (file_exists($path) === FALSE) {
-            mkdir($path, 0755, TRUE);
+        if (file_exists($path) === false) {
+            mkdir($path, 0755, true);
         }
 
         $path .= '/data.inc';
 
         $data = self::$_data;
 
-        if ($data === NULL) {
-            if (file_exists($path) === TRUE) {
+        if ($data === null) {
+            if (file_exists($path) === true) {
                 include $path;
             }
         }
@@ -786,7 +785,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $data[$varName] = $value;
 
         self::$_data = $data;
-        file_put_contents($path, '<?php $data = '.var_export($data, TRUE).'; ?>');
+        file_put_contents($path, '<?php $data = '.var_export($data, true).'; ?>');
 
     }//end addData()
 
@@ -801,19 +800,19 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     protected function getData($varName)
     {
         $data = array();
-        if (self::$_data === NULL) {
+        if (self::$_data === null) {
             $path = dirname(__FILE__).'/tmp/'.$this->sikuli->getBrowserid().'/data.inc';
-            if (file_exists($path) === TRUE) {
+            if (file_exists($path) === true) {
                 include $path;
                 self::$_data = $data;
             }
         }
 
-        if (isset(self::$_data[$varName]) === TRUE) {
+        if (isset(self::$_data[$varName]) === true) {
             return self::$_data[$varName];
         }
 
-        return NULL;
+        return null;
 
     }//end getData()
 
@@ -924,7 +923,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         // Replace URL keyword.
         $url = getenv('VIPER_TEST_URL');
-        if (empty($url) === TRUE) {
+        if (empty($url) === true) {
             $url = dirname(__FILE__);
         }
 
@@ -943,7 +942,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     private function _getBaseUrl()
     {
         $url = getenv('VIPER_TEST_URL');
-        if (empty($url) === TRUE) {
+        if (empty($url) === true) {
             $url = dirname(__FILE__);
         }
 
@@ -990,11 +989,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    protected function assertHTMLMatch($html, $msg=NULL, $removeTableHeaders=FALSE)
+    protected function assertHTMLMatch($html, $msg=null, $removeTableHeaders=false)
     {
         $html = $this->replaceKeywords($html);
 
-        $pageHtml = $this->getHtml(NULL, 0, $removeTableHeaders, TRUE);
+        $pageHtml = $this->getHtml(null, 0, $removeTableHeaders, true);
 
         $pageHtml = preg_replace("/<([a-z0-9]+)\n([a-z0-9]*)/i", '<$1$2', $pageHtml);
         $pageHtml = str_replace("<\n", '<', $pageHtml);
@@ -1038,9 +1037,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    protected function assertHTMLMatchNoHeaders($html, $msg=NULL)
+    protected function assertHTMLMatchNoHeaders($html, $msg=null)
     {
-        $this->assertHTMLMatch($html, $msg, TRUE);
+        $this->assertHTMLMatch($html, $msg, true);
 
     }//end assertHTMLMatchNoHeaders()
 
@@ -1058,7 +1057,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return mixed
      */
-    public static function assertEquals($expected, $actual, $message='', $delta=0, $maxDepth=10, $canonicalize=FALSE, $ignoreCase=FALSE)
+    public static function assertEquals($expected, $actual, $message='', $delta=0, $maxDepth=10, $canonicalize=false, $ignoreCase=false)
     {
         $expected = self::_replaceKeywords($expected);
 
@@ -1079,21 +1078,21 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    protected function assertHasHTML($html, $pos=NULL, $msg=NULL, $ignoreExtraSpace=FALSE)
+    protected function assertHasHTML($html, $pos=null, $msg=null, $ignoreExtraSpace=false)
     {
         $pageHtml = str_replace('\n', '', $this->getHtml());
         $html     = str_replace("\n", '', $html);
 
-        if ($ignoreExtraSpace === TRUE) {
+        if ($ignoreExtraSpace === true) {
             $pageHtml = preg_replace('/\s\s+/', ' ', $pageHtml);
         }
 
-        if ($msg === NULL) {
+        if ($msg === null) {
             $msg = 'Specified HTML not found in page content';
         }
 
-        if ($pos === NULL) {
-            if (strpos($pageHtml, $html) === FALSE) {
+        if ($pos === null) {
+            if (strpos($pageHtml, $html) === false) {
                 $this->fail($msg);
             }
         } else if (strpos($pageHtml, $html) !== $pos) {
@@ -1111,7 +1110,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    protected function assertListEqual(array $expected, $incContent=FALSE)
+    protected function assertListEqual(array $expected, $incContent=false)
     {
         $actual = $this->sikuli->execJS('gListS(null, '.((int) $incContent).')');
         $this->assertEquals($expected, $actual);
@@ -1160,7 +1159,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                             asort($vals[1]);
                             $match .= ' '.$attrs[1][$attrIndex].'="';
                             foreach ($vals[1] as $valIndex => $value) {
-                                if (strpos($vals[0][$valIndex], ';') === FALSE) {
+                                if (strpos($vals[0][$valIndex], ';') === false) {
                                     $vals[0][$valIndex] .= ';';
                                 }
 
@@ -1200,25 +1199,25 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function getInlineToolbar()
     {
-        $match = NULL;
+        $match = null;
         try {
-            $match = $this->sikuli->find($this->getBrowserImagePath().'/vitp_arrow.png', NULL, 0.85);
+            $match = $this->sikuli->find($this->getBrowserImagePath().'/vitp_arrow.png', null, 0.85);
             if ($this->sikuli->getX($match) === 0) {
-                $match = NULL;
+                $match = null;
             }
         } catch (Exception $e) {
-            $match = NULL;
+            $match = null;
         }
 
-        if ($match === NULL) {
+        if ($match === null) {
             // Get it using JS.
             $elemRect = $this->sikuli->execJS('gVITPArrow()');
-            if ($elemRect === NULL) {
+            if ($elemRect === null) {
                 $this->fail('Inline Toolbar is not visible');
             }
 
-            $match    = $this->sikuli->getRegionOnPage($elemRect);
-            if ($match === NULL) {
+            $match = $this->sikuli->getRegionOnPage($elemRect);
+            if ($match === null) {
                 $this->fail('Inline Toolbar is not visible');
             }
         }
@@ -1245,7 +1244,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function getTopToolbar()
     {
-        if (self::$_topToolbar !== NULL) {
+        if (self::$_topToolbar !== null) {
             return self::$_topToolbar;
         }
 
@@ -1276,7 +1275,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     {
         $rect = $this->sikuli->execJS('gActBubble()');
 
-        if (is_array($rect) === TRUE) {
+        if (is_array($rect) === true) {
             $region = $this->sikuli->getRegionOnPage($rect);
             return $region;
         }
@@ -1295,11 +1294,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return boolean
      */
-    protected function inlineToolbarButtonExists($buttonIcon, $state=NULL, $isText=FALSE)
+    protected function inlineToolbarButtonExists($buttonIcon, $state=null, $isText=false)
     {
         $button = $this->_getButton($buttonIcon, $state, $isText);
 
-        if ($isText === TRUE) {
+        if ($isText === true) {
             // Its harder for Sikuli to match a text button so use lower similarity.
             try {
                 $this->sikuli->find($button, $this->getInlineToolbar(), 0.7);
@@ -1309,7 +1308,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                     $rect = $this->_getTextButtonRectangle($buttonIcon, $state, 'inlineToolbar');
                     $this->sikuli->getRegionOnPage($rect);
                 } catch (Exception $e) {
-                    return FALSE;
+                    return false;
                 }
             }
         } else {
@@ -1317,11 +1316,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             try {
                 $this->sikuli->find($button, $toolbar, $this->getData('buttonSimmilarity'));
             } catch (Exception $e) {
-                return FALSE;
+                return false;
             }
         }//end if
 
-        return TRUE;
+        return true;
 
     }//end inlineToolbarButtonExists()
 
@@ -1335,11 +1334,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return boolean
      */
-    protected function topToolbarButtonExists($buttonIcon, $state=NULL, $isText=FALSE)
+    protected function topToolbarButtonExists($buttonIcon, $state=null, $isText=false)
     {
         $button = $this->_getButton($buttonIcon, $state, $isText);
 
-        if ($isText === TRUE) {
+        if ($isText === true) {
             // Its harder for Sikuli to match a text button so use lower similarity.
             try {
                 $this->sikuli->find($button, $this->getTopToolbar(), 0.7);
@@ -1349,7 +1348,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                     $rect = $this->_getTextButtonRectangle($buttonIcon, $state, 'topToolbar');
                     $this->sikuli->getRegionOnPage($rect);
                 } catch (Exception $e) {
-                    return FALSE;
+                    return false;
                 }
             }
         } else {
@@ -1360,12 +1359,12 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 try {
                     $this->sikuli->find($button, $toolbar, 0.92);
                 } catch (Exception $e) {
-                    return FALSE;
+                    return false;
                 }
             }
         }//end if
 
-        return TRUE;
+        return true;
 
     }//end topToolbarButtonExists()
 
@@ -1382,7 +1381,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      * @return void
      * @throws Exception If the specified icon file not found.
      */
-    protected function clickTopToolbarButton($buttonIcon, $state=NULL, $isText=FALSE, $forceJSPos=FALSE)
+    protected function clickTopToolbarButton($buttonIcon, $state=null, $isText=false, $forceJSPos=false)
     {
         $this->_clickButton($buttonIcon, $state, $isText, 'topToolbar', $forceJSPos);
 
@@ -1399,7 +1398,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      * @return void
      * @throws Exception If the specified icon file not found.
      */
-    protected function clickInlineToolbarButton($buttonIcon, $state=NULL, $isText=FALSE)
+    protected function clickInlineToolbarButton($buttonIcon, $state=null, $isText=false)
     {
         $this->_clickButton($buttonIcon, $state, $isText, 'inlineToolbar');
 
@@ -1416,7 +1415,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return boolean
      */
-    protected function buttonExists($buttonIcon, $state=NULL, $isText=FALSE, $region=NULL)
+    protected function buttonExists($buttonIcon, $state=null, $isText=false, $region=null)
     {
         $button = $this->_getButton($buttonIcon, $state, $isText);
         return $this->sikuli->exists($button, $region);
@@ -1438,14 +1437,14 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     private function _clickButton(
         $buttonIcon,
-        $state=NULL,
-        $isText=FALSE,
-        $location=NULL,
-        $forceJSPos=FALSE
+        $state=null,
+        $isText=false,
+        $location=null,
+        $forceJSPos=false
     ) {
         $buttonObj = $this->_getButton($buttonIcon, $state, $isText, $location);
 
-        $region = NULL;
+        $region = null;
         if ($location === 'topToolbar') {
             $region = $this->getTopToolbar();
         } else if ($location === 'inlineToolbar') {
@@ -1455,9 +1454,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         }
 
         try {
-            $match = NULL;
-            if ($isText === TRUE) {
-                if ($forceJSPos === TRUE) {
+            $match = null;
+            if ($isText === true) {
+                if ($forceJSPos === true) {
                     $rect  = $this->_getTextButtonRectangle($buttonIcon, $state, $location);
                     $match = $this->sikuli->getRegionOnPage($rect);
                 } else {
@@ -1496,7 +1495,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return string
      */
-    protected function clickButton($buttonIcon, $state=NULL, $isText=FALSE, $region=NULL)
+    protected function clickButton($buttonIcon, $state=null, $isText=false, $region=null)
     {
         return $this->_clickButton($buttonIcon, $state, $isText, $region);
 
@@ -1513,9 +1512,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return object
      */
-    protected function findButton($buttonIcon, $state=NULL, $isText=FALSE, $location=NULL)
+    protected function findButton($buttonIcon, $state=null, $isText=false, $location=null)
     {
-        return $this->sikuli->find($this->_getButton($buttonIcon, $state, $isText, $location), NULL, $this->getData('buttonSimmilarity'));
+        return $this->sikuli->find($this->_getButton($buttonIcon, $state, $isText, $location), null, $this->getData('buttonSimmilarity'));
 
     }//end findButton()
 
@@ -1531,9 +1530,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      * @return string
      * @throws Exception If the button image cannot be found.
      */
-    private function _getButton($buttonIcon, $state=NULL, $isText=FALSE, $location=NULL)
+    private function _getButton($buttonIcon, $state=null, $isText=false, $location=null)
     {
-        if ($isText === TRUE) {
+        if ($isText === true) {
             $buttonIconId = preg_replace('#\W#', '_', $buttonIcon);
             try {
                 $buttonIcon = $this->getButtonIconPath($buttonIconId, $state);
@@ -1541,11 +1540,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 $rect       = $this->_getTextButtonRectangle($buttonIcon, $state, $location);
                 $buttonIcon = $this->_createButtonImageFromRectangle($buttonIcon, $rect, $state);
             }//end try
-        } else if (is_file($buttonIcon) === FALSE) {
+        } else if (is_file($buttonIcon) === false) {
             $buttonIcon = $this->getButtonIconPath($buttonIcon, $state);
         }//end if
 
-        if (file_exists($buttonIcon) === FALSE) {
+        if (file_exists($buttonIcon) === false) {
             throw new Exception('File not found: '.$buttonIcon);
         }
 
@@ -1564,7 +1563,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      * @return string
      * @throws Exception If the button image cannot be found.
      */
-    private function _getTextButtonRectangle($button, $state=NULL, $location=NULL)
+    private function _getTextButtonRectangle($button, $state=null, $location=null)
     {
         $jsFn = 'gBtn';
 
@@ -1574,14 +1573,14 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $jsFn = 'gITPBtn';
         }
 
-        $rect = NULL;
-        if ($state !== NULL) {
+        $rect = null;
+        if ($state !== null) {
             $rect = $this->sikuli->execJS($jsFn.'("'.$button.'", "'.$state.'")');
         } else {
             $rect = $this->sikuli->execJS($jsFn.'("'.$button.'")');
         }
 
-        if (is_array($rect) === FALSE) {
+        if (is_array($rect) === false) {
             throw new Exception('Could not find button with text: '.$button);
         }
 
@@ -1599,7 +1598,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return string
      */
-    private function _createButtonImageFromRectangle($button, array $rect, $state=NULL)
+    private function _createButtonImageFromRectangle($button, array $rect, $state=null)
     {
         return $this->createImageFromRectangle($button, $rect, $state);
 
@@ -1617,13 +1616,13 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return string
      */
-    protected function createImageFromRectangle($imageName, array $rect, $postFix=NULL)
+    protected function createImageFromRectangle($imageName, array $rect, $postFix=null)
     {
         $imageName = preg_replace('#[^a-zA-Z0-9_-]#', '_', $imageName);
         $image     = $this->sikuli->capture($this->sikuli->getRegionOnPage($rect));
         $filePath  = $this->getBrowserImagePath().'/'.$imageName;
 
-        if ($postFix !== NULL) {
+        if ($postFix !== null) {
             $filePath .= '_'.$postFix;
         }
 
@@ -1651,7 +1650,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     {
         $filePath = $this->getBrowserImagePath().'/'.$imageName.'.png';
 
-        if (file_exists($filePath) === TRUE) {
+        if (file_exists($filePath) === true) {
             return $this->sikuli->find($filePath);
         } else {
             $elemRect = $this->getBoundingRectangle($selector, $index);
@@ -1672,7 +1671,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     protected function selectInlineToolbarLineageItem($index)
     {
         $rect = $this->getBoundingRectangle('.ViperITP-lineageItem', $index);
-        if (is_array($rect) === FALSE) {
+        if (is_array($rect) === false) {
             $this->fail('Inline Toolbar lineage item ('.$index.') not found!');
         }
 
@@ -1694,9 +1693,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    protected function selectText($startWord, $endWord=NULL)
+    protected function selectText($startWord, $endWord=null)
     {
-        if (empty($endWord) === TRUE) {
+        if (empty($endWord) === true) {
             $ipsum = $this->sikuli->find($startWord, $this->getBrowserWindow());
             $this->sikuli->doubleClick($ipsum);
             return;
@@ -1739,7 +1738,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $keywordImage = $this->_getKeywordImage($keyword);
 
         try {
-            $pos = $this->sikuli->find($keywordImage, NULL, $this->getData('textSimmilarity'));
+            $pos = $this->sikuli->find($keywordImage, null, $this->getData('textSimmilarity'));
         } catch (FindFailedException $e) {
             // Sometimes the caret is causing Sikuli not to find the keyword, Click on another keyword
             // and then try to find this keyword again.
@@ -1750,7 +1749,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                     $this->sikuli->click($this->findKeyword(1));
                 }
 
-                $pos = $this->sikuli->find($keywordImage, NULL, $this->getData('textSimmilarity'));
+                $pos = $this->sikuli->find($keywordImage, null, $this->getData('textSimmilarity'));
             } catch (FindFailedException $e) {
                 throw new FindFailedException('Failed to find keyword '.$this->getKeyword($keyword));
             }
@@ -1773,16 +1772,16 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      * @return void
      * @throws Exception If the keyword is not found.
      */
-    protected function selectKeyword($startKeyword, $endKeyword=NULL)
+    protected function selectKeyword($startKeyword, $endKeyword=null)
     {
         $startKeywordImage = $this->_getKeywordImage($startKeyword);
 
-        if ($endKeyword === NULL) {
+        if ($endKeyword === null) {
             $endKeyword = $startKeyword;
         }
 
         try {
-            $start = $this->sikuli->find($startKeywordImage, NULL, $this->getData('textSimmilarity'));
+            $start = $this->sikuli->find($startKeywordImage, null, $this->getData('textSimmilarity'));
         } catch (FindFailedException $e) {
             // Sometimes the caret is causing Sikuli not to find the keyword, Click on another keyword
             // and then try to find this keyword again.
@@ -1883,13 +1882,13 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function findKeyword($keyword)
     {
-        $loc = NULL;
+        $loc = null;
         try {
-            $loc = $this->sikuli->find($this->_getKeywordImage($keyword), NULL, $this->getData('textSimmilarity'));
+            $loc = $this->sikuli->find($this->_getKeywordImage($keyword), null, $this->getData('textSimmilarity'));
         } catch (FindFailedException $e) {
             // Try searching for it using JS.
             $loc = $this->getStringLocation($this->getKeyword($keyword));
-            if (is_array($loc) === FALSE) {
+            if (is_array($loc) === false) {
                 throw new FindFailedException('Failed to find keyword: '.$this->getKeyword($keyword));
             }
 
@@ -1926,12 +1925,12 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     protected function fieldExists($label)
     {
         try {
-            $this->sikuli->find($this->_getLabel($label), NULL, 0.7);
+            $this->sikuli->find($this->_getLabel($label), null, 0.7);
         } catch (FindFailedException $e) {
-            return FALSE;
+            return false;
         }
 
-        return TRUE;
+        return true;
 
     }//end fieldExists()
 
@@ -1945,7 +1944,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function clickField($label)
     {
-        $this->sikuli->click($this->sikuli->find($this->_getLabel($label), NULL, 0.7));
+        $this->sikuli->click($this->sikuli->find($this->_getLabel($label), null, 0.7));
 
     }//end clickField()
 
@@ -1960,9 +1959,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     protected function clearFieldValue($label)
     {
         try {
-            $fieldLabel = $this->sikuli->find($this->_getLabel($label), NULL, 0.7);
+            $fieldLabel = $this->sikuli->find($this->_getLabel($label), null, 0.7);
         } catch (FindFailedException $e) {
-            $fieldLabel = $this->sikuli->find($this->_getLabel($label, TRUE), NULL, 0.7);
+            $fieldLabel = $this->sikuli->find($this->_getLabel($label, true), null, 0.7);
         }
 
         $fieldRegion  = $this->sikuli->extendRight($fieldLabel, 400);
@@ -1984,15 +1983,15 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     protected function revertFieldValue($label)
     {
         try {
-            $fieldLabel = $this->sikuli->find($this->_getLabel($label), NULL, 0.7);
+            $fieldLabel = $this->sikuli->find($this->_getLabel($label), null, 0.7);
         } catch (FindFailedException $e) {
-            $fieldLabel = $this->sikuli->find($this->_getLabel($label, TRUE), NULL, 0.7);
+            $fieldLabel = $this->sikuli->find($this->_getLabel($label, true), null, 0.7);
         }
 
         $topLeft     = $this->sikuli->getTopLeft($fieldLabel);
         $fieldRegion = $this->sikuli->createRegion(
             $this->sikuli->getX($topLeft),
-            $this->sikuli->getY($topLeft) - 5,
+            ($this->sikuli->getY($topLeft) - 5),
             400,
             30
         );
@@ -2030,12 +2029,12 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return string
      */
-    private function _getLabel($label, $force=FALSE)
+    private function _getLabel($label, $force=false)
     {
         $labelImg  = preg_replace('#\W#', '_', $label);
         $imagePath = $this->getBrowserImagePath().'/label_'.$labelImg.'.png';
 
-        if (file_exists($imagePath) === FALSE || $force === TRUE) {
+        if (file_exists($imagePath) === false || $force === true) {
             $rect    = $this->sikuli->execJS('gField("'.$label.'")');
             $region  = $this->sikuli->getRegionOnPage($rect);
             $tmpPath = $this->sikuli->capture($region);
@@ -2056,7 +2055,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return integer
      */
-    protected function type($text, $modifiers=NULL, $psmrl=NULL)
+    protected function type($text, $modifiers=null, $psmrl=null)
     {
         $text   = $this->replaceKeywords($text);
         $result = $this->sikuli->type($text, $modifiers, $psmrl);
@@ -2076,17 +2075,17 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return string
      */
-    protected function getHtml($selector=NULL, $index=0, $removeTableHeaders=FALSE, $noModify=FALSE)
+    protected function getHtml($selector=null, $index=0, $removeTableHeaders=false, $noModify=false)
     {
         $removeTableHeaders = (int) $removeTableHeaders;
 
-        if ($selector === NULL) {
+        if ($selector === null) {
             $text = $this->sikuli->execJS('gHtml(null, null, '.$removeTableHeaders.')');
         } else {
             $text = $this->sikuli->execJS('gHtml("'.$selector.'", '.$index.', '.$removeTableHeaders.')');
         }
 
-        if ($noModify !== TRUE) {
+        if ($noModify !== true) {
             $text = str_replace("\n", '', $text);
             $text = str_replace('\n', '', $text);
         }
@@ -2107,11 +2106,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return string
      */
-    protected function getSelectedText($clean=TRUE)
+    protected function getSelectedText($clean=true)
     {
         $text = $this->sikuli->execJS('gText()');
 
-        if ($clean !== TRUE) {
+        if ($clean !== true) {
             return $text;
         }
 
@@ -2145,11 +2144,27 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    protected function clickElement($selector, $index=0, $rightClick=FALSE)
+    protected function clickElement($selector, $index=0, $rightClick=false)
     {
         return $this->sikuli->clickElement($selector, $index, $rightClick);
 
     }//end clickElement()
+
+
+    /**
+     * Sets the settings for specified plugin.
+     *
+     * @param string $pluginName The name of the plugin.
+     * @param array  $settings   List of settings for the plugin.
+     *
+     * @return void
+     */
+    protected function setPluginSettings($pluginName, array $settings)
+    {
+        $settings = json_encode($settings);
+        $this->sikuli->execJS('viper.getPluginManager().setPluginSettings(\''.$pluginName.'\', '.$settings.')');
+
+    }//end setPluginSettings()
 
 
     /**
@@ -2169,18 +2184,18 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         if ($appName === $this->sikuli->getBrowserName()) {
             // Open a new tab in this browser. Popup blocker must be disabled.
             $this->sikuli->execJS('window.open("'.$filePath.'", "_blank")');
-            return TRUE;
+            return true;
         }
 
-        if (array_key_exists($appName, self::$_apps) === TRUE) {
-            if (self::$_apps[$appName] === TRUE) {
+        if (array_key_exists($appName, self::$_apps) === true) {
+            if (self::$_apps[$appName] === true) {
                 system('open '.escapeshellarg($filePath));
-                return TRUE;
+                return true;
             } else {
-                return FALSE;
+                return false;
             }
         } else {
-            $retval = NULL;
+            $retval = null;
             if ($this->sikuli->getOS() === 'windows') {
                 system('open '.escapeshellarg($filePath), $retval);
             } else {
@@ -2188,11 +2203,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             }
 
             if ($retval === 1) {
-                self::$_apps[$appName] = FALSE;
-                return FALSE;
+                self::$_apps[$appName] = false;
+                return false;
             } else {
-                self::$_apps[$appName] = TRUE;
-                return TRUE;
+                self::$_apps[$appName] = true;
+                return true;
             }
         }//end if
 
@@ -2234,21 +2249,21 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    protected function removeTableHeaders($tableIndex=NULL, $removeid=TRUE)
+    protected function removeTableHeaders($tableIndex=null, $removeid=true)
     {
-        if ($tableIndex === NULL) {
+        if ($tableIndex === null) {
             $tableIndex = 'null';
         }
 
         $js = 'rmTableHeaders('.$tableIndex.',';
 
-        if ($removeid === TRUE) {
+        if ($removeid === true) {
             $js .= ' true)';
         } else {
             $js .= ' false)';
         }
 
-        $this->sikuli->execJS($js, TRUE);
+        $this->sikuli->execJS($js, true);
 
     }//end removeTableHeaders()
 
@@ -2265,9 +2280,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      * @return void
      * @throws Exception If the browser is not supported.
      */
-    protected function paste($rightClick=FALSE)
+    protected function paste($rightClick=false)
     {
-        if ($rightClick !== TRUE) {
+        if ($rightClick !== true) {
             $this->sikuli->keyDown('Key.CMD + v');
         } else {
             $this->sikuli->rightClick($this->sikuli->getMouseLocation());
@@ -2287,7 +2302,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function pasteFromURL($url)
     {
-        $this->sikuli->execJS('pasteFromURL("'.$url.'")', TRUE, TRUE);
+        $this->sikuli->execJS('pasteFromURL("'.$url.'")', true, true);
 
     }//end pasteFromURL()
 
@@ -2322,9 +2337,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      * @return void
      * @throws Exception If the browser is not supported.
      */
-    protected function cut($rightClick=FALSE)
+    protected function cut($rightClick=false)
     {
-        if ($rightClick !== TRUE) {
+        if ($rightClick !== true) {
             $this->sikuli->keyDown('Key.CMD + c');
         } else {
             $this->sikuli->rightClick($this->sikuli->getMouseLocation());
@@ -2355,7 +2370,6 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 default:
                 throw new Exception('Right click testing for this browser has not been implemented');
             }//end switch
-
         }//end if
 
     }//end cut()
@@ -2369,11 +2383,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    protected function runTestFor($os=NULL, $browser=NULL)
+    protected function runTestFor($os=null, $browser=null)
     {
-        if ($os !== NULL && $os !== $this->sikuli->getOS()) {
+        if ($os !== null && $os !== $this->sikuli->getOS()) {
             $this->markTestSkipped('This test does not run for this OS');
-        } else if ($browser !== NULL && $browser !== $this->sikuli->getBrowserid()) {
+        } else if ($browser !== null && $browser !== $this->sikuli->getBrowserid()) {
             $this->markTestSkipped('This test does not run for this browser');
         }
 
@@ -2388,15 +2402,15 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    protected function isOSAndBrowser($os=NULL, $browser=NULL)
+    protected function isOSAndBrowser($os=null, $browser=null)
     {
-        if ($os !== NULL && $os !== $this->sikuli->getOS()) {
-            return FALSE;
-        } else if ($browser !== NULL && $browser !== $this->sikuli->getBrowserid()) {
-            return FALSE;
+        if ($os !== null && $os !== $this->sikuli->getOS()) {
+            return false;
+        } else if ($browser !== null && $browser !== $this->sikuli->getBrowserid()) {
+            return false;
         }
 
-        return TRUE;
+        return true;
 
     }//end isOSAndBrowser()
 
@@ -2417,7 +2431,6 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
     /**
      * Moves the mouse pointer to the specified location for the given element.
-     *
      *
      * @return void
      */
@@ -2454,38 +2467,37 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return boolean
      */
-    protected function isCursorAssistLineVisible($relativeElement=NULL, $position='bottom', $index=0)
+    protected function isCursorAssistLineVisible($relativeElement=null, $position='bottom', $index=0)
     {
         $rect = $this->getBoundingRectangle('.ViperCursorAssistPlugin');
-        if (empty($rect) === FALSE) {
-            if ($relativeElement !== NULL) {
+        if (empty($rect) === false) {
+            if ($relativeElement !== null) {
                 // Get the position  of the element.
                 $elemPos = $this->getBoundingRectangle($relativeElement, $index);
 
                 switch ($position) {
                     case 'bottom':
                         if ($rect['y2'] <= $elemPos['y2']) {
-                            return FALSE;
+                            return false;
                         }
                     break;
 
                     case 'top':
                         if ($rect['y1'] >= $elemPos['y1']) {
-                            return FALSE;
+                            return false;
                         }
                     break;
 
                     default:
-                        throw new Exception('Position "'.$position.'" not supported.');
+                    throw new Exception('Position "'.$position.'" not supported.');
                     break;
                 }//end switch
-
             }//end if
 
-            return TRUE;
+            return true;
         }//end if
 
-        return FALSE;
+        return false;
 
     }//end isCursorAssistLineVisible()
 

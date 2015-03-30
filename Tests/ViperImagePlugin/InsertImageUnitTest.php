@@ -311,7 +311,7 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
         $this->type($this->getTestURL('/ViperImagePlugin/Images/editing.png'));
         $this->clickField('Image is decorative');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<img alt="" src="'.$this->getTestURL('/ViperImagePlugin/Images/editing.png').'" />');
+        $this->assertHTMLMatch('<img alt="" src="%url%/ViperImagePlugin/Images/editing.png" />');
 
         $this->useTest(2);
         $this->moveToKeyword(1, 'right');
@@ -319,7 +319,7 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
         $this->type($this->getTestURL('/ViperImagePlugin/Images/editing.png'));
         $this->clickField('Image is decorative');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('%1%<img alt="" src="'.$this->getTestURL('/ViperImagePlugin/Images/editing.png').'" /> %2%');
+        $this->assertHTMLMatch('%1%<img alt="" src="%url%/ViperImagePlugin/Images/editing.png" /> %2%');
 
         $this->useTest(2);
         $this->selectKeyword(1, 2);
@@ -328,7 +328,7 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
         $this->type($this->getTestURL('/ViperImagePlugin/Images/editing.png'));
         $this->clickField('Image is decorative');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<img alt="" src="'.$this->getTestURL('/ViperImagePlugin/Images/editing.png').'" />');
+        $this->assertHTMLMatch('<img alt="" src="%url%/ViperImagePlugin/Images/editing.png" />');
 
     }//end testInsertingImageWithNoBaseTag()
 
