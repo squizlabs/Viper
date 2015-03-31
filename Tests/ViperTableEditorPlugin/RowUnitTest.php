@@ -15,7 +15,7 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
     {
         $this->insertTable(1);
 
-        $this->showTools(1, 'row');
+        $this->showTools(4, 'row');
         $this->assertTrue($this->inlineToolbarButtonExists('tableSettings', 'selected'));
         $this->assertTrue($this->inlineToolbarButtonExists('addAbove'));
         $this->assertTrue($this->inlineToolbarButtonExists('addBelow'));
