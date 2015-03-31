@@ -15,11 +15,11 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
     {
         $this->insertTable(1);
 
-        $this->showTools(0, 'row');
+        $this->showTools(1, 'row');
         $this->assertTrue($this->inlineToolbarButtonExists('tableSettings', 'selected'));
         $this->assertTrue($this->inlineToolbarButtonExists('addAbove'));
         $this->assertTrue($this->inlineToolbarButtonExists('addBelow'));
-        $this->assertTrue($this->inlineToolbarButtonExists('mergeUp', 'disabled'));
+        $this->assertTrue($this->inlineToolbarButtonExists('mergeUp'));
         $this->assertTrue($this->inlineToolbarButtonExists('mergeDown'));
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass'));
         $this->assertTrue($this->inlineToolbarButtonExists('delete'));
@@ -31,7 +31,7 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
         $this->assertTrue($this->inlineToolbarButtonExists('tableSettings', 'selected'));
         $this->assertTrue($this->inlineToolbarButtonExists('addAbove'));
         $this->assertTrue($this->inlineToolbarButtonExists('addBelow'));
-        $this->assertTrue($this->inlineToolbarButtonExists('mergeUp', 'disabled'));
+        $this->assertTrue($this->inlineToolbarButtonExists('mergeUp'));
         $this->assertTrue($this->inlineToolbarButtonExists('mergeDown'));
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass'));
         $this->assertTrue($this->inlineToolbarButtonExists('delete'));
