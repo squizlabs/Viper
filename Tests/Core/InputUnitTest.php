@@ -751,6 +751,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->useTest(6);
         $this->selectKeyword(1);
         $this->type('test');
+        sleep(1);
         $this->assertHTMLMatch('<p>test</p>');
 
         $this->useTest(6);
