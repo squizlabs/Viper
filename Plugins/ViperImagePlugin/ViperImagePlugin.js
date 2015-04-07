@@ -471,14 +471,14 @@ ViperImagePlugin.prototype = {
 
         var self = this;
         var imageLoaded = function() {
-            // Image is loaded update the handles.
+            // only add hadnles when image is fully loaded
             self.showImageResizeHandles(image);
             self.viper.fireSelectionChanged(null, true);
         };
 
         image.onload  = imageLoaded;
         image.onerror = imageLoaded;
-        self.viper.fireSelectionChanged(null, true);
+
     },
 
     _updateToolbars: function(image)
@@ -498,6 +498,7 @@ ViperImagePlugin.prototype = {
         var tools = this.viper.ViperTools;
 
         if (image && ViperUtil.isTag(image, 'img') === true) {
+
             tools.setButtonActive('image');
 
             this.setUrlFieldValue(image.getAttribute('src'));
