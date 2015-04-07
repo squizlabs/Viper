@@ -202,7 +202,6 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteFormatsUnitTest extends Abstract
         $this->useTest(7);
         $this->selectKeyword(3);
         $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/CopyPasteFiles/HtmlCode.txt'));
-        sleep(5);
         $this->assertHTMLMatch('<p>First paragraph<strong>%1% bold content %2%</strong></p><pre>Lorum this is more content &lt;strong&gt;strong tags&lt;/strong&gt; &lt;ul&gt;&lt;li&gt;List item&lt;/li&gt;&lt;li&gt;List item&lt;/li&gt;&lt;/ul&gt;  to test</pre>');
 
         $this->useTest(7);
@@ -211,7 +210,6 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteFormatsUnitTest extends Abstract
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.ENTER');
         $this->clickTopToolbarButton('formats-p', 'active');
-        sleep(1);
         $this->clickTopToolbarButton('PRE', NULL, TRUE);
         $this->sikuli->keyDown('Key.CMD + v');
         $this->assertHTMLMatch('<p>First paragraph<strong>%1% bold content %2%</strong></p><pre>&lt;strong&gt;%1% bold content %2%&lt;/strong&gt;</pre><pre>Lorum this is more content %3% to test</pre>');

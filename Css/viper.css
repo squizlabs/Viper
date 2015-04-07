@@ -4,8 +4,7 @@
     outline: none;
 }
 
-#caret,
-.viper_caret {
+#caret, .viper_caret {
     width: 1px !important;
     background-color: #000;
     z-index: 750 !important;

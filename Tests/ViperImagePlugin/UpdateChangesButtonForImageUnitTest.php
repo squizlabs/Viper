@@ -34,7 +34,7 @@ class Viper_Tests_ViperImagePlugin_UpdateChangesButtonForImageUnitTest extends A
         $this->clickField('Image is decorative');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         sleep(1);
-        $this->assertHTMLMatch('<h1>Content without an Image</h1><p>%1% the first paragraph</p><p>The second paragraph on the page <img src="%url%/ViperImagePlugin/Images/editing.png" alt="" /></p>');
+        $this->assertHTMLMatch('<h1>Content without an Image</h1><p>%1% the first paragraph</p><p>The second paragraph on the page <img src="'.$this->getTestURL('/ViperImagePlugin/Images/editing.png').'" alt="" /></p>');
 
     }//end testApplyChangesButtonWhenClickingAwayFromImagePopUp()
 
@@ -72,7 +72,7 @@ class Viper_Tests_ViperImagePlugin_UpdateChangesButtonForImageUnitTest extends A
         $this->clickField('Image is decorative');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         sleep(1);
-        $this->assertHTMLMatch('<h1>Content without an Image</h1><p>%1% the first paragraph</p><p>The second paragraph on the page <img src="%url%/ViperImagePlugin/Images/editing.png" alt="" /></p>');
+        $this->assertHTMLMatch('<h1>Content without an Image</h1><p>%1% the first paragraph</p><p>The second paragraph on the page <img src="'.$this->getTestURL('/ViperImagePlugin/Images/editing.png').'" alt="" /></p>');
 
     }//end testApplyChangesButtonWhenClosingTheImagePopUp()
 

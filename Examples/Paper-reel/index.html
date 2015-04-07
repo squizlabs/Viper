@@ -18,29 +18,7 @@
             }
 
             viperTest = new Viper('test', {language: lang}, function(viper) {
-                var formatPluginSettings = {
-                    styles: {
-                        'Simple Image Border': {
-                            showFor: 'img,h1',
-                            hideFor: '*',
-                            classNames: 'simple-image-border'
-                        },
-                        'Article': {
-                            classNames: 'article',
-                            showFor: 'p'
-                        },
-                        'Multi Columns': {
-                            classNames: 'multi-col',
-                            hideFor: 'text-selection,img'
-                        },
-                        'Caption': 'simple-image-border image-caption',
-                        'Round Image': 'round-image',
-                        'Ordered List': 'ordered-list',
-                    }
-                };
-
                 viper.setEditableElement(document.getElementById('content'));
-                viper.getPluginManager().setPluginSettings('ViperFormatPlugin', formatPluginSettings);
             });
         };
 
@@ -77,7 +55,7 @@
 
     <!-- comment goes here la -->
 
-        <p>    Australian <span class="footnote-ref">governments</span> at all levels have <u><strong><em>endorsed</em></strong></u> WCAG 2.0, and require all government websites (federal, <span class="another-class multi-col simple-image-border customClass">state</span> and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012. In addition, the Australian Government requires all federal websites to meet the medium conformance level (Double A) by the end of 2014.    </p>
+        <p>    Australian governments at all levels have <u><strong><em>endorsed</em></strong></u> WCAG 2.0, and require all government websites (federal, state and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012. In addition, the Australian Government requires all federal websites to meet the medium conformance level (Double A) by the end of 2014.    </p>
 
 <p>
 
