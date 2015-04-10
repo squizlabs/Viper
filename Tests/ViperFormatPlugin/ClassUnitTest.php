@@ -5,52 +5,6 @@ require_once 'AbstractViperUnitTest.php';
 class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 {
 
-
-    /**
-     * Returns the selected styles.
-     *
-     * @return array
-     */
-    private function getSelectedStyles()
-    {
-        return $this->sikuli->execJS('viper.ViperTools.getItem(\'ViperFormatPlugin-classList\').getSelectedItems()');
-
-    }//end getSelectedStyles()
-
-
-    /**
-     * Selects the specified styles.
-     *
-     * @param array $styles Array of class names separated by spaces.
-     *
-     * @return void
-     */
-    private function selectStyles(array $styles)
-    {
-        $this->clickElement('.ViperFormatPlugin-stylePickerButton');
-        foreach ($styles as $classNames) {
-            $this->clickElement('li[data-id="'.$classNames.'"]');
-        }
-
-    }//end selectStyles()
-
-
-    /**
-     * Removes the specified styles.
-     *
-     * @param array $styles Array of class names separated by spaces.
-     *
-     * @return void
-     */
-    private function removeStyles(array $styles)
-    {
-        foreach ($styles as $classNames) {
-            $this->clickElement('.Viper-visible .ViperFormatPlugin-styleListItem-remove[data-id="'.$classNames.'"]');
-        }
-
-    }//end removeStyles()
-
-
     /**
      * Test that you can add the class attribute to a word.
      *
@@ -1118,52 +1072,5 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<p>This is some content <span class="myclass123">%1%</span> with classes applied %2%.</p>');
 
     }//end testApplyChangesButtonIsDisabledAfterCancellingChangesToAClass()
-
-
-    /**
-     * Test that custom styles can be set and selected.
-     *
-     * @return void
-     */
-    public function testCustomStyles()
-    {
-        $this->useTest(1);
-
-        $this->setPluginSettings(
-            'ViperFormatPlugin',
-            array(
-             'styles' => array(
-                          'Simple Image Border' => array(
-                                                    'showFor'    => 'img,h1',
-                                                    'hideFor'    => '*',
-                                                    'classNames' => 'simple-image-border',
-                                                   ),
-                          'Article'             => array(
-                                                    'classNames' => 'article',
-                                                    'showFor'    => 'p',
-                                                   ),
-                          'Multi Columns'       => array(
-                                                    'classNames' => 'multi-col',
-                                                    'hideFor'    => 'text-selection,img',
-                                                   ),
-                          'Caption'             => 'simple-image-border image-caption',
-                          'Round Image'         => 'round-image',
-                          'Ordered List'        => 'ordered-list',
-                         ),
-            )
-        );
-
-        $this->selectKeyword(1);
-        sleep(1);
-        $this->clickInlineToolbarButton('cssClass');
-
-        $this->selectStyles(array('ordered-list', 'simple-image-border image-caption'));
-
-        $selectedStyles = $this->getSelectedStyles();
-
-        $this->removeStyles($selectedStyles);
-
-    }//end testCustomStyles()
-
 
 }//end class
