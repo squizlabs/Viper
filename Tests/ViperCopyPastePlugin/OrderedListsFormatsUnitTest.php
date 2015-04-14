@@ -114,7 +114,9 @@ class Viper_Tests_ViperCopyPastePlugin_OrderedListsFormatsUnitTest extends Abstr
 
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + a');
+        sleep(1);
         $this->sikuli->keyDown('Key.DELETE');
+        sleep(1);
         $this->pasteFromURL($testFile);
         sleep(5);
 
