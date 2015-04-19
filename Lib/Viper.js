@@ -5395,6 +5395,20 @@ Viper.prototype = {
                             return;
                         }
 
+                        // Remove all BR tags and spaces just before this one.
+                        var prev = node.previousSibling;
+                        while (prev) {
+                            if (ViperUtil.isTag(prev, 'br') === true
+                                || (prev.nodeType === ViperUtil.TEXT_NODE && ViperUtil.trim(prev.nodeValue) === '')
+                            ) {
+                                var removeNode = prev;
+                                prev       = prev.previousSibling;
+                                ViperUtil.remove(removeNode);
+                            } else {
+                                break;
+                            }
+                        }
+
                         if (tag) {
                             var newNode = Viper.document.createTextNode(' ');
                             ViperUtil.insertBefore(node, newNode);
@@ -5416,6 +5430,20 @@ Viper.prototype = {
                         }
 
                         if (brLast === true) {
+                            // Rmove all BR tags just before this one.
+                            var prev = node.previousSibling;
+                            while (prev) {
+                                if (ViperUtil.isTag(prev, 'br') === true
+                                    || (prev.nodeType === ViperUtil.TEXT_NODE && ViperUtil.trim(prev.nodeValue) === '')
+                                ) {
+                                    var removeNode = prev;
+                                    prev       = prev.previousSibling;
+                                    ViperUtil.remove(removeNode);
+                                } else {
+                                    break;
+                                }
+                            }
+
                             ViperUtil.remove(node);
                         }
                     }//end if
