@@ -117,9 +117,8 @@ ViperFormatPlugin.prototype = {
                     - To specify a text selection in the showFor and hideFor filters use "text-selection".
         */
 
-        if (settings.styles) {
+        if (settings.styles && ViperUtil.isEmpty(settings.styles) === false) {
             this._custStyles = settings.styles;
-            ViperUtil.removeClass(this._stylePickerRow, 'ViperUtil-hidden');
 
             var items    = {};
             var expanded = {};
@@ -632,6 +631,7 @@ ViperFormatPlugin.prototype = {
         if (this._custStyles) {
             var nodeTagName = ViperUtil.getTagName(node) || 'text-selection';
             var list        = this.viper.ViperTools.getItem(this._styleListid);
+            var itemShown   = false;
 
             // Filter the list of classes that should be shown depending on the showFor, and hideFor settings.
             for (var classNames in this._custStyles) {
@@ -647,9 +647,16 @@ ViperFormatPlugin.prototype = {
                     list.hideItem(classNames);
                 } else if (!showFor || showFor === '*' || ViperUtil.inArray(nodeTagName, showFor) === true) {
                     list.showItem(classNames);
+                    itemShown = true;
                 } else {
                     list.hideItem(classNames);
                 }
+            }
+
+            if (itemShown === true) {
+                ViperUtil.removeClass(this._stylePickerRow, 'ViperUtil-hidden');
+            } else {
+                ViperUtil.addClass(this._stylePickerRow, 'ViperUtil-hidden');
             }
 
             list.setSelectedItems(selectedItems, true);
@@ -1005,10 +1012,10 @@ ViperFormatPlugin.prototype = {
                     }
 
                     // Class.
-                    var attrClass = self._getAttributeValue('class', nodeSelection);
-                    attrClass = self._getClassInitialValue(attrClass, nodeSelection);
+                    var originalAttrClass = self._getAttributeValue('class', nodeSelection);
+                    attrClass = self._getClassInitialValue(originalAttrClass, nodeSelection);
                     tools.getItem(prefix + 'class:input').setValue(attrClass);
-                    if (attrClass) {
+                    if (originalAttrClass) {
                         tools.setButtonActive('class');
                     } else {
                         tools.setButtonInactive('class');
