@@ -16,66 +16,66 @@
 }
 @keyframes appear-right {
   0% {
-    transform: translateX(-12px);
+    transform: translatex(-12px);
   }
   100% {
-    transform: translateX(0);
+    transform: translatex(0);
   }
 }
 @-webkit-keyframes appear-right {
   0% {
-    -webkit-transform: translateX(-12px);
+    -webkit-transform: translatex(-12px);
   }
   100% {
-    -webkit-transform: translateX(0);
+    -webkit-transform: translatex(0);
   }
 }
 @keyframes appear-left {
   0% {
-    transform: translateX(12px);
+    transform: translatex(12px);
   }
   100% {
-    transform: translateX(0);
+    transform: translatex(0);
   }
 }
 @-webkit-keyframes appear-left {
   0% {
-    -webkit-transform: translateX(12px);
+    -webkit-transform: translatex(12px);
   }
   100% {
-    -webkit-transform: translateX(0);
+    -webkit-transform: translatex(0);
   }
 }
 @keyframes appear-top {
   0% {
-    transform: translateY(12px);
+    transform: translatey(12px);
   }
   100% {
-    transform: translateY(0);
+    transform: translatey(0);
   }
 }
 @-webkit-keyframes appear-top {
   0% {
-    -webkit-transform: translateY(12px);
+    -webkit-transform: translatey(12px);
   }
   100% {
-    -webkit-transform: translateY(0);
+    -webkit-transform: translatey(0);
   }
 }
 @keyframes appear-bottom {
   0% {
-    transform: translateY(-12px);
+    transform: translatey(-12px);
   }
   100% {
-    transform: translateY(0);
+    transform: translatey(0);
   }
 }
 @-webkit-keyframes appear-bottom {
   0% {
-    -webkit-transform: translateY(-12px);
+    -webkit-transform: translatey(-12px);
   }
   100% {
-    -webkit-transform: translateY(0);
+    -webkit-transform: translatey(0);
   }
 }
 .Viper-button {
@@ -1113,6 +1113,9 @@
 .Viper-buttonGroup ViperITP-button-hidden {
   display: none;
 }
+.ViperUtil-hidden {
+  display: none;
+}
 .Viper-tooltip {
   position: absolute;
   max-width: 200px;
@@ -1127,6 +1130,9 @@
   font-weight: bold;
   -moz-user-select: none;
   margin: 5px 0;
+}
+@media screen and (max-width: 768px) {
+  
 }
 .Viper-popoutPanel {
   position: absolute;

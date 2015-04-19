@@ -1,7 +1,7 @@
 // Element Reveal Animations
 
     // Fade In
-    
+
         @keyframes fade-in {
             0% {opacity: 0;}
             100% {opacity: 1;}
@@ -12,7 +12,7 @@
         }
 
     // Right
-    
+
         @keyframes appear-right {
             0% {transform: translateX(-12px);}
             100% {transform: translateX(0);}
@@ -23,7 +23,7 @@
         }
 
     // Left
-    
+
         @keyframes appear-left {
             0% {transform: translateX(12px);}
             100% {transform: translateX(0);}
@@ -34,7 +34,7 @@
         }
 
     // Top
-    
+
         @keyframes appear-top {
             0% {transform: translateY(12px);}
             100% {transform: translateY(0);}
@@ -45,7 +45,7 @@
         }
 
     // Bottom
-    
+
         @keyframes appear-bottom {
             0% {transform: translateY(-12px);}
             100% {transform: translateY(0);}
@@ -1141,7 +1141,11 @@
     display: none;
 }
 
-// Viper Tooltip 
+.ViperUtil-hidden {
+    display: none;
+}
+
+// Viper Tooltip
 
     .Viper-tooltip {
         position: absolute;
@@ -1182,15 +1186,15 @@
         border-radius: 5px;
         border: 1px solid #2a2a2a;
         padding: 0.3em;
-        
+
         animation-duration: 90ms;
         animation-timing-function: ease-out;
         animation-fill-mode: forwards;
-    
+
         -webkit-animation-duration: 90ms;
         -webkit-animation-timing-function: ease-out;
         -webkit-animation-fill-mode: forwards;
-    
+
         &:before {
             right: 100%;
             top: 50%;
@@ -1205,15 +1209,15 @@
             border-width: 12px;
             margin-top: -12px;
         }
-        
+
         &.ViperUtil-visible {
             display: block;
-            
+
             &.ViperUtil-arrowleft {
                 animation-name: fade-in, appear-right;
                 -webkit-animation-name: fade-in, appear-right;
             }
-            
+
             &.ViperUtil-arrowright {
                 animation-name: fade-in, appear-left;
                 -webkit-animation-name: fade-in, appear-left;
@@ -1226,7 +1230,7 @@
     animation-name: fade-in, appear-bottom;
     -webkit-animation-name: fade-in, appear-bottom;
 }
-    
+
     // Selection List
 
         .Viper-selectionList {
@@ -1236,7 +1240,7 @@
             font-size: 12px;
             list-style: none;
             padding-left: 0;
-        
+
             & li {
                 padding: 6px 60px 6px 8px;
                 border-bottom: 1px solid #333;
@@ -1244,7 +1248,7 @@
                 cursor: pointer;
                 position: relative;
                 transition: background-color 0.1s ease-out;
-            
+
                 &:before {
                     content: "";
                     position: absolute;
@@ -1256,26 +1260,26 @@
                     margin-top: -9px;
                     top: 50%;
                 }
-                
+
                 &.selected:before {
                     background-color: #5A8BD0;
                     border-color: #5A8BD0;
                 }
-                
+
                 &:after {
                     content: "";
                     opacity: 0;
                     transform: scale(0.1);
                     transition: transform 0.1s ease-out;
                 }
-                
+
                 &.selected {
                     background-color: rgba(0, 0, 0, 0.25);
                     color: #5A8BD0;
                     box-shadow:
                         0 1px 0 rgba(255,255,255,0.1),
                         0 1px 0 #333236 inset;
-                    
+
                     &:after {
                         opacity: 1;
                         transform: scale(1);
@@ -1290,34 +1294,34 @@
                 }
             }
         }
-    
+
     // Arrows
-    
+
         .Viper-popoutPanel.ViperUtil-arrowleft {
             margin-left: 10px;
         }
-        
+
         .Viper-popoutPanel.ViperUtil-arrowleft.ViperUtil-aligntop:before {
             top: 0;
         }
-        
+
         .Viper-popoutPanel.ViperUtil-arrowleft.ViperUtil-alignbottom:before {
             top: 100%;
             margin-top: -25px;
         }
-        
+
         .Viper-popoutPanel.ViperUtil-alignbottom {
             margin-top: -15px;
         }
-        
+
         .Viper-popoutPanel.ViperUtil-arrowbottom {
             margin-top: -12px;
         }
-        
+
         .Viper-popoutPanel.ViperUtil-arrowtop {
             margin-top: 12px;
         }
-        
+
         .Viper-popoutPanel.ViperUtil-arrowtop:before {
             top: -12px;
             left: 50%;
@@ -1325,7 +1329,7 @@
             border-bottom-color: #2b2b2b;
             margin-left: -12px;
         }
-        
+
         .Viper-popoutPanel.ViperUtil-arrowright:before {
             left: 100%;
             top: 50%;
@@ -1334,15 +1338,15 @@
             border-width: 12px;
             margin-top: -12px;
         }
-        
+
         .Viper-popoutPanel.ViperUtil-arrowright.ViperUtil-aligntop {
             margin-top: 15px;
         }
-        
+
         .Viper-popoutPanel.ViperUtil-arrowright.ViperUtil-aligntop:before {
             top: 14px;
         }
-        
+
         .Viper-popoutPanel.ViperUtil-arrowbottom {
             top: 100%;
             left: 50%;
