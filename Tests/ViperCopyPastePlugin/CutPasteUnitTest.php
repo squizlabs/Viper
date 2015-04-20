@@ -37,7 +37,8 @@ class Viper_Tests_ViperCopyPastePlugin_CutPasteUnitTest extends AbstractViperUni
         $this->sikuli->keyDown('Key.CMD + a');
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('%1% This is one line of content %2%');
-        $this->selectKeyword(1, 2);
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + a');
         sleep(1);
         $this->sikuli->keyDown('Key.CMD + x');
         $this->type('new content');
@@ -45,7 +46,7 @@ class Viper_Tests_ViperCopyPastePlugin_CutPasteUnitTest extends AbstractViperUni
         sleep(1);
         $this->assertHTMLMatch('<p>new content</p><p>%1% This is one line of content %2%</p>');
         // Type some content to make sure the cursor is at the end
-        $this->type(' Added content');
+        $this->type('Added content');
         $this->assertHTMLMatch('<p>new content</p><p>%1% This is one line of content %2% Added content</p>');
 
         // Paste again
@@ -53,7 +54,7 @@ class Viper_Tests_ViperCopyPastePlugin_CutPasteUnitTest extends AbstractViperUni
         sleep(1);
         $this->assertHTMLMatch('<p>new content</p><p>%1% This is one line of content %2% Added content</p><p>%1% This is one line of content %2%</p>');
         // Type some content to make sure the cursor is at the end
-        $this->type(' More added content');
+        $this->type('More added content');
         $this->assertHTMLMatch('<p>new content</p><p>%1% This is one line of content %2% Added content</p><p>%1% This is one line of content %2% More added content</p>');
 
         // Paste again
@@ -61,7 +62,7 @@ class Viper_Tests_ViperCopyPastePlugin_CutPasteUnitTest extends AbstractViperUni
         sleep(1);
         $this->assertHTMLMatch('<p>new content</p><p>%1% This is one line of content %2% Added content</p><p>%1% This is one line of content %2% More added content</p><p>%1% This is one line of content %2%</p>');
         // Type some content to make sure the cursor is at the end
-        $this->type(' Last added content');
+        $this->type('Last added content');
         $this->assertHTMLMatch('<p>new content</p><p>%1% This is one line of content %2% Added content</p><p>%1% This is one line of content %2% More added content</p><p>%1% This is one line of content %2% Last added content</p>');
 
     }//end testSimpleTextCutPaste()
