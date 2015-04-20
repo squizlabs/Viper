@@ -1561,6 +1561,7 @@ Viper.prototype = {
                 ViperUtil.setHtml(this.element, '');
             } else {
                 range.deleteContents();
+                ViperSelection.addRange(range);
             }
 
             if (ViperUtil.trim(ViperUtil.getHtml(this.element)) === '') {
