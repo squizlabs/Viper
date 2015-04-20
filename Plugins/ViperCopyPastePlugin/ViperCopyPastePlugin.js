@@ -351,6 +351,8 @@ ViperCopyPastePlugin.prototype = {
                 var fakeEvent      = self._getFakeKeyboardEvent();
 
                 if (keyboardEditor.handleDelete(fakeEvent) !== false || fakeEvent.prevent !== true) {
+                    // Update the range object as it might have changed by handleDelete().
+                    range = self.viper.getCurrentRange();
                     range.deleteContents(self.viper.getViperElement(), self.viper.getDefaultBlockTag());
                     ViperSelection.addRange(range);
                 }
