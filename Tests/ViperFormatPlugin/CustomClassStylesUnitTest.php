@@ -122,12 +122,14 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         // Check class icon once applying custom style to a paragraph
         $this->useTest(1);
         $this->selectKeyword(1);
+        sleep(1);
         $this->selectInlineToolbarLineageItem(0);
         sleep(1);
         $this->clickInlineToolbarButton('cssClass');
         $this->selectStyles(array('ordered-list'));
         $this->sikuli->keyDown('Key.ENTER');
         $this->selectKeyword(1);
+        sleep(1);
         $this->selectInlineToolbarLineageItem(0);
         sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'));
