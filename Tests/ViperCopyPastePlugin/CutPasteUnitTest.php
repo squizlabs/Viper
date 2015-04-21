@@ -37,33 +37,37 @@ class Viper_Tests_ViperCopyPastePlugin_CutPasteUnitTest extends AbstractViperUni
         $this->sikuli->keyDown('Key.CMD + a');
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('%1% This is one line of content %2%');
-        $this->selectKeyword(1);
-        $this->sikuli->keyDown('Key.CMD + a');
+        sleep(1);
+        $this->selectKeyword(1, 2);
         sleep(1);
         $this->sikuli->keyDown('Key.CMD + x');
+        sleep(1);
         $this->type('new content');
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
         $this->assertHTMLMatch('<p>new content</p><p>%1% This is one line of content %2%</p>');
         // Type some content to make sure the cursor is at the end
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('Added content');
-        $this->assertHTMLMatch('<p>new content</p><p>%1% This is one line of content %2% Added content</p>');
+        $this->assertHTMLMatch('<p>new content</p><p>%1% This is one line of content %2%</p><p>Added content</p>');
 
         // Paste again
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
-        $this->assertHTMLMatch('<p>new content</p><p>%1% This is one line of content %2% Added content</p><p>%1% This is one line of content %2%</p>');
+        $this->assertHTMLMatch('<p>new content</p><p>%1% This is one line of content %2%</p><p>Added content</p><p>%1% This is one line of content %2%</p>');
         // Type some content to make sure the cursor is at the end
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('More added content');
-        $this->assertHTMLMatch('<p>new content</p><p>%1% This is one line of content %2% Added content</p><p>%1% This is one line of content %2% More added content</p>');
+        $this->assertHTMLMatch('<p>new content</p><p>%1% This is one line of content %2%</p><p>Added content</p><p>%1% This is one line of content %2%</p><p>More added content</p>');
 
         // Paste again
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
-        $this->assertHTMLMatch('<p>new content</p><p>%1% This is one line of content %2% Added content</p><p>%1% This is one line of content %2% More added content</p><p>%1% This is one line of content %2%</p>');
+        $this->assertHTMLMatch('<p>new content</p><p>%1% This is one line of content %2%</p><p>Added content</p><p>%1% This is one line of content %2%</p><p>More added content</p><p>%1% This is one line of content %2%</p>');
         // Type some content to make sure the cursor is at the end
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('Last added content');
-        $this->assertHTMLMatch('<p>new content</p><p>%1% This is one line of content %2% Added content</p><p>%1% This is one line of content %2% More added content</p><p>%1% This is one line of content %2% Last added content</p>');
+        $this->assertHTMLMatch('<p>new content</p><p>%1% This is one line of content %2%</p><p>Added content</p><p>%1% This is one line of content %2%</p><p>More added content</p><p>%1% This is one line of content %2%</p><p>Last added content</p>');
 
     }//end testSimpleTextCutPaste()
 
