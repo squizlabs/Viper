@@ -213,16 +213,23 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteFormatsUnitTest extends Abstract
         $this->clickTopToolbarButton('formats-p', 'active');
         sleep(1);
         $this->clickTopToolbarButton('PRE', NULL, TRUE);
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
         $this->assertHTMLMatch('<p>First paragraph<strong>%1% bold content %2%</strong></p><pre>&lt;strong&gt;%1% bold content %2%&lt;/strong&gt;</pre><pre>Lorum this is more content %3% to test</pre>');
         $this->clickTopToolbarButton('P', NULL, TRUE);
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
         $this->assertHTMLMatch('<p>First paragraph<strong>%1% bold content %2%</strong></p><p>&lt;strong&gt;%1% bold content %2%&lt;/strong&gt;<strong>%1% bold content %2%</strong></p><pre>Lorum this is more content %3% to test</pre>');
         $this->clickTopToolbarButton('PRE', NULL, TRUE);
+        sleep(1);
         $this->type(' ');
         $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
         $this->assertHTMLMatch('<p>First paragraph<strong>%1% bold content %2%</strong></p><pre>&lt;strong&gt;%1% bold content %2%&lt;/strong&gt;<strong>%1% bold content %2% &lt;strong&gt;%1% bold content %2%&lt;/strong&gt;</strong></pre><pre>Lorum this is more content %3% to test</pre>');
         $this->clickTopToolbarButton('PRE', 'active', TRUE);
+        sleep(1);
         $this->assertHTMLMatch('<p>First paragraph<strong>%1% bold content %2%</strong></p><p>&lt;strong&gt;%1% bold content %2%&lt;/strong&gt;<strong>%1% bold content %2% &lt;strong&gt;%1% bold content %2%&lt;/strong&gt;</strong></p><pre>Lorum this is more content %3% to test</pre>');
         
     }//end testPastingHtmlIntoPre()
