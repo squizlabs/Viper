@@ -156,7 +156,7 @@ class Viper_Tests_Core_GetHtmlUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test getHTML doesn't remove the <br/> when it is after a closing inline element.
+     * Test getHTML doesn't remove empty tags when the id or class attribute has been set.
      *
      * @return void
      */
@@ -168,6 +168,22 @@ class Viper_Tests_Core_GetHtmlUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<h1>%1% Heading</h1><p>A list:</p><ul><li>List item</li><li><a href="#"><span class="icon twitter"></span> Twitter</a></li></ul><p><i id="id-tag">&nbsp;</i></p><p>some content</p><p><i class="icon-chevron-right">&nbsp;</i></p>');
 
     }//end testEmtpyHtmlWithIdAndClassAreNotRemoved()
+
+
+     /**
+     * Test getHTML doesn't remove br tags between content but removes them at the end of the content.
+     *
+     * @return void
+     */
+    public function testRemovingBrTags()
+    {
+        $this->useTest(12);
+
+        $this->moveToKeyword(1);
+        $this->assertHTMLMatch('<h1>Heading</h1><p>Some content with br tags in between %1%<br /> <br /> <br /> <br /> <br /> <br /> <br />end of paragraph</p><p>Some more content with br tags at the end</p>');
+
+    }//end testRemovingBrTags()
+
 
 }//end class
 
