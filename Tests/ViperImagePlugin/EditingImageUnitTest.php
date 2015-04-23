@@ -92,6 +92,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
     {
         // Using inline toolbar
         $this->useTest(1);
+        $this->moveToKeyword(1);
         $this->clickElement('img', 0);
         $this->clickInlineToolbarButton('image', 'active');
         $this->clickField('Image is decorative');
@@ -136,6 +137,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
     {
         // Edit image with alt and no title using inline toolbar
         $this->useTest(2);
+        $this->moveToKeyword(1);
         $this->clickElement('img', 0);
         $this->clickInlineToolbarButton('image', 'active');
         $this->clearFieldValue('Alt');
