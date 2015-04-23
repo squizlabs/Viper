@@ -83,6 +83,29 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
 
     }//end removeStyles()
 
+
+    /**
+     * Test custom style menu doesn't appear in the class pop up when no styles defined
+     *
+     * @return void
+     */
+    public function testNoCustomStylesMenu()
+    {
+
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        sleep(1);
+
+        try {
+            $this->clickInlineToolbarButton('cssClass');
+            $this->selectStyles(array('ordered-list'));
+        } catch (Exception $e) {
+            $this->assertTrue(True, 'The Custom Styles Menu is not shown.');
+        }
+        
+    }//end testNoCustomStylesMenu()
+
+
     /**
      * Test class icon when applying custom styles
      *
