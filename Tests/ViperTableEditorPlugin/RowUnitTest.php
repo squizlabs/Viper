@@ -354,16 +354,19 @@ class Viper_Tests_ViperTableEditorPlugin_RowUnitTest extends AbstractViperTableE
     public function testMoveIconsInTheRowToolbar()
     {
         $this->insertTable(1);
+        sleep(1);
         $this->showTools(0, 'row');
-
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('mergeDown'), 'Move row down should be active');
         $this->assertTrue($this->inlineToolbarButtonExists('mergeUp', 'disabled'), 'Move row up should not be active');
 
         $this->showTools(10, 'row');
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('mergeDown', 'disabled'), 'Move row down should not be active');
         $this->assertTrue($this->inlineToolbarButtonExists('mergeUp'), 'Move row up should be active');
 
         $this->showTools(5, 'row');
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('mergeDown'), 'Move row down should be active');
         $this->assertTrue($this->inlineToolbarButtonExists('mergeUp'), 'Move row up should be active');
 

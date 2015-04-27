@@ -16,7 +16,9 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->useTest(1);
 
         $this->insertTable(1);
+        sleep(1);
         $this->showTools(0, 'col');
+        sleep(1);
 
         $this->assertTrue($this->inlineToolbarButtonExists('tableSettings', 'selected'));
         $this->assertTrue($this->inlineToolbarButtonExists('addLeft'));
@@ -388,20 +390,25 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->useTest(1);
 
         $this->insertTable(1);
+        sleep(1);
         $this->showTools(0, 'col');
+        sleep(1);
 
         $this->assertTrue($this->inlineToolbarButtonExists('mergeRight'), 'Move column right should be enabled');
         $this->assertTrue($this->inlineToolbarButtonExists('mergeLeft', 'disabled'), 'Move column left should not be enabled');
 
         $this->showTools(3, 'col');
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('mergeRight', 'disabled'), 'Move column right should not be enabled');
         $this->assertTrue($this->inlineToolbarButtonExists('mergeLeft'), 'Move column left should be enabled');
 
         $this->showTools(2, 'col');
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('mergeRight'), 'Move column right should be enabled');
         $this->assertTrue($this->inlineToolbarButtonExists('mergeLeft'), 'Move column left should be enabled');
 
         $this->showTools(1, 'col');
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('mergeRight'), 'Move column right should be enabled');
         $this->assertTrue($this->inlineToolbarButtonExists('mergeLeft'), 'Move column left should be enabled');
 
