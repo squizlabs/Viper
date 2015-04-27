@@ -301,11 +301,13 @@ class Viper_Tests_ViperListPlugin_CreateListUnitTest extends AbstractViperListPl
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + a');
         $this->sikuli->keyDown('Key.DELETE');
+        sleep(1);
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
 
         // Create unordered list and delete it
         $this->clickTopToolbarButton('listUL');
         $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(1);
         $this->assertHTMLMatch('<p></p>');
 
         // Create unordered list and add a list item
@@ -320,11 +322,13 @@ class Viper_Tests_ViperListPlugin_CreateListUnitTest extends AbstractViperListPl
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + a');
         $this->sikuli->keyDown('Key.DELETE');
+        sleep(1);
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
 
         // Create ordered list and delete it
         $this->clickTopToolbarButton('listOL');
         $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(1);
         $this->assertHTMLMatch('<p></p>');
 
         // Create ordered list and add a list item
