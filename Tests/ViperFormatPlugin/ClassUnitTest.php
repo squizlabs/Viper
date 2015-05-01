@@ -504,9 +504,11 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
     {
         $this->useTest(1);
         $this->selectKeyword(1);
-        $this->clickInlineToolbarButton('bold');
-        sleep(1);
         $this->clickInlineToolbarButton('italic');
+        sleep(1);
+        $this->clickInlineToolbarButton('bold');
+        
+        
         sleep(1);
 
         // Select bold in the lineage
