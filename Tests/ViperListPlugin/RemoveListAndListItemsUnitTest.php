@@ -368,7 +368,7 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsUnitTest extends Abstrac
         //Test ordered list when select the whole list item
         $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('listOL', 'active');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ol><p>sub item 3 %3%</p></li><li>second item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ol><p>sub item 3 %3%</p></li><li>second item %4%</li></ol>');
         $this->clickTopToolbarButton('listOL');
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item %4%</li></ol>');
 
