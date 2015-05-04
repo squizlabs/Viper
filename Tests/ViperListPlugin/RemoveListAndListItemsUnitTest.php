@@ -216,47 +216,49 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsUnitTest extends Abstrac
     {
         //Test unordered list when click inside a list item
         $this->useTest(3);
+        $this->moveToKeyword(4);
         $this->moveToKeyword(1);
         $this->clickTopToolbarButton('listUL', 'active');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><p>sub item 1 %1%</p><ul><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><p>sub item 1 %1%</p><ul><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item %4%</li></ul>');
         $this->clickTopToolbarButton('listUL');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item %4%</li></ul>');
 
         //Test unordered list when select a word in the list item
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('listUL', 'active');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><p>sub item 1 %1%</p><ul><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><p>sub item 1 %1%</p><ul><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item %4%</li></ul>');
         $this->clickTopToolbarButton('listUL');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item %4%</li></ul>');
 
         //Test unordered list when select the whole list item
         $this->selectInlineToolbarLineageItem(3);
         $this->clickInlineToolbarButton('listUL', 'active');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><p>sub item 1 %1%</p><ul><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><p>sub item 1 %1%</p><ul><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item %4%</li></ul>');
         $this->clickTopToolbarButton('listUL');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item %4%</li></ul>');
 
         //Test ordered list when click inside a list item
         $this->useTest(4);
+        $this->moveToKeyword(4);
         $this->moveToKeyword(1);
         $this->clickTopToolbarButton('listOL', 'active');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><p>sub item 1 %1%</p><ol><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><p>sub item 1 %1%</p><ol><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item %4%</li></ol>');
         $this->clickTopToolbarButton('listOL');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item %4%</li></ol>');
 
         //Test ordered list when select a word in the list item
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('listOL', 'active');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><p>sub item 1 %1%</p><ol><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><p>sub item 1 %1%</p><ol><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item %4%</li></ol>');
         $this->clickTopToolbarButton('listOL');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item %4%</li></ol>');
 
         //Test ordered list when select the whole list item
         $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('listOL', 'active');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><p>sub item 1 %1%</p><ol><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><p>sub item 1 %1%</p><ol><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item %4%</li></ol>');
         $this->clickTopToolbarButton('listOL');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item %4%</li></ol>');
 
     }//end testRemoveAndAddBackTheFirstItemInASubList()
 
@@ -270,47 +272,49 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsUnitTest extends Abstrac
     {
         //Test unordered list when click inside a list item
         $this->useTest(3);
+        $this->moveToKeyword(4);
         $this->moveToKeyword(2);
         $this->clickTopToolbarButton('listUL', 'active');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li></ul><p>sub item 2 %2%</p><ul><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li></ul><p>sub item 2 %2%</p><ul><li>sub item 3 %3%</li></ul></li><li>second item %4%</li></ul>');
         $this->clickTopToolbarButton('listUL');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item %4%</li></ul>');
 
         //Test unordered list when select a word in the list item
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('listUL', 'active');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li></ul><p>sub item 2 %2%</p><ul><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li></ul><p>sub item 2 %2%</p><ul><li>sub item 3 %3%</li></ul></li><li>second item %4%</li></ul>');
         $this->clickInlineToolbarButton('listUL');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item %4%</li></ul>');
 
         //Test unordered list when select the whole list item
         $this->selectInlineToolbarLineageItem(3);
         $this->clickInlineToolbarButton('listUL', 'active');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li></ul><p>sub item 2 %2%</p><ul><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li></ul><p>sub item 2 %2%</p><ul><li>sub item 3 %3%</li></ul></li><li>second item %4%</li></ul>');
         $this->clickTopToolbarButton('listUL');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item %4%</li></ul>');
 
         //Test ordered list when click inside a list item
         $this->useTest(4);
+        $this->moveToKeyword(4);
         $this->moveToKeyword(2);
         $this->clickTopToolbarButton('listOL', 'active');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li></ol><p>sub item 2 %2%</p><ol><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li></ol><p>sub item 2 %2%</p><ol><li>sub item 3 %3%</li></ol></li><li>second item %4%</li></ol>');
         $this->clickTopToolbarButton('listOL');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item %4%</li></ol>');
 
         //Test ordered list when select a word in the list item
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('listOL', 'active');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li></ol><p>sub item 2 %2%</p><ol><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li></ol><p>sub item 2 %2%</p><ol><li>sub item 3 %3%</li></ol></li><li>second item %4%</li></ol>');
         $this->clickInlineToolbarButton('listOL');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item %4%</li></ol>');
 
         //Test ordered list when select the whole list item
         $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('listOL', 'active');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li></ol><p>sub item 2 %2%</p><ol><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li></ol><p>sub item 2 %2%</p><ol><li>sub item 3 %3%</li></ol></li><li>second item %4%</li></ol>');
         $this->clickTopToolbarButton('listOL');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item %4%</li></ol>');
 
     }//end testRemoveAndAddBackTheMiddleItemInASubList()
 
@@ -324,47 +328,49 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsUnitTest extends Abstrac
     {
         //Test unordered list when click inside a list item
         $this->useTest(3);
+        $this->moveToKeyword(4);
         $this->moveToKeyword(3);
         $this->clickTopToolbarButton('listUL', 'active');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ul><p>sub item 3 %3%</p></li><li>second item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ul><p>sub item 3 %3%</p></li><li>second item %4%</li></ul>');
         $this->clickTopToolbarButton('listUL');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item %4%</li></ul>');
 
         //Test unordered list when select a word in the list item
         $this->selectKeyword(3);
         $this->clickInlineToolbarButton('listUL', 'active');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ul><p>sub item 3 %3%</p></li><li>second item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ul><p>sub item 3 %3%</p></li><li>second item %4%</li></ul>');
         $this->clickTopToolbarButton('listUL');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item %4%</li></ul>');
 
         //Test unordered list when select the whole list item
         $this->selectInlineToolbarLineageItem(3);
         $this->clickInlineToolbarButton('listUL', 'active');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ul><p>sub item 3 %3%</p></li><li>second item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ul><p>sub item 3 %3%</p></li><li>second item %4%</li></ul>');
         $this->clickTopToolbarButton('listUL');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item %4%</li></ul>');
 
         //Test ordered list when click inside a list item
         $this->useTest(4);
+        $this->moveToKeyword(4);
         $this->moveToKeyword(3);
         $this->clickTopToolbarButton('listOL', 'active');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ol><p>sub item 3 %3%</p></li><li>second item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ol><p>sub item 3 %3%</p></li><li>second item %4%</li></ol>');
         $this->clickTopToolbarButton('listOL');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item %4%</li></ol>');
 
         //Test ordered list when select a word in the list item
         $this->selectKeyword(3);
         $this->clickInlineToolbarButton('listOL', 'active');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ol><p>sub item 3 %3%</p></li><li>second item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ol><p>sub item 3 %3%</p></li><li>second item %4%</li></ol>');
         $this->clickTopToolbarButton('listOL');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item %4%</li></ol>');
 
         //Test ordered list when select the whole list item
         $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('listOL', 'active');
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ol><p>sub item 3 %3%</p></li><li>second item</li></ol>');
         $this->clickTopToolbarButton('listOL');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item %4%</li></ol>');
 
     }//end testRemoveAndAddBackTheLastItemInASubList()
 
@@ -378,33 +384,35 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsUnitTest extends Abstrac
     {
         //Test unordered list using top toolbar icons
         $this->useTest(3);
+        $this->moveToKeyword(4);
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(2);
         $this->clickTopToolbarButton('listUL', 'active');
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><p>sub item 1 %1%</p><p>sub item 2 %2%</p><p>sub item 3 %3%</p></li><li>second item</li></ul>');
         $this->clickTopToolbarButton('listUL');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item %4%</li></ul>');
 
         //Test unordered list using inline toolbar icons
         $this->clickInlineToolbarButton('listUL', 'active');
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><p>sub item 1 %1%</p><p>sub item 2 %2%</p><p>sub item 3 %3%</p></li><li>second item</li></ul>');
         $this->clickTopToolbarButton('listUL');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item %4%</li></ul>');
 
         //Test ordered list using top toolbar icons
         $this->useTest(4);
+        $this->moveToKeyword(4);
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(2);
         $this->clickTopToolbarButton('listOL', 'active');
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><p>sub item 1 %1%</p><p>sub item 2 %2%</p><p>sub item 3 %3%</p></li><li>second item</li></ol>');
         $this->clickTopToolbarButton('listOL');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item %4%</li></ol>');
 
         //Test ordered list using the inline toolbar icons
         $this->clickInlineToolbarButton('listOL', 'active');
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><p>sub item 1 %1%</p><p>sub item 2 %2%</p><p>sub item 3 %3%</p></li><li>second item</li></ol>');
         $this->clickTopToolbarButton('listOL');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ol></li><li>second item %4%</li></ol>');
 
     }//end testRemoveListUsingListIcon()
 
