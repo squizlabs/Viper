@@ -394,7 +394,7 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsUnitTest extends Abstrac
 
         //Test unordered list using inline toolbar icons
         $this->clickInlineToolbarButton('listUL', 'active');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><p>sub item 1 %1%</p><p>sub item 2 %2%</p><p>sub item 3 %3%</p></li><li>second item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><p>sub item 1 %1%</p><p>sub item 2 %2%</p><p>sub item 3 %3%</p></li><li>second item %4%</li></ul>');
         $this->clickTopToolbarButton('listUL');
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li><li>sub item 3 %3%</li></ul></li><li>second item %4%</li></ul>');
 
