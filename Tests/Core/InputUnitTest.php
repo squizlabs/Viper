@@ -25,7 +25,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
         $expected  = '`1234567890-=qwertyuiop[]asdfghjkl;zxcvbnm,.';
         $expected .= 'QWERTYUIOPASDFGHJKLZXCVBNM';
-        $expected .= '~!@#$%^&amp;*()_+{}|:"&lt;&gt;? &nbsp; .';
+        $expected .= '~!@#$%^&amp;*()_+{}|:"&lt;&gt;?&nbsp;&nbsp; .';
 
         $this->assertHTMLMatch('<p>'.$expected.' EIB MOZ %2%</p>');
 

@@ -5501,6 +5501,10 @@ Viper.prototype = {
                     ViperUtil.remove(node);
                 } else if (ViperUtil.trim(node.data) === '' && node.data.indexOf("\n") === 0) {
                     ViperUtil.remove(node);
+                } else {
+                    // Replace two spaces with two &nbsp;.
+                    var nbsp  = String.fromCharCode(160);
+                    node.data = node.data.replace(/\s{2,2}/g, nbsp + nbsp);
                 }
             } else {
                 node.data = node.data.replace(/^\n+\s*$/m, '');
