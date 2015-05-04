@@ -193,6 +193,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
     {
         //Test ordered sub list with top toolbar icon
         $this->useTest(1);
+        $this->moveToKeyword(1);
         $this->selectKeyword(2);
         sleep(1);
         $this->clickTopToolbarButton('listOL', 'active');
