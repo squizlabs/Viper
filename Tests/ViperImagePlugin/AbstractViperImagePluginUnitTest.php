@@ -24,7 +24,7 @@ abstract class AbstractViperImagePluginUnitTest extends AbstractViperUnitTest
         $selector = 'img';
 
         $imageRect   = $this->getBoundingRectangle($selector, $imageIndex);
-        $rightHandle = $this->findImage('ImageHandle-se', '.Viper-image-handle-se');
+        $rightHandle = $this->findImage('ImageHandle-se', '.Viper-image-handle-se', 0, true);
 
         $width  = ($imageRect['x2'] - $imageRect['x1']);
         $diff   = ($size - $width);

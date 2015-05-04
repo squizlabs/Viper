@@ -16,8 +16,8 @@ class Viper_Tests_ViperImagePlugin_ResizeImageUnitTest extends AbstractViperImag
 
         $this->clickElement('img', 0);
         sleep(1);
-        $this->findImage('ImageHandle-sw', '.Viper-image-handle-sw');
-        $this->findImage('ImageHandle-se', '.Viper-image-handle-se');
+        $this->findImage('ImageHandle-sw', '.Viper-image-handle-sw', 0, true);
+        $this->findImage('ImageHandle-se', '.Viper-image-handle-se', 0, true);
 
     }//end testImageResizeHandles()
 

@@ -193,8 +193,8 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
         $this->sikuli->keyDown('Key.ENTER');
         $this->clickElement('img', 0);
 
-        $this->findImage('ImageHandle-sw', '.Viper-image-handle-sw');
-        $this->findImage('ImageHandle-se', '.Viper-image-handle-se');
+        $this->findImage('ImageHandle-sw', '.Viper-image-handle-sw', 0, true);
+        $this->findImage('ImageHandle-se', '.Viper-image-handle-se', 0, true);
 
     }//end testImageResizeHandles()
 

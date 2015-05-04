@@ -1640,17 +1640,18 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      * Selector must be given so that the first time the image is found using the
      * selector and the next time using the Sikuli image matching.
      *
-     * @param string  $imageName Name of the image.
-     * @param string  $selector  The jQuery selector to use for finding the element.
-     * @param integer $index     The element index of the resulting array.
+     * @param string  $imageName   Name of the image.
+     * @param string  $selector    The jQuery selector to use for finding the element.
+     * @param integer $index       The element index of the resulting array.
+     * @param boolean $forceUpdate Ignores the cached image.
      *
      * @return string
      */
-    protected function findImage($imageName, $selector, $index=0)
+    protected function findImage($imageName, $selector, $index=0, $forceUpdate=false)
     {
         $filePath = $this->getBrowserImagePath().'/'.$imageName.'.png';
 
-        if (file_exists($filePath) === true) {
+        if ($forceUpdate !== true && file_exists($filePath) === true) {
             return $this->sikuli->find($filePath);
         } else {
             $elemRect = $this->getBoundingRectangle($selector, $index);
