@@ -242,6 +242,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
     {
         //Test ordered sub list with top toolbar icon
         $this->useTest(1);
+        $this->moveToKeyword(1);
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('listOL', 'active');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
@@ -252,6 +253,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
 
         //Test ordered sub list with inline toolbar icon
         $this->useTest(1);
+        $this->moveToKeyword(1);
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('listOL', 'active');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
@@ -262,6 +264,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
 
         //Test unordered sub list with top toolbar icon
         $this->useTest(2);
+        $this->moveToKeyword(1);
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('listUL', 'active');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
@@ -272,6 +275,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
 
         //Test unordered sub list with inline toolbar icon
         $this->useTest(2);
+        $this->moveToKeyword(1);
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('listUL', 'active');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
@@ -356,6 +360,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
     {
         //Test ordered sub list with inline toolbar icons
         $this->useTest(1);
+        $this->moveToKeyword(1);
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(2);
         $this->clickInlineToolbarButton('listOL', 'active');
@@ -375,6 +380,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
 
         //Test unordered sub list with inline toolbar icons
         $this->useTest(2);
+        $this->moveToKeyword(1);
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(2);
         $this->clickInlineToolbarButton('listUL', 'active');
@@ -404,6 +410,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
     {
         //Test ordered sub list
         $this->useTest(1);
+        $this->moveToKeyword(1);
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(2);
         $this->clickInlineToolbarButton('listOL', 'active');
@@ -415,6 +422,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
 
         //Test unordered sub list
         $this->useTest(2);
+        $this->moveToKeyword(1);
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(2);
         $this->clickInlineToolbarButton('listUL', 'active');

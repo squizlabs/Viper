@@ -210,6 +210,7 @@ class Viper_Tests_ViperListPlugin_CreateListUnitTest extends AbstractViperListPl
     {
         //Test unordered list
         $this->useTest(2);
+        $this->moveToKeyword(1);
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.ENTER');
@@ -218,6 +219,7 @@ class Viper_Tests_ViperListPlugin_CreateListUnitTest extends AbstractViperListPl
 
         //Test ordered list
         $this->useTest(3);
+        $this->moveToKeyword(1);
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.ENTER');
