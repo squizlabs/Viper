@@ -60,9 +60,13 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
      */
     private function selectStyles(array $styles)
     {
-        $this->clickElement('.ViperFormatPlugin-stylePickerButton');
+        $rect = $this->getBoundingRectangle('.ViperUtil-visible[data-id="test-ViperFormatPlugin-classPopout"]');
+        if (empty($rect) === true) {
+            $this->sikuli->clickVisibleElement('.ViperFormatPlugin-stylePickerButton', 0, true);
+        }
+
         foreach ($styles as $classNames) {
-            $this->clickElement('li[data-id="'.$classNames.'"]');
+            $this->sikuli->clickVisibleElement('li[data-id="'.$classNames.'"]');
         }
 
     }//end selectStyles()
@@ -78,7 +82,7 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
     private function removeStyles(array $styles)
     {
         foreach ($styles as $classNames) {
-            $this->clickElement('.Viper-visible .ViperFormatPlugin-styleListItem-remove[data-id="'.$classNames.'"]');
+            $this->sikuli->clickVisibleElement('.Viper-visible .ViperFormatPlugin-styleListItem-remove[data-id="'.$classNames.'"]');
         }
 
     }//end removeStyles()
@@ -102,7 +106,7 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         } catch (Exception $e) {
             $this->assertTrue(True, 'The Custom Styles Menu is not shown.');
         }
-        
+
     }//end testNoCustomStylesMenu()
 
 

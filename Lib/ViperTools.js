@@ -2053,6 +2053,8 @@ ViperTools.prototype = {
         var panel = document.createElement('div');
         ViperUtil.addClass(panel, 'Viper-popoutPanel');
 
+        ViperUtil.attr(panel, 'data-id', id);
+
         if (contentElement) {
             panel.appendChild(contentElement);
         }
