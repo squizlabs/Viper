@@ -194,6 +194,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         //Test ordered sub list with top toolbar icon
         $this->useTest(1);
         $this->selectKeyword(2);
+        sleep(1);
         $this->clickTopToolbarButton('listOL', 'active');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
         $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<br /><ol><li>first sub item</li></ol><p>second sub item %2%</p></li><li>second item %3%</li></ul>');
@@ -212,6 +213,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         //Test unordered sub list with top toolbar icon
         $this->useTest(2);
         $this->selectKeyword(2);
+        sleep(1);
         $this->clickTopToolbarButton('listUL', 'active');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
         $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item XAX<br /><ul><li>first sub item</li></ul><p>second sub item XBX</p></li><li>second item XCX</li></ol>');
