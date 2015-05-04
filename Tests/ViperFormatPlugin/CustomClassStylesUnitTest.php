@@ -424,7 +424,7 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
          // Edit the custom styles using top toolbar and press apply changes
         $this->selectStyles(array('multi-col'));
         $this->clickInlineToolbarButton('Apply Changes', null, true);
-        $this->assertHTMLMatch('<p class="article multi-col ">This is some content %1% in my unit test</p>');
+        $this->assertHTMLMatch('<p class="article multi-col">This is some content %1% in my unit test</p>');
 
     }//end testApplyAndEditCustomClassStyleToParagraph()
 
