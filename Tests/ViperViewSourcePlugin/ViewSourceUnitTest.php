@@ -92,8 +92,6 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViper
      */
     public function testEditingClosingTheWindowWithApplyingChanges()
     {
-        $this->markTestSkipped('Atm the top buttons are removed when it switches windows. Need a way to keep the buttons there');
-
         $this->moveToKeyword(2);
         $this->clickTopToolbarButton('sourceView');
         sleep(2);
@@ -102,6 +100,9 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViper
 
         $closeIcon = $this->findImage('closePopupIcon', '.Viper-popup-closeIcon');
         $this->sikuli->click($closeIcon);
+
+        // Wait for animations to complete.
+        sleep(2);
 
         $this->clickButton('Apply Changes', NULL, TRUE);
 
