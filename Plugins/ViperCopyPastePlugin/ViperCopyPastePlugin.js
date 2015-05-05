@@ -2190,19 +2190,6 @@ ViperCopyPastePlugin.prototype = {
 
             if (prevType !== listType && level === prevLevel) {
                 newList = true;
-            } else if (ViperUtil.isBrowser('safari') === true) {
-                if (prevCssStyle !== cssStyle) {
-                    if (styleToLvl[cssStyle]) {
-                        level = styleToLvl[cssStyle];
-                    } else {
-                        level++;
-                        styleToLvl[cssStyle] = level;
-                    }
-                } else if (styleToLvl[cssStyle]) {
-                    level = styleToLvl[cssStyle];
-                }
-
-                prevCssStyle = cssStyle;
             }
 
             prevType = listType;
