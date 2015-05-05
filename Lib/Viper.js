@@ -5502,6 +5502,11 @@ Viper.prototype = {
                 } else if (ViperUtil.trim(node.data) === '' && node.data.indexOf("\n") === 0) {
                     ViperUtil.remove(node);
                 } else {
+                    // Remove extra spaces from the node.
+                    node.data = node.data.replace(/^\s+/g, ' ');
+                    node.data = node.data.replace(/\s+$/g, ' ');
+                    node.data = node.data.replace(/\s*\n\s*/g, ' ');
+
                     // Replace two spaces with two &nbsp;.
                     var nbsp  = String.fromCharCode(160);
                     node.data = node.data.replace(/\s{2,2}/g, nbsp + nbsp);
