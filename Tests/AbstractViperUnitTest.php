@@ -722,7 +722,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             }
         }
 
-        for ($similarity = 0.93; $similarity < 0.99; $similarity += 0.01) {
+        for ($similarity = 0.93; $similarity < 0.97; $similarity += 0.01) {
             // Find each of the icons, if any fails it will throw an exception.
             $regions = array();
             foreach ($statuses as $status => $className) {
@@ -750,7 +750,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             break;
         }//end for
 
-        $this->addData('buttonSimmilarity', $similarity);
+        $this->addData('buttonSimmilarity', number_format($similarity, 2, '.', ''));
 
     }//end _calibrateIcons()
 
