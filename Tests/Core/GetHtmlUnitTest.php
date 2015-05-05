@@ -185,6 +185,21 @@ class Viper_Tests_Core_GetHtmlUnitTest extends AbstractViperUnitTest
     }//end testRemovingBrTags()
 
 
+     /**
+     * Test getHTML removes the contenteditable attribute from the HTML code.
+     *
+     * @return void
+     */
+    public function testRemovingContenteditableAttribute()
+    {
+        $this->useTest(13);
+
+        $this->moveToKeyword(1);
+        $this->assertHTMLMatch('<p>Content XAX</p><ul><li><a href="http://www.w3schools.com" target="_blank"><img alt="Okładka Biuletynu Informacyjnego 4/2014" height="152" src="./Pomorski Uniwersytet Medyczny- Biuletyn Informacyjny_files/biuletyn_2014_4.jpg" width="108" /></a></li></ul>');
+
+    }//end testRemovingContenteditableAttribute()
+
+
 }//end class
 
 ?>
