@@ -7,6 +7,23 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
 
 
     /**
+     * Returns true if the right click paste toolbar is visible.
+     *
+     * @return boolean
+     */
+    private function _isPasteToolbarVisible()
+    {
+        $rect = $this->getBoundingRectangle('#test-ViperCopyPastePlugin-paste');
+        if (empty($rect) === true) {
+            return false;
+        }
+
+        return true;
+
+    }//end _isPasteToolbarVisible()
+
+
+    /**
      * Test that copying/pasting a simple text works.
      *
      * @return void
@@ -94,7 +111,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         sleep(1);
         $this->assertHTMLMatch('<p>This is some content to %2%%1% test partial copy and paste. It %2% needs to be a really long paragraph.</p>');
 
-        // Test coping a section of a paragraph and pasting over another section on the page 
+        // Test coping a section of a paragraph and pasting over another section on the page
         $this->useTest(4);
         $this->selectKeyword(1, 2);
         sleep(2);
