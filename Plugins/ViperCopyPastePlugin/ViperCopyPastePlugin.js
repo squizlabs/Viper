@@ -673,52 +673,53 @@ ViperCopyPastePlugin.prototype = {
         var rows = [];
         if (ViperUtil.isBrowser('firefox') === true) {
             // Firefox has multiple range objects for each selected table cell.
-            var range = null;
-            var i     = 0;
-            while (range = ViperSelection.getRangeAt(i)) {
-                var elem = range.getStartNode();
+            var ffRange = null;
+            var i       = 0;
+            while (ffRange = ViperSelection.getRangeAt(i)) {
+                i++;
+                var elem = ffRange.getStartNode();
                 if (ViperUtil.isTag(elem, 'td') === false) {
-                    return false;
+                    // Not a table selection using Firefox range object. Try the generic way.
+                    rows = [];
+                    continue;
                 }
 
                 if (ViperUtil.inArray(elem.parentNode, rows) === false) {
                     rows.push(elem.parentNode);
                 }
-
-                i++;
             }
 
             if (rows.length > 0) {
                 this._selectedRows = rows;
                 return true;
             }
-        } else {
-            var startNode = range.getStartNode();
-            var endNode = range.getEndNode();
-            var elements = ViperUtil.getElementsBetween(startNode, endNode);
-            for (var i = 0; i < elements.length; i++) {
-                var row = null;
-                if (elements[i].nodeType === ViperUtil.TEXT_NODE) {
-                    continue;
-                } else if (ViperUtil.isTag(elements[i], 'td') === false) {
-                    if (ViperUtil.isTag(elements[i], 'tr') === false) {
-                        return false;
-                    } else {
-                        row = elements[i];
-                    }
+        }
+
+        var startNode = range.getStartNode();
+        var endNode   = range.getEndNode();
+        var elements  = ViperUtil.getElementsBetween(startNode, endNode);
+        for (var i = 0; i < elements.length; i++) {
+            var row = null;
+            if (elements[i].nodeType === ViperUtil.TEXT_NODE) {
+                continue;
+            } else if (ViperUtil.isTag(elements[i], 'td') === false) {
+                if (ViperUtil.isTag(elements[i], 'tr') === false) {
+                    return false;
                 } else {
-                    row = elements[i].parentNode;
+                    row = elements[i];
                 }
-
-                if (ViperUtil.inArray(row, rows) === false) {
-                    rows.push(row);
-                }
+            } else {
+                row = elements[i].parentNode;
             }
 
-            if (rows.length > 0) {
-                this._selectedRows = rows;
-                return true;
+            if (ViperUtil.inArray(row, rows) === false) {
+                rows.push(row);
             }
+        }
+
+        if (rows.length > 0) {
+            this._selectedRows = rows;
+            return true;
         }
 
         return false;
