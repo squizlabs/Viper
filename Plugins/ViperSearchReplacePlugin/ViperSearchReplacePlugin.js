@@ -254,6 +254,10 @@ ViperSearchReplacePlugin.prototype = {
                     return false;
                 }
 
+                if (this.viper.rangeInViperBounds(this.viper.getCurrentRange()) === false) {
+                    return false;
+                }
+
                 ViperSelection.addRange(this.viper.getCurrentRange());
                 this.viper.fireSelectionChanged();
                 setTimeout(function() {
