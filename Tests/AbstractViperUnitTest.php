@@ -2515,4 +2515,36 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     }//end clickCursorAssistLine()
 
 
+    /**
+     * Clicks outside of Viper.
+     *
+     * @return void
+     */
+    protected function clickOutside()
+    {
+        $this->clickElement('#testTitle');
+
+    }//end clickOutside()
+
+
+    /**
+     * Returns the browser window's scroll coordinates.
+     *
+     * @return void
+     */
+    protected function getScrollCoords()
+    {
+        $coordY = $this->sikuli->execJS('document.getElementById("content").scrollTop');
+        $coordX = $this->sikuli->execJS('document.getElementById("content").scrollLeft');
+
+        $coords = array(
+                   'x' => $coordX,
+                   'y' => $coordY,
+                  );
+
+        return $coords;
+
+    }//end getScrollCoords()
+
+
 }//end class
