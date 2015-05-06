@@ -721,7 +721,8 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->useTest(4);
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>%1%</p><p> %2%</p>test');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>%1%</p><p>test %2%</p>test');
 
         // Test that enter key creates a BR tag instead of creating block elements
         // if the text has no wrapping block elements.
