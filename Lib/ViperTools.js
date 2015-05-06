@@ -1222,6 +1222,8 @@ ViperTools.prototype = {
         var self    = this;
         var toolbar = document.createElement('div');
         var viper   = this.viper;
+        ViperUtil.attr(toolbar, 'data-toolid', id);
+        ViperUtil.attr(toolbar, 'id', this.viper.getId() + '-' + id);
 
         var toolsContainer = document.createElement('div');
         toolbar.appendChild(toolsContainer);
@@ -2277,8 +2279,13 @@ ViperTools.prototype = {
                 // returning null for a collapsed range, instead all values are set to 0.
                 var startNode = range.getStartNode();
                 if (startNode.nodeType === ViperUtil.TEXT_NODE) {
-                    if (range.startOffset <= startNode.data.length) {
-                        range.setEnd(startNode, (range.startOffset + 1));
+                    if (range.startOffset < startNode.data.length) {
+                        var offset = range.startOffset;
+                        if (startNode.data.length > 1) {
+                            offset += 1;
+                        }
+
+                        range.setEnd(startNode, offset);
                         rangeCoords = range.rangeObj.getBoundingClientRect();
                         range.collapse(true);
                         if (rangeCoords) {
