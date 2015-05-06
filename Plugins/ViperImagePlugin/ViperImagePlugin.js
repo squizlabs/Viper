@@ -358,7 +358,7 @@ ViperImagePlugin.prototype = {
 
         // Preview box to display image info and preview.
         var previewBox = document.createElement('div');
-        ViperUtil.addClass(previewBox, 'ViperITP-msgBox');
+        ViperUtil.addClass(previewBox, 'ViperITP-msgBox ViperImagePlugin-previewPanel');
         ViperUtil.setHtml(previewBox, 'Loading preview');
         ViperUtil.setStyle(previewBox, 'display', 'none');
         this._previewBox = previewBox;

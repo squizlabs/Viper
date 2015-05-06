@@ -13,7 +13,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
     public function testEditingTheURLForAnImage()
     {
         // Using the inline toolbar
-        
+
         // Change URL for an image that has no alt and title tag
         $this->useTest(1);
         $this->clickElement('img', 0);
@@ -56,6 +56,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->type($this->getTestURL('/ViperImagePlugin/Images/hero-shot.jpg'));
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
+        $this->checkPreviewImageSize();
         $this->clickTopToolbarButton('image', 'selected');
         $this->assertHTMLMatch('<p>Image without alt or title %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt=""/></p><p>LABS is ORSM</p>');
 
@@ -207,7 +208,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         for ($i = 1; $i <= 7; $i++) {
             $this->sikuli->keyDown('Key.BACKSPACE');
         }
-        
+
         $this->type('Alt tag');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>Image with alt no title %1%</p><p><img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag"/></p><p>LABS is ORSM</p>');
@@ -315,7 +316,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         for ($i = 1; $i <= 9; $i++) {
             $this->sikuli->keyDown('Key.BACKSPACE');
         }
-        
+
         $this->type('Title tag');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>Image with alt and title %1%</p><p><img src="%url%/ViperImagePlugin/Images/editing.png" alt="testalt" title="Title tag"/></p><p>LABS is ORSM</p>');
@@ -421,7 +422,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
 
     }//end testEditingImageIsDecorativeField()
 
-    
+
     /**
      * Test that the Alt field in the pop up is updated when you edit it in the source code.
      *

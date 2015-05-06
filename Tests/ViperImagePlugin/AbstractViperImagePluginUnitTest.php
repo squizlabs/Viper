@@ -8,16 +8,16 @@ abstract class AbstractViperImagePluginUnitTest extends AbstractViperUnitTest
 {
 
 
-     /**
-      * Resize specified image to given width.
-      *
-      * Returns the rectangle of the image after resize.
-      *
-      * @param integer $size       The new width of the image.
-      * @param integer $imageIndex The image index on the page.
-      *
-      * @return array
-      */
+    /**
+     * Resize specified image to given width.
+     *
+     * Returns the rectangle of the image after resize.
+     *
+     * @param integer $size       The new width of the image.
+     * @param integer $imageIndex The image index on the page.
+     *
+     * @return array
+     */
     public function resizeImage($size, $imageIndex=0)
     {
         $selector = 'img';
@@ -64,6 +64,25 @@ abstract class AbstractViperImagePluginUnitTest extends AbstractViperUnitTest
         $this->assertEquals(($image['y2'] - 10), $rightHandle['y1']);
 
     }//end checkResizeHandles()
+
+
+    /**
+     * Checks that the preview image size is correct.
+     *
+     * Must be called after the image is loaded.
+     *
+     * @return void
+     */
+    public function checkPreviewImageSize()
+    {
+        $image       = $this->getBoundingRectangle('.ViperImagePlugin-previewPanel > img');
+        $parent      = $this->getBoundingRectangle('.ViperImagePlugin-previewPanel');
+        $previewSize = 185;
+
+        $this->assertEquals(($image['x2'] - $image['x1']), $previewSize);
+        $this->assertTrue($parent['y2'] > $image['y2']);
+
+    }//end checkPreviewImageSize()
 
 
 }//end class
