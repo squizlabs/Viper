@@ -85,4 +85,48 @@ abstract class AbstractViperImagePluginUnitTest extends AbstractViperUnitTest
     }//end checkPreviewImageSize()
 
 
+    /**
+     * Drags and drops testing image to specified location.
+     *
+     * Note that the file in Images/dragDropTargetingImage-<os>.png needs to be copied to the Desktop.
+     *
+     * @param mixed $dropOn The keyword or the region to drop the image.
+     *
+     * @return void
+     */
+    public function dragDropFromDesktop($dropOn)
+    {
+        $showDesktopShortcut = '';
+        $imageFilePath       = dirname(__FILE__);
+        if ($this->sikuli->getOS() === 'windows') {
+            $showDesktopShortcut = 'Key.WIN + d';
+            $imageFilePath      .= '\Images\dragDropTargetingImage-windows.png';
+        } else {
+            $showDesktopShortcut = 'Key.F11';
+            $imageFilePath      .= '/Images/dragDropTargetingImage-osx.png';
+        }
+
+        // Hide all windows to view the desktop.
+        $this->sikuli->keyDown($showDesktopShortcut);
+        sleep(1);
+
+        // Find the target image.
+        $match = $this->sikuli->find($imageFilePath, -1, 0.6);
+
+        // Start drag operation.
+        $this->sikuli->drag($match);
+
+        $this->sikuli->mouseMoveOffset(30, 30);
+        $this->sikuli->mouseMoveOffset(-30, -30);
+
+        // Show the windows again.
+        $this->sikuli->keyDown($showDesktopShortcut);
+        sleep(1);
+
+        // Drop the image file at given location.
+        $this->sikuli->dropAt($dropOn);
+
+    }//end dragDropFromDesktop()
+
+
 }//end class
