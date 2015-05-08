@@ -244,6 +244,7 @@ MatrixImagePlugin.prototype = {
         }
         $form.append('<input id="'+ prefix + 'uploadImageButton" type="file" name="create_image_upload">');
         $form.append('<input type="hidden" name="create_root_node" value="">');
+        $form.append('<input type="hidden" name="show_in_menu" value="">');
         $form.append('<input type="hidden" name="alt" value="">');
         $form.append('<input type="hidden" name="title" value="">');
         $form.append('<input type="hidden" name="token" value="">');
@@ -509,7 +510,18 @@ MatrixImagePlugin.prototype = {
         urlRow.appendChild(assetPicker);
         content.appendChild(urlRow);
 
+        // use current location checkbox
+        var showInMenu = tools.createCheckbox(prefix + ':showInMenu', _('Show in menu'), false, function(presVal) {
+            // enable the apply button
+            if(self.viper.ViperTools.getItem('ViperImagePlugin:bubbleSubSection-applyButton')) {
+                self.viper.ViperTools.enableButton('ViperImagePlugin:bubbleSubSection-applyButton');
+            }
+            if(self.viper.ViperTools.getItem('vitpImagePlugin-infoSubsection-applyButton')) {
+                self.viper.ViperTools.enableButton('vitpImagePlugin-infoSubsection-applyButton');
+            }
 
+        });
+        content.appendChild(showInMenu);
 
         return content;
 
@@ -633,6 +645,7 @@ MatrixImagePlugin.prototype = {
             // set the selected parent root node location
             var selectedRootNode = tools.getItem(matrixPrefix + ':parentRootNode').getValue();
             var useCurrentLocation = tools.getItem(matrixPrefix + ':useCurrentLocation').getValue();
+            var showInMenu = tools.getItem(matrixPrefix + ':showInMenu').getValue();
             var currentAssetid = null;
             var editableElement = this.viper.getEditableElement();
             var idString = ViperUtil.$(editableElement).attr('id');
@@ -656,6 +669,8 @@ MatrixImagePlugin.prototype = {
                     uploadForm.find('input[name=create_root_node]').val(currentAssetid);
                 }
             }
+
+            uploadForm.find('input[name=show_in_menu]').val(showInMenu ? '1' : '0');
 
             // set alt attribute
             var altValue = tools.getItem(prefix + ':altInput').getValue();
