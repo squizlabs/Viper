@@ -5,24 +5,6 @@ require_once 'AbstractViperUnitTest.php';
 class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUnitTest
 {
 
-
-    /**
-     * Returns true if the right click paste toolbar is visible.
-     *
-     * @return boolean
-     */
-    private function _isPasteToolbarVisible()
-    {
-        $rect = $this->getBoundingRectangle('#test-ViperCopyPastePlugin-paste');
-        if (empty($rect) === true) {
-            return false;
-        }
-
-        return true;
-
-    }//end _isPasteToolbarVisible()
-
-
     /**
      * Test that copying/pasting a simple text works.
      *
