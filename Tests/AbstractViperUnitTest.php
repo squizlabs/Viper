@@ -2287,8 +2287,15 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $this->sikuli->keyDown('Key.CMD + v');
         } else {
             $this->sikuli->rightClick($this->sikuli->getMouseLocation());
-            $this->sikuli->keyDown('p');
-            $this->sikuli->keyDown('Key.ENTER');
+
+            if ($this->sikuli->getBrowserid() === 'safari') {
+                $this->sikuli->keyDown('Key.DOWN');
+                $this->sikuli->keyDown('Key.ENTER');    
+            } else {
+                $this->sikuli->keyDown('p');
+                $this->sikuli->keyDown('Key.ENTER');
+            }//end if
+            
         }//end if
 
     }//end paste()

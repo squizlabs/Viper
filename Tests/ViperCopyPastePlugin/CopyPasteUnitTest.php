@@ -120,6 +120,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->sikuli->keyDown('Key.CMD + c');
 
         $this->moveToKeyword(1, 'right');
+        sleep(1);
         $this->paste(TRUE);
 
         $this->assertFalse($this->_isPasteToolbarVisible());
