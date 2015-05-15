@@ -70,7 +70,6 @@ abstract class AbstractCopyPasteFromWordAndGoogleDocsUnitTest extends AbstractVi
 
         $this->removeTableHeaders();
         $this->assertHTMLMatch($expectedHtmlCode);
-        $this->assertFalse($this->_isPasteToolbarVisible());
 
     }//end copyAndPasteFromWordDoc
 
@@ -137,27 +136,8 @@ abstract class AbstractCopyPasteFromWordAndGoogleDocsUnitTest extends AbstractVi
 
         $this->removeTableHeaders();
         $this->assertHTMLMatch($expectedHtmlCode);
-        $this->assertFalse($this->_isPasteToolbarVisible());
 
     }//end copyAndPasteFromGoogleDocs
-
-
-    /**
-     * Returns true if the right click paste toolbar is visible.
-     *
-     * @return boolean
-     */
-    private function _isPasteToolbarVisible()
-    {
-        $rect = $this->getBoundingRectangle('#test-ViperCopyPastePlugin-paste');
-        if (empty($rect) === true) {
-            return false;
-        }
-
-        return true;
-
-    }//end _isPasteToolbarVisible()
-
 
 }//end class
 
