@@ -3421,8 +3421,8 @@ ViperTableEditorPlugin.prototype = {
         }
 
         var col         = ViperUtil.getTag('td,th', table)[0];
-        var rightWidth  = parseInt(ViperUtil.getComputedStyle(col, 'border-right-width'));
-        var bottomWidth = parseInt(ViperUtil.getComputedStyle(col, 'border-bottom-width'));
+        var rightWidth  = parseFloat(ViperUtil.getComputedStyle(col, 'border-right-width'));
+        var bottomWidth = parseFloat(ViperUtil.getComputedStyle(col, 'border-bottom-width'));
 
         if (bottomWidth === 0
             || rightWidth === 0
