@@ -4249,6 +4249,22 @@ Viper.prototype = {
                 ) {
                     // Webkit does not fire keypress event for delete and backspace keys..
                     this.fireNodesChanged();
+                } else if (ViperUtil.isBrowser('msie', '10') === true) {
+                    // Strange issue with IE10.. If a paragraph has only an anchor tag and caret is at the end
+                    // of this anchor tag then typing any chracter removes the whole tag...
+                    if (range.startContainer
+                        && range.startContainer === range.endContainer
+                        && range.startOffset === 0
+                        && range.endOffset === range.startOffset
+                        && ViperUtil.isBlockElement(range.startContainer) === true
+                        && ViperUtil.isTag(range.startContainer.firstChild, 'a') === true
+                    ) {
+                        var newTextNode = document.createTextNode('');
+                        ViperUtil.insertAfter(range.startContainer.firstChild, newTextNode);
+                        range.setStart(newTextNode, 0);
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+                    }
                 }//end if
 
                 return true;
