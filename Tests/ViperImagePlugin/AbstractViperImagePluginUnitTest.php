@@ -75,11 +75,16 @@ abstract class AbstractViperImagePluginUnitTest extends AbstractViperUnitTest
      */
     public function checkPreviewImageSize()
     {
-        $image       = $this->getBoundingRectangle('.ViperImagePlugin-previewPanel > img');
-        $parent      = $this->getBoundingRectangle('.ViperImagePlugin-previewPanel');
-        $previewSize = 185;
+        $image          = $this->getBoundingRectangle('.ViperImagePlugin-previewPanel > img');
+        $parent         = $this->getBoundingRectangle('.ViperImagePlugin-previewPanel');
+        $maxPreviewSize = 185;
+        $imageWidth     = ($image['x2'] - $image['x1']);
 
-        $this->assertEquals(($image['x2'] - $image['x1']), $previewSize);
+        if ($imageWidth < $maxPreviewSize) {
+            $maxPreviewSize = $imageWidth;
+        }
+
+        $this->assertEquals($imageWidth, $maxPreviewSize);
         $this->assertTrue($parent['y2'] > $image['y2']);
 
     }//end checkPreviewImageSize()
