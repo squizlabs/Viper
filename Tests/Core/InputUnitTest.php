@@ -14,22 +14,34 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
     public function testTextType()
     {
         $this->useTest(1);
-        $text = $this->selectKeyword(1);
+        $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.DELETE');
 
-        $chars  = '`1234567890-=qwertyuiop[]asdfghjkl;zxcvbnm,.';
-        $chars .= 'QWERTYUIOPASDFGHJKLZXCVBNM';
-        $chars .= '~!@#$%^&*()_+{}|:"<>?   . ';
+        $this->type('`1234567890-=qwertyuiop[]asdfghjkl;zxcvbnm,.QWERTYUIOPASDFGHJKLZXCVBNM~!@#$%^&*()_+{}|:"<>?   . ');
 
-        $this->type($chars);
-
-        $expected  = '`1234567890-=qwertyuiop[]asdfghjkl;zxcvbnm,.';
-        $expected .= 'QWERTYUIOPASDFGHJKLZXCVBNM';
-        $expected .= '~!@#$%^&amp;*()_+{}|:"&lt;&gt;?&nbsp;&nbsp; .';
-
-        $this->assertHTMLMatch('<p>'.$expected.' EIB MOZ %2%</p>');
+        $this->assertHTMLMatch('<p>`1234567890-=qwertyuiop[]asdfghjkl;zxcvbnm,.QWERTYUIOPASDFGHJKLZXCVBNM~!@#$%^&amp;*()_+{}|:"&lt;&gt;?&nbsp;&nbsp; . EIB MOZ %2%</p>');
 
     }//end testTextType()
+
+
+    /**
+     * Test that typing multiple spaces changes the space to a &nbsp.
+     *
+     * @return void
+     */
+    public function testTextTypeWithMultipleSpaces()
+    {
+        $this->useTest(1);
+        $this->moveToKeyword(1, 'right');
+        $this->type('   multiple    spaces between words    ');
+        $this->assertHTMLMatch('<p>%1%&nbsp;&nbsp; multiple&nbsp;&nbsp;&nbsp;&nbsp;spaces between words</p><p>EIB MOZ %2%</p>');
+
+        // Check that if you add multiple spaces onto the end of the content of the page, they are not saved.
+        $this->moveToKeyword(2, 'right');
+        $this->type('   ');
+        $this->assertHTMLMatch('<p>%1%&nbsp;&nbsp; multiple&nbsp;&nbsp;&nbsp;&nbsp;spaces between words</p><p>EIB MOZ %2%</p>');
+
+    }//end testTextTypeWithMultipleSpaces()
 
 
     /**
