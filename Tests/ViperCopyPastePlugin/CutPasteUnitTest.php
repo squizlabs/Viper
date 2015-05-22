@@ -89,7 +89,7 @@ class Viper_Tests_ViperCopyPastePlugin_CutPasteUnitTest extends AbstractViperUni
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + v');
 
-        $this->assertHTMLMatch('<p>This is some content to %2% test partial copy and paste. It  needs to be a really long paragraph.</p>');
+        $this->assertHTMLMatch('<p>This is some content to %2% test partial copy and paste. It&nbsp;&nbsp;needs to be a really long paragraph.</p>');
 
         // Test cutting some content and pasting it somewhere else in the existing content
         $this->useTest(2);
@@ -101,7 +101,7 @@ class Viper_Tests_ViperCopyPastePlugin_CutPasteUnitTest extends AbstractViperUni
         $this->moveToKeyword(1, 'left');
         $this->sikuli->keyDown('Key.CMD + v');
 
-        $this->assertHTMLMatch('<p>This is some content to %2%%1% test partial copy and paste. It  needs to be a really long paragraph.</p>');
+        $this->assertHTMLMatch('<p>This is some content to %2%%1% test partial copy and paste. It&nbsp;&nbsp;needs to be a really long paragraph.</p>');
 
     }//end testPartialCutPaste()
 
