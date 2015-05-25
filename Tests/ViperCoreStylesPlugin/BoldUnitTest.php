@@ -341,12 +341,15 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->useTest(1);
         
         $this->selectKeyword(2);
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + i');
+        sleep(1);
         $this->assertHTMLMatch('<p>%1% <em>%2%</em> %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         $this->selectKeyword(2, 3);
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + b');
-
+        sleep(1);
         $this->assertHTMLMatch('<p>%1% <strong><em>%2%</em> %3%</strong></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testAddBoldToTwoWordsWhereOneItalics()
