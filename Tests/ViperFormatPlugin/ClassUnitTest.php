@@ -754,7 +754,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Content with an image</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" class="test"/></p><p>End of content</p>');
+        $this->assertHTMLMatch('<p>Content with an image %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" class="test"/></p><p>End of content</p>');
 
         // Edit the class using the inline toolbar
         $this->clickElement('img');
@@ -762,17 +762,17 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->type('myclass');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Content with an image</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" class="testmyclass"/></p><p>End of content</p>');
+        $this->assertHTMLMatch('<p>Content with an image %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" class="testmyclass"/></p><p>End of content</p>');
 
         // Add a class using the top toolbar
         $this->useTest(8);
-
+        $this->clickKeyword(1);
         $this->clickElement('img');
         sleep(1);
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Content with an image</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" class="test"/></p><p>End of content</p>');
+        $this->assertHTMLMatch('<p>Content with an image %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" class="test"/></p><p>End of content</p>');
 
         // Edit the class using the top toolbar
         $this->clickElement('img');
@@ -780,7 +780,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->type('myclass');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Content with an image</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" class="testmyclass"/></p><p>End of content</p>');
+        $this->assertHTMLMatch('<p>Content with an image %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" class="testmyclass"/></p><p>End of content</p>');
 
     }//end testApplyingAClassToAnImage()
 
