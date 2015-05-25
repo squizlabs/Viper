@@ -17,7 +17,7 @@ class Viper_Tests_ViperCursorAssistPlugin_CursorAssistForListsUnitTest extends A
         $this->useTest(1);
         $this->moveToKeyword(1);
         $this->moveMouseToElement('ul', 'top');
-        sleep(1);
+        sleep(2);
 
         // Check to see if the cursor assit line appears above the list
         $this->assertTrue($this->isCursorAssistLineVisible('ul', 'top'));
@@ -31,7 +31,7 @@ class Viper_Tests_ViperCursorAssistPlugin_CursorAssistForListsUnitTest extends A
         $this->useTest(2);
         $this->moveToKeyword(1);
         $this->moveMouseToElement('ol', 'top');
-        sleep(1);
+        sleep(2);
 
         // Check to see if the cursor assit line appears above the list
         $this->assertTrue($this->isCursorAssistLineVisible('ol', 'top'));
