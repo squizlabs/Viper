@@ -773,25 +773,33 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         // Combine two div sections
         $this->useTest(7);
         $this->moveToKeyword(1, 'left');
+        sleep(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(1);
         $this->assertHTMLMatch('<div>First div section%1% second div section</div>');
 
         // Combine a div and a paragraph section
         $this->useTest(8);
         $this->moveToKeyword(1, 'left');
+        sleep(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(1);
         $this->assertHTMLMatch('<div>First div section%1% second paragraph section</div>');
 
         // Combine a div and a blockquote section
         $this->useTest(9);
         $this->moveToKeyword(1, 'left');
+        sleep(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(1);
         $this->assertHTMLMatch('<div>First div section%1% second quote section</div>');
 
         // Combine a div and a pre section
         $this->useTest(10);
         $this->moveToKeyword(1, 'left');
+        sleep(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(1);
         $this->assertHTMLMatch('<div>First div section%1% second pre section</div>');
 
     }//end testCombiningADivWithDifferentFormatSections()
