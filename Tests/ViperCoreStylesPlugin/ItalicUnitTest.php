@@ -296,12 +296,15 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->useTest(1);
 
         $this->selectKeyword(2);
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + b');
+        sleep(1);
         $this->assertHTMLMatch('<p>%1% <strong>%2%</strong> %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         $this->selectKeyword(2, 3);
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + i');
-
+        sleep(1);
         $this->assertHTMLMatch('<p>%1% <em><strong>%2%</strong> %3%</em></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testAddItalicsToTwoWordsWhereOneBold()
