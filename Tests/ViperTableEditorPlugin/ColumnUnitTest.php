@@ -17,13 +17,13 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
 
         $this->insertTable(1);
         sleep(1);
-        $this->showTools(0, 'col');
+        $this->showTools(1, 'col');
         sleep(1);
 
         $this->assertTrue($this->inlineToolbarButtonExists('tableSettings', 'selected'));
         $this->assertTrue($this->inlineToolbarButtonExists('addLeft'));
         $this->assertTrue($this->inlineToolbarButtonExists('addRight'));
-        $this->assertTrue($this->inlineToolbarButtonExists('mergeLeft', 'disabled'));
+        $this->assertTrue($this->inlineToolbarButtonExists('mergeLeft'));
         $this->assertTrue($this->inlineToolbarButtonExists('mergeRight'));
         $this->assertTrue($this->inlineToolbarButtonExists('delete'));
         $this->assertTrue($this->fieldExists('Width'));
