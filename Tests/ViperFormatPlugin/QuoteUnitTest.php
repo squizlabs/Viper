@@ -832,7 +832,7 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         // Join the paragraph together
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<blockquote><p>%1%&nbsp;%2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
+        $this->assertHTMLMatch('<blockquote><p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
 
     }//end testSplittingParagraphInQuote()
 
