@@ -122,41 +122,49 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
 
         // Check where the whole list item is linked
         $this->moveToKeyword(2, 'middle');
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectKeyword(2);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectInlineToolbarLineageItem(2);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
 
         // Check where only a word in the list item is linked
         $this->moveToKeyword(1, 'middle');
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectKeyword(1);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectInlineToolbarLineageItem(2);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
@@ -167,6 +175,7 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
@@ -176,50 +185,60 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
 
         // Check where the whole list item is linked
         $this->moveToKeyword(2, 'middle');
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectKeyword(2);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectInlineToolbarLineageItem(2);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
 
         // Check where only a word in the list item is linked
         $this->moveToKeyword(1, 'middle');
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectKeyword(1);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectInlineToolbarLineageItem(2);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
