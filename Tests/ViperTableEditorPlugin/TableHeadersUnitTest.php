@@ -180,33 +180,34 @@ class Viper_Tests_ViperTableEditorPlugin_TableHeadersUnitTest extends AbstractVi
     public function testRowHeaderConversion()
     {
         $results = array(
-                    1  => '<table><thead><tr><th>%1%</th><th>test</th></tr></thead></table>',
-                    2  => '<table><thead><tr><th>%1%</th><th>test</th></tr></thead></table>',
-                    3  => '<table><thead><tr><th>%1%</th><th>test</th></tr></thead><tbody><tr><td colspan="2">test</td></tr></tbody></table>',
-                    4  => '<table><tbody><tr><td colspan="2">test</td></tr><tr><th>%1%</th><th>test</th></tr></tbody></table>',
-                    5  => '<table><thead><tr><td>test</td><td>test</td></tr><tr><th>%1%</th><th>test</th></tr></thead><tbody><tr><td colspan="2">test</td></tr></tbody></table>',
-                    6  => '<table><thead><tr><td>test</td><td>test</td></tr></thead><tbody><tr><td colspan="2">test</td></tr><tr><th>%1%</th><th>test</th></tr></tbody></table>',
-                    7  => '<table><tbody><tr><td>%1%</td><td>test</td></tr></tbody></table>',
-                    8  => '<table><tbody><tr><td>%1%</td><td>test</td></tr></tbody></table>',
-                    9  => '<table><tbody><tr><td>%1%</td><td>test</td></tr><tr><td colspan="2">test</td></tr></tbody></table>',
-                    10 => '<table><tbody><tr><td colspan="2">test</td></tr><tr><td>%1%</td><td>test</td></tr></tbody></table>',
-                    11 => '<table><thead><tr><td>test</td><td>test</td></tr></thead><tbody><tr><td>%1%</td><td>test</td></tr><tr><td colspan="2">test</td></tr></tbody></table>',
-                    12 => '<table><thead><tr><td>test</td><td>test</td></tr></thead><tbody><tr><td colspan="2">test</td></tr><tr><td>%1%</td><td>test</td></tr></tbody></table>',
-                    13 => '<table><thead><tr><td>%1%</td><td>test</td></tr><tr><th>test</th><th>test</th></tr></thead><tbody><tr><td colspan="2">test</td></tr></tbody></table>',
-                    14 => '<table><thead><tr><th>test</th><th>test</th></tr></thead><tbody><tr><td>%1%</td><td>test</td></tr><tr><td colspan="2">test</td></tr></tbody></table>',
-                    15 => '<table><thead><tr><th>test</th><th>test</th></tr></thead><tbody><tr><td>%1%</td><td>test</td></tr></tbody></table>',
-                    16 => '<table><tbody><tr><td>%1%</td><td>test</td></tr></tbody></table>',
-                    17 => '<table><tfoot><tr><td colspan="2">test</td></tr></tfoot><tbody><tr><td>%1%</td><td>test</td></tr></tbody></table>',
-                    18 => '<table><thead><tr><th>test</th><th>test</th></tr></thead><tbody><tr><th>%1%</th><th rowspan="2">test</th></tr><tr><td>test</td></tr></tbody></table>',
-                    19 => '<table><thead><tr><th>test</th><th>test</th></tr></thead><tbody><tr><th>test</th><th rowspan="2">%1%</th></tr><tr><td>test</td></tr></tbody></table>',
-                    20 => '<table><thead><tr><th>test</th><th>test</th></tr><tr><th rowspan="2">test</th><th rowspan="2">%1%</th></tr></thead><tbody><tr><td>test</td><td>test</td></tr></tbody></table>',
+                    1  => '<p>Content for test %1%</p><table><thead><tr><th>%2%</th><th>test</th></tr></thead></table>',
+                    2  => '<p>Content for test %1%</p><table><thead><tr><th>%2%</th><th>test</th></tr></thead></table>',
+                    3  => '<p>Content for test %1%</p><table><thead><tr><th>%2%</th><th>test</th></tr></thead><tbody><tr><td colspan="2">test</td></tr></tbody></table>',
+                    4  => '<p>Content for test %1%</p><table><tbody><tr><td colspan="2">test</td></tr><tr><th>%2%</th><th>test</th></tr></tbody></table>',
+                    5  => '<p>Content for test %1%</p><table><thead><tr><td>test</td><td>test</td></tr><tr><th>%2%</th><th>test</th></tr></thead><tbody><tr><td colspan="2">test</td></tr></tbody></table>',
+                    6  => '<p>Content for test %1%</p><table><thead><tr><td>test</td><td>test</td></tr></thead><tbody><tr><td colspan="2">test</td></tr><tr><th>%2%</th><th>test</th></tr></tbody></table>',
+                    7  => '<p>Content for test %1%</p><table><tbody><tr><td>%2%</td><td>test</td></tr></tbody></table>',
+                    8  => '<p>Content for test %1%</p><table><tbody><tr><td>%2%</td><td>test</td></tr></tbody></table>',
+                    9  => '<p>Content for test %1%</p><table><tbody><tr><td>%2%</td><td>test</td></tr><tr><td colspan="2">test</td></tr></tbody></table>',
+                    10 => '<p>Content for test %1%</p><table><tbody><tr><td colspan="2">test</td></tr><tr><td>%2%</td><td>test</td></tr></tbody></table>',
+                    11 => '<p>Content for test %1%</p><table><thead><tr><td>test</td><td>test</td></tr></thead><tbody><tr><td>%2%</td><td>test</td></tr><tr><td colspan="2">test</td></tr></tbody></table>',
+                    12 => '<p>Content for test %1%</p><table><thead><tr><td>test</td><td>test</td></tr></thead><tbody><tr><td colspan="2">test</td></tr><tr><td>%2%</td><td>test</td></tr></tbody></table>',
+                    13 => '<p>Content for test %1%</p><table><thead><tr><td>%2%</td><td>test</td></tr><tr><th>test</th><th>test</th></tr></thead><tbody><tr><td colspan="2">test</td></tr></tbody></table>',
+                    14 => '<p>Content for test %1%</p><table><thead><tr><th>test</th><th>test</th></tr></thead><tbody><tr><td>%2%</td><td>test</td></tr><tr><td colspan="2">test</td></tr></tbody></table>',
+                    15 => '<p>Content for test %1%</p><table><thead><tr><th>test</th><th>test</th></tr></thead><tbody><tr><td>%2%</td><td>test</td></tr></tbody></table>',
+                    16 => '<p>Content for test %1%</p><table><tbody><tr><td>%2%</td><td>test</td></tr></tbody></table>',
+                    17 => '<p>Content for test %1%</p><table><tfoot><tr><td colspan="2">test</td></tr></tfoot><tbody><tr><td>%2%</td><td>test</td></tr></tbody></table>',
+                    18 => '<p>Content for test %1%</p><table><thead><tr><th>test</th><th>test</th></tr></thead><tbody><tr><th>%2%</th><th rowspan="2">test</th></tr><tr><td>test</td></tr></tbody></table>',
+                    19 => '<p>Content for test %1%</p><table><thead><tr><th>test</th><th>test</th></tr></thead><tbody><tr><th>test</th><th rowspan="2">%2%</th></tr><tr><td>test</td></tr></tbody></table>',
+                    20 => '<p>Content for test %1%</p><table><thead><tr><th>test</th><th>test</th></tr><tr><th rowspan="2">test</th><th rowspan="2">%2%</th></tr></thead><tbody><tr><td>test</td><td>test</td></tr></tbody></table>',
                    );
 
         $testCount = count($results);
         for ($i = 1; $i <= $testCount; $i++) {
             $this->useTest($i);
-            $this->sikuli->click($this->findKeyword(1));
-            $this->sikuli->click($this->findKeyword(1));
+            $this->clickKeyword(1);
+            $this->sikuli->click($this->findKeyword(2));
+            $this->sikuli->click($this->findKeyword(2));
             $this->showTools(NULL, 'row');
             $this->clickField('Heading');
             $this->sikuli->keyDown('Key.ENTER');
