@@ -696,9 +696,11 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->moveToKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('headings'));
         $this->selectKeyword(1);
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
         $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('headings'));
         $this->assertTrue($this->inlineToolbarButtonExists('headings'));
         $this->clickInlineToolbarButton('headings');
