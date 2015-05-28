@@ -669,7 +669,7 @@ ViperFormatPlugin.prototype = {
     },
 
     _removeDefinedStylesFromClass: function(attrClass, definedStyles) {
-        var re = new RegExp(definedStyles.join('|') + '\\s*',"g");
+        var re    = new RegExp('(\\s|^)' + definedStyles.join('|') + '(\\s|$)' ,'g');
         attrClass = attrClass.replace(re, '').replace(/\s{2,}/gi, ' ');
         return attrClass;
 
