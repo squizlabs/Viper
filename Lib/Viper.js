@@ -5506,7 +5506,10 @@ Viper.prototype = {
                     }
 
                 default:
-                    if (ViperUtil.isStubElement(node) === false && !node.firstChild) {
+                    if ((ViperUtil.isStubElement(node) === false
+                        && !node.firstChild)
+                        || ViperUtil.trim(ViperUtil.getHtml(node)) === '&nbsp;'
+                    ) {
                         ViperUtil.remove(node);
                     }
                 break;
