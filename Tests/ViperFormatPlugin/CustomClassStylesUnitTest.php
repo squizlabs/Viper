@@ -301,7 +301,7 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         // Test applying to a word and pressing enter using inline toolbar
         $this->useTest(1);
         $this->selectKeyword(1);
-        sleep(1);
+        sleep(2);
         $this->clickInlineToolbarButton('cssClass');
         $this->selectStyles(array('ordered-list'));
         $this->sikuli->keyDown('Key.ENTER');
@@ -315,7 +315,7 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         // Test applying to a word and pressing apply changes using inline toolbar
         $this->useTest(1);
         $this->selectKeyword(1);
-        sleep(1);
+        sleep(2);
         $this->clickInlineToolbarButton('cssClass');
         $this->selectStyles(array('ordered-list'));
         $this->clickInlineToolbarButton('Apply Changes', null, true);
@@ -329,7 +329,7 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         // Test applying to a word and pressing enter using top toolbar
         $this->useTest(1);
         $this->selectKeyword(1);
-        sleep(1);
+        sleep(2);
         $this->clickTopToolbarButton('cssClass');
         $this->selectStyles(array('ordered-list'));
         $this->sikuli->keyDown('Key.ENTER');
@@ -343,7 +343,7 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         // Test applying to a word and pressing apply changes using top toolbar
         $this->useTest(1);
         $this->selectKeyword(1);
-        sleep(1);
+        sleep(2);
         $this->clickTopToolbarButton('cssClass');
         $this->selectStyles(array('ordered-list'));
         $this->clickTopToolbarButton('Apply Changes', null, true);
