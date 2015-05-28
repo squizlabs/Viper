@@ -5347,12 +5347,31 @@ Viper.prototype = {
         ViperUtil.removeAttr(ViperUtil.find(elem, '[style=""]'), 'style');
         ViperUtil.removeAttr(ViperUtil.find(elem, '[class=""]'), 'class');
 
+        this.removeNotAllowedAttributes(elem);
+
         this._cleanDOM(elem, tagName, true);
 
         var range    = this.getViperRange(elem);
         var lastElem = range._getLastSelectableChild(elem);
         if (lastElem && lastElem.nodeType === ViperUtil.TEXT_NODE) {
             lastElem.data = ViperUtil.rtrim(lastElem.data.replace(/(&nbsp;)*$/, ''));
+        }
+
+    },
+
+    /**
+     * Removes attributes that are not allowed in Viper.
+     *
+     * @param {DOMNode} elem The element to clean.
+     *
+     * @return {void}
+     */
+    removeNotAllowedAttributes: function(elem)
+    {
+        // Find elements with contenteditable attribute and remove then.
+        var notAllowedAttributes = ['contenteditable'];
+        for (var i = 0; i < notAllowedAttributes.length; i++) {
+            ViperUtil.removeAttr(ViperUtil.find(elem, '[' + notAllowedAttributes[i] + ']'), notAllowedAttributes[i]);
         }
 
     },
