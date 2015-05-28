@@ -950,12 +950,12 @@ ViperKeyboardEditorPlugin.prototype = {
             var firstBlock = ViperUtil.getFirstBlockParent(startNode);
             if (firstBlock
                 && range._getFirstSelectableChild(firstBlock) === startNode
-                && firstBlock.previousSibling
-                && ViperUtil.isStubElement(firstBlock.previousSibling) === true
+                && firstBlock.previousElementSibling
+                && ViperUtil.isStubElement(firstBlock.previousElementSibling) === true
             ) {
                 // Firefox does not handle deletion at the start of a block element
                 // very well when the previous sibling is a stub element (e.g. HR).
-                ViperUtil.remove(firstBlock.previousSibling);
+                ViperUtil.remove(firstBlock.previousElementSibling);
                 return false;
             } else if (e.keyCode === 8
                 && range.collapsed === true
@@ -1506,7 +1506,16 @@ ViperKeyboardEditorPlugin.prototype = {
             var prevSelectable = range.getPreviousContainer(range.startContainer, null, true, true);
             var currentParent  = ViperUtil.getFirstBlockParent(range.startContainer);
             var prevParent     = ViperUtil.getFirstBlockParent(prevSelectable);
-            if (currentParent !== prevParent && this.viper.isOutOfBounds(prevSelectable) === false) {
+
+            if (currentParent
+                && range._getFirstSelectableChild(currentParent) === range.startContainer
+                && currentParent.previousElementSibling
+                && ViperUtil.isStubElement(currentParent.previousElementSibling) === true
+            ) {
+                // Previous element is a stub element, remove it.
+                ViperUtil.remove(firstBlock.previousSibling);
+                return false;
+            } else if (currentParent !== prevParent && this.viper.isOutOfBounds(prevSelectable) === false) {
                 // Check if there are any other elements in between.
                 var elemsBetween = ViperUtil.getElementsBetween(prevParent, currentParent);
                 var removeParent = true;
