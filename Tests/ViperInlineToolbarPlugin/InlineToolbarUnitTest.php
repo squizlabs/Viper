@@ -66,7 +66,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
 
         $toolbarY = $this->sikuli->getY($this->sikuli->getTopLeft($this->_getToolbarArrow($orientation)));
         $diff     = abs($targetY - $toolbarY);
-        $this->assertTrue(($diff <= 15), 'Y Position of toolbar arrow is incorrect. Difference was '.$diff.' pixels');
+        $cssGap   = 15;
+        $this->assertTrue(($diff <= (15 + $cssGap)), 'Y Position of toolbar arrow is incorrect. Difference was '.$diff.' pixels');
 
     }//end _assertPosition()
 
