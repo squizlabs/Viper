@@ -3541,95 +3541,143 @@ Viper.prototype = {
             }
         }//end if
 
-        // Collapse to the end of range.
-        range.collapse(false);
-
         var endBookmark           = Viper.document.createElement('span');
         endBookmark.style.display = 'none';
         ViperUtil.setHtml(endBookmark, '&nbsp;');
         ViperUtil.addClass(endBookmark, 'viperBookmark viperBookmark_end');
         endBookmark.setAttribute('viperBookmark', 'end');
 
-        var startNode = range.getStartNode();
-        range.insertNode(endBookmark);
-        if (ViperUtil.isChildOf(endBookmark, this.element) === false) {
-            this.element.appendChild(endBookmark);
-        }
-
-        // Move the range to where it was before.
-        if (startContainer.parentNode) {
-            // This check is to pevent IE11 stuffing up empty text nodes when range is collapsed.
-            range.setStart(startContainer, startOffset);
-            range.collapse(true);
-        }
-
-        // Create the start bookmark.
+         // Create the start bookmark.
         var startBookmark           = Viper.document.createElement('span');
         startBookmark.style.display = 'none';
         ViperUtil.addClass(startBookmark, 'viperBookmark viperBookmark_start');
         ViperUtil.setHtml(startBookmark, '&nbsp;');
         startBookmark.setAttribute('viperBookmark', 'start');
 
-        try {
+        var viperElement = this.getViperElement();
+        if (range.getNodeSelection() === viperElement) {
+            // Whole Viper element is selected.
+            if (!viperElement.firstChild) {
+                // There are no contents.
+                viperElement.appendChild(startBookmark);
+                viperElement.appendChild(endBookmark);
+            } else {
+                ViperUtil.insertBefore(viperElement.firstChild, startBookmark);
+                ViperUtil.insertAfter(viperElement.lastChild, endBookmark);
+            }
+        } else {
+            // Collapse to the end of range.
+            range.collapse(false);
+
+            var startNode = range.getStartNode();
+            range.insertNode(endBookmark);
+            if (ViperUtil.isChildOf(endBookmark, this.element) === false) {
+                this.element.appendChild(endBookmark);
+            }
+
+            // Move the range to where it was before.
             if (startContainer.parentNode) {
-                range.insertNode(startBookmark);
-            } else {
+                // This check is to pevent IE11 stuffing up empty text nodes when range is collapsed.
+                range.setStart(startContainer, startOffset);
+                range.collapse(true);
+            }
+
+            try {
+                if (startContainer.parentNode) {
+                    range.insertNode(startBookmark);
+                } else {
+                    ViperUtil.insertBefore(endBookmark, startBookmark);
+                }
+
+                // Make sure start and end are in correct position.
+                if (startBookmark.previousSibling === endBookmark) {
+                    // Reverse..
+                    ViperUtil.insertBefore(endBookmark, startBookmark);
+                }
+            } catch (e) {
+                // NS_ERROR_UNEXPECTED: I believe this is a Firefox bug.
+                // It seems like if the range is collapsed and the text node is empty
+                // (i.e. length = 0) then Firefox tries to split the node for no reason and fails...
                 ViperUtil.insertBefore(endBookmark, startBookmark);
             }
 
-            // Make sure start and end are in correct position.
-            if (startBookmark.previousSibling === endBookmark) {
-                // Reverse..
-                ViperUtil.insertBefore(endBookmark, startBookmark);
+            if (ViperUtil.isChildOf(startBookmark, this.element) === false) {
+                if (this.element.firstChild) {
+                    ViperUtil.insertBefore(this.element.firstChild, startBookmark);
+                } else {
+                    // Should not happen...
+                    this.element.appendChild(startBookmark);
+                }
             }
-        } catch (e) {
-            // NS_ERROR_UNEXPECTED: I believe this is a Firefox bug.
-            // It seems like if the range is collapsed and the text node is empty
-            // (i.e. length = 0) then Firefox tries to split the node for no reason and fails...
-            ViperUtil.insertBefore(endBookmark, startBookmark);
-        }
 
-        if (ViperUtil.isChildOf(startBookmark, this.element) === false) {
-            if (this.element.firstChild) {
-                ViperUtil.insertBefore(this.element.firstChild, startBookmark);
-            } else {
-                // Should not happen...
-                this.element.appendChild(startBookmark);
-            }
-        }
+            if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true) {
+                // Sigh.. Move the range where its suppose to be instead of Webkit deciding that it should
+                // move the end of range to the begining of the next sibling -.-.
+                if (!endBookmark.previousSibling) {
+                    var node = endBookmark.parentNode.previousSibling;
+                    while (node) {
+                        if (node.nodeType !== ViperUtil.TEXT_NODE || ViperUtil.isBlank(node.data) === false) {
+                            break;
+                        }
 
-        if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true) {
-            // Sigh.. Move the range where its suppose to be instead of Webkit deciding that it should
-            // move the end of range to the begining of the next sibling -.-.
-            if (!endBookmark.previousSibling) {
-                var node = endBookmark.parentNode.previousSibling;
-                while (node) {
-                    if (node.nodeType !== ViperUtil.TEXT_NODE || ViperUtil.isBlank(node.data) === false) {
-                        break;
+                        node = node.previousSibling;
                     }
 
-                    node = node.previousSibling;
-                }
-
-                if (node === startBookmark.parentNode) {
-                    startBookmark.parentNode.appendChild(endBookmark);
+                    if (node === startBookmark.parentNode) {
+                        startBookmark.parentNode.appendChild(endBookmark);
+                    }
                 }
             }
+
+            if (!endBookmark.previousSibling) {
+                var tmp = Viper.document.createTextNode('');
+                ViperUtil.insertBefore(endBookmark, tmp);
+            }
+
+            // The original range object must be changed.
+            if (!startBookmark.nextSibling) {
+                var tmp = Viper.document.createTextNode('');
+                ViperUtil.insertAfter(startBookmark, tmp);
+            }
+
+            currRange.setStart(startBookmark.nextSibling, 0);
+            currRange.setEnd(endBookmark.previousSibling, (endBookmark.previousSibling.length || 0));
         }
 
-        if (!endBookmark.previousSibling) {
-            var tmp = Viper.document.createTextNode('');
-            ViperUtil.insertBefore(endBookmark, tmp);
+        var bookmark = {
+            start: startBookmark,
+            end: endBookmark
+        };
+
+        return bookmark;
+
+    },
+
+    /**
+     * Creates a bookmark using the Viper highlight.
+     *
+     * @return object
+     */
+    createBookmarkFromHighlight: function()
+    {
+        var highlights = this.getHighlights();
+        if (highlights.length === 0) {
+            return null;
         }
 
-        // The original range object must be changed.
-        if (!startBookmark.nextSibling) {
-            var tmp = Viper.document.createTextNode('');
-            ViperUtil.insertAfter(startBookmark, tmp);
-        }
+        var startBookmark           = Viper.document.createElement('span');
+        startBookmark.style.display = 'none';
+        ViperUtil.addClass(startBookmark, 'viperBookmark viperBookmark_start');
+        ViperUtil.setHtml(startBookmark, '&nbsp;');
+        startBookmark.setAttribute('viperBookmark', 'start');
+        ViperUtil.insertBefore(highlights[0], startBookmark);
 
-        currRange.setStart(startBookmark.nextSibling, 0);
-        currRange.setEnd(endBookmark.previousSibling, (endBookmark.previousSibling.length || 0));
+        var endBookmark           = Viper.document.createElement('span');
+        endBookmark.style.display = 'none';
+        ViperUtil.setHtml(endBookmark, '&nbsp;');
+        ViperUtil.addClass(endBookmark, 'viperBookmark viperBookmark_end');
+        endBookmark.setAttribute('viperBookmark', 'end');
+        ViperUtil.insertAfter(highlights[(highlights.length - 1)], endBookmark);
 
         var bookmark = {
             start: startBookmark,
@@ -3952,7 +4000,7 @@ Viper.prototype = {
         element = element || this.element;
 
         // There should be one...
-        var highlights = ViperUtil.getClass('__viper_selHighlight', element);
+        var highlights = this.getHighlights(element);
         if (highlights.length === 0) {
             return;
         }
@@ -3977,6 +4025,16 @@ Viper.prototype = {
         }//end for
 
         return true
+
+    },
+
+    getHighlights: function(element)
+    {
+        element = element || this.element;
+
+        // There should be one...
+        var highlights = ViperUtil.getClass('__viper_selHighlight', element);
+        return highlights;
 
     },
 

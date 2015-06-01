@@ -25,9 +25,7 @@ function ViperCopyPastePlugin(viper)
     this._tmpNode        = null;
     this._tmpNodeOffset  = 0;
     this._iframe         = null;
-    this._isFirefox      = ViperUtil.isBrowser('firefox');
     this._isMSIE         = ViperUtil.isBrowser('msie');
-    this._isSafari       = ViperUtil.isBrowser('safari');
     this._toolbarElement = null;
     this._selectedRows   = null;
 
@@ -93,7 +91,7 @@ ViperCopyPastePlugin.prototype = {
         }
 
         var self = this;
-        if (this._isMSIE !== true && (this._isFirefox !== true || ViperUtil.isOS('windows') !== true)) {
+        if (this._isMSIE !== true) {
             elem.onpaste = function(e) {
                 if (!e.clipboardData) {
                     return;
@@ -156,83 +154,13 @@ ViperCopyPastePlugin.prototype = {
             };
 
         } else {
-            elem.onpaste = function(e) {
-                var viperRange = self.viper.getViperRange();
+            // Fired before the paste event, the actual paste event is handled in createPasteDiv.
+            elem.onbeforepaste = function(e) {
+                self._beforePaste();
+                var pasteDiv = self._createPasteDiv(true);
 
-                var tools   = self.viper.ViperTools;
-                var toolbar = null;
-                var content = document.createElement('div');
-                ViperUtil.addClass(content, 'ViperCopyPastePlugin-pasteWrapper');
-
-                var shortcut = 'CTRL+V';
-                if (navigator.platform.indexOf('Mac') >= 0) {
-                    shortcut = 'CMD+V';
-                }
-
-                var pasteDesc = '<p class="ViperCopyPatePlugin-pasteDesc">' + _('Paste your content into the box below and it will be automatically inserted and cleaned up.') + '</p>';
-                pasteDesc    += '<p class="ViperCopyPatePlugin-pasteDesc">' + ViperUtil.sprintf(_('Avoid this step for future pastes using the keyboard shortcut %s.'), '<strong>' + shortcut + '</strong>') + '</p>';
-
-                ViperUtil.setHtml(content, pasteDesc);
-
-                if (self._toolbarElement) {
-                    ViperUtil.remove(self._toolbarElement);
-                }
-
-                self._toolbarElement = tools.createInlineToolbar('ViperCopyPastePlugin-paste', false, null, function() {
-                    toolbar.toggleSubSection('pasteSubSection');
-                });
-                toolbar = tools.getItem('ViperCopyPastePlugin-paste');
-                toolbar.makeSubSection('pasteSubSection', content);
-                toolbar.hideToolsSection();
-
-                var iframe    = self._createPasteIframe(content);
-                var frameDoc  = ViperUtil.getIFrameDocument(iframe);
-                var pasteArea = frameDoc.getElementById('ViperPasteIframeDiv');
-
-                pasteArea.onpaste = function(e) {
-                    if (self._isSafari === true
-                        && e.clipboardData
-                        && e.clipboardData.types
-                        && ViperUtil.inArray('text/html', e.clipboardData.types) === false
-                        && ViperUtil.inArray('text/plain', e.clipboardData.types) === true
-                    ) {
-                        // Plain text content is being pasted, replace all new line
-                        // characters with BR tags.
-                        var pasteContent = e.clipboardData.getData('text/plain');
-                        pasteContent = pasteContent.replace(/\r\n/g, '<br />');
-                        pasteContent = pasteContent.replace(/\n/g, '<br />');
-                        var node     = pasteArea;
-                        ViperUtil.setHtml(node, pasteContent);
-                        self._handleFormattedPasteValue(false, node);
-                        ViperUtil.preventDefault(e);
-                        return false;
-                    }
-
-                    setTimeout(function() {
-                        var node = pasteArea;
-                        toolbar.hide();
-
-                        self.viper.blurActiveElement();
-                        ViperSelection.addRange(viperRange);
-                        self._beforePaste(viperRange);
-
-                        self._handleFormattedPasteValue(false, node);
-                    }, 10);
-                };
-
-                setTimeout(function() {
-                    ViperSelection.addRange(viperRange);
-                    toolbar.setOnHideCallback(function() {
-                        ViperUtil.remove(self._toolbarElement);
-                    });
-
-                    toolbar.update();
-                    setTimeout(function() {
-                        pasteArea.focus();
-                    }, 200);
-                }, 220);
-
-                return false;
+                // Give focus to paste div so when the paste event fires the contents are pasted there.
+                pasteDiv.focus();
             };
         }//end if
 
@@ -623,12 +551,9 @@ ViperCopyPastePlugin.prototype = {
 
     keyDown: function (e)
     {
-        if (this._isMSIE === true || (this._isFirefox === true && ViperUtil.isOS('windows') === true)) {
+        if (this._isMSIE === true) {
             if (e.metaKey === true || e.ctrlKey === true) {
-                if (e.keyCode === 86) {
-                    // CTRL/CMD + V.
-                    return this._fakePaste(e);
-                } else if (e.keyCode === 88) {
+                if (e.keyCode === 88) {
                     // CTRL/CMD + X.
                     var elem = this.viper.getViperElement();
                     var orig = elem.oncut;
@@ -658,11 +583,17 @@ ViperCopyPastePlugin.prototype = {
         this._tmpNode = document.createTextNode('');
         this._tmpNodeOffset = 0;
 
-        try {
-            this.viper.insertNodeAtCaret(this._tmpNode);
-        } catch (e) {
-            this.viper.initEditableElement();
-            this.viper.insertNodeAtCaret(this._tmpNode);
+        if (this._isMSIE === true) {
+            this.rangeObj  = null;
+            this.viper.highlightSelection();
+            this._bookmark = this.viper.createBookmarkFromHighlight();
+        } else {
+            try {
+                this.viper.insertNodeAtCaret(this._tmpNode);
+            } catch (e) {
+                this.viper.initEditableElement();
+                this.viper.insertNodeAtCaret(this._tmpNode);
+            }
         }
 
     },
@@ -725,54 +656,6 @@ ViperCopyPastePlugin.prototype = {
         return false;
     },
 
-    _fakePaste: function(e)
-    {
-        this._beforePaste();
-        switch (this.pasteType) {
-            case 'formatted':
-                this._handleFormattedPaste(false, e);
-            break;
-
-            case 'formattedClean':
-                this._handleFormattedPaste(true, e);
-            break;
-
-            default:
-                this._handleRawPaste(e);
-            break;
-        }
-
-        return true;
-
-    },
-
-    _handleRawPaste: function(e)
-    {
-        var textInput     = document.createElement('input');
-        this.pasteElement = textInput;
-
-        ViperUtil.setStyle(textInput, 'top', '0px');
-        ViperUtil.setStyle(textInput, 'left', '0px');
-        ViperUtil.setStyle(textInput, 'position', 'fixed');
-        ViperUtil.setStyle(textInput, 'width', '0px');
-        ViperUtil.setStyle(textInput, 'height', '0px');
-        ViperUtil.setStyle(textInput, 'border', '0px');
-
-        this.viper.addElement(textInput);
-        textInput.focus();
-
-        var self          = this;
-        textInput.onpaste = function() {
-            setTimeout(function() {
-                self._handleRawPasteValue(textInput.value);
-                self.viper.fireNodesChanged();
-            }, 100);
-        };
-
-        return true;
-
-    },
-
     _handleRawPasteValue: function(content)
     {
         if (!content) {
@@ -813,6 +696,26 @@ ViperCopyPastePlugin.prototype = {
             div.setAttribute('contentEditable', true);
             this.viper.addElement(div);
 
+            var self = this;
+            div.onpaste = function(e) {
+                var bookmark = self._bookmark;
+                if (!bookmark.start.previousSibling) {
+                    if (bookmark.start.parentNode !== self.viper.getViperElement()) {
+                        ViperUtil.insertBefore(bookmark.start.parentNode, self._tmpNode);
+                    } else {
+                        ViperUtil.insertBefore(bookmark.start, self._tmpNode);
+                    }
+                } else {
+                    ViperUtil.insertBefore(bookmark.start, self._tmpNode);
+                }
+
+                self.viper.removeBookmark(bookmark);
+                setTimeout(function() {
+                    self._handleFormattedPasteValue(null, div);
+                    self.viper.focus();
+                }, 100);
+            };
+
             return div;
         }
 
@@ -845,56 +748,6 @@ ViperCopyPastePlugin.prototype = {
         doc.close();
 
         return iframe;
-
-    },
-
-    _handleFormattedPaste: function(stripTags, e)
-    {
-        if (!this.pasteElement) {
-            this.pasteElement = this._createPasteDiv(this._isSafari);
-        } else {
-            ViperUtil.empty(this.pasteElement);
-        }
-
-        this.pasteElement.innerHTML = '';
-        if (this._isSafari === true) {
-            var scrollCoords = ViperUtil.getScrollCoords();
-            this.pasteElement.innerHTML = '&nbsp;';
-            this.pasteElement.focus();
-            Viper.window.scrollTo(scrollCoords.x, scrollCoords.y);
-        } else {
-            this.pasteElement.focus();
-        }
-
-        var self = this;
-        this.pasteElement.onpaste = function(e) {
-            if (self._isSafari === true
-                && e.clipboardData
-                && e.clipboardData.types
-                && ViperUtil.inArray('text/html', e.clipboardData.types) === false
-                && ViperUtil.inArray('text/plain', e.clipboardData.types) === true
-            ) {
-                // Plain text content is being pasted, replace all new line
-                // characters with BR tags.
-                var pasteContent = e.clipboardData.getData('text/plain');
-                pasteContent = pasteContent.replace(/\r\n/g, '<br />');
-                pasteContent = pasteContent.replace(/\n/g, '<br />');
-                ViperUtil.setHtml(self.pasteElement, pasteContent);
-                self._handleFormattedPasteValue(stripTags);
-                ViperUtil.preventDefault(e);
-                return false;
-            } else {
-                setTimeout(function() {
-                    self._handleFormattedPasteValue(stripTags);
-                    self.viper.focus();
-                    if (self._isMSIE === true) {
-                        self.pasteElement = self._createPasteDiv();
-                    }
-                }, 100);
-            }
-        };
-
-        return true;
 
     },
 
@@ -1072,7 +925,8 @@ ViperCopyPastePlugin.prototype = {
             range.setEnd(this._tmpNode, 0);
             range.collapse(false);
 
-            var prevBlock = keyboardEditor.splitAtRange(true, range);
+            var prevBlock = null;
+            keyboardEditor.handleEnter();
             if (!prevBlock) {
                 prevBlock = this._tmpNode;
             } else {
@@ -2396,6 +2250,10 @@ ViperCopyPastePlugin.prototype = {
                 range.setStart(this._tmpNode, this._tmpNodeOffset);
                 range.collapse(true);
                 ViperSelection.addRange(range);
+            }
+
+            if (this._bookmark) {
+                this.viper.removeBookmark(this._bookmark);
             }
 
             // Remove tmp nodes.
