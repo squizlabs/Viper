@@ -928,7 +928,7 @@ ViperCopyPastePlugin.prototype = {
             var prevBlock = null;
             keyboardEditor.handleEnter();
             if (!prevBlock) {
-                prevBlock = this._tmpNode;
+                prevBlock = this._tmpNode.parentNode;
             } else {
                 try {
                     if (!this._tmpNode.parentNode) {
