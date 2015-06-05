@@ -131,16 +131,19 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteFormatsUnitTest extends Abstract
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
         $this->assertHTMLMatch('<div>Lorum this is more content %1% to test %2%</div><div>Lorum this is more content %1% to test %2%</div>');
 
         // Test copy and paste a quote section
         $this->useTest(3);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + c');
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
         $this->assertHTMLMatch('<p>First paragraph</p><blockquote><p>Lorum this is more content %1% to test %2%</p></blockquote><blockquote><p>Lorum this is more content %1% to test %2%</p></blockquote>');
 
         // Test copy and paste a paragraph section
@@ -151,6 +154,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteFormatsUnitTest extends Abstract
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
         $this->assertHTMLMatch('<p>Lorum this is more content %1% to test %2%</p><p>Lorum this is more content %1% to test %2%</p>');
 
     }//end testCopyAndPasteASectionOfAFormats()
