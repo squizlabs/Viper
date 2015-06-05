@@ -925,10 +925,9 @@ ViperCopyPastePlugin.prototype = {
             range.setEnd(this._tmpNode, 0);
             range.collapse(false);
 
-            var prevBlock = null;
-            keyboardEditor.handleEnter();
+            var prevBlock = keyboardEditor.splitAtRange(true, range);
             if (!prevBlock) {
-                prevBlock = this._tmpNode.parentNode;
+                prevBlock = this._tmpNode;
             } else {
                 try {
                     if (!this._tmpNode.parentNode) {
