@@ -99,6 +99,9 @@ MatrixImagePlugin.prototype = {
             // if we click on a preview image, have to prepare uploading preview interface
             self._prepareDropppedImageUpload(prefix);
 
+            // focus back on the input field (we lost focus from above interface mods)
+            $('.Viper-imageUploadFileRow input').focus();
+
         });
 
         // when you click on a pasted image, pop up the upload menu directly
@@ -206,6 +209,10 @@ MatrixImagePlugin.prototype = {
 
             // if we click on a preview image, have to prepare uploading preview interface
             self._prepareDropppedImageUpload(prefix);
+
+
+            // focus back on the input field (we lost focus from above interface mods)
+            $('.Viper-imageUploadFileRow input').focus();
 
         });
 
