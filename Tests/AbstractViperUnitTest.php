@@ -2313,25 +2313,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $this->sikuli->execJS('pasteFromURL("'.$url.'")', true, true);
 
     }//end pasteFromURL()
-
-
-    /**
-     * Finds the location of right click paste div and right clicks the paste frame.
-     *
-     * @return void
-     */
-    private function _rightClickPasteDiv()
-    {
-        $targetIcon = $this->sikuli->find(dirname(dirname(__FILE__)).'/Core/Images/window-target2.png');
-        $topLeft    = $this->sikuli->getTopLeft($targetIcon);
-        $loc        = array(
-                       'x' => ($this->sikuli->getX($topLeft) + 50),
-                       'y' => ($this->sikuli->getY($topLeft) + 100),
-                      );
-        $this->sikuli->rightClick($this->sikuli->createLocation($loc['x'], $loc['y']));
-
-    }//end _rightClickPasteDiv()
-
+    
 
     /**
      * Cut content.
