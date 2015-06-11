@@ -500,6 +500,76 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
 
 
     /**
+     * Test applying a scustom style and class with similar name 
+     *
+     * @return void
+     */
+    public function testApplyingCustomStyleAndClassWithSimilarNames()
+    {
+        $this->setCustomClassStyles();
+
+        // Test applying to a word
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        sleep(1);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->selectStyles(array('ordered-list'));
+        sleep(1);
+        $this->clickField('Class');
+        sleep(1);
+        $this->type('ordered-list-test');
+        sleep(1);
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>This is some content <span class="ordered-list-test ordered-list">%1%</span> in my unit test</p>');
+
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        sleep(1);
+        $this->clickTopToolbarButton('cssClass');
+        $this->selectStyles(array('ordered-list'));
+        sleep(1);
+        $this->clickField('Class');
+        sleep(1);
+        $this->type('test-ordered-list');
+        sleep(1);
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>This is some content <span class="test-ordered-list ordered-list">%1%</span> in my unit test</p>');
+
+        // Test applying to a paragraph
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
+        $this->clickInlineToolbarButton('cssClass');
+        sleep(1);
+        $this->selectStyles(array('article'));
+        sleep(1);
+        $this->clickField('Class');
+        sleep(1);
+        $this->type('article-test');
+        sleep(1);
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p class="article-test article">This is some content %1% in my unit test</p>');
+
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
+        $this->clickTopToolbarButton('cssClass');
+        sleep(1);
+        $this->selectStyles(array('article'));
+        sleep(1);
+        $this->clickField('Class');
+        sleep(1);
+        $this->type('article-test');
+        sleep(1);
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p class="article-test article">This is some content %1% in my unit test</p>');
+
+    }//end testApplyingCustomStyleAndClassWithSimilarNames()
+
+
+    /**
      * Test applying a custom style and class to a paragraph.
      *
      * @return void

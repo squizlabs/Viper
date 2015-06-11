@@ -123,28 +123,10 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         sleep(1);
         $this->paste(TRUE);
 
-        $this->assertFalse($this->_isPasteToolbarVisible());
         sleep(1);
         $this->assertHTMLMatch('<p>%1%</p><p>%1%</p>');
 
     }//end testRightClickPaste()
-
-
-    /**
-     * Returns true if the right click paste toolbar is visible.
-     *
-     * @return boolean
-     */
-    private function _isPasteToolbarVisible()
-    {
-        $rect = $this->getBoundingRectangle('#test-ViperCopyPastePlugin-paste');
-        if (empty($rect) === true) {
-            return false;
-        }
-
-        return true;
-
-    }//end _isPasteToolbarVisible()
 
 
     /**
