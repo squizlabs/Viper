@@ -941,7 +941,7 @@ Viper.prototype = {
                 if (!blockTag) {
                     ViperUtil.setHtml(elem, '');
                 } else {
-                    ViperUtil.setHtml(elem, '<' + blockTag + '>&nbsp;</' + blockTag + '>');
+                    ViperUtil.setHtml(elem, ViperUtil.getHtml(elem) +  '<' + blockTag + '>&nbsp;</' + blockTag + '>');
                 }
 
                 try {
