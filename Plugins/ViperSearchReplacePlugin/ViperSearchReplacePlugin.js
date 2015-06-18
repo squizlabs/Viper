@@ -61,19 +61,14 @@ ViperSearchReplacePlugin.prototype = {
         var content = document.createElement('div');
 
         // Search text box.
-        var search = tools.createTextbox('ViperSearchPlugin:searchInput', _('Search'), '', function(value) {
-            var found = self.find(value);
-            if (found !== true) {
-                self._matchCount = 0;
-            }
-
-            self._updateButtonStates(found);
-        });
+        var search = tools.createTextbox('ViperSearchPlugin:searchInput', _('Search'), '');
         tools.setFieldEvent('ViperSearchPlugin:searchInput', 'keyup', function() {
             if (tools.getItem('ViperSearchPlugin:searchInput').getValue()) {
                 tools.enableButton('ViperSearchPlugin:findNext');
             } else {
                 tools.disableButton('ViperSearchPlugin:findNext');
+                tools.disableButton('ViperSearchPlugin:replace');
+                tools.disableButton('ViperSearchPlugin:replaceAll');
             }
         });
         content.appendChild(search);
@@ -109,7 +104,7 @@ ViperSearchReplacePlugin.prototype = {
         content.appendChild(replaceAllBtn);
         content.appendChild(replaceBtn);
 
-        var findNext = tools.createButton('ViperSearchPlugin:findNext', _('Find Next'), _('Find Next'), '', function() {
+        var _findNext = function () {
             // Find again.
             var found = self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue());
             if (found !== true) {
@@ -125,6 +120,10 @@ ViperSearchReplacePlugin.prototype = {
 
             self._updateButtonStates(found);
             return false;
+        };
+
+        var findNext = tools.createButton('ViperSearchPlugin:findNext', _('Find Next'), _('Find Next'), '', function() {
+            return _findNext();
         }, true);
         content.appendChild(findNext);
 
@@ -136,6 +135,10 @@ ViperSearchReplacePlugin.prototype = {
         var searchBtn   = tools.createButton('searchReplace', '', _('Search & Replace'), 'Viper-searchReplace', null, true);
         toolbar.addButton(searchBtn);
         toolbar.setBubbleButton('ViperSearchPlugin:bubble', 'searchReplace');
+
+        tools.getItem('ViperSearchPlugin:bubble').setSubSectionAction('ViperSearchPlugin:bubbleSubSection', function() {
+            return _findNext();
+        }, ['ViperSearchPlugin:searchInput'], 'ViperSearchPlugin:findNext');
 
         // Update the buttons when the toolbar updates it self.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperSearchReplacePlugin', null);

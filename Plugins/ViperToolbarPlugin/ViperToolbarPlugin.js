@@ -348,13 +348,15 @@ ViperToolbarPlugin.prototype = {
 
                 this._subSectionButtons[sectionid] = button;
             },
-            setSubSectionAction: function(subSectionid, action, widgetids) {
+            setSubSectionAction: function(subSectionid, action, widgetids, customButtonid) {
                 widgetids      = widgetids || [];
                 var tools      = self.viper.ViperTools;
                 var subSection = tools.getItem(subSectionid);
                 if (!subSection) {
                     return;
                 }
+
+                var buttonid = customButtonid;
 
                 subSection.form.onsubmit = function(e) {
                     self.viper.focus();
@@ -363,12 +365,18 @@ ViperToolbarPlugin.prototype = {
                         ViperUtil.preventDefault(e);
                     }
 
-                    var button = tools.getItem(subSectionid + '-applyButton');
+                    if (!buttonid) {
+                        buttonid = subSectionid + '-applyButton';
+                    }
+
+                    var button = tools.getItem(buttonid);
                     if (button.isEnabled() === false) {
                         return false;
                     }
 
-                    tools.disableButton(subSectionid + '-applyButton');
+                    if (!customButtonid) {
+                        tools.disableButton(subSectionid + '-applyButton');
+                    }
 
                     // IE needs this timeout so focus works <3..
                     if (ViperUtil.isBrowser('msie') === false) {
@@ -410,8 +418,10 @@ ViperToolbarPlugin.prototype = {
                     return false;
                 };
 
-                var button = tools.createButton(subSectionid + '-applyButton', _('Apply Changes'), _('Apply Changes'), '', subSection.form.onsubmit, true);
-                subSection.form.appendChild(button);
+                if (!buttonid) {
+                    var button = tools.createButton(subSectionid + '-applyButton', _('Apply Changes'), _('Apply Changes'), '', subSection.form.onsubmit, true);
+                    subSection.form.appendChild(button);
+                }
 
                 this.addSubSectionActionWidgets(subSectionid, widgetids);
 
