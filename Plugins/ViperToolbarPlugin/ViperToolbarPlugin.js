@@ -356,7 +356,11 @@ ViperToolbarPlugin.prototype = {
                     return;
                 }
 
+                this.updateSubSectionAction(subSectionid, action);
+
                 var buttonid = customButtonid;
+
+                var _self = this;
 
                 subSection.form.onsubmit = function(e) {
                     self.viper.focus();
@@ -378,7 +382,7 @@ ViperToolbarPlugin.prototype = {
                         tools.disableButton(subSectionid + '-applyButton');
                     }
 
-                    // IE needs this timeout so focus works <3..
+                    var action = _self.getSubsectionAction(subSectionid);
                     if (ViperUtil.isBrowser('msie') === false) {
                         try {
                             action.call(this);
@@ -396,6 +400,7 @@ ViperToolbarPlugin.prototype = {
                             }
                         }, 50);
                     } else {
+                        // IE needs this timeout so focus works <3..
                         setTimeout(function() {
                             try {
                                 action.call(this);
@@ -425,6 +430,12 @@ ViperToolbarPlugin.prototype = {
 
                 this.addSubSectionActionWidgets(subSectionid, widgetids);
 
+            },
+            updateSubSectionAction: function (subSectionid, action) {
+                this._subSectionActions[subSectionid] = action;
+            },
+            getSubsectionAction: function (subSectionid) {
+                return this._subSectionActions[subSectionid];
             },
             addSubSectionActionWidgets: function(subSectionid, widgetids)
             {
@@ -479,7 +490,8 @@ ViperToolbarPlugin.prototype = {
             _activeSubSection: null,
             _openCallback: openCallback,
             _closeCallback: closeCallback,
-            _subSectionActionWidgets: {}
+            _subSectionActionWidgets: {},
+            _subSectionActions: {}
         };
 
         if (subSectionElement) {

@@ -73,7 +73,12 @@ ViperSearchReplacePlugin.prototype = {
         });
         content.appendChild(search);
 
-        // Replace text box.
+        var _replace = function () {
+            self.replace(tools.getItem('ViperSearchPlugin:replaceInput').getValue());
+            self._updateButtonStates();
+            self.viper.fireNodesChanged();
+        };
+
         var replace = tools.createTextbox('ViperSearchPlugin:replaceInput', _('Replace'), '', function(value) {
             var search = tools.getItem('ViperSearchPlugin:searchInput').getValue();
             self.getNumberOfMatches(search);
@@ -83,7 +88,7 @@ ViperSearchReplacePlugin.prototype = {
         });
         content.appendChild(replace);
 
-        var replaceAllBtn = tools.createButton('ViperSearchPlugin:replaceAll', _('Replace All'), _('Replace All'), 'Viper-replaceAll', function() {
+        var _replaceAll = function () {
             var replaceCount = 0;
             var fromStart    = true;
             while (self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), false, fromStart) === true) {
@@ -95,12 +100,24 @@ ViperSearchReplacePlugin.prototype = {
             self._matchCount = 0;
             self._updateButtonStates();
             self.viper.fireNodesChanged();
+        };
+
+        var replaceAllBtn = tools.createButton('ViperSearchPlugin:replaceAll', _('Replace All'), _('Replace All'), 'Viper-replaceAll', function() {
+            var bubble = tools.getItem('ViperSearchPlugin:bubble');
+            bubble.updateSubSectionAction('ViperSearchPlugin:bubbleSubSection', _replaceAll);
+
+            var subSection = tools.getItem('ViperSearchPlugin:bubbleSubSection');
+            return subSection.form.onsubmit();
         }, true);
+
         var replaceBtn = tools.createButton('ViperSearchPlugin:replace', _('Replace'), _('Replace'), 'Viper-replaceText', function() {
-            self.replace(tools.getItem('ViperSearchPlugin:replaceInput').getValue());
-            self._updateButtonStates();
-            self.viper.fireNodesChanged();
+            var bubble = tools.getItem('ViperSearchPlugin:bubble');
+            bubble.updateSubSectionAction('ViperSearchPlugin:bubbleSubSection', _replace);
+
+            var subSection = tools.getItem('ViperSearchPlugin:bubbleSubSection');
+            return subSection.form.onsubmit();
         }, true);
+
         content.appendChild(replaceAllBtn);
         content.appendChild(replaceBtn);
 
@@ -123,7 +140,11 @@ ViperSearchReplacePlugin.prototype = {
         };
 
         var findNext = tools.createButton('ViperSearchPlugin:findNext', _('Find Next'), _('Find Next'), '', function() {
-            return _findNext();
+            var bubble = tools.getItem('ViperSearchPlugin:bubble');
+            bubble.updateSubSectionAction('ViperSearchPlugin:bubbleSubSection', _findNext);
+
+            var subSection = tools.getItem('ViperSearchPlugin:bubbleSubSection');
+            return subSection.form.onsubmit();
         }, true);
         content.appendChild(findNext);
 
