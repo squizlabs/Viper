@@ -2914,11 +2914,40 @@ Viper.prototype = {
 
     removeStyle: function(style)
     {
-        var range        = this.getViperRange();
-        range            = this.adjustRange(range);
-        var startNode    = range.getStartNode();
-        var endNode      = range.getEndNode();
-        var viperElement = this.getViperElement();
+        var range         = this.getViperRange();
+        range             = this.adjustRange(range);
+        var startNode     = range.getStartNode();
+        var endNode       = range.getEndNode();
+        var viperElement  = this.getViperElement();
+        var nodeSelection = range.getNodeSelection();
+
+        if (nodeSelection) {
+            // A whole node is selected. Remove all nested style tags and the node it self its the same tag.
+            var styleTags = ViperUtil.getTag(style, nodeSelection);
+            var sln       = styleTags.length;
+            for (var i = 0; i < sln; i++) {
+                while (styleTags[i].firstChild) {
+                    ViperUtil.insertBefore(styleTags[i], styleTags[i].firstChild);
+                }
+
+                ViperUtil.remove(styleTags[i]);
+            }
+
+            if (ViperUtil.isTag(nodeSelection, style) === true) {
+                // This node is the style tag, move all its child nodes and delete it.
+                while (nodeSelection.firstChild) {
+                    ViperUtil.insertBefore(nodeSelection, nodeSelection.firstChild);
+                }
+
+                ViperUtil.remove(nodeSelection);
+            }
+
+            range.setStart(startNode, 0);
+            range.setEnd(endNode, endNode.data.length);
+
+            ViperSelection.addRange(range);
+            return;
+        }//end if
 
         if (startNode.nodeType === ViperUtil.TEXT_NODE
             && ViperUtil.trim(startNode.data) === ''
@@ -3301,7 +3330,7 @@ Viper.prototype = {
         var startPos    = null;
         var endPos      = null;
         var startOffset = 0;
-        var endOffset   = null;
+        var endOffset   = 0;
         if (bookmark.start.nextSibling === bookmark.end
             || ViperUtil.getElementsBetween(bookmark.start, bookmark.end).length === 0
         ) {
@@ -3329,7 +3358,11 @@ Viper.prototype = {
             }
         } else {
             if (bookmark.start.nextSibling) {
+                // Find the next non empty text node.
                 startPos = ViperUtil.getFirstChildTextNode(bookmark.start.nextSibling);
+                while (startPos && startPos.data.length === 0 && startPos.nextSibling) {
+                    startPos = ViperUtil.getFirstChildTextNode(startPos.nextSibling);
+                }
             } else {
                 if (!bookmark.start.previousSibling) {
                     var tmp = Viper.document.createTextNode('');
@@ -3341,7 +3374,12 @@ Viper.prototype = {
             }
 
             if (bookmark.end.previousSibling) {
+                // Find the previous non empty text node.
                 endPos = ViperUtil.getLastChildTextNode(bookmark.end.previousSibling);
+                while (endPos && endPos.data.length === 0 && endPos.previousSibling) {
+                    endPos = ViperUtil.getFirstChildTextNode(endPos.previousSibling);
+                }
+
                 if (endPos.data) {
                     endOffset = endPos.data.length;
                 }
