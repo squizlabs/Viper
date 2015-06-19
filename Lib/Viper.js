@@ -4804,6 +4804,19 @@ Viper.prototype = {
                     range.setEnd(lastSelectable, lastSelectable.data.length);
                     ViperSelection.addRange(range);
                 }
+            } else if (range.endOffset > 0
+                && ViperUtil.isBlank(ViperUtil.trim(endNode.data)) === true
+                && range.commonAncestorContainer === this.getViperElement()
+                && range.commonAncestorContainer.firstElementChild === range.commonAncestorContainer.lastElementChild
+                && range._getFirstSelectableChild(range.commonAncestorContainer, startNode)
+                && range._getLastSelectableChild(range.commonAncestorContainer, endNode)
+            ) {
+                // This is the case where selection starts from first selectable and ends at last selectable
+                // where last selectable is empty text node after a block element.
+                // E.g. <viperEl><div><p>[aaa</p><p>bbb</p></div>    ]</viperEl>
+                // Range should be adjusted to select the common parent.
+                range.selectNode(range.commonAncestorContainer.firstElementChild);
+                ViperSelection.addRange(range);
             }
         } else if (startNode && startNode.nodeType === ViperUtil.TEXT_NODE
             && endNode && endNode.nodeType === ViperUtil.TEXT_NODE
