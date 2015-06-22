@@ -29,6 +29,9 @@ function ViperCopyPastePlugin(viper)
     this._toolbarElement = null;
     this._selectedRows   = null;
 
+    this._pasteProcess = 0;
+    this._isRightClick = false;
+
 }
 
 ViperCopyPastePlugin.prototype = {
@@ -52,9 +55,15 @@ ViperCopyPastePlugin.prototype = {
             return false;
         });
 
-        if (this._isMSIE === true) {
-            this.pasteElement = this._createPasteDiv();
-        }
+        this.viper.registerCallback(['Viper:rightMouseDown', 'Viper:mouseDown'], 'ViperCopyPastePlugin', function(data) {
+            if (data.which === 3) {
+                self._isRightClick = true;
+            } else {
+                self._isRightClick = false;
+            }
+
+            self._pasteProcess = 0;
+        });
 
     },
 
@@ -150,14 +159,182 @@ ViperCopyPastePlugin.prototype = {
             };
 
         } else {
-            // Fired before the paste event, the actual paste event is handled in createPasteDiv.
-            elem.onbeforepaste = function(e) {
-                self._beforePaste();
-                var pasteDiv = self._createPasteDiv(true);
+            self._pasteProcess = 0;
 
-                // Give focus to paste div so when the paste event fires the contents are pasted there.
-                pasteDiv.focus();
-            };
+            if (ViperUtil.isBrowser('msie', '<11') === true) {
+                var cutPasteDiv    = null;
+                elem.onbeforepaste = function() {
+                    if (self._pasteProcess === 0) {
+                        // This is the 2nd time the onbeforepaste is called when the right click menu is opened.
+                        // Get the contents of the current selection and add Viper element so that it can be cleaned up in paste.
+                        var range           = self.viper.getCurrentRange();
+                        var selectedContent = '';
+                        if (range.collapsed !== true) {
+                            var selectedNode    = range.getNodeSelection();
+                            var viperElem       = self.viper.getViperElement();
+                            if (selectedNode && selectedNode !== viperElem) {
+                                var surroundingParents = ViperUtil.getSurroundingParents(selectedNode, null, false, viperElem);
+                                if (surroundingParents.length > 0) {
+                                    selectedNode = surroundingParents.pop();
+                                }
+
+                                var tmp = document.createElement('div');
+                                tmp.appendChild(selectedNode.cloneNode(true));
+                                selectedContent = ViperUtil.getHtml(tmp);
+                            } else {
+                                selectedContent = range.getHTMLContents()
+                            }
+
+                            selectedContent = self._fixPartialSelection(selectedContent, range);
+                        }
+
+                        // Save the position where the paste needs to happen.
+                        self._beforePaste();
+
+                        // Remove the existing paste div.
+                        cutPasteDiv = ViperUtil.getid('ViperPasteDivNew');
+                        ViperUtil.remove(cutPasteDiv);
+
+                        // Create the new tmp div with the currently selected content.  This content is used by cut and
+                        // copy operations.
+                        cutPasteDiv = document.createElement('div');
+                        cutPasteDiv.innerHTML = selectedContent;
+                        cutPasteDiv.id = 'ViperPasteDivNew';
+                        elem.appendChild(cutPasteDiv);
+
+                        if (selectedContent !== '') {
+                            // Select all the contents of the temp element.
+                            var firstChild = range._getFirstSelectableChild(cutPasteDiv);
+                            var lastChild = range._getLastSelectableChild(cutPasteDiv);
+                            if (cutPasteDiv.lastChild.nodeType === ViperUtil.ELEMENT_NODE) {
+                                // Last child could be an image etc.
+                                cutPasteDiv.appendChild(document.createTextNode(''));
+                                range.setEnd(cutPasteDiv.lastChild, 0);
+                            } else if (ViperUtil.isBrowser('msie', '<11') === true) {
+                                range.setEnd(lastChild, lastChild.data.length);
+                            } else {
+                                range.setEnd(lastChild, lastChild.data.length);
+                            }
+
+                            // WORKING ON IE8
+                            //if (ViperUtil.isBrowser('msie', '<11') === true) {
+                              //  range.setStart(firstChild, 1);
+                            //} else {
+                                range.setStart(firstChild, 0);
+                            //}
+
+                            //range.setEnd(range._getLastSelectableChild(x), range._getLastSelectableChild(x).data.length);
+                            //range.setStart(range._getFirstSelectableChild(x), 0);
+                            ViperSelection.addRange(range);
+                        }
+
+                        // Give the focus to cut/paste temp div so that its contents are properly selected. When the user
+                        // clicks the cut/copy/paste action in the right click menu, browser will use the cutPasteDiv
+                        // as the source element.
+                        cutPasteDiv.focus();
+
+                        cutPasteDiv.onpaste = function() {
+                            // Insert the tmpNode where the content is inserted before the bookmark that was created.
+                            var bookmark = self._bookmark;
+                            if (!bookmark.start.previousSibling) {
+                                if (bookmark.start.parentNode !== self.viper.getViperElement()) {
+                                    ViperUtil.insertBefore(bookmark.start.parentNode, self._tmpNode);
+                                } else {
+                                    ViperUtil.insertBefore(bookmark.start, self._tmpNode);
+                                }
+                            } else {
+                                ViperUtil.insertBefore(bookmark.start, self._tmpNode);
+                            }
+
+                            // Since this is a paste remove the selected contents.
+                            self.viper.removeBookmark(bookmark);
+
+                            setTimeout(function() {
+                                // Remove the temp div.
+                                ViperUtil.remove(cutPasteDiv);
+
+                                range.setStart(self._tmpNode, 0);
+                                range.collapse(true);
+                                ViperSelection.addRange(range);
+
+                                // Use the cutPasteDiv to get the pasted content and inserted where the tmpNode is located.
+                                self._handleFormattedPasteValue(null, cutPasteDiv);
+                            }, 100);
+                        };
+
+                        if (selectedContent !== '') {
+                            // Only add oncut and onpaste if there is something selected, if range is collapsed then
+                            // there is no point of adding these events.
+                            cutPasteDiv.oncut = function(e) {
+                                var bookmark = self._bookmark;
+                                if (!bookmark.start.previousSibling) {
+                                    if (bookmark.start.parentNode !== self.viper.getViperElement()) {
+                                        ViperUtil.insertBefore(bookmark.start.parentNode, self._tmpNode);
+                                    } else {
+                                        ViperUtil.insertBefore(bookmark.start, self._tmpNode);
+                                    }
+                                } else {
+                                    ViperUtil.insertBefore(bookmark.start, self._tmpNode);
+                                }
+
+                                self.viper.removeBookmark(self._bookmark);
+
+                                setTimeout(function() {
+                                    ViperUtil.remove(cutPasteDiv);
+
+                                    range.setStart(self._tmpNode, 0);
+                                    range.collapse(true);
+                                    ViperSelection.addRange(range);
+
+                                    self.viper.fireCallbacks('Viper:cut');
+                                    self.viper.fireNodesChanged();
+                                    self.viper.fireSelectionChanged(range, true);
+                                }, 5);
+                            }
+
+                            cutPasteDiv.oncopy = function(e) {
+                                ViperUtil.remove(cutPasteDiv);
+                                self.viper.selectBookmark(self._bookmark);
+
+                                self.viper.fireCallbacks('Viper:copy');
+                                self.viper.fireNodesChanged();
+                                self.viper.fireSelectionChanged(null, true);
+                            }
+                        }//end if
+                    }//end if
+
+                    self._pasteProcess++;
+                }//end if
+            } else {
+                var pasteDiv       = null;
+                elem.onbeforepaste = function (e) {
+                    if (self._pasteProcess === 0) {
+                        // Initial call to onbeforepaste, happens when right click menu opens.
+                        // Create the paste div.
+                        pasteDiv = self._createPasteDiv(true);
+                    } else if (self._pasteProcess === 2 || (self._pasteProcess === 1 && self._isRightClick === false)) {
+                        // Third call to onbeforepaste, happens when paste option is clicked.
+                        self._beforePaste();
+
+                        // Give paste div the focus.
+                        pasteDiv.focus();
+                        var max = 10;
+                        var t   = setInterval(function () {
+                            if (pasteDiv.innerHTML !== '') {
+                                pasteDiv.onpaste();
+                                clearInterval(t);
+                            } else if (max > 10) {
+                                clearInterval(t);
+                            }
+
+                            max++;
+                        }, 50);
+                    }
+
+                    self._pasteProcess++;
+                };
+            }//end if
+
         }//end if
 
         var onCopy = function(e) {
@@ -273,9 +450,9 @@ ViperCopyPastePlugin.prototype = {
                 }, 5);
             }
        } else {
-           elem.oncut = function(e) {
+           /*elem.oncut = function(e) {
                return self._beforeCut(e, true);
-           }
+           }*/
        }//end if
 
         // Handle drag/drop text in Webkit to prevent extra 'span' tags.
