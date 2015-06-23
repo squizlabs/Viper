@@ -548,44 +548,60 @@ Viper.prototype = {
             }
         });
 
-        ViperUtil.addEvent(elem, 'dragover.' + namespace, function(e) {
-            ViperUtil.preventDefault(e);
-            return false;
-        });
-        ViperUtil.addEvent(elem, 'dragenter.' + namespace, function(e) {
-            ViperUtil.preventDefault(e);
-            return false;
+        // This is necessary for IE, because IE does not return the current range when drop event fires.
+        var _dragRange = null;
+        ViperUtil.addEvent(elem, 'dragstart.' + namespace, function(e) {
+            _dragRange = self.getViperRange();
         });
 
         ViperUtil.addEvent(elem, 'drop.' + namespace, function(e) {
             ViperUtil.preventDefault(e);
+
+            e.originalEvent.dataTransfer.dropEffect = 'move';
 
             // Get the range using the mouse pointer (drop location).
             var range        = self.getRangeFromCoords(e.originalEvent.clientX, e.originalEvent.clientY);
             var dataTransfer = e.originalEvent.dataTransfer;
 
             // Call the callback functions with dataTransfer object, range and original event.
-            if (self.fireCallbacks('Viper:dropped', {dataTransfer: dataTransfer, range: range, e: e}) === false) {
+            if (self.fireCallbacks('Viper:dropped', {dataTransfer: dataTransfer, range: range, e: e, origRange: _dragRange}) === false) {
                 return false;
             }
 
             var textPlain = null;
-            for (var i = 0; i < dataTransfer.types.length; i++) {
-                try {
+            if (dataTransfer.types) {
+                for (var i = 0; i < dataTransfer.types.length; i++) {
+                    try {
+                        var data = {
+                            data: dataTransfer.getData(dataTransfer.types[i]),
+                            range: range,
+                            origRange: _dragRange
+                        };
+                    } catch (e) {
+                        continue;
+                    }
+
+                    if (dataTransfer.types[i] === 'text/plain' || dataTransfer.types[i] === 'Text') {
+                        textPlain = data;
+                    }
+
+                    // Fire callbacks for each data type.
+                    if (self.fireCallbacks('Viper:dropped:' + dataTransfer.types[i], data) === false) {
+                        return false;
+                    }
+                }
+            } else if (ViperUtil.isBrowser('msie', '8') === true) {
+                textPlain = dataTransfer.getData('text');
+                 try {
                     var data = {
-                        data: dataTransfer.getData(dataTransfer.types[i]),
-                        range: range
+                        data: textPlain,
+                        range: range,
+                        origRange: _dragRange
                     };
                 } catch (e) {
-                    continue;
                 }
 
-                if (dataTransfer.types[i] === 'text/plain' || dataTransfer.types[i] === 'Text') {
-                    textPlain = data;
-                }
-
-                // Fire callbacks for each data type.
-                if (self.fireCallbacks('Viper:dropped:' + dataTransfer.types[i], data) === false) {
+                if (self.fireCallbacks('Viper:dropped:Text', data) === false) {
                     return false;
                 }
             }

@@ -42,16 +42,32 @@ ViperCopyPastePlugin.prototype = {
             self._init();
         });
 
-        this.viper.registerCallback('Viper:dropped:text/html', 'ViperCopyPastePlugin', function(data) {
+        this.viper.registerCallback(['Viper:dropped:text/html', 'Viper:dropped:Text'], 'ViperCopyPastePlugin', function(data) {
             if (!data.data) {
                 return;
+            }
+
+            // Bookmark the current selection so that it can be deleted.
+            var bookmark = null;
+            if (data.origRange.collapsed === false) {
+                bookmark = self.viper.createBookmark(data.origRange);
             }
 
             ViperSelection.addRange(data.range);
             var div = document.createElement('div');
             ViperUtil.setHtml(div, data.data);
-            self._beforePaste();
+            self._beforePaste(data.range);
+
+            if (self._bookmark) {
+                self._insertTmpNodeBeforeBookmark(self._bookmark);
+            }
+
             self._handleFormattedPasteValue(false, div);
+
+            if (bookmark) {
+                self.viper.removeBookmark(bookmark);
+            }
+
             return false;
         });
 
@@ -839,15 +855,7 @@ ViperCopyPastePlugin.prototype = {
             var self = this;
             div.onpaste = function(e) {
                 var bookmark = self._bookmark;
-                if (!bookmark.start.previousSibling) {
-                    if (bookmark.start.parentNode !== self.viper.getViperElement()) {
-                        ViperUtil.insertBefore(bookmark.start.parentNode, self._tmpNode);
-                    } else {
-                        ViperUtil.insertBefore(bookmark.start, self._tmpNode);
-                    }
-                } else {
-                    ViperUtil.insertBefore(bookmark.start, self._tmpNode);
-                }
+                self._insertTmpNodeBeforeBookmark(bookmark);
 
                 self.viper.removeBookmark(bookmark);
                 setTimeout(function() {
@@ -859,6 +867,18 @@ ViperCopyPastePlugin.prototype = {
             return div;
         }
 
+    },
+
+    _insertTmpNodeBeforeBookmark: function (bookmark) {
+        if (!bookmark.start.previousSibling) {
+            if (bookmark.start.parentNode !== this.viper.getViperElement()) {
+                ViperUtil.insertBefore(bookmark.start.parentNode, this._tmpNode);
+            } else {
+                ViperUtil.insertBefore(bookmark.start, this._tmpNode);
+            }
+        } else {
+            ViperUtil.insertBefore(bookmark.start, this._tmpNode);
+        }
     },
 
     _createPasteIframe: function(parent)

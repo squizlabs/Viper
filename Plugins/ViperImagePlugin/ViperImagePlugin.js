@@ -151,10 +151,19 @@ ViperImagePlugin.prototype = {
         );
 
         this.viper.registerCallback('Viper:dropped', 'ViperImagePlugin', function(data) {
+            if (!data.dataTransfer.files) {
+                return;
+            }
+
             for (var i = 0; i < data.dataTransfer.files.length; i++) {
                 self.readDroppedImage(data.dataTransfer.files[i], function(image, file) {
                     self.insertDroppedImage(image, data.range, file);
+                    noImage = false;
                 });
+            }
+
+            if (data.dataTransfer.files.length > 0) {
+                return false;
             }
         });
 
