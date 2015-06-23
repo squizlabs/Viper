@@ -338,7 +338,11 @@ ViperCopyPastePlugin.prototype = {
         }//end if
 
         var onCopy = function(e) {
-            var yCoord = self.viper.getCaretCoords().y;
+            var yCoord = null;
+            if (ViperUtil.isBrowser('msie', '<11') === true) {
+                yCoord = self.viper.getCaretCoords().y;
+            }
+
             var range  = self.viper.getViperRange();
 
             // Create a clone of the current range as we are going to modify it.
@@ -389,7 +393,9 @@ ViperCopyPastePlugin.prototype = {
 
             // Set the coords of the tmp element to be same as the current window scroll position so that when we move
             // the focus to the tmp element the page does not 'jump'.
-            ViperUtil.setStyle(tmp, 'top', yCoord + 'px');
+            if (yCoord !== null) {
+                ViperUtil.setStyle(tmp, 'top', yCoord + 'px');
+            }
 
             if (ViperUtil.isBrowser('msie', '8') === true) {
                 tmp.focus();
