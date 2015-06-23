@@ -157,6 +157,10 @@
     width: 217px;
 }
 
+.Viper-browser-firefox .VSVP-source .ace_replace_form .ace_search_field {
+    width: 205px;
+}
+
 /* Source Scroller for webkit */
 
 .Viper-popup-content .ace_editor .ace_sb::-webkit-scrollbar {
