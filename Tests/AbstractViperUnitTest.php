@@ -737,6 +737,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                         }
 
                         $regions[$loc] = $buttonName;
+
+                        // Prevent screensaver turning on.
+                        $this->sikuli->keyDown('Key.ESC');
                     } catch (Exception $e) {
                         continue(3);
                     }
