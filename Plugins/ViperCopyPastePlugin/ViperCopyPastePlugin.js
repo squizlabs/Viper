@@ -2077,6 +2077,20 @@ ViperCopyPastePlugin.prototype = {
             }//end for
         }
 
+        // Convert MsoQuote to blockquote.
+        var prevBlockquote = null;
+        var quotes         = ViperUtil.find(tmp, '[class="MsoQuote"]');
+        for (var i = 0; i < quotes.length; i++) {
+            var quote = quotes[i];
+            if (prevBlockquote === null || quote.previousElementSibling !== prevBlockquote) {
+                prevBlockquote = document.createElement('blockquote');
+                ViperUtil.insertBefore(quote, prevBlockquote);
+            }
+
+            prevBlockquote.appendChild(quote);
+
+        }
+
         content = ViperUtil.getHtml(tmp);
         ViperUtil.setHtml(tmp, content);
 
