@@ -257,6 +257,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $this->sikuli->setClickDelay(250);
         }
 
+        // Reset zoom.
+        $this->sikuli->keyDown('Key.CMD + 0');
+
         // Change browser and then change the URL.
         if (self::$_testRun === true) {
             // URL is already changed to the test runner, so just reload.
@@ -280,14 +283,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 }
             }
 
-            /*
-                $matches = $this->sikuli->findAll(dirname(__FILE__).'/Web/favicon.png', NULL, 0.9);
-                if (empty($matches) === FALSE) {
-                $match = array_pop($matches);
-                $this->sikuli->click($match);
-            } else {*/
-                $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
-            // }
+            $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
             $this->sikuli->setAutoWaitTimeout(1);
             $this->_waitForViper();
 
@@ -2290,12 +2286,12 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
             if ($this->sikuli->getBrowserid() === 'safari') {
                 $this->sikuli->keyDown('Key.DOWN');
-                $this->sikuli->keyDown('Key.ENTER');    
+                $this->sikuli->keyDown('Key.ENTER');
             } else {
                 $this->sikuli->keyDown('p');
                 $this->sikuli->keyDown('Key.ENTER');
             }//end if
-            
+
         }//end if
 
     }//end paste()
@@ -2313,7 +2309,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $this->sikuli->execJS('pasteFromURL("'.$url.'")', true, true);
 
     }//end pasteFromURL()
-    
+
 
     /**
      * Cut content.
