@@ -719,7 +719,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             }
         }
 
-        for ($similarity = 0.93; $similarity < 0.97; $similarity += 0.01) {
+        for ($similarity = 0.92; $similarity < 0.97; $similarity += 0.01) {
             // Find each of the icons, if any fails it will throw an exception.
             $regions = array();
             foreach ($statuses as $status => $className) {
