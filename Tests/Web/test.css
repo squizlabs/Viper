@@ -141,6 +141,11 @@ body.Viper-unitTest .ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-buttonIcon 
     margin-left: -17px;
 }
 
+.Viper-button.Viper-active .Viper-buttonIcon.Viper-listOutdent {
+    margin-top: -16px;
+    margin-left: -18px;
+}
+
 .Viper-buttonIcon.Viper-justifyBlock {
     width: 10px;
 }
