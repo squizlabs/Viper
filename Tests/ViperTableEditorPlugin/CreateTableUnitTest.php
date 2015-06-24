@@ -15,6 +15,8 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
     {
         $this->useTest(1);
 
+        $this->moveToKeyword(1, 'right');
+
         $this->insertTable(1, 0);
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table style="width: 100%;" border="1"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
 
@@ -301,7 +303,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
     public function testInsertTableAfterCuttingContent()
     {
         $this->useTest(2);
-        
+
         $location = $this->findKeyword(1);
         // Cut the content from the page
         $this->selectKeyword(1, 2);
@@ -315,6 +317,40 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         $this->assertHTMLMatchNoHeaders('<h1>Insert Table</h1><p></p><table border="1" style="width:100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>Third paragraph</p>');
 
     }//end testInsertTableAfterCuttingContent()
+
+
+    /**
+     * Test creating table when page is zoomed.
+     *
+     * @return void
+     */
+    public function testCreateTableWithZoom()
+    {
+        $this->useTest(1);
+
+        $this->moveToKeyword(1, 'right');
+
+        // Zoom in.
+        $this->sikuli->keyDown('Key.CMD + =');
+
+        // Need to insert the table using JS calls due to zoom level increase causes issues with JS positioning.
+        // TODO: most likely need to add scaling to JS location values etc. How do we solve scale issue for Sikuli?
+        $this->sikuli->execJS('viper.ViperPluginManager.getPlugin("ViperTableEditorPlugin").insertTable(3, 4, 0)');
+
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table style="width: 100%;" border="1"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+
+        // Zoom out.
+        $this->sikuli->keyDown('Key.CMD + 0');
+
+        $this->moveToKeyword(1, 'right');
+
+        // Zoom in.
+        $this->sikuli->keyDown('Key.CMD + =');
+
+        $this->sikuli->execJS('viper.ViperPluginManager.getPlugin("ViperTableEditorPlugin").insertTable(5, 8, 0)');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p></p><table border="1" style="width: 100%;"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+
+    }//end testCreateTableWithZoom()
 
 
 }//end class
