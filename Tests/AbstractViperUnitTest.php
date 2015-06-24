@@ -196,13 +196,6 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             self::$_viperVersion = $this->_getGitCommitid();
         }
 
-        // Reset the Sikuli connection and restart the browser if the number of consecutive errors reach the limit.
-        if (ViperTestListener::getErrorStreak() >= self::$_maxErrorStreak) {
-            $this->resetConnection();
-            $this->sikuli->restartBrowser();
-            ViperTestListener::resetErrorStreak();
-        }
-
         // Get the contents of the test file template.
         if (self::$_testContent === null) {
             self::$_testContent = file_get_contents($baseDir.'/Web/test-template.html');
@@ -227,6 +220,14 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $numErrors  = ViperTestListener::getErrors();
         $totalTests = ViperTestListener::getNumberOfTests();
         $testsRun   = ViperTestListener::getTestsRun();
+
+        // Reset the Sikuli connection and restart the browser if the number of consecutive errors reach the limit or
+        // every 100 tests.
+        if (ViperTestListener::getErrorStreak() >= self::$_maxErrorStreak || ($testsRun % 100) === 0) {
+            $this->resetConnection();
+            $this->sikuli->restartBrowser();
+            ViperTestListener::resetErrorStreak();
+        }
 
         ViperTestListener::setSikuli($this->sikuli);
         ViperTestListener::setFilter(getenv('VIPER_TEST_FILTER'));
