@@ -33,6 +33,9 @@ function ViperKeyboardEditorPlugin(viper)
     // enter event instead of the browser.
     this._tagList = ('p|div|h1|h2|h3|h4|h5|h6|blockquote|section|main|article|aside').split('|');
 
+    // These elements are not to be removed when whole of their content is selected and deleted.
+    this._keepContainerList = ('td|th').split('|');
+
 }
 
 ViperKeyboardEditorPlugin.prototype = {
@@ -805,6 +808,16 @@ ViperKeyboardEditorPlugin.prototype = {
         var firstSelectable = range._getFirstSelectableChild(viperElement);
         var startNode       = range.getStartNode();
 
+        if (!startNode
+            && range.startOffset === 0
+            && range.startContainer.nodeType !== ViperUtil.TEXT_NODE
+            && range.collapsed === true
+            && !range.startContainer.firstChild
+        ) {
+            startNode = range.startContainer;
+        }
+
+        // TODO: Should use getNodeSelection to simplify this whole delete method.
         if (range.collapsed === true && e.keyCode === 8) {
             if (startNode && startNode.nodeType === ViperUtil.TEXT_NODE) {
                 var skippedBlockElem = [];
@@ -1113,6 +1126,11 @@ ViperKeyboardEditorPlugin.prototype = {
                     ViperUtil.remove(remove);
                 }
 
+                node.data = node.data.substr(0, (node.data.length - 1));
+                range.setEnd(node, (startOffset - 1));
+                range.collapse(false);
+                ViperSelection.addRange(range);
+
                 return false;
             } else if (!range.startContainer.previousSibling) {
                 return false;
@@ -1127,6 +1145,16 @@ ViperKeyboardEditorPlugin.prototype = {
                 if (nodeSelection === this.viper.getViperElement()) {
                     ViperUtil.setHtml(nodeSelection, '');
                     this.viper.initEditableElement();
+                }  else if (ViperUtil.inArray(ViperUtil.getTagName(nodeSelection), this._keepContainerList) === true) {console.info(1)
+                    // Remove only the contents when a whole element is selected but the element cannot be
+                    // removed (e.g. TD, as it would break the layout).
+                    ViperUtil.setHtml(nodeSelection, '<br/>');
+                    range.setStart(nodeSelection, 0);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                    this.viper.fireNodesChanged();
+                    this.viper.fireSelectionChanged(range, true);
+                    return false;
                 } else {
                     var parents = ViperUtil.getSurroundingParents(nodeSelection, null, null, this.viperElement);
                     if (parents.length > 0) {
@@ -1596,7 +1624,16 @@ ViperKeyboardEditorPlugin.prototype = {
                     }
                 } else {
                     var nextSelectable = range.getNextContainer(nodeSelection, null, true);
-                    if (this.viper.isOutOfBounds(nextSelectable) === true) {
+                    if (ViperUtil.inArray(ViperUtil.getTagName(nodeSelection), this._keepContainerList) === true) {
+                        // Remove only the contents when a whole element is selected but the element cannot be
+                        // removed (e.g. TD, as it would break the layout).
+                        ViperUtil.setHtml(nodeSelection, '<br/>');
+                        range.setStart(nodeSelection, 0);
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+                        this.viper.fireNodesChanged();
+                        return false;
+                    } else if (this.viper.isOutOfBounds(nextSelectable) === true) {
                         nextSelectable = range.getPreviousContainer(range.startContainer, null, true);
                         if (nextSelectable) {
                             range.setStart(nextSelectable, nextSelectable.data.length);
