@@ -5283,6 +5283,11 @@ Viper.prototype = {
         var html = ViperUtil.getHtml(clone);
         html     = this.cleanHTML(html);
 
+        var defaultBlockTag = this.getDefaultBlockTag();
+        if (html === '' && defaultBlockTag) {
+            html = '<' + defaultBlockTag + '></' + defaultBlockTag + '>';
+        }
+
         html = html.replace(/<\/viper:param>/ig, '');
         html = html.replace(/<viper:param /ig, '<param ');
         html = html.replace(/<:object/ig, '<object');
