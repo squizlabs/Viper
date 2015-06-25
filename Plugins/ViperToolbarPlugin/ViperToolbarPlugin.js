@@ -363,8 +363,6 @@ ViperToolbarPlugin.prototype = {
                 var _self = this;
 
                 subSection.form.onsubmit = function(e) {
-                    self.viper.focus();
-
                     if (e) {
                         ViperUtil.preventDefault(e);
                     }
@@ -377,6 +375,8 @@ ViperToolbarPlugin.prototype = {
                     if (button.isEnabled() === false) {
                         return false;
                     }
+
+                    self.viper.focus();
 
                     if (!customButtonid) {
                         tools.disableButton(subSectionid + '-applyButton');
