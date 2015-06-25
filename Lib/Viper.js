@@ -957,7 +957,12 @@ Viper.prototype = {
                 if (!blockTag) {
                     ViperUtil.setHtml(elem, '');
                 } else {
-                    ViperUtil.setHtml(elem, ViperUtil.getHtml(elem) +  '<' + blockTag + '>&nbsp;</' + blockTag + '>');
+                    var emptyCont = '<br/>';
+                    if (ViperUtil.isBrowser('msie') === true) {
+                        emptyCont = '&nbsp;';
+                    }
+
+                    ViperUtil.setHtml(elem, ViperUtil.getHtml(elem) +  '<' + blockTag + '>' + emptyCont + '</' + blockTag + '>');
                 }
 
                 try {
