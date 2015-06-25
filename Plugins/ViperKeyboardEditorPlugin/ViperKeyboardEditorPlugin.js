@@ -1145,7 +1145,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 if (nodeSelection === this.viper.getViperElement()) {
                     ViperUtil.setHtml(nodeSelection, '');
                     this.viper.initEditableElement();
-                }  else if (ViperUtil.inArray(ViperUtil.getTagName(nodeSelection), this._keepContainerList) === true) {console.info(1)
+                }  else if (ViperUtil.inArray(ViperUtil.getTagName(nodeSelection), this._keepContainerList) === true) {
                     // Remove only the contents when a whole element is selected but the element cannot be
                     // removed (e.g. TD, as it would break the layout).
                     ViperUtil.setHtml(nodeSelection, '<br/>');
