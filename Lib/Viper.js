@@ -1180,6 +1180,33 @@ Viper.prototype = {
 
     },
 
+    selectAll: function(elem)
+    {
+        elem      = elem || this.getViperElement();
+        var range = this.getViperRange();
+
+        if (!elem.firstChild) {
+            return;
+        }
+
+        var start = elem.firstChild;
+        if (start.nodeType !== ViperUtil.TEXT_NODE) {
+            start = document.createTextNode('');
+            ViperUtil.insertBefore(elem.firstChild, start);
+        }
+
+        var end = elem.lastChild;
+        if (end.nodeType !== ViperUtil.TEXT_NODE) {
+            end = document.createTextNode('');
+            ViperUtil.insertAfter(elem.lastChild, end);
+        }
+
+        range.setStart(start, 0);
+        range.setEnd(end, end.data.length);
+        ViperSelection.addRange(range);
+
+    },
+
     getNodeSelection: function(range)
     {
         range = range || this.getViperRange();
