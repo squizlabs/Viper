@@ -902,7 +902,7 @@ ViperFormatPlugin.prototype = {
         });
 
         var updateToolbar = function() {
-            var range = self.viper.getCurrentRange();
+            var range = self.viper.getViperRange();
 
             // Make sure passed in range is still valud.
             try {
