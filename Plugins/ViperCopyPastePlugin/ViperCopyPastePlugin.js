@@ -961,6 +961,11 @@ ViperCopyPastePlugin.prototype = {
             html    = this._updateElements(html);
         }
 
+        var tmp = document.createElement('div');
+        ViperUtil.setHtml(tmp, html);
+        this.viper.cleanDOM(tmp);
+        html = ViperUtil.getHtml(tmp);
+
         var self = this;
         this.viper.fireCallbacks('ViperCopyPastePlugin:cleanPaste', {html: html, stripTags: stripTags}, function(obj, newHTML) {
             if (newHTML) {

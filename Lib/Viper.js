@@ -5650,9 +5650,11 @@ Viper.prototype = {
                     }
 
                 default:
+                    var cont = ViperUtil.trim(ViperUtil.getHtml(node));
                     if ((ViperUtil.isStubElement(node) === false
                         && !node.firstChild)
-                        || ViperUtil.trim(ViperUtil.getHtml(node)) === '&nbsp;'
+                        || cont === '&nbsp;'
+                        || (cont === '' && ViperUtil.isTag(node, 'p'))
                     ) {
                         ViperUtil.remove(node);
                     }
