@@ -2034,11 +2034,12 @@ ViperFormatPlugin.prototype = {
                     ViperSelection.addRange(range);
                 } else {
                     var newElem = this._convertSingleElement(selectedNode, type);
-
-                    this.viper.selectBookmark(bookmark);
                     if (nodeSelection && newElem) {
+                        this.viper.removeBookmarks();
                         range.selectNode(newElem);
                         ViperSelection.addRange(range);
+                    } else {
+                        this.viper.selectBookmark(bookmark);
                     }
                 }
 

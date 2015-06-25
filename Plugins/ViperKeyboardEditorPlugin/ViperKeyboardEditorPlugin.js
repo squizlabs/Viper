@@ -2243,16 +2243,24 @@ ViperKeyboardEditorPlugin.prototype = {
 
     cleanPreTags: function()
     {
-        var preTags = ViperUtil.getTag('pre', this.viper.getViperElement());
-        var c       = preTags.length;
-
-        var bookmark = this.viper.createBookmark();
+        var preTags       = ViperUtil.getTag('pre', this.viper.getViperElement());
+        var c             = preTags.length;
+        var bookmark      = null;
+        var range         = this.viper.getViperRange();
+        var nodeSelection = range.getNodeSelection();
+        if (!nodeSelection) {
+            bookmark = this.viper.createBookmark();
+        }
 
         for (var i = 0; i < c; i++) {
             this.cleanPreTag(preTags[i]);
         }
 
-        this.viper.selectBookmark(bookmark);
+        if (!nodeSelection) {
+            this.viper.selectBookmark(bookmark);
+        } else {
+            range.selectNode(nodeSelection);
+        }
 
     },
 
