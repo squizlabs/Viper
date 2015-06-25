@@ -154,6 +154,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
         $this->clickTopToolbarButton('searchReplace');
         $this->type('FIND');
         $this->clickTopToolbarButton('Find Next', NULL, TRUE);
+        $this->assertEquals('find', $this->getSelectedText(), 'find was not found in the content');
 
         $this->clickField('Replace');
         $this->type('replace');
@@ -181,8 +182,11 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
         $this->clickTopToolbarButton('searchReplace');
         $this->type('websites');
         $this->clickTopToolbarButton('Find Next', NULL, TRUE);
+        sleep(1);
+        $this->assertEquals('websites', $this->getSelectedText(), 'find was not found in the content');
 
         $this->clickField('Replace');
+        sleep(1);
         $this->type('test');
         $this->clickTopToolbarButton('Replace All', NULL, TRUE);
 
