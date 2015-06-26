@@ -683,7 +683,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->type('1');
 
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th>1</th><th>2</th></tr></thead><tbody><tr><td>3</td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th>1</th><th>2</th></tr></thead><tbody><tr><td>3</td><td></td><td></td></tr></tbody></table>');
 
     }//end testTableKeyboardNav()
 
@@ -730,7 +730,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->type('4');
 
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><td rowspan="2"></td><td></td><td>1</td></tr><tr><td colspan="2">2</td></tr><tr><td>3</td><td></td><td>4</td></tr><tr><td>5</td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table style="width: 100%; " border="1"><tbody><tr><td rowspan="2"></td><td></td><td>1</td></tr><tr><td colspan="2">2</td></tr><tr><td>3</td><td></td><td>4</td></tr><tr><td>5</td><td></td><td></td></tr></tbody></table>');
 
     }//end testTableKeyboardNavWithRowNColSpan()
 
@@ -752,7 +752,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->showTools(0, 'row');
         $this->clickButton('delete');
 
-        $this->assertHTMLMatch('<p>Test %1%</p><p></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p>');
 
     }//end testRemoveTableOnLastRowDelete()
 
@@ -774,7 +774,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->showTools(0, 'col');
         $this->clickButton('delete');
 
-        $this->assertHTMLMatch('<p>Test %1%</p><p></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p>');
 
     }//end testRemoveTableOnLastColDelete()
 
