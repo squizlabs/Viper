@@ -319,7 +319,10 @@ ViperSourceViewPlugin.prototype = {
                 self.viper.ViperTools.getItem('VSVP:popup').hideTop();
                 self._isVisible = false;
                 self.toolbarPlugin.enable();
-                self.viper.focus();
+
+                setTimeout(function() {
+                    self.viper.focus();
+                }, 10);
             },
             function() {
                 if (self._editor) {
