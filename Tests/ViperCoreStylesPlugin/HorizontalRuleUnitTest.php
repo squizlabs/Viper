@@ -144,7 +144,7 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->sikuli->keyDown('Key.ENTER');
         $this->clickTopToolbarButton('insertHr');
 
-        $this->assertHTMLMatch('<p>%1% <sub>%2%</sub> dolor sit <em>amet</em> <strong><del>%3%</del></strong></p><p></p><hr /><p></p>');
+        $this->assertHTMLMatch('<p>%1% <sub>%2%</sub> dolor sit <em>amet</em> <strong><del>%3%</del></strong></p><hr />');
 
     }//end testAddingHorizontalRuleAfterFormattedText()
 
@@ -163,7 +163,7 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->clickTopToolbarButton('insertHr');
 
-        $this->assertHTMLMatch('<p>This is ul list:</p><ul><li>List item 1</li><li>List item 2 %1%</li><li>List item 3 %2%</li></ul><p></p><hr /><p></p><p>This is ol list:</p><ol><li>List item 1</li><li>List item 2 %3%</li><li>List item 3 %4%</li></ol>');
+        $this->assertHTMLMatch('<p>This is ul list:</p><ul><li>List item 1</li><li>List item 2 %1%</li><li>List item 3 %2%</li></ul><hr /><p>This is ol list:</p><ol><li>List item 1</li><li>List item 2 %3%</li><li>List item 3 %4%</li></ol>');
 
         // Test ol list
         $this->moveToKeyword(4, 'right');
@@ -171,7 +171,7 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->clickTopToolbarButton('insertHr');
 
-        $this->assertHTMLMatch('<p>This is ul list:</p><ul><li>List item 1</li><li>List item 2 %1%</li><li>List item 3 %2%</li></ul><p></p><hr /><p></p><p>This is ol list:</p><ol><li>List item 1</li><li>List item 2 %3%</li><li>List item 3 %4%</li></ol><p></p><hr /><p></p>');
+        $this->assertHTMLMatch('<p>This is ul list:</p><ul><li>List item 1</li><li>List item 2 %1%</li><li>List item 3 %2%</li></ul><hr /><p>This is ol list:</p><ol><li>List item 1</li><li>List item 2 %3%</li><li>List item 3 %4%</li></ol><hr />');
 
     }//end testAddingHorizontalRuleAfterRemovingListItem()
 
