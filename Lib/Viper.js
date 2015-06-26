@@ -2981,6 +2981,18 @@ Viper.prototype = {
                 ViperUtil.remove(styleTags[i]);
             }
 
+            // Check the surrounding parents.
+            var surrounding = ViperUtil.getSurroundingParents(nodeSelection, style, false, this.getViperElement());
+            for (var i = 0; i < surrounding.length; i++) {
+                if (ViperUtil.isTag(surrounding[i], style) === true) {
+                    while (surrounding[i].firstChild) {
+                        ViperUtil.insertBefore(surrounding[i], surrounding[i].firstChild);
+                    }
+
+                    ViperUtil.remove(surrounding[i]);
+                }
+            }
+
             if (ViperUtil.isTag(nodeSelection, style) === true) {
                 // This node is the style tag, move all its child nodes and delete it.
                 while (nodeSelection.firstChild) {
