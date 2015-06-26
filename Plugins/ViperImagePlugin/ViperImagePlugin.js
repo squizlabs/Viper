@@ -609,15 +609,14 @@ ViperImagePlugin.prototype = {
                 }
 
                 self.moveImage(imageElement, range);
-
+                ViperSelection.removeAllRanges();
                 range.selectNode(imageElement);
                 ViperSelection.addRange(range);
-                ViperSelection.removeAllRanges();
+
 
                 // Show the image resize handles and the toolbar.
                 self.showImageResizeHandles(imageElement);
-                toolbar.update(null, imageElement);
-                self._updateToolbars(imageElement);
+                self.viper.fireSelectionChanged(range, true);
 
                 self._moveImage = null;
 

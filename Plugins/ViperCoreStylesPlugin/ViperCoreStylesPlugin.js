@@ -1279,7 +1279,7 @@ ViperCoreStylesPlugin.prototype = {
     _canStyleNode: function(node, topBar)
     {
         if (topBar === true) {
-            if (this._selectedImage) {
+            if (this._selectedImage || ViperUtil.isTag(node, 'img') === true) {
                 return false;
             }
 
@@ -1407,7 +1407,7 @@ ViperCoreStylesPlugin.prototype = {
             startNode = range.startContainer;
         }
 
-        var tools     = this.viper.ViperTools;
+        var tools = this.viper.ViperTools;
         if (this._canStyleNode(startNode, true) !== true) {
             for (var btn in buttons) {
                 if (btn === 'justify' || btn === 'removeFormat') {
