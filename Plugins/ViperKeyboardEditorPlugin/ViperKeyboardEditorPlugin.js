@@ -737,6 +737,31 @@ ViperKeyboardEditorPlugin.prototype = {
                 // Pressing enter changes the content to: <p>XAX</p>*XBX<br>XCX.
                 // By adding an extra BR we keep it in the content.
                 ViperUtil.insertAfter(startNode, document.createElement('br'));
+            } else if ((ViperUtil.isBrowser('msie') === true
+                || ViperUtil.isBrowser('firefox') === true)
+                && startNode.nodeType === ViperUtil.TEXT_NODE
+                && range.endOffset === startNode.data.length
+                && range.collapsed === true
+                && startNode.nextSibling === null
+                && ViperUtil.isBlockElement(startNode.parentNode) === false
+            ) {
+                // Handle: <p>test<strong>test*</strong>test</p>.
+                // When enter is pressed make sure the new paragraph does not start with the tag.
+                var parent = startNode.parentNode;
+                var surroundingParents = ViperUtil.getSurroundingParents(parent);
+                if (surroundingParents.length > 0) {
+                    parent = surroundingParents.pop();
+                }
+
+                var parentNextSibling = parent.nextSibling;
+                if (!parentNextSibling || parentNextSibling.nodeType !== ViperUtil.TEXT_NODE) {
+                    parentNextSibling = document.createTextNode('');
+                    ViperUtil.insertAfter(parent, parentNextSibling);
+                }
+
+                range.setStart(parentNextSibling, 0);
+                range.collapse(true);
+                ViperSelection.addRange(range);
             }//end if
 
             setTimeout(function() {
