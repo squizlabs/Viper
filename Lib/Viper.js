@@ -4421,6 +4421,19 @@ Viper.prototype = {
                         range.collapse(true);
                         ViperSelection.addRange(range);
                     }
+                } else if (ViperUtil.isBrowser('msie') === true
+                    && range.collapsed === true
+                    && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                    && range.startOffset === 0
+                    && range.startContainer.data.charCodeAt(0) === 160
+                    && !range.startContainer.previousSibling
+                ) {
+                    // If the character is being inserted at the start of a container and the first character is a
+                    // nonbreaking space then replace it with a normal space.
+                    range.startContainer.data = ' ' + range.startContainer.data.substr(1);
+                    range.setStart(range.startContainer, 0);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
                 }//end if
 
                 return true;
