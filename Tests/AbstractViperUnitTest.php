@@ -2330,13 +2330,12 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     protected function cut($rightClick=false)
     {
         if ($rightClick !== true) {
-            $this->sikuli->keyDown('Key.CMD + c');
+            $this->sikuli->keyDown('Key.CMD + x');
         } else {
             $this->sikuli->rightClick($this->sikuli->getMouseLocation());
 
             switch ($this->sikuli->getBrowserid()) {
                 case 'firefox':
-                case 'firefoxNightly':
                 case 'ie11':
                 case 'ie10':
                 case 'ie9':
@@ -2346,8 +2345,6 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 break;
 
                 case 'chrome':
-                case 'chromium':
-                case 'chromeCanary':
                 case 'safari':
                     // Use the shortcut menu to select the menu option and then move the mouse up to cut.
                     $this->sikuli->keyDown('c');
@@ -2363,6 +2360,51 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         }//end if
 
     }//end cut()
+
+
+    /**
+     * Copy content.
+     *
+     * Note that if right click is being used then make sure to move the mouse to the
+     * target location before calling this method.
+     *
+     * @param boolean $rightClick If TRUE then contents will be copied using the
+     *                            browser's right click menu.
+     *
+     * @return void
+     * @throws Exception If the browser is not supported.
+     */
+    protected function copy($rightClick=false)
+    {
+        if ($rightClick !== true) {
+            $this->sikuli->keyDown('Key.CMD + c');
+        } else {
+            $this->sikuli->rightClick($this->sikuli->getMouseLocation());
+
+            switch ($this->sikuli->getBrowserid()) {
+                case 'firefox':
+                case 'ie11':
+                case 'ie10':
+                case 'ie9':
+                case 'ie8':
+                    // Use the shortcut to select the copy menu option.
+                    $this->sikuli->keyDown('c');
+                break;
+
+                case 'chrome':
+                case 'safari':
+                    // Use the shortcut menu to select the menu option and then move the mouse up to copy.
+                    $this->sikuli->keyDown('c');
+                    sleep(2);
+                    $this->sikuli->keyDown('Key.ENTER');
+                break;
+
+                default:
+                throw new Exception('Right click testing for this browser has not been implemented');
+            }//end switch
+        }//end if
+
+    }//end copy()
 
 
     /**
