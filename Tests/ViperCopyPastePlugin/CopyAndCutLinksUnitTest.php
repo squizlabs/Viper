@@ -2,7 +2,7 @@
 
 require_once 'AbstractViperUnitTest.php';
 
-class Viper_Tests_ViperCopyPastePlugin_CopyPasteLinksUnitTest extends AbstractViperUnitTest
+class Viper_Tests_ViperCopyPastePlugin_CopyAndCutLinksUnitTest extends AbstractViperUnitTest
 {
 
     /**
