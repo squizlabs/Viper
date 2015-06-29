@@ -60,6 +60,47 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutLinksUnitTest extends AbstractV
 
     }//end testCopyAndPasteLinkInContent()
 
+
+    /**
+     * Test cut and paste a link in the content of the page.
+     *
+     * @return void
+     */
+    public function testCutAndPasteLinkInContent()
+    {
+        
+        // Test cut and paste link only
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        sleep(2);
+        $this->selectInlineToolbarLineageItem(1);
+        sleep(2);
+        $this->sikuli->keyDown('Key.CMD + x');
+        sleep(2);
+        $this->moveToKeyword(3);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.SPACE');
+        sleep(1);
+        $this->sikuli->keyDown('Key.CMD + v');
+        $this->assertHTMLMatch('<h1>Copy Link Test</h1><p>This is a paragraph&nbsp;&nbsp;in the content of my page.</p><p>This is another paragraph %2% <a href="http://www.squizlabs.com">%1%</a> in the content of my page. %3%</p>');
+
+        // Test cut and paste paragraph containing the link
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        sleep(2);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->sikuli->keyDown('Key.CMD + x');
+        sleep(2);
+        $this->moveToKeyword(3, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->sikuli->keyDown('Key.CMD + v');
+        $this->assertHTMLMatch('<h1>Copy Link Test</h1><p>This is another paragraph %2% in the content of my page. %3%</p><p>This is a paragraph <a href="http://www.squizlabs.com">%1%</a> in the content of my page.</p>');
+
+
+    }//end testCutAndPasteLinkInContent()
+
+
 }//end class
 
 ?>
