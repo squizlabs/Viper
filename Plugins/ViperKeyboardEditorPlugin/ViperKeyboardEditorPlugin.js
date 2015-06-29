@@ -1164,6 +1164,45 @@ ViperKeyboardEditorPlugin.prototype = {
             }
         }
 
+        if (ViperUtil.isBrowser('msie') === true
+            && range.endContainer.nodeType === ViperUtil.TEXT_NODE
+            && range.endOffset === range.endContainer.data.length
+            && range.startOffset === 0
+            && range.endContainer !== range.startContainer
+            && ViperUtil.getFirstBlockParent(range.startContainer) !== ViperUtil.getFirstBlockParent(range.endContainer)
+            && range._getFirstSelectableChild(ViperUtil.getFirstBlockParent(range.startContainer)) === range.startContainer
+            && range._getLastSelectableChild(ViperUtil.getFirstBlockParent(range.endContainer)) === range.endContainer
+        ) {
+            // Handle: <p><strong>*test</strong>test</p><p>test</p>, <p><strong>test</strong>test</p><p>test<strong>test*</strong></p>
+            // In these cases once the paragraphs are removed and a new character is inserted it gets wrapped with the
+            // inline tag.
+            var startParent = range.startContainer.parentNode;
+            if (ViperUtil.isBlockElement(startParent) === false && !startParent.previousSibling) {
+                var surroundingParents = ViperUtil.getSurroundingParents(startParent);
+                if (surroundingParents.length > 0) {
+                    startParent = surroundingParents.pop();
+                }
+
+                var tmpNode = document.createTextNode(' ');
+                ViperUtil.insertBefore(startParent, tmpNode);
+                range.setStart(tmpNode, 0);
+            }
+
+            var endParent = range.endContainer.parentNode;
+            if (ViperUtil.isBlockElement(endParent) === false && !endParent.nextSibling) {
+                var surroundingParents = ViperUtil.getSurroundingParents(endParent);
+                if (surroundingParents.length > 0) {
+                    endParent = surroundingParents.pop();
+                }
+
+                var tmpNode = document.createTextNode(' ');
+                ViperUtil.insertAfter(endParent, tmpNode);
+                range.setEnd(tmpNode, 1);
+            }
+
+            ViperSelection.addRange(range);
+        }//end if
+
         if (range.collapsed === false) {
             var nodeSelection = range.getNodeSelection();
             if (nodeSelection) {
