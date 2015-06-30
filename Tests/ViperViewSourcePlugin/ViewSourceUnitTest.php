@@ -118,8 +118,6 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViper
      */
     public function testEditingAndDiscardingChanges()
     {
-        $this->markTestSkipped('Atm the top buttons are removed when it switches windows. Need a way to keep the buttons there');
-
         $this->moveToKeyword(2);
         $this->clickTopToolbarButton('sourceView');
         sleep(2);
