@@ -1,0 +1,154 @@
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="ProgId" content="Word.Document">
+<meta name="Generator" content="Microsoft Word 11">
+<meta name="Originator" content="Microsoft Word 11">
+<link rel="File-List" href="file:///C:\Users\IEUser\AppData\Local\Temp\msohtml1\01\clip_filelist.xml">
+<!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:View>Normal</w:View>
+  <w:Zoom>0</w:Zoom>
+  <w:PunctuationKerning></w:PunctuationKerning>
+  <w:ValidateAgainstSchemas></w:ValidateAgainstSchemas>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:BreakWrappedTables></w:BreakWrappedTables>
+   <w:SnapToGridInCell></w:SnapToGridInCell>
+   <w:WrapTextWithPunct></w:WrapTextWithPunct>
+   <w:UseAsianBreakRules></w:UseAsianBreakRules>
+   <w:DontGrowAutofit></w:DontGrowAutofit>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]-->
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+    {font-family:"MS Minngs";
+    panose-1:0 0 0 0 0 0 0 0 0 0;
+    mso-font-alt:w;
+    mso-font-charset:128;
+    mso-generic-font-family:roman;
+    mso-font-format:other;
+    mso-font-pitch:fixed;
+    mso-font-signature:1 134676480 16 0 131072 0;}
+@font-face
+    {font-family:Cambria;
+    panose-1:2 4 5 3 5 4 6 3 2 4;
+    mso-font-charset:0;
+    mso-generic-font-family:roman;
+    mso-font-pitch:variable;
+    mso-font-signature:-536870145 1073743103 0 0 415 0;}
+@font-face
+    {font-family:Times;
+    panose-1:2 2 6 3 5 4 5 2 3 4;
+    mso-font-charset:0;
+    mso-generic-font-family:roman;
+    mso-font-pitch:variable;
+    mso-font-signature:-536855809 -1073711039 9 0 511 0;}
+@font-face
+    {font-family:"\@MS Minngs";
+    panose-1:0 0 0 0 0 0 0 0 0 0;
+    mso-font-charset:128;
+    mso-generic-font-family:roman;
+    mso-font-format:other;
+    mso-font-pitch:fixed;
+    mso-font-signature:1 134676480 16 0 131072 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+    {mso-style-parent:"";
+    margin:0in;
+    margin-bottom:.0001pt;
+    mso-pagination:widow-orphan;
+    font-size:12.0pt;
+    font-family:Cambria;
+    mso-fareast-font-family:"MS Minngs";
+    mso-bidi-font-family:"Times New Roman";}
+p.Quote, li.Quote, div.Quote
+    {mso-style-name:Quote;
+    mso-style-link:"Quote Char";
+    mso-style-next:Normal;
+    margin:0in;
+    margin-bottom:.0001pt;
+    mso-pagination:widow-orphan;
+    font-size:12.0pt;
+    font-family:Cambria;
+    mso-fareast-font-family:"MS Minngs";
+    mso-bidi-font-family:"Times New Roman";
+    color:black;
+    font-style:italic;}
+span.QuoteChar
+    {mso-style-name:"Quote Char";
+    mso-style-locked:yes;
+    mso-style-link:Quote;
+    mso-ansi-font-size:12.0pt;
+    mso-bidi-font-size:12.0pt;
+    font-family:Cambria;
+    mso-ascii-font-family:Cambria;
+    mso-fareast-font-family:"MS Minngs";
+    mso-hansi-font-family:Cambria;
+    color:black;
+    mso-ansi-language:EN-US;
+    mso-fareast-language:EN-US;
+    mso-bidi-language:AR-SA;
+    font-style:italic;}
+@page Section1
+    {size:595.0pt 842.0pt;
+    margin:1.0in 1.25in 1.0in 1.25in;
+    mso-header-margin:35.4pt;
+    mso-footer-margin:35.4pt;
+    mso-paper-source:0;}
+div.Section1
+    {page:Section1;}
+-->
+</style>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+    {mso-style-name:"Table Normal";
+    mso-tstyle-rowband-size:0;
+    mso-tstyle-colband-size:0;
+    mso-style-noshow:yes;
+    mso-style-parent:"";
+    mso-padding-alt:0in 5.4pt 0in 5.4pt;
+    mso-para-margin:0in;
+    mso-para-margin-bottom:.0001pt;
+    mso-pagination:widow-orphan;
+    font-size:10.0pt;
+    font-family:"Times New Roman";
+    mso-ansi-language:#0400;
+    mso-fareast-language:#0400;
+    mso-bidi-language:#0400;}
+</style>
+<![endif]-->
+
+
+
+<!--StartFragment-->
+
+<p class="Quote"><a name="_GoBack"><span lang="EN-AU" style="background:white;
+mso-ansi-language:EN-AU">I've attached the document I have started to create
+which will be used in the demonstration, it has a word blockquote near the
+begining. When pasting into the viper pasting page, looks like we have
+conistent markup to check agains&nbsp;<b>class="MsoQuote"</b>&nbsp;is
+in raw content for all browsers except ie8.</span></a><span style="mso-bookmark:
+_GoBack"><span lang="EN-AU" style="font-size:10.0pt;font-family:Times;mso-bidi-font-family:
+&quot;Times New Roman&quot;;mso-ansi-language:EN-AU"><o:p></o:p></span></span></p>
+
+<span style="mso-bookmark:_GoBack"></span>
+
+<p class="MsoNormal"><o:p>&nbsp;</o:p></p>
+
+<!--EndFragment-->
+
+
+
