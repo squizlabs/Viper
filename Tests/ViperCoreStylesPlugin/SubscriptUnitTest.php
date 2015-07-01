@@ -139,6 +139,22 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
     }//end testUndoAndRedoSubscript()
 
 
+    /**
+     * Test that you cannot have both subscript and superscript on the same item.
+     *
+     * @return void
+     */
+    public function testSubscriptAndSuperscript()
+    {
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('subscript');
+        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'));
+        $this->assertTrue($this->topToolbarButtonExists('superscript', 'disabled'));
+        $this->assertHTMLMatch('<p><sub>%1%</sub> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+
+    }//end testSuperscriptAndSubscript()
+
+
 
 }//end class
 
