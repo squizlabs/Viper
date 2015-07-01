@@ -1151,8 +1151,11 @@ ViperKeyboardEditorPlugin.prototype = {
                     ViperUtil.remove(remove);
                 }
 
-                node.data = node.data.substr(0, (node.data.length - 1));
-                range.setEnd(node, (startOffset - 1));
+                if (node.nodeType === ViperUtil.TEXT_NODE) {
+                    node.data = node.data.substr(0, node.data.length);
+                }
+
+                range.setEnd(node, startOffset);
                 range.collapse(false);
                 ViperSelection.addRange(range);
 
