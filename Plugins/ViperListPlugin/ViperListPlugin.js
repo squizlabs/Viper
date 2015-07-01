@@ -1042,6 +1042,9 @@ ViperListPlugin.prototype = {
                 var p = this._getValidParentElement(elems[i]);
                 if (p && ViperUtil.inArray(p, pElems) === false) {
                     pElems.push(p);
+                } else if (!p && elems[i].nodeType === ViperUtil.TEXT_NODE && ViperUtil.isBlank(elems[i].data) === true) {
+                    // Remove blank text nodes between these elements.
+                    ViperUtil.remove(elems[i]);
                 }
             }
         }

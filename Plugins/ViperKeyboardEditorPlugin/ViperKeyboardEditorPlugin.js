@@ -1390,7 +1390,7 @@ ViperKeyboardEditorPlugin.prototype = {
                     // When a block element is selected and removed in Firefox it leaves the content as <p>NULL CHAR</p>.
                     // Handle the deletion here.
                     if (ViperUtil.isTag(nodeSelection, 'td') === true
-                        || ViperUtil.isTag(nodeSelection, 'th') === false
+                        || ViperUtil.isTag(nodeSelection, 'th') === true
                     ) {
                         // Remove only the contents.
                         ViperUtil.setHtml(nodeSelection, '<br>');
