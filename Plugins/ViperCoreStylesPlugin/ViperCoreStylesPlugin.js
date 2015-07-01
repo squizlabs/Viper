@@ -1183,7 +1183,7 @@ ViperCoreStylesPlugin.prototype = {
             return false;
         }
 
-        var selectedNode = range.getNodeSelection();
+        var selectedNode = range.getNodeSelection(null, true);
         var startNode    = null;
         var endNode      = null;
         var viperElement = this.viper.getViperElement();
