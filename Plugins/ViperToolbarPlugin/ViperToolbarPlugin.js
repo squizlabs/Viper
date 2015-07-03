@@ -433,7 +433,7 @@ ViperToolbarPlugin.prototype = {
                             var enable = true;
                             for (var j = 0; j < c; j++) {
                                 var widget = tools.getItem(subSectionWidgets[j]);
-                                if (widget.required === true && ViperUtil.trim(widget.getValue()) === '') {
+                                if (widget && widget.required === true && ViperUtil.trim(widget.getValue()) === '') {
                                     enable = false;
                                     break;
                                 }
@@ -576,6 +576,8 @@ ViperToolbarPlugin.prototype = {
         if (bubble._closeCallback) {
             bubble._closeCallback.call(this);
         }
+
+        this.viper.fireCallbacks('ViperToolbarPlugin:bubbleClosed', bubbleid);
 
         if (this._activeBubble === bubbleid) {
             this._activeBubble = null;
