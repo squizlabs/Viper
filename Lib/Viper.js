@@ -3002,11 +3002,14 @@ Viper.prototype = {
                 ViperUtil.remove(nodeSelection);
             }
 
-            range.setStart(startNode, 0);
-            range.setEnd(endNode, endNode.data.length);
+            // Check if it has a parent with this style, if not stop here.
+            if (ViperUtil.getParents(nodeSelection, style, this.getViperElement()).length === 0) {
+                range.setStart(startNode, 0);
+                range.setEnd(endNode, endNode.data.length);
 
-            ViperSelection.addRange(range);
-            return;
+                ViperSelection.addRange(range);
+                return;
+            }
         }//end if
 
         if (startNode.nodeType === ViperUtil.TEXT_NODE
