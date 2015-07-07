@@ -638,6 +638,35 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsUnitTest extends Abstrac
 
     }//end _getHtmllWithBlankLiTags
 
+
+    /**
+     * Test for removing multiple lists.
+     *
+     * @return string
+     */
+    public function testRemoveMultipleLists()
+    {
+        // Removing multiple unordered lists from content
+        $this->useTest(6);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('listUl', 'active');
+        $this->assertHTMLMatch('<p>Unordered List:</p><p>%1% first item</p><p>second item</p><p>third item</p><p>Another list:</p><p>first item</p><p>second item</p><p>third item %2%</p>');
+
+        // Removing multiple ordered lists from content
+        $this->useTest(7);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('listOl', 'active');
+        $this->assertHTMLMatch('<p>Ordered List:</p><p>%1% first item</p><p>second item</p><p>third item</p><p>Another list:</p><p>first item</p><p>second item</p><p>third item %2%</p>');
+
+         // Removing multiple lists from content
+        $this->useTest(6);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('listUl', 'active');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item</li><li>third item</li></ul><p>Another list:</p><ol><li>first item</li><li>second item</li><li>third item %2%</li></ol>');
+        
+    }//end testRemoveMultipleLists
+
+
 }//end class
 
 ?>

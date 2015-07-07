@@ -14,6 +14,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
     public function testApplyAndRemoveSubscript()
     {
         // Apply and remove at the start of a paragraph
+        $this->useTest(1);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('subscript');
         $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
@@ -54,6 +55,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
     public function testRemoveSubscriptFromPartOfTheContent()
     {
         // Apply strihethrough to multiple keywords
+        $this->useTest(1);
         $this->selectKeyword(2, 3);
         $this->clickTopToolbarButton('subscript');
         $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
@@ -81,6 +83,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
      */
     public function testAdjacentSubscriptStyling()
     {
+        $this->useTest(1);
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('subscript');
 
@@ -102,6 +105,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
      */
     public function testSpaceSeparatedSubscriptStyling()
     {
+        $this->useTest(1);
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('subscript');
 
@@ -123,6 +127,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
      */
     public function testUndoAndRedoSubscript()
     {
+        $this->useTest(1);
         $this->selectKeyword(2);
 
         $this->clickTopToolbarButton('subscript');
@@ -146,6 +151,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
      */
     public function testSubscriptAndSuperscript()
     {
+        $this->useTest(1);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('subscript');
         $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'));
@@ -154,6 +160,29 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
 
     }//end testSuperscriptAndSubscript()
 
+
+    /**
+     * Test applying and removing subscript for a link in the content of a page.
+     *
+     * @return void
+     */
+    public function testAddAndRemoveSubscriptForLink()
+    {
+        $this->useTest(2);
+
+        $this->moveToKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('subscript');
+        $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com"><sub>%1%</sub></a> more test content.</p>');
+        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'subscript icon should be active');
+
+        $this->moveToKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com">%1%</a> more test content.</p>');
+        $this->assertTrue($this->topToolbarButtonExists('subscript'), 'subscript icon should not be active');
+
+    }//end testAddAndRemoveSubscriptForLink()
 
 
 }//end class

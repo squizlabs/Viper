@@ -14,6 +14,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
     public function testAddAndRemoveSuperscript()
     {
         // apply and remove from the start of a paragraph
+        $this->useTest(1);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('superscript');
         $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
@@ -54,6 +55,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
     public function testRemoveSuperscriptFromPartOfTheContent()
     {
         // Apply superscript to multiple keywords
+        $this->useTest(1);
         $this->selectKeyword(2, 3);
         $this->clickTopToolbarButton('superscript');
         $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
@@ -81,6 +83,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
      */
     public function testAdjacentSuperscriptStyling()
     {
+        $this->useTest(1);
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('superscript');
 
@@ -102,6 +105,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
      */
     public function testSpaceSeparatedSuperscriptStyling()
     {
+        $this->useTest(1);
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('superscript');
 
@@ -123,6 +127,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
      */
     public function testUndoAndRedoSuperscript()
     {
+        $this->useTest(1);
         $this->selectKeyword(2);
 
         $this->clickTopToolbarButton('superscript');
@@ -147,6 +152,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
      */
     public function testSuperscriptAndSubscript()
     {
+        $this->useTest(1);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('superscript');
         $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'));
@@ -154,6 +160,29 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
         $this->assertHTMLMatch('<p><sup>%1%</sup> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testSuperscriptAndSubscript()
+
+    /**
+     * Test applying and removing superscript for a link in the content of a page.
+     *
+     * @return void
+     */
+    public function testAddAndRemoveSuperscriptForLink()
+    {
+        $this->useTest(2);
+
+        $this->moveToKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('superscript');
+        $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com"><sup>%1%</sup></a> more test content.</p>');
+        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'superscript icon should be active');
+
+        $this->moveToKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com">%1%</a> more test content.</p>');
+        $this->assertTrue($this->topToolbarButtonExists('superscript'), 'superscript icon should not be active');
+
+    }//end testAddAndRemoveSuperscriptForLink()
 
 }//end class
 

@@ -422,6 +422,39 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
 
     }//end testDeletingBoldAndItalicContent()
 
+
+    /**
+     * Test that undo and redo buttons for bold formatting.
+     *
+     * @return void
+     */
+    public function testRemoveBoldAndItalicFromLinkInBoldAndItalicParagraph()
+    {
+
+        // Test removing bold and italic for link using inline toolbar
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('bold', 'active');
+        $this->clickInlineToolbarButton('italic', 'active');
+        $this->assertHTMLMatch('<p><strong><em>Test content </em></strong><a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a> <strong><em>more test content.</em></strong></p>');
+
+        // Test removing bold and italic for link using top toolbar
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->assertHTMLMatch('<p><strong><em>Test content </em></strong><a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a> <strong><em>more test content.</em></strong></p>');
+
+        // Test removing bold and italic for link using the keyboard shortcuts
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->assertHTMLMatch('<p><strong><em>Test content </em></strong><a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a> <strong><em>more test content.</em></strong></p>');
+
+    }//end testRemoveBoldAndItalicFromLinkInBoldAndItalicParagraph()
+
+
 }//end class
 
 ?>

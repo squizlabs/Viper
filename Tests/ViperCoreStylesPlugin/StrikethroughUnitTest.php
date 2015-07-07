@@ -14,6 +14,7 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
     public function testApplyAndRemoveStrikethrough()
     {
         // Apply and remove at the start of a paragraph
+        $this->usetest(1);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('strikethrough');
         $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar is not active');
@@ -43,6 +44,8 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
         $this->assertTrue($this->topToolbarButtonExists('strikethrough'), 'Strikethrough icon in the top toolbar is active');
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
+
+
     }//end testStartOfParaStrikethrough()
 
 
@@ -54,6 +57,7 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
     public function testRemoveStrikethroughFromPartOfTheContent()
     {
         // Apply format to multiple keywords
+        $this->usetest(1);
         $this->selectKeyword(2, 3);
         $this->clickTopToolbarButton('strikethrough');
         $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar is not active');
@@ -81,6 +85,7 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
      */
     public function testAdjacentStrikethroughStyling()
     {
+        $this->usetest(1);
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('strikethrough');
 
@@ -102,6 +107,7 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
      */
     public function testSpaceSeparatedStrikethroughStyling()
     {
+        $this->usetest(1);        
         $this->selectKeyword(2);
          $this->clickTopToolbarButton('strikethrough');
 
@@ -123,6 +129,7 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
      */
     public function testUndoAndRedoStrikethrough()
     {
+        $this->usetest(1);        
         $this->selectKeyword(2);
 
         $this->clickTopToolbarButton('strikethrough');
@@ -137,6 +144,30 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
         $this->assertHTMLMatch('<p>%1% <del>%2%</del> %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testUndoAndRedoStrikethrough()
+
+
+     /**
+     * Test applying and removing strikethrough for a link in the content of a page.
+     *
+     * @return void
+     */
+    public function testAddAndRemoveStrikethroughForLink()
+    {
+        $this->useTest(2);
+
+        $this->moveToKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('strikethrough');
+        $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com"><del>%1%</del></a> more test content.</p>');
+        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'strikethrough icon should be active');
+
+        $this->moveToKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com">%1%</a> more test content.</p>');
+        $this->assertTrue($this->topToolbarButtonExists('strikethrough'), 'strikethrough icon should not be active');
+
+    }//end testAddAndRemoveStrikethroughForLink()
 
 }//end class
 

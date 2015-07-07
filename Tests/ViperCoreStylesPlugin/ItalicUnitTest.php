@@ -514,7 +514,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
     }//end testUndoAndRedoForBold()
 
 
-/**
+    /**
      * Test applying and removing italic for a link in the content of a page.
      *
      * @return void
@@ -578,6 +578,47 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->assertTrue($this->topToolbarButtonExists('italic'), 'italic icon should not be active');
 
     }//end testAddAndRemoveItalicForLink()
+
+
+    /**
+     * Test applying and removing bold for a link in italics paragraph.
+     *
+     * @return void
+     */
+    public function testRemoveItalicsForLinkInItalicParagraph()
+    {
+
+       // Using inline toolbar
+        $this->useTest(6);
+        $this->moveToKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        sleep(1);
+        $this->clickInlineToolbarButton('italic', 'active');
+        $this->assertHTMLMatch('<p><em>Test content </em><a href="http://www.squizlabs.com">%1%</a><em> end of test content.</em></p>');
+        $this->assertTrue($this->inLineToolbarButtonExists('italic'), 'Italic icon should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('italic'), 'Italic icon should not be active');
+
+        // Using top toolbar
+        $this->useTest(6);
+        $this->moveToKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        sleep(1);
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->assertHTMLMatch('<p><em>Test content </em><a href="http://www.squizlabs.com">%1%</a><em> end of test content.</em></p>');
+        $this->assertTrue($this->inLineToolbarButtonExists('italic'), 'Italic icon should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('italic'), 'Italic icon should not be active');
+
+        // Using keyboard shortcut
+        $this->useTest(6);
+        $this->moveToKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        sleep(1);
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->assertHTMLMatch('<p><em>Test content </em><a href="http://www.squizlabs.com">%1%</a><em> end of test content.</em></p>');
+        $this->assertTrue($this->inLineToolbarButtonExists('italic'), 'Italic icon should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('italic'), 'Italic icon should not be active');
+
+    }//end testRemoveItalicsForLinkInItalicParagraph()
 
 
     /**
