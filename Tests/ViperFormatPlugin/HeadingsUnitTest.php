@@ -660,6 +660,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         // Make word bold
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + b');
+        sleep(1);
         $this->assertHTMLMatch('<div>sit amet <strong>%1%</strong></div><div>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</div>');
 
         $this->moveToKeyword(1);
@@ -668,6 +669,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
         $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('headings'));
         $this->assertTrue($this->inlineToolbarButtonExists('headings'));
         $this->clickInlineToolbarButton('headings');
