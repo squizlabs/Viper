@@ -296,6 +296,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         // Make word italic
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + i');
+        sleep(1);
         $this->assertHTMLMatch('<p>sit amet <em>%1%</em></p><p>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
 
         $this->sikuli->click($this->findKeyword(1));
@@ -306,6 +307,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->assertFalse($this->inlineToolbarButtonExists('headings'));
 
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('headings'));
         $this->assertTrue($this->inlineToolbarButtonExists('headings'));
 
