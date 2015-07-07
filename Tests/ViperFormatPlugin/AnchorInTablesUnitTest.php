@@ -664,7 +664,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         // Check icon when inserting a table with no header row
         $this->useTest(2);
         $this->insertTable(1, 0, 2, 2);
-        $this->assertHTMLMatchNoHeaders('<p>A paragraph on the page to test tables %1%</p><table border="1" style="width:100%;"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>A paragraph on the page to test tables %1%</p><table border="1" style="width:100%;"><tbody><tr><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table>');
 
         // Check the anchor icon in each cell
         $this->clickCell(0);
@@ -690,7 +690,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         // Check icon when inserting a table with side header row
         $this->useTest(2);
         $this->insertTableWithSpecificId('test', 2, 2, 1, 1);
-        $this->assertHTMLMatch('<p>A paragraph on the page to test tables %1%</p><table border="1" id="test" style="width:100%;"><tbody><tr><th id="testr1c1"></th><td headers="testr1c1"></td></tr><tr><th id="testr2c1"></th><td headers="testr2c1"></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatch('<p>A paragraph on the page to test tables %1%</p><table border="1" id="test" style="width:100%;"><tbody><tr><th id="testr1c1"></th><td headers="testr1c1"></td></tr><tr><th id="testr2c1"></th><td headers="testr2c1"></td></tr></tbody></table>');
 
         // Check the anchor icon in each cell
         $this->clickCell(0);
@@ -716,7 +716,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         // Check icon when inserting a table with top header row
         $this->useTest(2);
         $this->insertTableWithSpecificId('test', 2, 2, 2, 1);
-        $this->assertHTMLMatch('<p>A paragraph on the page to test tables %1%</p><table border="1" id="test" style="width: 100%;"><thead><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th></tr></thead><tbody><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c2">&nbsp;</td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatch('<p>A paragraph on the page to test tables %1%</p><table border="1" id="test" style="width: 100%;"><thead><tr><th id="testr1c1">&nbsp;</th><th id="testr1c2">&nbsp;</th></tr></thead><tbody><tr><td headers="testr1c1">&nbsp;</td><td headers="testr1c2">&nbsp;</td></tr></tbody></table>');
 
         // Check the anchor icon in each cell
         $this->clickCell(0);
@@ -742,7 +742,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         // Check icon when inserting a table with side and top header row
         $this->useTest(2);
         $this->insertTableWithSpecificId('test', 2, 2, 3, 1);
-        $this->assertHTMLMatch('<p>A paragraph on the page to test tables %1%</p><table border="1" id="test" style="width:100%;"><thead><tr><th id="testr1c1"></th><th id="testr1c2"></th></tr></thead><tbody><tr><th id="testr2c1"></th><td headers="testr1c2 testr2c1"></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatch('<p>A paragraph on the page to test tables %1%</p><table border="1" id="test" style="width:100%;"><thead><tr><th id="testr1c1"></th><th id="testr1c2"></th></tr></thead><tbody><tr><th id="testr2c1"></th><td headers="testr1c2 testr2c1"></td></tr></tbody></table>');
 
         // Check the anchor icon in each cell
         $this->clickCell(0);
