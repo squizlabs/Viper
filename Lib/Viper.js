@@ -941,7 +941,7 @@ Viper.prototype = {
                 if (!blockTag) {
                     ViperUtil.setHtml(elem, '');
                 } else {
-                    ViperUtil.setHtml(elem, '<' + blockTag + '>&nbsp;</' + blockTag + '>');
+                    ViperUtil.setHtml(elem, ViperUtil.getHtml(elem) +  '<' + blockTag + '>&nbsp;</' + blockTag + '>');
                 }
 
                 try {
@@ -1130,10 +1130,10 @@ Viper.prototype = {
      *
      * @return {ViperDOMRange} The Vipe DOMRange object.
      */
-    getViperRange: function()
+    getViperRange: function(element)
     {
         if (ViperUtil.isBrowser('msie') === false) {
-            this.highlightToSelection();
+            this.highlightToSelection(element);
         }
 
         if (this._viperRange) {
@@ -1565,10 +1565,9 @@ Viper.prototype = {
 
             if (ViperUtil.trim(ViperUtil.getHtml(this.element)) === '') {
                 this.initEditableElement();
-
-                // Update the range var.
-                range = this.getCurrentRange();
             }
+
+            range = this.getCurrentRange();
 
             if (range.startContainer === range.endContainer && this.element === range.startContainer) {
                 // The whole editable element is selected. Need to remove everything
@@ -3877,8 +3876,11 @@ Viper.prototype = {
                 highlights[0].removeAttribute('class');
             }
 
-            range.selectNode(highlights[0]);
-            ViperSelection.addRange(range);
+            if (element === this.element) {
+                range.selectNode(highlights[0]);
+                ViperSelection.addRange(range);
+            }
+
             return true;
         }
 
@@ -3935,18 +3937,21 @@ Viper.prototype = {
             }//end if
         }//end for
 
-        ViperSelection.addRange(range);
-
-        this._viperRange = range.cloneRange();
+        if (element === this.element) {
+            ViperSelection.addRange(range);
+            this._viperRange = range.cloneRange();
+        }
 
         return true;
 
     },
 
-    removeHighlights: function()
+    removeHighlights: function(element)
     {
+        element = element || this.element;
+
         // There should be one...
-        var highlights = ViperUtil.getClass('__viper_selHighlight', this.element);
+        var highlights = ViperUtil.getClass('__viper_selHighlight', element);
         if (highlights.length === 0) {
             return;
         }
@@ -5025,7 +5030,7 @@ Viper.prototype = {
                     self._fireCallbacks(callbacks, data, doneCallback, retVal);
                 });
             } catch (e) {
-                console.error(e, callback);
+                console.error(e, callback, e.stack);
             }
 
             return this._fireCallbacks(callbacks, data, doneCallback, retVal);
@@ -5089,6 +5094,8 @@ Viper.prototype = {
 
         // Clone the element so we dont modify the actual contents.
         var clone = ViperUtil.cloneNode(elem);
+
+        this.removeHighlights(clone);
         this.removeEmptyNodes(clone);
 
         // Remove special Viper elements.
@@ -5325,7 +5332,7 @@ Viper.prototype = {
 
         this._cleanDOM(elem, tagName, true);
 
-        var range    = this.getViperRange();
+        var range    = this.getViperRange(elem);
         var lastElem = range._getLastSelectableChild(elem);
         if (lastElem && lastElem.nodeType === ViperUtil.TEXT_NODE) {
             lastElem.data = ViperUtil.rtrim(lastElem.data.replace(/(&nbsp;)*$/, ''));
