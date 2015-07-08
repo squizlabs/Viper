@@ -569,9 +569,11 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
         $this->useTest(3);
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
+        sleep(1);
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item</li><li>second item</li><li>first sub item %1%<ul><li>second sub item %2%</li><li>third sub item %3%</li></ul></li><li>third item</li></ul>');
         $this->sikuli->keyDown('Key.TAB');
+        sleep(1);
         $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item</li><li>second item<br /><ul><li>first sub item %1%</li><li>second sub item %2%</li><li>third sub item %3%</li></ul></li><li>third item</li></ul>');
 
@@ -595,9 +597,11 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
         $this->useTest(4);
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
+        sleep(1);
         $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item</li><li>second item</li><li>first sub item %1%<ol><li>second sub item %2%</li><li>third sub item %3%</li></ol></li><li>third item</li></ol>');
         $this->sikuli->keyDown('Key.TAB');
+        sleep(1);
         $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item</li><li>second item<br /><ol><li>first sub item %1%</li><li>second sub item %2%</li><li>third sub item %3%</li></ol></li><li>third item</li></ol>');
 
