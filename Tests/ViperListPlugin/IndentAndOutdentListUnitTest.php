@@ -159,9 +159,12 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
         //Test unordered list using keyboard shortcuts
         $this->useTest(1);
         $this->selectKeyword(1);
+        sleep(1);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
+        sleep(1);
         $this->assertHTMLMatch('<p>Unordered List:</p><p>%1% first item</p><ul><li>second item %2%</li><li>third %3% item</li></ul>');
         $this->sikuli->keyDown('Key.TAB');
+        sleep(1);
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
 
         //Test unordered list using inline toolbar icons
@@ -179,9 +182,12 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
         //Test ordered list
         $this->useTest(2);
         $this->selectKeyword(1);
+        sleep(1);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
+        sleep(1);
         $this->assertHTMLMatch('<p>Ordered List:</p><p>%1% first item</p><ol><li>second item %2%</li><li>third %3% item</li></ol>');
         $this->sikuli->keyDown('Key.TAB');
+        sleep(1);
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ol>');
 
         //Test ordered list using inline toolbar icons
