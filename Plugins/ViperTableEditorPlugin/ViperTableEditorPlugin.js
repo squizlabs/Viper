@@ -70,7 +70,7 @@ ViperTableEditorPlugin.prototype = {
             }
         });
 
-        this.viper.registerCallback('setHtml', 'ViperTableEditorPlugin', function(data) {
+        this.viper.registerCallback('Viper:setHtml', 'ViperTableEditorPlugin', function(data) {
             var vap = self.viper.ViperPluginManager.getPlugin('ViperAccessibilityPlugin');
             if (vap) {
                 vap.loadHTMLCS(function() {

@@ -1049,7 +1049,7 @@ Viper.prototype = {
     _useDefaultPlugins: function()
     {
         // Default plugins (all Viper plugins).
-        this.ViperPluginManager.setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperCursorAssistPlugin', 'ViperTrackChangesPlugin']);
+        this.ViperPluginManager.setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperCursorAssistPlugin', 'ViperTrackChangesPlugin', 'ViperReplacementPlugin']);
 
         // Default button ordering.
         var buttons = [['bold', 'italic', 'subscript', 'superscript', 'strikethrough', 'class'], 'removeFormat', ['justify', 'formats', 'headings'], ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], 'insertTable', 'image', 'hr', ['insertLink', 'removeLink', 'anchor'], 'insertCharacter', 'searchReplace', 'langTools', 'accessibility', 'sourceEditor'];
@@ -5440,7 +5440,7 @@ Viper.prototype = {
         this.removeEmptyNodes(clone);
 
         var self = this;
-        this.fireCallbacks('setHtml', {element: clone}, function() {
+        this.fireCallbacks('Viper:setHtml', {element: clone}, function() {
             var html = ViperUtil.getHtml(clone);
             if (ViperUtil.isBrowser('msie', 8) === true) {
                 // IE8 has problems with param tags, it removes them from the content
