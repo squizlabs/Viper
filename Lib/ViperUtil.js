@@ -2502,18 +2502,25 @@ var ViperUtil = {
     {
         var nodes = [];
 
-        if (parent && parent.childNodes) {
-            var ln = parent.childNodes.length;
-            for (var i = 0; i < ln; i++) {
-                var child = parent.childNodes[i];
-                if (child.nodeType === ViperUtil.TEXT_NODE) {
-                    if (removeEmpty === true && /^\s*$/.test(child.data) === true) {
-                        ViperUtil.remove(child);
-                    } else {
-                        nodes.push(child);
+        if (ViperUtil.isBrowser('msie') === false) {
+            var walk  = document.createTreeWalker(parent, NodeFilter.SHOW_TEXT)
+            while (node = walk.nextNode()) {
+                nodes.push(node);
+            }
+        } else {
+            if (parent && parent.childNodes) {
+                var ln = parent.childNodes.length;
+                for (var i = 0; i < ln; i++) {
+                    var child = parent.childNodes[i];
+                    if (child.nodeType === ViperUtil.TEXT_NODE) {
+                        if (removeEmpty === true && /^\s*$/.test(child.data) === true) {
+                            ViperUtil.remove(child);
+                        } else {
+                            nodes.push(child);
+                        }
+                    } else if (child.childNodes && child.childNodes.length > 0) {
+                        nodes = nodes.concat(ViperUtil.getTextNodes(child));
                     }
-                } else if (child.childNodes && child.childNodes.length > 0) {
-                    nodes = nodes.concat(ViperUtil.getTextNodes(child));
                 }
             }
         }
