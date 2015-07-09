@@ -17,6 +17,8 @@ function ViperReplacementPlugin(viper)
     this._searchPattern       = null;
     this._replacementsCallback = null;
 
+    this._cache = {};
+
 }
 
 ViperReplacementPlugin.prototype = {
@@ -25,15 +27,15 @@ ViperReplacementPlugin.prototype = {
         var self = this;
 
         this.viper.registerCallback('Viper:editableElementChanged', 'ViperReplacementPlugin', function() {
-            self.cloneAttributes();
+            self.showReplacements();
         });
 
         this.viper.registerCallback('Viper:getHtml', 'ViperReplacementPlugin', function(data) {
-            self.cloneToRealAttributes(data.element);
+            self.showKeywords(data.element);
         });
 
         this.viper.registerCallback('Viper:setHtml', 'ViperReplacementPlugin', function(data, callback) {
-            self.cloneAttributes(data.element, callback);
+            self.showReplacements(data.element, callback);
         });
 
     },
@@ -57,7 +59,53 @@ ViperReplacementPlugin.prototype = {
         return this._replacementsCallback;
     },
 
-    cloneToRealAttributes: function (parentElem) {
+    /**
+     * Replaceses all the keywords in the content with their replacements.
+     */
+    showReplacements: function (element, callback) {
+        // Get all the keywords in the element.
+        var keywords = this.scanKeywords(element);
+        if (!keywords) {
+            return;
+        }
+
+        // Get the keyword replacements.
+        var self = this;
+        this.getKeywordReplacements(
+            keywords,
+            function(replacements) {
+                // Convert the keywords inside the text nodes.
+                self._convertContentKeywords(replacements);
+
+                // Convert the keywords inside the attributes.
+                self._convertAttributeKeywords(replacements);
+            }
+        );
+
+    },
+
+    /**
+     * Shows the keywords instead of their replacements.
+     */
+    showKeywords: function (elem) {
+        this._convertContentReplacementsToKeywords(elem)
+        this._convertAttributeReplacementsToKeywords(elem);
+
+    },
+
+    _convertContentReplacementsToKeywords: function (parentElem) {
+        var keywordElements = ViperUtil.find(parentElem, '[data-viper-keyword]');
+        var ln              = keywordElements.length;
+        for (var i = 0; i < ln; i++) {
+            var keyword  = ViperUtil.attr(keywordElements[i], 'data-viper-keyword');
+            var textNode = document.createTextNode(keyword);
+            ViperUtil.insertAfter(keywordElements[i], textNode);
+            ViperUtil.remove(keywordElements[i]);
+        }
+
+    },
+
+    _convertAttributeReplacementsToKeywords: function (parentElem) {
         parentElem = parentElem || this.viper.getViperElement();
 
         // Find all elements.
@@ -66,37 +114,72 @@ ViperReplacementPlugin.prototype = {
 
         for (var i = 0; i < elems.length; i++) {
             for (var j = (elems[i].attributes.length - 1); j >= 0; j--) {
-                var attr    = elems[i].attributes[j];
-                if (attr.nodeName.indexOf('data-viper-') !== 0) {
-                    // Skip non cloned attributes.
-                    continue;
+                var attr = elems[i].attributes[j];
+                if (attr.nodeName === 'data-viper-attribite-keywords') {
+                    // Remove the cloned attribute.
+                    ViperUtil.removeAttr(elems[i], attr.nodeName);
+                } else if (attr.nodeName.indexOf('data-viper-') === 0) {
+                    // Replace real attribute value with the cloned value.
+                    ViperUtil.attr(elems[i], attr.nodeName.replace('data-viper-', ''), attr.value);
+
+                    // Remove the cloned attribute.
+                    ViperUtil.removeAttr(elems[i], attr.nodeName);
                 }
-
-                // Replace real attribute value with the cloned value.
-                ViperUtil.attr(elems[i], attr.nodeName.replace('data-viper-', ''), attr.value);
-
-                // Remove the cloned attribute.
-                ViperUtil.removeAttr(elems[i], attr.nodeName);
             }
         }
-
     },
 
-    cloneAttributes: function (parentElem, doneCallback) {
-        parentElem = parentElem || this.viper.getViperElement();
-
-        var regex    = this.getReplacementRegex();
-        var callback = this.getReplacementsCallback();
-        if (!regex || !callback) {
+    getKeywordReplacements: function (keywords, callback) {
+        // The function that is going to retrieve all the replacements.
+        var repCallback = this.getReplacementsCallback();
+        if (!repCallback) {
+            callback.call(this, keywords);
             return;
         }
 
-        // Cache is stores the element and attribute that uses a specific keyword.
-        var cache = {};
+        var self = this;
+        repCallback(
+            keywords,
+            function(replacements) {
+                callback.call(self, replacements);
+            }
+        );
 
-        // All the keyword matches to be sent to the getReplacements callback.
-        var allMatches = [];
+    },
 
+    /**
+     * Scands the text nodes and element attributes for keywords.
+     *
+     * @param {DOMNode} parentElem The element to scan.
+     *
+     * @return {array}
+     */
+    scanKeywords: function (parentElem) {
+        if (!this.getReplacementRegex()) {
+            return;
+        }
+
+        var keywords = {};
+        var cache    = {};
+
+        this._scanAttributeKeywords(parentElem, keywords);
+        this._scanContentKeywords(parentElem, keywords);
+
+        return keywords;
+
+    },
+
+    _scanAttributeKeywords: function (parentElem, keywords) {
+        parentElem = parentElem || this.viper.getViperElement();
+
+        var regex      = this.getReplacementRegex();
+        if (!regex) {
+            return keywords;
+        }
+
+        this._cache.attributes = {};
+
+        // Find keywords in element attributes.
         // Find all elements.
         var elems = ViperUtil.getTag('*', parentElem);
         var ln    = elems.length;
@@ -115,12 +198,15 @@ ViperReplacementPlugin.prototype = {
                 if (matches !== null) {
                     var match = null;
                     while (match = matches.pop()) {
-                        if (!cache[match]) {
-                            cache[match] = [];
-                            allMatches.push(match);
+                        if (!this._cache.attributes[match]) {
+                            this._cache.attributes[match] = [];
                         }
 
-                        cache[match].push(
+                        if (ViperUtil.isset(keywords[match]) === false) {
+                            keywords[match] = '';
+                        }
+
+                        this._cache.attributes[match].push(
                             {
                                 elem: elems[i],
                                 attrName: attr.nodeName,
@@ -132,38 +218,131 @@ ViperReplacementPlugin.prototype = {
             }//end for
         }//end for
 
-        var self = this;
-        callback(
-            allMatches,
-            function(replacements) {
-                self._makeReplacements(replacements, cache);
-
-                if (doneCallback) {
-                    doneCallback.call(this);
-                }
-            }
-        );
+        return keywords;
 
     },
 
-    _makeReplacements: function (replacements, cache) {
-        for (var match in replacements) {
-            if (cache[match]) {
-                var ln = cache[match].length;
-                for (var i = 0; i < ln; i++) {
-                    var elem = cache[match][i].elem;
-                    var name = cache[match][i].attrName;
-                    var val  = cache[match][i].attrValue;
+    _scanContentKeywords: function (parentElem, keywords) {
+        parentElem = parentElem || this.viper.getViperElement();
 
-                    // Clone the real attribute.
-                    ViperUtil.attr(elem, 'data-viper-' + name, val);
+        var regex = this.getReplacementRegex();
+        if (!regex) {
+            return keywords;
+        }
 
-                    var realValue = ViperUtil.attr(elem, name);
-                    realValue     = realValue.replace(match, replacements[match]);
-                    ViperUtil.attr(elem, name, realValue);
+        regex = new RegExp(regex, 'gi');
+
+        this._cache.textNodes = [];
+
+        var textNodes = ViperUtil.getTextNodes(parentElem);
+        var ln        = textNodes.length;
+        var prevNode  = null;
+        var nodeData  = null;
+        for (var i = 0; i < ln; i++) {
+            var matches = textNodes[i].data.match(regex);
+            if (matches !== null) {
+                var match = null;
+                while (match = matches.shift()) {
+                    if (prevNode !== textNodes[i]) {
+                        // New node. Each node might have more than one keyword.
+                        nodeData = {
+                            elem: textNodes[i],
+                            keywords: []
+                        };
+
+                        this._cache.textNodes.push(nodeData);
+                    }
+
+                    if (ViperUtil.isset(keywords[match]) === false) {
+                        keywords[match] = '';
+                    }
+
+                    nodeData.keywords.push(match);
+                    prevNode = textNodes[i];
                 }
             }
         }
+
+        return keywords;
+
+    },
+
+    /**
+     * Converts keywords inside conent (not attributes).
+     */
+    _convertContentKeywords: function (replacements) {
+        var ln = this._cache.textNodes.length;
+        for (var i = 0; i < ln; i++) {
+            // For each element replcace its keywords from end to beginning.
+            var kc = this._cache.textNodes[i].keywords.length;
+            for (var j = (kc - 1); j >= 0; j--) {
+                var textNode = this._cache.textNodes[i].elem;
+                var keyword  = this._cache.textNodes[i].keywords[j];
+
+                // Need to split the text node at the start of keyword and create a new text node to put the
+                // rest of the content. For this reason we have to start replacing from the end of the string.
+                var startIndex = textNode.data.lastIndexOf(keyword);
+                if (startIndex < 0) {
+                    // Could not find the keyword.
+                    continue;
+                }
+
+                var startText = textNode.data.substr(0, startIndex);
+                var endText   = textNode.data.substr(startIndex + keyword.length);
+
+                var newTextNode = document.createTextNode(endText);
+                textNode.data   = startText;
+                ViperUtil.insertAfter(textNode, newTextNode);
+
+                // Now create the new un editable element.
+                var keywordHolder = this.viper.createUneditableElement(
+                    {
+                        tagName: 'keyword',
+                        attributes: {
+                            'data-viper-keyword': keyword,
+                            title: keyword
+                        },
+                        content: replacements[keyword]
+                    }
+                );
+
+                // If the keyword holder has block elements then set display style to block.
+                if (this.viper.hasBlockChildren(keywordHolder) === true) {
+                    ViperUtil.setStyle(keywordHolder, 'display', 'block');
+                }
+
+                // Add it after the original textNode.
+                ViperUtil.insertAfter(textNode, keywordHolder);
+            }
+        }
+
+    },
+
+    _convertAttributeKeywords: function (replacements) {
+        for (var keyword in replacements) {
+            if (this._cache.attributes[keyword]) {
+                var ln = this._cache.attributes[keyword].length;
+                for (var i = 0; i < ln; i++) {
+                    var info = this._cache.attributes[keyword][i];
+
+                    // Copy the real attribute into a new data attribute so that it can be recovered.
+                    var cloneName = 'data-viper-' + info.attrName;
+                    if (ViperUtil.hasAttribute(info.elem, cloneName) === false) {
+                        ViperUtil.attr(info.elem, cloneName, info.attrValue);
+                    }
+
+                    // Replace the keyword with its value in the real attribute.
+                    var realValue = ViperUtil.attr(info.elem, info.attrName);
+                    realValue     = realValue.replace(keyword, replacements[keyword]);
+                    ViperUtil.attr(info.elem, info.attrName, realValue);
+
+                    this.viper.makeElementUneditable(info.elem);
+
+                    ViperUtil.attr(info.elem, 'data-viper-attribite-keywords', 'true');
+                }
+            }
+        }
+
     }
 
 };

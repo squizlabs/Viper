@@ -2445,6 +2445,39 @@ Viper.prototype = {
     },
 
     /**
+     * Creates an element that cannot be edited.
+     */
+    createUneditableElement: function (options) {
+        if (!options) {
+            options = {};
+        }
+
+        var tagName = options.tagName || 'span';
+        var content = options.content || '';
+
+        var elem = document.createElement(tagName);
+
+        // Disable editing.
+        ViperUtil.attr(elem, 'contenteditable', false);
+
+        ViperUtil.setHtml(elem, content);
+
+        if (options.attributes) {
+            for (var attrName in options.attributes) {
+                ViperUtil.attr(elem, attrName, options.attributes[attrName]);
+            }
+        }
+
+        return elem;
+
+    },
+
+    makeElementUneditable: function (element) {
+        ViperUtil.attr(element, 'contenteditable', false);
+
+    },
+
+    /**
      * This is not as simple as wrapping a selection with the specified node.
      * For example, if the specified node is a STRONG tag, which is an inline
      * ELEMENT_NODE then it cannot be a parent to block element (i.e. P, DIV).
