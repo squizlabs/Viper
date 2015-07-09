@@ -38,6 +38,61 @@ ViperReplacementPlugin.prototype = {
             self.showReplacements(data.element, callback);
         });
 
+        if (ViperUtil.isBrowser('msie') === true) {
+            // IE, "surprisingly" ignores "contenteditable=false" so when a keyword is selected adjust the selection...
+            this.viper.registerCallback('Viper:selectionChanged', 'ViperReplacementPlugin', function(range) {
+                var start = range.getStartNode();
+                var end   = range.getEndNode();
+
+                var startKeyword = self._getKeywordElement(start);
+                var endKeyword   = self._getKeywordElement(end);
+
+                if (startKeyword !== false && startKeyword === endKeyword) {
+                    // Just remove the range.
+                    ViperSelection.removeAllRanges();console.info(1)
+                } else if (startKeyword) {console.info(1)
+                    range = self._fixRange(range, startKeyword, true);
+                    ViperSelection.addRange(range);
+                } else if (endKeyword) {console.info(1)
+                    range = self._fixRange(range, endKeyword, false);
+                    ViperSelection.addRange(range);
+                }
+            });
+        }
+
+    },
+
+    _fixRange: function (range, keywordElem, start) {
+        if (start === true) {
+            // Start of range is in keyword.. Move it after keyword.
+            var cont = range.getNextContainer(keywordElem);
+            range.setStart(cont, 0);
+        } else {
+            var cont = range.getPreviousContainer(keywordElem);
+            range.setEnd(cont, cont.data.length);
+        }
+
+        return range;
+
+    },
+
+    _getKeywordElement: function (elem) {
+        if (ViperUtil.isTag(elem, 'keyword') === true) {
+            return true;
+        }
+
+        var viperElement = this.viper.getViperElement();
+        while (elem.parentNode && elem.parentNode !== viperElement) {
+            elem = elem.parentNode;
+            if (ViperUtil.isTag(elem, 'keyword') === true
+                || ViperUtil.attr(elem, 'data-viper-attribite-keywords') === 'true'
+            ) {
+                return elem;
+            }
+        }
+
+        return false;
+
     },
 
     setReplacementsCallback: function (callback) {
