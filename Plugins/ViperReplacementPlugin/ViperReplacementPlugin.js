@@ -49,11 +49,11 @@ ViperReplacementPlugin.prototype = {
 
                 if (startKeyword !== false && startKeyword === endKeyword) {
                     // Just remove the range.
-                    ViperSelection.removeAllRanges();console.info(1)
-                } else if (startKeyword) {console.info(1)
+                    ViperSelection.removeAllRanges();
+                } else if (startKeyword) {
                     range = self._fixRange(range, startKeyword, true);
                     ViperSelection.addRange(range);
-                } else if (endKeyword) {console.info(1)
+                } else if (endKeyword) {
                     range = self._fixRange(range, endKeyword, false);
                     ViperSelection.addRange(range);
                 }
