@@ -85,7 +85,7 @@ ViperReplacementPlugin.prototype = {
                         keywords,
                         function(replacements) {
                             for (var keyword in replacements) {
-                                value = self._replaceAttributeKeyword(element, attribute, keyword, replacements[keyword], true);
+                                self._replaceAttributeKeyword(element, attribute, keyword, replacements[keyword], value, true);
                             }
                         }
                     );
@@ -425,18 +425,18 @@ ViperReplacementPlugin.prototype = {
                 for (var i = 0; i < ln; i++) {
                     var info = this._cache.attributes[keyword][i];
 
-                    this._replaceAttributeKeyword(info.elem, info.attrName, keyword, replacements[keyword]);
+                    this._replaceAttributeKeyword(info.elem, info.attrName, keyword, replacements[keyword], info.attrValue);
                 }
             }
         }
 
     },
 
-    _replaceAttributeKeyword: function(element, attribute, keyword, replacement, forceUpdate) {
+    _replaceAttributeKeyword: function(element, attribute, keyword, replacement, value, forceUpdate) {
         // Copy the real attribute into a new data attribute so that it can be recovered.
         var cloneName = 'data-viper-' + attribute;
         if (forceUpdate === true || ViperUtil.hasAttribute(element, cloneName) === false) {
-            ViperUtil.attr(element, cloneName, element.getAttribute(attribute));
+            ViperUtil.attr(element, cloneName, value);
         }
 
         // Replace the keyword with its value in the real attribute.
