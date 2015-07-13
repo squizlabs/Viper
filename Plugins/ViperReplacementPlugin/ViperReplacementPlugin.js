@@ -36,6 +36,7 @@ ViperReplacementPlugin.prototype = {
 
         this.viper.registerCallback('Viper:setHtml', 'ViperReplacementPlugin', function(data, callback) {
             self.showReplacements(data.element, callback);
+            return function() {};
         });
 
         if (ViperUtil.isBrowser('msie') === true) {
@@ -59,6 +60,46 @@ ViperReplacementPlugin.prototype = {
                 }
             });
         }
+
+        this.viper.addAttributeGetModifier(
+            function (element, attribute, value) {
+                // Check if the element has a keyword attribute.
+                value = element.getAttribute('data-viper-' + attribute) || value;
+                return value;
+            }
+        );
+
+        this.viper.addAttributeSetModifier(
+            function (element, attribute, value) {
+                // If the value has keyword it needs to be handled.
+                var regex = new RegExp(self.getReplacementRegex(), 'gi');
+                var matches = value.match(regex);
+                if (matches !== null) {
+                    var keywords = {};
+                    var match    = null;
+                    while (match = matches.pop()) {
+                        keywords[match] = '';
+                    }
+
+                    self.getKeywordReplacements(
+                        keywords,
+                        function(replacements) {
+                            for (var keyword in replacements) {
+                                value = self._replaceAttributeKeyword(element, attribute, keyword, replacements[keyword], true);
+                            }
+                        }
+                    );
+                } else {
+                    // No keywords.. If there is a attribute backup, remove it.
+                    var cloneName = 'data-viper-' + attribute;
+                    if (ViperUtil.hasAttribute(element, cloneName) === true) {
+                        ViperUtil.removeAttr(element, cloneName);
+                    }
+                }
+
+                return value;
+            }
+        );
 
     },
 
@@ -134,6 +175,10 @@ ViperReplacementPlugin.prototype = {
 
                 // Convert the keywords inside the attributes.
                 self._convertAttributeKeywords(replacements);
+
+                if (callback) {
+                    callback.call(self);
+                }
             }
         );
 
@@ -380,23 +425,30 @@ ViperReplacementPlugin.prototype = {
                 for (var i = 0; i < ln; i++) {
                     var info = this._cache.attributes[keyword][i];
 
-                    // Copy the real attribute into a new data attribute so that it can be recovered.
-                    var cloneName = 'data-viper-' + info.attrName;
-                    if (ViperUtil.hasAttribute(info.elem, cloneName) === false) {
-                        ViperUtil.attr(info.elem, cloneName, info.attrValue);
-                    }
-
-                    // Replace the keyword with its value in the real attribute.
-                    var realValue = ViperUtil.attr(info.elem, info.attrName);
-                    realValue     = realValue.replace(keyword, replacements[keyword]);
-                    ViperUtil.attr(info.elem, info.attrName, realValue);
-
-                    this.viper.makeElementUneditable(info.elem);
-
-                    ViperUtil.attr(info.elem, 'data-viper-attribite-keywords', 'true');
+                    this._replaceAttributeKeyword(info.elem, info.attrName, keyword, replacements[keyword]);
                 }
             }
         }
+
+    },
+
+    _replaceAttributeKeyword: function(element, attribute, keyword, replacement, forceUpdate) {
+        // Copy the real attribute into a new data attribute so that it can be recovered.
+        var cloneName = 'data-viper-' + attribute;
+        if (forceUpdate === true || ViperUtil.hasAttribute(element, cloneName) === false) {
+            ViperUtil.attr(element, cloneName, element.getAttribute(attribute));
+        }
+
+        // Replace the keyword with its value in the real attribute.
+        var realValue = ViperUtil.attr(element, attribute);
+        realValue     = realValue.replace(keyword, replacement);
+        ViperUtil.attr(element, attribute, realValue);
+
+        //this.viper.makeElementUneditable(element);
+
+        ViperUtil.attr(element, 'data-viper-attribite-keywords', 'true');
+
+        return realValue;
 
     }
 

@@ -389,7 +389,7 @@ ViperFormatPlugin.prototype = {
 
         node = this.getNodeWithAttributeFromRange(attribute, node);
         if (node) {
-            var value = node.getAttribute(attribute);
+            var value = this.viper.getAttribute(node, attribute);
             if (attribute === 'class') {
                 value = this._removeViperHighlightClass(value);
             }
@@ -1331,8 +1331,6 @@ ViperFormatPlugin.prototype = {
 
             classAttribute = this._getClassInitialValue(classAttribute, element);
             this.viper.ViperTools.getItem(prefix + 'class:input').setValue(classAttribute);
-
-            //this._updateDefinedStylesList()
 
             data.toolbar.showButton(prefix + 'classBtn-' + data.type);
         }

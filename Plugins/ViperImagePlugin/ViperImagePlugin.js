@@ -238,14 +238,15 @@ ViperImagePlugin.prototype = {
 
         if (!img) {
             img = document.createElement('img');
-            img.setAttribute('src', url);
+
+            this.viper.setAttribute(img, 'src', url);
 
             if (alt !== null) {
-                img.setAttribute('alt', alt);
+                this.viper.setAttribute(img, 'alt', alt);
             }
 
             if (title !== null && ViperUtil.trim(title).length !== 0) {
-                img.setAttribute('title', title);
+                this.viper.setAttribute(img, 'title', title);
             }
         }
 
@@ -332,7 +333,7 @@ ViperImagePlugin.prototype = {
             return;
         }
 
-        image.setAttribute('alt', alt);
+        this.viper.setAttribute(image, 'alt', alt);
 
     },
 
@@ -342,7 +343,7 @@ ViperImagePlugin.prototype = {
             return;
         }
 
-        image.setAttribute('src', url);
+        this.viper.setAttribute(image, 'src', url);
 
     },
 
@@ -353,7 +354,7 @@ ViperImagePlugin.prototype = {
         } else if (title === null) {
             image.removeAttribute('title');
         } else {
-            image.setAttribute('title', title);
+            this.viper.setAttribute(image, 'title', title);
         }
 
     },
@@ -509,9 +510,10 @@ ViperImagePlugin.prototype = {
         if (image && ViperUtil.isTag(image, 'img') === true) {
             tools.setButtonActive('image');
 
-            this.setUrlFieldValue(image.getAttribute('src'));
-            tools.getItem(toolbarPrefix + ':altInput').setValue(image.getAttribute('alt') || '');
-            tools.getItem(toolbarPrefix + ':titleInput').setValue(image.getAttribute('title') || '');
+            var src = this.viper.getAttribute(image, 'src');
+            this.setUrlFieldValue(src);
+            tools.getItem(toolbarPrefix + ':altInput').setValue(this.viper.getAttribute(image, 'alt') || '');
+            tools.getItem(toolbarPrefix + ':titleInput').setValue(this.viper.getAttribute(image, 'title') || '');
 
             if (!image.getAttribute('alt')) {
                 tools.getItem(toolbarPrefix + ':isDecorative').setValue(true);
@@ -521,7 +523,7 @@ ViperImagePlugin.prototype = {
 
             // Update preview pane.
             ViperUtil.empty(this._previewBox);
-            this.updateImagePreview(image.getAttribute('src'));
+            this.updateImagePreview(src);
         } else {
             tools.enableButton('image');
             tools.setButtonInactive('image');

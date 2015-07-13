@@ -32,6 +32,8 @@ function Viper(id, options, callback, editables)
     this._subElementActive   = false;
     this._mainElem           = null;
     this._registeredElements = [];
+    this._attributeGetModifiers = [];
+    this._attributeSetModifiers = [];
 
     // This var is used to store the range of Viper before it loses focus. Any plugins
     // that steal focus from Viper element can use getPreviousRange.
@@ -1227,6 +1229,43 @@ Viper.prototype = {
 
     },
 
+    addAttributeGetModifier: function (callback)
+    {
+        this._attributeGetModifiers.push(callback);
+
+    },
+
+    addAttributeSetModifier: function (callback)
+    {
+        this._attributeSetModifiers.push(callback);
+
+    },
+
+    /**
+     * Returns the value of the specified attribute of an eleement.
+     *
+     * Plugins can use the addAttributeModifier method to change the value that this method returns.
+     *
+     * @param {DOMNode}  element   The element to update.
+     * @param {string}   attribute The attribute name.
+     *
+     * @return {string}
+     */
+    getAttribute: function (element, attribute)
+    {
+        var value = element.getAttribute(attribute);
+
+        var modifiersCount = this._attributeGetModifiers.length;
+        if (modifiersCount > 0) {
+            for (var i = 0; i < modifiersCount; i++) {
+                value = this._attributeGetModifiers[i].call(this, element, attribute, value);
+            }
+        }
+
+        return value;
+
+    },
+
     /**
      * Sets the attribute of an element.
      *
@@ -1276,6 +1315,13 @@ Viper.prototype = {
             }//end if
         } else if (value) {
             element.setAttribute(attribute, value);
+
+            var modifiersCount = this._attributeSetModifiers.length;
+            if (modifiersCount > 0) {
+                for (var i = 0; i < modifiersCount; i++) {
+                    this._attributeSetModifiers[i].call(this, element, attribute, value);
+                }
+            }
         }//end if
 
     },
@@ -2921,7 +2967,7 @@ Viper.prototype = {
 
         if (attributes.attributes) {
             for (var attr in attributes.attributes) {
-                element.setAttribute(attr, attributes.attributes[attr]);
+                this.setAttribute(element, attr, attributes.attributes[attr]);
             }
         }
 
@@ -5264,6 +5310,11 @@ Viper.prototype = {
                 var retVal = callback.call(this, data, function(retVal) {
                     self._fireCallbacks(callbacks, data, doneCallback, retVal);
                 });
+
+                // TODO: need a better way to handle callback only events.
+                if (ViperUtil.isFn(retVal) === true) {
+                    return;
+                }
             } catch (e) {
                 console.error(e, callback, e.stack);
             }
