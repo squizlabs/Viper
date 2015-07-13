@@ -23,6 +23,8 @@ function Viper(id, options, callback, editables)
     this._subElementActive   = false;
     this._mainElem           = null;
     this._registeredElements = [];
+    this._attributeGetModifiers = [];
+    this._attributeSetModifiers = [];
 
     // This var is used to store the range of Viper before it loses focus. Any plugins
     // that steal focus from Viper element can use getPreviousRange.
@@ -1135,6 +1137,34 @@ Viper.prototype = {
 
     },
 
+    addAttributeGetModifier: function (callback)
+    {
+        this._attributeGetModifiers.push(callback);
+
+    },
+
+    addAttributeSetModifier: function (callback)
+    {
+        this._attributeSetModifiers.push(callback);
+
+    },
+
+    
+    getAttribute: function (element, attribute)
+    {
+        var value = element.getAttribute(attribute);
+
+        var modifiersCount = this._attributeGetModifiers.length;
+        if (modifiersCount > 0) {
+            for (var i = 0; i < modifiersCount; i++) {
+                value = this._attributeGetModifiers[i].call(this, element, attribute, value);
+            }
+        }
+
+        return value;
+
+    },
+
     
     setAttribute: function(element, attribute, value)
     {
@@ -1175,6 +1205,13 @@ Viper.prototype = {
             }//end if
         } else if (value) {
             element.setAttribute(attribute, value);
+
+            var modifiersCount = this._attributeSetModifiers.length;
+            if (modifiersCount > 0) {
+                for (var i = 0; i < modifiersCount; i++) {
+                    this._attributeSetModifiers[i].call(this, element, attribute, value);
+                }
+            }
         }//end if
 
     },
@@ -2731,7 +2768,7 @@ Viper.prototype = {
 
         if (attributes.attributes) {
             for (var attr in attributes.attributes) {
-                element.setAttribute(attr, attributes.attributes[attr]);
+                this.setAttribute(element, attr, attributes.attributes[attr]);
             }
         }
 
@@ -4959,6 +4996,11 @@ Viper.prototype = {
                 var retVal = callback.call(this, data, function(retVal) {
                     self._fireCallbacks(callbacks, data, doneCallback, retVal);
                 });
+
+                // TODO: need a better way to handle callback only events.
+                if (ViperUtil.isFn(retVal) === true) {
+                    return;
+                }
             } catch (e) {
                 console.error(e, callback, e.stack);
             }
@@ -21824,7 +21866,7 @@ ViperFormatPlugin.prototype = {
 
         node = this.getNodeWithAttributeFromRange(attribute, node);
         if (node) {
-            var value = node.getAttribute(attribute);
+            var value = this.viper.getAttribute(node, attribute);
             if (attribute === 'class') {
                 value = this._removeViperHighlightClass(value);
             }
@@ -22766,8 +22808,6 @@ ViperFormatPlugin.prototype = {
 
             classAttribute = this._getClassInitialValue(classAttribute, element);
             this.viper.ViperTools.getItem(prefix + 'class:input').setValue(classAttribute);
-
-            //this._updateDefinedStylesList()
 
             data.toolbar.showButton(prefix + 'classBtn-' + data.type);
         }
@@ -24268,14 +24308,15 @@ ViperImagePlugin.prototype = {
 
         if (!img) {
             img = document.createElement('img');
-            img.setAttribute('src', url);
+
+            this.viper.setAttribute(img, 'src', url);
 
             if (alt !== null) {
-                img.setAttribute('alt', alt);
+                this.viper.setAttribute(img, 'alt', alt);
             }
 
             if (title !== null && ViperUtil.trim(title).length !== 0) {
-                img.setAttribute('title', title);
+                this.viper.setAttribute(img, 'title', title);
             }
         }
 
@@ -24362,7 +24403,7 @@ ViperImagePlugin.prototype = {
             return;
         }
 
-        image.setAttribute('alt', alt);
+        this.viper.setAttribute(image, 'alt', alt);
 
     },
 
@@ -24372,7 +24413,7 @@ ViperImagePlugin.prototype = {
             return;
         }
 
-        image.setAttribute('src', url);
+        this.viper.setAttribute(image, 'src', url);
 
     },
 
@@ -24383,7 +24424,7 @@ ViperImagePlugin.prototype = {
         } else if (title === null) {
             image.removeAttribute('title');
         } else {
-            image.setAttribute('title', title);
+            this.viper.setAttribute(image, 'title', title);
         }
 
     },
@@ -24539,9 +24580,10 @@ ViperImagePlugin.prototype = {
         if (image && ViperUtil.isTag(image, 'img') === true) {
             tools.setButtonActive('image');
 
-            this.setUrlFieldValue(image.getAttribute('src'));
-            tools.getItem(toolbarPrefix + ':altInput').setValue(image.getAttribute('alt') || '');
-            tools.getItem(toolbarPrefix + ':titleInput').setValue(image.getAttribute('title') || '');
+            var src = this.viper.getAttribute(image, 'src');
+            this.setUrlFieldValue(src);
+            tools.getItem(toolbarPrefix + ':altInput').setValue(this.viper.getAttribute(image, 'alt') || '');
+            tools.getItem(toolbarPrefix + ':titleInput').setValue(this.viper.getAttribute(image, 'title') || '');
 
             if (!image.getAttribute('alt')) {
                 tools.getItem(toolbarPrefix + ':isDecorative').setValue(true);
@@ -24551,7 +24593,7 @@ ViperImagePlugin.prototype = {
 
             // Update preview pane.
             ViperUtil.empty(this._previewBox);
-            this.updateImagePreview(image.getAttribute('src'));
+            this.updateImagePreview(src);
         } else {
             tools.enableButton('image');
             tools.setButtonInactive('image');
@@ -28685,20 +28727,20 @@ ViperLinkPlugin.prototype = {
             // IE for whatever reason, changed the content of the link to be the href
             // when its a mailto link.....
             var linkContent = ViperUtil.getHtml(link);
-            link.setAttribute('href', url);
+            this.viper.setAttribute(link, 'href', url);
             ViperUtil.setHtml(link, linkContent);
         } else {
-            link.setAttribute('href', url);
+            this.viper.setAttribute(link, 'href', url);
         }
 
         if (title) {
-            link.setAttribute('title', title);
+            this.viper.setAttribute(link, 'title', title);
         } else {
             link.removeAttribute('title');
         }
 
         if (newWindow === true) {
-            link.setAttribute('target', '_blank');
+            this.viper.setAttribute(link, 'target', '_blank');
         } else {
             link.removeAttribute('target');
         }
@@ -29283,8 +29325,8 @@ ViperLinkPlugin.prototype = {
         var isEmailLink = false;
 
         if (link) {
-            href  = link.getAttribute('href');
-            title = link.getAttribute('title');
+            href  = this.viper.getAttribute(link, 'href');
+            title = this.viper.getAttribute(link, 'title');
 
             if (link.getAttribute('target') === '_blank') {
                 newWindow = true;
@@ -29329,8 +29371,8 @@ ViperLinkPlugin.prototype = {
         var isEmailLink = false;
 
         if (link) {
-            href  = link.getAttribute('href');
-            title = link.getAttribute('title');
+            href  = this.viper.getAttribute(link, 'href');
+            title = this.viper.getAttribute(link, 'title');
 
             if (link.getAttribute('target') === '_blank') {
                 newWindow = true;
@@ -31846,6 +31888,7 @@ ViperReplacementPlugin.prototype = {
 
         this.viper.registerCallback('Viper:setHtml', 'ViperReplacementPlugin', function(data, callback) {
             self.showReplacements(data.element, callback);
+            return function() {};
         });
 
         if (ViperUtil.isBrowser('msie') === true) {
@@ -31869,6 +31912,46 @@ ViperReplacementPlugin.prototype = {
                 }
             });
         }
+
+        this.viper.addAttributeGetModifier(
+            function (element, attribute, value) {
+                // Check if the element has a keyword attribute.
+                value = element.getAttribute('data-viper-' + attribute) || value;
+                return value;
+            }
+        );
+
+        this.viper.addAttributeSetModifier(
+            function (element, attribute, value) {
+                // If the value has keyword it needs to be handled.
+                var regex = new RegExp(self.getReplacementRegex(), 'gi');
+                var matches = value.match(regex);
+                if (matches !== null) {
+                    var keywords = {};
+                    var match    = null;
+                    while (match = matches.pop()) {
+                        keywords[match] = '';
+                    }
+
+                    self.getKeywordReplacements(
+                        keywords,
+                        function(replacements) {
+                            for (var keyword in replacements) {
+                                value = self._replaceAttributeKeyword(element, attribute, keyword, replacements[keyword], true);
+                            }
+                        }
+                    );
+                } else {
+                    // No keywords.. If there is a attribute backup, remove it.
+                    var cloneName = 'data-viper-' + attribute;
+                    if (ViperUtil.hasAttribute(element, cloneName) === true) {
+                        ViperUtil.removeAttr(element, cloneName);
+                    }
+                }
+
+                return value;
+            }
+        );
 
     },
 
@@ -31942,6 +32025,10 @@ ViperReplacementPlugin.prototype = {
 
                 // Convert the keywords inside the attributes.
                 self._convertAttributeKeywords(replacements);
+
+                if (callback) {
+                    callback.call(self);
+                }
             }
         );
 
@@ -32178,23 +32265,30 @@ ViperReplacementPlugin.prototype = {
                 for (var i = 0; i < ln; i++) {
                     var info = this._cache.attributes[keyword][i];
 
-                    // Copy the real attribute into a new data attribute so that it can be recovered.
-                    var cloneName = 'data-viper-' + info.attrName;
-                    if (ViperUtil.hasAttribute(info.elem, cloneName) === false) {
-                        ViperUtil.attr(info.elem, cloneName, info.attrValue);
-                    }
-
-                    // Replace the keyword with its value in the real attribute.
-                    var realValue = ViperUtil.attr(info.elem, info.attrName);
-                    realValue     = realValue.replace(keyword, replacements[keyword]);
-                    ViperUtil.attr(info.elem, info.attrName, realValue);
-
-                    this.viper.makeElementUneditable(info.elem);
-
-                    ViperUtil.attr(info.elem, 'data-viper-attribite-keywords', 'true');
+                    this._replaceAttributeKeyword(info.elem, info.attrName, keyword, replacements[keyword]);
                 }
             }
         }
+
+    },
+
+    _replaceAttributeKeyword: function(element, attribute, keyword, replacement, forceUpdate) {
+        // Copy the real attribute into a new data attribute so that it can be recovered.
+        var cloneName = 'data-viper-' + attribute;
+        if (forceUpdate === true || ViperUtil.hasAttribute(element, cloneName) === false) {
+            ViperUtil.attr(element, cloneName, element.getAttribute(attribute));
+        }
+
+        // Replace the keyword with its value in the real attribute.
+        var realValue = ViperUtil.attr(element, attribute);
+        realValue     = realValue.replace(keyword, replacement);
+        ViperUtil.attr(element, attribute, realValue);
+
+        //this.viper.makeElementUneditable(element);
+
+        ViperUtil.attr(element, 'data-viper-attribite-keywords', 'true');
+
+        return realValue;
 
     }
 
@@ -33748,7 +33842,7 @@ ViperTableEditorPlugin.prototype = {
             }
         });
 
-        this.viper.registerCallback('Viper:setHtml', 'ViperTableEditorPlugin', function(data) {
+        this.viper.registerCallback('Viper:setHtml', 'ViperTableEditorPlugin', function(data, callback) {
             var vap = self.viper.ViperPluginManager.getPlugin('ViperAccessibilityPlugin');
             if (vap) {
                 vap.loadHTMLCS(function() {
@@ -33757,13 +33851,21 @@ ViperTableEditorPlugin.prototype = {
                         self.setTableHeaders(tables[i]);
                         self._initTable(tables[i]);
                     }
+
+                    callback.call(this);
                 });
+
+                callback.call(this);
             } else {
                 var tables = ViperUtil.getTag('table', data.element);
                 for (var i = 0; i < tables.length; i++) {
                     self._initTable(tables[i]);
                 }
+
+                callback.call(this);
             }
+
+            return function() {};
         });
 
         this.viper.registerCallback('Viper:enabled', 'ViperTableEditorPlugin', function() {
@@ -34567,7 +34669,7 @@ ViperTableEditorPlugin.prototype = {
         var tableWidth = this.getTableWidth(table);
         this._tools.getItem('VTEP:tableProps:width').setValue(tableWidth);
 
-        var summary = table.getAttribute('summary') || '';
+        var summary = this.viper.getAttribute(table, 'summary') || '';
         this._tools.getItem('VTEP:tableProps:summary').setValue(summary);
 
         this._tools.getItem('VTEP:tableProps:caption').setValue((ViperUtil.getTag('caption', table).length > 0));
