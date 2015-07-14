@@ -24523,6 +24523,13 @@ ViperAccessibilityPlugin.prototype = {
         } else {
             document.getElementsByTagName('head')[0].appendChild(link);
         }
+    },
+
+    remove: function()
+    {
+        // Remove plugin buttons.
+        this.viper.ViperTools.removeItem('accessibility');
+
     }
 
 };
