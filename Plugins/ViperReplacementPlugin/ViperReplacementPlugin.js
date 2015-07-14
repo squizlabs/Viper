@@ -30,6 +30,13 @@ ViperReplacementPlugin.prototype = {
             self.showReplacements();
         });
 
+        this.viper.registerCallback('Viper:enabled', 'ViperReplacementPlugin', function() {
+            // Viper removes the contenteditable attribute when Viper is disabled etc..
+            // Add contenteditable=false to all keywords when Viper is enabled again.
+            var keywords = ViperUtil.find(self.viper.getViperElement(), 'keyword');
+            ViperUtil.attr(keywords, 'contenteditable', false);
+        });
+
         this.viper.registerCallback('Viper:getHtml', 'ViperReplacementPlugin', function(data) {
             self.showKeywords(data.element);
         });
@@ -89,6 +96,8 @@ ViperReplacementPlugin.prototype = {
                             }
                         }
                     );
+
+                    return false;
                 } else {
                     // No keywords.. If there is a attribute backup, remove it.
                     var cloneName = 'data-viper-' + attribute;
@@ -165,7 +174,7 @@ ViperReplacementPlugin.prototype = {
             if (callback) {
                 callback.call(self);
             }
-            
+
             return;
         }
 
@@ -444,7 +453,7 @@ ViperReplacementPlugin.prototype = {
         }
 
         // Replace the keyword with its value in the real attribute.
-        var realValue = ViperUtil.attr(element, attribute);
+        var realValue = value;
         realValue     = realValue.replace(keyword, replacement);
         ViperUtil.attr(element, attribute, realValue);
 

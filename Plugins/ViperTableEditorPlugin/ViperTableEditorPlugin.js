@@ -82,8 +82,6 @@ ViperTableEditorPlugin.prototype = {
 
                     callback.call(this);
                 });
-
-                callback.call(this);
             } else {
                 var tables = ViperUtil.getTag('table', data.element);
                 for (var i = 0; i < tables.length; i++) {
