@@ -762,25 +762,33 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         // Combine two blockquote sections
         $this->useTest(5);
         $this->moveToKeyword(1, 'left');
+        sleep(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(1);
         $this->assertHTMLMatch('<blockquote><p>First blockquote section%1% Second blockquote section</p></blockquote>');
 
         // Combine a quote and a paragraph section
         $this->useTest(6);
         $this->moveToKeyword(1, 'left');
+        sleep(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(1);
         $this->assertHTMLMatch('<blockquote><p>First blockquote section%1% Second paragraph section</p></blockquote>');
 
         // Combine a quote and a div section
         $this->useTest(7);
         $this->moveToKeyword(1, 'left');
+        sleep(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(1);
         $this->assertHTMLMatch('<blockquote><p>First blockquote section%1% Second div section</p></blockquote>');
 
         // Combine a quote and a pre section
         $this->useTest(8);
         $this->moveToKeyword(1, 'left');
+        sleep(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(1);
         $this->assertHTMLMatch('<blockquote><p>First blockquote section%1% Second pre section</p></blockquote>');
 
     }//end testCombiningAQuoteWithDifferentFormatSections()
