@@ -710,7 +710,7 @@ ViperImagePlugin.prototype = {
             callback.call(this, false);
         };
 
-        img.src = url;
+        this.viper.setAttribute(img, 'src', url);
 
     },
 
