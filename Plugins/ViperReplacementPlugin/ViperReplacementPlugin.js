@@ -161,7 +161,11 @@ ViperReplacementPlugin.prototype = {
     showReplacements: function (element, callback) {
         // Get all the keywords in the element.
         var keywords = this.scanKeywords(element);
-        if (!keywords) {
+        if (!keywords || ViperUtil.isEmpty(keywords) === true) {
+            if (callback) {
+                callback.call(self);
+            }
+            
             return;
         }
 
