@@ -1314,12 +1314,15 @@ Viper.prototype = {
                 }
             }//end if
         } else if (value) {
-            element.setAttribute(attribute, value);
-
+            var notModified    = true;
             var modifiersCount = this._attributeSetModifiers.length;
             if (modifiersCount > 0) {
                 for (var i = 0; i < modifiersCount; i++) {
-                    this._attributeSetModifiers[i].call(this, element, attribute, value);
+                    notModified = this._attributeSetModifiers[i].call(this, element, attribute, value);
+                }
+
+                if (notModified !== false) {
+                    element.setAttribute(attribute, value);
                 }
             }
         }//end if
