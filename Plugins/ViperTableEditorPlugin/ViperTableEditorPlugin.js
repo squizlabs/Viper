@@ -224,7 +224,7 @@ ViperTableEditorPlugin.prototype = {
             }//end if
         });
 
-        this.viper.registerCallback('Viper:clickedOutside', 'ViperTableEditorPlugin', function(data) {
+        this.viper.registerCallback(['Viper:clickedOutside', 'Viper:disabled'], 'ViperTableEditorPlugin', function(data) {
             self.hideCellToolsIcon();
             self.removeHighlights();
         });

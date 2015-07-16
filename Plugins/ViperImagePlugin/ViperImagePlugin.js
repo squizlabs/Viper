@@ -143,7 +143,7 @@ ViperImagePlugin.prototype = {
         });
 
         this.viper.registerCallback(
-            ['ViperHistoryManager:beforeUndo', 'Viper:clickedOutside', 'ViperTools:popup:open', 'ViperCoreStylesPlugin:beforeImageUpdate', 'Viper:cut'],
+            ['ViperHistoryManager:beforeUndo', 'Viper:clickedOutside', 'ViperTools:popup:open', 'ViperCoreStylesPlugin:beforeImageUpdate', 'Viper:cut', 'Viper:disabled'],
             'ViperImagePlugin',
             function() {
                 self.hideImageResizeHandles();
