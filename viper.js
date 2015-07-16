@@ -11810,7 +11810,7 @@ ViperTools.prototype = {
         );
 
         this.viper.registerCallback(
-            'Viper:clickedOutside',
+            ['Viper:clickedOutside', 'Viper:disabled'],
             id,
             function(range) {
                 self.getItem(id).hide();
@@ -31843,7 +31843,7 @@ ViperImagePlugin.prototype = {
         });
 
         this.viper.registerCallback(
-            ['ViperHistoryManager:beforeUndo', 'Viper:clickedOutside', 'ViperTools:popup:open', 'ViperCoreStylesPlugin:beforeImageUpdate', 'Viper:cut'],
+            ['ViperHistoryManager:beforeUndo', 'Viper:clickedOutside', 'ViperTools:popup:open', 'ViperCoreStylesPlugin:beforeImageUpdate', 'Viper:cut', 'Viper:disabled'],
             'ViperImagePlugin',
             function() {
                 self.hideImageResizeHandles();
@@ -41641,7 +41641,7 @@ ViperTableEditorPlugin.prototype = {
             }//end if
         });
 
-        this.viper.registerCallback('Viper:clickedOutside', 'ViperTableEditorPlugin', function(data) {
+        this.viper.registerCallback(['Viper:clickedOutside', 'Viper:disabled'], 'ViperTableEditorPlugin', function(data) {
             self.hideCellToolsIcon();
             self.removeHighlights();
         });
