@@ -1478,7 +1478,7 @@ Viper.prototype = {
     
     insertNodeAtCaret: function(node)
     {
-        var range = this.getCurrentRange();
+        var range = this.getViperRange();
 
         // If we have any nodes highlighted, then we want to delete them before
         // inserting the new text.
