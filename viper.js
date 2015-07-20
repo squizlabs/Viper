@@ -813,6 +813,13 @@ Viper.prototype = {
             self.fireSelectionChanged(range, true);
         });
 
+        // If the document of this editable is different to Viper then add the highlight class to that document.
+        if (document !== elem.ownerDocument) {
+            var style       = elem.ownerDocument.createElement('style');
+            style.innerHTML = '.__viper_selHighlight {background-color: #CCC !important;}';
+            elem.ownerDocument.head.appendChild(style);
+        }
+
     },
 
     registerEditableElements: function(elements)
@@ -11792,17 +11799,8 @@ ViperTools.prototype = {
                         'scroll.' + id,
                         function(e) {
                             if (toolbar.isVisible() === true) {
-                                toolbar.hide();
+                                self.getItem(id).updatePosition();
                             }
-
-                            clearTimeout(t);
-                            t = setTimeout(
-                                function() {
-                                    ViperUtil.removeClass(toolbar.element, 'scrolling');
-                                    self.getItem(id).update();
-                                },
-                                300
-                            );
                         }
                     );
                 }//end if
@@ -29453,6 +29451,26 @@ ViperFormatPlugin.prototype = {
             }
         );
 
+        this.viper.registerCallback(
+            'Viper:editableElementChanged',
+            'ViperFormatPlugin-stylePicker',
+            function() {
+                var elemDoc = self.viper.getViperElementDocument();
+                if (elemDoc !== document) {
+                    ViperUtil.removeEvent(elemDoc.defaultView, 'scroll.ViperFormatPlugin-stylePicker');
+                    ViperUtil.addEvent(
+                        elemDoc.defaultView,
+                        'scroll.ViperFormatPlugin-stylePicker',
+                        function(e) {
+                            if (popout.isOpen() === true) {
+                                popout.hide();
+                            }
+                        }
+                    );
+                }//end if
+            }
+        );
+
     },
 
     _getToolbarContents: function(toolbarType)
@@ -31867,6 +31885,26 @@ ViperImagePlugin.prototype = {
             }
         });
 
+        this.viper.registerCallback(
+            'Viper:editableElementChanged',
+            'ViperImagePlugin',
+            function() {
+                var elemDoc = self.viper.getViperElementDocument();
+                if (elemDoc !== document) {
+                    ViperUtil.removeEvent(elemDoc.defaultView, 'scroll.ViperImagePlugin');
+                    ViperUtil.addEvent(
+                        elemDoc.defaultView,
+                        'scroll.ViperImagePlugin',
+                        function(e) {
+                            if (self._resizeImage) {
+                                self.showImageResizeHandles(self._resizeImage);
+                            }
+                        }
+                    );
+                }//end if
+            }
+        );
+
     },
 
     readDroppedImage: function(file, callback)
@@ -32492,6 +32530,14 @@ ViperImagePlugin.prototype = {
         rect.y1 += offset.y;
         rect.y2 += offset.y;
 
+        if (document !== image.ownerDocument) {
+            var scrollCoords = ViperUtil.getScrollCoords(image.ownerDocument.defaultView);
+            rect.x1 -= scrollCoords.x;
+            rect.x2 -= scrollCoords.x;
+            rect.y1 -= scrollCoords.y;
+            rect.y2 -= scrollCoords.y;
+        }
+
         // Set the position of handles.
         ViperUtil.setStyle(swHandle, 'left', rect.x1 + 'px');
         ViperUtil.setStyle(swHandle, 'top', (rect.y2) + 'px');
@@ -32509,11 +32555,10 @@ ViperImagePlugin.prototype = {
         this._resizeImage = image;
 
         var self = this;
-
         var _addMouseEvents = function(handle, rev) {
             ViperUtil.addEvent(handle, 'mousedown', function(e) {
-                var width    = image.clientWidth;
-                var height   = image.clientHeight;
+                var width    = image.width;
+                var height   = image.height;
                 var prevPosX = e.clientX - offset.x;
                 var prevPosY = e.clientY - offset.y;
                 var resized  = false;
@@ -32550,6 +32595,13 @@ ViperImagePlugin.prototype = {
                     }
 
                     var rect = ViperUtil.getBoundingRectangle(image);
+                    if (document !== image.ownerDocument) {
+                        rect.x1 -= scrollCoords.x;
+                        rect.x2 -= scrollCoords.x;
+                        rect.y1 -= scrollCoords.y;
+                        rect.y2 -= scrollCoords.y;
+                    }
+
                     ViperUtil.setStyle(seHandle, 'left', (rect.x2 + offset.x) + 'px');
                     ViperUtil.setStyle(seHandle, 'top', (rect.y2 + offset.y) + 'px');
 
@@ -32561,7 +32613,7 @@ ViperImagePlugin.prototype = {
                 });
 
                 // Remove mousemove event.
-                ViperUtil.addEvent(Viper.document, 'mouseup.ViperImageResize', function(e) {
+                ViperUtil.addEvent([document, Viper.document], 'mouseup.ViperImageResize', function(e) {
                     ViperUtil.removeEvent(Viper.document, 'mousemove.ViperImageResize');
                     ViperUtil.removeEvent(Viper.document, 'mouseup.ViperImageResize');
 
