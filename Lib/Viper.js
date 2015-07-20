@@ -886,6 +886,13 @@ Viper.prototype = {
             self.fireSelectionChanged(range, true);
         });
 
+        // If the document of this editable is different to Viper then add the highlight class to that document.
+        if (document !== elem.ownerDocument) {
+            var style       = elem.ownerDocument.createElement('style');
+            style.innerHTML = '.__viper_selHighlight {background-color: #CCC !important;}';
+            elem.ownerDocument.head.appendChild(style);
+        }
+
     },
 
     registerEditableElements: function(elements)

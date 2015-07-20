@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Viper - Simple Example</title>
+    <link rel="stylesheet" media="screen" href="main.css">
+    <script type="text/javascript" src="../jquery.js"></script>
+    <script type="text/javascript" src="../jquery.ui.js"></script>
+    <script type="text/javascript" src="../../Viper-all.js"></script>
+    <script type="text/javascript">
+        var viperTest = null;
+        ViperReadyCallback = function() {
+            var lang = 'en';
+            var search = window.location.search;
+            if (search && search.indexOf('?lang=') === 0) {
+                lang = search.replace('?lang=', '');
+                ViperUtil.getid('langSelector').value = lang;
+            }
+
+            viperTest = new Viper('test', {language: lang}, function(viper) {
+                var formatPluginSettings = {
+                    styles: {
+                        'Simple Image Border': {
+                            showFor: 'img,h1',
+                            hideFor: '*',
+                            classNames: 'simple-image-border'
+                        },
+                        'Article': {
+                            classNames: 'article',
+                            showFor: 'p'
+                        },
+                        'Multi Columns': {
+                            classNames: 'multi-col',
+                            hideFor: 'text-selection,img'
+                        },
+                        'Caption': 'simple-image-border image-caption',
+                        'Round Image': 'round-image',
+                        'Ordered List': 'ordered-list',
+                    }
+                };
+
+                var frameDoc = ViperUtil.getIFrameDocument(frames[0]);
+                viper.setEditableElement(frameDoc.getElementById('content'));
+                viper.getPluginManager().setPluginSettings('ViperFormatPlugin', formatPluginSettings);
+            });
+        };
+
+        function changeLang(lang)
+        {
+            window.location = ViperUtil.baseUrl(window.location.href) + '?lang=' + lang;
+        }
+    </script>
+</head>
+<body spellcheck="false">
+
+<div id="pageWidth">
+<div id="contentHolder">
+<div id="contentInner">
+<div id="contentPadder">
+
+
+    <iframe id="viperFrame" src="./frame.html" style="width: 100%;height:100vh;" />
+</body>
+</html>

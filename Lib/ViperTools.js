@@ -1300,17 +1300,8 @@ ViperTools.prototype = {
                         'scroll.' + id,
                         function(e) {
                             if (toolbar.isVisible() === true) {
-                                toolbar.hide();
+                                self.getItem(id).updatePosition();
                             }
-
-                            clearTimeout(t);
-                            t = setTimeout(
-                                function() {
-                                    ViperUtil.removeClass(toolbar.element, 'scrolling');
-                                    self.getItem(id).update();
-                                },
-                                300
-                            );
                         }
                     );
                 }//end if

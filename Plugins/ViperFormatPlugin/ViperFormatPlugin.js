@@ -346,6 +346,26 @@ ViperFormatPlugin.prototype = {
             }
         );
 
+        this.viper.registerCallback(
+            'Viper:editableElementChanged',
+            'ViperFormatPlugin-stylePicker',
+            function() {
+                var elemDoc = self.viper.getViperElementDocument();
+                if (elemDoc !== document) {
+                    ViperUtil.removeEvent(elemDoc.defaultView, 'scroll.ViperFormatPlugin-stylePicker');
+                    ViperUtil.addEvent(
+                        elemDoc.defaultView,
+                        'scroll.ViperFormatPlugin-stylePicker',
+                        function(e) {
+                            if (popout.isOpen() === true) {
+                                popout.hide();
+                            }
+                        }
+                    );
+                }//end if
+            }
+        );
+
     },
 
     _getToolbarContents: function(toolbarType)
