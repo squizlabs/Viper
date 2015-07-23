@@ -5415,6 +5415,8 @@ Viper.prototype = {
         html = html.replace(/<:object/ig, '<object');
         html = html.replace(/<\/:object/ig, '</object');
 
+        html = html.replace('__viper_attr_', '');
+
         // Revert to original settings.
         this.setSettings(originalSettings, true);
 
@@ -5513,6 +5515,15 @@ Viper.prototype = {
      * Sets the Viper content, content cannot contain Viper specific elements.
      */
     setHtml: function(contents, callback)
+    {
+        var self = this;
+        this.fireCallbacks('Viper:setHtmlContent', contents, function(newContents) {
+            self._setHTML(newContents, callback);
+        });
+
+    },
+
+    _setHTML: function(contents, callback)
     {
         var clone = Viper.document.createElement('div');
 
