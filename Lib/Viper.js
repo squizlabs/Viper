@@ -5517,7 +5517,7 @@ Viper.prototype = {
     setHtml: function(contents, callback)
     {
         var self = this;
-        this.fireCallbacks('Viper:setHtmlContent', contents, function(newContents) {
+        this.fireCallbacks('Viper:setHtmlContent', contents, function(data, newContents) {
             self._setHTML(newContents, callback);
         });
 
