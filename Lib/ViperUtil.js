@@ -392,6 +392,16 @@ var ViperUtil = {
 
     },
 
+    replaceAll: function(search, replace, subject)
+    {
+        // Escape search.
+        search = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+        var r = new RegExp(search, 'g');
+        return subject.replace(r, replace);
+
+    },
+
     /**
      * returns true if specified string is blank.
      *
