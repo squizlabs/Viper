@@ -5097,7 +5097,7 @@ Viper.prototype = {
         html = html.replace(/<:object/ig, '<object');
         html = html.replace(/<\/:object/ig, '</object');
 
-        html = html.replace('__viper_attr_', '');
+        html = html.replace(/__viper_attr_/g, '');
 
         // Revert to original settings.
         this.setSettings(originalSettings, true);
@@ -13161,6 +13161,16 @@ var ViperUtil = {
     ucFirst: function(str)
     {
         return str.substr(0,1).toUpperCase() + str.substr(1, str.length);
+
+    },
+
+    replaceAll: function(search, replace, subject)
+    {
+        // Escape search.
+        search = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+        var r = new RegExp(search, 'g');
+        return subject.replace(r, replace);
 
     },
 
@@ -39880,7 +39890,7 @@ ViperReplacementPlugin.prototype = {
 
         this._cache.attributes = {};
 
-        content = content.replace('__viper_attr_', '');
+        content = content.replace(/__viper_attr_/g, '');
 
         content = content.replace(tagRegex, function(match, tagStart, a, tagEnd) {
             match = match.replace(attrRegex, function(a, attrName, attrValue) {
@@ -40008,16 +40018,16 @@ ViperReplacementPlugin.prototype = {
             content = ViperUtil.getHtml(content);
         }
 
-        content = content.replace('__viper_attr_', '');
+        content = content.replace(/__viper_attr_/g, '');
 
         for (var attr in this._cache.attributes) {
             var attrRep = attr;
             for (var i = 0; i < this._cache.attributes[attr].length; i++) {
                 var keyword = this._cache.attributes[attr][i];
-                attrRep = attrRep.replace(keyword, replacements[keyword]) + ' data-viper-' + ViperUtil.ltrim(attr);
+                attrRep     = attrRep.replace(keyword, replacements[keyword]) + ' data-viper-' + ViperUtil.ltrim(attr);
             }
 
-            content = content.replace(attr, attrRep);
+            content = ViperUtil.replaceAll(attr, attrRep, content);
         }
 
         return content;
