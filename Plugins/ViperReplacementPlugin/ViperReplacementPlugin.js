@@ -345,7 +345,7 @@ ViperReplacementPlugin.prototype = {
 
         this._cache.attributes = {};
 
-        content = content.replace('__viper_attr_', '');
+        content = content.replace(/__viper_attr_/g, '');
 
         content = content.replace(tagRegex, function(match, tagStart, a, tagEnd) {
             match = match.replace(attrRegex, function(a, attrName, attrValue) {
@@ -475,16 +475,16 @@ ViperReplacementPlugin.prototype = {
             content = ViperUtil.getHtml(content);
         }
 
-        content = content.replace('__viper_attr_', '');
+        content = content.replace(/__viper_attr_/g, '');
 
         for (var attr in this._cache.attributes) {
             var attrRep = attr;
             for (var i = 0; i < this._cache.attributes[attr].length; i++) {
                 var keyword = this._cache.attributes[attr][i];
-                attrRep = attrRep.replace(keyword, replacements[keyword]) + ' data-viper-' + ViperUtil.ltrim(attr);
+                attrRep     = attrRep.replace(keyword, replacements[keyword]) + ' data-viper-' + ViperUtil.ltrim(attr);
             }
 
-            content = content.replace(attr, attrRep);
+            content = ViperUtil.replaceAll(attr, attrRep, content);
         }
 
         return content;

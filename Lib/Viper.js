@@ -5415,7 +5415,7 @@ Viper.prototype = {
         html = html.replace(/<:object/ig, '<object');
         html = html.replace(/<\/:object/ig, '</object');
 
-        html = html.replace('__viper_attr_', '');
+        html = html.replace(/__viper_attr_/g, '');
 
         // Revert to original settings.
         this.setSettings(originalSettings, true);
