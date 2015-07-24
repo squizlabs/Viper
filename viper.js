@@ -11468,9 +11468,18 @@ ViperTools.prototype = {
             ViperUtil.addClass(dragIcon, 'Viper-popup-dragIcon');
             header.appendChild(dragIcon);
 
+            var overlay = document.createElement('div');
+            ViperUtil.addClass(overlay, 'Viper-dragOverlay');
+
             ViperUtil.$(main).draggable(
                 {
-                    handle: header
+                    handle: header,
+                    start: function() {
+                        self.viper.addElement(overlay);
+                    },
+                    stop: function() {
+                        ViperUtil.remove(overlay);
+                    }
                 }
             );
         }
@@ -11590,6 +11599,10 @@ ViperTools.prototype = {
                 ViperUtil.setStyle(midContent, 'height', ui.size.height + 'px');
             };
 
+            // Create overlay element that sits behind the popup when dragging/resizing incase there are child frames.
+            var overlay = document.createElement('div');
+            ViperUtil.addClass(overlay, 'Viper-dragOverlay');
+
             ViperUtil.$(midContent).resizable(
                 {
                     handles: 'se',
@@ -11598,7 +11611,11 @@ ViperTools.prototype = {
                             resizeCallback.call(this, e, ui);
                         }
                     },
+                    start: function() {
+                        self.viper.addElement(overlay);
+                    },
                     stop: function(e, ui) {
+                        ViperUtil.remove(overlay);
                         if (resizeCallback) {
                             resizeCallback.call(this, e, ui);
                         }
