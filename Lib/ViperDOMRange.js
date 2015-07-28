@@ -809,6 +809,26 @@ ViperDOMRange.prototype = {
         if (!startNode && !endNode) {
             this._nodeSel.node = null;
             return null;
+        } else if (startNode
+            && endNode
+            && startNode === endNode
+            && startNode.nodeType !== ViperUtil.TEXT_NODE
+            && range.startOffset === range.endOffset
+            && this.startContainer.childNodes.length >= range.startOffset
+        ) {
+            // Case: <p><img />*</p> and a character is typed. It should not return img as selected.
+            this._nodeSel.node = null;
+            return null;
+        } else if (startNode
+            && endNode
+            && startNode === endNode
+            && startNode.nodeType !== ViperUtil.TEXT_NODE
+            && (range.startOffset + 1) === range.endOffset
+            && this.startContainer.childNodes.length >= range.startOffset
+        ) {
+            // Case: <p>[<img />]</p>. Image clicked.
+            this._nodeSel.node = startNode;
+            return startNode;
         } else if (startNode && !endNode) {
             if (startNode.nodeType === ViperUtil.TEXT_NODE) {
                 if (range.endContainer.nodeType === ViperUtil.ELEMENT_NODE
