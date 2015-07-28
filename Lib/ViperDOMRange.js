@@ -722,7 +722,14 @@ ViperDOMRange.prototype = {
         }
 
         if (this.startContainer.nodeType === ViperUtil.ELEMENT_NODE) {
-            return this.startContainer.childNodes[this.startOffset];
+            var ln = this.startContainer.childNodes.length;
+            if (ln > this.startOffset) {
+                return this.startContainer.childNodes[this.startOffset];
+            } else if (ln === this.startOffset && ViperUtil.isStubElement(this.startContainer.childNodes[this.startOffset - 1]) === true) {
+                // When the last child is a stub element (e.g. img) and range is set after it the offset becomes greater
+                // than the number of children.
+                return this.startContainer.childNodes[this.startOffset - 1];
+            }
         }
 
         return this.startContainer;
