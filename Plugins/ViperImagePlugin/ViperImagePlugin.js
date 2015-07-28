@@ -47,7 +47,6 @@ ViperImagePlugin.prototype = {
                 var range = self.viper.getViperRange();
                 range.selectNode(target);
                 ViperSelection.addRange(range);
-                self.viper.fireSelectionChanged(range, true);
 
                 if (ViperUtil.isBrowser('msie', '<11') === true && ViperUtil.isTag(target, 'img') === true) {
                     self._ieImageResize = target;
