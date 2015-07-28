@@ -1343,19 +1343,20 @@ Viper.prototype = {
     
     getRangeFromCoords: function(x, y)
     {
+        var doc = this.getViperElement().ownerDocument;
         var range = null;
-        if (document.caretRangeFromPoint) {
+        if (doc.caretRangeFromPoint) {
             // Webkit.
-            var rangeObj = document.caretRangeFromPoint(x, y);
+            var rangeObj = doc.caretRangeFromPoint(x, y);
             range        = new ViperMozRange(rangeObj);
-        } else if (document.caretPositionFromPoint) {
+        } else if (doc.caretPositionFromPoint) {
             // Firefox.
-            var rangeObj = document.caretPositionFromPoint(x, y);
+            var rangeObj = doc.caretPositionFromPoint(x, y);
             range        = this.getCurrentRange().cloneRange();
             range.setStart(rangeObj.offsetNode, rangeObj.offset);
             range.collapse(true);
-        } else if (document.body.createTextRange) {
-            var rangeObj = document.body.createTextRange();
+        } else if (doc.body.createTextRange) {
+            var rangeObj = doc.body.createTextRange();
             try {
                 rangeObj.moveToPoint(x, y);
             } catch (e) {
@@ -1363,8 +1364,8 @@ Viper.prototype = {
 
             range = new ViperIERange(rangeObj);
 
-            if (Viper.document.createRange) {
-                rangeObj         = Viper.document.createRange();
+            if (Viper.doc.createRange) {
+                rangeObj         = Viper.doc.createRange();
                 var ieToMozRange = new ViperMozRange(rangeObj);
                 ieToMozRange.setStart(range.startContainer, range.startOffset);
                 ieToMozRange.collapse(true);
@@ -7640,7 +7641,14 @@ ViperDOMRange.prototype = {
         }
 
         if (this.startContainer.nodeType === ViperUtil.ELEMENT_NODE) {
-            return this.startContainer.childNodes[this.startOffset];
+            var ln = this.startContainer.childNodes.length;
+            if (ln > this.startOffset) {
+                return this.startContainer.childNodes[this.startOffset];
+            } else if (ln === this.startOffset && ViperUtil.isStubElement(this.startContainer.childNodes[this.startOffset - 1]) === true) {
+                // When the last child is a stub element (e.g. img) and range is set after it the offset becomes greater
+                // than the number of children.
+                return this.startContainer.childNodes[this.startOffset - 1];
+            }
         }
 
         return this.startContainer;
@@ -31926,9 +31934,12 @@ ViperImagePlugin.prototype = {
                 return;
             }
 
+            var range    = data.range;
+            var bookmark = self.viper.createBookmark(range);
+
             for (var i = 0; i < data.dataTransfer.files.length; i++) {
                 self.readDroppedImage(data.dataTransfer.files[i], function(image, file) {
-                    self.insertDroppedImage(image, data.range, file);
+                    self.insertDroppedImage(image, range, file);
                     noImage = false;
                 });
             }
@@ -31962,11 +31973,12 @@ ViperImagePlugin.prototype = {
 
     readDroppedImage: function(file, callback)
     {
+        var self   = this;
         var reader = new FileReader();
         reader.onload = function (event) {
             var image = new Image();
             image.src = event.target.result;
-            callback.call(this, image, file);
+            callback.call(self, image, file);
         };
 
         reader.readAsDataURL(file);
