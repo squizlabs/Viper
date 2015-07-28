@@ -3285,12 +3285,20 @@ Viper.prototype = {
             if (bookmark.end.previousSibling) {
                 // Find the previous non empty text node.
                 endPos = ViperUtil.getLastChildTextNode(bookmark.end.previousSibling);
-                while (endPos && endPos.data.length === 0 && endPos.previousSibling) {
-                    endPos = ViperUtil.getFirstChildTextNode(endPos.previousSibling);
-                }
+                if (endPos.nodeType === ViperUtil.TEXT_NODE) {
+                    while (endPos && endPos.data.length === 0 && endPos.previousSibling) {
+                        endPos = ViperUtil.getFirstChildTextNode(endPos.previousSibling);
+                    }
 
-                if (endPos.data) {
-                    endOffset = endPos.data.length;
+                    if (endPos.data) {
+                        endOffset = endPos.data.length;
+                    }
+                } else {
+                    // Handle situation where there is no last text node.
+                    var tmpTextNode = document.createTextNode('');
+                    ViperUtil.insertBefore(endPos, tmpTextNode);
+                    endPos    = tmpTextNode;
+                    endOffset = 0;
                 }
             } else {
                 endPos    = ViperUtil.getFirstChildTextNode(bookmark.end.nextSibling);
@@ -7646,7 +7654,14 @@ ViperDOMRange.prototype = {
         }
 
         if (this.endContainer.nodeType === ViperUtil.ELEMENT_NODE) {
-            return this.endContainer.childNodes[this.endOffset];
+            var ln = this.endContainer.childNodes.length;
+            if (ln > this.endOffset) {
+                return this.endContainer.childNodes[this.endOffset];
+            } else if (ln === this.endOffset && ViperUtil.isStubElement(this.endContainer.childNodes[this.endOffset - 1]) === true) {
+                // When the last child is a stub element (e.g. img) and range is set after it the offset becomes greater
+                // than the number of children.
+                return this.endContainer.childNodes[this.endOffset - 1];
+            }
         }
 
         return this.endContainer;
@@ -38161,6 +38176,10 @@ ViperListPlugin.prototype = {
 
             var c     = elems.length;
             for (var i = 0; i < c; i++) {
+                if (!elems[i]) {
+                    continue;
+                }
+
                 var p = this._getValidParentElement(elems[i]);
                 if (p && ViperUtil.inArray(p, pElems) === false) {
                     pElems.push(p);
