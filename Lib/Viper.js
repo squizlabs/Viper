@@ -3446,12 +3446,20 @@ Viper.prototype = {
             if (bookmark.end.previousSibling) {
                 // Find the previous non empty text node.
                 endPos = ViperUtil.getLastChildTextNode(bookmark.end.previousSibling);
-                while (endPos && endPos.data.length === 0 && endPos.previousSibling) {
-                    endPos = ViperUtil.getFirstChildTextNode(endPos.previousSibling);
-                }
+                if (endPos.nodeType === ViperUtil.TEXT_NODE) {
+                    while (endPos && endPos.data.length === 0 && endPos.previousSibling) {
+                        endPos = ViperUtil.getFirstChildTextNode(endPos.previousSibling);
+                    }
 
-                if (endPos.data) {
-                    endOffset = endPos.data.length;
+                    if (endPos.data) {
+                        endOffset = endPos.data.length;
+                    }
+                } else {
+                    // Handle situation where there is no last text node.
+                    var tmpTextNode = document.createTextNode('');
+                    ViperUtil.insertBefore(endPos, tmpTextNode);
+                    endPos    = tmpTextNode;
+                    endOffset = 0;
                 }
             } else {
                 endPos    = ViperUtil.getFirstChildTextNode(bookmark.end.nextSibling);

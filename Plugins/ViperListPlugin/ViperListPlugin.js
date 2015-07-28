@@ -1039,6 +1039,10 @@ ViperListPlugin.prototype = {
 
             var c     = elems.length;
             for (var i = 0; i < c; i++) {
+                if (!elems[i]) {
+                    continue;
+                }
+
                 var p = this._getValidParentElement(elems[i]);
                 if (p && ViperUtil.inArray(p, pElems) === false) {
                     pElems.push(p);
