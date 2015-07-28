@@ -155,9 +155,12 @@ ViperImagePlugin.prototype = {
                 return;
             }
 
+            var range    = data.range;
+            var bookmark = self.viper.createBookmark(range);
+
             for (var i = 0; i < data.dataTransfer.files.length; i++) {
                 self.readDroppedImage(data.dataTransfer.files[i], function(image, file) {
-                    self.insertDroppedImage(image, data.range, file);
+                    self.insertDroppedImage(image, range, file);
                     noImage = false;
                 });
             }
@@ -191,11 +194,12 @@ ViperImagePlugin.prototype = {
 
     readDroppedImage: function(file, callback)
     {
+        var self   = this;
         var reader = new FileReader();
         reader.onload = function (event) {
             var image = new Image();
             image.src = event.target.result;
-            callback.call(this, image, file);
+            callback.call(self, image, file);
         };
 
         reader.readAsDataURL(file);
