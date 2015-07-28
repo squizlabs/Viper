@@ -1431,19 +1431,20 @@ Viper.prototype = {
      */
     getRangeFromCoords: function(x, y)
     {
+        var doc = this.getViperElement().ownerDocument;
         var range = null;
-        if (document.caretRangeFromPoint) {
+        if (doc.caretRangeFromPoint) {
             // Webkit.
-            var rangeObj = document.caretRangeFromPoint(x, y);
+            var rangeObj = doc.caretRangeFromPoint(x, y);
             range        = new ViperMozRange(rangeObj);
-        } else if (document.caretPositionFromPoint) {
+        } else if (doc.caretPositionFromPoint) {
             // Firefox.
-            var rangeObj = document.caretPositionFromPoint(x, y);
+            var rangeObj = doc.caretPositionFromPoint(x, y);
             range        = this.getCurrentRange().cloneRange();
             range.setStart(rangeObj.offsetNode, rangeObj.offset);
             range.collapse(true);
-        } else if (document.body.createTextRange) {
-            var rangeObj = document.body.createTextRange();
+        } else if (doc.body.createTextRange) {
+            var rangeObj = doc.body.createTextRange();
             try {
                 rangeObj.moveToPoint(x, y);
             } catch (e) {
@@ -1451,8 +1452,8 @@ Viper.prototype = {
 
             range = new ViperIERange(rangeObj);
 
-            if (Viper.document.createRange) {
-                rangeObj         = Viper.document.createRange();
+            if (Viper.doc.createRange) {
+                rangeObj         = Viper.doc.createRange();
                 var ieToMozRange = new ViperMozRange(rangeObj);
                 ieToMozRange.setStart(range.startContainer, range.startOffset);
                 ieToMozRange.collapse(true);
