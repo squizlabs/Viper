@@ -100,7 +100,7 @@ ViperReplacementPlugin.prototype = {
                     self.getKeywordReplacements(
                         keywords,
                         function(replacements) {
-                            for (var keyword in replacements) {
+                            for (var keyword in keywords) {
                                 self._replaceAttributeKeyword(element, attribute, keyword, replacements[keyword], value, true);
                             }
                         }
