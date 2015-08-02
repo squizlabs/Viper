@@ -561,7 +561,12 @@ ViperDOMRange.prototype = {
             if (element.nodeType !== ViperUtil.TEXT_NODE) {
                 var child = element.firstChild;
                 while (child) {
-                    if (this._isSelectable(child) === true || (brIsSelectable === true && ViperUtil.isTag(child, 'br') === true)) {
+                    if (ViperUtil.attr(child, 'contenteditable') === 'false') {
+                        // Create a new text node if this element is not editable.
+                        var newNode = document.createTextNode('');
+                        ViperUtil.insertBefore(child, newNode);
+                        return newNode;
+                    } else if (this._isSelectable(child) === true || (brIsSelectable === true && ViperUtil.isTag(child, 'br') === true)) {
                         return child;
                     } else if (child.firstChild) {
                         // This node does have child nodes.
@@ -591,7 +596,12 @@ ViperDOMRange.prototype = {
             if (element.nodeType !== ViperUtil.TEXT_NODE) {
                 var child = element.lastChild;
                 while (child) {
-                    if (this._isSelectable(child) === true || (brIsSelectable === true && ViperUtil.isTag(child, 'br') === true)) {
+                    if (ViperUtil.attr(child, 'contenteditable') === 'false') {
+                        // Create a new text node if this element is not editable.
+                        var newNode = document.createTextNode('');
+                        ViperUtil.insertAfter(child, newNode);
+                        return newNode;
+                    } else if (this._isSelectable(child) === true || (brIsSelectable === true && ViperUtil.isTag(child, 'br') === true)) {
                         return child;
                     } else if (child.lastChild) {
                         // This node does have child nodes.
