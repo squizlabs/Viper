@@ -23,11 +23,36 @@ function ViperReplacementPlugin(viper)
 
 ViperReplacementPlugin.prototype = {
 
+    setSettings: function (settings) {
+        if (settings.callback) {
+            this.setReplacementsCallback(settings.callback);
+        }
+
+        if (settings.pattern) {
+            this.setSearchPattern(settings.pattern);
+        }
+
+        var self = this;
+        this.showReplacements(
+            null,
+            function () {
+                self.viper.getHistoryManager().clear();
+                self.viper.getHistoryManager().add();
+            }
+        );
+    },
+
     init: function () {
         var self = this;
 
         this.viper.registerCallback('Viper:editableElementChanged', 'ViperReplacementPlugin', function() {
-            self.showReplacements();
+            self.viper.getHistoryManager().clear();
+            self.showReplacements(
+                null,
+                function () {
+                    self.viper.getHistoryManager().clear();
+                }
+            );
         });
 
         this.viper.registerCallback('Viper:enabled', 'ViperReplacementPlugin', function() {

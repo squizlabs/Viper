@@ -42,36 +42,36 @@
                 viper.setEditableElement(document.getElementById('content'));
                 viper.getPluginManager().setPluginSettings('ViperFormatPlugin', formatPluginSettings);
 
-                var repPlugin = viper.getPluginManager().getPlugin('ViperReplacementPlugin');
-                repPlugin.setSearchPattern('\\(\\([^\\)]+\\)\\)');
-                repPlugin.setReplacementsCallback(
-                    function(keywords, callback) {
-                        for (var keyword in keywords) {
-                            var rep = '';
-                            switch (keyword) {
-                                case '((prop:productName))':
-                                    rep = 'Viper';
-                                break;
+                viper.getPluginManager().setPluginSettings(
+                    'ViperReplacementPlugin',
+                    {
+                        pattern: '\\(\\([^\\)]+\\)\\)',
+                        callback: function(keywords, callback) {
+                            for (var keyword in keywords) {
+                                var rep = '';
+                                switch (keyword) {
+                                    case '((prop:productName))':
+                                        rep = 'VIPER';
+                                    break;
 
-                                case '((prop:url))':
-                                    rep = './Images/testImage.png';
-                                break;
+                                    case '((prop:url))':
+                                        rep = './Images/testImage.png';
+                                    break;
 
-                                case '((prop:className))':
-                                    rep = 'replaced-className';
-                                break;
+                                    case '((prop:className))':
+                                        rep = 'replaced-className';
+                                    break;
+                                }
+
+                                keywords[keyword] = rep;
                             }
 
-                            keywords[keyword] = rep;
+                            //setTimeout(function() {
+                                callback.call(this, keywords);
+                            //}, 500);
                         }
-
-                        //setTimeout(function() {
-                            callback.call(this, keywords);
-                        //}, 500);
                     }
                 );
-
-                repPlugin.showReplacements();
             });
         };
 
@@ -108,7 +108,7 @@
 
     <!-- comment goes here la -->
 
-        <p>((prop:productName))    Australian <span class="footnote-ref ((prop:className)) ((prop:className))">governments</span> at all levels have <u><strong><em>endorsed</em></strong></u> WCAG 2.0, and require all government websites (federal, <span class="another-class multi-col simple-image-border customClass">state</span> and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012. In addition, the Australian Government requires all federal websites to meet the medium conformance level (Double A) by the end of 2014.    </p>
+        <p>((prop:productName))    Australian <span class="footnote-ref ((prop:className)) ((prop:className))">governments</span> at all levels have <u><strong><em>endorsed</em></strong></u> WCAG 2.0, and require ((prop:productName)) all government websites (federal, <span class="another-class multi-col simple-image-border customClass">state</span> and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012. In addition, the Australian Government requires all federal websites to meet the medium conformance level (Double A) by the end of 2014.    ((prop:productName))</p>
 
 <p>
 
