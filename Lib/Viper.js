@@ -1283,13 +1283,13 @@ Viper.prototype = {
      * @param {string}   attribute The attribute name.
      * @param {string}   value     The value of the attribute.
      */
-    setAttribute: function(element, attribute, value)
+    setAttribute: function(element, attribute, value, keepEmptyAttribute)
     {
         if (!element || !element.setAttribute) {
             return;
         }
 
-        if (!value && ViperUtil.hasAttribute(element, attribute) === true) {
+        if (!value && keepEmptyAttribute !== true && ViperUtil.hasAttribute(element, attribute) === true) {
             element.removeAttribute(attribute);
 
             if (ViperUtil.isTag(element, 'span') === true
@@ -1320,7 +1320,7 @@ Viper.prototype = {
                     this.resetViperRange(range);
                 }
             }//end if
-        } else if (value) {
+        } else if (value || keepEmptyAttribute === true) {
             var notModified    = true;
             var modifiersCount = this._attributeSetModifiers.length;
             if (modifiersCount > 0) {

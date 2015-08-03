@@ -221,7 +221,7 @@ ViperImagePlugin.prototype = {
             return;
         }
 
-        return this._rangeToImage(range, image);
+        return this._rangeToImage(range, image, null, null, null, true);
     },
 
     rangeToImage: function(range, url, alt, title)
@@ -234,7 +234,7 @@ ViperImagePlugin.prototype = {
 
     },
 
-    _rangeToImage: function(range, img, url, alt, title)
+    _rangeToImage: function(range, img, url, alt, title, isMoveAction)
     {
         this._resizeImage = null;
 
@@ -273,7 +273,27 @@ ViperImagePlugin.prototype = {
             }
         }
 
-        ViperUtil.insertBefore(bookmark.start, img);
+        if (isMoveAction === true) {
+            // Image is being moved, make sure its surrounding parents also move with it.
+            var surroundingParents = ViperUtil.getSurroundingParents(img, null, null, this.viper.getViperElement());
+            if (surroundingParents.length > 0) {
+                var parent = null
+                while (parent = surroundingParents.pop()) {
+                    if (ViperUtil.isBlockElement(parent) === false) {
+                        ViperUtil.insertBefore(bookmark.start, parent);
+                        break;
+                    }
+                }
+
+                if (!parent) {
+                    ViperUtil.insertBefore(bookmark.start, img);
+                }
+            } else {
+                ViperUtil.insertBefore(bookmark.start, img);
+            }
+        } else {
+            ViperUtil.insertBefore(bookmark.start, img);
+        }
 
         this.viper.removeBookmark(bookmark);
 
@@ -350,13 +370,13 @@ ViperImagePlugin.prototype = {
         return false;
     },
 
-    setImageAlt: function(image, alt)
+    setImageAlt: function(image, alt, keepEmptyAttribute)
     {
         if (!image) {
             return;
         }
 
-        this.viper.setAttribute(image, 'alt', alt);
+        this.viper.setAttribute(image, 'alt', alt, keepEmptyAttribute);
 
     },
 
@@ -494,7 +514,7 @@ ViperImagePlugin.prototype = {
             image = this.rangeToImage(this.viper.getViperRange(), this.getImageUrl(url), alt, title);
         } else {
             this.setImageURL(image, this.getImageUrl(url));
-            this.setImageAlt(image, alt);
+            this.setImageAlt(image, alt, pres);
             this.setImageTitle(image, title);
 
             this.viper.fireNodesChanged([image]);
