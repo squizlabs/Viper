@@ -1254,7 +1254,7 @@ ViperListPlugin.prototype = {
         var node = p.lastChild;
         while (node) {
             var prevSibling = node.previousSibling;
-            if (ViperUtil.isBlockElement(node) === true) {
+            if (ViperUtil.isBlockElement(node) === true && ViperUtil.isStubElement(node) === false) {
                 ViperUtil.insertAfter(p, node);
             }
 
