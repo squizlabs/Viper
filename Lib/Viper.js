@@ -2969,14 +2969,14 @@ Viper.prototype = {
 
     },
 
-    removeStyle: function(style)
+    removeStyle: function(style, nodeSelection)
     {
         var range         = this.getViperRange();
         range             = this.adjustRange(range);
         var startNode     = range.getStartNode();
         var endNode       = range.getEndNode();
         var viperElement  = this.getViperElement();
-        var nodeSelection = range.getNodeSelection();
+        var nodeSelection = nodeSelection || range.getNodeSelection();
 
         if (nodeSelection) {
             // A whole node is selected. Remove all nested style tags and the node it self its the same tag.
