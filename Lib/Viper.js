@@ -2482,9 +2482,33 @@ Viper.prototype = {
 
         var startContainer = range.getStartNode();
         var endContainer   = range.getEndNode();
+        var nodeSelection  = range.getNodeSelection();
 
         if (startContainer === endContainer) {
             // Selected contents from same node.
+            if (nodeSelection) {
+                // Get the most outer surrounding parent which is not a block element.
+                var parents = ViperUtil.getSurroundingParents(nodeSelection, null, 'inline', this.getViperElement());
+                if (parents.length > 0 || ViperUtil.isBlockElement(nodeSelection) === false && ViperUtil.isStubElement(nodeSelection) === false) {
+                    if (parents.length > 0) {
+                        nodeSelection = parents.pop();
+                    }
+
+                    var node = Viper.document.createElement(tag);
+                    this._setWrapperElemAttributes(node, attributes);
+                    ViperUtil.insertBefore(nodeSelection, node);
+                    node.appendChild(nodeSelection);
+
+                    if (keepSelection !== true) {
+                        range.setStart(range._getFirstSelectableChild(node), 0);
+                        range.setEnd(range._getLastSelectableChild(node), range._getLastSelectableChild(node).data.length);
+                        ViperSelection.addRange(range);
+                    }
+
+                    return node;
+                }
+            }
+
             if (startContainer.nodeType === ViperUtil.TEXT_NODE) {
                 // Selection is a text node.
                 // Just wrap the contents with the specified node.
@@ -2531,8 +2555,6 @@ Viper.prototype = {
                 }, attributes);
             }//end if
         } else {
-            var nodeSelection = range.getNodeSelection();
-
             if (nodeSelection && ViperUtil.isBlockElement(nodeSelection) === false && nodeSelection.nodeType !== ViperUtil.TEXT_NODE) {
                 var newElement = document.createElement(otag);
                 this._setWrapperElemAttributes(newElement, attributes);
@@ -2991,7 +3013,7 @@ Viper.prototype = {
             }
 
             // Check the surrounding parents.
-            var surrounding = ViperUtil.getSurroundingParents(nodeSelection, style, false, this.getViperElement());
+            var surrounding = ViperUtil.getSurroundingParents(nodeSelection, style, null, this.getViperElement());
             for (var i = 0; i < surrounding.length; i++) {
                 if (ViperUtil.isTag(surrounding[i], style) === true) {
                     while (surrounding[i].firstChild) {
