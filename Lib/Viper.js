@@ -3537,6 +3537,10 @@ Viper.prototype = {
         }//end if
 
         try {
+            if (this.isEditableInIframe() === true) {
+                this.focus();
+            }
+
             ViperSelection.addRange(range);
         } catch (e) {
             // IE may throw exception for hidden elements..
@@ -5011,6 +5015,18 @@ Viper.prototype = {
                 // Catch the IE error: Can't move focus to control because its invisible.
             }//end try
         }//end if
+
+    },
+
+    isEditableInIframe: function(element)
+    {
+        element = element || this.element;
+
+        if (document !== element.ownerDocument) {
+            return true;
+        }
+
+        return false;
 
     },
 
