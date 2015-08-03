@@ -1848,15 +1848,23 @@ var ViperUtil = {
      *
      * @return {array}
      */
-    getDocuments: function()
-    {
-        var docs = [document];
-        var c    = frames.length;
-        for (var i = 0; i < c; i++) {
-            docs.push(ViperUtil.getIFrameDocument(frames[i]));
-        }
+     getDocuments: function(nested, parentDoc)
+     {
+         parentDoc = parentDoc || document;
+         var docs  = [parentDoc];
+         var c     = parentDoc.defaultView.frames.length;
+         for (var i = 0; i < c; i++) {
+             var doc = this.getIFrameDocument(parentDoc.defaultView.frames[i]);
+             if (doc !== null) {
+                 if (nested === true) {
+                     docs = docs.concat(dfx.getDocuments(nested, doc))
+                 } else {
+                     docs.push(doc);
+                 }
+             }
+         }
 
-        return docs;
+         return docs;
 
     },
 
