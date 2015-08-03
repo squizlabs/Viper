@@ -691,14 +691,14 @@ var ViperUtil = {
     /**
      * Returns list of parent elements that have only one child.
      *
-     * @param node              {DOMNode} The child element to get parents of.
-     * @param tagName           {string}  The tag name filter.
-     * @param blockElementsOnly {boolean} If true only the block elements is returned.
-     *                                    If the tagName filter is set then this param is ignored.
+     * @param node        {DOMNode} The child element to get parents of.
+     * @param tagName     {string}  The tag name filter.
+     * @param elementType {boolean} Can be one of block|inline|stub.
+     *                              If the tagName filter is set then this param is ignored.
      *
      * @return {array} Parent elements.
      */
-    getSurroundingParents: function(node, tagName, blockElementsOnly, stopElem)
+    getSurroundingParents: function(node, tagName, elementType, stopElem)
     {
         var parents = [];
         if (!node) {
@@ -724,7 +724,25 @@ var ViperUtil = {
             }
 
             if (!tagName) {
-                if (blockElementsOnly !== true || ViperUtil.isBlockElement(parent) === true) {
+                var isOfType = false;
+                switch (elementType) {
+                    case 'block':
+                        isOfType = ViperUtil.isBlockElement(parent);
+                    break;
+
+                    case 'stub':
+                        isOfType = ViperUtil.isStubElement(parent);
+                    break;
+
+                    default:
+                        if (parent.nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isBlockElement(parent) === false) {
+                            // Inline
+                            isOfType = true;
+                        }
+                    break;
+                }
+
+                if (isOfType) {
                     parents.push(parent);
                 }
             } else if (ViperUtil.isTag(parent, tagName) === true) {

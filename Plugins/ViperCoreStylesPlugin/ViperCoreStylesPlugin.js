@@ -945,8 +945,8 @@ ViperCoreStylesPlugin.prototype = {
 
         if (nodeSelection) {
             var sParents  = ViperUtil.getSurroundingParents(nodeSelection);
-            if (sParents.length > 0 && sParents[0] !== this.viper.getViperElement()) {
-                nodeSelection = sParents[0];
+            if (sParents.length > 0 && sParents[(sParents.length - 1)] !== this.viper.getViperElement()) {
+                nodeSelection = sParents[(sParents.length - 1)];
             }
         }
 
@@ -1028,7 +1028,7 @@ ViperCoreStylesPlugin.prototype = {
         // Remove all formating tags.
         var tln = tags.length;
         for (var i = 0; i < tln; i++) {
-            this.viper.removeStyle(tags[i]);
+            this.viper.removeStyle(tags[i], nodeSelection);
         }
 
         ViperChangeTracker.endBatchChange(changeid);
