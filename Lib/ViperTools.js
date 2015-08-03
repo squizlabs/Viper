@@ -2331,6 +2331,12 @@ ViperTools.prototype = {
         }
 
         var scrollCoords = ViperUtil.getScrollCoords();
+        if ((selectedNode && selectedNode.ownerDocument !== document)
+            || (range.startContainer && range.startContainer.ownerDocument !== document)
+        ) {
+            scrollCoords.x = 0;
+            scrollCoords.y = 0;
+        }
 
         ViperUtil.addClass(element, 'Viper-calcWidth');
         ViperUtil.setStyle(element, 'width', 'auto');

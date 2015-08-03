@@ -42,7 +42,7 @@ ViperCursorAssistPlugin.prototype = {
         };
 
         this.viper.registerCallback('Viper:editableElementChanged', 'ViperCursorAssistPlugin', function() {
-            ViperUtil.addEvent(document, 'mousemove', function(e) {
+            ViperUtil.addEvent(ViperUtil.getDocuments(), 'mousemove', function(e) {
                 clearTimeout(t);
                 t = setTimeout(function() {
                     var line = ViperUtil.getid(self.viper.getId() + '-cursorAssist');
@@ -81,6 +81,12 @@ ViperCursorAssistPlugin.prototype = {
                     var mousePos = (e.clientY + scroll.y);
                     var elemRect = ViperUtil.getBoundingRectangle(hoverElem);
                     var dist     = self._dist;
+                    var childScrollCoords = {x:0, y:0};
+
+                    if (self.viper.isEditableInIframe() === true) {
+                        childScrollCoords = ViperUtil.getScrollCoords(hoverElem.ownerDocument.defaultView);
+                        mousePos += childScrollCoords.y;
+                    }
 
                     if (ViperUtil.isTag(hoverElem, 'table') === true
                         && ViperUtil.isBrowser('firefox') === true
@@ -212,6 +218,19 @@ ViperCursorAssistPlugin.prototype = {
                             self.viper.fireSelectionChanged(null, true);
                         }, 10);
                     });
+
+                    if (self.viper.isEditableInIframe() === true) {
+                        childScrollCoords = ViperUtil.getScrollCoords(hoverElem.ownerDocument.defaultView);
+                        elemRect.y1 -= childScrollCoords.y;
+                        elemRect.y2 -= childScrollCoords.y;
+
+                        var frameOffset = self.viper.getDocumentOffset(hoverElem.ownerDocument);
+                        elemRect.y1 += frameOffset.y;
+                        elemRect.y2 += frameOffset.y;
+                        elemRect.x1 += frameOffset.x;
+                        elemRect.x2 += frameOffset.x;
+
+                    }
 
                     ViperUtil.removeClass(line, 'insertBetween');
                     if (sibling === 'previousSibling') {

@@ -839,6 +839,19 @@ ViperDOMRange.prototype = {
             // Case: <p>[<img />]</p>. Image clicked.
             this._nodeSel.node = startNode;
             return startNode;
+        } else if (startNode
+            && endNode
+            && startNode.nodeType === ViperUtil.ELEMENT_NODE
+            && endNode.nodeType === ViperUtil.ELEMENT_NODE
+            && startNode !== endNode
+            && endNode === common
+            && !startNode.nextElementSibling
+            && ((range.startOffset + 1) === range.endOffset)
+        ) {
+            // Last element in the container however the range start node is the last element but end node is the common
+            // parent with endOffset = startOffset + 1.
+            this._nodeSel.node = startNode;
+            return startNode;
         } else if (startNode && !endNode) {
             if (startNode.nodeType === ViperUtil.TEXT_NODE) {
                 if (range.endContainer.nodeType === ViperUtil.ELEMENT_NODE

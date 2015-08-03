@@ -1526,9 +1526,10 @@ Viper.prototype = {
     getElementAtCoords: function(x, y)
     {
         var elem = null;
-        if (document.caretRangeFromPoint) {
+        var doc  = this.getViperElement().ownerDocument;
+        if (doc.caretRangeFromPoint) {
             // Webkit.
-            var range = document.caretRangeFromPoint(x, y);
+            var range = doc.caretRangeFromPoint(x, y);
             if (range) {
                 if (range.startContainer === range.endContainer
                     && range.startOffset === range.endOffset
@@ -1540,9 +1541,9 @@ Viper.prototype = {
                     }
                 }
             }
-        } else if (document.caretPositionFromPoint) {
+        } else if (doc.caretPositionFromPoint) {
             // Firefox.
-            var range = document.caretPositionFromPoint(x, y);
+            var range = doc.caretPositionFromPoint(x, y);
             if (range) {
                 if (ViperUtil.isBlockElement(range.offsetNode) === true) {
                     var offset = range.offset;
@@ -1555,9 +1556,9 @@ Viper.prototype = {
                     elem = range.offsetNode;
                 }
             }
-        } else if (document.body.createTextRange) {
+        } else if (doc.body.createTextRange) {
             // IE.
-            range = document.body.createTextRange();
+            range = doc.body.createTextRange();
             try {
                 range.moveToPoint(x, y);
             } catch (e) {
@@ -1570,9 +1571,9 @@ Viper.prototype = {
 
     },
 
-    getDocumentOffset: function()
+    getDocumentOffset: function(doc)
     {
-        var doc    = Viper.document;
+        var doc    = doc || Viper.document;
         var offset = {
             x: 0,
             y: 0
@@ -3619,6 +3620,10 @@ Viper.prototype = {
         }//end if
 
         try {
+            if (this.isEditableInIframe() === true) {
+                this.focus();
+            }
+
             ViperSelection.addRange(range);
         } catch (e) {
             // IE may throw exception for hidden elements..
@@ -5093,6 +5098,18 @@ Viper.prototype = {
                 // Catch the IE error: Can't move focus to control because its invisible.
             }//end try
         }//end if
+
+    },
+
+    isEditableInIframe: function(element)
+    {
+        element = element || this.element;
+
+        if (document !== element.ownerDocument) {
+            return true;
+        }
+
+        return false;
 
     },
 
