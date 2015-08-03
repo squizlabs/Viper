@@ -1382,9 +1382,10 @@ Viper.prototype = {
     getElementAtCoords: function(x, y)
     {
         var elem = null;
-        if (document.caretRangeFromPoint) {
+        var doc  = this.getViperElement().ownerDocument;
+        if (doc.caretRangeFromPoint) {
             // Webkit.
-            var range = document.caretRangeFromPoint(x, y);
+            var range = doc.caretRangeFromPoint(x, y);
             if (range) {
                 if (range.startContainer === range.endContainer
                     && range.startOffset === range.endOffset
@@ -1396,9 +1397,9 @@ Viper.prototype = {
                     }
                 }
             }
-        } else if (document.caretPositionFromPoint) {
+        } else if (doc.caretPositionFromPoint) {
             // Firefox.
-            var range = document.caretPositionFromPoint(x, y);
+            var range = doc.caretPositionFromPoint(x, y);
             if (range) {
                 if (ViperUtil.isBlockElement(range.offsetNode) === true) {
                     var offset = range.offset;
@@ -1411,9 +1412,9 @@ Viper.prototype = {
                     elem = range.offsetNode;
                 }
             }
-        } else if (document.body.createTextRange) {
+        } else if (doc.body.createTextRange) {
             // IE.
-            range = document.body.createTextRange();
+            range = doc.body.createTextRange();
             try {
                 range.moveToPoint(x, y);
             } catch (e) {
@@ -1426,9 +1427,9 @@ Viper.prototype = {
 
     },
 
-    getDocumentOffset: function()
+    getDocumentOffset: function(doc)
     {
-        var doc    = Viper.document;
+        var doc    = doc || Viper.document;
         var offset = {
             x: 0,
             y: 0
@@ -3376,6 +3377,10 @@ Viper.prototype = {
         }//end if
 
         try {
+            if (this.isEditableInIframe() === true) {
+                this.focus();
+            }
+
             ViperSelection.addRange(range);
         } catch (e) {
             // IE may throw exception for hidden elements..
@@ -4779,6 +4784,18 @@ Viper.prototype = {
                 // Catch the IE error: Can't move focus to control because its invisible.
             }//end try
         }//end if
+
+    },
+
+    isEditableInIframe: function(element)
+    {
+        element = element || this.element;
+
+        if (document !== element.ownerDocument) {
+            return true;
+        }
+
+        return false;
 
     },
 
@@ -7480,7 +7497,12 @@ ViperDOMRange.prototype = {
             if (element.nodeType !== ViperUtil.TEXT_NODE) {
                 var child = element.firstChild;
                 while (child) {
-                    if (this._isSelectable(child) === true || (brIsSelectable === true && ViperUtil.isTag(child, 'br') === true)) {
+                    if (ViperUtil.attr(child, 'contenteditable') === 'false') {
+                        // Create a new text node if this element is not editable.
+                        var newNode = document.createTextNode('');
+                        ViperUtil.insertBefore(child, newNode);
+                        return newNode;
+                    } else if (this._isSelectable(child) === true || (brIsSelectable === true && ViperUtil.isTag(child, 'br') === true)) {
                         return child;
                     } else if (child.firstChild) {
                         // This node does have child nodes.
@@ -7510,7 +7532,12 @@ ViperDOMRange.prototype = {
             if (element.nodeType !== ViperUtil.TEXT_NODE) {
                 var child = element.lastChild;
                 while (child) {
-                    if (this._isSelectable(child) === true || (brIsSelectable === true && ViperUtil.isTag(child, 'br') === true)) {
+                    if (ViperUtil.attr(child, 'contenteditable') === 'false') {
+                        // Create a new text node if this element is not editable.
+                        var newNode = document.createTextNode('');
+                        ViperUtil.insertAfter(child, newNode);
+                        return newNode;
+                    } else if (this._isSelectable(child) === true || (brIsSelectable === true && ViperUtil.isTag(child, 'br') === true)) {
                         return child;
                     } else if (child.lastChild) {
                         // This node does have child nodes.
@@ -7742,6 +7769,19 @@ ViperDOMRange.prototype = {
             && this.startContainer.childNodes.length >= range.startOffset
         ) {
             // Case: <p>[<img />]</p>. Image clicked.
+            this._nodeSel.node = startNode;
+            return startNode;
+        } else if (startNode
+            && endNode
+            && startNode.nodeType === ViperUtil.ELEMENT_NODE
+            && endNode.nodeType === ViperUtil.ELEMENT_NODE
+            && startNode !== endNode
+            && endNode === common
+            && !startNode.nextElementSibling
+            && ((range.startOffset + 1) === range.endOffset)
+        ) {
+            // Last element in the container however the range start node is the last element but end node is the common
+            // parent with endOffset = startOffset + 1.
             this._nodeSel.node = startNode;
             return startNode;
         } else if (startNode && !endNode) {
@@ -9372,6 +9412,27 @@ ViperMozRange.prototype = {
     
     setStart: function(node, offset)
     {
+        // TODO: Quick fix for selection issues with non editable elmeents in Viper element. Should be done in another way.
+        // When the range is set inside a contenteditable=false element, find the element with this attribute and move the
+        // range before the element.
+        var tmp = node;
+        while (tmp) {
+            if (tmp.nodeType === ViperUtil.ELEMENT_NODE) {
+                var editable = tmp.getAttribute('contenteditable');
+                if (editable === 'false') {
+                    var t = document.createTextNode('');
+                    ViperUtil.insertBefore(tmp, t);
+                    node = t;
+                    offset = 0;
+                    break;
+                } else if (editable === 'true') {
+                    break;
+                }
+            }
+
+            tmp = tmp.parentNode;
+        }
+
         this.rangeObj.setStart(node, offset);
 
         this.startContainer = node;
@@ -9390,6 +9451,27 @@ ViperMozRange.prototype = {
     
     setEnd: function(node, offset)
     {
+        // TODO: Quick fix for selection issues with non editable elmeents in Viper element. Should be done in another way.
+        // When the range is set inside a contenteditable=false element, find the element with this attribute and move the
+        // range after the element.
+        var tmp = node;
+        while (tmp) {
+            if (tmp.nodeType === ViperUtil.ELEMENT_NODE) {
+                var editable = tmp.getAttribute('contenteditable');
+                if (editable === 'false') {
+                    var t = document.createTextNode('');
+                    ViperUtil.insertAfter(tmp, t);
+                    node = t;
+                    offset = 0;
+                    break;
+                } else if (editable === 'true') {
+                    break;
+                }
+            }
+
+            tmp = tmp.parentNode;
+        }
+
         this.rangeObj.setEnd(node, offset);
         this.endContainer = node;
         this.endOffset    = offset;
@@ -12858,6 +12940,12 @@ ViperTools.prototype = {
         }
 
         var scrollCoords = ViperUtil.getScrollCoords();
+        if ((selectedNode && selectedNode.ownerDocument !== document)
+            || (range.startContainer && range.startContainer.ownerDocument !== document)
+        ) {
+            scrollCoords.x = 0;
+            scrollCoords.y = 0;
+        }
 
         ViperUtil.addClass(element, 'Viper-calcWidth');
         ViperUtil.setStyle(element, 'width', 'auto');
@@ -14441,15 +14529,23 @@ var ViperUtil = {
 
 
     
-    getDocuments: function()
-    {
-        var docs = [document];
-        var c    = frames.length;
-        for (var i = 0; i < c; i++) {
-            docs.push(ViperUtil.getIFrameDocument(frames[i]));
-        }
+     getDocuments: function(nested, parentDoc)
+     {
+         parentDoc = parentDoc || document;
+         var docs  = [parentDoc];
+         var c     = parentDoc.defaultView.frames.length;
+         for (var i = 0; i < c; i++) {
+             var doc = this.getIFrameDocument(parentDoc.defaultView.frames[i]);
+             if (doc !== null) {
+                 if (nested === true) {
+                     docs = docs.concat(dfx.getDocuments(nested, doc))
+                 } else {
+                     docs.push(doc);
+                 }
+             }
+         }
 
-        return docs;
+         return docs;
 
     },
 
@@ -28981,7 +29077,7 @@ ViperCursorAssistPlugin.prototype = {
         };
 
         this.viper.registerCallback('Viper:editableElementChanged', 'ViperCursorAssistPlugin', function() {
-            ViperUtil.addEvent(document, 'mousemove', function(e) {
+            ViperUtil.addEvent(ViperUtil.getDocuments(), 'mousemove', function(e) {
                 clearTimeout(t);
                 t = setTimeout(function() {
                     var line = ViperUtil.getid(self.viper.getId() + '-cursorAssist');
@@ -29020,6 +29116,12 @@ ViperCursorAssistPlugin.prototype = {
                     var mousePos = (e.clientY + scroll.y);
                     var elemRect = ViperUtil.getBoundingRectangle(hoverElem);
                     var dist     = self._dist;
+                    var childScrollCoords = {x:0, y:0};
+
+                    if (self.viper.isEditableInIframe() === true) {
+                        childScrollCoords = ViperUtil.getScrollCoords(hoverElem.ownerDocument.defaultView);
+                        mousePos += childScrollCoords.y;
+                    }
 
                     if (ViperUtil.isTag(hoverElem, 'table') === true
                         && ViperUtil.isBrowser('firefox') === true
@@ -29152,6 +29254,19 @@ ViperCursorAssistPlugin.prototype = {
                         }, 10);
                     });
 
+                    if (self.viper.isEditableInIframe() === true) {
+                        childScrollCoords = ViperUtil.getScrollCoords(hoverElem.ownerDocument.defaultView);
+                        elemRect.y1 -= childScrollCoords.y;
+                        elemRect.y2 -= childScrollCoords.y;
+
+                        var frameOffset = self.viper.getDocumentOffset(hoverElem.ownerDocument);
+                        elemRect.y1 += frameOffset.y;
+                        elemRect.y2 += frameOffset.y;
+                        elemRect.x1 += frameOffset.x;
+                        elemRect.x2 += frameOffset.x;
+
+                    }
+
                     ViperUtil.removeClass(line, 'insertBetween');
                     if (sibling === 'previousSibling') {
                         ViperUtil.setStyle(line, 'top', elemRect.y1 + 'px');
@@ -29213,6 +29328,7 @@ ViperCursorAssistPlugin.prototype = {
     }
 
 };
+
 
 
 function ViperFormatPlugin(viper)
@@ -39645,11 +39761,36 @@ function ViperReplacementPlugin(viper)
 
 ViperReplacementPlugin.prototype = {
 
+    setSettings: function (settings) {
+        if (settings.callback) {
+            this.setReplacementsCallback(settings.callback);
+        }
+
+        if (settings.pattern) {
+            this.setSearchPattern(settings.pattern);
+        }
+
+        var self = this;
+        this.showReplacements(
+            null,
+            function () {
+                self.viper.getHistoryManager().clear();
+                self.viper.getHistoryManager().add();
+            }
+        );
+    },
+
     init: function () {
         var self = this;
 
         this.viper.registerCallback('Viper:editableElementChanged', 'ViperReplacementPlugin', function() {
-            self.showReplacements();
+            self.viper.getHistoryManager().clear();
+            self.showReplacements(
+                null,
+                function () {
+                    self.viper.getHistoryManager().clear();
+                }
+            );
         });
 
         this.viper.registerCallback('Viper:enabled', 'ViperReplacementPlugin', function() {
@@ -42173,13 +42314,6 @@ ViperTableEditorPlugin.prototype = {
             ViperUtil.addClass(tools, 'Viper-topBar');
         }
 
-        var offset = this.viper.getDocumentOffset();
-        var left   = (Math.ceil(cellCoords.x1 + ((cellCoords.x2 - cellCoords.x1) / 2) - (toolsWidth / 2)) + 1 + offset.x);
-        var top    = (cellCoords.y2 + 5 + offset.y);
-
-        ViperUtil.setStyle(tools, 'top', top + 'px');
-        ViperUtil.setStyle(tools, 'left', left + 'px');
-
         if (this._isiPad() === false) {
             // On Hover of the buttons highlight the table/row/col/cell.
             ViperUtil.hover(tableBtn, function() {
@@ -42228,6 +42362,9 @@ ViperTableEditorPlugin.prototype = {
         }//end if
 
         this.viper.addElement(tools);
+
+        this.viper.ViperTools.updatePositionOfElement(tools, null, cell);
+        ViperUtil.setStyle(tools, 'width', 'auto');
 
     },
 
