@@ -1321,11 +1321,28 @@ Viper.prototype = {
                 }
             }//end if
         } else if (value || keepEmptyAttribute === true) {
+            var self           = this;
             var notModified    = true;
             var modifiersCount = this._attributeSetModifiers.length;
             if (modifiersCount > 0) {
+                this._retrievingValues = true;
+                var doneCount          = 0;
                 for (var i = 0; i < modifiersCount; i++) {
-                    notModified = this._attributeSetModifiers[i].call(this, element, attribute, value);
+                    notModified = this._attributeSetModifiers[i].call(
+                        this,
+                        element,
+                        attribute,
+                        value,
+                        function() {
+                            doneCount++;
+                            if (doneCount === modifiersCount) {
+                                self._retrievingValues = false;
+                                if (self._valuesRetrievedCallback) {
+                                    self._valuesRetrievedCallback.call(self);
+                                }
+                            }
+                        }
+                    );
                 }
 
                 if (notModified !== false) {
@@ -4346,7 +4363,16 @@ Viper.prototype = {
             || this._prevRange.collapsed !== range.collapsed
         ) {
             this._prevRange = range;
-            this.fireCallbacks('Viper:selectionChanged', range);
+
+            if (this._retrievingValues === true) {
+                var self = this;
+                this._valuesRetrievedCallback = function() {
+                    self.fireCallbacks('Viper:selectionChanged', range);
+                };
+            } else {
+                this._valuesRetrievedCallback = null;
+                this.fireCallbacks('Viper:selectionChanged', range);
+            }
         }
 
     },

@@ -111,7 +111,7 @@ ViperReplacementPlugin.prototype = {
         );
 
         this.viper.addAttributeSetModifier(
-            function (element, attribute, value) {
+            function (element, attribute, value, callback) {
                 // If the value has keyword it needs to be handled.
                 var regex = new RegExp(self.getReplacementRegex(), 'gi');
                 var matches = value.match(regex);
@@ -128,6 +128,8 @@ ViperReplacementPlugin.prototype = {
                             for (var keyword in keywords) {
                                 self._replaceAttributeKeyword(element, attribute, keyword, replacements[keyword], value, true);
                             }
+
+                            callback.call(this);
                         }
                     );
 
