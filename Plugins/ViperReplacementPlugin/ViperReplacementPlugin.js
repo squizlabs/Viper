@@ -50,7 +50,7 @@ ViperReplacementPlugin.prototype = {
             self.showReplacements(
                 null,
                 function () {
-                    self.viper.getHistoryManager().clear();
+                    self.viper.getHistoryManager().add();
                 }
             );
         });
