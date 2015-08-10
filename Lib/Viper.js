@@ -2980,9 +2980,9 @@ Viper.prototype = {
 
     },
 
-    removeStylesBetweenElems: function(start, end, style)
+    removeStylesBetweenElems: function(start, end, style, range)
     {
-        var elems = ViperUtil.getElementsBetween(start, end);
+        var elems = ViperUtil.getElementsBetween(start, end, range);
         elems.unshift(start);
         var len = elems.length;
         for (var i = 0; i < len; i++) {
@@ -3063,7 +3063,7 @@ Viper.prototype = {
         var startParents = ViperUtil.getParents(startNode, style, this.element);
         var endParents   = ViperUtil.getParents(endNode, style, this.element);
 
-        this.removeStylesBetweenElems(startNode, endNode, style);
+        this.removeStylesBetweenElems(startNode, endNode, style, range);
 
         if (startParents.length === 0 && endParents.length === 0) {
             // Start and End is not inside of style tag, so we are done.
