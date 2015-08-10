@@ -2901,9 +2901,9 @@ Viper.prototype = {
 
     },
 
-    removeStylesBetweenElems: function(start, end, style)
+    removeStylesBetweenElems: function(start, end, style, range)
     {
-        var elems = ViperUtil.getElementsBetween(start, end);
+        var elems = ViperUtil.getElementsBetween(start, end, range);
         elems.unshift(start);
         var len = elems.length;
         for (var i = 0; i < len; i++) {
@@ -2939,7 +2939,7 @@ Viper.prototype = {
 
         var bookmark = this.createBookmark(range);
 
-        this.removeStylesBetweenElems(startNode, endNode, style);
+        this.removeStylesBetweenElems(startNode, endNode, style, range);
 
         var startParents = ViperUtil.getParents(bookmark.start, style, this.element);
         var endParents   = ViperUtil.getParents(bookmark.end, style, this.element);
