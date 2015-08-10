@@ -2937,19 +2937,21 @@ Viper.prototype = {
             endNode = startNode;
         }
 
-        var startParents = ViperUtil.getParents(startNode, style, this.element);
-        var endParents   = ViperUtil.getParents(endNode, style, this.element);
+        var bookmark = this.createBookmark(range);
 
         this.removeStylesBetweenElems(startNode, endNode, style);
+
+        var startParents = ViperUtil.getParents(bookmark.start, style, this.element);
+        var endParents   = ViperUtil.getParents(bookmark.end, style, this.element);
 
         if (startParents.length === 0 && endParents.length === 0) {
             // Start and End is not inside of style tag, so we are done.
             ViperSelection.addRange(range);
+            this.removeBookmarks();
             return;
         }
 
         // Bookmark and get the top style parents.
-        var bookmark       = this.createBookmark(range);
         var startTopParent = startParents.pop();
         var endTopParent   = endParents.pop();
 
