@@ -767,7 +767,7 @@ var ViperUtil = {
      * Calling getElementsFromTo(x, y);
      * Result: [br, p, div(id=a)]
      */
-    getElementsBetween: function(fromElem, toElem)
+    getElementsBetween: function(fromElem, toElem, range)
     {
         var elements = [];
 
@@ -828,6 +828,7 @@ var ViperUtil = {
             if (lastParent.firstChild === lastParent.lastChild
                 && lastParent.firstChild === fromElem
                 && lastParent !== toElem
+                && (!range || range.startOffset === 0)
             ) {
                elements.push(lastParent);
             }
