@@ -435,7 +435,7 @@ ViperDOMRange.prototype = {
      * @return The text container that range can extend to.
      * @type   {TextNode}
      */
-    getPreviousContainer: function(container, skippedBlockElem, skipEmptyNodes, brIsSelectable)
+    getPreviousContainer: function(container, skippedBlockElem, skipEmptyNodes, brIsSelectable, stopAtBlockElement)
     {
         if (!container) {
             return null;
@@ -463,6 +463,10 @@ ViperDOMRange.prototype = {
         }
 
         if (!container) {
+            return null;
+        }
+
+        if (stopAtBlockElement === true && ViperUtil.isBlockElement(container) === true) {
             return null;
         }
 
@@ -509,7 +513,7 @@ ViperDOMRange.prototype = {
      * @return The text container that range can extend to.
      * @type   {TextNode}
      */
-    getNextContainer: function(container, skippedBlockElem, skipSpaceTextNodes, brIsSelectable)
+    getNextContainer: function(container, skippedBlockElem, skipSpaceTextNodes, brIsSelectable, stopAtBlockElement)
     {
         if (!container) {
             return null;
@@ -533,6 +537,10 @@ ViperDOMRange.prototype = {
         }
 
         if (!container) {
+            return null;
+        }
+
+        if (stopAtBlockElement === true && ViperUtil.isBlockElement(container) === true) {
             return null;
         }
 

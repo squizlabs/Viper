@@ -12,13 +12,13 @@ var ViperUtil = {
     DOCUMENT_TYPE_NODE: 10,
     DOCUMENT_FRAGMENT_NODE: 11,
     NOTATION_NODE: 12,
-    DOM_VK_DELETE: 8,
+    DOM_VK_DELETE: 46,
     DOM_VK_LEFT: 37,
     DOM_VK_UP: 38,
     DOM_VK_RIGHT: 39,
     DOM_VK_DOWN: 40,
     DOM_VK_ENTER: 13,
-    DOM_VK_BACKSPACE: 46,
+    DOM_VK_BACKSPACE: 8,
     _browserType: null,
     _browserVersion: null,
 
@@ -754,6 +754,15 @@ var ViperUtil = {
         }
 
         return parents;
+
+    },
+
+    getTopSurroundingParent: function(node, tagName, elementType, stopElem)
+    {
+        var parents = this.getSurroundingParents(node, tagName, elementType, stopElem);
+        if (parents.length > 0) {
+            return parents.pop();
+        }
 
     },
 

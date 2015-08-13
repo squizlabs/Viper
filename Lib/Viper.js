@@ -4349,7 +4349,6 @@ Viper.prototype = {
     {
         if (!range) {
             range = this.getViperRange();
-
             try {
                 range = this.adjustRange(range);
             } catch (e) {
@@ -4529,7 +4528,7 @@ Viper.prototype = {
             this._keyDownRangeCollapsed = range.collapsed;
         }
 
-        if (e.which === ViperUtil.DOM_VK_DELETE
+        if (e.which === ViperUtil.DOM_VK_BACKSPACE
             && ViperChangeTracker.isTracking() === true
             && ViperUtil.isBrowser('firefox') === false
         ) {
@@ -4592,6 +4591,11 @@ Viper.prototype = {
                     ViperSelection.addRange(range);
                 }//end if
 
+                var self = this;
+                setTimeout(function() {
+                    self.fireSelectionChanged();
+                }, 10);
+
                 return true;
             }//end if
         } else if ((e.which === 65 && (e.metaKey === true || e.ctrlKey === true))
@@ -4601,7 +4605,7 @@ Viper.prototype = {
             var self = this;
             setTimeout(function() {
                 self.fireSelectionChanged();
-            }, 50);
+            }, 10);
             return true;
         } else if ((e.which === 37 || e.which === 39) && (e.metaKey === true && ViperUtil.isOS('mac') === true)) {
             // Prevent browser history triger on OSX.
@@ -4708,7 +4712,7 @@ Viper.prototype = {
         // Check that keyCode is not 0 as Firefox fires keyPress for arrow keys which
         // have key code of 0.
         if (e.which !== 0 && ViperChangeTracker.isTracking() === true) {
-            if (e.which === ViperUtil.DOM_VK_DELETE) {
+            if (e.which === ViperUtil.DOM_VK_BACKSPACE) {
                 // Handle delete OP here because some browsers (e.g. Chrome, IE) does not
                 // fire keyPress when DELETE is held down.
                 this.deleteContents();
@@ -4873,7 +4877,7 @@ Viper.prototype = {
             return false;
         }
 
-        if (e.which === ViperUtil.DOM_VK_DELETE) {
+        if (e.which === ViperUtil.DOM_VK_BACKSPACE) {
             // Check if the content is now empty.
             var html = ViperUtil.getHtml(this.element);
             if (!html || html === '<br>') {
@@ -4891,7 +4895,7 @@ Viper.prototype = {
             || e.which === 46
             || (e.which >= 37 && e.which <= 40)
         ) {
-            this.fireSelectionChanged();
+        //    this.fireSelectionChanged();
         }
 
         this._keyDownRangeCollapsed = true;

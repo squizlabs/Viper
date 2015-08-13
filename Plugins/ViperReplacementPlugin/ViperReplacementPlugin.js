@@ -55,13 +55,6 @@ ViperReplacementPlugin.prototype = {
             );
         });
 
-        this.viper.registerCallback('Viper:enabled', 'ViperReplacementPlugin', function() {
-            // Viper removes the contenteditable attribute when Viper is disabled etc..
-            // Add contenteditable=false to all keywords when Viper is enabled again.
-            var keywords = ViperUtil.find(self.viper.getViperElement(), 'keyword');
-            ViperUtil.attr(keywords, 'contenteditable', false);
-        });
-
         this.viper.registerCallback('Viper:getHtml', 'ViperReplacementPlugin', function(data) {
             self.showKeywords(data.element);
         });
@@ -79,28 +72,188 @@ ViperReplacementPlugin.prototype = {
             return function() {};
         });
 
+        // Shift, Control, Alt, Caps lock, esc, L-CMD, R-CMD, arrow keys.
+        var ignoredKeys = [16, 17, 18, 20, 27, 91, 93, 37, 38, 39, 40];
+        this.viper.registerCallback('Viper:keyDown', 'ViperReplacementPlugin', function(e) {
+            switch (e.which) {
+                default:
+                    if (ViperUtil.inArray(e.which, ignoredKeys) === true) {
+                        return;
+                    }
 
-        if (ViperUtil.isBrowser('msie') === true) {
-            // IE, "surprisingly" ignores "contenteditable=false" so when a keyword is selected adjust the selection...
-            this.viper.registerCallback('Viper:selectionChanged', 'ViperReplacementPlugin', function(range) {
-                var start = range.getStartNode();
-                var end   = range.getEndNode();
+                    var range     = self.viper.getViperRange();
+                    var startNode = range.getStartNode();
+                    var selNode   = range.getNodeSelection();
 
-                var startKeyword = self._getKeywordElement(start);
-                var endKeyword   = self._getKeywordElement(end);
+                    if (startNode && startNode.nodeType === ViperUtil.TEXT_NODE) {
+                        // Check if the caret is inside a keyword element.
+                        var rep = self._getKeywordElement(startNode);
+                        if (!rep) {
+                            if (range.startOffset === 0) {
+                                // Range is at the start of a text node so check if the previous container is a keyword
+                                // element.
+                                rep = self._getKeywordElement(range.getPreviousContainer(startNode, null, false, false, true));
+                                if (rep) {
+                                    if (e.which === ViperUtil.DOM_VK_BACKSPACE || e.which === ViperUtil.DOM_VK_DELETE) {
+                                        // This is a backspace. Need to remove the keyword element and prevent default
+                                        // action so mo.
+                                        var elem = ViperUtil.getTopSurroundingParent(rep) || rep;
+                                        ViperUtil.remove(elem);
+                                        self.viper.fireSelectionChanged(null, true);
+                                        self.viper.fireNodesChanged();
+                                        return false;
+                                    }
 
-                if (startKeyword !== false && startKeyword === endKeyword) {
-                    // Just remove the range.
-                    ViperSelection.removeAllRanges();
-                } else if (startKeyword) {
-                    range = self._fixRange(range, startKeyword, true);
-                    ViperSelection.addRange(range);
-                } else if (endKeyword) {
-                    range = self._fixRange(range, endKeyword, false);
-                    ViperSelection.addRange(range);
+                                    // Add a space between the keyword element and the caret container.
+                                    if (startNode.data[0] === ' ') {
+                                        // The first character of this text node is a space so we need to add non breaking
+                                        // space.
+                                        startNode.data = String.fromCharCode(160) + startNode.data;
+                                    } else if (startNode.data.length === 0) {
+                                        startNode.data = String.fromCharCode(160);
+                                    } else {
+                                        startNode.data = ' ' + startNode.data;
+                                    }
+
+                                    // When the keyDown executes insert the character after the first space character.
+                                    range.setStart(startNode, 1);
+                                    range.collapse(true);
+                                    ViperSelection.addRange(range);
+                                } else {
+                                    rep = self._getKeywordElement(range.getNextContainer(startNode, null, false, false, true));
+                                    if (rep) {
+                                        if (e.which === ViperUtil.DOM_VK_BACKSPACE || e.which === ViperUtil.DOM_VK_DELETE) {
+                                            // This is a backspace. Need to remove the keyword element and prevent default
+                                            // action so mo.
+                                            var elem = ViperUtil.getTopSurroundingParent(rep) || rep;
+                                            ViperUtil.remove(elem);
+                                            self.viper.fireSelectionChanged(null, true);
+                                            return false;
+                                        }
+
+                                        if (startNode.data[0] === ' ') {
+                                            // The first character of this text node is a space so we need to add non breaking
+                                            // space.
+                                            startNode.data = String.fromCharCode(160) + startNode.data;
+                                        } else if (startNode.data.length === 0) {
+                                            startNode.data = String.fromCharCode(160);
+                                        } else {
+                                            startNode.data = ' ' + startNode.data;
+                                        }
+
+                                        range.setStart(startNode, 0);
+                                        range.collapse(true);
+                                        ViperSelection.addRange(range);
+
+                                        setTimeout(
+                                            function () {
+                                                startNode.data = ViperUtil.rtrim(startNode.data);
+                                                range.setStart(startNode, 1);
+                                                range.collapse(true);
+                                                ViperSelection.addRange(range);
+                                            },
+                                            2
+                                        )
+                                    }
+                                }
+                                return;
+                            } else if (range.startOffset >= startNode.data.length) {
+                                rep = self._getKeywordElement(range.getPreviousContainer(startNode, null, false, false, true));
+                                if (rep) {
+                                    if (e.which === ViperUtil.DOM_VK_BACKSPACE || e.which === ViperUtil.DOM_VK_DELETE) {
+                                        // This is a delete. Need to remove the keyword element and prevent default
+                                        // action so mo.
+                                        var elem = ViperUtil.getTopSurroundingParent(rep) || rep;
+                                        ViperUtil.remove(elem);
+                                        self.viper.fireSelectionChanged(null, true);
+                                        self.viper.fireNodesChanged();
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            if (!rep) {
+                                return;
+                            }
+                        }
+                    } else {
+                        rep = self._getKeywordElement(selNode);
+                    }
+
+                    if (selNode === rep) {
+                        // Whole keyword element is selected. Remove it and its surrounding parents.
+                        var parents  = ViperUtil.getSurroundingParents(selNode);
+                        if (parents.length > 0) {
+                            selNode = parents.pop();
+                        }
+
+                        // When there are text siblings its better to join them.
+                        var info = self._normaliseTextNodeSiblings(selNode);
+                        if (info) {
+                            range.setStart(info.textNode, info.splitOffset);
+                        } else {
+                            var cont = range.getPreviousContainer(selNode, null, false, false, true);
+                            if (!cont) {
+                                cont = range.getNextContainer(selNode, null, false, false, true);
+                                if (!cont) {
+                                    cont = document.createTextNode('');
+                                    ViperUtil.insertBefore(selNode, cont);
+                                } else {
+                                    self._trimExtraSpaceFromStart(cont, true);
+                                }
+
+                                range.setStart(cont, 0);
+                            } else {
+                                self._trimExtraSpaceFromEnd(cont, true);
+                                range.setStart(cont, cont.data.length);
+                            }
+                        }
+
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+                        ViperUtil.remove(selNode);
+                        return;
+                    }
+
+                break;
+            }
+        });
+
+        this.viper.registerCallback('Viper:selectionChanged', 'ViperReplacementPlugin', function(range) {
+            var start        = range.getStartNode();
+            var end          = range.getEndNode();
+            var startKeyword = self._getKeywordElement(start);
+            var endKeyword   = self._getKeywordElement(end);
+
+            if (startKeyword !== false && startKeyword === endKeyword) {
+                // Now check if the range is at the start or end of the keyword.
+                if (range.collapsed === true && start.nodeType === ViperUtil.TEXT_NODE) {
+                    if (range.startOffset === start.data.length) {
+                        // At the end.
+                        var textNode = document.createTextNode('');
+                        ViperUtil.insertAfter(startKeyword, textNode);
+                        range.setStart(textNode, 0);
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+                        return;
+
+                    } else if (range.startOffset === 0) {
+                        // At the start.
+                        // TODO: Check surrounding parents?
+                        var textNode = document.createTextNode('');
+                        ViperUtil.insertBefore(startKeyword, textNode);
+                        range.setStart(textNode, 0);
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+                        return;
+                    }
                 }
-            });
-        }
+
+                range.selectNode(startKeyword);
+                ViperSelection.addRange(range);
+            }
+
+        });
 
         this.viper.addAttributeGetModifier(
             function (element, attribute, value) {
@@ -148,14 +301,82 @@ ViperReplacementPlugin.prototype = {
 
     },
 
+    _trimExtraSpaceFromStart: function(textNode, useNbsp)
+    {
+        var fromIdx = -1;
+        for (var i = 0; i < textNode.data.length; i++) {
+            if (textNode.data[i] === ' ') {
+                fromIdx = i;
+            } else {
+                break;
+            }
+        }
+
+        if (useNbsp === true && fromIdx >= 0) {
+            textNode.data = String.fromCharCode(160) + textNode.data.substr(fromIdx + 1);
+        } else if (fromIdx > 0) {
+            textNode.data = textNode.data.substr(fromIdx);
+        }
+
+    },
+
+    _trimExtraSpaceFromEnd: function(textNode, useNbsp)
+    {
+        var fromIdx = -1;
+        for (var i = (textNode.data.length - 1); i >= 0 ; i--) {
+            var c = textNode.data[i];
+            if (c === ' ') {
+                fromIdx = i;
+            } else {
+                break;
+            }
+        }
+
+        if (useNbsp === true && fromIdx >= 0) {
+            textNode.data = textNode.data.substr(0, fromIdx) + String.fromCharCode(160);
+        } else if (fromIdx > 0) {
+            textNode.data = textNode.data.substr(0, fromIdx);
+        }
+
+    },
+
+    _normaliseTextNodeSiblings: function (element)
+    {
+        var prevCont = element.previousSibling;
+        var nextCont = element.nextSibling;
+        var info     = null;
+
+        if (prevCont
+            && nextCont
+            && prevCont.nodeType === ViperUtil.TEXT_NODE
+            && nextCont.nodeType === ViperUtil.TEXT_NODE
+        ) {
+            // Both siblings
+            info = {
+                splitOffset: prevCont.data.length,
+                textNode: prevCont
+            };
+
+            if (nextCont.data[0] === ' ' && prevCont.data[(prevCont.data.length - 1)] === ' ') {
+                nextCont.data = String.fromCharCode(160) + nextCont.data.substr(1);
+            }
+
+            prevCont.data += nextCont.data;
+        }
+
+        return info;
+
+    },
+
     _fixRange: function (range, keywordElem, start) {
         if (start === true) {
             // Start of range is in keyword.. Move it after keyword.
-            var cont = range.getNextContainer(keywordElem);
-            range.setStart(cont, 0);
-        } else {
             var cont = range.getPreviousContainer(keywordElem);
             range.setEnd(cont, cont.data.length);
+        } else {
+            var cont = range.getNextContainer(keywordElem);
+            range.setStart(cont, 0);
+            range.collapse(true);
         }
 
         return range;
@@ -163,14 +384,18 @@ ViperReplacementPlugin.prototype = {
     },
 
     _getKeywordElement: function (elem) {
-        if (ViperUtil.isTag(elem, 'keyword') === true) {
-            return true;
+        if (!elem) {
+            return false;
+        }
+
+        if (ViperUtil.hasAttribute(elem, 'data-viper-keyword') === true) {
+            return elem;
         }
 
         var viperElement = this.viper.getViperElement();
         while (elem.parentNode && elem.parentNode !== viperElement) {
             elem = elem.parentNode;
-            if (ViperUtil.isTag(elem, 'keyword') === true
+            if (ViperUtil.hasAttribute(elem, 'data-viper-keyword') === true
                 || ViperUtil.attr(elem, 'data-viper-attribite-keywords') === 'true'
             ) {
                 return elem;
@@ -474,9 +699,8 @@ ViperReplacementPlugin.prototype = {
                 ViperUtil.insertAfter(textNode, newTextNode);
 
                 // Now create the new un editable element.
-                var keywordHolder = this.viper.createUneditableElement(
+                var keywordHolder = this._createUneditableElement(
                     {
-                        tagName: 'keyword',
                         attributes: {
                             'data-viper-keyword': keyword,
                             title: keyword
@@ -485,15 +709,41 @@ ViperReplacementPlugin.prototype = {
                     }
                 );
 
-                // If the keyword holder has block elements then set display style to block.
-                if (this.viper.hasBlockChildren(keywordHolder) === true) {
-                    ViperUtil.setStyle(keywordHolder, 'display', 'block');
-                }
-
                 // Add it after the original textNode.
                 ViperUtil.insertAfter(textNode, keywordHolder);
             }
         }
+
+    },
+
+    /**
+     * Creates an element that cannot be edited.
+     */
+    _createUneditableElement: function (options) {
+        if (!options) {
+            options = {};
+        }
+
+        var tagName = options.tagName || 'div';
+        var content = options.content || '';
+
+        var elem = document.createElement(tagName);
+
+        ViperUtil.setHtml(elem, content);
+
+        if (!options.tagName && this.viper.hasBlockChildren(elem) !== true) {
+            // There are no block elements so use a span instead.
+            elem = document.createElement('span');
+            ViperUtil.setHtml(elem, content);
+        }
+
+        if (options.attributes) {
+            for (var attrName in options.attributes) {
+                ViperUtil.attr(elem, attrName, options.attributes[attrName]);
+            }
+        }
+
+        return elem;
 
     },
 
