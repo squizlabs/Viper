@@ -31,6 +31,8 @@ abstract class AbstractViperImagePluginUnitTest extends AbstractViperUnitTest
         $imageRect = $this->getBoundingRectangle($selector, $imageIndex);
         return $imageRect;
     }//end resizeImage()
+
+    
     /**
      * Asserts that the resize handles are in the correct position for selected image.
      *
