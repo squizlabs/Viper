@@ -1431,6 +1431,7 @@ ViperCopyPastePlugin.prototype = {
     {
         var validStyles = {
             'font-weight:\\s*bold': 'strong',
+            'font-weight:\\s*(\\d+)': 'strong',
             'font-style:\\s*italic': 'em',
             'text-decoration:\\s*line-through': 'del',
             'vertical-align:\\s*sub': 'sub',
@@ -1449,7 +1450,15 @@ ViperCopyPastePlugin.prototype = {
                         regexs[style] = new RegExp(style);
                     }
 
-                    if (ViperUtil.attr(span, 'style').match(regexs[style]) !== null) {
+                    var match = ViperUtil.attr(span, 'style').match(regexs[style]);
+                    if (match !== null) {
+                        if (validStyles[style] === 'strong') {
+                            // Incase the font-weight is a numeric value check if its 400+.
+                            if (style === 'font-weight:\\s*(\\d+)' && match[1] <= 400) {
+                                continue;
+                            }
+                        }
+
                         // Create a new tag for this style.
                         var t = document.createElement(validStyles[style]);
 
