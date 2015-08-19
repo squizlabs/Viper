@@ -1,0 +1,597 @@
+/* Viper buttons */
+.Viper-buttonIcon.Viper-comments {
+  background-image: url(../../Images/matrixButtonIcons.png);  
+  background-position: 0 -82px;
+}
+.Viper-button.Viper-active .Viper-buttonIcon.Viper-comments,
+.Viper-button.Viper-selected .Viper-buttonIcon.Viper-comments {
+  background-image: url(../../Images/matrixButtonIcons.png);    
+  background-position: -33px -82px;
+}
+
+.Viper-button.Viper-comment-highlighted .Viper-buttonIcon.Viper-comments {
+  background-image: url(../../Images/matrixButtonIcons.png);    
+  background-position: -0px -109px;
+}
+.Viper-button.Viper-active.Viper-comment-highlighted  .Viper-buttonIcon.Viper-comments,
+.Viper-button.Viper-selected.Viper-comment-highlighted  .Viper-buttonIcon.Viper-comments {
+  background-image: url(../../Images/matrixButtonIcons.png);    
+  background-position: -33px -109px;
+}
+
+
+.Viper-buttonIcon.Viper-add-comments {
+  background-image: url(../../Images/matrixButtonIcons.png);  
+  background-position: 0 -136px;
+}
+.Viper-button.Viper-active .Viper-buttonIcon.Viper-add-comments,
+.Viper-button.Viper-selected .Viper-buttonIcon.Viper-add-comments {
+  background-image: url(../../Images/matrixButtonIcons.png);    
+  background-position: -33px -136px;
+}
+
+
+/* Viper toolbar content */
+.MatrixCommentsPluginViewCommentArea {
+  text-align: left;
+  height: 24px;
+    padding: 0.6em 0.5em 0.7em;
+    line-height: 1.3em;
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#919097, endColorstr=#727179);
+    background: -webkit-gradient(linear, left top, left bottom, from(#919097), to(#727179));
+    background: -moz-linear-gradient(center top , #919097, #727179) repeat scroll 0 0 transparent;
+    border-top: 1px solid #A2A1A8;
+    display: block;
+    margin: 0 -0.6em -0.6em -0.6em;
+    border-bottom-left-radius: 0.75em;
+    border-bottom-right-radius: 0.75em;
+}
+.MatrixCommentsPluginViewCommentAreaText{
+  text-align: left;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #000;
+  padding-left: 11px;
+  line-height: 22px;
+}
+
+.MatrixCommentsPluginViewCommentButtonArea {
+  float: right;
+}
+.MatrixCommentsPluginViewCommentArea .MatrixComment-ViewCommentButton {
+  margin: 0;
+  border: none;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 -14px 16px -8px rgba(0,0,0,0.3) inset;
+  color: #2B2B2B;
+  background-color: #e9e9eb;
+  text-shadow: 0 1px 0 #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 1.6em;
+  line-height: 1.7em;
+  min-width: 0.8em;
+  padding: 0 0.5em;
+  position: relative;
+  text-align: center;
+}
+
+.MatrixCommentsPluginViewCommentArea .MatrixComment-ViewCommentButton.disabled {
+  cursor: default;
+  opacity: 0.3;
+}
+#MatrixComment-ViewPreviousCommentButton {
+    border-bottom-left-radius: 0.3em;
+    border-left: medium none !important;
+    border-top-left-radius: 0.3em;
+    background-image: url(../../Images/matrixButtonIcons.png);    
+    background-position: 0px -188px;
+}
+#MatrixComment-ViewNextCommentButton {
+    border-bottom-right-radius: 0.3em;
+    border-left: medium none !important;
+    border-top-right-radius: 0.3em;
+    background-image: url(../../Images/matrixButtonIcons.png);    
+    background-position: 0px -161px;
+}
+
+
+
+/* Matrix comment mark */
+.Matrix-Viper-commentmark {
+  position: absolute;
+  width: 18px;
+  height: 16px;
+  margin: 5px 0px 20px;
+  border-radius: 3px;
+  text-align: center;
+  font: 11px/16px Arial,sans-serif;
+  color: #FFF;
+  background: #0583db none repeat scroll 0% 0%;
+  cursor: pointer;
+}
+.Matrix-Viper-commentmark div {
+  width: 100%;
+  height: 100%;
+}
+.Matrix-Viper-commentmark::before {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    right: 7px;
+    border-width: 0px 0px 5px 5px;
+    border-style: solid;
+    border-color: transparent #0583db;
+}
+.Matrix-Viper-commentmark-color-0 {
+  background: #0583db none repeat scroll 0% 0%;
+}
+.Matrix-Viper-commentmark-color-0::before {
+  border-color: transparent #0583db;
+}
+.Matrix-Viper-commentmark-color-1 {
+  background: #ad41bd none repeat scroll 0% 0%;
+}
+.Matrix-Viper-commentmark-color-1::before {
+  border-color: transparent #ad41bd;
+}
+.Matrix-Viper-commentmark-color-2 {
+  background: #f17828 none repeat scroll 0% 0%;
+}
+.Matrix-Viper-commentmark-color-2::before {
+  border-color: transparent #f17828;
+}
+.Matrix-Viper-commentmark-color-3 {
+  background: #e8b01f none repeat scroll 0% 0%;
+}
+.Matrix-Viper-commentmark-color-3::before {
+  border-color: transparent #e8b01f;
+}
+.Matrix-Viper-commentmark-color-4 {
+  background: #ea4c8b none repeat scroll 0% 0%;
+}
+.Matrix-Viper-commentmark-color-4::before {
+  border-color: transparent #ea4c8b;
+}
+
+.Matrix-Viper-commentmark-resolved div {
+  background: transparent url(Images/active-tick.png) center no-repeat;
+}
+.Matrix-Viper-commentmark-resolved {
+  background: #ccc none repeat scroll 0% 0%;
+}
+.Matrix-Viper-commentmark-resolved::before {
+  border-color: transparent #ccc;
+}
+
+
+/* comment dialog */
+
+.Matrix-Viper-commentdialog {
+  position: absolute;
+  width: 250px;
+  margin: 5px 0px 65px;
+  border-radius: 4px;
+  font: 11px/16px Arial,sans-serif;
+  border: solid 1px #ccc;
+  font-family: arial,sans-serif;
+  background-color: white;
+  box-shadow: 0 1px 2px 0px rgba(0, 0, 0, 0.2);
+}
+.Matrix-Viper-commentdialog::before {
+  content: "";
+  top: 45px;
+  bottom: auto;
+  left: -13px;
+  border-width: 10px 12px 10px 0px;
+  border-color: transparent #ccc;
+  display:block;
+  border-style: solid;
+  position: absolute;
+}
+
+.Matrix-Viper-commentdialog::after {
+  content: "";
+  top: 45px;
+  bottom: auto;
+  left: -12px;
+  border-width: 10px 12px 10px 0px;
+  border-color: transparent #fff;
+  display:block;
+  border-style: solid;
+  position: absolute;
+}
+
+
+.Matrix-Viper-commentdialog-mainArea {
+  padding: 5px;
+}
+
+
+/* comment dialog textarea */
+.Matrix-Viper-commentdialog-newCommentTextArea {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 12px;
+  color: #3d3d3d;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb( 187, 187, 187 );
+  border-radius: 4px;
+  vertical-align: middle;
+  background-color: rgb( 255, 255, 255 );
+  box-shadow: 0px 1px 0px 0px rgb( 255, 255, 255 );
+  width: 90%;
+  height: 80px;
+  padding: 7px 10px;
+}
+
+
+/* comment dialog new comment */
+
+/* comment dialog new comment text */
+.Matrix-Viper-commentdialog-newCommentText {
+  height: 20px;
+  line-height: 26px;
+  margin-left: 8px;
+  font-size: 11px;
+  color: #8A898F;
+}
+
+/* comment dialog new comment current user name*/
+.Matrix-Viper-commentdialog-currentUserName {
+  height: 20px;
+  line-height: 20px;
+  font-weight: bold;
+  margin: 8px;
+  font-size: 13px;
+  color: #0583DB;
+}
+
+
+/* comment dialog buttons */
+.Matrix-Viper-commentdialog-buttonArea {
+  padding: 5px;
+}
+
+.Matrix-Viper-commentdialog-buttonArea a {
+  display: inline-block;
+  font-family: "Arial", "Helvetica", sans-serif;
+  font-size: 12px;
+  text-align: center;
+  text-decoration: none;
+  border-style: solid;
+  border-width: 1px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  box-shadow: 0px 2px 5px 0px rgba( 0, 0, 0, 0.25 );
+  padding: 0 34px;
+  height: 30px;
+  line-height: 30px;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: #F5F5F5;
+  border: 1px solid #B7B7B7;
+  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.19), 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 -2.4em 3.3em -2.4em rgba(0, 0, 0, 0.2) inset;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.19), 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 -2.4em 3.3em -2.4em rgba(0, 0, 0, 0.2) inset;
+  color: #454545;
+  text-shadow: 0 1px 0 #FFFFFF;
+}
+
+.Matrix-Viper-commentdialog-buttonArea a:hover {
+  background-color: #FCFCFC;
+  border-color: #9F9F9F;
+  color: #414040;
+}
+
+.Matrix-Viper-commentdialog-buttonArea a.Matrix-Viper-commentdialog-button-blue {
+  border-color: #0A233A;
+  background: #2D77C2;
+  color: #e2ebf3;
+  text-shadow: -1px -1px 0 #0A233A;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.44), 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 -2.4em 3.3em -2.4em rgba(0, 0, 0, 0.6) inset;
+  width: 52px;
+}
+
+.Matrix-Viper-commentdialog-buttonArea a.Matrix-Viper-commentdialog-button-blue:hover {
+  background: #298AEE none repeat scroll 0% 0%;
+  color: #F1F8FE;
+  border-color: #0A233A;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.8), 0px 1px 0px rgba(255, 255, 255, 0.2) inset, 0px -2.4em 3.3em -2.4em rgba(0, 0, 0, 0.6) inset;
+}
+
+.Matrix-Viper-commentdialog-button-grey {
+  margin-right: 8px;
+}
+
+
+/* reply dialog header */
+.Matrix-Viper-commentdialog-reply-header {
+  padding: 6px 4px;
+  background: #F0F0F0;
+  height: 15px;
+  border-bottom: solid 1px #ccc;
+}
+
+
+.Matrix-Viper-commentdialog-reply-header-prev {
+  width: 0; 
+  height: 0; 
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent; 
+  border-right: 12px solid #8A898F; 
+  float: left;
+  margin-right: 12px;
+  margin-left: 5px;
+  display: inline-block;
+}
+
+.Matrix-Viper-commentdialog-reply-header-next {
+  width: 0;
+  height: 0; 
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent; 
+  border-left:  12px solid #8A898F;
+  display: inline-block;
+}
+
+/* reply dialog prev and next arrows */
+.Matrix-Viper-commentdialog-reply-header-prev {
+  cursor: pointer;
+}
+.Matrix-Viper-commentdialog-reply-header-next {
+  cursor: pointer;
+}
+
+
+/* reply dialog comments */
+.Matrix-Viper-commentdialog-reply-comment {
+  padding: 8px;
+  border-bottom: solid 1px #ccc;
+}
+
+.Matrix-Viper-commentdialog-reply-comment-userName {
+  font-weight: bold;
+  font-size: 13px;
+  color: #0583DB;
+}
+
+.Matrix-Viper-commentdialog-reply-comment-timestamp {
+  font-size: 11px;
+  color: #8A898F;
+}
+
+.Matrix-Viper-commentdialog-reply-comment-action {
+    font-size: 22px;
+    color: #8A898F;
+    cursor: pointer;
+    float: right;
+    margin-top: -20px;
+}
+
+.Matrix-Viper-commentdialog-reply-comment-label {
+  font-size: 11px;
+  color: #8A898F;
+  padding-bottom: 5px;
+}
+
+.Matrix-Viper-commentdialog-replyCommentTextArea {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 12px;
+  color: #3d3d3d;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb( 187, 187, 187 );
+  border-radius: 4px;
+  vertical-align: middle;
+  background-color: rgb( 255, 255, 255 );
+  box-shadow: 0px 1px 0px 0px rgb( 255, 255, 255 );
+  width: 90%;
+  height: 28px;
+  padding: 7px 10px;
+}
+
+/* edit comment */
+.Matrix-Viper-commentdialog-editCommentTextArea {
+  display: none;
+}
+.Matrix-Viper-commentdialog-editButtonArea {
+  display: none;
+  padding: 0;
+  margin-top: 5px;
+}
+
+.Matrix-Viper-commentdialog-buttonArea.Matrix-Viper-commentdialog-editButtonArea .Matrix-Viper-commentdialog-button-blue{
+  width: 48px;
+}
+
+/* comment actions */
+.Matrix-Viper-commentdialog-comment-action {
+  position: absolute;
+  width: 120px;
+  border-radius: 2px;
+  font: 11px/16px Arial,sans-serif;
+  border: solid 1px #ccc;
+  font-family: arial,sans-serif;
+  background-color: white;
+  box-shadow: 0 1px 2px 0px rgba(0, 0, 0, 0.2);
+}
+.Matrix-Viper-commentdialog-comment-action:before {
+    content: "";
+    position: absolute;
+    border-style: solid;
+    border-color: #ccc transparent;
+    display: block;
+    width: 0;
+    top: -8px;
+    bottom: auto;
+    left: auto;
+    right: 8px;
+    border-width: 0 7px 7px;
+}
+.Matrix-Viper-commentdialog-comment-action:after {
+    content: "";
+    position: absolute;
+    bottom: auto;
+    right: 8px;
+    left: auto;
+    top: -7px;
+    border-width: 0 7px 7px;
+    border-style: solid;
+    border-color: #fff transparent;
+    display: block;
+    width: 0;
+}
+.Matrix-Viper-commentdialog-inAdmin:before {
+    content: "";
+    top: -12px;
+    bottom: auto;
+    right: 10px;
+    border-width: 0 10px 12px;
+    border-color: #ccc transparent;
+    display: block;
+    border-style: solid;
+    position: absolute;
+    left: auto;
+}
+.Matrix-Viper-commentdialog-inAdmin:after {
+    content: "";
+    top: -11px;
+    bottom: auto;
+    right: 10px;
+    border-width: 0 10px 12px;
+    border-color: #F0F0F0 transparent;
+    display: block;
+    border-style: solid;
+    position: absolute;
+    left: auto;
+
+}
+
+
+.Matrix-Viper-commentdialog-comment-action-edit {
+  padding: 5px;
+  cursor: pointer;
+  display: block;
+}
+.Matrix-Viper-commentdialog-comment-action-edit:nth-of-type(1){
+  border-bottom: solid 1px #ccc;
+  cursor: pointer;
+}
+.Matrix-Viper-commentdialog-comment-action-edit:hover {
+  background: #F0F0F0;
+}
+
+
+/* slide switch button */
+
+.Matrix-Viper-commentdialog-reply-header-resolve {
+  float: right;
+  position: relative;
+  height: 8px;
+  cursor: pointer;
+}
+
+.Matrix-Viper-commentdialog-reply-header-resolve .Matrix-Viper-commentdialog-reply-header-resolve-label {
+  margin-right: 50px;
+  color: #8A898F;
+  font-style: italic;
+  font-size: 13px;
+  -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+  -moz-user-select: none; /* mozilla browsers */
+  -khtml-user-select: none; /* webkit (konqueror) browsers */
+  -ms-user-select: none; /* IE10+ */
+}
+
+.GUI-switch-button {
+    font-size: 1.2em;
+    position: absolute;
+    overflow: hidden;
+    right: 0;
+    width: 3.21em;
+    height: 1.6em;
+    margin-top: -3px;
+    cursor: pointer;
+    background-color: #8A898F;
+    border-radius: 0.8em;
+    -moz-transition: background-color 0.2s ease;
+    -webkit-transition: background-color 0.2s ease;
+    box-shadow: 0 2px 2px -1px rgba(0,0,0,0.4) inset,0 -2px 2px -2px rgba(0,0,0,0.6) inset,0 1px 0 rgba(255,255,255,0.2),1px 0 0 rgba(0,0,0,0.2) inset,-1px 0 0 rgba(0,0,0,0.2) inset;
+    -webkit-user-select: none; /* webkit (safari, chrome) browsers */
+    -moz-user-select: none; /* mozilla browsers */
+    -khtml-user-select: none; /* webkit (konqueror) browsers */
+    -ms-user-select: none; /* IE10+ */
+}
+
+.switchSmall .GUI-switch-button {
+    font-size: 1em;
+}
+
+.GUI-switch.GUI-switch-readOnly .GUI-switch-button {
+    cursor: default;
+}
+
+.GUI-switch.GUI-active .GUI-switch-button {
+    background-color: #57ad21;
+}
+
+.GUI-switch.GUI-switch-boxed .GUI-switch-button {
+    right: 0.6em;
+}
+
+.GUI-switch-slider {
+    -moz-transition: left 0.2s ease-out;
+    -webkit-transition: left 0.2s ease-out;
+    transition: left 0.2s ease-out;
+    content: "";
+    position: absolute;
+    width: 1.3em;
+    height: 1.3em;
+    border-radius: 0.65em;
+    left: 0.16em;
+    top: 50%;
+    margin-top: -0.65em;
+    background-color: #FFF;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.07);
+}
+
+.GUI-switch.GUI-active .GUI-switch-slider {
+    left: 1.7em;
+}
+
+.GUI-switch-button:before {
+    content: "";
+    display: block;
+    opacity: 0;
+    position: absolute;
+    width: 10px;
+    height: 7px;
+    background: transparent url(Images/active-tick.png) 0 0 no-repeat;
+    left: 0.5em;
+    top: 51%;
+    margin-top: -4px;
+    -moz-transition: 0.2s opacity ease-in;
+    -webkit-transition: 0.2s opacity ease-in;
+    transition: 0.2s opacity ease-in;
+}
+
+.GUI-switch.GUI-active .GUI-switch-button:before {
+    opacity: 1;
+}
+
+.GUI-switch input {
+    visibility: hidden;
+}
+
+/* IE9 Mouse Hover Fix */
+body.GUI-browserVer-msie9 span.GUI-switch-title {
+    display: inline;
+}
+
+/* highlighted comment text */
+.Matrix-Viper-comment-highlighted {
+  background: #99CCFF;
+  background-blend-mode: multiply;
+}
+
+
