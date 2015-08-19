@@ -920,6 +920,8 @@ ViperCopyPastePlugin.prototype = {
             ViperUtil.remove(viperCopyElems[0]);
         }
 
+        this.viper.removeNotAllowedAttributes(pasteElement);
+
         var html = ViperUtil.getHtml(pasteElement);
         if (isViperContent === true) {
             html = html.replace(/&nbsp;$/, '');
