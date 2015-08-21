@@ -13,14 +13,14 @@ class Viper_Tests_ViperKeywordPlugin_CutAndPasteKeywordUnitTest extends Abstract
     public function testCutAndPasteKeyword()
     {
 
-        // Beginning of paragraph using keyboard shortcuts
+        // Beginning of paragraph
         $this->useTest(1);
         $this->moveToKeyword(1 , 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         sleep(1);
         $this->sikuli->keyDown('Key.CMD + x');
-        $this->moveToKeyword(2, 'right');
+        $this->moveToKeyword(1, 'left');
         $this->sikuli->KeyDown('Key.CMD + v');
         $this->assertHTMLMatch('<p>((prop:productName))%1%&nbsp;&nbsp;%2%</p><p>%3% %4%</p>');
 
@@ -28,14 +28,14 @@ class Viper_Tests_ViperKeywordPlugin_CutAndPasteKeywordUnitTest extends Abstract
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
         
-        // Middle of paragraph using keyboard shortcuts
+        // Middle of paragraph
         $this->useTest(1);
         $this->moveToKeyword(1 , 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         sleep(1);
         $this->sikuli->keyDown('Key.CMD + x');
-        $this->moveToKeyword(2, 'right');
+        $this->moveToKeyword(3, 'right');
         $this->sikuli->KeyDown('Key.CMD + v');
         $this->assertHTMLMatch('<p>%1%&nbsp;&nbsp;%2%</p><p>%3%((prop:productName)) %4%</p>');
 
@@ -43,7 +43,7 @@ class Viper_Tests_ViperKeywordPlugin_CutAndPasteKeywordUnitTest extends Abstract
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);        
 
-        // End of paragraph using keyboard shortcuts
+        // End of paragraph
         $this->useTest(1);
         $this->moveToKeyword(1 , 'right');
         $this->sikuli->keyDown('Key.RIGHT');

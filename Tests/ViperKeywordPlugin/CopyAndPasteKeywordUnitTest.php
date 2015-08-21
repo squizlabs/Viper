@@ -81,15 +81,14 @@ class Viper_Tests_ViperKeywordPlugin_CopyAndPasteKeywordUnitTest extends Abstrac
 
     }//end testCopyAndPasteClassesWithKeywordNames()
 
-        /**
+
+    /**
      * Test that keyword with a link can be copied and pasted.
      *
      * @return void
      */
     public function testCopyAndPasteKeywordWithLink()
     {
-
-
         // Beginning of paragraph using keyboard shortcuts
         $this->useTest(3);
         $this->moveToKeyword(1 , 'right');

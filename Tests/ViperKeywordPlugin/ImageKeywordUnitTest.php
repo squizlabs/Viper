@@ -102,7 +102,7 @@ class Viper_Tests_ViperKeywordPlugin_ImageKeywordUnitTest extends AbstractViperI
         $this->clickInlineToolbarButton('image', 'active');
         $this->clickField('Image is decorative');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p>test content %1%</p><p>more content<img src="((prop:url))" /> even more content</p>');
+        $this->assertHTMLMatch('<p>test content %1%</p><p>more content<img src="((prop:url))" alt="" /> even more content</p>');
 
         $expectedRawHTML = '<p>test content %1%</p>	<p>more content <img class="__viper_selHighlight __viper_cleanOnly" data-viper-attribite-keywords="true" src="../../Examples/Paper-reel/Images/testImage.png" data-viper-src="((prop:url))"> even more content</p>';
         $actualRawHTML = $this->getRawHtml();
@@ -216,7 +216,6 @@ class Viper_Tests_ViperKeywordPlugin_ImageKeywordUnitTest extends AbstractViperI
         $expectedRawHTML = '<p>test content %1%</p><p><img alt="TITLE" src="http://localhost/~slabs/Viper/Examples/Paper-reel/Images/testImage.png" data-viper-src="((prop:url))"></p><p></p><p>more content  even more content</p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
-
 
     }//end testCutAndPasteImageKeyword()
 
