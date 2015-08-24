@@ -159,7 +159,6 @@ class Viper_Tests_ViperKeywordPlugin_UndoAndRedoKeywordUnitTest extends Abstract
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
         //Removing Link using top toolbar
-        $this->useTest(3);
         $this->moveToKeyword(1 , 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');

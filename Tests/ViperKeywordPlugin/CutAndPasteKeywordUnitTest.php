@@ -62,34 +62,12 @@ class Viper_Tests_ViperKeywordPlugin_CutAndPasteKeywordUnitTest extends Abstract
 
 
     /**
-     * Test that classes using keyword names can be cut and pasted.
-     *
-     * @return void
-     */
-    public function testCutAndPasteClassesWithKeywordNames()
-    {
-        $this->useTest(2);
-        $this->selectKeyword(1);
-        $this->sikuli->KeyDown('Key.CMD + x');
-        $this->moveToKeyword(2, 'right');
-        $this->sikuli->KeyDown('Key.CMD + v');
-        $this->assertHTMLMatch('<p>Test content&nbsp;&nbsp;more test content %2%<span class="footnote-ref ((prop:className)) ((prop:className))">%1%</span></p>');
-
-        $expectedRawHTML = '<p>Test content&nbsp;&nbsp;more test content %2%<span class="footnote-ref replaced-className replaced-className" data-viper-class="footnote-ref ((prop:className)) ((prop:className))">%1%</span></p>';
-        $actualRawHTML = $this->getRawHtml();
-        $this->assertEquals($expectedRawHTML, $actualRawHTML);
-
-    }//end testCutAndPasteClassesWithKeywordNames()
-
-
-    /**
-     * Test that keyword with a link can be cut and pasted.
+     * Test that keyword with a link can cut and pasted.
      *
      * @return void
      */
     public function testCutAndPasteKeywordWithLink()
     {
-
 
         // Beginning of paragraph using keyboard shortcuts
         $this->useTest(3);
@@ -100,42 +78,60 @@ class Viper_Tests_ViperKeywordPlugin_CutAndPasteKeywordUnitTest extends Abstract
         $this->sikuli->keyDown('Key.CMD + x');
         $this->moveToKeyword(1, 'left');
         $this->sikuli->keyDown('Key.CMD + v');
-        $this->assertHTMLMatch('<p><a href="www.squizlabs.com.au">((prop:productName))</a>%1%&nbsp;&nbsp;%2%</p><p>%3% %4%</p>');
+        $this->assertHTMLMatch('<p><a href="www.squizlabs.com.au">((prop:productName))</a>%1%</p><p>%2% %3%</p><p>%4% <a href="www.squizlabs.com.au">((prop:productName))</a></p><p>%5% %6%</p>');
 
-        $expectedRawHTML = '<p><a href="www.squizlabs.com.au"><keyword data-viper-keyword="((prop:productName))" title="((prop:productName))" contenteditable="false">VIPER</keyword></a>%1%&nbsp;&nbsp;%2%</p><p>%3% %4%</p>';
+        $expectedRawHTML = '<p><a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a>%1%</p><p>%2% %3%</p><p>%4% <a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a></p><p>%5% %6%</p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
         // Middle of paragraph using keyboard shortcuts
-        $this->useTest(1);
-        $this->moveToKeyword(1 , 'right');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        sleep(1);
-        $this->sikuli->keyDown('Key.CMD + x');
-        $this->moveToKeyword(3, 'right');
+        $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.CMD + v');
-        $this->assertHTMLMatch('<p>%1%&nbsp;&nbsp;%2%</p><p>%3%<a href="www.squizlabs.com.au">((prop:productName))</a> %4%</p>');
-
-        $expectedRawHTML = '<p>%1%&nbsp;&nbsp;%2%</p><p>%3%<a href="www.squizlabs.com.au"><keyword data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</keyword></a> %4%</p>';
+        $this->assertHTMLMatch('<p><a href="www.squizlabs.com.au">((prop:productName))</a>%1%</p><p>%2% %3%</p><p>%4% <a href="www.squizlabs.com.au">((prop:productName))</a></p><p>%5% %6%</p>');
+       
+        $expectedRawHTML = '<p><a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a>%1%</p><p>%2%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a> %3%</p><p>%4%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a></p><p>%5% %6%</p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
         // End of paragraph using keyboard shortcuts
-        $this->useTest(1);
-        $this->moveToKeyword(1 , 'right');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        sleep(1);
-        $this->sikuli->keyDown('Key.CMD + x');
-        $this->moveToKeyword(2, 'right');
+        $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.CMD + v');
-        $this->assertHTMLMatch('<p>%1%&nbsp;&nbsp;%2%<a href="www.squizlabs.com.au">((prop:productName))</a></p><p>%3% %4%</p>');
+        $this->assertHTMLMatch('<p><a href="www.squizlabs.com.au">((prop:productName))</a>%1%</p><p>%2%<a href="www.squizlabs.com.au">((prop:productName))</a> %3%<a href="www.squizlabs.com.au">((prop:productName))</a></p><p>%4%<a href="www.squizlabs.com.au">((prop:productName))</a></p><p>%5% %6%</p>');
 
-        $expectedRawHTML = '<p>%1%&nbsp;&nbsp;%2%<a href="www.squizlabs.com.au"><keyword data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</keyword></a></p><p>%3% %4%</p>';
+        $expectedRawHTML = '<p><a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a>%1%</p><p>%2%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a> %3%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a></p><p>%4%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a></p><p>%5% %6%</p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
-    }//end testCutAndPasteKeywordWithLink()
+        // Beginning of paragraph using right click
+        $this->moveToKeyword(4 , 'right');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        sleep(1);
+        $this->cut(true);
+        $this->moveToKeyword(4, 'left');
+        $this->paste(true);
+        $this->assertHTMLMatch('<p><a href="www.squizlabs.com.au">((prop:productName))</a>%1%</p><p>%2%<a href="www.squizlabs.com.au">((prop:productName))</a> %3%<a href="www.squizlabs.com.au">((prop:productName))</a></p><p><a href="www.squizlabs.com.au">((prop:productName))</a>%4%</p><p>%5% %6%</p>');
 
+        $expectedRawHTML = '<p><a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a>%1%</p><p>%2%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a> %3%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a></p><p><a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a>%4%</p><p>%5% %6%</p>';
+        $actualRawHTML = $this->getRawHtml();
+        $this->assertEquals($expectedRawHTML, $actualRawHTML);
+
+        // Middle of paragraph using right click
+        $this->moveToKeyword(5, 'right');
+        $this->paste(true);
+        $this->assertHTMLMatch('<p><a href="www.squizlabs.com.au">((prop:productName))</a>%1%</p><p>%2%<a href="www.squizlabs.com.au">((prop:productName))</a> %3%<a href="www.squizlabs.com.au">((prop:productName))</a></p><p><a href="www.squizlabs.com.au">((prop:productName))</a>%4%</p><p>%5%<a href="www.squizlabs.com.au">((prop:productName))</a> %6%</p>');
+
+        $expectedRawHTML = '<p><a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a>%1% <a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a></p><p>%2%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a> %3%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a></p><p><a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a>%4%</p><p>%5%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a> %6%</p>';
+        $actualRawHTML = $this->getRawHtml();
+        $this->assertEquals($expectedRawHTML, $actualRawHTML);
+
+        // End of paragraph using right click
+        $this->moveToKeyword(6, 'right');
+        $this->paste(true);
+        $this->assertHTMLMatch('<p><a href="www.squizlabs.com.au">((prop:productName))</a>%1% %3%<a href="www.squizlabs.com.au">((prop:productName))</a></p><p><a href="www.squizlabs.com.au">((prop:productName))</a>%4%</p><p>%5%<a href="www.squizlabs.com.au">((prop:productName))</a> %6%<a href="www.squizlabs.com.au">((prop:productName))</a></p>');
+
+        $expectedRawHTML = '<p><span <a href="www.squizlabs.com.au"><keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</a></span>%1%</p><p>%2%<span <a href="www.squizlabs.com.au"><keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</a></span> %3%<span <a href="www.squizlabs.com.au"><keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</a></span></p><p><span <a href="www.squizlabs.com.au"><keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</a></span>%4%</p><p>%5%<span <a href="www.squizlabs.com.au"><keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</a></span> %6%<span <a href="www.squizlabs.com.au"><keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</a></span></p>';
+        $actualRawHTML = $this->getRawHtml();
+        $this->assertEquals($expectedRawHTML, $actualRawHTML);
+    }//end testCopyAndPasteKeywordWithLink()
 }
