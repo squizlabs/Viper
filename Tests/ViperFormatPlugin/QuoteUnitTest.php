@@ -814,8 +814,13 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
         // Join the quote together
         $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(1);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->assertHTMLMatch('<blockquote><p>%1%%2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
 
