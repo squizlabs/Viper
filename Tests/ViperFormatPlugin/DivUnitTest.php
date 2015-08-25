@@ -486,6 +486,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->clickTopToolbarButton('formats-div');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
         $this->assertHTMLMatch('<p>First paragraph</p><div><div>%1%</div> xtn dolor</div>');
+        $this->assertTrue($this->topToolbarButtonExists('formats-div', 'active'), 'DIV format icon should be active in the top toolbar');
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
@@ -501,6 +502,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->clickTopToolbarButton('formats-div');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
         $this->assertHTMLMatch('<div>Div section with a strong word <div><strong>%1%</strong></div></div>');
+        $this->assertTrue($this->topToolbarButtonExists('formats-div', 'active'), 'DIV format icon should be active in the top toolbar');
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
@@ -516,6 +518,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->clickTopToolbarButton('formats-div');
         $this->clickTopToolbarButton('DIV', NULL, TRUE);
         $this->assertHTMLMatch('<div>Div section with an italic word <div><em>%1%</em></div></div>');
+        $this->assertTrue($this->topToolbarButtonExists('formats-div', 'active'), 'DIV format icon should be active in the top toolbar');
 
         // Remove Div
         $this->selectKeyword(1);
