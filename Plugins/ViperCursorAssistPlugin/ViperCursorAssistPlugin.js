@@ -46,6 +46,15 @@ ViperCursorAssistPlugin.prototype = {
                 clearTimeout(t);
                 t = setTimeout(function() {
                     var line = ViperUtil.getid(self.viper.getId() + '-cursorAssist');
+
+                    if (self.viper.isEnabled() === false) {
+                        if (line) {
+                            _removeLine(line);
+                        }
+
+                        return;
+                    }
+
                     var hoverElem = self.viper.getElementAtCoords(e.clientX, e.clientY);
                     if (hoverElem && (hover === true || hoverElem === line || hoverElem.parentNode.parentNode === line)) {
                         return;
