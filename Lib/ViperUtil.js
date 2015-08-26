@@ -1861,6 +1861,18 @@ var ViperUtil = {
 
     },
 
+    getFrames: function(doc)
+    {
+        doc = doc || document;
+        if (doc.frames) {
+            return doc.frames;
+        } else if (doc.defaultView.frames) {
+            return doc.defaultView.frames;
+        }
+
+        return [];
+    },
+
 
     /**
      * Returns the loaded DOM Documents (main window, iframes, etc).
@@ -1869,11 +1881,12 @@ var ViperUtil = {
      */
      getDocuments: function(nested, parentDoc)
      {
-         parentDoc = parentDoc || document;
-         var docs  = [parentDoc];
-         var c     = parentDoc.defaultView.frames.length;
+         parentDoc  = parentDoc || document;
+         var docs   = [parentDoc];
+         var frames = this.getFrames(parentDoc);
+         var c      = frames.length;
          for (var i = 0; i < c; i++) {
-             var doc = this.getIFrameDocument(parentDoc.defaultView.frames[i]);
+             var doc = this.getIFrameDocument(frames[i]);
              if (doc !== null) {
                  if (nested === true) {
                      docs = docs.concat(dfx.getDocuments(nested, doc))
