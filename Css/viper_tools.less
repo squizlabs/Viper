@@ -1,3 +1,4 @@
+// out: viper_tools.css
 // Element Reveal Animations
 
     // Fade In
@@ -55,1137 +56,1044 @@
             100% {-webkit-transform: translateY(0);}
         }
 
-// Buttons
+// Button Config
 
 .Viper-button {
     position: relative;
-    border-radius: 0.25em;
+    border-radius: @buttonBorderRadius;
     cursor: pointer;
     display: inline-block;
     font-size: 1.5em;
     line-height: 1.8em;
     margin-left: 0.3em;
-    min-width: 29px;
-    box-sizing: border-box;
-    padding: 0 0.5em;
+    min-width: 0.75em;
+    box-sizing: content-box;
+    padding: 0 10px;
+    border: 1px solid transparent;
     text-align: center;
     transition: opacity 0.1s ease-out;
     -webkit-transition: opacity 0.1s ease-out;
-
-    .Viper-browserVer-msie8 &,
-    .Viper-browserVer-msie9 & {
-        min-width: 15px;
-        box-sizing: content-box;
-    }
 
     &:first-child {
         margin-left: 0;
     }
     &.Viper-disabled {
         opacity: 0.3;
-        filter: ~"alpha(opacity = 50)";
         cursor: default;
+
+        .Viper-browserVer-msie8 & {
+            filter: ~"alpha(opacity = 30)";
+        }
     }
     &.Viper-hidden {
         display: none;
     }
-    &.Viper-headings {
-        min-width: 30px;
-
-        .Viper-browserVer-msie8 &,
-        .Viper-browserVer-msie9 & {
-            min-width: 18px;
-        }
-    }
 }
 
-// Button Groups
+// Button Groups Config
 
 .Viper-buttonGroup {
     display: inline-block;
     margin-left: 0.55em;
     white-space: nowrap;
 
+    &.ViperITP-button-hidden {
+        display: none;
+    }
+
     &:first-child {
         margin-left: 0;
     }
-}
 
-.Viper-buttonGroup .Viper-button {
-    border-radius: 0;
-    margin: 0;
-    &.Viper-active,
-    &.Viper-selected {
+    // Buttons in Groups Config
+
+    & .Viper-button {
         border-radius: 0;
-    }
-    &:first-child {
-        border-top-left-radius: 0.3em;
-        border-bottom-left-radius: 0.3em;
-        border-left: none;
-    }
-    &:last-child {
-        border-top-right-radius: 0.3em;
-        border-bottom-right-radius: 0.3em;
-    }
-}
+        margin: 0;
+        border-right-width: 0;
 
-/* Theme - Dark Grey */
+        &:first-child {
+            border-top-left-radius: @buttonBorderRadius;
+            border-bottom-left-radius: @buttonBorderRadius;
+        }
 
-/* button declaration vars */
-
-@buttonBg-default: #E9E9EB;
-@buttonBg-active: #3784ee;
-@buttonBg-selected: #54535A;
-
-@buttonShadow-default-around: 0 0 2px 0 rgba(0, 0, 0, 0.55);
-@buttonShadow-default-topHighlight: 0 1px 0 rgba(255, 255, 255, 0.8) inset;
-@buttonShadow-default-gradient: 0 -1.8em 1.6em -1em rgba(0, 0, 0, 0.20) inset;
-
-@buttonShadow-group-top: 0 -2px 2px -2px rgba(0, 0, 0, 0.45);
-@buttonShadow-group-bottom: 0 2px 2px -2px rgba(0, 0, 0, 0.45);
-@buttonShadow-group-leftHighlight: 1px 0 0 rgba(255,255,255,0.3) inset;
-@buttonShadow-groupFirst-left: -2px 0 2px -2px rgba(0,0,0,0.45);
-@buttonShadow-groupLast-right: 2px 0 2px -2px rgba(0,0,0,0.45);
-
-@buttonShadow-active-topInner: 0 2px 1px -1px rgba(0, 0, 0, 0.5) inset;
-@buttonShadow-active-bottomHighlight: 0 1px 0 rgba(255, 255, 255, 0.2);
-@buttonShadow-active-bottomInner: 0 -1px 1px -1px #000 inset;
-@buttonShadow-active-leftInner: 1px 0px 0 rgba(0, 0, 0, 0.25) inset;
-@buttonShadow-active-rightInner: -1px 0px 0 rgba(0, 0, 0, 0.25) inset;
-@buttonShadow-active-gradient: 0 -1.6em 1.1em -1em #205CAF inset;
-@buttonShadow-active-leftHighlight: 1px 0 0 0 rgba(255,255,255,0.2) inset;
-
-@buttonShadow-selected-gradient: 0 1.5em 0.6em -1.3em rgba(0, 0, 0, 0.0) inset;
-
-.Viper-themeDark .Viper-button,
-.Viper-themeDark .Viper-button.Viper-disabled:hover {
-    background-color: @buttonBg-default;
-    border: none;
-    color: #2b2b2b;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
-    box-shadow:
-        @buttonShadow-default-around,
-        @buttonShadow-default-topHighlight,
-        @buttonShadow-default-gradient;
-
-    .Viper-browserVer-msie8 & {
-        border: 1px solid #666;
-        border-color: #777 #666 #555 #666;
-    }
-}
-
-.Viper-themeDark .Viper-button:hover {
-    background-color: (@buttonBg-default - 12%);
-}
-
-.Viper-themeDark .Viper-button.Viper-active,
-.Viper-themeDark .Viper-button.Viper-active:hover,
-.Viper-themeDark .Viper-button.Viper-selected,
-.Viper-themeDark .Viper-button.Viper-selected:hover {
-    background-color: @buttonBg-active;
-    color: #FFF;
-    text-shadow: 0 -1px 0 rgba(0,0,0,0.3);
-    box-shadow:
-        @buttonShadow-active-topInner,
-        @buttonShadow-active-bottomHighlight,
-        @buttonShadow-active-bottomInner,
-        @buttonShadow-active-leftInner,
-        @buttonShadow-active-rightInner,
-        @buttonShadow-active-gradient;
-}
-
-.Viper-themeDark .Viper-button.Viper-selected,
-.Viper-themeDark .Viper-button.Viper-selected:hover {
-    background: @buttonBg-selected;
-    border-color: #555;
-    box-shadow:
-        @buttonShadow-active-topInner,
-        @buttonShadow-active-bottomHighlight,
-        @buttonShadow-active-bottomInner,
-        @buttonShadow-active-leftInner,
-        @buttonShadow-active-rightInner,
-        @buttonShadow-selected-gradient;
-}
-
-.Viper-themeDark .Viper-buttonGroup {
-    .Viper-browserVer-msie8 & {
-        border-right: 1px solid #666;
-    }
-}
-
-.Viper-themeDark .Viper-buttonGroup .Viper-button,
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-disabled:hover {
-    border-left: 1px solid #a6a6a9;
-    box-shadow:
-        @buttonShadow-default-topHighlight,
-        @buttonShadow-group-leftHighlight,
-        @buttonShadow-default-gradient,
-        @buttonShadow-group-top,
-        @buttonShadow-group-bottom;
-
-    .Viper-browserVer-msie8 & {
-        border-color: #777 #dadade #555 #a6a6a9;
-        border-right: none;
-    }
-}
-
-.Viper-themeDark .Viper-buttonGroup .Viper-button:first-child,
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-disabled:first-child {
-    border-left-width: 0;
-    box-shadow:
-        @buttonShadow-default-topHighlight,
-        @buttonShadow-default-gradient,
-        @buttonShadow-group-top,
-        @buttonShadow-group-bottom,
-        @buttonShadow-group-leftHighlight,
-        @buttonShadow-groupFirst-left;
-
-    .Viper-browserVer-msie8 & {
-        border-left-width: 1px;
-        border-left-color: #666;
-    }
-
-}
-
-.Viper-themeDark .Viper-buttonGroup .Viper-button:last-child {
-    box-shadow:
-        @buttonShadow-group-leftHighlight,
-        @buttonShadow-default-topHighlight,
-        @buttonShadow-group-top,
-        @buttonShadow-group-bottom,
-        @buttonShadow-groupLast-right,
-        @buttonShadow-default-gradient;
-
-    .Viper-browserVer-msie8 & {
-        border-right: 1px solid #666;
-    }
-}
-
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active {
-    border-left-color: #1f4e8d;
-    box-shadow:
-        @buttonShadow-active-topInner,
-        @buttonShadow-active-bottomHighlight,
-        @buttonShadow-active-bottomInner,
-        @buttonShadow-active-leftHighlight,
-        @buttonShadow-active-gradient;
-}
-
-.Viper-themeDark .Viper-buttonGroup .Viper-button + .Viper-button.Viper-active {
-    box-shadow:
-        @buttonShadow-active-topInner,
-        @buttonShadow-active-bottomHighlight,
-        @buttonShadow-active-bottomInner,
-        @buttonShadow-active-gradient;
-}
-
-.Viper-themeDark .Viper-buttonGroup .Viper-button:first-child.Viper-active {
-    box-shadow:
-        @buttonShadow-active-topInner,
-        @buttonShadow-active-bottomHighlight,
-        @buttonShadow-active-bottomInner,
-        @buttonShadow-active-leftInner,
-        @buttonShadow-active-gradient;
-}
-
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected,
-.Viper-themeDark .Viper-buttonGroup .Viper-button + .Viper-button.Viper-selected {
-    border-left-color: #222225;
-    box-shadow:
-        @buttonShadow-active-topInner,
-        @buttonShadow-active-bottomHighlight,
-        @buttonShadow-active-bottomInner,
-        @buttonShadow-selected-gradient;
-}
-
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected:first-child {
-    border-left-color: #555;
-    box-shadow:
-        @buttonShadow-active-topInner,
-        @buttonShadow-active-bottomHighlight,
-        @buttonShadow-active-bottomInner,
-        @buttonShadow-active-leftInner,
-        @buttonShadow-selected-gradient;
-}
-
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button,
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button.Viper-disabled:hover {
-    border-left-color: #1f4e8d;
-}
-
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected + .Viper-button {
-    border-left-color: #222225;
-}
-
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected + .Viper-button.Viper-active,
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button.Viper-active,
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button.Viper-active.Viper-disabled:hover {
-    box-shadow:
-        @buttonShadow-active-topInner,
-        @buttonShadow-active-bottomHighlight,
-        @buttonShadow-active-bottomInner,
-        @buttonShadow-active-leftHighlight,
-        @buttonShadow-active-gradient;
-}
-
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button.Viper-selected {
-    border-left-color: #333;
-    box-shadow:
-        @buttonShadow-active-topInner,
-        @buttonShadow-active-bottomHighlight,
-        @buttonShadow-active-bottomInner,
-        @buttonShadow-selected-gradient;
-}
-
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active:last-child,
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active:last-child.Viper-disabled:hover {
-    box-shadow:
-        @buttonShadow-active-topInner,
-        @buttonShadow-active-bottomHighlight,
-        @buttonShadow-active-bottomInner,
-        @buttonShadow-active-rightInner,
-        @buttonShadow-active-gradient;
-}
-
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button.Viper-active:last-child,
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button.Viper-active.Viper-disabled:last-child:hover,
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected + .Viper-button.Viper-active:last-child {
-    box-shadow:
-        @buttonShadow-active-topInner,
-        @buttonShadow-active-bottomHighlight,
-        @buttonShadow-active-bottomInner,
-        @buttonShadow-active-leftHighlight,
-        @buttonShadow-active-rightInner,
-        @buttonShadow-active-gradient;
-}
-
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-selected:last-child,
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active.Viper-selected:last-child,
-.Viper-themeDark .Viper-buttonGroup .Viper-button.Viper-active.Viper-selected.Viper-disabled:last-child {
-    box-shadow:
-        @buttonShadow-active-topInner,
-        @buttonShadow-active-bottomHighlight,
-        @buttonShadow-active-bottomInner,
-        @buttonShadow-active-rightInner,
-        @buttonShadow-selected-gradient !important;
-}
-
-/* Buttons */
-
-// Button Vars
-
-@fieldIconSpriteLocation: 1;
-@iconWidth: 25px;
-@iconHeight: 20px;
-@iconHeightOffset: 27px;
-@bgY: 0;
-@bgY-activeOffset: 33px;
-@bgX: -(@fieldIconSpriteLocation - 1) * @iconHeightOffset;
-
-// Icon container defaults
-
-.Viper-buttonIcon {
-    position: absolute;
-    width: @iconWidth;
-    height: @iconHeight;
-    left: 50%;
-    top: 50%;
-    margin: -(@iconHeight / 2) 0 0 -(@iconWidth / 2);
-    background-image: url(../Images/buttonIcons.png);
-
-    .Viper-disabled & {
-
-        .Viper-browserVer-msie8 & {
-            filter: ~"alpha(opacity = 50)";
+        &:last-child {
+            border-top-right-radius: @buttonBorderRadius;
+            border-bottom-right-radius: @buttonBorderRadius;
+            border-right-width: 1px;
         }
     }
+}
 
-    .Viper-browserVer-msie8 .Viper-disabled & {
-            background-color: (@buttonBg-default - 40%);
-    }
-    .Viper-browserVer-msie8  .Viper-disabled.Viper-active & {
-            background-color: (@buttonBg-active + 5%);
-    }
+// Button Colours
 
-// Icon definitions
+    //  Declaration vars
 
-    // Bold
-    &.Viper-bold {
-        .icon (51);
-    }
-    // Italic
-    &.Viper-italic {
-        .icon (52);
-    }
-    // Merge Up
-    &.Viper-mergeUp {
-        .icon (1);
-    }
-    // Merge Down
-    &.Viper-mergeDown {
-        .icon (2);
-    }
-    // Delete
-    &.Viper-delete {
-        .icon (3);
-        // Special case for generic delete button to change its icon on hover
-        .Viper-delete:hover & {
-        .iconHoverSwap (3);
+    @buttonText-default: #2B2B2B;
+    @buttonText-active: #FFF;
+
+    @buttonBg-default: #FFF;
+    @buttonBg-active: #2b7ce0;
+    @buttonBg-selected: #CACACA;
+    @buttonBg-selectedActive: #1a4c8a;
+    @buttonBg-delete: #FF5353;
+
+    @buttonBorder-default: #d7d7d7;
+    @buttonBorder-active: #2b7ce0;
+    @buttonBorder-selected: #B3B3B3;
+    @buttonBorder-selectedActive: #1a4c8a;
+    @buttonBorder-delete: #FF5353;
+
+    @buttonBorderRadius: 0.25em;
+
+    @buttonShadow-default: 0 0 2px 0 rgba(0, 0, 0, 0.55);
+
+    .Viper-button {
+        background-color: @buttonBg-default;
+        border-color: @buttonBorder-default;
+        color: @buttonText-default;
+        font-weight: bold;
+
+        // Buttons inside inline toolbar sections
+
+            .Viper-subSection & {
+                border-color: #B1B1B1;
+            }
+
+        &.Viper-active {
+            background-color: @buttonBg-active;
+            border-color: @buttonBorder-active - 20%;
+            color: @buttonText-active;
+
+            .Viper-buttonGroup & + .Viper-button {
+                border-left-color: (@buttonBorder-active - 20%);
+
+                &.Viper-selected.Viper-active {
+                    border-left-color: @buttonBorder-selectedActive;
+                }
+            }
         }
+
+        &.Viper-selected {
+            background: @buttonBg-selected;
+            border-color: @buttonBorder-selected;
+            color: @buttonText-active;
+
+            .Viper-buttonGroup & + .Viper-button {
+                border-left-color: (@buttonBorder-selected - 20%);
+            }
+        }
+
+        &.Viper-selected.Viper-active {
+            background: @buttonBg-selectedActive;
+            border-color: @buttonBorder-selectedActive;
+
+            .Viper-buttonGroup & + .Viper-button {
+                border-left-color: @buttonBorder-selectedActive;
+            }
+        }
+
+        &.ViperITP-button-hidden {
+            display: none;
+        }
+
+        &.Viper-delete:hover {
+            background-color: @buttonBg-delete;
+            border-color: @buttonBorder-delete - 20%;
+        }
+
     }
 
-    // Add Above
-    &.Viper-addAbove {
-        .icon (4);
-    }
-    // Add Below
-    &.Viper-addBelow {
-        .icon (5);
-    }
-    // Merge Left
-    &.Viper-mergeLeft {
-        .icon (6);
-    }
-    // Merge Right
-    &.Viper-mergeRight {
-        .icon (7);
-    }
-    // Split Horiz
-    &.Viper-splitHoriz {
-        .icon (8);
-    }
-    // Split Vert
-    &.Viper-splitVert {
-        .icon (9);
-    }
-    // Move
-    &.Viper-move {
-        .icon (10);
-    }
-    // Add Left
-    &.Viper-addLeft {
-        .icon (11);
-    }
-    // Add Right
-    &.Viper-addRight {
-        .icon (12);
-    }
-    // Split & Merge
-    &.Viper-splitMerge {
-        .icon (13);
-    }
-    // Accessibility Auditor
-    &.Viper-accessAudit {
-        .icon (14);
-    }
-    // TH Abbreviation
-    &.Viper-headerAbbr {
-        .icon (15);
-    }
-    // CSS Class
-    &.Viper-cssClass {
-        .icon (16);
-    }
-    // Anchor / ID
-    &.Viper-anchorID {
-        .icon (17);
-    }
-    // Table
-    &.Viper-table {
-        .icon (18);
-    }
-    // Table Row
-    &.Viper-tableRow {
-        .icon (19);
-    }
-    // Table Col
-    &.Viper-tableCol {
-        .icon (20);
-    }
-    // Table Cell
-    &.Viper-tableCell {
-        .icon (21);
-    }
-    // List - Unordered
-    &.Viper-listUL {
-        .icon (22);
-    }
-    // List - Ordered
-    &.Viper-listOL {
-        .icon (23);
-    }
-    // List indent
-    &.Viper-listIndent {
-        .icon (24);
-    }
-    // List outdent
-    &.Viper-listOutdent {
-        .icon (25);
-    }
-    // Link
-    &.Viper-link {
-        .icon (26);
-    }
-    // Link in new window
-    &.Viper-linkNewWindow {
-        .icon (27);
-    }
-    // Remove Link
-    &.Viper-linkRemove {
-        .icon (28);
-    }
-    // Image
-    &.Viper-image {
-        .icon (29);
-    }
-    // Rerun Accessibility Auditor
-    &.Viper-accessRerun {
-        .icon (30);
-    }
-    // Locate on page
-    &.Viper-locate {
-        .icon (31);
-    }
-    // Source View
-    &.Viper-sourceView {
-        .icon (32);
-    }
-    // Next Issue
-    &.Viper-nextIssue {
-        .icon (33);
-    }
-    // Prev Issue
-    &.Viper-prevIssue {
-        .icon (34);
-    }
-    // Justify Left
-    &.Viper-justifyLeft {
-        .icon (35);
-    }
-    // Justify Right
-    &.Viper-justifyRight {
-        .icon (36);
-    }
-    // Justify Center
-    &.Viper-justifyCenter {
-        .icon (37);
-    }
-    // Justify Block
-    &.Viper-justifyBlock {
-        .icon (38);
-    }
-    // Subscript
-    &.Viper-subscript {
-        .icon (39);
-    }
-    // Superscript
-    &.Viper-superscript {
-        .icon (40);
-    }
-    // Strikethrough
-    &.Viper-strikethrough {
-        .icon (41);
-    }
-    // Remove Formatting
-    &.Viper-removeFormat {
-        .icon (42);
-    }
-    // History Undo
-    &.Viper-historyUndo {
-        .icon (43);
-    }
-    // History Redo
-    &.Viper-historyRedo {
-        .icon (44);
-    }
-    // Accessibility Settings
-    &.Viper-accessSettings {
-        .icon (45);
-    }
-    // Table Settings
-    &.Viper-tableSettings {
-        .icon (45);
-    }
-    // Target
-    &.Viper-target {
-        .icon (46);
-    }
-    // Horizontal Rule
-    &.Viper-insertHr {
-        .icon (47);
-    }
-    // Character Map
-    &.Viper-charMap {
-        .icon (48);
-    }
-    // Hidden Characters
-    &.Viper-showHiddenChars {
-        .icon (49);
-    }
-    // Source Editor in new window
-    &.Viper-sourceNewWindow {
-        .icon (27);
-    }
-    // Language Tools
-    &.Viper-langTools {
-        .icon (50);
-    }
-    // Search & Replace
-    &.Viper-searchReplace {
-        .icon (53);
-    }
-    // Formats Containers
-    &.Viper-formats {
-        .icon (54);
-    }
-    // Headings
-    &.Viper-headings {
-        .icon (55);
-    }
-    // Format - P Tag
-    &.Viper-formats-p {
-        .icon (57);
-    }
-    // Format - Blockquote Tag
-    &.Viper-formats-blockquote {
-        .icon (58);
-    }
-    // Format - DIV Tag
-    &.Viper-formats-div {
-        .icon (56);
-    }
-    // Format - PRE Tag
-    &.Viper-formats-pre {
-        .icon (59);
-    }
+// Icon Sprite Vars
 
-} // End .buttonIcon
+    @fieldIconSpriteLocation: 1;
+    @iconWidth: 25px;
+    @iconHeight: 20px;
+    @iconHeightOffset: 27px;
+    @bgY: 0;
+    @bgY-activeOffset: 34px;
+    @bgX: -(@fieldIconSpriteLocation - 1) * @iconHeightOffset;
+
+// Icons Config
+
+    .Viper-buttonIcon {
+        position: absolute;
+        width: @iconWidth;
+        height: @iconHeight;
+        left: 50%;
+        top: 50%;
+        margin-top: -(@iconHeight / 2);
+        margin-left: -((@iconWidth + 1) / 2);
+        background-image: url("../Images/buttonIcons.svg");
+
+        /* PNG fallback for older trowsers */
+
+            .Viper-browserVer-msie8 & {
+                background-image: url("../Images/buttonIcons.png");
+            }
+
+        .Viper-buttonGroup & {
+            margin-left: -((@iconWidth - 1) / 2);
+        }
+
+        .Viper-disabled & {
+
+            .Viper-browserVer-msie8 & {
+                filter: ~"alpha(opacity = 50)";
+            }
+        }
+
+        // Icon definitions
+
+            // Bold
+            &.Viper-bold {
+                .icon (51);
+            }
+            // Italic
+            &.Viper-italic {
+                .icon (52);
+            }
+            // Merge Up
+            &.Viper-mergeUp {
+                .icon (1);
+            }
+            // Merge Down
+            &.Viper-mergeDown {
+                .icon (2);
+            }
+            // Delete
+            &.Viper-delete {
+                .icon (3);
+                // Special case for generic delete button to change its icon on hover
+                .Viper-delete:hover & {
+                .iconHoverSwap (3);
+                }
+            }
+
+            // Add Above
+            &.Viper-addAbove {
+                .icon (4);
+            }
+            // Add Below
+            &.Viper-addBelow {
+                .icon (5);
+            }
+            // Merge Left
+            &.Viper-mergeLeft {
+                .icon (6);
+            }
+            // Merge Right
+            &.Viper-mergeRight {
+                .icon (7);
+            }
+            // Split Horiz
+            &.Viper-splitHoriz {
+                .icon (8);
+            }
+            // Split Vert
+            &.Viper-splitVert {
+                .icon (9);
+            }
+            // Move
+            &.Viper-move {
+                .icon (10);
+            }
+            // Add Left
+            &.Viper-addLeft {
+                .icon (11);
+            }
+            // Add Right
+            &.Viper-addRight {
+                .icon (12);
+            }
+            // Split & Merge
+            &.Viper-splitMerge {
+                .icon (13);
+            }
+            // Accessibility Auditor
+            &.Viper-accessAudit {
+                .icon (14);
+            }
+            // TH Abbreviation
+            &.Viper-headerAbbr {
+                .icon (15);
+            }
+            // CSS Class
+            &.Viper-cssClass {
+                .icon (16);
+            }
+            // Anchor / ID
+            &.Viper-anchorID {
+                .icon (17);
+            }
+            // Table
+            &.Viper-table {
+                .icon (18);
+            }
+            // Table Row
+            &.Viper-tableRow {
+                .icon (19);
+            }
+            // Table Col
+            &.Viper-tableCol {
+                .icon (20);
+            }
+            // Table Cell
+            &.Viper-tableCell {
+                .icon (21);
+            }
+            // List - Unordered
+            &.Viper-listUL {
+                .icon (22);
+            }
+            // List - Ordered
+            &.Viper-listOL {
+                .icon (23);
+            }
+            // List indent
+            &.Viper-listIndent {
+                .icon (24);
+            }
+            // List outdent
+            &.Viper-listOutdent {
+                .icon (25);
+            }
+            // Link
+            &.Viper-link {
+                .icon (26);
+            }
+            // Link in new window
+            &.Viper-linkNewWindow {
+                .icon (27);
+            }
+            // Remove Link
+            &.Viper-linkRemove {
+                .icon (28);
+            }
+            // Image
+            &.Viper-image {
+                .icon (29);
+            }
+            // Rerun Accessibility Auditor
+            &.Viper-accessRerun {
+                .icon (30);
+            }
+            // Locate on page
+            &.Viper-locate {
+                .icon (31);
+            }
+            // Source View
+            &.Viper-sourceView {
+                .icon (32);
+            }
+            // Next Issue
+            &.Viper-nextIssue {
+                .icon (33);
+            }
+            // Prev Issue
+            &.Viper-prevIssue {
+                .icon (34);
+            }
+            // Justify Left
+            &.Viper-justifyLeft {
+                .icon (35);
+            }
+            // Justify Right
+            &.Viper-justifyRight {
+                .icon (36);
+            }
+            // Justify Center
+            &.Viper-justifyCenter {
+                .icon (37);
+            }
+            // Justify Block
+            &.Viper-justifyBlock {
+                .icon (38);
+            }
+            // Subscript
+            &.Viper-subscript {
+                .icon (39);
+            }
+            // Superscript
+            &.Viper-superscript {
+                .icon (40);
+            }
+            // Strikethrough
+            &.Viper-strikethrough {
+                .icon (41);
+            }
+            // Remove Formatting
+            &.Viper-removeFormat {
+                .icon (42);
+            }
+            // History Undo
+            &.Viper-historyUndo {
+                .icon (43);
+            }
+            // History Redo
+            &.Viper-historyRedo {
+                .icon (44);
+            }
+            // Accessibility Settings
+            &.Viper-accessSettings {
+                .icon (45);
+            }
+            // Table Settings
+            &.Viper-tableSettings {
+                .icon (45);
+            }
+            // Target
+            &.Viper-target {
+                .icon (46);
+            }
+            // Horizontal Rule
+            &.Viper-insertHr {
+                .icon (47);
+            }
+            // Character Map
+            &.Viper-charMap {
+                .icon (48);
+            }
+            // Hidden Characters
+            &.Viper-showHiddenChars {
+                .icon (49);
+            }
+            // Source Editor in new window
+            &.Viper-sourceNewWindow {
+                .icon (27);
+            }
+            // Language Tools
+            &.Viper-langTools {
+                .icon (50);
+            }
+            // Search & Replace
+            &.Viper-searchReplace {
+                .icon (53);
+            }
+            // Formats Containers
+            &.Viper-formats {
+                .icon (54);
+            }
+            // Headings
+            &.Viper-headings {
+                .icon (55);
+            }
+            // Format - P Tag
+            &.Viper-formats-p {
+                .icon (57);
+            }
+            // Format - Blockquote Tag
+            &.Viper-formats-blockquote {
+                .icon (58);
+            }
+            // Format - DIV Tag
+            &.Viper-formats-div {
+                .icon (56);
+            }
+            // Format - PRE Tag
+            &.Viper-formats-pre {
+                .icon (59);
+            }
+
+    } // End .buttonIcon
 
 // Button state bundle with icon selection, declared after all the buttons so their icon variables are used instead of the defaults
 
-.icon (@iconCount) {
-    @fieldIconSpriteLocation: @iconCount;
-    background-position: @bgY @bgX;
-    .Viper-button.Viper-active &,
-    .Viper-button.Viper-selected & {
+    .icon (@iconCount) {
+        @fieldIconSpriteLocation: @iconCount;
+        background-position: @bgY @bgX;
+        .Viper-button.Viper-active &,
+        .Viper-button.Viper-active.Viper-selected & {
+            background-position: -@bgY-activeOffset @bgX;
+        }
+    }
+    .iconHoverSwap (@iconCount) {
+        @fieldIconSpriteLocation: @iconCount;
         background-position: -@bgY-activeOffset @bgX;
     }
-}
-.iconHoverSwap (@iconCount) {
-    @fieldIconSpriteLocation: @iconCount;
-    background-position: -@bgY-activeOffset @bgX;
-}
 
-// Viper Selections
+// Selections
 
-.__viper_selHighlight {
-    background-color: #CCC !important;
-}
-
-// Viper Delete
-
-.Viper-deleteOverlay {
-    background: transparent url(../Images/deleteOverlay.png) 0 0 repeat;
-}
-
-// Viper Text Inputs & Areas
-.Viper-textbox {
-    margin-bottom: 0.6em;
-    -moz-transition: opacity 0.2s ease-in;
-    -webkit-transition: opacity 0.2s ease-in;
-    & .Viper-textbox-textArea {
-        resize: none;
+    .__viper_selHighlight {
+        background-color: #CCC !important;
     }
-    &.Viper-disabled {
-        opacity: 0.4;
-        filter: ~"alpha(opacity = 40)";
+
+// Delete
+
+    .Viper-deleteOverlay {
+        background: transparent url("../Images/deleteOverlay.svg") 0 0 repeat;
+
+        // PNG fallback for older trowsers
+
+            .Viper-browserVer-msie8 & {
+                background-image: url("../Images/deleteOverlay.png");
+            }
     }
-}
 
-.Viper-textbox-label {
-    display: block;
-    padding: 4px 2px;
-    position: relative;
-    clear: both;
-    text-align: left;
-    color: #DDD;
-    background: #2b2b2b;
-    border-radius: 0.4em;
-    -moz-transition-property: color, background;
-    -moz-transition-duration: 0.3s;
-    -webkit-transition-property: color, background;
-    -webkit-transition-duration: 0.3s;
-    border-top: 1px solid #000;
-    border-bottom: 1px solid #777;
-    color: #5A8BD0;
-    box-shadow: 0 0 3px #000 inset;
+// Text Inputs & Areas
 
-    .Viper-disabled & {
-        filter: ~"alpha(opacity = 40)";
+    // Resets
+
+        .ViperITP form,
+        .ViperITP ul,
+        .ViperITP ol {
+          padding: 0;
+          margin: 0;
+        }
+
+    .Viper-textbox {
+        margin-bottom: 0.6em;
+        -moz-transition: opacity 0.2s ease-in;
+        -webkit-transition: opacity 0.2s ease-in;
+        & .Viper-textbox-textArea {
+            resize: none;
+        }
+        &.Viper-disabled {
+            opacity: 0.4;
+
+            .Viper-browserVer-msie8 & {
+                filter: ~"alpha(opacity = 40)";
+            }
+        }
     }
-}
 
-.Viper-textbox.Viper-active .Viper-textbox-label {
-    background: #205caf;
-}
+    // Labels
 
-.Viper-textbox:after {
-    display: block;
-    content: "";
-    clear: both;
-}
+        .Viper-textbox-label {
+            display: block;
+            padding: 4px 2px;
+            position: relative;
+            clear: both;
+            text-align: left;
+            color: #DDD;
+            background-color: #FFF;
+            border-radius: 0.4em;
+            border: 1px solid #BFBFBF;
+            -moz-transition-property: color, background;
+            -moz-transition-duration: 0.3s;
+            -webkit-transition-property: color, background;
+            -webkit-transition-duration: 0.3s;
+            color: #5A8BD0;
 
-.Viper-textbox-main {
-    position: relative;
-    padding-right: 0.3em;
-}
+            .Viper-disabled & {
+                opacity: 0.4;
 
-.Viper-textbox.Viper-actionRevert .Viper-textbox-main,
-.Viper-textbox.Viper-actionClear .Viper-textbox-main {
-    padding-right: 22px;
-}
+                .Viper-browserVer-msie8 & {
+                    filter: ~"alpha(opacity = 40)";
+                }
+            }
+        }
 
-.Viper-textbox-title {
-    position: absolute;
-    left: 0px;
-    top: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    color: #DDD;
-    text-shadow: 0 -1px 0 #000;
-    text-shadow: none;
-    line-height: 1.85em;
-    font-size: 1.2em;
-    padding: 0 10px;
-    margin: 0 0 0 0.2em;
-    background-color: #404040;
-    border-radius: 0.2em;
-    height: 100%;
-    -moz-transition-property: color, background;
-    -moz-transition-duration: 0.3s;
-    -webkit-transition-property: color, background;
-    -webkit-transition-duration: 0.3s;
+        .Viper-textbox.Viper-active .Viper-textbox-label {
+            background: #205caf;
+        }
 
-    .Viper-disabled & {
-        filter: ~"alpha(opacity = 40)";
+    .Viper-textbox:after {
+        display: block;
+        content: "";
+        clear: both;
     }
-}
 
-.Viper-textbox.Viper-active .Viper-textbox-title,
-.Viper-textbox.Viper-required.Viper-active .Viper-textbox-title {
-    background-color: #366cb7;
-    box-shadow: 0 0 6px rgba(0,0,0,0.5);
-}
+    // Main Wrapper
 
-.Viper-textbox.Viper-required .Viper-textbox-title {
-    background-color: #c44e4e;
-    color: #FFF;
-    text-shadow: 0 -1px 0 rgba(0,0,0,0.2);
-}
+        .Viper-textbox-main {
+            position: relative;
+            padding-right: 0.3em;
+        }
 
-.Viper-textbox-input[type=text],
-.Viper-textbox-textArea {
-    font-family: Arial;
-    box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    width: 100%;
-    font-size: 1.49em;
-    font-weight: bold;
-    border: none;
-    padding: 0.1em 0 0.15em;
-    background: transparent;
-    color: #5A8BD0;
-    outline: none;
+        .Viper-textbox.Viper-actionRevert .Viper-textbox-main,
+        .Viper-textbox.Viper-actionClear .Viper-textbox-main {
+            padding-right: 22px;
+        }
 
-    .Viper-textbox.Viper-active &,
-    .Viper-textbox.Viper-required.Viper-active & {
+    // Input Titles
+
+        .Viper-textbox-title {
+            position: absolute;
+            left: 0px;
+            top: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #808080;
+            line-height: 1.85em;
+            font-size: 1.2em;
+            padding: 0 10px;
+            margin: 0 0 0 0.2em;
+            background-color: #EDEDED;
+            border-radius: 0.2em;
+            height: 100%;
+            -moz-transition-property: color, background;
+            -moz-transition-duration: 0.3s;
+            -webkit-transition-property: color, background;
+            -webkit-transition-duration: 0.3s;
+
+            .Viper-browserVer-msie8 .Viper-disabled & {
+                filter: ~"alpha(opacity = 40)";
+            }
+        }
+
+        .Viper-textbox.Viper-active .Viper-textbox-title,
+        .Viper-textbox.Viper-required.Viper-active .Viper-textbox-title {
+            background-color: #2b7ce0;
+            color: #FFF;
+        }
+
+        .Viper-textbox.Viper-required .Viper-textbox-title {
+            background-color: #EA6868;
+            color: #FFF;
+        }
+
+    // Input Elements
+
+        .Viper-textbox-input[type=text],
+        .Viper-textbox-textArea {
+            font-family: Arial;
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            width: 100%;
+            font-size: 1.49em;
+            border: none;
+            padding: 0.1em 0 0.15em;
+            background: transparent;
+            color: #2b7ce0;
+            outline: none;
+
+            .Viper-textbox.Viper-active &,
+            .Viper-textbox.Viper-required.Viper-active & {
+                color: #FFF;
+            }
+
+            .Viper-textbox.Viper-required & {
+                color: #EA6868;
+            }
+
+            &::-webkit-input-placeholder {
+                .input-placeholder;
+            }
+
+            &:-moz-placeholder {
+                .input-placeholder;
+            }
+
+            .Viper-textbox.Viper-disabled & {
+                text-decoration: line-through;
+                color: #CCC;
+            }
+
+            .Viper-browserVer-msie8 .Viper-disabled & {
+                filter: ~"alpha(opacity = 40)";
+            }
+
+        }
+
+        .Viper-textbox-textArea {
+            min-height: 3.5em;
+        }
+
+        .input-placeholder {
+            color: #c44e4e;
+            font-style: italic;
+            font-weight: normal;
+            .Viper-textbox.Viper-active & {
+                color: #7c9cc9;
+            }
+        }
+
+    // Messages
+
+    .Viper-textbox-messages {
+        padding: 0.5em 0.2em 0;
+        font-size: 1.3em;
+    }
+
+    .Viper-textbox-error {
+        display: block;
+        background-color: #E65757;
         color: #FFF;
+        border-radius: 0.2em;
+        padding: 0.4em 0.5em;
     }
 
-    .Viper-textbox.Viper-required & {
-        color: #c44e4e;
+    .Viper-textbox-desc {
+        display: block;
+        padding: 0.4em 1em;
+        font-size: 1.4em;
+        color: #111;
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
     }
 
-    &::-webkit-input-placeholder {
-        .input-placeholder;
-    }
+    // Actions (revert, clear, required)
 
-    &:-moz-placeholder {
-        .input-placeholder;
-    }
-
-    .Viper-textbox.Viper-disabled & {
-        text-decoration: line-through;
-        color: #CCC;
-    }
-
-    .Viper-disabled & {
-        filter: ~"alpha(opacity = 40)";
-    }
-
-}
-
-.Viper-textbox-textArea {
-    min-height: 3.5em;
-}
-
-.input-placeholder {
-    color: #c44e4e;
-    font-style: italic;
-    font-weight: normal;
-    .Viper-textbox.Viper-active & {
-        color: #7c9cc9;
-    }
-}
-
-.Viper-textbox-messages {
-    padding: 0.5em 0.3em 0;
-    font-size: 1.3em;
-}
-
-.Viper-textbox-error {
-    display: block;
-    background-color: #c01c1c;
-    color: #FFF;
-    border-radius: 0.2em;
-    padding: 0.4em 0.5em;
-    text-shadow: 0 -1px 0 rgba(0,0,0,0.4);
-}
-.Viper-textbox-desc {
-    display: block;
-    padding: 0.4em 1em;
-    font-size: 1.4em;
-    color: #111;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-.Viper-textbox-action,
-.Viper-textbox.Viper-required .Viper-textbox-main:after {
-    display: none;
-    position: absolute;
-    cursor: pointer;
-    background: transparent url(../Images/viperToolsSprite.png) 0 -122px no-repeat;
-    width: 18px;
-    height: 18px;
-    right: 2px;
-    top: 50%;
-    margin-top: -9px;
-}
-
-.Viper-textbox.Viper-actionRevert.Viper-required .Viper-textbox-main:after,
-.Viper-textbox.Viper-actionClear.Viper-required .Viper-textbox-main:after {
-    display: none;
-}
-
-.Viper-textbox.Viper-required .Viper-textbox-main:after {
-    .Viper-textbox.Viper-disabled & {
-        visibility: hidden;
-    }
-
-    .Viper-textBox-textArea & {
+    .Viper-textbox-action,
+    .Viper-textbox.Viper-required .Viper-textbox-main:after {
         display: none;
+        position: absolute;
+        cursor: pointer;
+        background: transparent url("../Images/viperTools.svg") 0 -122px no-repeat;
+        width: 18px;
+        height: 18px;
+        right: 2px;
+        top: 50%;
+        margin-top: -9px;
+
+        /* PNG fallback for older trowsers */
+
+            .Viper-browserVer-msie8 & {
+                background-image: url("../Images/viperTools.png");
+            }
     }
-}
 
-.Viper-textbox.Viper-required .Viper-textbox-main:after {
-    display: block;
-    content: "";
-    background-position: 0 -158px;
-}
+        // Required
 
-.Viper-textbox.Viper-required.Viper-active .Viper-textbox-main:after {
-    background-position: 0 -215px;
-}
+            .Viper-textbox.Viper-actionRevert.Viper-required .Viper-textbox-main:after,
+            .Viper-textbox.Viper-actionClear.Viper-required .Viper-textbox-main:after {
+                display: none;
+            }
 
-.Viper-textbox.Viper-actionRevert .Viper-textbox-action,
-.Viper-textbox.Viper-actionClear .Viper-textbox-action {
-    display: block;
-    opacity: 0.6;
-}
+            .Viper-textbox.Viper-required .Viper-textbox-main:after {
+                .Viper-textbox.Viper-disabled & {
+                    visibility: hidden;
+                }
 
-.Viper-textbox.Viper-actionRevert .Viper-textbox-action:hover,
-.Viper-textbox.Viper-actionClear .Viper-textbox-action:hover {
-    opacity: 1;
-}
+                .Viper-textBox-textArea & {
+                    display: none;
+                }
+            }
 
-.Viper-textbox.Viper-actionClear .Viper-textbox-action {
-    background-position: 0 -140px;
-}
+            .Viper-textbox.Viper-required .Viper-textbox-main:after {
+                display: block;
+                content: "";
+                background-position: 0 -158px;
+            }
 
-// Checkbox
+            .Viper-textbox.Viper-required.Viper-active .Viper-textbox-main:after {
+                background-position: 0 -215px;
+            }
 
-.Viper-checkbox {
-    display: block;
-    position: relative;
-    clear: both;
-    margin-bottom: 0.6em;
-    text-align: left;
-    text-shadow: none;
-    color: #FFF;
-    background-color: rgba(255, 255, 255, 0.06);
-    border: 1px solid #393939;
-    border-radius: 0.4em 0.4em 0.4em 0.4em;
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 1px 0 rgba(255, 255, 255, 0.1);
-    padding: 0 0.8em;
-    font-size: 1.2em;
-    cursor: pointer;
+        // Revert / Clear
 
-    &.Viper-disabled {
-        opacity: 0.4;
-    }
-}
+            .Viper-textbox.Viper-actionRevert .Viper-textbox-action,
+            .Viper-textbox.Viper-actionClear .Viper-textbox-action {
+                display: block;
+                opacity: 0.6;
 
-.Viper-checkbox-title {
-    text-shadow: 0 -1px 0 rgba(0,0,0,0.4);
-    color: #ddd;
-    white-space: nowrap;
-    font-size: 1.1em;
-    line-height: 2.5em;
-}
+                .Viper-browserVer-msie8 & {
+                    filter: ~"alpha(opacity = 60)";
+                }
+            }
 
-.Viper-checkbox-switch {
-    font-size: 1.2em;
-    position: absolute;
-    overflow: hidden;
-    right: 0.6em;
-    width: 3.2em;
-    height: 1.6em;
-    top: 50%;
-    margin-top: -0.8em;
-     cursor: pointer;
-    background-color: #2b2b2b;
-    border-radius: 0.8em;
-    box-shadow: 0 0 1px 1px rgba(0,0,0,0.6) inset, 0 1px 0 rgba(255, 255, 255, 0.2);
-    -moz-transition: background-color 0.2s ease;
-    -webkit-transition: background-color 0.2s ease;
-    box-shadow:
-            0 2px 2px -1px rgba(0, 0, 0, 0.8) inset,
-            0 -2px 2px -2px rgba(0, 0, 0, 1) inset,
-            0 1px 0 rgba(255, 255, 255, 0.2),
-            1px 0px 0 rgba(0, 0, 0, 0.3) inset,
-            -1px 0px 0 rgba(0, 0, 0, 0.3) inset;
+            .Viper-textbox.Viper-actionRevert .Viper-textbox-action:hover,
+            .Viper-textbox.Viper-actionClear .Viper-textbox-action:hover {
+                opacity: 1;
 
-    .Viper-checkbox.Viper-active & {
-        background-color: #205caf;
-    }
-}
+                .Viper-browserVer-msie8 & {
+                    filter: ~"alpha(opacity = 100)";
+                }
+            }
 
-.Viper-checkbox-slider {
-    -moz-transition: left 0.2s ease-out;
-    -webkit-transition: left 0.2s ease-out;
-    content: "";
-    position: absolute;
-    width: 1.3em;
-    height: 1.3em;
-    border-radius: 0.65em;
-    left: 0.15em;
-    top: 50%;
-    margin-top: -0.65em;
-    background-color: #65636b;
-    box-shadow: 0 0 2px #000000, 0 1px 0 rgba(255,255,255,0.3) inset;
+            .Viper-textbox.Viper-actionClear .Viper-textbox-action {
+                background-position: 0 -140px;
+            }
 
-    .Viper-checkbox.Viper-active & {
-        left: 1.7em;
-        background-color: #d9d9de;
-        box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.6), 0 1px 0 rgba(255,255,255,0.3) inset;
-        background: -webkit-gradient(linear, left top, left bottom, from(#e9e9eb), to(#c2c2cb));
-        background: -moz-linear-gradient(top,  #e9e9eb,  #c2c2cb);
-    }
-}
+    // Checkbox (sliding switch)
 
-.Viper-checkbox-switch:before {
-    content: "";
-    display: block;
-    opacity: 0;
-    position: absolute;
-    width: 10px;
-    height: 7px;
-    background: transparent url(../Images/viperToolsSprite.png) 0 -233px no-repeat;
-    left: 0.5em;
-    top: 51%;
-    margin-top: -3px;
-    -moz-transition: 0.2s opacity ease-in;
-    -webkit-transition: 0.2s opacity ease-in;
+        .Viper-checkbox {
+            display: block;
+            position: relative;
+            clear: both;
+            margin-bottom: 0.6em;
+            text-align: left;
+            color: #4C4C4C;
+            background-color: #EDEDED;
+            border: 1px solid #BFBFBF;
+            border-radius: 0.3em;
+            padding: 0 0.8em;
+            font-size: 1.2em;
+            cursor: pointer;
 
-    .Viper-checkbox.Viper-active & {
-        opacity: 1;
-    }
-}
+            &.Viper-disabled {
+                opacity: 0.4;
 
-.Viper-checkbox input {
-    visibility: hidden;
-}
+                .Viper-browserVer-msie8 & {
+                    filter: ~"alpha(opacity = 40)";
+                }
+            }
+        }
+
+        // Title
+
+            .Viper-checkbox-title {
+                white-space: nowrap;
+                font-size: 1.1em;
+                line-height: 2.5em;
+            }
+
+        // Switch
+
+            .Viper-checkbox-switch {
+                font-size: 1.2em;
+                position: absolute;
+                overflow: hidden;
+                right: 0.6em;
+                width: 3.2em;
+                height: 1.6em;
+                top: 50%;
+                margin-top: -0.8em;
+                cursor: pointer;
+                background-color: #CACACA;
+                border-radius: 0.8em;
+                box-shadow: 0 0 1px 0px rgba(0, 0, 0, 0.3) inset;
+                -moz-transition: background-color 0.2s ease;
+                -webkit-transition: background-color 0.2s ease;
+
+                .Viper-checkbox.Viper-active & {
+                    background-color: #2b7ce0;
+                }
+            }
+
+            // Slider
+
+                .Viper-checkbox-slider {
+                    -moz-transition: left 0.2s ease-out;
+                    -webkit-transition: left 0.2s ease-out;
+                    content: "";
+                    position: absolute;
+                    width: 1.3em;
+                    height: 1.3em;
+                    border-radius: 0.65em;
+                    left: 0.15em;
+                    top: 50%;
+                    margin-top: -0.65em;
+                    background-color: #FFF;
+                    box-shadow: 0 0 1px rgba(0, 0, 0, 0.55);
+
+                    .Viper-checkbox.Viper-active & {
+                        left: 1.7em;
+                    }
+                }
+
+            .Viper-checkbox-switch:before {
+                content: "";
+                display: block;
+                opacity: 0;
+                position: absolute;
+                width: 10px;
+                height: 7px;
+                background: transparent url("../Images/viperTools.svg") 0 -233px no-repeat;
+                left: 0.5em;
+                top: 51%;
+                margin-top: -3px;
+                -moz-transition: 0.2s opacity ease-in;
+                -webkit-transition: 0.2s opacity ease-in;
+
+                .Viper-browserVer-msie8 & {
+                    filter: ~"alpha(opacity = 0)";
+                }
+
+                /* PNG fallback for older trowsers */
+
+                    .Viper-browserVer-msie8 & {
+                        background-image: url("../Images/viperTools.png");
+                    }
+
+                .Viper-checkbox.Viper-active & {
+                    opacity: 1;
+
+                    .Viper-browserVer-msie8 & {
+                        filter: ~"alpha(opacity = 100)";
+                    }
+                }
+            }
+
+            .Viper-checkbox input {
+                visibility: hidden;
+            }
 
 // Popup modal window (source view)
 
-.Viper-popup {
-    font-family: Arial,Sans Serif;
-    font-size: 9px;
-    position: fixed !important;
-    z-index: 1001;
-    border: 1px solid transparent;
-    border-radius: 0.8em 0.8em 0.8em 0.8em;
-    box-shadow: 0px 0px 10px 4px #222;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.7), 0 1px 0 #555555 inset;
-}
+    .Viper-popup {
+        font-family: Arial,Sans Serif;
+        font-size: 9px;
+        position: fixed !important;
+        z-index: 1001;
+        border: 1px solid transparent;
+        border-radius: 0.8em;
 
-.Viper-themeDark.Viper-popup {
-    background-color: #2B2B2B;
-    border-color: #2B2B2B;
-    color: #FFF;
-    text-shadow: 0 1px 0 #FFFFFF;
-    border: 1px solid transparent;
-}
+        // Colours
+            background-color: #2B2B2B;
+            border-color: #2B2B2B;
+            color: #FFF;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.7), 0 1px 0 #555 inset;
+    }
 
-.Viper-popup-header {
-    position: relative;
-    text-transform: uppercase;
-    font-size: 1.2em;
-    padding-top: 0.5em;
-    text-align: center;
-    border-bottom: 1px solid transparent;
-    line-height: 1.8em;
-    margin: 0;
-    padding: 0.4em 0 0;
-    white-space: nowrap;
-    cursor: move;
-}
-.Viper-themeDark .Viper-popup-header {
-    color: #AAAAAA;
-    text-shadow: 0 -1px 0 #000000;
-}
+    // Header
 
-.Viper-popup-bottom,
-.Viper-popup-content {
-    padding: 0.3em 1em 1em;
-    background: url(../Images/bgTexture-dark1.gif) repeat 0 0 #54535A;
-    text-shadow: none;
-}
+        .Viper-popup-header {
+            position: relative;
+            text-transform: uppercase;
+            font-size: 1.2em;
+            padding-top: 0.5em;
+            text-align: center;
+            border-bottom: 1px solid transparent;
+            line-height: 1.8em;
+            margin: 0;
+            padding: 0.4em 0 0;
+            white-space: nowrap;
+            cursor: move;
+        }
+        .Viper-popup-header {
+            color: #AAAAAA;
+            text-shadow: 0 -1px 0 #000000;
+        }
 
-.Viper-popup-bottom {
-    position: relative;
-    border-bottom-left-radius: 0.8em;
-    border-bottom-right-radius: 0.8em;
-    text-align: center;
-}
+    // Footer + Content containers
 
-.Viper-popup-content {
-    padding: 0.7em;
-    min-width: 52em;
-}
+        .Viper-popup-bottom,
+        .Viper-popup-content {
+            padding: 0.3em 1em 1em;
+            background: url(../Images/bgTexture-dark1.gif) repeat 0 0 #54535A;
+        }
 
-.Viper-popup-closeIcon,
-.Viper-popup-closeIcon:after,
-.Viper-popup-dragIcon,
-.Viper-popup-resizeIcon,
-.Viper-popup .ui-resizable-se {
-    position: absolute;
-    background-image: url(../Images/viperToolsSprite.png);
-}
+        .Viper-popup-bottom {
+            position: relative;
+            border-bottom-left-radius: 0.8em;
+            border-bottom-right-radius: 0.8em;
+            text-align: center;
+        }
 
-.Viper-popup-closeIcon {
-    right: 0;
-    top: 0;
-    width: 2.2em;
-    height: 2.2em;
-    opacity: 0.5;
-    filter: ~"alpha(opacity = 50)";
-    cursor: pointer;
-    background: none;
-}
-.Viper-popup-closeIcon:hover {
-    opacity: 1;
-    filter: ~"alpha(opacity = 100)";
-}
-.Viper-popup-closeIcon:after {
-    content: "";
-    display: block;
-    left: 50%;
-    top: 50%;
-    width: 11px;
-    height: 10px;
-    background-position: 0 -176px;
-    margin: -5px 0 0 -5px;
-}
+        .Viper-popup-content {
+            padding: 0.7em;
+            min-width: 52em;
+        }
 
-.Viper-popup-dragIcon {
-    width: 17px;
-    height: 16px;
-    left: 0.5em;
-    top: 50%;
-    margin-top: -8px;
-    background-position: 0 -186px;
-}
+    // Icon Shared Config
 
-.Viper-popup-resizeIcon {
-    bottom: 0;
-    right: 0;
-    width: 13px;
-    height: 13px;
-    background-position: 0 -199px;
-}
+        .Viper-popup-closeIcon,
+        .Viper-popup-closeIcon:after,
+        .Viper-popup-dragIcon,
+        .Viper-popup-resizeIcon,
+        .Viper-popup .ui-resizable-se {
+            position: absolute;
+            background-image: url("../Images/viperTools.svg");
 
-.Viper-popup .ui-resizable-se {
-    bottom: 3px;
-    right: 3px;
-    width: 13px;
-    height: 13px;
-    background-position: 0 -202px;
-    cursor: se-resize;
-}
+            // PNG fallback for older trowsers
 
-.Viper-button.ViperITP-button-hidden,
-.Viper-buttonGroup ViperITP-button-hidden {
-    display: none;
-}
+                .Viper-browserVer-msie8 & {
+                    background-image: url("../Images/viperTools.png");
+                }
+        }
+
+    // Close Icon
+
+        .Viper-popup-closeIcon {
+            right: 0;
+            top: 0;
+            width: 2.2em;
+            height: 2.2em;
+            opacity: 0.5;
+            cursor: pointer;
+            background: none;
+
+            .Viper-browserVer-msie8 & {
+                filter: ~"alpha(opacity = 50)";
+            }
+        }
+
+        .Viper-popup-closeIcon:hover {
+            opacity: 1;
+
+            .Viper-browserVer-msie8 & {
+                filter: ~"alpha(opacity = 100)";
+            }
+        }
+
+        .Viper-popup-closeIcon:after {
+            content: "";
+            display: block;
+            left: 50%;
+            top: 50%;
+            width: 11px;
+            height: 10px;
+            background-position: 0 -176px;
+            margin: -5px 0 0 -5px;
+        }
+
+    // Drag Icon
+
+        .Viper-popup-dragIcon {
+            width: 17px;
+            height: 16px;
+            left: 0.5em;
+            top: 50%;
+            margin-top: -8px;
+            background-position: 0 -186px;
+        }
+
+    // Resize Handles
+
+        .Viper-popup-resizeIcon {
+            bottom: 0;
+            right: 0;
+            width: 13px;
+            height: 13px;
+            background-position: 0 -199px;
+        }
+
+        .Viper-popup .ui-resizable-se {
+            bottom: 3px;
+            right: 3px;
+            width: 13px;
+            height: 13px;
+            background-position: 0 -202px;
+            cursor: se-resize;
+        }
 
 .ViperUtil-hidden {
     display: none;
 }
 
-// Viper Tooltip
+// Tooltip
 
     .Viper-tooltip {
         position: absolute;
         max-width: 200px;
         opacity: 0.85;
-        background-color: #222;
         padding: 10px;
-        border: 1px solid #000;
         border-radius: 0.4em;
+        text-align: center;
         z-index: 1000;
-        color: #FFF;
-        font-family: arial;
-        font-weight: bold;
+        font-family: Arial;
         -moz-user-select: none;
         margin: 5px 0;
+        line-height: 1.2em;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.3), 0 0 1px rgba(0, 0, 0, 0.5);
+
+        // Colours
+            color: #171717;
+            background-color: #EDEDED;
+
+        // Fallback for older trowsers
+
+            .Viper-browserVer-msie8 & {
+                border: 1px solid #d7d7d7;
+                filter: ~"alpha(opacity = 85)";
+            }
     }
 
-// Small screen customisations
-
-    @media screen and (max-width: 768px) {
-      .Viper-popup,
-      .ViperITP,
-      .ViperTP-bar {
-//         font-size: 13px !important;
-      }
-      .Viper-button {
-//         min-width: 39px;
-      }
-    }
-
-// Viper Popout Panel
+// Popout Panel
 
     .Viper-popoutPanel {
         position: absolute;
         display: none;
-        background-color: #434247;
         z-index: 1100;
         border-radius: 5px;
-        border: 1px solid #2a2a2a;
         padding: 0.3em;
+
+        // Colours
+            background-color: #FFF;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.3), 0 0 1px rgba(0, 0, 0, 0.6);
 
         animation-duration: 90ms;
         animation-timing-function: ease-out;
@@ -1195,19 +1103,24 @@
         -webkit-animation-timing-function: ease-out;
         -webkit-animation-fill-mode: forwards;
 
-        &:before {
+        &:before,
+        &:after {
             right: 100%;
             top: 50%;
-            border: solid transparent;
+            border: 10px solid transparent;
             content: "";
             height: 0;
             width: 0;
             position: absolute;
             pointer-events: none;
-            border-color: transparent;
-            border-right-color: #2a2a2a;
-            border-width: 12px;
-            margin-top: -12px;
+            border-right-color: #C1C1C1;
+            margin-top: -10px;
+        }
+
+        &:after {
+            border-width: 8px;
+            border-right-color: #FFF;
+            margin-top: -8px;
         }
 
         &.ViperUtil-visible {
@@ -1234,8 +1147,8 @@
     // Selection List
 
         .Viper-selectionList {
-            color: #FFF;
-            font-family: Arial,Sans Serif;
+            color: #777;
+            font-family: Arial, Sans Serif;
             margin: 0;
             font-size: 12px;
             list-style: none;
@@ -1243,7 +1156,7 @@
 
             & li {
                 padding: 6px 60px 6px 8px;
-                border-bottom: 1px solid #333;
+                border-bottom: 1px solid #D7D7D7;
                 box-shadow: 0 1px 0 rgba(255,255,255,0.1);
                 cursor: pointer;
                 position: relative;
@@ -1252,7 +1165,7 @@
                 &:before {
                     content: "";
                     position: absolute;
-                    border: 2px solid #666;
+                    border: 2px solid #B1B1B1;
                     border-radius: 10px;
                     width: 14px;
                     height: 14px;
@@ -1261,24 +1174,25 @@
                     top: 50%;
                 }
 
-                &.selected:before {
-                    background-color: #5A8BD0;
-                    border-color: #5A8BD0;
-                }
-
                 &:after {
                     content: "";
                     opacity: 0;
                     transform: scale(0.1);
                     transition: transform 0.1s ease-out;
+
+                    .Viper-browserVer-msie8 & {
+                        filter: ~"alpha(opacity = 0)";
+                    }
                 }
 
                 &.selected {
-                    background-color: rgba(0, 0, 0, 0.25);
-                    color: #5A8BD0;
-                    box-shadow:
-                        0 1px 0 rgba(255,255,255,0.1),
-                        0 1px 0 #333236 inset;
+                    background-color: #E9F3FF;
+                    color: #2b7ce0;
+
+                    &:before {
+                        background-color: #2b7ce0;
+                        border-color: #2b7ce0;
+                    }
 
                     &:after {
                         opacity: 1;
@@ -1289,7 +1203,14 @@
                         height: 9px;
                         top: 50%;
                         margin-top: -4px;
-                        background: transparent url(../Images/viperToolsSprite.png) 0 -240px no-repeat;
+                        background: transparent url("../Images/viperTools.svg") 0 -240px no-repeat;
+
+                        // PNG fallback for older trowsers
+
+                            .Viper-browserVer-msie8 & {
+                                filter: ~"alpha(opacity = 100)";
+                                background-image: url("../Images/viperTools.png");
+                            }
                     }
                 }
             }

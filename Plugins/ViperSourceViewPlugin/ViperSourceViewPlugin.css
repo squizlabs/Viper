@@ -44,6 +44,7 @@
 .VSVP-confirmButton-apply,
 .VSVP-bottomPanel-apply,
 .VSVP-bottomPanel-newWindow {
+    border-color: #484848;
 }
 
 #ViperSourceViewPlugin-window .Viper-popup {

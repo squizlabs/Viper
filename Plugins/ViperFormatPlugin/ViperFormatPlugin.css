@@ -4,11 +4,10 @@
     margin-bottom: 0.4em;
     text-align: left;
     text-shadow: none;
-    color: #DADADA;
-    background-color: rgba(255, 255, 255, 0.06);
-    border: 1px solid #393939;
+    color: #545454;
+    background-color: #EDEDED;
+    border: 1px solid #BFBFBF;
     border-radius: 0.3em;
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1) inset, 0 1px 0 rgba(255, 255, 255, 0.1);
     font-size: 1.4em;
     cursor: pointer;
     padding: 0.5em 0;
@@ -18,7 +17,7 @@
 .ViperFormatPlugin-stylePickerButton:after {
     content: "";
     position: absolute;
-    background: transparent url(../../Images/viperToolsSprite.png) 0 -80px no-repeat;
+    background: transparent url("../../Images/viperTools.svg") 0 -80px no-repeat;
     width: 9px;
     height: 14px;
     right: 10px;
@@ -26,13 +25,17 @@
     margin-top: -7px;
 }
 
+/* PNG fallback for older trowsers */
+
+    .Viper-browserVer-msie8 .ViperFormatPlugin-stylePickerButton:after {
+        background-image: url("../../Images/viperTools.png");
+    }
+
 .ViperFormatPlugin-stylePicker-title {
     line-height: 30px;
     text-shadow: none;
-    color: #b8b8b8;
     font-size: 1.2em;
-    border-top: 1px solid #3b3b40;
-    box-shadow: 0 1px 0 #616161 inset;
+    border-top: 1px solid #B1B1B1;
     margin-top: 5px;
 }
 
@@ -40,15 +43,12 @@
 
 .ViperFormatPlugin-styleListItem {
     position: relative;
-    background-color: #2b2b2b;
-    border: 1px solid #212121;
-    border-radius: 0.3em;
+    background-color: #FFFFFF;
+    border: 1px solid #BFBFBF;
+    border-radius: 0.4em;
     text-align: left;
     padding: 0.4em 22px 0.3em 0.7em;
     text-shadow: none;
-    box-shadow:
-        0 1px 3px 0px rgba(0, 0, 0, 0.26),
-        inset 0 1px 0px 0px rgba(255, 255, 255, 0.08);
 }
 
 .ViperFormatPlugin-styleListItem + .ViperFormatPlugin-styleListItem {
@@ -57,12 +57,12 @@
 
 .ViperFormatPlugin-styleListItem-name {
     font-size: 13px;
-    color: #5a8bd0;
+    color: #2B7CE0;
 }
 
 .ViperFormatPlugin-styleListItem-classes {
       font-size: 11px;
-      color: #7f7f81;
+      color: #6F6F6F;
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;

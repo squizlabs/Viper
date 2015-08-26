@@ -1,10 +1,20 @@
 .Viper-image-handle {
-    width: 19px;
-    height: 19px;
-    background: transparent url(Images/resizers.png) 0 0 no-repeat;
+    width: 14px;
+    height: 14px;
+    background: transparent url("Images/resizers.png") 0 0 no-repeat;
     position: absolute;
     z-index: 999;
+    background-color: #FFF;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3), 0 0 1px rgba(0, 0, 0, 0.6);
+    border-radius: 0.2em;
 }
+
+/* Fallbacks for older trowsers */
+
+    .Viper-browserVer-msie8 .Viper-image-handle {
+        background-image: url("Images/resizers.png");
+        border: 1px solid #d7d7d7;
+    }
 
 .Viper-image-handle-se {
     cursor: se-resize;
@@ -13,7 +23,7 @@
 }
 
 .Viper-image-handle-sw {
-    background-position: -19px 0;
+    background-position: -14px 0;
     cursor: sw-resize;
     margin-left: -10px;
     margin-top: -10px;

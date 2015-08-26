@@ -587,7 +587,7 @@ ViperImagePlugin.prototype = {
         this._inlineToolbar = toolbar;
 
         // Create a tooltip that will be shown when the image move icon is clicked.
-        tools.createToolTip('ViperImageToolbar-tooltip', _('The selected image will be moved to the next location you click. To cancel press the move icon again or ESC'), 'mouse');
+        tools.createToolTip('ViperImageToolbar-tooltip', _('The selected image will be moved to the next location you click. To cancel, press the move icon again, or ESC'), 'mouse');
 
         // Image Details.
         var subContent = this._getToolbarContents(idPrefix);
