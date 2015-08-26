@@ -130,7 +130,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $cellBottom = $cellRect['y2'];
 
         $this->assertTrue((($cellCenter + 3) >= $iconX && ($cellCenter - 3) <= $iconX), 'X Position of table editing icon is incorrect.');
-        $this->assertTrue(($cellBottom <= $iconY && $cellBottom + 10 > $iconY), 'Y Position of table editing icon is incorrect.');
+        $this->assertTrue(($cellBottom <= $iconY && $cellBottom + 20 > $iconY), 'Y Position of table editing icon is incorrect.');
 
         // Move mouse on top of the icon.
         $this->sikuli->mouseMove($icon);
