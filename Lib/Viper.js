@@ -3575,11 +3575,6 @@ Viper.prototype = {
 
     },
 
-    /*
-        TODO: WE need to have id for each bookmark so that we can use
-        ViperUtil.getid() to retrieve a specific bookmark on a page. However,
-        this will not work if the bookmark is not a part of the DOM tree.
-     */
     getBookmark: function(parent, type)
     {
         var bookmarks = ViperUtil.getClass('viperBookmark_' + type, parent);
@@ -3589,6 +3584,23 @@ Viper.prototype = {
         ViperUtil.remove(bookmarks);
 
         return elem;
+
+    },
+
+    getBookmarkById: function(bookmarkid, parent)
+    {
+        parent = parent || this.getViperElement();
+        var bookmarks = ViperUtil.find(parent, '[data-bookmarkid="' + bookmarkid + '"]');
+        if (bookmarks.length !== 2) {
+            return null;
+        }
+
+        var bookmark = {
+            start: bookmarks[0],
+            end: bookmarks[1]
+        }
+
+        return bookmark;
 
     },
 
@@ -3639,7 +3651,7 @@ Viper.prototype = {
 
     },
 
-    createBookmark: function(range, keepOldBookmarks)
+    createBookmark: function(range, keepOldBookmarks, bookmarkid)
     {
         // Remove all bookmarks?
         if (keepOldBookmarks !== true) {
@@ -3693,12 +3705,20 @@ Viper.prototype = {
         ViperUtil.addClass(endBookmark, 'viperBookmark viperBookmark_end');
         endBookmark.setAttribute('viperBookmark', 'end');
 
+        if (bookmarkid) {
+            endBookmark.setAttribute('data-bookmarkid', bookmarkid);
+        }
+
          // Create the start bookmark.
         var startBookmark           = Viper.document.createElement('span');
         startBookmark.style.display = 'none';
         ViperUtil.addClass(startBookmark, 'viperBookmark viperBookmark_start');
         ViperUtil.setHtml(startBookmark, '&nbsp;');
         startBookmark.setAttribute('viperBookmark', 'start');
+
+        if (bookmarkid) {
+            startBookmark.setAttribute('data-bookmarkid', bookmarkid);
+        }
 
         var viperElement = this.getViperElement();
         if (range.getNodeSelection() === viperElement) {
