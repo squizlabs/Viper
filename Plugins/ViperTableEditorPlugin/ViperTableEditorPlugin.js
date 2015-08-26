@@ -571,6 +571,13 @@ ViperTableEditorPlugin.prototype = {
             }
 
             ViperUtil.addClass(tools, 'Viper-topBar');
+
+            var offset = this.viper.getDocumentOffset();
+            var left   = (Math.ceil(cellCoords.x1 + ((cellCoords.x2 - cellCoords.x1) / 2) - (toolsWidth / 2)) + 1 + offset.x);
+            var top    = (cellCoords.y2 + 5 + offset.y);
+
+            ViperUtil.setStyle(tools, 'top', top + 'px');
+            ViperUtil.setStyle(tools, 'left', left + 'px');
         }
 
         if (this._isiPad() === false) {
@@ -622,8 +629,10 @@ ViperTableEditorPlugin.prototype = {
 
         this.viper.addElement(tools);
 
-        this.viper.ViperTools.updatePositionOfElement(tools, null, cell);
-        ViperUtil.setStyle(tools, 'width', 'auto');
+        if (inTopBar !== true) {
+            this.viper.ViperTools.updatePositionOfElement(tools, null, cell);
+            ViperUtil.setStyle(tools, 'width', 'auto');
+        }
 
     },
 
