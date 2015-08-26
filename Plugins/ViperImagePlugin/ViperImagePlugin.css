@@ -1,7 +1,7 @@
 .Viper-image-handle {
     width: 14px;
     height: 14px;
-    background: transparent url("Images/resizers.png") 0 0 no-repeat;
+    background: transparent url("Images/resizers.svg") 0 0 no-repeat;
     position: absolute;
     z-index: 999;
     background-color: #FFF;
