@@ -1212,6 +1212,21 @@ ViperFormatPlugin.prototype = {
                             tools.enableButton(prefix + 'formats:' + formatButtons[tag]);
                         }
                     }
+
+                    // Get surrounding parents.
+                    var surroundingParents = ViperUtil.getSurroundingParents(nodeSelection, null, 'block', self.viper.getViperElement());
+                    if (surroundingParents.length > 0) {
+                        var surroundingParent = surroundingParents[0];
+                        var surTagName        = ViperUtil.getTagName(surroundingParent)
+                        if (surroundingParents.length > 1
+                            && surTagName === 'p'
+                            && ViperUtil.getTagName(surroundingParents[1]) === 'blockquote'
+                        ) {
+                            surTagName = 'blockquote';
+                        }
+
+                        tools.setButtonActive(prefix + 'formats:' + formatButtons[surTagName]);
+                    }
                 } else {
                     // Its a text selection.
                     var startBlock    = ViperUtil.getFirstBlockParent(startNode);
