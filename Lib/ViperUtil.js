@@ -1144,6 +1144,31 @@ var ViperUtil = {
     },
 
     /**
+     * Returns true if the given element has valid content.
+     *
+     * E.g. <p><br /></p> will not return true but <p><img /></p> will return true.
+     *
+     */
+    hasContent: function (element)
+    {
+        if (ViperUtil.isBlank(ViperUtil.getNodeTextContent(element)) === true) {
+            // Might have stub elements.
+            var tags = ViperUtil.getTag('*', element);
+            var ln   = tags.length;
+            for (var i = 0; i < ln; i++) {
+                if (ViperUtil.isStubElement(tags[i]) === true && ViperUtil.isTag(tags[i], 'br') === false) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        return true;
+
+    },
+
+    /**
      * Returns the height of the element.
      *
      * By default, returns the "outer" dimensions, including padding and borders. If the

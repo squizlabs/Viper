@@ -1056,10 +1056,13 @@ Viper.prototype = {
     _useDefaultPlugins: function()
     {
         // Default plugins (all Viper plugins).
-        this.ViperPluginManager.setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperCursorAssistPlugin', 'ViperTrackChangesPlugin']);
+        var plugins = 'ViperCoreStylesPlugin|ViperKeyboardEditorPlugin|ViperInlineToolbarPlugin|ViperHistoryPlugin|ViperListPlugin|ViperFormatPlugin|ViperToolbarPlugin|ViperTableEditorPlugin|ViperCopyPastePlugin|ViperImagePlugin|ViperLinkPlugin|ViperAccessibilityPlugin|ViperSourceViewPlugin|ViperSearchReplacePlugin|ViperLangToolsPlugin|ViperCharMapPlugin|ViperCursorAssistPlugin|ViperTrackChangesPlugin';
+        this.ViperPluginManager.setPlugins(plugins.split('|'));
 
         // Default button ordering.
-        var buttons = [['bold', 'italic', 'subscript', 'superscript', 'strikethrough', 'class'], 'removeFormat', ['justify', 'formats', 'headings'], ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], 'insertTable', 'image', 'hr', ['insertLink', 'removeLink', 'anchor'], 'insertCharacter', 'searchReplace', 'langTools', 'accessibility', 'sourceEditor'];
+        var buttons = [
+            ['bold', 'italic', 'subscript', 'superscript', 'strikethrough', 'class'], 'removeFormat', ['justify', 'formats', 'headings'], ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], 'insertTable', 'image', 'hr', ['insertLink', 'removeLink', 'anchor'], 'insertCharacter', 'searchReplace', 'langTools', 'accessibility', 'sourceEditor'
+        ];
         this.getPluginManager().setPluginSettings('ViperToolbarPlugin', {buttons: buttons});
 
         var inlineToolbarButtons = [['bold', 'italic', 'class'], ['justify', 'formats', 'headings'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], ['insertLink', 'removeLink', 'anchor'], ['image', 'imageMove']];
@@ -1627,7 +1630,11 @@ Viper.prototype = {
 
             range = this.getCurrentRange();
 
-            if (range.startContainer === range.endContainer && this.element === range.startContainer) {
+            if (range.startContainer === range.endContainer
+                && this.element === range.startContainer
+                && range.startOffset === range.endOffset
+                && range.startOffset === 0
+            ) {
                 // The whole editable element is selected. Need to remove everything
                 // and init its contents.
                 ViperUtil.empty(this.element);

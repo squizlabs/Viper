@@ -2056,7 +2056,25 @@ ViperFormatPlugin.prototype = {
                     var newElem = this._convertSingleElement(selectedNode, type);
                     if (nodeSelection && newElem) {
                         this.viper.removeBookmarks();
-                        range.selectNode(newElem);
+
+                        // If the element is empty then collapse range.
+                        if (ViperUtil.hasContent(newElem) === false) {
+                            if (type === 'blockquote') {
+                                ViperUtil.setHtml(newElem, '<p><br/></p>');
+                                range.setStart(newElem.firstElementChild.firstElementChild, 0);
+                            } else if (type === 'pre') {
+                                ViperUtil.setHtml(newElem, ' ');
+                                range.setStart(newElem.firstChild, 0);
+                            } else {
+                                ViperUtil.setHtml(newElem, '<br/>');
+                                range.setStart(newElem.firstElementChild, 0);
+                            }
+
+                            range.collapse(true);
+                        } else {
+                            range.selectNode(newElem);
+                        }
+
                         ViperSelection.addRange(range);
                     } else {
                         this.viper.selectBookmark(bookmark);
