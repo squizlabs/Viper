@@ -1058,6 +1058,13 @@ ViperFormatPlugin.prototype = {
             // Heading button will only be enabled if its a whole node selection or
             // no selection and not in a blockquote with multiple paragraphs.
             if (nodeSelection) {
+                if (ViperUtil.isBlockElement(nodeSelection) === false) {
+                    var surroundParent = ViperUtil.getSurroundingParents(nodeSelection, null, 'block', self.viper.getViperElement());
+                    if (surroundParent.length > 0) {
+                        nodeSelection = surroundParent.shift();
+                    }
+                }
+
                 if (nodeSelection.nodeType === ViperUtil.TEXT_NODE) {
                     if (range.collapsed === true) {
                         // Disable the heading tag if the selection is in a blockquote
@@ -2010,6 +2017,12 @@ ViperFormatPlugin.prototype = {
                 selectedNode = startNode;
             } else {
                 selectedNode = ViperUtil.getFirstBlockParent(range.startContainer);
+            }
+        } else if (selectedNode && ViperUtil.isBlockElement(selectedNode) === false) {
+            // Get surrounding parent.
+            var surroundParent = ViperUtil.getSurroundingParents(selectedNode, null, 'block', this.viper.getViperElement());
+            if (surroundParent.length > 0) {
+                selectedNode = surroundParent.shift();
             }
         }
 
