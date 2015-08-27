@@ -766,6 +766,17 @@ var ViperUtil = {
 
     },
 
+    hasSurroundingParent: function(element, parentTagName, stopEl)
+    {
+        var parents = this.getSurroundingParents(element, parentTagName, null, stopEl);
+        if (parents.length > 0) {
+            return true;
+        }
+
+        return false;
+
+    },
+
     /**
      * Returns true if the specified element(s) is a child of parent.
      */
@@ -1159,6 +1170,31 @@ var ViperUtil = {
         }
 
         return false;
+
+    },
+
+    /**
+     * Returns true if the given element has valid content.
+     *
+     * E.g. <p><br /></p> will not return true but <p><img /></p> will return true.
+     *
+     */
+    hasContent: function (element)
+    {
+        if (ViperUtil.isBlank(ViperUtil.getNodeTextContent(element)) === true) {
+            // Might have stub elements.
+            var tags = ViperUtil.getTag('*', element);
+            var ln   = tags.length;
+            for (var i = 0; i < ln; i++) {
+                if (ViperUtil.isStubElement(tags[i]) === true && ViperUtil.isTag(tags[i], 'br') === false) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        return true;
 
     },
 

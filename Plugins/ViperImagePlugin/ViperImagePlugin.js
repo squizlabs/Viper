@@ -155,7 +155,12 @@ ViperImagePlugin.prototype = {
             }
 
             var range    = data.range;
-            var bookmark = self.viper.createBookmark(range);
+            if (data.e.target && ViperUtil.isTag(data.e.target, 'img') === true) {
+                // Image dropped on top of another image. Replace.
+                range.selectNode(data.e.target);
+            }
+
+            var bookmark = self.viper.createBookmark(range, null, 'imageDrop');
 
             for (var i = 0; i < data.dataTransfer.files.length; i++) {
                 self.readDroppedImage(data.dataTransfer.files[i], function(image, file) {
@@ -252,7 +257,7 @@ ViperImagePlugin.prototype = {
             range = this.viper.getViperRange();
         }
 
-        var bookmark = this.viper.createBookmark(range);
+        var bookmark = this.viper.getBookmarkById('imageDrop') || this.viper.createBookmark(range);
 
         var elems = ViperUtil.getElementsBetween(bookmark.start, bookmark.end);
         for (var i = 0; i < elems.length; i++) {
@@ -918,7 +923,7 @@ ViperImagePlugin.prototype = {
                 });
 
                 // Remove mousemove event.
-                ViperUtil.addEvent([document, Viper.document], 'mouseup.ViperImageResize', function(e) {
+                ViperUtil.addEvent(ViperUtil.getDocuments(), 'mouseup.ViperImageResize', function(e) {
                     ViperUtil.removeEvent(Viper.document, 'mousemove.ViperImageResize');
                     ViperUtil.removeEvent(Viper.document, 'mouseup.ViperImageResize');
 
