@@ -13,7 +13,6 @@
 
 ViperReadyCallback = null;
 (function() {
-    dfxLoadedCallback = function() {
         var dfxScripts = document.getElementsByTagName('script');
         var path       = null;
 
@@ -79,7 +78,7 @@ ViperReadyCallback = null;
         };
 
         // Viper core files.
-        var jsFiles = 'Viper.js|ViperChangeTracker.js|ViperTools.js|ViperDOMRange.js|ViperIERange.js|ViperMozRange.js|ViperSelection.js|ViperPluginManager.js|ViperHistoryManager.js';
+        var jsFiles = 'ViperUtil.js|Viper.js|ViperTranslation.js|ViperChangeTracker.js|ViperTools.js|ViperDOMRange.js|ViperIERange.js|ViperMozRange.js|ViperSelection.js|ViperPluginManager.js|ViperHistoryManager.js';
         jsFiles     = jsFiles.split('|');
 
         _loadScripts(path + '/Lib/', jsFiles, function() {
@@ -110,5 +109,4 @@ ViperReadyCallback = null;
                 document.getElementsByTagName('head')[0].appendChild(link);
             }
         });
-    };
 }) ();
