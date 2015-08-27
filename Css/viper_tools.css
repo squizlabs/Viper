@@ -144,7 +144,7 @@
 .Viper-button.Viper-active {
   background-color: #2b7ce0;
   border-color: #1768cc;
-  color: #ffffff;
+  color: #2b2b2b;
 }
 .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button {
   border-left-color: #1768cc;
@@ -154,11 +154,11 @@
 }
 .Viper-button.Viper-selected {
   background: #cacaca;
-  border-color: #b3b3b3;
-  color: #ffffff;
+  border-color: #b8b8b8;
+  color: #2b2b2b;
 }
 .Viper-buttonGroup .Viper-button.Viper-selected + .Viper-button {
-  border-left-color: #9f9f9f;
+  border-left-color: #b8b8b8;
 }
 .Viper-button.Viper-selected.Viper-active {
   background: #1a4c8a;
@@ -641,6 +641,7 @@
 }
 .Viper-textbox {
   margin-bottom: 0.6em;
+  transition: opacity 0.2s ease-in;
   -moz-transition: opacity 0.2s ease-in;
   -webkit-transition: opacity 0.2s ease-in;
 }
@@ -663,6 +664,8 @@
   background-color: #FFF;
   border-radius: 0.4em;
   border: 1px solid #BFBFBF;
+  transition-property: color, background;
+  transition-duration: 0.3s;
   -moz-transition-property: color, background;
   -moz-transition-duration: 0.3s;
   -webkit-transition-property: color, background;
@@ -706,6 +709,8 @@
   background-color: #EDEDED;
   border-radius: 0.2em;
   height: 100%;
+  transition-property: color, background;
+  transition-duration: 0.3s;
   -moz-transition-property: color, background;
   -moz-transition-duration: 0.3s;
   -webkit-transition-property: color, background;

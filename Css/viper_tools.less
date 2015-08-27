@@ -130,7 +130,7 @@
     //  Declaration vars
 
     @buttonText-default: #2B2B2B;
-    @buttonText-active: #FFF;
+    @buttonText-active: #2B2B2B;
 
     @buttonBg-default: #FFF;
     @buttonBg-active: #2b7ce0;
@@ -138,11 +138,11 @@
     @buttonBg-selectedActive: #1a4c8a;
     @buttonBg-delete: #FF5353;
 
-    @buttonBorder-default: #d7d7d7;
-    @buttonBorder-active: #2b7ce0;
-    @buttonBorder-selected: #B3B3B3;
-    @buttonBorder-selectedActive: #1a4c8a;
-    @buttonBorder-delete: #FF5353;
+    @buttonBorder-default: (@buttonBg-default - 40%);
+    @buttonBorder-active: (@buttonBg-active - 20%);
+    @buttonBorder-selected: (@buttonBg-selected - 18%);
+    @buttonBorder-selectedActive: @buttonBg-selectedActive;
+    @buttonBorder-delete: (@buttonBg-delete - 20%);
 
     @buttonBorderRadius: 0.25em;
 
@@ -162,11 +162,11 @@
 
         &.Viper-active {
             background-color: @buttonBg-active;
-            border-color: @buttonBorder-active - 20%;
+            border-color: @buttonBorder-active;
             color: @buttonText-active;
 
             .Viper-buttonGroup & + .Viper-button {
-                border-left-color: (@buttonBorder-active - 20%);
+                border-left-color: @buttonBorder-active;
 
                 &.Viper-selected.Viper-active {
                     border-left-color: @buttonBorder-selectedActive;
@@ -180,7 +180,7 @@
             color: @buttonText-active;
 
             .Viper-buttonGroup & + .Viper-button {
-                border-left-color: (@buttonBorder-selected - 20%);
+                border-left-color: @buttonBorder-selected;
             }
         }
 
@@ -199,7 +199,7 @@
 
         &.Viper-delete:hover {
             background-color: @buttonBg-delete;
-            border-color: @buttonBorder-delete - 20%;
+            border-color: @buttonBorder-delete;
         }
 
     }
@@ -543,6 +543,7 @@
 
     .Viper-textbox {
         margin-bottom: 0.6em;
+        transition: opacity 0.2s ease-in;
         -moz-transition: opacity 0.2s ease-in;
         -webkit-transition: opacity 0.2s ease-in;
         & .Viper-textbox-textArea {
@@ -569,6 +570,8 @@
             background-color: #FFF;
             border-radius: 0.4em;
             border: 1px solid #BFBFBF;
+            transition-property: color, background;
+            transition-duration: 0.3s;
             -moz-transition-property: color, background;
             -moz-transition-duration: 0.3s;
             -webkit-transition-property: color, background;
@@ -623,6 +626,8 @@
             background-color: #EDEDED;
             border-radius: 0.2em;
             height: 100%;
+            transition-property: color, background;
+            transition-duration: 0.3s;
             -moz-transition-property: color, background;
             -moz-transition-duration: 0.3s;
             -webkit-transition-property: color, background;
