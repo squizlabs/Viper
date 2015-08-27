@@ -833,6 +833,7 @@ ViperDOMRange.prototype = {
             && startNode.nodeType !== ViperUtil.TEXT_NODE
             && range.startOffset === range.endOffset
             && this.startContainer.childNodes.length >= range.startOffset
+            && ViperUtil.isTag(startNode, 'br') === false
         ) {
             // Case: <p><img />*</p> and a character is typed. It should not return img as selected.
             this._nodeSel.node = null;

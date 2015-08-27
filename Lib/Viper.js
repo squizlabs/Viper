@@ -1347,6 +1347,10 @@ Viper.prototype = {
 
                 if (notModified !== false) {
                     element.setAttribute(attribute, value);
+                    self._retrievingValues = false;
+                    if (self._valuesRetrievedCallback) {
+                        self._valuesRetrievedCallback.call(self);
+                    }
                 }
             }
         }//end if

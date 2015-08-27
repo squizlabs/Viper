@@ -558,7 +558,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->selectInlineToolbarLineageItem(1);
         sleep(1);
         $this->clickInlineToolbarButton('bold');
-        $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com"><strong>%1%</strong></a> end of test content.</p>');
+        $this->assertHTMLMatch('<p>Test content <strong><a href="http://www.squizlabs.com">%1%</a></strong> end of test content.</p>');
         $this->assertTrue($this->inLineToolbarButtonExists('bold', 'active'), 'Bold icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon should be active');
 
@@ -579,7 +579,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->selectInlineToolbarLineageItem(1);
         sleep(1);
         $this->clickTopToolbarButton('bold');
-        $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com"><strong>%1%</strong></a> end of test content.</p>');
+        $this->assertHTMLMatch('<p>Test content <strong><a href="http://www.squizlabs.com">%1%</a></strong> end of test content.</p>');
         $this->assertTrue($this->inLineToolbarButtonExists('bold', 'active'), 'Bold icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon should be active');
 
@@ -600,7 +600,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->selectInlineToolbarLineageItem(1);
         sleep(1);
         $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com"><strong>%1%</strong></a> end of test content.</p>');
+        $this->assertHTMLMatch('<p>Test content <strong><a href="http://www.squizlabs.com">%1%</a></strong> end of test content.</p>');
         $this->assertTrue($this->inLineToolbarButtonExists('bold', 'active'), 'Bold icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon should be active');
 
