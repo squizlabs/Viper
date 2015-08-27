@@ -344,6 +344,7 @@ ViperSourceViewPlugin.prototype = {
                 // Setup the Ace editor.
                 var editor   = ace.edit(source);
                 self._editor = editor;
+                editor.$blockScrolling = Infinity;
 
                 self.applyEditorSettings(editor);
 
