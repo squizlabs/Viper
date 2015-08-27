@@ -99,7 +99,7 @@ class Viper_Tests_ViperFormatPlugin_BaseTagUnitTest extends AbstractFormatsUnitT
         $this->checkStatusOfFormatIconsInTheInlineToolbar('active', NULL, NULL, NULL);
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
         $this->clickTopToolbarButton('Quote', 'active', TRUE);
-        $this->assertHTMLMatch('XAX XBX     <div>test test</div>');
+        $this->assertHTMLMatch('XAX XBX<div>test test</div>');
 
         $this->useTest(4);
         $this->selectKeyword(1, 2);

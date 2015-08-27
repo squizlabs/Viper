@@ -122,41 +122,49 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
 
         // Check where the whole list item is linked
         $this->moveToKeyword(2, 'middle');
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectKeyword(2);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectInlineToolbarLineageItem(2);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
 
         // Check where only a word in the list item is linked
         $this->moveToKeyword(1, 'middle');
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectKeyword(1);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectInlineToolbarLineageItem(2);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
@@ -167,6 +175,7 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
@@ -176,50 +185,60 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
 
         // Check where the whole list item is linked
         $this->moveToKeyword(2, 'middle');
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectKeyword(2);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectInlineToolbarLineageItem(2);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
 
         // Check where only a word in the list item is linked
         $this->moveToKeyword(1, 'middle');
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectKeyword(1);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectInlineToolbarLineageItem(2);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'));
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
@@ -415,6 +434,7 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
         $this->useTest(4);
         $this->moveToKeyword(2, 'middle');
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->clickInlineToolbarButton('linkRemove');
         $this->assertHTMLMatch('<p>Ordered list with links:</p><ol><li>%1% item 1</li><li>item 2</li><li>item 3 %2%</li></ol>');
 
@@ -430,6 +450,7 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
         $this->useTest(3);
         $this->moveToKeyword(2, 'middle');
         $this->selectInlineToolbarLineageItem(2);
+        sleep(1);
         $this->clickTopToolbarButton('linkRemove');
         $this->assertHTMLMatch('<p>Unordered list with links:</p><ul><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ul>');
 
@@ -437,6 +458,7 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
         $this->useTest(3);
         $this->moveToKeyword(2, 'middle');
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->clickTopToolbarButton('linkRemove');
         $this->assertHTMLMatch('<p>Unordered list with links:</p><ul><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ul>');
 
@@ -444,6 +466,7 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
         $this->useTest(3);
         $this->moveToKeyword(2, 'middle');
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->clickTopToolbarButton('linkRemove');
         $this->assertHTMLMatch('<p>Unordered list with links:</p><ul><li>%1% item 1</li><li>item 2</li><li>item 3 %2%</li></ul>');
 
@@ -459,6 +482,7 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
         $this->useTest(4);
         $this->moveToKeyword(2, 'middle');
         $this->selectInlineToolbarLineageItem(2);
+        sleep(1);
         $this->clickTopToolbarButton('linkRemove');
         $this->assertHTMLMatch('<p>Ordered list with links:</p><ol><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ol>');
 
@@ -466,6 +490,7 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
         $this->useTest(4);
         $this->moveToKeyword(2, 'middle');
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->clickTopToolbarButton('linkRemove');
         $this->assertHTMLMatch('<p>Ordered list with links:</p><ol><li><a href="http://www.squizlabs.com">%1%</a> item 1</li><li>item 2</li><li>item 3 %2%</li></ol>');
 
@@ -473,6 +498,7 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
         $this->useTest(4);
         $this->moveToKeyword(2, 'middle');
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->clickTopToolbarButton('linkRemove');
         $this->assertHTMLMatch('<p>Ordered list with links:</p><ol><li>%1% item 1</li><li>item 2</li><li>item 3 %2%</li></ol>');
 

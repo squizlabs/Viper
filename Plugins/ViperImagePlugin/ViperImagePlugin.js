@@ -47,7 +47,6 @@ ViperImagePlugin.prototype = {
                 var range = self.viper.getViperRange();
                 range.selectNode(target);
                 ViperSelection.addRange(range);
-                self.viper.fireSelectionChanged(range, true);
 
                 if (ViperUtil.isBrowser('msie', '<11') === true && ViperUtil.isTag(target, 'img') === true) {
                     self._ieImageResize = target;
@@ -151,22 +150,60 @@ ViperImagePlugin.prototype = {
         );
 
         this.viper.registerCallback('Viper:dropped', 'ViperImagePlugin', function(data) {
+            if (!data.dataTransfer.files) {
+                return;
+            }
+
+            var range    = data.range;
+            if (data.e.target && ViperUtil.isTag(data.e.target, 'img') === true) {
+                // Image dropped on top of another image. Replace.
+                range.selectNode(data.e.target);
+            }
+
+            var bookmark = self.viper.createBookmark(range, null, 'imageDrop');
+
             for (var i = 0; i < data.dataTransfer.files.length; i++) {
                 self.readDroppedImage(data.dataTransfer.files[i], function(image, file) {
-                    self.insertDroppedImage(image, data.range, file);
+                    self.insertDroppedImage(image, range, file);
+                    noImage = false;
                 });
             }
+
+            if (data.dataTransfer.files.length > 0) {
+                return false;
+            }
         });
+
+        this.viper.registerCallback(
+            'Viper:editableElementChanged',
+            'ViperImagePlugin',
+            function() {
+                var elemDoc = self.viper.getViperElementDocument();
+                if (elemDoc !== document) {
+                    ViperUtil.removeEvent(elemDoc.defaultView, 'scroll.ViperImagePlugin');
+                    ViperUtil.addEvent(
+                        elemDoc.defaultView,
+                        'scroll.ViperImagePlugin',
+                        function(e) {
+                            if (self._resizeImage) {
+                                self.showImageResizeHandles(self._resizeImage);
+                            }
+                        }
+                    );
+                }//end if
+            }
+        );
 
     },
 
     readDroppedImage: function(file, callback)
     {
+        var self   = this;
         var reader = new FileReader();
         reader.onload = function (event) {
             var image = new Image();
             image.src = event.target.result;
-            callback.call(this, image, file);
+            callback.call(self, image, file);
         };
 
         reader.readAsDataURL(file);
@@ -220,7 +257,7 @@ ViperImagePlugin.prototype = {
             range = this.viper.getViperRange();
         }
 
-        var bookmark = this.viper.createBookmark(range);
+        var bookmark = this.viper.getBookmarkById('imageDrop') || this.viper.createBookmark(range);
 
         var elems = ViperUtil.getElementsBetween(bookmark.start, bookmark.end);
         for (var i = 0; i < elems.length; i++) {
@@ -358,7 +395,7 @@ ViperImagePlugin.prototype = {
 
         // Preview box to display image info and preview.
         var previewBox = document.createElement('div');
-        ViperUtil.addClass(previewBox, 'ViperITP-msgBox');
+        ViperUtil.addClass(previewBox, 'ViperITP-msgBox ViperImagePlugin-previewPanel');
         ViperUtil.setHtml(previewBox, 'Loading preview');
         ViperUtil.setStyle(previewBox, 'display', 'none');
         this._previewBox = previewBox;
@@ -600,15 +637,14 @@ ViperImagePlugin.prototype = {
                 }
 
                 self.moveImage(imageElement, range);
-
+                ViperSelection.removeAllRanges();
                 range.selectNode(imageElement);
                 ViperSelection.addRange(range);
-                ViperSelection.removeAllRanges();
+
 
                 // Show the image resize handles and the toolbar.
                 self.showImageResizeHandles(imageElement);
-                toolbar.update(null, imageElement);
-                self._updateToolbars(imageElement);
+                self.viper.fireSelectionChanged(range, true);
 
                 self._moveImage = null;
 
@@ -782,6 +818,14 @@ ViperImagePlugin.prototype = {
         rect.y1 += offset.y;
         rect.y2 += offset.y;
 
+        if (document !== image.ownerDocument) {
+            var scrollCoords = ViperUtil.getScrollCoords(image.ownerDocument.defaultView);
+            rect.x1 -= scrollCoords.x;
+            rect.x2 -= scrollCoords.x;
+            rect.y1 -= scrollCoords.y;
+            rect.y2 -= scrollCoords.y;
+        }
+
         // Set the position of handles.
         ViperUtil.setStyle(swHandle, 'left', rect.x1 + 'px');
         ViperUtil.setStyle(swHandle, 'top', (rect.y2) + 'px');
@@ -799,11 +843,10 @@ ViperImagePlugin.prototype = {
         this._resizeImage = image;
 
         var self = this;
-
         var _addMouseEvents = function(handle, rev) {
             ViperUtil.addEvent(handle, 'mousedown', function(e) {
-                var width    = image.clientWidth;
-                var height   = image.clientHeight;
+                var width    = image.width;
+                var height   = image.height;
                 var prevPosX = e.clientX - offset.x;
                 var prevPosY = e.clientY - offset.y;
                 var resized  = false;
@@ -840,6 +883,13 @@ ViperImagePlugin.prototype = {
                     }
 
                     var rect = ViperUtil.getBoundingRectangle(image);
+                    if (document !== image.ownerDocument) {
+                        rect.x1 -= scrollCoords.x;
+                        rect.x2 -= scrollCoords.x;
+                        rect.y1 -= scrollCoords.y;
+                        rect.y2 -= scrollCoords.y;
+                    }
+
                     ViperUtil.setStyle(seHandle, 'left', (rect.x2 + offset.x) + 'px');
                     ViperUtil.setStyle(seHandle, 'top', (rect.y2 + offset.y) + 'px');
 
@@ -851,7 +901,7 @@ ViperImagePlugin.prototype = {
                 });
 
                 // Remove mousemove event.
-                ViperUtil.addEvent(Viper.document, 'mouseup.ViperImageResize', function(e) {
+                ViperUtil.addEvent(ViperUtil.getDocuments(), 'mouseup.ViperImageResize', function(e) {
                     ViperUtil.removeEvent(Viper.document, 'mousemove.ViperImageResize');
                     ViperUtil.removeEvent(Viper.document, 'mouseup.ViperImageResize');
 

@@ -958,9 +958,18 @@ ViperTools.prototype = {
             ViperUtil.addClass(dragIcon, 'Viper-popup-dragIcon');
             header.appendChild(dragIcon);
 
+            var overlay = document.createElement('div');
+            ViperUtil.addClass(overlay, 'Viper-dragOverlay');
+
             ViperUtil.$(main).draggable(
                 {
-                    handle: header
+                    handle: header,
+                    start: function() {
+                        self.viper.addElement(overlay);
+                    },
+                    stop: function() {
+                        ViperUtil.remove(overlay);
+                    }
                 }
             );
         }
@@ -1080,6 +1089,10 @@ ViperTools.prototype = {
                 ViperUtil.setStyle(midContent, 'height', ui.size.height + 'px');
             };
 
+            // Create overlay element that sits behind the popup when dragging/resizing incase there are child frames.
+            var overlay = document.createElement('div');
+            ViperUtil.addClass(overlay, 'Viper-dragOverlay');
+
             ViperUtil.$(midContent).resizable(
                 {
                     handles: 'se',
@@ -1088,7 +1101,11 @@ ViperTools.prototype = {
                             resizeCallback.call(this, e, ui);
                         }
                     },
+                    start: function() {
+                        self.viper.addElement(overlay);
+                    },
                     stop: function(e, ui) {
+                        ViperUtil.remove(overlay);
                         if (resizeCallback) {
                             resizeCallback.call(this, e, ui);
                         }
@@ -1222,6 +1239,8 @@ ViperTools.prototype = {
         var self    = this;
         var toolbar = document.createElement('div');
         var viper   = this.viper;
+        ViperUtil.attr(toolbar, 'data-toolid', id);
+        ViperUtil.attr(toolbar, 'id', this.viper.getId() + '-' + id);
 
         var toolsContainer = document.createElement('div');
         toolbar.appendChild(toolsContainer);
@@ -1298,17 +1317,8 @@ ViperTools.prototype = {
                         'scroll.' + id,
                         function(e) {
                             if (toolbar.isVisible() === true) {
-                                toolbar.hide();
+                                self.getItem(id).updatePosition();
                             }
-
-                            clearTimeout(t);
-                            t = setTimeout(
-                                function() {
-                                    ViperUtil.removeClass(toolbar.element, 'scrolling');
-                                    self.getItem(id).update();
-                                },
-                                300
-                            );
                         }
                     );
                 }//end if
@@ -2053,6 +2063,8 @@ ViperTools.prototype = {
         var panel = document.createElement('div');
         ViperUtil.addClass(panel, 'Viper-popoutPanel');
 
+        ViperUtil.attr(panel, 'data-id', id);
+
         if (contentElement) {
             panel.appendChild(contentElement);
         }
@@ -2275,8 +2287,13 @@ ViperTools.prototype = {
                 // returning null for a collapsed range, instead all values are set to 0.
                 var startNode = range.getStartNode();
                 if (startNode.nodeType === ViperUtil.TEXT_NODE) {
-                    if (range.startOffset <= startNode.data.length) {
-                        range.setEnd(startNode, (range.startOffset + 1));
+                    if (range.startOffset < startNode.data.length) {
+                        var offset = range.startOffset;
+                        if (startNode.data.length > 1) {
+                            offset += 1;
+                        }
+
+                        range.setEnd(startNode, offset);
                         rangeCoords = range.rangeObj.getBoundingClientRect();
                         range.collapse(true);
                         if (rangeCoords) {
@@ -2314,6 +2331,12 @@ ViperTools.prototype = {
         }
 
         var scrollCoords = ViperUtil.getScrollCoords();
+        if ((selectedNode && selectedNode.ownerDocument !== document)
+            || (range.startContainer && range.startContainer.ownerDocument !== document)
+        ) {
+            scrollCoords.x = 0;
+            scrollCoords.y = 0;
+        }
 
         ViperUtil.addClass(element, 'Viper-calcWidth');
         ViperUtil.setStyle(element, 'width', 'auto');
@@ -2345,7 +2368,10 @@ ViperTools.prototype = {
             ViperUtil.setStyle(element, 'left', left + 'px');
         }
 
-        var top = (rangeCoords.bottom + margin + scrollCoords.y);
+        var top = (rangeCoords.bottom + margin);
+        if (ViperUtil.getStyle(element, 'position') !== 'fixed') {
+            top += scrollCoords.y;
+        }
 
         if (top === 0) {
             if (hideCallback) {

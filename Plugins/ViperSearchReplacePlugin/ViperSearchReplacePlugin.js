@@ -61,24 +61,24 @@ ViperSearchReplacePlugin.prototype = {
         var content = document.createElement('div');
 
         // Search text box.
-        var search = tools.createTextbox('ViperSearchPlugin:searchInput', _('Search'), '', function(value) {
-            var found = self.find(value);
-            if (found !== true) {
-                self._matchCount = 0;
-            }
-
-            self._updateButtonStates(found);
-        });
+        var search = tools.createTextbox('ViperSearchPlugin:searchInput', _('Search'), '');
         tools.setFieldEvent('ViperSearchPlugin:searchInput', 'keyup', function() {
             if (tools.getItem('ViperSearchPlugin:searchInput').getValue()) {
                 tools.enableButton('ViperSearchPlugin:findNext');
             } else {
                 tools.disableButton('ViperSearchPlugin:findNext');
+                tools.disableButton('ViperSearchPlugin:replace');
+                tools.disableButton('ViperSearchPlugin:replaceAll');
             }
         });
         content.appendChild(search);
 
-        // Replace text box.
+        var _replace = function () {
+            self.replace(tools.getItem('ViperSearchPlugin:replaceInput').getValue());
+            self._updateButtonStates();
+            self.viper.fireNodesChanged();
+        };
+
         var replace = tools.createTextbox('ViperSearchPlugin:replaceInput', _('Replace'), '', function(value) {
             var search = tools.getItem('ViperSearchPlugin:searchInput').getValue();
             self.getNumberOfMatches(search);
@@ -88,7 +88,7 @@ ViperSearchReplacePlugin.prototype = {
         });
         content.appendChild(replace);
 
-        var replaceAllBtn = tools.createButton('ViperSearchPlugin:replaceAll', _('Replace All'), _('Replace All'), 'Viper-replaceAll', function() {
+        var _replaceAll = function () {
             var replaceCount = 0;
             var fromStart    = true;
             while (self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue(), false, fromStart) === true) {
@@ -100,16 +100,28 @@ ViperSearchReplacePlugin.prototype = {
             self._matchCount = 0;
             self._updateButtonStates();
             self.viper.fireNodesChanged();
+        };
+
+        var replaceAllBtn = tools.createButton('ViperSearchPlugin:replaceAll', _('Replace All'), _('Replace All'), 'Viper-replaceAll', function() {
+            var bubble = tools.getItem('ViperSearchPlugin:bubble');
+            bubble.updateSubSectionAction('ViperSearchPlugin:bubbleSubSection', _replaceAll);
+
+            var subSection = tools.getItem('ViperSearchPlugin:bubbleSubSection');
+            return subSection.form.onsubmit();
         }, true);
+
         var replaceBtn = tools.createButton('ViperSearchPlugin:replace', _('Replace'), _('Replace'), 'Viper-replaceText', function() {
-            self.replace(tools.getItem('ViperSearchPlugin:replaceInput').getValue());
-            self._updateButtonStates();
-            self.viper.fireNodesChanged();
+            var bubble = tools.getItem('ViperSearchPlugin:bubble');
+            bubble.updateSubSectionAction('ViperSearchPlugin:bubbleSubSection', _replace);
+
+            var subSection = tools.getItem('ViperSearchPlugin:bubbleSubSection');
+            return subSection.form.onsubmit();
         }, true);
+
         content.appendChild(replaceAllBtn);
         content.appendChild(replaceBtn);
 
-        var findNext = tools.createButton('ViperSearchPlugin:findNext', _('Find Next'), _('Find Next'), '', function() {
+        var _findNext = function () {
             // Find again.
             var found = self.find(tools.getItem('ViperSearchPlugin:searchInput').getValue());
             if (found !== true) {
@@ -125,6 +137,14 @@ ViperSearchReplacePlugin.prototype = {
 
             self._updateButtonStates(found);
             return false;
+        };
+
+        var findNext = tools.createButton('ViperSearchPlugin:findNext', _('Find Next'), _('Find Next'), '', function() {
+            var bubble = tools.getItem('ViperSearchPlugin:bubble');
+            bubble.updateSubSectionAction('ViperSearchPlugin:bubbleSubSection', _findNext);
+
+            var subSection = tools.getItem('ViperSearchPlugin:bubbleSubSection');
+            return subSection.form.onsubmit();
         }, true);
         content.appendChild(findNext);
 
@@ -136,6 +156,10 @@ ViperSearchReplacePlugin.prototype = {
         var searchBtn   = tools.createButton('searchReplace', '', _('Search & Replace'), 'Viper-searchReplace', null, true);
         toolbar.addButton(searchBtn);
         toolbar.setBubbleButton('ViperSearchPlugin:bubble', 'searchReplace');
+
+        tools.getItem('ViperSearchPlugin:bubble').setSubSectionAction('ViperSearchPlugin:bubbleSubSection', function() {
+            return _findNext();
+        }, ['ViperSearchPlugin:searchInput'], 'ViperSearchPlugin:findNext');
 
         // Update the buttons when the toolbar updates it self.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperSearchReplacePlugin', null);
@@ -251,6 +275,10 @@ ViperSearchReplacePlugin.prototype = {
                 try {
                     viperRange.rangeObj.select();
                 } catch (e) {
+                    return false;
+                }
+
+                if (this.viper.rangeInViperBounds(this.viper.getCurrentRange()) === false) {
                     return false;
                 }
 

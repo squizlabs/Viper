@@ -132,6 +132,7 @@ class Viper_Tests_ViperImagePlugin_UndoAndRedoForImageUnitTest extends AbstractV
         // Click redo
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt=""/></p><p>LABS is ORSM</p>');
+        $this->checkResizeHandles('img');
 
     }//end testUndoEditUrlOfImage()
 
@@ -164,6 +165,7 @@ class Viper_Tests_ViperImagePlugin_UndoAndRedoForImageUnitTest extends AbstractV
         // Click redo
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="Alt tag" src="%url%/ViperImagePlugin/Images/editing.png" title="Title tag" /></p><p>LABS is ORSM</p>');
+        $this->checkResizeHandles('img');
 
     }//end testUndoEditingImage()
 
@@ -186,6 +188,7 @@ class Viper_Tests_ViperImagePlugin_UndoAndRedoForImageUnitTest extends AbstractV
 
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" height="270" src="%url%/ViperImagePlugin/Images/editing.png" width="300" /></p><p>LABS is ORSM</p>');
+        $this->checkResizeHandles('img');
 
     }//end testUndoResizeOfImage()
 

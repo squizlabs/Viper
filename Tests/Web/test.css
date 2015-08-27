@@ -5,6 +5,25 @@ body {
     font-family: monospace;
 }
 
+* {
+    /* Disable all transitions and animations */
+    -o-transition-property: none !important;
+    -moz-transition-property: none !important;
+    -ms-transition-property: none !important;
+    -webkit-transition-property: none !important;
+    transition-property: none !important;
+    -o-transform: none !important;
+    -moz-transform: none !important;
+    -ms-transform: none !important;
+    -webkit-transform: none !important;
+    transform: none !important;
+    -webkit-animation: none !important;
+    -moz-animation: none !important;
+    -o-animation: none !important;
+    -ms-animation: none !important;
+    animation: none !important;
+}
+
 ::selection {
     background: #DDD;
     color: #000;
@@ -120,6 +139,11 @@ body.Viper-unitTest .ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-buttonIcon 
 .Viper-button.Viper-active .Viper-buttonIcon {
     margin-top: -14px;
     margin-left: -17px;
+}
+
+.Viper-button.Viper-active .Viper-buttonIcon.Viper-listOutdent {
+    margin-top: -16px;
+    margin-left: -18px;
 }
 
 .Viper-buttonIcon.Viper-justifyBlock {

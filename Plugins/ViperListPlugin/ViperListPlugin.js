@@ -1039,9 +1039,16 @@ ViperListPlugin.prototype = {
 
             var c     = elems.length;
             for (var i = 0; i < c; i++) {
+                if (!elems[i]) {
+                    continue;
+                }
+
                 var p = this._getValidParentElement(elems[i]);
                 if (p && ViperUtil.inArray(p, pElems) === false) {
                     pElems.push(p);
+                } else if (!p && elems[i].nodeType === ViperUtil.TEXT_NODE && ViperUtil.isBlank(elems[i].data) === true) {
+                    // Remove blank text nodes between these elements.
+                    ViperUtil.remove(elems[i]);
                 }
             }
         }
@@ -1247,7 +1254,7 @@ ViperListPlugin.prototype = {
         var node = p.lastChild;
         while (node) {
             var prevSibling = node.previousSibling;
-            if (ViperUtil.isBlockElement(node) === true) {
+            if (ViperUtil.isBlockElement(node) === true && ViperUtil.isStubElement(node) === false) {
                 ViperUtil.insertAfter(p, node);
             }
 

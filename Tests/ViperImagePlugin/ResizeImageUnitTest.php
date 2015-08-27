@@ -16,8 +16,8 @@ class Viper_Tests_ViperImagePlugin_ResizeImageUnitTest extends AbstractViperImag
 
         $this->clickElement('img', 0);
         sleep(1);
-        $this->findImage('ImageHandle-sw', '.Viper-image-handle-sw');
-        $this->findImage('ImageHandle-se', '.Viper-image-handle-se');
+        $this->findImage('ImageHandle-sw', '.Viper-image-handle-sw', 0, true);
+        $this->findImage('ImageHandle-se', '.Viper-image-handle-se', 0, true);
 
     }//end testImageResizeHandles()
 
@@ -35,6 +35,7 @@ class Viper_Tests_ViperImagePlugin_ResizeImageUnitTest extends AbstractViperImag
         $this->resizeImage(200);
 
         $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="200" height="90"/></p><p>LABS is ORSM</p>');
+        $this->checkResizeHandles('img');
 
     }//end testResizingAnImage()
 
@@ -51,6 +52,7 @@ class Viper_Tests_ViperImagePlugin_ResizeImageUnitTest extends AbstractViperImag
         $this->clickElement('img', 0);
         $this->resizeImage(100);
         $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="100" height="45"/></p><p>LABS is ORSM</p>');
+        $this->checkResizeHandles('img');
         $this->clickElement('img', 0);
         $this->clickInlineToolbarButton('image', 'active');
         $this->clickField('Image is decorative');
@@ -66,6 +68,7 @@ class Viper_Tests_ViperImagePlugin_ResizeImageUnitTest extends AbstractViperImag
         $this->clickElement('img', 0);
         $this->resizeImage(100);
         $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="100" height="45"/></p><p>LABS is ORSM</p>');
+        $this->checkResizeHandles('img');
         $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
         $this->clickField('Image is decorative');

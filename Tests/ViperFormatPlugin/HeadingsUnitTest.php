@@ -263,6 +263,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         // Make word bold
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + b');
+        sleep(1);
         $this->assertHTMLMatch('<p>sit amet <strong>%1%</strong></p><p>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
 
         $this->moveToKeyword(1);
@@ -274,6 +275,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->assertFalse($this->inlineToolbarButtonExists('headings'));
 
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('headings'));
         $this->assertTrue($this->inlineToolbarButtonExists('headings'));
 
@@ -296,6 +298,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         // Make word italic
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + i');
+        sleep(1);
         $this->assertHTMLMatch('<p>sit amet <em>%1%</em></p><p>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</p>');
 
         $this->sikuli->click($this->findKeyword(1));
@@ -306,6 +309,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->assertFalse($this->inlineToolbarButtonExists('headings'));
 
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('headings'));
         $this->assertTrue($this->inlineToolbarButtonExists('headings'));
 
@@ -660,6 +664,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         // Make word bold
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + b');
+        sleep(1);
         $this->assertHTMLMatch('<div>sit amet <strong>%1%</strong></div><div>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</div>');
 
         $this->moveToKeyword(1);
@@ -668,6 +673,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
         $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('headings'));
         $this->assertTrue($this->inlineToolbarButtonExists('headings'));
         $this->clickInlineToolbarButton('headings');
@@ -688,15 +694,19 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
 
         // Make word italic
         $this->selectKeyword(1);
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + i');
+        sleep(1);
         $this->assertHTMLMatch('<div>sit amet <em>%1%</em></div><div>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar. Extra long paragraph for testing that the heading icon does not appear in the inline toolbar.</div>');
 
         $this->moveToKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('headings'));
         $this->selectKeyword(1);
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
         $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('headings'));
         $this->assertTrue($this->inlineToolbarButtonExists('headings'));
         $this->clickInlineToolbarButton('headings');
@@ -778,6 +788,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
 
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
         $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should not appear in the inline toolbar');
 
@@ -791,6 +802,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be disabled in the top toolbar');
         $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should not appear in the inline toolbar');
 

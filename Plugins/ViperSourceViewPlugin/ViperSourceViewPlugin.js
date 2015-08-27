@@ -115,9 +115,24 @@ ViperSourceViewPlugin.prototype = {
             }
 
             if (this._editor) {
-                this._originalSource = content;
+                // Set Ace editor content.
                 this._editor.getSession().setValue(content);
-                this.viper.ViperTools.openPopup('VSVP:popup', 800, 600);
+
+                // Scroll to the current caret position.
+                this.scrollToText('__viper_scrollpos');
+
+                // Remove special scroll attribute from the actual content.
+                self._removeScrollAttribute();
+
+                // Remove the special scroll attribute from source view content.
+                self._editor.replaceAll('', {needle: ' __viper_scrollpos="true"'});
+
+                // Make sure the original source does not include the scroll attribute.
+                self._originalSource = self._editor.getSession().getValue();
+
+                // Show the editor.
+                self.viper.ViperTools.openPopup('VSVP:popup', 800, 600);
+
                 setTimeout(function() {
                     self._editor.resize();
                     self._editor.focus();
@@ -298,11 +313,16 @@ ViperSourceViewPlugin.prototype = {
                     }
                 }
 
+                self._removeScrollAttribute();
+
                 // Hide the Confirm message.
                 self.viper.ViperTools.getItem('VSVP:popup').hideTop();
                 self._isVisible = false;
                 self.toolbarPlugin.enable();
-                self.viper.focus();
+
+                setTimeout(function() {
+                    self.viper.focus();
+                }, 10);
             },
             function() {
                 if (self._editor) {
@@ -324,6 +344,7 @@ ViperSourceViewPlugin.prototype = {
                 // Setup the Ace editor.
                 var editor   = ace.edit(source);
                 self._editor = editor;
+                editor.$blockScrolling = Infinity;
 
                 self.applyEditorSettings(editor);
 
@@ -379,7 +400,11 @@ ViperSourceViewPlugin.prototype = {
             this._editor.find(text);
             setTimeout(function() {
                 var anchor = self._editor.getSelection().getSelectionAnchor();
-                self._editor.navigateTo(anchor.row, anchor.column);
+                self._editor.clearSelection();
+                if (self._editor.isRowVisible(anchor.row) === false) {
+                    self._editor.scrollToRow(anchor.row);
+                }
+
             }, 500);
         } else {
             var range = this._textEditor.createTextRange();
@@ -602,6 +627,20 @@ ViperSourceViewPlugin.prototype = {
 
     getContents: function()
     {
+        if (this._editor) {
+            // If the Ace editor is enabled then try to scroll the editor to the current caret position. This is done
+            // by adding a special attribute to first parent element.
+            var range = this.viper.getViperRange();
+            var node = range.getStartNode();
+            if (node) {
+                if (node.nodeType === ViperUtil.TEXT_NODE) {
+                    node = node.parentNode;
+                }
+
+                ViperUtil.attr(node, '__viper_scrollpos', 'true');
+            }
+        }
+
         var html = this.viper.getHtml(null, {emptyTableCellContent:''});
 
         if (window.StyleHTML) {
@@ -670,6 +709,15 @@ ViperSourceViewPlugin.prototype = {
         } else {
             document.getElementsByTagName('head')[0].appendChild(script);
         }
+    },
+
+    _removeScrollAttribute: function () {
+        // Remove Viper scroll attribute from content.
+        var elems = ViperUtil.find(this.viper.getViperElement(), '[__viper_scrollpos]');
+        for (var i = 0; i < elems.length; i++) {
+            ViperUtil.removeAttr(elems[i], '__viper_scrollpos');
+        }
+
     }
 
 };

@@ -571,14 +571,14 @@ ViperTableEditorPlugin.prototype = {
             }
 
             ViperUtil.addClass(tools, 'Viper-topBar');
+
+            var offset = this.viper.getDocumentOffset();
+            var left   = (Math.ceil(cellCoords.x1 + ((cellCoords.x2 - cellCoords.x1) / 2) - (toolsWidth / 2)) + 1 + offset.x);
+            var top    = (cellCoords.y2 + 5 + offset.y);
+
+            ViperUtil.setStyle(tools, 'top', top + 'px');
+            ViperUtil.setStyle(tools, 'left', left + 'px');
         }
-
-        var offset = this.viper.getDocumentOffset();
-        var left   = (Math.ceil(cellCoords.x1 + ((cellCoords.x2 - cellCoords.x1) / 2) - (toolsWidth / 2)) + 1 + offset.x);
-        var top    = (cellCoords.y2 + 5 + offset.y);
-
-        ViperUtil.setStyle(tools, 'top', top + 'px');
-        ViperUtil.setStyle(tools, 'left', left + 'px');
 
         if (this._isiPad() === false) {
             // On Hover of the buttons highlight the table/row/col/cell.
@@ -628,6 +628,11 @@ ViperTableEditorPlugin.prototype = {
         }//end if
 
         this.viper.addElement(tools);
+
+        if (inTopBar !== true) {
+            this.viper.ViperTools.updatePositionOfElement(tools, null, cell);
+            ViperUtil.setStyle(tools, 'width', 'auto');
+        }
 
     },
 
@@ -3421,8 +3426,8 @@ ViperTableEditorPlugin.prototype = {
         }
 
         var col         = ViperUtil.getTag('td,th', table)[0];
-        var rightWidth  = parseInt(ViperUtil.getComputedStyle(col, 'border-right-width'));
-        var bottomWidth = parseInt(ViperUtil.getComputedStyle(col, 'border-bottom-width'));
+        var rightWidth  = parseFloat(ViperUtil.getComputedStyle(col, 'border-right-width'));
+        var bottomWidth = parseFloat(ViperUtil.getComputedStyle(col, 'border-bottom-width'));
 
         if (bottomWidth === 0
             || rightWidth === 0

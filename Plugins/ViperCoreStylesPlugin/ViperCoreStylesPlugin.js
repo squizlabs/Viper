@@ -838,28 +838,57 @@ ViperCoreStylesPlugin.prototype = {
             var prev = keyboardEditorPlugin.splitAtRange(true, null);
         }
 
+        var nextSibling = prev.nextSibling;
+
         ViperUtil.insertAfter(prev, hr);
 
-        var nextSibling = hr.nextSibling;
+        if (!nextSibling || ViperUtil.isBlockElement(nextSibling) === false) {
+            var p = document.createElement('p');
+            ViperUtil.setHtml(p, '&nbsp;');
+            ViperUtil.insertAfter(hr, p);
+            nextSibling = p;
+        } else {
+            if (ViperUtil.trim(ViperUtil.getNodeTextContent(nextSibling)) === '') {
+                if (!nextSibling.nextElementSibling || ViperUtil.isBlockElement(nextSibling.nextElementSibling) === false) {
+                    ViperUtil.setHtml(nextSibling, '&nbsp;');
 
-        if (nextSibling
-            && ViperUtil.trim(ViperUtil.getNodeTextContent(nextSibling)) === ''
-            && !nextSibling.firstElementChild
-        ) {
-            ViperUtil.remove(nextSibling);
-        }
+                    var nextEmptyElem = nextSibling.nextSibling;
+                    while (nextEmptyElem) {
+                        if (ViperUtil.isBlockElement(nextEmptyElem) === true) {
+                            var html = ViperUtil.getHtml(nextEmptyElem);
+                            if (html === '' || html === '<br>' || html === '&nbsp;') {
+                                // This is an empty block element that is after the next sibling.. remove it..
+                                nextEmptyElem.parentNode.removeChild(nextEmptyElem);
+                            }
 
-        if (prev
-            && ViperUtil.trim(ViperUtil.getNodeTextContent(prev)) === ''
-            && !prev.firstElementChild
-        ) {
-            ViperUtil.remove(prev);
-        }
+                            break;
+                        } else if (nextEmptyElem.nodeType === ViperUtil.TEXT_NODE && ViperUtil.trim(nextEmptyElem.data) !== '') {
+                            break;
+                        }
 
-        this.viper.moveCaretAway(hr);
+                        nextEmptyElem = nextEmptyElem.nextSibling;
+                    }
+                } else if (nextSibling.nextElementSibling) {
+                    var delNode = nextSibling;
+                    nextSibling = nextSibling.nextElementSibling;
+                    ViperUtil.remove(delNode);
+                }
+            } else if (range.startOffset === 0
+                && (ViperUtil.trim(ViperUtil.getNodeTextContent(prev)) === ''
+                ||  ViperUtil.getHtml(prev) === '&nbsp;')
+            ) {
+                ViperUtil.remove(prev);
+            }
+        }//end if
+
+        var range = this.viper.getViperRange();
+        range.setStart(range._getFirstSelectableChild(nextSibling), 0);
+        range.collapse(true);
+        ViperSelection.addRange(range);
 
         this.viper.fireNodesChanged('ViperCoreStylesPlugin:hr');
         this.viper.ViperHistoryManager.end();
+
         this.viper.fireSelectionChanged(null, true);
 
     },
@@ -916,8 +945,8 @@ ViperCoreStylesPlugin.prototype = {
 
         if (nodeSelection) {
             var sParents  = ViperUtil.getSurroundingParents(nodeSelection);
-            if (sParents.length > 0 && sParents[0] !== this.viper.getViperElement()) {
-                nodeSelection = sParents[0];
+            if (sParents.length > 0 && sParents[(sParents.length - 1)] !== this.viper.getViperElement()) {
+                nodeSelection = sParents[(sParents.length - 1)];
             }
         }
 
@@ -999,7 +1028,7 @@ ViperCoreStylesPlugin.prototype = {
         // Remove all formating tags.
         var tln = tags.length;
         for (var i = 0; i < tln; i++) {
-            this.viper.removeStyle(tags[i]);
+            this.viper.removeStyle(tags[i], nodeSelection);
         }
 
         ViperChangeTracker.endBatchChange(changeid);
@@ -1154,7 +1183,7 @@ ViperCoreStylesPlugin.prototype = {
             return false;
         }
 
-        var selectedNode = range.getNodeSelection();
+        var selectedNode = range.getNodeSelection(null, true);
         var startNode    = null;
         var endNode      = null;
         var viperElement = this.viper.getViperElement();
@@ -1250,7 +1279,7 @@ ViperCoreStylesPlugin.prototype = {
     _canStyleNode: function(node, topBar)
     {
         if (topBar === true) {
-            if (this._selectedImage) {
+            if (this._selectedImage || ViperUtil.isTag(node, 'img') === true) {
                 return false;
             }
 
@@ -1378,7 +1407,7 @@ ViperCoreStylesPlugin.prototype = {
             startNode = range.startContainer;
         }
 
-        var tools     = this.viper.ViperTools;
+        var tools = this.viper.ViperTools;
         if (this._canStyleNode(startNode, true) !== true) {
             for (var btn in buttons) {
                 if (btn === 'justify' || btn === 'removeFormat') {

@@ -36,7 +36,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
         $this->assertHTMLMatch('<p><strong>%1%</strong> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        // Remove bold using top toolbar
+        // Rstrongove bold using top toolbar
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('bold', 'active');
         $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon in the inline toolbar is active');
@@ -100,7 +100,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->clickInlineToolbarButton('bold');
         $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>%1% %2% <strong>%3%</strong></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% <strong>%3%</strong></p><p>sit <em>%4%</em><strong>%5%</strong></p>');
 
         // Remove bold using inline toolbar
         $this->selectKeyword(3);
@@ -127,7 +127,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
 
 
     /**
-     * Test that bold is applied to two words and then removed from one word.
+     * Test that bold is applied to two words and then remove from one word.
      *
      * @return void
      */
@@ -153,6 +153,8 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->selectKeyword(2);
         $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
+        $this->clickInlineToolbarButton('bold', 'active');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testRemoveBoldFromPartOfContent()
 
@@ -202,7 +204,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
 
 
     /**
-     * Test checking that the strong tag is not used when you delete bold content and add new content.
+     * Test that the strong tag is not used when you delete bold content and add new content.
      *
      * @return void
      */
@@ -239,7 +241,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->sikuli->keyDown('Key.CMD + b');
         $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon in the inline toolbar is still active');
         $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is still active');
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em><strong>%5%</strong></p>');
 
     }//end testShortcutCommand()
 
@@ -303,11 +305,11 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
 
 
     /**
-     * Test that the VITP bold icon is removed from the toolbar when you click the P tag.
+     * Test that the VITP bold icon is rstrongoved from the toolbar when you click the P tag.
      *
      * @return void
      */
-    public function testBoldIconIsRemovedFromInlineToolbar()
+    public function testBoldIconIsRstrongovedFromInlineToolbar()
     {
         $this->useTest(1);
         
@@ -328,32 +330,35 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         // Inline Toolbar icon should be displayed.
         $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon does appear in the inline toolbar');
 
-    }//end testBoldIconIsRemovedFromInlineToolbar()
+    }//end testBoldIconIsRstrongovedFromInlineToolbar()
 
 
     /**
-     * Test applying a bold to two words where one word is italics.
+     * Test applying a bold to two words where one word is italic.
      *
      * @return void
      */
-    public function testAddBoldToTwoWordsWhereOneItalics()
+    public function testAddBoldToTwoWordsWhereOneItalic()
     {
         $this->useTest(1);
         
         $this->selectKeyword(2);
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + i');
+        sleep(1);
         $this->assertHTMLMatch('<p>%1% <em>%2%</em> %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         $this->selectKeyword(2, 3);
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + b');
-
+        sleep(1);
         $this->assertHTMLMatch('<p>%1% <strong><em>%2%</em> %3%</strong></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-    }//end testAddBoldToTwoWordsWhereOneItalics()
+    }//end testAddBoldToTwoWordsWhereOneItalic()
 
 
     /**
-     * Test applying bold to two words where one is bold and one is italics.
+     * Test applying bold to two words where one is bold and one is italic.
      *
      * @return void
      */
@@ -398,7 +403,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
 
 
     /**
-     * Test that a paragraph can be made bold using the top toolbar and that the VITP bold icon will appear when that happen. Then remove the bold formatting and check that the VITP bold icon is removed.
+     * Test that a paragraph can be made bold using the top toolbar and that the VITP bold icon will appear when that happens. Then remove the bold formatting and check that the VITP bold icon is removed.
      *
      * @return void
      */
@@ -420,7 +425,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         // The bold icon should now be disaplyed in the inline toolbar
         $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Active bold icon does not appear in the inline toolbar');
 
-        //Remove bold formating
+        //Rstrongove bold formating
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickInlineToolbarButton('bold', 'active');
@@ -544,23 +549,26 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
      *
      * @return void
      */
-    public function testAddAndRemoveBoldForLink()
+    public function testAddAndRemovingBoldForLink()
     {
         $this->useTest(4);
         
         // Using inline toolbar
         $this->moveToKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->clickInlineToolbarButton('bold');
-        $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com"><strong>%1%</strong></a> end of test content.</p>');
+        $this->assertHTMLMatch('<p>Test content <strong><a href="http://www.squizlabs.com">%1%</a></strong> end of test content.</p>');
         $this->assertTrue($this->inLineToolbarButtonExists('bold', 'active'), 'Bold icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon should be active');
 
         $this->moveToKeyword(1);
         $this->selectInlineToolbarLineageItem(2);
+        sleep(1);
         // Check to see if bold icon is in the inline toolbar
         $this->assertTrue($this->inLineToolbarButtonExists('bold', 'active'), 'Bold icon should be active');
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->clickInlineToolbarButton('bold', 'active');
         $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com">%1%</a> end of test content.</p>');
         $this->assertTrue($this->inLineToolbarButtonExists('bold'), 'Bold icon should not be active');
@@ -569,16 +577,19 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         // Using top toolbar
         $this->moveToKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->clickTopToolbarButton('bold');
-        $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com"><strong>%1%</strong></a> end of test content.</p>');
+        $this->assertHTMLMatch('<p>Test content <strong><a href="http://www.squizlabs.com">%1%</a></strong> end of test content.</p>');
         $this->assertTrue($this->inLineToolbarButtonExists('bold', 'active'), 'Bold icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon should be active');
 
         $this->moveToKeyword(1);
         $this->selectInlineToolbarLineageItem(2);
+        sleep(1);
         // Check to see if bold icon is in the inline toolbar
         $this->assertTrue($this->inLineToolbarButtonExists('bold', 'active'), 'Bold icon should be active');
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->clickTopToolbarButton('bold', 'active');
         $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com">%1%</a> end of test content.</p>');
         $this->assertTrue($this->inLineToolbarButtonExists('bold'), 'Bold icon should not be active');
@@ -587,23 +598,66 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         // Using keyboard shortcuts
         $this->moveToKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com"><strong>%1%</strong></a> end of test content.</p>');
+        $this->assertHTMLMatch('<p>Test content <strong><a href="http://www.squizlabs.com">%1%</a></strong> end of test content.</p>');
         $this->assertTrue($this->inLineToolbarButtonExists('bold', 'active'), 'Bold icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon should be active');
 
         $this->moveToKeyword(1);
         $this->selectInlineToolbarLineageItem(2);
+        sleep(1);
         // Check to see if bold icon is in the inline toolbar
         $this->assertTrue($this->inLineToolbarButtonExists('bold', 'active'), 'Bold icon should be active');
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + b');
         $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com">%1%</a> end of test content.</p>');
         $this->assertTrue($this->inLineToolbarButtonExists('bold'), 'Bold icon should not be active');
         $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon should not be active');
 
-    }//end testAddAndRemoveBoldForLink()
+    }//end testAddAndRemovingBoldForLink()
 
+
+    /**
+     * Test applying and removing bold for a link in bolded paragraph.
+     *
+     * @return void
+     */
+    public function testRemoveBoldForLinkInBoldParagraph()
+    {
+        // Using inline toolbar
+        $this->useTest(6);
+        $this->moveToKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        sleep(1);
+        $this->clickInlineToolbarButton('bold', 'active');
+        $this->assertHTMLMatch('<p><strong>Test content </strong><a href="http://www.squizlabs.com">%1%</a><strong> end of test content.</strong></p>');
+        $this->assertTrue($this->inLineToolbarButtonExists('bold'), 'Bold icon should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon should not be active');
+
+        // Using top toolbar
+        $this->useTest(6);
+        $this->moveToKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        sleep(1);
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->assertHTMLMatch('<p><strong>Test content </strong><a href="http://www.squizlabs.com">%1%</a><strong> end of test content.</strong></p>');
+        $this->assertTrue($this->inLineToolbarButtonExists('bold'), 'Bold icon should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon should not be active');
+
+        // Using keyboard shortcut
+        $this->useTest(6);
+        $this->moveToKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        sleep(1);
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->assertHTMLMatch('<p><strong>Test content </strong><a href="http://www.squizlabs.com">%1%</a><strong> end of test content.</strong></p>');
+        $this->assertTrue($this->inLineToolbarButtonExists('bold'), 'Bold icon should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon should not be active');
+
+    }//end testRemoveBoldForLinkInBoldParagraph()
+    
 
     /**
      * Test that undo and redo buttons for bold formatting.

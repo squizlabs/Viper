@@ -14,7 +14,7 @@ class Viper_Tests_ViperImagePlugin_DeleteImageUnitTest extends AbstractViperImag
     {
         $this->clickElement('img', 0);
         $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>%1% XuT</p><p></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>%1% XuT</p><p>LABS is ORSM</p>');
         $this->assertTrue($this->topToolbarButtonExists('image'), 'Image icon should be active.');
 
     }//end testDeletingAnImage()

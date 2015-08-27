@@ -67,7 +67,7 @@ class Viper_Tests_ViperCopyPastePlugin_CursorAssistWithWordDocUnitTest extends A
         sleep(5);
         $this->assertHTMLMatch('<p>This is some basic content to test copy and paste when using the cursor assist feature in viper.</p><table border="1" style="width: 100%;"><tbody><tr><td><p>Cell 1</p></td><td><p>Cell 2</p></td><td><p>Cell 3</p></td></tr><tr><td><p>Cell 4</p></td><td><p>Cell 5</p></td><td><p>Cell 6</p></td></tr></tbody></table>');
 
-        // Click the cursor assist icon 
+        // Click the cursor assist icon
         $this->moveMouseToElement('table', 'bottom');
         $this->clickCursorAssistLine();
 
@@ -125,7 +125,7 @@ class Viper_Tests_ViperCopyPastePlugin_CursorAssistWithWordDocUnitTest extends A
         }//end switch
 
         // Paste the word document in the content
-        $this->selectKeyword(1);
+        $this->clickKeyword(1);
         sleep(1);
         $this->sikuli->keyDown('Key.CMD + a');
         sleep(1);
@@ -135,7 +135,7 @@ class Viper_Tests_ViperCopyPastePlugin_CursorAssistWithWordDocUnitTest extends A
         sleep(5);
         $this->assertHTMLMatch('<p>This is some basic content to test copy and paste when using the cursor assist feature in viper.</p><div><table style="border:none; border-collapse:collapse;"><colgroup><col width="197"><col width="197"><col width="198"></colgroup><tbody><tr style="height:0px;"><td style="border-bottom:solid #000000 1px; border-left:solid #000000 1px; border-right:solid #000000 1px; border-top:solid #000000 1px; padding:7px 7px 7px 7px;"><p>Cell 1</p></td><td style="border-bottom:solid #000000 1px; border-left:solid #000000 1px; border-right:solid #000000 1px; border-top:solid #000000 1px; padding:7px 7px 7px 7px;"><p>Cell 2</p></td><td style="border-bottom:solid #000000 1px; border-left:solid #000000 1px; border-right:solid #000000 1px; border-top:solid #000000 1px; padding:7px 7px 7px 7px;"><p>Cell 3</p></td></tr><tr style="height:0px;"><td style="border-bottom:solid #000000 1px; border-left:solid #000000 1px; border-right:solid #000000 1px; border-top:solid #000000 1px; padding:7px 7px 7px 7px;"><p>Cell 4</p></td><td style="border-bottom:solid #000000 1px; border-left:solid #000000 1px; border-right:solid #000000 1px; border-top:solid #000000 1px; padding:7px 7px 7px 7px;"><p>Cell 5</p></td><td style="border-bottom:solid #000000 1px; border-left:solid #000000 1px; border-right:solid #000000 1px; border-top:solid #000000 1px; padding:7px 7px 7px 7px;"><p>Cell 6</p></td></tr></tbody></table></div>');
 
-        // Click the cursor assist icon 
+        // Click the cursor assist icon
         $this->moveMouseToElement('table', 'bottom');
         sleep(5);
         $this->clickCursorAssistLine();
@@ -143,7 +143,7 @@ class Viper_Tests_ViperCopyPastePlugin_CursorAssistWithWordDocUnitTest extends A
         // Paste the word document again to make sure the attributes are removed
         $this->pasteFromURL($testFile);
         sleep(5);
-        $this->assertHTMLMatch('<p>This is some basic content to test copy and paste when using the cursor assist feature in viper.</p><table border="1" style="width:100%;"><tbody><tr><td><p>Cell 1</p></td><td><p>Cell 2</p></td><td><p>Cell 3</p></td></tr><tr><td><p>Cell 4</p></td><td><p>Cell 5</p></td><td><p>Cell 6</p></td></tr></tbody></table><p>This is some basic content to test copy and paste when using the cursor assist feature in viper.</p><table border="1" style="width:100%;"><tbody><tr><td><p>Cell 1</p></td><td><p>Cell 2</p></td><td><p>Cell 3</p></td></tr><tr><td><p>Cell 4</p></td><td><p>Cell 5</p></td><td><p>Cell 6</p></td></tr></tbody></table>');
+        $this->assertHTMLMatch('<p>This is some basic content to test copy and paste when using the cursor assist feature in viper.</p><div><table style="border:none; border-collapse:collapse;"><colgroup><col width="197"><col width="197"><col width="198"></colgroup><tbody><tr style="height:0px;"><td style="border-bottom:solid #000000 1px; border-left:solid #000000 1px; border-right:solid #000000 1px; border-top:solid #000000 1px; padding:7px 7px 7px 7px;"><p>Cell 1</p></td><td style="border-bottom:solid #000000 1px; border-left:solid #000000 1px; border-right:solid #000000 1px; border-top:solid #000000 1px; padding:7px 7px 7px 7px;"><p>Cell 2</p></td><td style="border-bottom:solid #000000 1px; border-left:solid #000000 1px; border-right:solid #000000 1px; border-top:solid #000000 1px; padding:7px 7px 7px 7px;"><p>Cell 3</p></td></tr><tr style="height:0px;"><td style="border-bottom:solid #000000 1px; border-left:solid #000000 1px; border-right:solid #000000 1px; border-top:solid #000000 1px; padding:7px 7px 7px 7px;"><p>Cell 4</p></td><td style="border-bottom:solid #000000 1px; border-left:solid #000000 1px; border-right:solid #000000 1px; border-top:solid #000000 1px; padding:7px 7px 7px 7px;"><p>Cell 5</p></td><td style="border-bottom:solid #000000 1px; border-left:solid #000000 1px; border-right:solid #000000 1px; border-top:solid #000000 1px; padding:7px 7px 7px 7px;"><p>Cell 6</p></td></tr></tbody></table><p>This is some basic content to test copy and paste when using the cursor assist feature in viper.</p><div><table style="border:none; border-collapse:collapse;"><colgroup><col width="197"><col width="197"><col width="198"></colgroup><tbody><tr style="height:0px;"><td style="border-bottom:solid #000000 1px; border-left:solid #000000 1px; border-right:solid #000000 1px; border-top:solid #000000 1px; padding:7px 7px 7px 7px;"><p>Cell 1</p></td><td style="border-bottom:solid #000000 1px; border-left:solid #000000 1px; border-right:solid #000000 1px; border-top:solid #000000 1px; padding:7px 7px 7px 7px;"><p>Cell 2</p></td><td style="border-bottom:solid #000000 1px; border-left:solid #000000 1px; border-right:solid #000000 1px; border-top:solid #000000 1px; padding:7px 7px 7px 7px;"><p>Cell 3</p></td></tr><tr style="height:0px;"><td style="border-bottom:solid #000000 1px; border-left:solid #000000 1px; border-right:solid #000000 1px; border-top:solid #000000 1px; padding:7px 7px 7px 7px;"><p>Cell 4</p></td><td style="border-bottom:solid #000000 1px; border-left:solid #000000 1px; border-right:solid #000000 1px; border-top:solid #000000 1px; padding:7px 7px 7px 7px;"><p>Cell 5</p></td><td style="border-bottom:solid #000000 1px; border-left:solid #000000 1px; border-right:solid #000000 1px; border-top:solid #000000 1px; padding:7px 7px 7px 7px;"><p>Cell 6</p></td></tr></tbody></table></div></div>');
 
     }//end testUsingCursorAssistWhenPastingContentFromGoogleDocs()
 
