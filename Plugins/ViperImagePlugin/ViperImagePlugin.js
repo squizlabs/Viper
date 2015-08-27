@@ -901,7 +901,7 @@ ViperImagePlugin.prototype = {
                 });
 
                 // Remove mousemove event.
-                ViperUtil.addEvent([document, Viper.document], 'mouseup.ViperImageResize', function(e) {
+                ViperUtil.addEvent(ViperUtil.getDocuments(), 'mouseup.ViperImageResize', function(e) {
                     ViperUtil.removeEvent(Viper.document, 'mousemove.ViperImageResize');
                     ViperUtil.removeEvent(Viper.document, 'mouseup.ViperImageResize');
 
