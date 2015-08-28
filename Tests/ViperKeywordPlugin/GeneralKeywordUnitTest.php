@@ -77,6 +77,39 @@ class Viper_Tests_ViperKeywordPlugin_GeneralKeywordUnitTest extends AbstractVipe
 
 
     /**
+     * Test that keywords can have formats removed with remove format key applied.
+     *
+     * @return void
+     */
+    public function testAddingConentAroundKeywords()
+    {
+        // Test before keyword
+        $this->useTest(4);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->type('Test content ');
+        sleep(1);
+        $this->assertHTMLMatch('<p>%1% Test content ((prop:productName)) %2%</p>');
+
+        $expectedRawHTML = '<p>%1% Test content <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span> %2%</p>';
+        $actualRawHTML = $this->getRawHtml();
+        $this->assertEquals($expectedRawHTML, $actualRawHTML);
+
+        // Test after keyword
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type(' more test content');
+        sleep(1);
+        $this->assertHTMLMatch('<p>%1% Test content ((prop:productName)) more test content %2%</p>');
+
+        $expectedRawHTML = '<p>%1% Test content <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span> more test content %2%</p>';
+        $actualRawHTML = $this->getRawHtml();
+        $this->assertEquals($expectedRawHTML, $actualRawHTML);
+
+    }//end testAddingContentAroundKeywords()
+
+
+    /**
      * Test that keywords can work properly with the delete functions.
      *
      * @return void
@@ -162,5 +195,5 @@ class Viper_Tests_ViperKeywordPlugin_GeneralKeywordUnitTest extends AbstractVipe
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
-    }//end testApplyingStrikethroughToKeywords()
+    }//end testDeletingKeywords()
 }

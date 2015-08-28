@@ -5,7 +5,7 @@ require_once 'AbstractViperImagePluginUnitTest.php';
 class Viper_Tests_ViperKeywordPlugin_ImageKeywordUnitTest extends AbstractViperImagePluginUnitTest
 {
 
-/**
+    /**
      * Test that images using keywords can have it's title changed.
      *
      * @return void

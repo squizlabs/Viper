@@ -251,9 +251,87 @@ class Viper_Tests_ViperKeywordPlugin_KeywordFormatUnitTest extends AbstractViper
         $expectedRawHTML = '<p>%1% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p><p>%2% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p><p>%3% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
-
-        //To do
-        //$this->clickTopToolbarButton('strikethrough', 'active');
-
+    
     }//end testApplyingStrikethroughToKeywords()
+
+
+    /**
+     * Test that keywords that have formats applied retain selection.
+     *
+     * @return void
+     */
+    public function testSelectionAfterFormatOnKeywords()
+    {
+        // Test start of paragraph
+        $this->useTest(2);
+        $this->clickKeyword(1);
+        sleep(1);
+        $this->moveToKeyword(1 , 'right');
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->assertEquals($this->replaceKeywords('Viper %1%'), $this->getSelectedText(), 'First line of text should be selected');
+
+        // Test middle of paragraph
+        $this->selectKeyword(2,3);
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->assertEquals($this->replaceKeywords('%2% Viper %3%'), $this->getSelectedText(), 'Second line of text should be selected');
+
+        // Test end of paragraph
+        $this->moveToKeyword(4, 'left');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->assertEquals($this->replaceKeywords('%4% Viper'), $this->getSelectedText(), 'Third line of text should be selected');
+
+    }//end testSelectionAfterFormatOnKeywords()
+
+   
+    /**
+     * Test that keywords that have multiple formats applied remove all formats.
+     *
+     * @return void
+     */
+    public function testRemoveMultipleFormats()
+    {
+        $this->useTest(1);
+        $this->clickKeyword(1);
+        sleep(1);
+        $this->moveToKeyword(1 , 'left');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->clickTopToolbarButton('removeFormat', NULL);
+        $this->assertHTMLMatch('<p>%1% ((prop:productName))</p><p>%2% ((prop:productName))</p><p>%3% ((prop:productName))</p>');
+
+        $expectedRawHTML = '<p>%1% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p><p>%2% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p><p>%3% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p>';
+        $actualRawHTML = $this->getRawHtml();
+        $this->assertEquals($expectedRawHTML, $actualRawHTML);
+
+        $this->moveToKeyword(2 , 'left');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->clickTopToolbarButton('removeFormat', NULL);
+        $this->assertHTMLMatch('<p>%1% ((prop:productName))</p><p>%2% ((prop:productName))</p><p>%3% ((prop:productName))</p>');
+
+        $expectedRawHTML = '<p>%1% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p><p>%2% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p><p>%3% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p>';
+        $actualRawHTML = $this->getRawHtml();
+        $this->assertEquals($expectedRawHTML, $actualRawHTML);
+
+    }// end testRemoveMultipleFormats
 }
