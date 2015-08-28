@@ -715,6 +715,17 @@ var ViperUtil = {
 
     },
 
+    hasSurroundingParent: function(element, parentTagName, stopEl)
+    {
+        var parents = this.getSurroundingParents(element, parentTagName, null, stopEl);
+        if (parents.length > 0) {
+            return true;
+        }
+
+        return false;
+
+    },
+
     /**
      * Returns true if the specified element(s) is a child of parent.
      */
