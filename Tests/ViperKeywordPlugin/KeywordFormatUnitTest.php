@@ -56,12 +56,14 @@ class Viper_Tests_ViperKeywordPlugin_KeywordFormatUnitTest extends AbstractViper
         sleep(1);
         $this->clickTopToolbarButton('bold', 'active');
 
+        // Using inline toolbar
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         sleep(1);
         $this->clickInlineToolbarButton('bold', 'active');
 
+        // Using keyboard shortcuts
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
@@ -127,12 +129,14 @@ class Viper_Tests_ViperKeywordPlugin_KeywordFormatUnitTest extends AbstractViper
         sleep(1);
         $this->clickTopToolbarButton('italic', 'active');
 
+        // Using inline toolbar
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         sleep(1);
         $this->clickInlineToolbarButton('italic', 'active');
 
+        //Using keyboard shortcuts
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');

@@ -12,7 +12,7 @@ class Viper_Tests_ViperKeywordPlugin_GeneralKeywordUnitTest extends AbstractVipe
      */
     public function testRemoveFormatOnKeywords()
     {
-        //Test on italic
+        // Test on italic
         $this->useTest(3);
         $this->moveToKeyword(1 , 'right');
         $this->sikuli->keyDown('Key.RIGHT');

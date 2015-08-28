@@ -87,6 +87,29 @@ class Viper_Tests_ViperKeywordPlugin_ImageKeywordUnitTest extends AbstractViperI
     }//end testMovingImageKeyword()
 
 
+    /**
+     * Test that linked images using keywords can be moved.
+     *
+     * @return void
+     */
+    public function testMovingLinkedImageKeyword()
+    {
+        // Using inline toolbar
+        $this->useTest(2);
+        $this->clickKeyword(1);
+        sleep(1);
+        $this->clickElement('img', 0);
+        $this->clickInlineToolbarButton('move');
+        $this->clickKeyword(1);
+        $this->assertHTMLMatch('<p>test content %<a href="www.squizlabs.com.au"><img alt="TITLE" src="((prop:url))" /></a>1%</p><p>more content even more content</p>');
+
+        $expectedRawHTML = '<p>test content %<a href="www.squizlabs.com.au"><img alt="TITLE" src="./Images/testImage.png" data-viper-src="((prop:url))"></a>1%</p><p>more content  even more content</p>';
+        $actualRawHTML = $this->getRawHtml();
+        $this->assertEquals($expectedRawHTML, $actualRawHTML);
+
+    }//end testMovingLinkedImageKeyword()
+
+
 	/**
      * Test that images using keywords can be moved.
      *
@@ -254,7 +277,7 @@ class Viper_Tests_ViperKeywordPlugin_ImageKeywordUnitTest extends AbstractViperI
      */
     public function testDeleteImagesThatUseKeywords()
     {
-        $this->useTest(2);
+        $this->useTest(1);
         $this->clickKeyword(1);
         sleep(1);
         $this->clickElement('img', 0);

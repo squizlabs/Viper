@@ -12,7 +12,7 @@ class Viper_Tests_ViperKeywordPlugin_KeywordClassNamesUnitTest extends AbstractV
      */
     public function testApplyKeywordClassNames()
     {
-        //Using inline toolbar
+        // Using inline toolbar
         $this->useTest(1);
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('cssClass');
@@ -25,7 +25,7 @@ class Viper_Tests_ViperKeywordPlugin_KeywordClassNamesUnitTest extends AbstractV
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
-        //Using top toolbar
+        // Using top toolbar
         $this->useTest(1);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('cssClass');
@@ -48,10 +48,10 @@ class Viper_Tests_ViperKeywordPlugin_KeywordClassNamesUnitTest extends AbstractV
      */
     public function testRemoveKeywordClassNames()
     {
-        //Using inline toolbar
+        // Using inline toolbar
         $this->useTest(2);
         $this->selectKeyword(1);
-        $this->clickInlineToolbarButton('cssClass');
+        $this->clickInlineToolbarButton('cssClass','active');
         $this->clearFieldValue('Class');
         $this->sikuli->KeyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>Test content %1% more test content</p>');
@@ -60,7 +60,7 @@ class Viper_Tests_ViperKeywordPlugin_KeywordClassNamesUnitTest extends AbstractV
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
-        //Using top toolbar
+        // Using top toolbar
         $this->useTest(2);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('cssClass');

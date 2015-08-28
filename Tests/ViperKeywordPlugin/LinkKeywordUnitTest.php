@@ -17,10 +17,6 @@ class Viper_Tests_ViperKeywordPlugin_LinkKeywordUnitTest extends AbstractViperUn
         $this->moveToKeyword(1 , 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         sleep(1);
         $this->clickInlineToolbarButton('link');
         $this->type('www.squizlabs.com.au');
@@ -35,12 +31,7 @@ class Viper_Tests_ViperKeywordPlugin_LinkKeywordUnitTest extends AbstractViperUn
         $this->moveToKeyword(1 , 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
 		$this->clickInlineToolbarButton('linkRemove');
-
         $this->assertHTMLMatch('<p>%1% ((prop:productName)) %2%</p>');
 
         $expectedRawHTML = '<p>%1% <keyword title="((prop:productName))" data-viper-keyword="((prop:productName))" contenteditable="false">Viper</keyword> %2%</p>';
@@ -48,13 +39,8 @@ class Viper_Tests_ViperKeywordPlugin_LinkKeywordUnitTest extends AbstractViperUn
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
         // Using top toolbar
-        $this->useTest(1);
         $this->moveToKeyword(1 , 'right');
         $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         sleep(1);
         $this->clickTopToolbarButton('link');
@@ -69,10 +55,6 @@ class Viper_Tests_ViperKeywordPlugin_LinkKeywordUnitTest extends AbstractViperUn
         // Removing link
         $this->moveToKeyword(1 , 'right');
         $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickTopToolbarButton('linkRemove');
 

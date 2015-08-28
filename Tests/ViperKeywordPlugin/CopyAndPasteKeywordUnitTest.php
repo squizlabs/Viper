@@ -12,7 +12,6 @@ class Viper_Tests_ViperKeywordPlugin_CopyAndPasteKeywordUnitTest extends Abstrac
      */
     public function testCopyAndPasteKeyword()
     {
-
         // Beginning of paragraph using keyboard shortcuts
         $this->useTest(1);
         $this->moveToKeyword(1 , 'right');
@@ -109,7 +108,6 @@ class Viper_Tests_ViperKeywordPlugin_CopyAndPasteKeywordUnitTest extends Abstrac
      */
     public function testCopyAndPasteKeywordWithLink()
     {
-
         // Beginning of paragraph using keyboard shortcuts
         $this->useTest(3);
         $this->moveToKeyword(1 , 'right');

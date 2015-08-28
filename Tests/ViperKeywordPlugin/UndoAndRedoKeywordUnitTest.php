@@ -12,7 +12,7 @@ class Viper_Tests_ViperKeywordPlugin_UndoAndRedoKeywordUnitTest extends Abstract
      */
     public function testUndoAndRedoDeletingKeywords()
     {
-        //Using keyboard shortcuts
+        // Using keyboard shortcuts
         $this->useTest(1);
         $this->moveToKeyword(1 , 'right');
         $this->sikuli->keyDown('Key.RIGHT');
@@ -26,7 +26,29 @@ class Viper_Tests_ViperKeywordPlugin_UndoAndRedoKeywordUnitTest extends Abstract
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
-        //Test for redo
+        // Test for redo
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>%1%&nbsp;&nbsp;%2%</p><p>%3% %4%</p>');
+
+        $expectedRawHTML = '<p>%1%&nbsp;&nbsp;%2%</p><p>%3% %4%</p>';
+        $actualRawHTML = $this->getRawHtml();
+        $this->assertEquals($expectedRawHTML, $actualRawHTML);
+
+        // Using top toolbar
+        $this->useTest(1);
+        $this->moveToKeyword(1 , 'right');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        sleep(1);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>%1% ((prop:productName)) %2%</p><p>%3% %4%</p>');
+
+        $expectedRawHTML = '<p><keyword title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</keyword>%1% <keyword title="((prop:productName))" data-viper-keyword="((prop:productName))" contenteditable="false"></keyword> %2%</p><p>%3% %4%</p>';
+        $actualRawHTML = $this->getRawHtml();
+        $this->assertEquals($expectedRawHTML, $actualRawHTML);
+
+        // Test for redo
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         $this->assertHTMLMatch('<p>%1%&nbsp;&nbsp;%2%</p><p>%3% %4%</p>');
 
@@ -44,7 +66,7 @@ class Viper_Tests_ViperKeywordPlugin_UndoAndRedoKeywordUnitTest extends Abstract
      */
     public function testUndoAndRedoDeletingImageKeywords()
     {
-        //Using keyboard shortcuts
+        // Using keyboard shortcuts
         $this->useTest(2);
         $this->clickKeyword(1);
         sleep(1);
@@ -56,6 +78,8 @@ class Viper_Tests_ViperKeywordPlugin_UndoAndRedoKeywordUnitTest extends Abstract
         $expectedRawHTML = '<p>test content %1%</p><p>more content <img alt="TITLE" src="../../Examples/Paper-reel/Images/testImage.png" data-viper-src="((prop:url))"> even more content</p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
+
+        // Test for redo
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         $this->assertHTMLMatch('<p>test content %1%</p><p>more content&nbsp;&nbsp;even more content</p>');
 
@@ -72,7 +96,7 @@ class Viper_Tests_ViperKeywordPlugin_UndoAndRedoKeywordUnitTest extends Abstract
      */
     public function testUndoAndRedoMovingImageKeywords()
     {   
-        //Using inline toolbar
+        // Using inline toolbar
         $this->useTest(2);
         $this->clickKeyword(1);
         sleep(1);
@@ -86,8 +110,29 @@ class Viper_Tests_ViperKeywordPlugin_UndoAndRedoKeywordUnitTest extends Abstract
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
-        //Test for redo
+        // Test for redo
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>test content %<img alt="TITLE" src="((prop:url))" />1%</p><p>more content  even more content</p>');
+
+        $expectedRawHTML = '<p>test content %<img alt="TITLE" src="../../Examples/Paper-reel/Images/testImage.png" data-viper-src="((prop:url))">1%</p><p>more content  even more content</p>';
+        $actualRawHTML = $this->getRawHtml();
+        $this->assertEquals($expectedRawHTML, $actualRawHTML);
+        sleep(1);
+
+        // Using top toolbar
+        $this->clickTopToolbarButton('historyUndo');
+        $this->clickElement('img', 0);
+        $this->clickTopToolbarButton('move');
+        $this->clickKeyword(1);
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>test content %1%</p><p>more content <img alt="TITLE" src="((prop:url))" /> even more content</p>');
+
+        $expectedRawHTML = '<p>test content %1%</p><p>more content <img alt="TITLE" src="../../Examples/Paper-reel/Images/testImage.png" data-viper-src="((prop:url))"> even more content</p>';
+        $actualRawHTML = $this->getRawHtml();
+        $this->assertEquals($expectedRawHTML, $actualRawHTML);
+
+        // Test for redo
+        $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<p>test content %<img alt="TITLE" src="((prop:url))" />1%</p><p>more content  even more content</p>');
 
         $expectedRawHTML = '<p>test content %<img alt="TITLE" src="../../Examples/Paper-reel/Images/testImage.png" data-viper-src="((prop:url))">1%</p><p>more content  even more content</p>';
@@ -104,7 +149,7 @@ class Viper_Tests_ViperKeywordPlugin_UndoAndRedoKeywordUnitTest extends Abstract
      */
     public function testUndoAndRedoResizingImageKeywords()
     {   
-        //Using inline toolbar
+        // Using inline toolbar
         $this->useTest(2);
         $this->clickKeyword(1);
         sleep(1);
@@ -118,8 +163,29 @@ class Viper_Tests_ViperKeywordPlugin_UndoAndRedoKeywordUnitTest extends Abstract
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
-        //Test for redo
+        // Test for redo
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>test content %1%</p><p>more content<img alt="TITLE" height="170" src="((prop:url))" width="200" /> even more content</p>');
+
+        $expectedRawHTML = '<p>test content %<img alt="TITLE" src="../../Examples/Paper-reel/Images/testImage.png" data-viper-src="((prop:url))">1%</p><p>more content  even more content</p>';
+        $actualRawHTML = $this->getRawHtml();
+        $this->assertEquals($expectedRawHTML, $actualRawHTML);
+
+        // Using top toolbar
+        sleep(1);
+        $this->clickTopToolbarButton('historyUndo');
+        $this->clickElement('img', 0);
+        $this->resizeImage(200);
+        sleep(1);
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>test content %1%</p><p>more content<img alt="TITLE" height="170" src="((prop:url))" width="200" /> even more content</p>');
+
+        $expectedRawHTML = '<p>test content %1%</p><p>more content <img alt="TITLE" src="../../Examples/Paper-reel/Images/testImage.png" data-viper-src="((prop:url))"> even more content</p></div>';
+        $actualRawHTML = $this->getRawHtml();
+        $this->assertEquals($expectedRawHTML, $actualRawHTML);
+
+        // Test for redo
+        $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<p>test content %1%</p><p>more content<img alt="TITLE" height="170" src="((prop:url))" width="200" /> even more content</p>');
 
         $expectedRawHTML = '<p>test content %<img alt="TITLE" src="../../Examples/Paper-reel/Images/testImage.png" data-viper-src="((prop:url))">1%</p><p>more content  even more content</p>';
@@ -136,7 +202,7 @@ class Viper_Tests_ViperKeywordPlugin_UndoAndRedoKeywordUnitTest extends Abstract
      */
     public function testUndoAndRedoOnLinkedKeywords()
     {   
-        //Removing Link using inline toolbar
+        // Removing Link using inline toolbar
         $this->useTest(3);
         $this->moveToKeyword(1 , 'right');
         $this->sikuli->keyDown('Key.RIGHT');
@@ -150,7 +216,7 @@ class Viper_Tests_ViperKeywordPlugin_UndoAndRedoKeywordUnitTest extends Abstract
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
-        //Test for redo
+        // Test for redo
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<p>%1% ((prop:productName)) %2%</p><p>%3% %4%</p>');
 
@@ -158,7 +224,7 @@ class Viper_Tests_ViperKeywordPlugin_UndoAndRedoKeywordUnitTest extends Abstract
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
-        //Removing Link using top toolbar
+        // Removing Link using top toolbar
         $this->moveToKeyword(1 , 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
@@ -171,7 +237,7 @@ class Viper_Tests_ViperKeywordPlugin_UndoAndRedoKeywordUnitTest extends Abstract
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
-        //Test for redo
+        // Test for redo
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<p>%1% ((prop:productName)) %2%</p><p>%3% %4%</p>');
 
