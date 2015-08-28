@@ -1500,19 +1500,40 @@ var ViperUtil = {
 
     },
 
+    getFrames: function(doc)
+    {
+        doc = doc || document;
+        if (doc.frames) {
+            return doc.frames;
+        } else if (doc.defaultView.frames) {
+            return doc.defaultView.frames;
+        }
+
+        return [];
+    },
+
 
     /**
      * Returns the loaded DOM Documents (main window, iframes, etc).
      *
      * @return {array}
      */
-    getDocuments: function()
-    {
-        var docs = [document];
-        var c    = frames.length;
-        for (var i = 0; i < c; i++) {
-            docs.push(ViperUtil.getIFrameDocument(frames[i]));
-        }
+     getDocuments: function(nested, parentDoc)
+     {
+         parentDoc  = parentDoc || document;
+         var docs   = [parentDoc];
+         var frames = this.getFrames(parentDoc);
+         var c      = frames.length;
+         for (var i = 0; i < c; i++) {
+             var doc = this.getIFrameDocument(frames[i]);
+             if (doc !== null) {
+                 if (nested === true) {
+                     docs = docs.concat(dfx.getDocuments(nested, doc))
+                 } else {
+                     docs.push(doc);
+                 }
+             }
+         }
 
         return docs;
 
