@@ -151,6 +151,18 @@ ViperImagePlugin.prototype = {
         );
 
         this.viper.registerCallback('Viper:dropped', 'ViperImagePlugin', function(data) {
+            if (!data.dataTransfer.files) {
+                return;
+            }
+
+            var range    = data.range;
+            if (data.e.target && ViperUtil.isTag(data.e.target, 'img') === true) {
+                // Image dropped on top of another image. Replace.
+                range.selectNode(data.e.target);
+            }
+
+            var bookmark = self.viper.createBookmark(range, null, 'imageDrop');
+
             for (var i = 0; i < data.dataTransfer.files.length; i++) {
                 self.readDroppedImage(data.dataTransfer.files[i], function(image, file) {
                     self.insertDroppedImage(image, data.range, file);
@@ -220,7 +232,7 @@ ViperImagePlugin.prototype = {
             range = this.viper.getViperRange();
         }
 
-        var bookmark = this.viper.createBookmark(range);
+        var bookmark = this.viper.getBookmarkById('imageDrop') || this.viper.createBookmark(range);
 
         var elems = ViperUtil.getElementsBetween(bookmark.start, bookmark.end);
         for (var i = 0; i < elems.length; i++) {
