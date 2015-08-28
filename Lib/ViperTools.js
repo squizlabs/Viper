@@ -2193,7 +2193,10 @@ ViperTools.prototype = {
             ViperUtil.setStyle(element, 'left', left + 'px');
         }
 
-        var top = (rangeCoords.bottom + margin + scrollCoords.y);
+        var top = (rangeCoords.bottom + margin);
+        if (ViperUtil.getStyle(element, 'position') !== 'fixed') {
+            top += scrollCoords.y;
+        }
 
         if (top === 0) {
             if (hideCallback) {
