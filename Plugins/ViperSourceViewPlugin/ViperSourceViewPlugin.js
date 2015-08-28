@@ -360,6 +360,7 @@ ViperSourceViewPlugin.prototype = {
     applyEditorSettings: function(editor)
     {
         editor.setTheme("ace/theme/viper");
+        editor.getSession().setUseWorker(false);
         editor.getSession().setMode("ace/mode/html");
 
         // Use wrapping.
