@@ -149,7 +149,7 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
         $this->clickTopToolbarButton('italic');
         $this->clickTopToolbarButton('subscript');
         $this->clickTopToolbarButton('superscript');
-        $this->assertHTMLMatch('<p>Test content with <em><sub><sup>%1%</sup></sub></em> no styles applied</p>');
+        $this->assertHTMLMatch('<p>Test content with <sup><sub><em>%1%</em></sub></sup> no styles applied</p>');
 
         // Remove format for the content
         $this->clickTopToolbarButton('removeFormat');
@@ -167,7 +167,7 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
         $this->clickTopToolbarButton('italic');
         $this->clickTopToolbarButton('subscript');
         $this->clickTopToolbarButton('superscript');
-        $this->assertHTMLMatch('<p>Test content with <strong><em><sub><sup>%1%</sup></sub></em></strong> no styles applied</p>');
+        $this->assertHTMLMatch('<p>Test content with <sup><sub><em><strong>%1%</strong></em></sub></sup> no styles applied</p>');
 
         // Remove format for the content
         $this->clickTopToolbarButton('removeFormat');
