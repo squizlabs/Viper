@@ -961,12 +961,9 @@
   font-size: 9px;
   position: fixed !important;
   z-index: 1001;
-  border: 1px solid transparent;
   border-radius: 0.8em;
-  background-color: #2B2B2B;
-  border-color: #2B2B2B;
-  color: #FFF;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.7), 0 1px 0 #555555 inset;
+  background-color: #EDEDED;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3), 0 0 1px rgba(0, 0, 0, 0.6);
 }
 .Viper-popup-header {
   position: relative;
@@ -981,14 +978,10 @@
   white-space: nowrap;
   cursor: move;
 }
-.Viper-popup-header {
-  color: #AAAAAA;
-  text-shadow: 0 -1px 0 #000000;
-}
 .Viper-popup-bottom,
 .Viper-popup-content {
   padding: 0.3em 1em 1em;
-  background: url(../Images/bgTexture-dark1.gif) repeat 0 0 #54535a;
+  background-color: #D4D4D4;
 }
 .Viper-popup-bottom {
   position: relative;
