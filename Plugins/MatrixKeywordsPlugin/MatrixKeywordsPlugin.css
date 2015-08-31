@@ -1,24 +1,25 @@
-.Viper-buttonIcon.Viper-keywords {
-  background-image: url(../../Images/matrixButtonIcons.png);  
+/*.Viper-buttonIcon.Viper-keywords {
+  background-image: url(../../Images/matrixButtonIcons.png);
   background-position: 0 -0px;
 }
 .Viper-button.Viper-active .Viper-buttonIcon.Viper-keywords,
 .Viper-button.Viper-selected .Viper-buttonIcon.Viper-keywords {
-  background-image: url(../../Images/matrixButtonIcons.png);  
+  background-image: url(../../Images/matrixButtonIcons.png);
   background-position: -33px -0px;
-}
+}*/
 
-.Viper-buttonIcon.Viper-snippet {
-  background-image: url(../../Images/matrixButtonIcons.png);  
+/*.Viper-buttonIcon.Viper-snippet {
+  background-image: url(../../Images/matrixButtonIcons.png);
   background-position: 0 -27px;
 }
 .Viper-button.Viper-active .Viper-buttonIcon.Viper-snippet,
 .Viper-button.Viper-selected .Viper-buttonIcon.Viper-snippet {
-  background-image: url(../../Images/matrixButtonIcons.png);    
+  background-image: url(../../Images/matrixButtonIcons.png);
   background-position: -33px -27px;
-}
+}*/
 
 /* Matrix Viper Selection input */
+
 .Matrix-Viper-selection {
   margin-bottom: 0.6em;
   -moz-transition: opacity 0.2s ease-in;
@@ -106,7 +107,7 @@
     width: 100%;
     outline: 0;
     border:none;
-/*  
+/*
     it's really difficult to style a dropdown box for consistent look across browsers, so let's leave it
     color: #5A8BD0;
     background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
@@ -118,6 +119,3 @@
     box-shadow: none;
 */
 }
-
-  
-  
