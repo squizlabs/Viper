@@ -514,13 +514,13 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>This is some content <em class="test"><strong>XAX</strong></em> in my unit test XBX</p>');
+        $this->assertHTMLMatch('<p>This is some content <strong class="test"><em>XAX</em></strong> in my unit test XBX</p>');
 
         // Check that the class field stayed open in the inline toolbar has remaind open with the class field
         $this->clickField('Class');
         $this->type('class');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>This is some content <em class="testclass"><strong>XAX</strong></em> in my unit test XBX</p>');
+        $this->assertHTMLMatch('<p>This is some content <strong class="testclass"><em>XAX</em></strong> in my unit test XBX</p>');
 
     }//end testClassFieldRemainsOpenAfterApplyingBoldAndItalic()
 
