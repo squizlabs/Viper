@@ -84,17 +84,36 @@
 .Viper-browserVer-msie8 .Viper-buttonIcon.Viper-snippet {
   background-image: url("../Images/matrixButtonIcons.png");
 }
+.Viper-buttonIcon.Viper-uploadImage-button {
+  background-position: 0 -54px;
+  background-image: url("../Images/matrixButtonIcons.svg");
+}
+.Viper-button:active .Viper-buttonIcon.Viper-uploadImage-button,
+.Viper-button.Viper-active .Viper-buttonIcon.Viper-uploadImage-button,
+.Viper-button.Viper-selected .Viper-buttonIcon.Viper-uploadImage-button {
+  background-position: -34px -54px;
+}
+.Viper-browserVer-msie8 .Viper-buttonIcon.Viper-uploadImage-button {
+  background-image: url("../Images/matrixButtonIcons.png");
+}
 .Viper-button.Viper-ees-target {
   position: absolute;
-  right: 0;
   top: 0;
-  line-height: 2em;
+  right: 0;
+  line-height: 26px;
 }
 .Viper-button.Viper-assetSelector-button {
   position: absolute;
-  right: 2.7em;
   top: 0;
-  line-height: 2em;
+  right: 0;
+  line-height: 26px;
+  right: 2.7em;
+}
+.Viper-button.Viper-uploadImage-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  line-height: 26px;
 }
 .Viper-subSectionRow.Viper-urlRow {
   padding-right: 3.8em;

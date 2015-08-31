@@ -2,23 +2,6 @@
     padding-right: 7.8em;
 }
 
-.Viper-buttonIcon.Viper-uploadImage-button {
-  background-image: url(../../Images/matrixButtonIcons.png);
-  background-position: 0 -54px;
-}
-
-.Viper-button:active .Viper-buttonIcon.Viper-uploadImage-button, .Viper-button.Viper-active .Viper-buttonIcon.Viper-uploadImage-button, .Viper-button.Viper-selected .Viper-buttonIcon.Viper-uploadImage-button {
-    background-image: url(../../Images/matrixButtonIcons.png);
-  background-position: -33px -54px;
-}
-
-.Viper-button.Viper-uploadImage-button {
-  position: absolute;
-  right: 0;
-  top: 0;
-  line-height: 2.1em;
-}
-
 .uploadImage-progressIndicator .uploadImage-progress-status {
     color: #ddd;
     font-size: 1.3em;
