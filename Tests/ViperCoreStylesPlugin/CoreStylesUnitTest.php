@@ -84,7 +84,6 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
         $this->assertHTMLMatch('<p><strong><em>%1% %2% %3%</em></strong></p><p><em><strong>sit %4%</strong></em> <strong>%5%</strong></p>');
 
-        $this->selectKeyword(1, 4);
         $this->sikuli->keyDown('Key.CMD + i');
         sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('italic'), 'Italic icon in the inline toolbar should not be active');
