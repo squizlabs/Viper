@@ -14,10 +14,6 @@
 }
 .Viper-buttonIcon.Viper-ees-target {
   background-position: 0 -1215px;
-  position: absolute;
-  right: 0;
-  top: 0;
-  line-height: 2.1em;
 }
 .Viper-button:active .Viper-buttonIcon.Viper-ees-target,
 .Viper-button.Viper-active .Viper-buttonIcon.Viper-ees-target,
@@ -56,41 +52,49 @@
 .Viper-browserVer-msie8 .Viper-buttonIcon.Viper-add-comments {
   background-image: url("../Images/matrixButtonIcons.png");
 }
-.Viper-buttonIcon .Viper-assetSelector-button {
+.Viper-buttonIcon.Viper-assetSelector-button {
   background-position: 0 -1215px;
-  position: absolute;
-  right: 2.7em;
-  top: 0;
-  line-height: 2.1em;
 }
-.Viper-button:active .Viper-buttonIcon .Viper-assetSelector-button,
-.Viper-button.Viper-active .Viper-buttonIcon .Viper-assetSelector-button,
-.Viper-button.Viper-selected .Viper-buttonIcon .Viper-assetSelector-button {
+.Viper-button:active .Viper-buttonIcon.Viper-assetSelector-button,
+.Viper-button.Viper-active .Viper-buttonIcon.Viper-assetSelector-button,
+.Viper-button.Viper-selected .Viper-buttonIcon.Viper-assetSelector-button {
   background-position: -34px -1215px;
 }
-.Viper-buttonIcon .Viper-keywords {
+.Viper-buttonIcon.Viper-keywords {
   background-position: 0 0px;
   background-image: url("../Images/matrixButtonIcons.svg");
 }
-.Viper-button:active .Viper-buttonIcon .Viper-keywords,
-.Viper-button.Viper-active .Viper-buttonIcon .Viper-keywords,
-.Viper-button.Viper-selected .Viper-buttonIcon .Viper-keywords {
+.Viper-button:active .Viper-buttonIcon.Viper-keywords,
+.Viper-button.Viper-active .Viper-buttonIcon.Viper-keywords,
+.Viper-button.Viper-selected .Viper-buttonIcon.Viper-keywords {
   background-position: -34px 0px;
 }
-.Viper-browserVer-msie8 .Viper-buttonIcon .Viper-keywords {
+.Viper-browserVer-msie8 .Viper-buttonIcon.Viper-keywords {
   background-image: url("../Images/matrixButtonIcons.png");
 }
-.Viper-buttonIcon .Viper-snippet {
+.Viper-buttonIcon.Viper-snippet {
   background-position: 0 -27px;
   background-image: url("../Images/matrixButtonIcons.svg");
 }
-.Viper-button:active .Viper-buttonIcon .Viper-snippet,
-.Viper-button.Viper-active .Viper-buttonIcon .Viper-snippet,
-.Viper-button.Viper-selected .Viper-buttonIcon .Viper-snippet {
+.Viper-button:active .Viper-buttonIcon.Viper-snippet,
+.Viper-button.Viper-active .Viper-buttonIcon.Viper-snippet,
+.Viper-button.Viper-selected .Viper-buttonIcon.Viper-snippet {
   background-position: -34px -27px;
 }
-.Viper-browserVer-msie8 .Viper-buttonIcon .Viper-snippet {
+.Viper-browserVer-msie8 .Viper-buttonIcon.Viper-snippet {
   background-image: url("../Images/matrixButtonIcons.png");
+}
+.Viper-button.Viper-ees-target {
+  position: absolute;
+  right: 0;
+  top: 0;
+  line-height: 2em;
+}
+.Viper-button.Viper-assetSelector-button {
+  position: absolute;
+  right: 2.7em;
+  top: 0;
+  line-height: 2em;
 }
 .Viper-subSectionRow.Viper-urlRow {
   padding-right: 3.8em;

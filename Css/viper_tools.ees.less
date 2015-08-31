@@ -57,10 +57,6 @@
     // EES Link Target
         &.Viper-ees-target {
             .icon (46);
-            position: absolute;
-            right: 0;
-            top: 0;
-            line-height: 2.1em;
         }
 
     // Inline Comments
@@ -79,22 +75,18 @@
         }
 
     // Asset Selector
-        .Viper-assetSelector-button {
+        &.Viper-assetSelector-button {
             .icon (46);
-            position: absolute;
-            right: 2.7em;
-            top: 0;
-            line-height: 2.1em;
         }
 
     // Matrix Keywords
-        .Viper-keywords {
+        &.Viper-keywords {
             .icon(1);
             .matrix-sprite;
         }
 
     // Matrix Snippet
-        .Viper-snippet {
+        &.Viper-snippet {
             .icon(2);
             .matrix-sprite;
         }
@@ -112,6 +104,28 @@
         background-position: -@bgY-activeOffset @bgX;
     }
 }
+
+// Custom button positioning
+
+    .Viper-button {
+
+        // EES Link Target
+            &.Viper-ees-target {
+                position: absolute;
+                right: 0;
+                top: 0;
+                line-height: 2em;
+            }
+
+        // Asset Selector (target icon)
+            &.Viper-assetSelector-button {
+                position: absolute;
+                right: 2.7em;
+                top: 0;
+                line-height: 2em;
+            }
+
+    }
 
 .Viper-subSectionRow.Viper-urlRow {
     padding-right: 3.8em;
