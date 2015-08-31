@@ -253,7 +253,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + i');
         $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertHTMLMatch('<p><em><strong>%1% %2% %3%</strong></em></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->assertHTMLMatch('<p><strong><em>%1% %2% %3%</em></strong></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         $this->moveToKeyword(1, 'right');
 
@@ -277,7 +277,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
         $this->sikuli->keyDown('Key.CMD + i');
         $this->type('TEST');
 
-        $this->assertHTMLMatch('<p><em><strong>%1%</strong></em>TESTTEST<strong>TEST</strong>TEST<strong><em>TEST</em></strong><em><strong> %2% %3%</strong></em></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->assertHTMLMatch('<p><strong><em>%1%</em></strong>TEST<em>TEST<strong>TEST</strong>TEST<strong><em>TEST</em></strong><em><strong> %2% %3%</strong></em></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testStartAndStopStylesInActiveStyles()
 
