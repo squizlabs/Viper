@@ -108,12 +108,12 @@
 .Viper-button.Viper-selected .Viper-buttonIcon.MatrixComment-ViewNextCommentButton-icon-previous {
   background-position: -34px -891px;
 }
-.Viper-buttonIcon.MatrixComment-ViewNextCommentButton-icon-previous {
+.Viper-buttonIcon.MatrixComment-ViewNextCommentButton-icon-next {
   background-position: 0 -864px;
 }
-.Viper-button:active .Viper-buttonIcon.MatrixComment-ViewNextCommentButton-icon-previous,
-.Viper-button.Viper-active .Viper-buttonIcon.MatrixComment-ViewNextCommentButton-icon-previous,
-.Viper-button.Viper-selected .Viper-buttonIcon.MatrixComment-ViewNextCommentButton-icon-previous {
+.Viper-button:active .Viper-buttonIcon.MatrixComment-ViewNextCommentButton-icon-next,
+.Viper-button.Viper-active .Viper-buttonIcon.MatrixComment-ViewNextCommentButton-icon-next,
+.Viper-button.Viper-selected .Viper-buttonIcon.MatrixComment-ViewNextCommentButton-icon-next {
   background-position: -34px -864px;
 }
 .Viper-button.Viper-ees-target {
