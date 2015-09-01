@@ -23,11 +23,6 @@
     float: right;
 }
 
-.MatrixCommentsPluginViewCommentArea .MatrixComment-ViewCommentButton.disabled {
-  cursor: default;
-  opacity: 0.3;
-}
-
 /* Matrix comment mark */
 .Matrix-Viper-commentmark {
   position: absolute;
@@ -137,7 +132,8 @@
 }
 
 /* comment dialog textarea */
-.Matrix-Viper-commentdialog-newCommentTextArea {
+.Matrix-Viper-commentdialog-newCommentTextArea,
+.Matrix-Viper-commentdialog-replyCommentTextArea {
   font-family: arial, helvetica, sans-serif;
   font-size: 12px;
   color: #3d3d3d;
@@ -146,11 +142,12 @@
   border-color: rgb( 187, 187, 187 );
   border-radius: 4px;
   vertical-align: middle;
-  background-color: rgb( 255, 255, 255 );
-  box-shadow: 0px 1px 0px 0px rgb( 255, 255, 255 );
-  width: 90%;
+  background-color: #FFF;
+  box-shadow: 0px 1px 0px 0px #FFF;
+  width: 100%;
+  box-sizing: border-box;
   height: 80px;
-  padding: 5px 0px;
+  padding: 5px 10px;
 }
 
 /* comment dialog new comment */
@@ -309,19 +306,6 @@
 
 
 .Matrix-Viper-commentdialog-replyCommentTextArea {
-  font-family: arial, helvetica, sans-serif;
-  font-size: 12px;
-  color: #3d3d3d;
-  border-style: solid;
-  border-width: 1px;
-  border-color: rgb( 187, 187, 187 );
-  border-radius: 4px;
-  vertical-align: middle;
-  background-color: rgb( 255, 255, 255 );
-  box-shadow: 0px 1px 0px 0px rgb( 255, 255, 255 );
-  width: 90%;
-  height: 28px;
-  padding: 5px 10px;
   height: 4em;
 }
 
