@@ -59,7 +59,7 @@ class Viper_Tests_ViperKeywordPlugin_KeywordListUnitTest extends AbstractViperUn
         $this->clickTopToolbarButton('listOL', 'active');
         $this->assertHTMLMatch('<p>%1%<a href="www.squizlabs.com.au">((prop:productName))</a></p>');
 
-        $expectedRawHTML = '<p>%1%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a></p>';
+        $expectedRawHTML = '<p>%1%<a href="www.squizlabs.com.au"><span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></a></p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
     }//end testLinkedKeywordOrderedList()
