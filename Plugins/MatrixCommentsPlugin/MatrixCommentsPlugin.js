@@ -1281,8 +1281,8 @@ MatrixCommentsPlugin.prototype = {
                 $resolve_switch.toggleClass('GUI-active');
 
                 var status = 'open';
-                if($resolve_switch_label.html() == _('Unresolved')) {
-                    $resolve_switch_label.html(_('Resolved'));
+                if($resolve_switch_label.html() == _('Mark as resolved')) {
+                    $resolve_switch_label.html(_('Mark as resolved'));
                     status = 'resolved';
                     // clear out the number
                     $commentMark.find('div').html('');
@@ -1291,7 +1291,7 @@ MatrixCommentsPlugin.prototype = {
                     $replyCommentButtonArea.hide();
                 }
                 else {
-                    $resolve_switch_label.html(_('Unresolved'));
+                    $resolve_switch_label.html(_('Mark as resolved'));
                     // put back the comments number
                     var commentNumber = 0;
                     for(var i = 0; i< self._comments[containerId].length; i++) {
