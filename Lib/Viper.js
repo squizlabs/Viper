@@ -3153,6 +3153,11 @@ Viper.prototype = {
             }
         }//end if
 
+        // Create bookmark and update the start and end nodes incase bookmark updated the range.
+        var bookmark = this.createBookmark(range);
+        startNode    = range.getStartNode();
+        endNode      = range.getEndNode();
+
         if (startNode.nodeType === ViperUtil.TEXT_NODE
             && ViperUtil.trim(startNode.data) === ''
             && startNode === viperElement.firstChild
@@ -3169,8 +3174,6 @@ Viper.prototype = {
         if (!endNode) {
             endNode = startNode;
         }
-
-        var bookmark = this.createBookmark(range);
 
         this.removeStylesBetweenElems(startNode, endNode, style, range);
 
