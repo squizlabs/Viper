@@ -164,14 +164,14 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
      */
     public function testDeletingItalicContent()
     {
-        $this->useTest(1);
+        $this->useTest(7);
         
         // Delete italic word and replace with new content
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(1);
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('this is new content');
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit this is new content <strong>%5%</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit this is new content</p><p>Extra content under the paragraph</p>');
 
     }//end testDeletingItalicContent()
 
