@@ -459,6 +459,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
 
         // Check value of alt field in inline toolbar
         $this->clickElement('img', 0);
+        sleep(1);
         $this->clickInlineToolbarButton('image', 'active');
         $this->sikuli->keyDown('Key.TAB');
         $altField = $this->sikuli->execJS('document.activeElement.value');
