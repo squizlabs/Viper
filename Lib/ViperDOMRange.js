@@ -1027,6 +1027,14 @@ ViperDOMRange.prototype = {
         ) {
             this._nodeSel.node = this.endContainer;
             return this._nodeSel.node;
+        } else if (endNode !== startNode
+            && endNode === common
+            && (startNode === common.firstElementChild || startNode === common.firstChild)
+            && range.startOffset === 0
+        ) {
+            // <div>[<p><em>text</em></p><p><em>text</em></p>]</div>.
+            this._nodeSel.node = common;
+            return this._nodeSel.node;
         }
 
         // We may need to adjust the "startNode" depending on its offset.
