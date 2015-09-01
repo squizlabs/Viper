@@ -1,93 +1,9 @@
 <?php
 
-require_once 'AbstractViperUnitTest.php';
+require_once 'AbstractViperCustomClassStylesUnitTest.php';
 
-class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractViperUnitTest
+class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractViperCustomClassStylesUnitTest
 {
-
-    /**
-     * Set custom class styles.
-     *
-     * @return array
-     */
-    private function setCustomClassStyles()
-    {
-        $this->setPluginSettings(
-            'ViperFormatPlugin',
-            array(
-             'styles' => array(
-                          'Simple Image Border' => array(
-                                                    'showFor'    => 'img,h1',
-                                                    'hideFor'    => '*',
-                                                    'classNames' => 'simple-image-border',
-                                                   ),
-                          'Article'             => array(
-                                                    'classNames' => 'article',
-                                                    'showFor'    => 'p',
-                                                   ),
-                          'Multi Columns'       => array(
-                                                    'classNames' => 'multi-col',
-                                                    'hideFor'    => 'text-selection,img',
-                                                   ),
-                          'Caption'             => 'simple-image-border image-caption',
-                          'Round Image'         => 'round-image',
-                          'Ordered List'        => 'ordered-list',
-                         ),
-            )
-        );
-
-    }//end setCustomClassStyles()
-
-
-    /**
-     * Returns the selected styles.
-     *
-     * @return array
-     */
-    private function getSelectedStyles()
-    {
-        return $this->sikuli->execJS('viper.ViperTools.getItem(\'ViperFormatPlugin-classList\').getSelectedItems()');
-
-    }//end getSelectedStyles()
-
-
-    /**
-     * Selects the specified styles.
-     *
-     * @param array $styles Array of class names separated by spaces.
-     *
-     * @return void
-     */
-    private function selectStyles(array $styles)
-    {
-        $rect = $this->getBoundingRectangle('.ViperUtil-visible[data-id="test-ViperFormatPlugin-classPopout"]');
-        if (empty($rect) === true) {
-            $this->sikuli->clickVisibleElement('.ViperFormatPlugin-stylePickerButton', 0, true);
-        }
-
-        foreach ($styles as $classNames) {
-            $this->sikuli->clickVisibleElement('li[data-id="'.$classNames.'"]');
-        }
-
-    }//end selectStyles()
-
-
-    /**
-     * Removes the specified styles.
-     *
-     * @param array $styles Array of class names separated by spaces.
-     *
-     * @return void
-     */
-    private function removeStyles(array $styles)
-    {
-        foreach ($styles as $classNames) {
-            $this->sikuli->clickVisibleElement('.Viper-visible .ViperFormatPlugin-styleListItem-remove[data-id="'.$classNames.'"]');
-        }
-
-    }//end removeStyles()
-
-
     /**
      * Test custom style menu doesn't appear in the class pop up when no styles defined
      *

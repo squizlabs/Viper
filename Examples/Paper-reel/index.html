@@ -41,6 +41,37 @@
 
                 viper.setEditableElement(document.getElementById('content'));
                 viper.getPluginManager().setPluginSettings('ViperFormatPlugin', formatPluginSettings);
+
+                viper.getPluginManager().setPluginSettings(
+                    'ViperReplacementPlugin',
+                    {
+                        pattern: '\\(\\([^\\)]+\\)\\)',
+                        callback: function(keywords, callback) {
+                            for (var keyword in keywords) {
+                                var rep = '';
+                                switch (keyword) {
+                                    case '((prop:productName))':
+                                        rep = 'VIPER';
+                                    break;
+
+                                    case '((prop:url))':
+                                        rep = './Images/testImage.png';
+                                    break;
+
+                                    case '((prop:className))':
+                                        rep = 'replaced-className';
+                                    break;
+                                }
+
+                                keywords[keyword] = rep;
+                            }
+
+                            //setTimeout(function() {
+                                callback.call(this, keywords);
+                            //}, 500);
+                        }
+                    }
+                );
             });
         };
 
@@ -77,15 +108,15 @@
 
     <!-- comment goes here la -->
 
-        <p>    Australian <span class="footnote-ref">governments</span> at all levels have <u><strong><em>endorsed</em></strong></u> WCAG 2.0, and require all government websites (federal, <span class="another-class multi-col simple-image-border customClass">state</span> and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012. In addition, the Australian Government requires all federal websites to meet the medium conformance level (Double A) by the end of 2014.    </p>
+        <p>((prop:productName))    Australian <span class="footnote-ref ((prop:className)) ((prop:className))">governments</span> at all levels have <u><strong><em>endorsed</em></strong></u> WCAG 2.0, and require ((prop:productName)) all government websites (federal, <span class="another-class multi-col simple-image-border customClass">state</span> and territory) to meet the new guidelines at the minimum compliance level (Single A) by the end of 2012. In addition, the Australian Government requires all federal websites to meet the medium conformance level (Double A) by the end of 2014.    ((prop:productName))</p>
 
 <p>
 
-Federal government agencies must update <strong>all government</strong> websites (as specified within scope under the Website Accessibility National Transition Strategy (NTS)) to WCAG 2.0 conformance. Agencies should use the principle of progressive enhancement when building and managing websites, and test for conformance across multiple browsers and operating system configurations.
+Federal <span>government</span> ((prop:productName)) agencies <img __viper_attr_src="((prop:url))" alt="TITLE" /> must update <strong>all government</strong> websites (as specified within scope under the Website Accessibility National Transition Strategy (NTS)) to WCAG 2.0 conformance. Agencies should use the principle of progressive enhancement when building and managing websites, and test for conformance across multiple browsers and operating system configurations.
 
 </p>
 
-<p>Agencies are advised to consider the varied needs of their users and plan for accessibility from the outset. Where accessibility problems are known, agencies should put in place implementation plans to address the problem, then endeavour to minimise future risk by using standards-based web technologies and best practice content management processes.</p>
+<p>Agencies are <img __viper_attr_src="((prop:url))" alt="Second Image" /> advised to consider the varied needs of their users and plan for accessibility from the outset. Where accessibility problems are known, agencies should put in place implementation plans to address the problem, then endeavour to minimise future risk by using standards-based web technologies and best practice content management processes.</p>
 
 <p>Further information at <a href="http://webguide.gov.au/accessibility-usability/accessibility/%20">http://webguide.gov.au/accessibility-usability/accessibility/</a> and <a href="http://www.w3.org/TR/WCAG20/">http://www.w3.org/TR/WCAG20/</a>.</p>
 

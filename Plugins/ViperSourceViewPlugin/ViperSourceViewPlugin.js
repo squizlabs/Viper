@@ -344,6 +344,9 @@ ViperSourceViewPlugin.prototype = {
                 // Setup the Ace editor.
                 var editor   = ace.edit(source);
                 self._editor = editor;
+                editor.$blockScrolling = Infinity;
+
+                editor.$blockScrolling = Infinity;
 
                 self.applyEditorSettings(editor);
 
@@ -359,6 +362,7 @@ ViperSourceViewPlugin.prototype = {
     applyEditorSettings: function(editor)
     {
         editor.setTheme("ace/theme/viper");
+        editor.getSession().setUseWorker(false);
         editor.getSession().setMode("ace/mode/html");
 
         // Use wrapping.

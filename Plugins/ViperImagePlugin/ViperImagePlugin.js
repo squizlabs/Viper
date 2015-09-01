@@ -142,7 +142,7 @@ ViperImagePlugin.prototype = {
         });
 
         this.viper.registerCallback(
-            ['ViperHistoryManager:beforeUndo', 'Viper:clickedOutside', 'ViperTools:popup:open', 'ViperCoreStylesPlugin:beforeImageUpdate', 'Viper:cut'],
+            ['ViperHistoryManager:beforeUndo', 'Viper:clickedOutside', 'ViperTools:popup:open', 'ViperCoreStylesPlugin:beforeImageUpdate', 'Viper:cut', 'Viper:disabled'],
             'ViperImagePlugin',
             function() {
                 self.hideImageResizeHandles();
@@ -155,7 +155,12 @@ ViperImagePlugin.prototype = {
             }
 
             var range    = data.range;
-            var bookmark = self.viper.createBookmark(range);
+            if (data.e.target && ViperUtil.isTag(data.e.target, 'img') === true) {
+                // Image dropped on top of another image. Replace.
+                range.selectNode(data.e.target);
+            }
+
+            var bookmark = self.viper.createBookmark(range, null, 'imageDrop');
 
             for (var i = 0; i < data.dataTransfer.files.length; i++) {
                 self.readDroppedImage(data.dataTransfer.files[i], function(image, file) {
@@ -221,7 +226,7 @@ ViperImagePlugin.prototype = {
             return;
         }
 
-        return this._rangeToImage(range, image);
+        return this._rangeToImage(range, image, null, null, null, true);
     },
 
     rangeToImage: function(range, url, alt, title)
@@ -234,7 +239,7 @@ ViperImagePlugin.prototype = {
 
     },
 
-    _rangeToImage: function(range, img, url, alt, title)
+    _rangeToImage: function(range, img, url, alt, title, isMoveAction)
     {
         this._resizeImage = null;
 
@@ -252,7 +257,7 @@ ViperImagePlugin.prototype = {
             range = this.viper.getViperRange();
         }
 
-        var bookmark = this.viper.createBookmark(range);
+        var bookmark = this.viper.getBookmarkById('imageDrop') || this.viper.createBookmark(range);
 
         var elems = ViperUtil.getElementsBetween(bookmark.start, bookmark.end);
         for (var i = 0; i < elems.length; i++) {
@@ -261,18 +266,39 @@ ViperImagePlugin.prototype = {
 
         if (!img) {
             img = document.createElement('img');
-            img.setAttribute('src', url);
+
+            this.viper.setAttribute(img, 'src', url);
 
             if (alt !== null) {
-                img.setAttribute('alt', alt);
+                this.viper.setAttribute(img, 'alt', alt);
             }
 
             if (title !== null && ViperUtil.trim(title).length !== 0) {
-                img.setAttribute('title', title);
+                this.viper.setAttribute(img, 'title', title);
             }
         }
 
-        ViperUtil.insertBefore(bookmark.start, img);
+        if (isMoveAction === true) {
+            // Image is being moved, make sure its surrounding parents also move with it.
+            var surroundingParents = ViperUtil.getSurroundingParents(img, null, null, this.viper.getViperElement());
+            if (surroundingParents.length > 0) {
+                var parent = null
+                while (parent = surroundingParents.pop()) {
+                    if (ViperUtil.isBlockElement(parent) === false) {
+                        ViperUtil.insertBefore(bookmark.start, parent);
+                        break;
+                    }
+                }
+
+                if (!parent) {
+                    ViperUtil.insertBefore(bookmark.start, img);
+                }
+            } else {
+                ViperUtil.insertBefore(bookmark.start, img);
+            }
+        } else {
+            ViperUtil.insertBefore(bookmark.start, img);
+        }
 
         this.viper.removeBookmark(bookmark);
 
@@ -349,13 +375,13 @@ ViperImagePlugin.prototype = {
         return false;
     },
 
-    setImageAlt: function(image, alt)
+    setImageAlt: function(image, alt, keepEmptyAttribute)
     {
         if (!image) {
             return;
         }
 
-        image.setAttribute('alt', alt);
+        this.viper.setAttribute(image, 'alt', alt, keepEmptyAttribute);
 
     },
 
@@ -365,7 +391,7 @@ ViperImagePlugin.prototype = {
             return;
         }
 
-        image.setAttribute('src', url);
+        this.viper.setAttribute(image, 'src', url);
 
     },
 
@@ -376,7 +402,7 @@ ViperImagePlugin.prototype = {
         } else if (title === null) {
             image.removeAttribute('title');
         } else {
-            image.setAttribute('title', title);
+            this.viper.setAttribute(image, 'title', title);
         }
 
     },
@@ -493,7 +519,7 @@ ViperImagePlugin.prototype = {
             image = this.rangeToImage(this.viper.getViperRange(), this.getImageUrl(url), alt, title);
         } else {
             this.setImageURL(image, this.getImageUrl(url));
-            this.setImageAlt(image, alt);
+            this.setImageAlt(image, alt, pres);
             this.setImageTitle(image, title);
 
             this.viper.fireNodesChanged([image]);
@@ -532,9 +558,10 @@ ViperImagePlugin.prototype = {
         if (image && ViperUtil.isTag(image, 'img') === true) {
             tools.setButtonActive('image');
 
-            this.setUrlFieldValue(image.getAttribute('src'));
-            tools.getItem(toolbarPrefix + ':altInput').setValue(image.getAttribute('alt') || '');
-            tools.getItem(toolbarPrefix + ':titleInput').setValue(image.getAttribute('title') || '');
+            var src = this.viper.getAttribute(image, 'src');
+            this.setUrlFieldValue(src);
+            tools.getItem(toolbarPrefix + ':altInput').setValue(this.viper.getAttribute(image, 'alt') || '');
+            tools.getItem(toolbarPrefix + ':titleInput').setValue(this.viper.getAttribute(image, 'title') || '');
 
             if (!image.getAttribute('alt')) {
                 tools.getItem(toolbarPrefix + ':isDecorative').setValue(true);
@@ -544,7 +571,7 @@ ViperImagePlugin.prototype = {
 
             // Update preview pane.
             ViperUtil.empty(this._previewBox);
-            this.updateImagePreview(image.getAttribute('src'));
+            this.updateImagePreview(src);
         } else {
             tools.enableButton('image');
             tools.setButtonInactive('image');
@@ -731,7 +758,7 @@ ViperImagePlugin.prototype = {
             callback.call(this, false);
         };
 
-        img.src = url;
+        this.viper.setAttribute(img, 'src', url);
 
     },
 
@@ -896,7 +923,7 @@ ViperImagePlugin.prototype = {
                 });
 
                 // Remove mousemove event.
-                ViperUtil.addEvent([document, Viper.document], 'mouseup.ViperImageResize', function(e) {
+                ViperUtil.addEvent(ViperUtil.getDocuments(), 'mouseup.ViperImageResize', function(e) {
                     ViperUtil.removeEvent(Viper.document, 'mousemove.ViperImageResize');
                     ViperUtil.removeEvent(Viper.document, 'mouseup.ViperImageResize');
 

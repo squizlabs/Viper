@@ -149,7 +149,7 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
         $this->clickTopToolbarButton('italic');
         $this->clickTopToolbarButton('subscript');
         $this->clickTopToolbarButton('superscript');
-        $this->assertHTMLMatch('<p>Test content with <em><sub><sup>%1%</sup></sub></em> no styles applied</p>');
+        $this->assertHTMLMatch('<p>Test content with <sup><sub><em>%1%</em></sub></sup> no styles applied</p>');
 
         // Remove format for the content
         $this->clickTopToolbarButton('removeFormat');
@@ -167,7 +167,7 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
         $this->clickTopToolbarButton('italic');
         $this->clickTopToolbarButton('subscript');
         $this->clickTopToolbarButton('superscript');
-        $this->assertHTMLMatch('<p>Test content with <strong><em><sub><sup>%1%</sup></sub></em></strong> no styles applied</p>');
+        $this->assertHTMLMatch('<p>Test content with <sup><sub><em><strong>%1%</strong></em></sub></sup> no styles applied</p>');
 
         // Remove format for the content
         $this->clickTopToolbarButton('removeFormat');
@@ -207,7 +207,7 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com" title="Squiz Labs"><strong>%1%</strong></a> more test content.</p>');
+        $this->assertHTMLMatch('<p>Test content <strong><a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a></strong> more test content.</p>');
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('removeFormat');
         $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a> more test content.</p>');
@@ -228,7 +228,7 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->sikuli->keyDown('Key.CMD + i');
-        $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com" title="Squiz Labs"><em>%1%</em></a> more test content.</p>');
+        $this->assertHTMLMatch('<p>Test content <em><a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a></em> more test content.</p>');
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('removeFormat');
         $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a> more test content.</p>');
@@ -249,7 +249,7 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('strikethrough');
-        $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com" title="Squiz Labs"><del>%1%</del></a> more test content.</p>');
+        $this->assertHTMLMatch('<p>Test content <del><a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a></del> more test content.</p>');
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('removeFormat');
         $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a> more test content.</p>');
@@ -270,7 +270,7 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('subscript');
-        $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com" title="Squiz Labs"><sub>%1%</sub></a> more test content.</p>');
+        $this->assertHTMLMatch('<p>Test content <sub><a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a></sub> more test content.</p>');
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('removeFormat');
         $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a> more test content.</p>');
@@ -291,7 +291,7 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('superscript');
-        $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com" title="Squiz Labs"><sup>%1%</sup></a> more test content.</p>');
+        $this->assertHTMLMatch('<p>Test content <sup><a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a></sup> more test content.</p>');
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('removeFormat');
         $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a> more test content.</p>');

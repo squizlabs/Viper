@@ -104,6 +104,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicInListsUnitTest extends AbstractVi
         // Apply italic using inline toolbar
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->clickInlineToolbarButton('italic');
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar is not active');
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar is not active');
@@ -111,6 +112,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicInListsUnitTest extends AbstractVi
 
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->clickInlineToolbarButton('italic');
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar is not active');
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar is not active');
@@ -119,6 +121,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicInListsUnitTest extends AbstractVi
         // Remove italic using inline toolbar
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->clickInlineToolbarButton('italic', 'active');
         $this->assertTrue($this->inlineToolbarButtonExists('italic'), 'Italic icon in the inline toolbar is active');
         $this->assertTrue($this->topToolbarButtonExists('italic'), 'Italic icon in the top toolbar is active');
@@ -126,6 +129,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicInListsUnitTest extends AbstractVi
 
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->clickInlineToolbarButton('italic', 'active');
         $this->assertTrue($this->inlineToolbarButtonExists('italic'), 'Italic icon in the inline toolbar is active');
         $this->assertTrue($this->topToolbarButtonExists('italic'), 'Italic icon in the top toolbar is active');
@@ -134,14 +138,15 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicInListsUnitTest extends AbstractVi
         // Apply italic using top toolbar
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
-        $this->clickInlineToolbarButton('italic');
+        $this->clickTopToolbarButton('italic');
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar is not active');
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar is not active');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><em>item 2 %1%</em></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
 
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
-        $this->clickInlineToolbarButton('italic');
+        sleep(1);
+        $this->clickTopToolbarButton('italic');
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar is not active');
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar is not active');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><em>item 2 %1%</em></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><em>item 2 %2%</em></li><li>item 3</li></ol>');
@@ -149,6 +154,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicInListsUnitTest extends AbstractVi
          // Remove italic using top toolbar
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->clickTopToolbarButton('italic', 'active');
         $this->assertTrue($this->inlineToolbarButtonExists('italic'), 'Italic icon in the inline toolbar is active');
         $this->assertTrue($this->topToolbarButtonExists('italic'), 'Italic icon in the top toolbar is active');
@@ -156,6 +162,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicInListsUnitTest extends AbstractVi
 
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->clickTopToolbarButton('italic', 'active');
         $this->assertTrue($this->inlineToolbarButtonExists('italic'), 'Italic icon in the inline toolbar is active');
         $this->assertTrue($this->topToolbarButtonExists('italic'), 'Italic icon in the top toolbar is active');
@@ -164,6 +171,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicInListsUnitTest extends AbstractVi
         // Apply italic using keyboard shortcuts
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + i');
         sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar is not active');
@@ -172,6 +180,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicInListsUnitTest extends AbstractVi
 
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + i');
         sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar is not active');
@@ -181,6 +190,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicInListsUnitTest extends AbstractVi
         // Remove italic using top toolbar
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + i');
         sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('italic'), 'Italic icon in the inline toolbar is active');
@@ -189,6 +199,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicInListsUnitTest extends AbstractVi
 
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + i');
         sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('italic'), 'Italic icon in the inline toolbar is active');

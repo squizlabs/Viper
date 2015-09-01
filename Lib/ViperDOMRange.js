@@ -435,7 +435,7 @@ ViperDOMRange.prototype = {
      * @return The text container that range can extend to.
      * @type   {TextNode}
      */
-    getPreviousContainer: function(container, skippedBlockElem, skipEmptyNodes, brIsSelectable)
+    getPreviousContainer: function(container, skippedBlockElem, skipEmptyNodes, brIsSelectable, stopAtBlockElement)
     {
         if (!container) {
             return null;
@@ -463,6 +463,10 @@ ViperDOMRange.prototype = {
         }
 
         if (!container) {
+            return null;
+        }
+
+        if (stopAtBlockElement === true && ViperUtil.isBlockElement(container) === true) {
             return null;
         }
 
@@ -509,7 +513,7 @@ ViperDOMRange.prototype = {
      * @return The text container that range can extend to.
      * @type   {TextNode}
      */
-    getNextContainer: function(container, skippedBlockElem, skipSpaceTextNodes, brIsSelectable)
+    getNextContainer: function(container, skippedBlockElem, skipSpaceTextNodes, brIsSelectable, stopAtBlockElement)
     {
         if (!container) {
             return null;
@@ -533,6 +537,10 @@ ViperDOMRange.prototype = {
         }
 
         if (!container) {
+            return null;
+        }
+
+        if (stopAtBlockElement === true && ViperUtil.isBlockElement(container) === true) {
             return null;
         }
 
@@ -561,7 +569,12 @@ ViperDOMRange.prototype = {
             if (element.nodeType !== ViperUtil.TEXT_NODE) {
                 var child = element.firstChild;
                 while (child) {
-                    if (this._isSelectable(child) === true || (brIsSelectable === true && ViperUtil.isTag(child, 'br') === true)) {
+                    if (ViperUtil.attr(child, 'contenteditable') === 'false') {
+                        // Create a new text node if this element is not editable.
+                        var newNode = document.createTextNode('');
+                        ViperUtil.insertBefore(child, newNode);
+                        return newNode;
+                    } else if (this._isSelectable(child) === true || (brIsSelectable === true && ViperUtil.isTag(child, 'br') === true)) {
                         return child;
                     } else if (child.firstChild) {
                         // This node does have child nodes.
@@ -591,7 +604,12 @@ ViperDOMRange.prototype = {
             if (element.nodeType !== ViperUtil.TEXT_NODE) {
                 var child = element.lastChild;
                 while (child) {
-                    if (this._isSelectable(child) === true || (brIsSelectable === true && ViperUtil.isTag(child, 'br') === true)) {
+                    if (ViperUtil.attr(child, 'contenteditable') === 'false') {
+                        // Create a new text node if this element is not editable.
+                        var newNode = document.createTextNode('');
+                        ViperUtil.insertAfter(child, newNode);
+                        return newNode;
+                    } else if (this._isSelectable(child) === true || (brIsSelectable === true && ViperUtil.isTag(child, 'br') === true)) {
                         return child;
                     } else if (child.lastChild) {
                         // This node does have child nodes.

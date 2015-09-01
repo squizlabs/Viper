@@ -12,13 +12,13 @@ var ViperUtil = {
     DOCUMENT_TYPE_NODE: 10,
     DOCUMENT_FRAGMENT_NODE: 11,
     NOTATION_NODE: 12,
-    DOM_VK_DELETE: 8,
+    DOM_VK_DELETE: 46,
     DOM_VK_LEFT: 37,
     DOM_VK_UP: 38,
     DOM_VK_RIGHT: 39,
     DOM_VK_DOWN: 40,
     DOM_VK_ENTER: 13,
-    DOM_VK_BACKSPACE: 46,
+    DOM_VK_BACKSPACE: 8,
     _browserType: null,
     _browserVersion: null,
 
@@ -392,6 +392,16 @@ var ViperUtil = {
 
     },
 
+    replaceAll: function(search, replace, subject)
+    {
+        // Escape search.
+        search = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+        var r = new RegExp(search, 'g');
+        return subject.replace(r, replace);
+
+    },
+
     /**
      * returns true if specified string is blank.
      *
@@ -715,21 +725,25 @@ var ViperUtil = {
 
             if (!tagName) {
                 var isOfType = false;
-                switch (elementType) {
-                    case 'block':
-                        isOfType = ViperUtil.isBlockElement(parent);
-                    break;
+                if (elementType) {
+                    switch (elementType) {
+                        case 'block':
+                            isOfType = ViperUtil.isBlockElement(parent);
+                        break;
 
-                    case 'stub':
-                        isOfType = ViperUtil.isStubElement(parent);
-                    break;
+                        case 'stub':
+                            isOfType = ViperUtil.isStubElement(parent);
+                        break;
 
-                    default:
-                        if (parent.nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isBlockElement(parent) === false) {
-                            // Inline
-                            isOfType = true;
-                        }
-                    break;
+                        default:
+                            if (parent.nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isBlockElement(parent) === false) {
+                                // Inline
+                                isOfType = true;
+                            }
+                        break;
+                    }
+                } else {
+                    isOfType = true;
                 }
 
                 if (isOfType) {
@@ -744,6 +758,26 @@ var ViperUtil = {
         }
 
         return parents;
+
+    },
+
+    getTopSurroundingParent: function(node, tagName, elementType, stopElem)
+    {
+        var parents = this.getSurroundingParents(node, tagName, elementType, stopElem);
+        if (parents.length > 0) {
+            return parents.pop();
+        }
+
+    },
+
+    hasSurroundingParent: function(element, parentTagName, stopEl)
+    {
+        var parents = this.getSurroundingParents(element, parentTagName, null, stopEl);
+        if (parents.length > 0) {
+            return true;
+        }
+
+        return false;
 
     },
 
@@ -1140,6 +1174,31 @@ var ViperUtil = {
         }
 
         return false;
+
+    },
+
+    /**
+     * Returns true if the given element has valid content.
+     *
+     * E.g. <p><br /></p> will not return true but <p><img /></p> will return true.
+     *
+     */
+    hasContent: function (element)
+    {
+        if (ViperUtil.isBlank(ViperUtil.getNodeTextContent(element)) === true) {
+            // Might have stub elements.
+            var tags = ViperUtil.getTag('*', element);
+            var ln   = tags.length;
+            for (var i = 0; i < ln; i++) {
+                if (ViperUtil.isStubElement(tags[i]) === true && ViperUtil.isTag(tags[i], 'br') === false) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        return true;
 
     },
 
@@ -2542,18 +2601,25 @@ var ViperUtil = {
     {
         var nodes = [];
 
-        if (parent && parent.childNodes) {
-            var ln = parent.childNodes.length;
-            for (var i = 0; i < ln; i++) {
-                var child = parent.childNodes[i];
-                if (child.nodeType === ViperUtil.TEXT_NODE) {
-                    if (removeEmpty === true && /^\s*$/.test(child.data) === true) {
-                        ViperUtil.remove(child);
-                    } else {
-                        nodes.push(child);
+        if (ViperUtil.isBrowser('msie') === false) {
+            var walk  = document.createTreeWalker(parent, NodeFilter.SHOW_TEXT)
+            while (node = walk.nextNode()) {
+                nodes.push(node);
+            }
+        } else {
+            if (parent && parent.childNodes) {
+                var ln = parent.childNodes.length;
+                for (var i = 0; i < ln; i++) {
+                    var child = parent.childNodes[i];
+                    if (child.nodeType === ViperUtil.TEXT_NODE) {
+                        if (removeEmpty === true && /^\s*$/.test(child.data) === true) {
+                            ViperUtil.remove(child);
+                        } else {
+                            nodes.push(child);
+                        }
+                    } else if (child.childNodes && child.childNodes.length > 0) {
+                        nodes = nodes.concat(ViperUtil.getTextNodes(child));
                     }
-                } else if (child.childNodes && child.childNodes.length > 0) {
-                    nodes = nodes.concat(ViperUtil.getTextNodes(child));
                 }
             }
         }

@@ -974,6 +974,7 @@ ViperCoreStylesPlugin.prototype = {
                 startNode = bookmark.start;
             }
         } else {
+            bookmark  = this.viper.createBookmark();
             startNode = nodeSelection;
         }
 
@@ -1026,9 +1027,27 @@ ViperCoreStylesPlugin.prototype = {
         var changeid = ViperChangeTracker.startBatchChange('removedFormat');
 
         // Remove all formating tags.
+        var tmpSpan = null;
+        if (nodeSelection) {
+            // Bookmark the selection and wrap the node in to a tmp span incase the node it self gets removed.
+            bookmark = this.viper.createBookmark();
+            tmpSpan = document.createElement('span');
+            ViperUtil.insertBefore(nodeSelection, tmpSpan);
+            tmpSpan.appendChild(nodeSelection);
+        }
+
         var tln = tags.length;
         for (var i = 0; i < tln; i++) {
-            this.viper.removeStyle(tags[i], nodeSelection);
+            this.viper.removeStyle(tags[i], tmpSpan);
+        }
+
+        if (tmpSpan) {
+            while (tmpSpan.firstChild) {
+                ViperUtil.insertBefore(tmpSpan, tmpSpan.firstChild);
+            }
+
+            ViperUtil.remove(tmpSpan);
+            this.viper.selectBookmark(bookmark);
         }
 
         ViperChangeTracker.endBatchChange(changeid);

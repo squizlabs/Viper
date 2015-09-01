@@ -158,7 +158,7 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
         $this->moveToKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('strikethrough');
-        $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com"><del>%1%</del></a> more test content.</p>');
+        $this->assertHTMLMatch('<p>Test content <del><a href="http://www.squizlabs.com">%1%</a></del> more test content.</p>');
         $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'strikethrough icon should be active');
 
         $this->moveToKeyword(1);

@@ -173,7 +173,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
         $this->moveToKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('subscript');
-        $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com"><sub>%1%</sub></a> more test content.</p>');
+        $this->assertHTMLMatch('<p>Test content <sub><a href="http://www.squizlabs.com">%1%</a></sub> more test content.</p>');
         $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'subscript icon should be active');
 
         $this->moveToKeyword(1);

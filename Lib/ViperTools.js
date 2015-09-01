@@ -1326,7 +1326,7 @@ ViperTools.prototype = {
         );
 
         this.viper.registerCallback(
-            'Viper:clickedOutside',
+            ['Viper:clickedOutside', 'Viper:disabled'],
             id,
             function(range) {
                 self.getItem(id).hide();

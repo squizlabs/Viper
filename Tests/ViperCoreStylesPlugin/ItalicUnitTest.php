@@ -164,14 +164,14 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
      */
     public function testDeletingItalicContent()
     {
-        $this->useTest(1);
+        $this->useTest(7);
         
         // Delete italic word and replace with new content
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(1);
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('this is new content');
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit this is new content <strong>%5%</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit this is new content</p><p>Extra content under the paragraph</p>');
 
     }//end testDeletingItalicContent()
 
@@ -480,6 +480,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
 
         $this->moveToKeyword(2);
         $this->sikuli->keyDown('Key.CMD + a');
+        sleep(1);
         $this->clickTopToolbarButton('italic', 'active');
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit %4% <strong>%5%</strong></p>');
         $this->assertTrue($this->topToolbarButtonExists('italic'), 'Italic icon should not be active');
@@ -527,7 +528,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->moveToKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickInlineToolbarButton('italic');
-        $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com"><em>%1%</em></a> end of test content.</p>');
+        $this->assertHTMLMatch('<p>Test content <em><a href="http://www.squizlabs.com">%1%</a></em> end of test content.</p>');
         $this->assertTrue($this->inLineToolbarButtonExists('italic', 'active'), 'italic icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'italic icon should be active');
 
@@ -545,7 +546,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->moveToKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('italic');
-        $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com"><em>%1%</em></a> end of test content.</p>');
+        $this->assertHTMLMatch('<p>Test content <em><a href="http://www.squizlabs.com">%1%</a></em> end of test content.</p>');
         $this->assertTrue($this->inLineToolbarButtonExists('italic', 'active'), 'italic icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'italic icon should be active');
 
@@ -563,7 +564,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->moveToKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->sikuli->keyDown('Key.CMD + i');
-        $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com"><em>%1%</em></a> end of test content.</p>');
+        $this->assertHTMLMatch('<p>Test content <em><a href="http://www.squizlabs.com">%1%</a></em> end of test content.</p>');
         $this->assertTrue($this->inLineToolbarButtonExists('italic', 'active'), 'italic icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'italic icon should be active');
 

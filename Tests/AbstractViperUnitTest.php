@@ -2067,6 +2067,34 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
 
     /**
+     * Returns the raw HTML of the test page.
+     *
+     * @param string  $selector The jQuery selector to use for finding the element.
+     * @param integer $index    The element index of the resulting array.
+     *
+     * @return string
+     */
+    protected function getRawHtml($selector=null, $index=0)
+    {
+        if ($selector === null) {
+            $text = $this->sikuli->execJS('getRawHTML()');
+        } else {
+            $text = $this->sikuli->execJS('getRawHTML("'.$selector.'", '.$index.')');
+        }
+
+        $text = str_replace("\n", '', $text);
+        $text = str_replace('\n', '', $text);
+
+        // Google Chrome always adds an extra space at the end of a style attribute
+        // remove it here...
+        $text = preg_replace('#style="(.+)\s"#', 'style="$1"', $text);
+
+        return $text;
+
+    }//end getRawHtml()
+
+
+    /**
      * Returns the HTML of the test page.
      *
      * @param string  $selector           The jQuery selector to use for finding the element.
