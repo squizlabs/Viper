@@ -1773,6 +1773,7 @@ ViperKeyboardEditorPlugin.prototype = {
             range.collapse(true);
             ViperSelection.addRange(range);
             this.viper.fireNodesChanged();
+            this.viper.fireSelectionChanged(null, true);
             return false;
         } else if (this._isWholeViperElementSelected(range) === true) {
             // The whole Viper element is selected, remove all of its content
@@ -1780,6 +1781,7 @@ ViperKeyboardEditorPlugin.prototype = {
             ViperUtil.setHtml(this.viper.getViperElement(), '');
             this.viper.initEditableElement();
             this.viper.fireNodesChanged();
+            this.viper.fireSelectionChanged(null, true);
             return false;
         } else if (range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
             && range.startContainer === range.endContainer
