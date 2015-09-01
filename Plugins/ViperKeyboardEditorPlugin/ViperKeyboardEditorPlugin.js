@@ -1089,6 +1089,7 @@ ViperKeyboardEditorPlugin.prototype = {
                             }
 
                             this.viper.fireNodesChanged();
+                            this.viper.fireSelectionChanged(null, true);
                             return false;
                         }//end if
                     }//end if
