@@ -133,7 +133,7 @@
 }
 
 .Matrix-Viper-commentdialog-mainArea {
-  padding: 5px;
+  padding: 8px;
 }
 
 /* comment dialog textarea */
@@ -150,7 +150,7 @@
   box-shadow: 0px 1px 0px 0px rgb( 255, 255, 255 );
   width: 90%;
   height: 80px;
-  padding: 7px 10px;
+  padding: 5px 0px;
 }
 
 /* comment dialog new comment */
@@ -176,54 +176,54 @@
 
 /* comment dialog buttons */
 .Matrix-Viper-commentdialog-buttonArea {
-  padding: 5px;
+  padding: 0 5px 5px;
+  text-align: center;
 }
 
-.Matrix-Viper-commentdialog-buttonArea a {
-  display: inline-block;
-  font-family: "Arial", "Helvetica", sans-serif;
-  font-size: 12px;
-  text-align: center;
-  text-decoration: none;
-  border-style: solid;
-  border-width: 1px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  box-shadow: 0px 2px 5px 0px rgba( 0, 0, 0, 0.25 );
-  padding: 0 34px;
-  height: 30px;
-  line-height: 30px;
-  overflow: hidden;
-  cursor: pointer;
-  background-color: #F5F5F5;
-  border: 1px solid #B7B7B7;
-  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.19), 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 -2.4em 3.3em -2.4em rgba(0, 0, 0, 0.2) inset;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.19), 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 -2.4em 3.3em -2.4em rgba(0, 0, 0, 0.2) inset;
-  color: #454545;
-  text-shadow: 0 1px 0 #FFFFFF;
+.Matrix-Viper-commentdialog-buttonArea a,
+.Matrix-Viper-commentdialog-buttonArea a:visited {
+    font-family: "Arial", "Helvetica", sans-serif;
+    font-size: 12px;
+    text-align: center;
+    text-decoration: none;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 3px;
+    box-shadow: 0 1px 0 rgba(255,255,255,1) inset, 0 1px 3px rgba(0,0,0,0.1);
+    margin: 0 4px;
+    padding: 0 20px;
+    display: inline-block;
+    height: 28px;
+    line-height: 28px;
+    overflow: hidden;
+    cursor: pointer;
+    width: 29%;
+
+    /* Light Colour */
+        color: #373737;
+        background-color: #FAFAFA;
+        border: 1px solid #CCCCCC;
+        box-shadow: 0 1px 0 rgba(255,255,255,1) inset, 0 1px 2px rgba(0,0,0,0.1);
 }
 
 .Matrix-Viper-commentdialog-buttonArea a:hover {
-  background-color: #FCFCFC;
-  border-color: #9F9F9F;
-  color: #414040;
+    transition: all 0.2s ease-out 0s;
+
+    background-color: #f2f2f2;
+    color: #373737;
 }
 
 .Matrix-Viper-commentdialog-buttonArea a.Matrix-Viper-commentdialog-button-blue {
-  border-color: #0A233A;
-  background: #2D77C2;
-  color: #e2ebf3;
-  text-shadow: -1px -1px 0 #0A233A;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.44), 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 -2.4em 3.3em -2.4em rgba(0, 0, 0, 0.6) inset;
-  width: 52px;
+    color: #FFFFFF;
+    background-color: #3f98e1;
+    border: 1px solid #3175ad;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.2) inset, 0 1px 2px rgba(0,0,0,0.2);
+    text-shadow: 0 0 2px rgba(0,0,0,0.5);
 }
 
 .Matrix-Viper-commentdialog-buttonArea a.Matrix-Viper-commentdialog-button-blue:hover {
-  background: #298AEE none repeat scroll 0% 0%;
-  color: #F1F8FE;
-  border-color: #0A233A;
-  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.8), 0px 1px 0px rgba(255, 255, 255, 0.2) inset, 0px -2.4em 3.3em -2.4em rgba(0, 0, 0, 0.6) inset;
+    background-color: #3c91d6;
+    color: #FFFFFF;
 }
 
 .Matrix-Viper-commentdialog-button-grey {
@@ -321,7 +321,8 @@
   box-shadow: 0px 1px 0px 0px rgb( 255, 255, 255 );
   width: 90%;
   height: 28px;
-  padding: 7px 10px;
+  padding: 5px 10px;
+  height: 4em;
 }
 
 /* edit comment */

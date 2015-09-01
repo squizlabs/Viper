@@ -805,7 +805,7 @@ MatrixCommentsPlugin.prototype = {
             // show new comment dialog
             $commentDialog.append($commentDialogNewComment);
 
-            $commentDialogNewComment.append('<div class="Matrix-Viper-commentdialog-currentUserName">'+ this._currentUserLastName + ' ' + this._currentUserFirstName + '</div>');
+            $commentDialogNewComment.append('<div class="Matrix-Viper-commentdialog-currentUserName">'+ this._currentUserFirstName + ' ' + this._currentUserLastName + '</div>');
             $commentDialogNewComment.append('<div class="Matrix-Viper-commentdialog-newCommentText">'+ _('New Comment') + '</div>');
 
             var $replyCommentMainArea = $('<div class="Matrix-Viper-commentdialog-mainArea"></div>');
@@ -968,7 +968,7 @@ MatrixCommentsPlugin.prototype = {
             //  list comments
             for(var i = minIndex; i < maxIndex; i++) {
                 $comment_div = jQuery('<div class="Matrix-Viper-commentdialog-reply-comment" data-comment-id="' + id + '" data-comment-index="' + i + '" data-comment-userid="' + comments[i]['userid'] + '" ></div>');
-                $replyCommentUserName = jQuery('<div class="Matrix-Viper-commentdialog-reply-comment-userName">'+ comments[i]['userLastName'] + ' ' + comments[i]['userFirstName'] + '</div>');
+                $replyCommentUserName = jQuery('<div class="Matrix-Viper-commentdialog-reply-comment-userName">'+ comments[i]['userFirstName'] + ' ' + comments[i]['userLastName'] + '</div>');
 
                 $comment_div.append($replyCommentUserName);
 
