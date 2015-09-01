@@ -725,21 +725,25 @@ var ViperUtil = {
 
             if (!tagName) {
                 var isOfType = false;
-                switch (elementType) {
-                    case 'block':
-                        isOfType = ViperUtil.isBlockElement(parent);
-                    break;
+                if (elementType) {
+                    switch (elementType) {
+                        case 'block':
+                            isOfType = ViperUtil.isBlockElement(parent);
+                        break;
 
-                    case 'stub':
-                        isOfType = ViperUtil.isStubElement(parent);
-                    break;
+                        case 'stub':
+                            isOfType = ViperUtil.isStubElement(parent);
+                        break;
 
-                    default:
-                        if (parent.nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isBlockElement(parent) === false) {
-                            // Inline
-                            isOfType = true;
-                        }
-                    break;
+                        default:
+                            if (parent.nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isBlockElement(parent) === false) {
+                                // Inline
+                                isOfType = true;
+                            }
+                        break;
+                    }
+                } else {
+                    isOfType = true;
                 }
 
                 if (isOfType) {
