@@ -897,7 +897,7 @@ MatrixCommentsPlugin.prototype = {
             $next_arrow = jQuery('<div class="Matrix-Viper-commentdialog-reply-header-next"></div>');
 
             $resolve_switch = jQuery('<div class="Matrix-Viper-commentdialog-reply-header-resolve GUI-switch"></div>');
-            $resolve_switch_label = jQuery('<span class="Matrix-Viper-commentdialog-reply-header-resolve-label">' + _('Unresolved')+ '</span>');
+            $resolve_switch_label = jQuery('<span class="Matrix-Viper-commentdialog-reply-header-resolve-label">' + _('Mark as resolved')+ '</span>');
             $resolve_switch_button = jQuery('<span class="GUI-switch-button"><span class="GUI-switch-slider"></span></span>');
             $resolve_switch.append($resolve_switch_label);
             $resolve_switch.append($resolve_switch_button);
@@ -1282,7 +1282,7 @@ MatrixCommentsPlugin.prototype = {
 
                 var status = 'open';
                 if($resolve_switch_label.html() == _('Mark as resolved')) {
-                    $resolve_switch_label.html(_('Mark as resolved'));
+                    $resolve_switch_label.html(_('Resolved'));
                     status = 'resolved';
                     // clear out the number
                     $commentMark.find('div').html('');
