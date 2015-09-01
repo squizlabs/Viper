@@ -54,7 +54,8 @@
             .icon (4);
             .matrix-sprite;
 
-            .Viper-comment-highlighted & {
+            .Viper-comment-highlighted &,
+            .Viper-comment-highlighted.Viper-selected & {
                 .icon (5);
             }
         }
@@ -85,6 +86,16 @@
         &.Viper-uploadImage-button {
             .icon(3);
             .matrix-sprite;
+        }
+
+    // Previous Comment
+        &.MatrixComment-ViewNextCommentButton-icon-previous {
+            .icon(34);
+        }
+
+    // Next Comment
+        &.MatrixComment-ViewNextCommentButton-icon-previous {
+            .icon(33);
         }
 
 } // End .buttonIcon
@@ -131,5 +142,5 @@
     }
 
 .Viper-subSectionRow.Viper-urlRow {
-    padding-right: 3.8em;
+    padding-right: 4.1em;
 }

@@ -32,12 +32,16 @@
 .Viper-browserVer-msie8 .Viper-buttonIcon.Viper-comments {
   background-image: url("../Images/matrixButtonIcons.png");
 }
-.Viper-comment-highlighted .Viper-buttonIcon.Viper-comments {
+.Viper-comment-highlighted .Viper-buttonIcon.Viper-comments,
+.Viper-comment-highlighted.Viper-selected .Viper-buttonIcon.Viper-comments {
   background-position: 0 -108px;
 }
 .Viper-button:active .Viper-comment-highlighted .Viper-buttonIcon.Viper-comments,
+.Viper-button:active .Viper-comment-highlighted.Viper-selected .Viper-buttonIcon.Viper-comments,
 .Viper-button.Viper-active .Viper-comment-highlighted .Viper-buttonIcon.Viper-comments,
-.Viper-button.Viper-selected .Viper-comment-highlighted .Viper-buttonIcon.Viper-comments {
+.Viper-button.Viper-active .Viper-comment-highlighted.Viper-selected .Viper-buttonIcon.Viper-comments,
+.Viper-button.Viper-selected .Viper-comment-highlighted .Viper-buttonIcon.Viper-comments,
+.Viper-button.Viper-selected .Viper-comment-highlighted.Viper-selected .Viper-buttonIcon.Viper-comments {
   background-position: -34px -108px;
 }
 .Viper-buttonIcon.Viper-add-comments {
@@ -96,6 +100,22 @@
 .Viper-browserVer-msie8 .Viper-buttonIcon.Viper-uploadImage-button {
   background-image: url("../Images/matrixButtonIcons.png");
 }
+.Viper-buttonIcon.MatrixComment-ViewNextCommentButton-icon-previous {
+  background-position: 0 -891px;
+}
+.Viper-button:active .Viper-buttonIcon.MatrixComment-ViewNextCommentButton-icon-previous,
+.Viper-button.Viper-active .Viper-buttonIcon.MatrixComment-ViewNextCommentButton-icon-previous,
+.Viper-button.Viper-selected .Viper-buttonIcon.MatrixComment-ViewNextCommentButton-icon-previous {
+  background-position: -34px -891px;
+}
+.Viper-buttonIcon.MatrixComment-ViewNextCommentButton-icon-previous {
+  background-position: 0 -864px;
+}
+.Viper-button:active .Viper-buttonIcon.MatrixComment-ViewNextCommentButton-icon-previous,
+.Viper-button.Viper-active .Viper-buttonIcon.MatrixComment-ViewNextCommentButton-icon-previous,
+.Viper-button.Viper-selected .Viper-buttonIcon.MatrixComment-ViewNextCommentButton-icon-previous {
+  background-position: -34px -864px;
+}
 .Viper-button.Viper-ees-target {
   position: absolute;
   top: 0;
@@ -116,5 +136,5 @@
   line-height: 26px;
 }
 .Viper-subSectionRow.Viper-urlRow {
-  padding-right: 3.8em;
+  padding-right: 4.1em;
 }

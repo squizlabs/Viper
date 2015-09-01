@@ -1,106 +1,32 @@
-/* Viper buttons */
-/*.Viper-buttonIcon.Viper-comments {
-  background-image: url(../../Images/matrixButtonIcons.png);
-  background-position: 0 -82px;
-}
-.Viper-button.Viper-active .Viper-buttonIcon.Viper-comments,
-.Viper-button.Viper-selected .Viper-buttonIcon.Viper-comments {
-  background-image: url(../../Images/matrixButtonIcons.png);
-  background-position: -33px -82px;
-}
-
-.Viper-button.Viper-comment-highlighted .Viper-buttonIcon.Viper-comments {
-  background-image: url(../../Images/matrixButtonIcons.png);
-  background-position: -0px -109px;
-}
-.Viper-button.Viper-active.Viper-comment-highlighted  .Viper-buttonIcon.Viper-comments,
-.Viper-button.Viper-selected.Viper-comment-highlighted  .Viper-buttonIcon.Viper-comments {
-  background-image: url(../../Images/matrixButtonIcons.png);
-  background-position: -33px -109px;
-}
-
-
-.Viper-buttonIcon.Viper-add-comments {
-  background-image: url(../../Images/matrixButtonIcons.png);
-  background-position: 0 -136px;
-}
-.Viper-button.Viper-active .Viper-buttonIcon.Viper-add-comments,
-.Viper-button.Viper-selected .Viper-buttonIcon.Viper-add-comments {
-  background-image: url(../../Images/matrixButtonIcons.png);
-  background-position: -33px -136px;
-}*/
-
-
 /* Viper toolbar content */
 
 .MatrixCommentsPluginViewCommentArea {
-  text-align: left;
-  height: 24px;
-    padding: 0.6em 0.5em 0.7em;
-    line-height: 1.3em;
-    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#919097, endColorstr=#727179);
-    background: -webkit-gradient(linear, left top, left bottom, from(#919097), to(#727179));
-    background: -moz-linear-gradient(center top , #919097, #727179) repeat scroll 0 0 transparent;
-    border-top: 1px solid #A2A1A8;
+    text-align: left;
+    height: 24px;
+    padding: 0.6em 0 0.8em 0.6em;
+    line-height: 1.4em;
+    border-top: 1px solid #BFBFBF;
     display: block;
-    margin: 0 -0.6em -0.6em -0.6em;
+    margin: 0 0 -0.8em 0;
     border-bottom-left-radius: 0.75em;
     border-bottom-right-radius: 0.75em;
 }
 
-.MatrixCommentsPluginViewCommentAreaText{
-  text-align: left;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
-  font-size: 1.3em;
-  font-weight: bold;
-  color: #000;
-  padding-left: 11px;
-  line-height: 22px;
+.MatrixCommentsPluginViewCommentAreaText {
+    text-align: left;
+    font-size: 1.3em;
+    font-weight: bold;
+    line-height: 23px;
 }
 
 .MatrixCommentsPluginViewCommentButtonArea {
-  float: right;
-}
-
-.MatrixCommentsPluginViewCommentArea .MatrixComment-ViewCommentButton {
-  margin: 0;
-  border: none;
-  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 -14px 16px -8px rgba(0,0,0,0.3) inset;
-  color: #2B2B2B;
-  background-color: #e9e9eb;
-  text-shadow: 0 1px 0 #FFFFFF;
-  cursor: pointer;
-  display: inline-block;
-  font-size: 1.6em;
-  line-height: 1.7em;
-  min-width: 0.8em;
-  padding: 0 0.5em;
-  position: relative;
-  text-align: center;
+    float: right;
 }
 
 .MatrixCommentsPluginViewCommentArea .MatrixComment-ViewCommentButton.disabled {
   cursor: default;
   opacity: 0.3;
 }
-
-#MatrixComment-ViewPreviousCommentButton {
-    border-bottom-left-radius: 0.3em;
-    border-left: medium none !important;
-    border-top-left-radius: 0.3em;
-    background-image: url(../../Images/matrixButtonIcons.png);
-    background-position: 0px -188px;
-}
-
-#MatrixComment-ViewNextCommentButton {
-    border-bottom-right-radius: 0.3em;
-    border-left: medium none !important;
-    border-top-right-radius: 0.3em;
-    background-image: url(../../Images/matrixButtonIcons.png);
-    background-position: 0px -161px;
-}
-
-
 
 /* Matrix comment mark */
 .Matrix-Viper-commentmark {
@@ -169,7 +95,6 @@
   border-color: transparent #ccc;
 }
 
-
 /* comment dialog */
 
 .Matrix-Viper-commentdialog {
@@ -207,11 +132,9 @@
   position: absolute;
 }
 
-
 .Matrix-Viper-commentdialog-mainArea {
   padding: 5px;
 }
-
 
 /* comment dialog textarea */
 .Matrix-Viper-commentdialog-newCommentTextArea {
@@ -229,7 +152,6 @@
   height: 80px;
   padding: 7px 10px;
 }
-
 
 /* comment dialog new comment */
 
@@ -251,7 +173,6 @@
   font-size: 13px;
   color: #0583DB;
 }
-
 
 /* comment dialog buttons */
 .Matrix-Viper-commentdialog-buttonArea {
@@ -318,7 +239,6 @@
   border-bottom: solid 1px #ccc;
 }
 
-
 .Matrix-Viper-commentdialog-reply-header-prev {
   width: 0;
   height: 0;
@@ -347,7 +267,6 @@
 .Matrix-Viper-commentdialog-reply-header-next {
   cursor: pointer;
 }
-
 
 /* reply dialog comments */
 .Matrix-Viper-commentdialog-reply-comment {
@@ -482,7 +401,6 @@
 
 }
 
-
 .Matrix-Viper-commentdialog-comment-action-edit {
   padding: 5px;
   cursor: pointer;
@@ -495,7 +413,6 @@
 .Matrix-Viper-commentdialog-comment-action-edit:hover {
   background: #F0F0F0;
 }
-
 
 /* slide switch button */
 

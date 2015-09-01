@@ -1,5 +1,5 @@
 .Viper-subSectionRow.Viper-imageUploadRow {
-    padding-right: 7.8em;
+    padding-right: 8em;
 }
 
 .uploadImage-progressIndicator .uploadImage-progress-status {
@@ -61,7 +61,7 @@
     min-width:300px;
 }
 
-/* Image Treatments for Droppepd Image */
+/* Image Treatments for Dropped Image */
 
 [data-imagepaste="true"] {
     /* Styles */
