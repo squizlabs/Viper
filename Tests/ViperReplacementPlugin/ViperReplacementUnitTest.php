@@ -18,7 +18,7 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
 
         $raw = $this->getRawHtml();
         $this->assertEquals(
-            '<p>Lorem <keyword title="((prop:productName))" data-viper-keyword="((prop:productName))" contenteditable="false">Viper</keyword> %1%</p><p><strong>%2%</strong> sit amet</p><p>test <img src="../../Examples/Paper-reel/Images/testImage.png" data-viper-src="((prop:url))" alt="Viper" data-viper-alt="((prop:productName))" title="Test Image" data-viper-height="((prop:height))" data-viper-width="((prop:width))" height="200px" width="100px"></p>',
+            '<p>Lorem <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span> XAX</p><p><strong>XBX</strong> sit amet</p><p>test <img src="../../Examples/Paper-reel/Images/testImage.png" data-viper-src="((prop:url))" alt="Viper" data-viper-alt="((prop:productName))" title="Test Image" data-viper-height="((prop:height))" data-viper-width="((prop:width))" height="200px" width="100px"></p>',
             $raw
         );
 
