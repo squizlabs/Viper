@@ -1176,16 +1176,16 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the top toolbar.');
 
+        sleep(1);
         $this->sikuli->keyDown('Key.RIGHT');
-        sleep(1);
+        sleep(2);
         $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
+        sleep(2);
         $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the top toolbar.');
 
         $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
+        sleep(2);
         $this->type('New parra');
-        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should appear in the top toolbar.');
 
         // Check 0l list
