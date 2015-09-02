@@ -1399,7 +1399,7 @@ ViperKeyboardEditorPlugin.prototype = {
                         range.collapse(true);
                         ViperSelection.addRange(range);
                     } else {
-                        range = this.viper.moveCaretAway(nodeSelection);
+                        range = this.viper.moveCaretAway(nodeSelection, true);
                         ViperUtil.remove(nodeSelection);
                         if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
                             && range.startContainer.data === ' '
@@ -1814,7 +1814,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 }
 
                 // Handle deletion of a whole bold/italic/etc tag.
-                range = this.viper.moveCaretAway(nodeSelection);
+                range = this.viper.moveCaretAway(nodeSelection, e.keyCode === 46);
                 ViperUtil.remove(nodeSelection);
                 if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
                     && range.startContainer.data === ' '
