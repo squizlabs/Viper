@@ -130,7 +130,7 @@
     //  Declaration vars
 
     @buttonText-default: #2B2B2B;
-    @buttonText-active: #2B2B2B;
+    @buttonText-active: #FFF;
 
     @buttonBg-default: #FFF;
     @buttonBg-active: #2b7ce0;
@@ -177,7 +177,7 @@
         &.Viper-selected {
             background: @buttonBg-selected;
             border-color: @buttonBorder-selected;
-            color: @buttonText-active;
+            color: @buttonText-default;
 
             .Viper-buttonGroup & + .Viper-button {
                 border-left-color: @buttonBorder-selected;
@@ -187,6 +187,7 @@
         &.Viper-selected.Viper-active {
             background: @buttonBg-selectedActive;
             border-color: @buttonBorder-selectedActive;
+            color: @buttonText-active;
 
             .Viper-buttonGroup & + .Viper-button {
                 border-left-color: @buttonBorder-selectedActive;
@@ -550,7 +551,7 @@
             resize: none;
         }
         &.Viper-disabled {
-            opacity: 0.4;
+            opacity: 0.3;
 
             .Viper-browserVer-msie8 & {
                 filter: ~"alpha(opacity = 40)";
@@ -577,14 +578,6 @@
             -webkit-transition-property: color, background;
             -webkit-transition-duration: 0.3s;
             color: #5A8BD0;
-
-            .Viper-disabled & {
-                opacity: 0.4;
-
-                .Viper-browserVer-msie8 & {
-                    filter: ~"alpha(opacity = 40)";
-                }
-            }
         }
 
         .Viper-textbox.Viper-active .Viper-textbox-label {

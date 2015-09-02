@@ -168,10 +168,9 @@
 
         .ViperITP-lineage,
         .ViperITP-header {
-            font-size: 1.2em;
-            line-height: 1.8em;
+            font-size: 1.3em;
+            line-height: 1.7em;
             margin: 0;
-            padding: 0.1em 0 0;
             list-style: none;
             border-bottom:  1px solid transparent;
             white-space: nowrap;

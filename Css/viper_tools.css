@@ -144,7 +144,7 @@
 .Viper-button.Viper-active {
   background-color: #2b7ce0;
   border-color: #1768cc;
-  color: #2b2b2b;
+  color: #ffffff;
 }
 .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button {
   border-left-color: #1768cc;
@@ -163,6 +163,7 @@
 .Viper-button.Viper-selected.Viper-active {
   background: #1a4c8a;
   border-color: #1a4c8a;
+  color: #ffffff;
 }
 .Viper-buttonGroup .Viper-button.Viper-selected.Viper-active + .Viper-button {
   border-left-color: #1a4c8a;
@@ -649,7 +650,7 @@
   resize: none;
 }
 .Viper-textbox.Viper-disabled {
-  opacity: 0.4;
+  opacity: 0.3;
 }
 .Viper-browserVer-msie8 .Viper-textbox.Viper-disabled {
   filter: alpha(opacity = 40);
@@ -671,12 +672,6 @@
   -webkit-transition-property: color, background;
   -webkit-transition-duration: 0.3s;
   color: #5A8BD0;
-}
-.Viper-disabled .Viper-textbox-label {
-  opacity: 0.4;
-}
-.Viper-browserVer-msie8 .Viper-disabled .Viper-textbox-label {
-  filter: alpha(opacity = 40);
 }
 .Viper-textbox.Viper-active .Viper-textbox-label {
   background: #205caf;
