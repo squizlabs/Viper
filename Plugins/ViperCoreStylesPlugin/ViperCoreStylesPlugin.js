@@ -1087,6 +1087,8 @@ ViperCoreStylesPlugin.prototype = {
             return;
         }
 
+        // TODO: Fix here: <p><em>text*text</em></p>. Press CMD+I, CMD+B and type p will produce extra p character.
+        // E.g. <p><em>text</em>pp<em>text</em></p>.
         var origData = node.data;
         var style    = null;
         var removeStyle = false;
