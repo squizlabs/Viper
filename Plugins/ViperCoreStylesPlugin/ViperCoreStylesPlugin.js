@@ -1029,11 +1029,14 @@ ViperCoreStylesPlugin.prototype = {
         // Remove all formating tags.
         var tmpSpan = null;
         if (nodeSelection) {
-            // Bookmark the selection and wrap the node in to a tmp span incase the node it self gets removed.
-            bookmark = this.viper.createBookmark();
-            tmpSpan = document.createElement('span');
-            ViperUtil.insertBefore(nodeSelection, tmpSpan);
-            tmpSpan.appendChild(nodeSelection);
+            var tagName = ViperUtil.getTagName(nodeSelection);
+            if (ViperUtil.inArray(tagName, tags) === true) {
+                // Bookmark the selection and wrap the node in to a tmp span incase the node it self gets removed.
+                bookmark = this.viper.createBookmark();
+                tmpSpan = document.createElement('span');
+                ViperUtil.insertBefore(nodeSelection, tmpSpan);
+                tmpSpan.appendChild(nodeSelection);
+            }
         }
 
         var tln = tags.length;
