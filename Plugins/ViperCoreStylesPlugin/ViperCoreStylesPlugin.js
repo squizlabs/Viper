@@ -816,7 +816,6 @@ ViperCoreStylesPlugin.prototype = {
     handleHR: function()
     {
         var hr = document.createElement('hr');
-
         this.viper.ViperHistoryManager.begin();
 
         var range = this.viper.getViperRange();
@@ -836,6 +835,15 @@ ViperCoreStylesPlugin.prototype = {
         } else {
             var keyboardEditorPlugin = this.viper.ViperPluginManager.getPlugin('ViperKeyboardEditorPlugin');
             var prev = keyboardEditorPlugin.splitAtRange(true, null);
+            if (ViperUtil.isTag(prev, 'br') === true && prev.nextSibling === null && prev.previousSibling === null) {
+                prev = prev.parentNode;
+                var prevElemSib = prev.previousElementSibling;
+                if (ViperUtil.isTag(prevElemSib, ['ul', 'ol', 'table']) === true) {
+                    // Remove the blank paragraph if its after these tags.
+                    ViperUtil.remove(prev);
+                    prev = prevElemSib;
+                }
+            }
         }
 
         var nextSibling = prev.nextSibling;
