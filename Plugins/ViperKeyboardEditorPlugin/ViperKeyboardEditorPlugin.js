@@ -1164,9 +1164,7 @@ ViperKeyboardEditorPlugin.prototype = {
 
                 if (node.nodeType === ViperUtil.TEXT_NODE) {
                     node.data = node.data.substr(0, node.data.length);
-                }
-
-                if (parent === this.viper.getViperElement()) {
+                } else if (parent === this.viper.getViperElement()) {
                     node = range._getFirstSelectableChild(parent, true);
                     if (!node) {
                         this.viper.initEditableElement();
