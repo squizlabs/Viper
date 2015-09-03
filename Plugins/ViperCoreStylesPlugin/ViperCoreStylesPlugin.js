@@ -1574,7 +1574,7 @@ ViperCoreStylesPlugin.prototype = {
             activeStates.alignment = null;
 
             var startParent = null;
-            if (!selectedNode || ViperUtil.isBlockElement(selectedNode) === false) {
+            if (!selectedNode || selectedNode === viperElement || ViperUtil.isBlockElement(selectedNode) === false) {
                 startParent = ViperUtil.getFirstBlockParent(startNode);
             } else {
                 startParent = selectedNode;
