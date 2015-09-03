@@ -28,7 +28,7 @@ function ViperToolbarPlugin(viper)
     var self           = this;
     var clickedOutside = false;
     this.viper.registerCallback('Viper:selectionChanged', 'ViperToolbarPlugin', function(range) {
-        if (clickedOutside === true || self.viper.rangeInViperBounds(range) === false) {
+        if (clickedOutside === true || self.viper.rangeInViperBounds(range) === false) {console.info(range);
             return;
         }
 

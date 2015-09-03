@@ -797,6 +797,16 @@ ViperKeyboardEditorPlugin.prototype = {
     {
         var range = this.viper.getViperRange();
 
+        if (this._isWholeViperElementSelected(range) === true) {
+            // The whole Viper element is selected, remove all of its content
+            // and then initialise the Viper element.
+            ViperUtil.setHtml(this.viper.getViperElement(), '');
+            this.viper.initEditableElement();
+            this.viper.fireNodesChanged();
+            this.viper.fireSelectionChanged(null, true);
+            return false;
+        }
+
         if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true) {
             // Latest Chrome versions have strange issue with all content deletion, handle it in another method.
             return this._handleDeleteForWebkit(e, range);
@@ -1156,10 +1166,20 @@ ViperKeyboardEditorPlugin.prototype = {
                     node.data = node.data.substr(0, node.data.length);
                 }
 
+                if (parent === this.viper.getViperElement()) {
+                    node = range._getFirstSelectableChild(parent, true);
+                    if (!node) {
+                        this.viper.initEditableElement();
+                        node = range._getFirstSelectableChild(parent, true);
+                    }
+                }
+
                 range.setEnd(node, startOffset);
                 range.collapse(false);
                 ViperSelection.addRange(range);
 
+                this.viper.fireNodesChanged();
+                this.viper.fireSelectionChanged(null, true);
                 return false;
             } else if (!range.startContainer.previousSibling) {
                 return false;
