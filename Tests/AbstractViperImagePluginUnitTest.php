@@ -32,7 +32,7 @@ abstract class AbstractViperImagePluginUnitTest extends AbstractViperUnitTest
         return $imageRect;
     }//end resizeImage()
 
-    
+
     /**
      * Asserts that the resize handles are in the correct position for selected image.
      *
@@ -92,11 +92,20 @@ abstract class AbstractViperImagePluginUnitTest extends AbstractViperUnitTest
             $showDesktopShortcut = 'Key.F11';
             $imageFilePath      .= '/Images/dragDropTargetingImage-osx.png';
         }
+
         // Hide all windows to view the desktop.
         $this->sikuli->keyDown($showDesktopShortcut);
         sleep(1);
-        // Find the target image.
-        $match = $this->sikuli->find($imageFilePath, -1, 0.6);
+
+        try {
+            // Find the target image.
+            $match = $this->sikuli->find($imageFilePath, -1, 0.6);
+        } catch (Exception $e) {
+            // Show the browser again.
+            $this->sikuli->keyDown($showDesktopShortcut);
+            return false;
+        }
+
         // Start drag operation.
         $this->sikuli->drag($match);
         $this->sikuli->mouseMoveOffset(30, 30);
