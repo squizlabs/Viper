@@ -149,11 +149,12 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>%1%<strong>test</strong></p>');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1% <strong>test</strong></p>');
 
         // Add content to check the position of the cursor
         $this->type('content');
-        $this->assertHTMLMatch('<p>%1%<strong>test</strong>content</p>');
+        $this->assertHTMLMatch('<p>%1% <strong>testcontent</strong></p>');
 
         // Check deleting from the end of the paragraph including bold content
         $this->useTest(4);
@@ -169,11 +170,23 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
         $this->type('content');
         $this->assertHTMLMatch('<p>%1%content</p>');
 
+        // Check deleting from the start of the paragraph
+        $this->useTest(4);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p><strong>test</strong> %2%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p><strong>contenttest</strong> %2%</p>');
+
         // Check deleting from the start of the paragraph including bold content
         $this->useTest(4);
         $this->moveToKeyword(1, 'left');
 
-        for ($i = 0; $i < 7; $i++) {
+        for ($i = 0; $i < 8; $i++) {
             $this->sikuli->keyDown('Key.DELETE');
         }
 
@@ -199,11 +212,12 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>%1%<em>test</em></p>');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1% <em>test</em></p>');
 
         // Add content to check the position of the cursor
         $this->type('content');
-        $this->assertHTMLMatch('<p>%1%<em>test</em>content</p>');
+        $this->assertHTMLMatch('<p>%1% <em>testcontent</em></p>');
 
         // Check deleting from the end of the paragraph including italic content
         $this->useTest(5);
@@ -219,11 +233,23 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
         $this->type('content');
         $this->assertHTMLMatch('<p>%1%content</p>');
 
+        // Check deleting from the start of the paragraph
+        $this->useTest(5);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p><em>test</em> %2%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p><em>contenttest</em> %2%</p>');
+
         // Check deleting from the start of the paragraph including italic content
         $this->useTest(5);
         $this->moveToKeyword(1, 'left');
 
-        for ($i = 0; $i < 7; $i++) {
+        for ($i = 0; $i < 8; $i++) {
             $this->sikuli->keyDown('Key.DELETE');
         }
 
