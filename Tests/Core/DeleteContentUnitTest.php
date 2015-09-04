@@ -98,4 +98,141 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
     }//end testDeletingContentBeforeBRTag()
 
 
+    /**
+     * Test deleting a paragraph by pressing backspace and delete.
+     *
+     * @return void
+     */
+    public function testDeletingParagraph()
+    {
+        // Check deleting a paragraph with backspace
+        $this->useTest(3);
+        $this->moveToKeyword(2, 'right');
+
+        for ($i = 0; $i < 12; $i++) {
+            $this->sikuli->keyDown('Key.BACKSPACE');
+        }
+
+        $this->assertHTMLMatch('<p>some content</p><p>a</p>');
+
+        // Add content to check the position of the cursor
+        $this->type(' New content in paragraph');
+        $this->assertHTMLMatch('<p>some content</p><p>a New content in paragraph</p>');
+
+        // Check deleting a paragraph with delete
+        $this->useTest(3);
+        $this->moveToKeyword(1, 'left');
+
+        for ($i = 0; $i < 12; $i++) {
+            $this->sikuli->keyDown('Key.DELETE');
+        }
+
+        $this->assertHTMLMatch('<p>some content</p><p>a</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('New content in paragraph');
+        $this->assertHTMLMatch('<p>some content</p><p>a</p><p>New content in paragraph</p>');
+
+    }//end testDeletingParagraph()
+
+
+    /**
+     * Test deleting content including content with bold formatting
+     *
+     * @return void
+     */
+    public function testDeletingContentWithBoldFormatting()
+    {
+        // Check deleting a word after the bold content
+        $this->useTest(4);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1%<strong>test</strong></p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>%1%<strong>test</strong>content</p>');
+
+        // Check deleting from the end of the paragraph including bold content
+        $this->useTest(4);
+        $this->moveToKeyword(2, 'right');
+
+        for ($i = 0; $i < 8; $i++) {
+            $this->sikuli->keyDown('Key.BACKSPACE');
+        }
+
+        $this->assertHTMLMatch('<p>%1%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>%1%content</p>');
+
+        // Check deleting from the start of the paragraph including bold content
+        $this->useTest(4);
+        $this->moveToKeyword(1, 'left');
+
+        for ($i = 0; $i < 7; $i++) {
+            $this->sikuli->keyDown('Key.DELETE');
+        }
+
+        $this->assertHTMLMatch('<p>%2%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>content%2%</p>');
+
+    }//end testDeletingContentWithBoldFormatting()
+
+
+    /**
+     * Test deleting content including content with italic formatting
+     *
+     * @return void
+     */
+    public function testDeletingContentWithItalicFormatting()
+    {
+        // Check deleting a word after the italic content
+        $this->useTest(5);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1%<em>test</em></p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>%1%<em>test</em>content</p>');
+
+        // Check deleting from the end of the paragraph including italic content
+        $this->useTest(5);
+        $this->moveToKeyword(2, 'right');
+
+        for ($i = 0; $i < 8; $i++) {
+            $this->sikuli->keyDown('Key.BACKSPACE');
+        }
+
+        $this->assertHTMLMatch('<p>%1%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>%1%content</p>');
+
+        // Check deleting from the start of the paragraph including italic content
+        $this->useTest(5);
+        $this->moveToKeyword(1, 'left');
+
+        for ($i = 0; $i < 7; $i++) {
+            $this->sikuli->keyDown('Key.DELETE');
+        }
+
+        $this->assertHTMLMatch('<p>%2%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>content%2%</p>');
+
+    }//end testDeletingContentWithItalicFormatting()
+
 }//end class
