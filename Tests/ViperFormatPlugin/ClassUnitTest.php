@@ -5,52 +5,6 @@ require_once 'AbstractViperUnitTest.php';
 class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 {
 
-
-    /**
-     * Returns the selected styles.
-     *
-     * @return array
-     */
-    private function getSelectedStyles()
-    {
-        return $this->sikuli->execJS('viper.ViperTools.getItem(\'ViperFormatPlugin-classList\').getSelectedItems()');
-
-    }//end getSelectedStyles()
-
-
-    /**
-     * Selects the specified styles.
-     *
-     * @param array $styles Array of class names separated by spaces.
-     *
-     * @return void
-     */
-    private function selectStyles(array $styles)
-    {
-        $this->clickElement('.ViperFormatPlugin-stylePickerButton');
-        foreach ($styles as $classNames) {
-            $this->clickElement('li[data-id="'.$classNames.'"]');
-        }
-
-    }//end selectStyles()
-
-
-    /**
-     * Removes the specified styles.
-     *
-     * @param array $styles Array of class names separated by spaces.
-     *
-     * @return void
-     */
-    private function removeStyles(array $styles)
-    {
-        foreach ($styles as $classNames) {
-            $this->clickElement('.Viper-visible .ViperFormatPlugin-styleListItem-remove[data-id="'.$classNames.'"]');
-        }
-
-    }//end removeStyles()
-
-
     /**
      * Test that you can add the class attribute to a word.
      *
@@ -550,21 +504,23 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
     {
         $this->useTest(1);
         $this->selectKeyword(1);
-        $this->clickInlineToolbarButton('bold');
         $this->clickInlineToolbarButton('italic');
+        sleep(1);
+        $this->clickInlineToolbarButton('bold');
+        sleep(1);
 
         // Select bold in the lineage
         $this->selectInlineToolbarLineageItem(1);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>This is some content<strong class="test"><em>%1%</em></strong> in my unit test %2%</p>');
+        $this->assertHTMLMatch('<p>This is some content <em class="test"><strong>XAX</strong></em> in my unit test XBX</p>');
 
         // Check that the class field stayed open in the inline toolbar has remaind open with the class field
         $this->clickField('Class');
         $this->type('class');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>This is some content <strong class="testclass"><em>%1%</em></strong> in my unit test %2%</p>');
+        $this->assertHTMLMatch('<p>This is some content <em class="testclass"><strong>XAX</strong></em> in my unit test XBX</p>');
 
     }//end testClassFieldRemainsOpenAfterApplyingBoldAndItalic()
 
@@ -798,7 +754,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Content with an image</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" class="test"/></p><p>End of content</p>');
+        $this->assertHTMLMatch('<p>Content with an image %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" class="test"/></p><p>End of content</p>');
 
         // Edit the class using the inline toolbar
         $this->clickElement('img');
@@ -806,17 +762,17 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->type('myclass');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Content with an image</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" class="testmyclass"/></p><p>End of content</p>');
+        $this->assertHTMLMatch('<p>Content with an image %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" class="testmyclass"/></p><p>End of content</p>');
 
         // Add a class using the top toolbar
         $this->useTest(8);
-
+        $this->clickKeyword(1);
         $this->clickElement('img');
         sleep(1);
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Content with an image</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" class="test"/></p><p>End of content</p>');
+        $this->assertHTMLMatch('<p>Content with an image %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" class="test"/></p><p>End of content</p>');
 
         // Edit the class using the top toolbar
         $this->clickElement('img');
@@ -824,7 +780,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->type('myclass');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Content with an image</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" class="testmyclass"/></p><p>End of content</p>');
+        $this->assertHTMLMatch('<p>Content with an image %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" class="testmyclass"/></p><p>End of content</p>');
 
     }//end testApplyingAClassToAnImage()
 
@@ -1118,52 +1074,5 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<p>This is some content <span class="myclass123">%1%</span> with classes applied %2%.</p>');
 
     }//end testApplyChangesButtonIsDisabledAfterCancellingChangesToAClass()
-
-
-    /**
-     * Test that custom styles can be set and selected.
-     *
-     * @return void
-     */
-    public function testCustomStyles()
-    {
-        $this->useTest(1);
-
-        $this->setPluginSettings(
-            'ViperFormatPlugin',
-            array(
-             'styles' => array(
-                          'Simple Image Border' => array(
-                                                    'showFor'    => 'img,h1',
-                                                    'hideFor'    => '*',
-                                                    'classNames' => 'simple-image-border',
-                                                   ),
-                          'Article'             => array(
-                                                    'classNames' => 'article',
-                                                    'showFor'    => 'p',
-                                                   ),
-                          'Multi Columns'       => array(
-                                                    'classNames' => 'multi-col',
-                                                    'hideFor'    => 'text-selection,img',
-                                                   ),
-                          'Caption'             => 'simple-image-border image-caption',
-                          'Round Image'         => 'round-image',
-                          'Ordered List'        => 'ordered-list',
-                         ),
-            )
-        );
-
-        $this->selectKeyword(1);
-        sleep(1);
-        $this->clickInlineToolbarButton('cssClass');
-
-        $this->selectStyles(array('ordered-list', 'simple-image-border image-caption'));
-
-        $selectedStyles = $this->getSelectedStyles();
-
-        $this->removeStyles($selectedStyles);
-
-    }//end testCustomStyles()
-
 
 }//end class

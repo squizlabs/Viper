@@ -375,6 +375,15 @@
   padding-bottom: 5px;
 }
 
+.Matrix-Viper-commentdialog-reply-comment-showMore {
+  padding-top: 2px;
+}
+.Matrix-Viper-commentdialog-reply-comment-showMore a{
+  color: rgb(5, 131, 219);
+  text-decoration: none;
+}
+
+
 .Matrix-Viper-commentdialog-replyCommentTextArea {
   font-family: arial, helvetica, sans-serif;
   font-size: 12px;

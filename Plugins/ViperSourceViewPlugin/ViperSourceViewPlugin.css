@@ -120,20 +120,45 @@
 }
 
 .VSVP-source .ace_search_form,
-.VSVP-source .ace_replace_form {
+.VSVP-source .ace_replace_form .ace_search_field {
     border-color: #767676;
 }
 
-.VSVP-source .ace_search_options .ace_button {
+.VSVP-source .ace_replace_form .ace_search_field {
+    border-color: #767676;
+    border: 1px solid #767676;
+    border-radius: 3px;
+}
+
+.VSVP-source .ace_replace_form {
+    border-color: transparent;
+    border-bottom: 1px solid #676767;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+}
+
+.VSVP-source .ace_search_options .ace_button,
+.VSVP-source .ace_replace_form .ace_replacebtn {
     border-color: #606060;
     border-radius: 2px;
     padding: 0 3px;
+    margin: 0 2px;
+    background-color: rgba(0, 0, 0, 0);
+    border: 1px solid #666;
 }
 
 .VSVP-source .ace_search_options .ace_button.checked {
     background-color: #3784EE;
     color: #FFF;
     border-color: #1760CA;
+}
+
+.VSVP-source .ace_replace_form .ace_search_field {
+    width: 217px;
+}
+
+.Viper-browser-firefox .VSVP-source .ace_replace_form .ace_search_field {
+    width: 205px;
 }
 
 /* Source Scroller for webkit */

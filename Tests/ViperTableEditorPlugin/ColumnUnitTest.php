@@ -16,12 +16,14 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->useTest(1);
 
         $this->insertTable(1);
-        $this->showTools(0, 'col');
+        sleep(1);
+        $this->showTools(1, 'col');
+        sleep(1);
 
         $this->assertTrue($this->inlineToolbarButtonExists('tableSettings', 'selected'));
         $this->assertTrue($this->inlineToolbarButtonExists('addLeft'));
         $this->assertTrue($this->inlineToolbarButtonExists('addRight'));
-        $this->assertTrue($this->inlineToolbarButtonExists('mergeLeft', 'disabled'));
+        $this->assertTrue($this->inlineToolbarButtonExists('mergeLeft'));
         $this->assertTrue($this->inlineToolbarButtonExists('mergeRight'));
         $this->assertTrue($this->inlineToolbarButtonExists('delete'));
         $this->assertTrue($this->fieldExists('Width'));
@@ -47,14 +49,14 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->clickField('Width');
         $this->type('50');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th style="width: 50px;"></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th style="width: 50px;"></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         // Change the width of the last column and press enter
         $this->showTools(3, 'col');
         $this->clickField('Width');
         $this->type('100');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th style="width: 50px;"></th><th></th><th></th><th style="width: 100px;"></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th style="width: 50px;"></th><th></th><th></th><th style="width: 100px;"></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
     }//end testChangingColumnWidth()
 
@@ -76,13 +78,13 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->type('50');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->moveToKeyword(1);
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th style="width: 50px;"></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th style="width: 50px;"></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th style="width: 50px;"></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th style="width: 50px;"></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
     }//end testChangingColumnWidthAndClickingUndo()
 
@@ -112,29 +114,29 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->clickInlineToolbarButton('addRight');
         // Add a new column before the third column of the table
         $this->clickInlineToolbarButton('addLeft');
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><td>One</td><td>Two</td><td></td><td>Three</td><td></td><td>Four</td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><td>One</td><td>Two</td><td></td><td>Three</td><td></td><td>Four</td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         // Delete the third column
         $this->showTools(2, 'col');
         $this->clickInlineToolbarButton('delete');
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><td>One</td><td>Two</td><td>Three</td><td></td><td>Four</td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><td>One</td><td>Two</td><td>Three</td><td></td><td>Four</td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         // Move the second column left
         $this->showTools(2, 'col');
         $this->clickInlineToolbarButton('mergeLeft');
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><td>One</td><td>Three</td><td>Two</td><td></td><td>Four</td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><td>One</td><td>Three</td><td>Two</td><td></td><td>Four</td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         // Move the third column right
         $this->showTools(2, 'col');
         $this->clickInlineToolbarButton('mergeRight');
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><td>One</td><td>Three</td><td></td><td>Two</td><td>Four</td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><td>One</td><td>Three</td><td></td><td>Two</td><td>Four</td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         // Change the first colum to be a header column
         $this->showTools(0, 'col');
         $this->clickField('Heading');
         sleep(1);
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th>One</th><td>Three</td><td></td><td>Two</td><td>Four</td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th>One</th><td>Three</td><td></td><td>Two</td><td>Four</td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
     }//end testColumnsInANewTableWithoutHeaders()
 
@@ -165,36 +167,36 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         //Add a new column after the first column of the table
         $this->showTools(0, 'col');
         $this->clickInlineToolbarButton('addRight');
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th>One</th><th></th><td></td><td>Two</td><td>Three</td><td>Four</td></tr><tr><th></th><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><th></th><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th>One</th><th></th><td></td><td>Two</td><td>Three</td><td>Four</td></tr><tr><th></th><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><th></th><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         //Delete the second column
         $this->showTools(1, 'col');
         $this->clickInlineToolbarButton('delete');
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th>One</th><td></td><td>Two</td><td>Three</td><td>Four</td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th>One</th><td></td><td>Two</td><td>Three</td><td>Four</td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         // Move the third column left
         $this->showTools(2, 'col');
         $this->clickInlineToolbarButton('mergeLeft');
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th>One</th><td>Two</td><td></td><td>Three</td><td>Four</td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th>One</th><td>Two</td><td></td><td>Three</td><td>Four</td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         // Move the third column right
         $this->showTools(2, 'col');
         $this->clickInlineToolbarButton('mergeRight');
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th>One</th><td>Two</td><td>Three</td><td></td><td>Four</td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><th>One</th><td>Two</td><td>Three</td><td></td><td>Four</td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         // Change the first colum not to be a header column
         $this->showTools(0, 'col');
         $this->clickField('Heading');
         sleep(1);
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><td>One</td><td>Two</td><td>Three</td><td></td><td>Four</td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><td>One</td><td>Two</td><td>Three</td><td></td><td>Four</td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         // Change the third colum not to be a header column
         $this->showTools(2, 'col');
         $this->clickField('Heading');
         sleep(1);
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><td>One</td><td>Two</td><th>Three</th><td></td><td>Four</td></tr><tr><td></td><td></td><th></th><td></td><td></td></tr><tr><td></td><td></td><th></th><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><td>One</td><td>Two</td><th>Three</th><td></td><td>Four</td></tr><tr><td></td><td></td><th></th><td></td><td></td></tr><tr><td></td><td></td><th></th><td></td><td></td></tr></tbody></table>');
 
 
     }//end testColumnsInANewTableWithLeftHeaders()
@@ -227,36 +229,36 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->showTools(0, 'col');
         $this->clickInlineToolbarButton('addRight');
 
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th></th><th></th><th>Two</th><th>Three</th><th>Four</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th></th><th></th><th>Two</th><th>Three</th><th>Four</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         //Delete the second column
         $this->showTools(1, 'col');
         $this->clickInlineToolbarButton('delete');
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th></th><th>Two</th><th>Three</th><th>Four</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th></th><th>Two</th><th>Three</th><th>Four</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         // Move the third column left
         $this->showTools(2, 'col');
         $this->clickInlineToolbarButton('mergeLeft');
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th>Two</th><th></th><th>Three</th><th>Four</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th>Two</th><th></th><th>Three</th><th>Four</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         // Move the third column right
         $this->showTools(2, 'col');
         $this->clickInlineToolbarButton('mergeRight');
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th>Two</th><th>Three</th><th></th><th>Four</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th>Two</th><th>Three</th><th></th><th>Four</th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         // Change the first colum to be a header column
         $this->showTools(0, 'col');
         $this->clickField('Heading');
         sleep(1);
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th>Two</th><th>Three</th><th></th><th>Four</th></tr></thead><tbody><tr><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th>Two</th><th>Three</th><th></th><th>Four</th></tr></thead><tbody><tr><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         // Change the third colum to be a header column
         $this->showTools(2, 'col');
         $this->clickField('Heading');
         sleep(1);
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th>Two</th><th>Three</th><th></th><th>Four</th></tr></thead><tbody><tr><th></th><td></td><th></th><td></td><td></td></tr><tr><th></th><td></td><th></th><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th>Two</th><th>Three</th><th></th><th>Four</th></tr></thead><tbody><tr><th></th><td></td><th></th><td></td><td></td></tr><tr><th></th><td></td><th></th><td></td><td></td></tr></tbody></table>');
 
     }//end testColumnsInANewTableWithTopHeaders()
 
@@ -288,36 +290,36 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         //Add a new column after the first column of the table
         $this->showTools(0, 'col');
         $this->clickInlineToolbarButton('addRight');
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th></th><th></th><th>Two</th><th>Three</th><th>Four</th></tr></thead><tbody><tr><th></th><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><th></th><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th></th><th></th><th>Two</th><th>Three</th><th>Four</th></tr></thead><tbody><tr><th></th><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><th></th><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         //Delete the second column
         $this->showTools(1, 'col');
         $this->clickInlineToolbarButton('delete');
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th></th><th>Two</th><th>Three</th><th>Four</th></tr></thead><tbody><tr><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th></th><th>Two</th><th>Three</th><th>Four</th></tr></thead><tbody><tr><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         // Move the third column left
         $this->showTools(2, 'col');
         $this->clickInlineToolbarButton('mergeLeft');
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th>Two</th><th></th><th>Three</th><th>Four</th></tr></thead><tbody><tr><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th>Two</th><th></th><th>Three</th><th>Four</th></tr></thead><tbody><tr><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         // Move the third column right
         $this->showTools(2, 'col');
         $this->clickInlineToolbarButton('mergeRight');
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th>Two</th><th>Three</th><th></th><th>Four</th></tr></thead><tbody><tr><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th>Two</th><th>Three</th><th></th><th>Four</th></tr></thead><tbody><tr><th></th><td></td><td></td><td></td><td></td></tr><tr><th></th><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         // Change the third colum to be a header column
         $this->showTools(2, 'col');
         $this->clickField('Heading');
         sleep(1);
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th>Two</th><th>Three</th><th></th><th>Four</th></tr></thead><tbody><tr><th></th><td></td><th></th><td></td><td></td></tr><tr><th></th><td></td><th></th><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th>One</th><th>Two</th><th>Three</th><th></th><th>Four</th></tr></thead><tbody><tr><th></th><td></td><th></th><td></td><td></td></tr><tr><th></th><td></td><th></th><td></td><td></td></tr></tbody></table>');
 
         // Change the first colum not to be a header column
         $this->showTools(0, 'col');
         $this->clickField('Heading');
         sleep(1);
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><td>One</td><th>Two</th><th>Three</th><th></th><th>Four</th></tr></thead><tbody><tr><td></td><td></td><th></th><td></td><td></td></tr><tr><td></td><td></td><th></th><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><td>One</td><th>Two</th><th>Three</th><th></th><th>Four</th></tr></thead><tbody><tr><td></td><td></td><th></th><td></td><td></td></tr><tr><td></td><td></td><th></th><td></td><td></td></tr></tbody></table>');
 
 
     }//end testColumnsInANewTableWithBothHeaders()
@@ -369,7 +371,7 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
     public function testColspanChangesWhenYouDeleteTheFirstColumnOfMergedCell()
     {
         $this->useTest(4);
-        
+
         $this->showTools(5, 'col');
         $this->clickInlineToolbarButton('delete');
         $this->assertHTMLMatchNoHeaders('<table style="width: 300px;" border="1" cellspacing="2" cellpadding="2"><tbody><tr><td style="width: 100px;" colspan="2">Survey</td><td rowspan="2">All Genders</td><td style="width: 100px;">By Gender</td></tr><tr><td></td><td></td><td>Females</td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>');
@@ -388,20 +390,25 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
         $this->useTest(1);
 
         $this->insertTable(1);
+        sleep(1);
         $this->showTools(0, 'col');
+        sleep(1);
 
         $this->assertTrue($this->inlineToolbarButtonExists('mergeRight'), 'Move column right should be enabled');
         $this->assertTrue($this->inlineToolbarButtonExists('mergeLeft', 'disabled'), 'Move column left should not be enabled');
 
         $this->showTools(3, 'col');
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('mergeRight', 'disabled'), 'Move column right should not be enabled');
         $this->assertTrue($this->inlineToolbarButtonExists('mergeLeft'), 'Move column left should be enabled');
 
         $this->showTools(2, 'col');
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('mergeRight'), 'Move column right should be enabled');
         $this->assertTrue($this->inlineToolbarButtonExists('mergeLeft'), 'Move column left should be enabled');
 
         $this->showTools(1, 'col');
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('mergeRight'), 'Move column right should be enabled');
         $this->assertTrue($this->inlineToolbarButtonExists('mergeLeft'), 'Move column left should be enabled');
 
@@ -419,17 +426,17 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
 
         $this->insertTableWithSpecificId('test', 3, 4, 1, 1);
 
-        $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1"></th><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td></tr><tr><th id="testr2c1"></th><td headers="testr2c1"></td><td headers="testr2c1"></td><td headers="testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr3c1"></td><td headers="testr3c1"></td><td headers="testr3c1"></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1"></th><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td></tr><tr><th id="testr2c1"></th><td headers="testr2c1"></td><td headers="testr2c1"></td><td headers="testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr3c1"></td><td headers="testr3c1"></td><td headers="testr3c1"></td></tr></tbody></table>');
 
         $this->showTools(0, 'col');
         $this->clickField('Heading');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         $this->clickField('Heading');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
 
-        $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1"></th><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td></tr><tr><th id="testr2c1"></th><td headers="testr2c1"></td><td headers="testr2c1"></td><td headers="testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr3c1"></td><td headers="testr3c1"></td><td headers="testr3c1"></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1"></th><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td></tr><tr><th id="testr2c1"></th><td headers="testr2c1"></td><td headers="testr2c1"></td><td headers="testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr3c1"></td><td headers="testr3c1"></td><td headers="testr3c1"></td></tr></tbody></table>');
 
     }//end testHeaderIdsRemovedWhenYouRemoveHeaderColumn()
 
@@ -445,20 +452,20 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
 
         $this->insertTableWithSpecificId('test', 3, 4, 1, 1);
 
-        $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1"></th><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td></tr><tr><th id="testr2c1"></th><td headers="testr2c1"></td><td headers="testr2c1"></td><td headers="testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr3c1"></td><td headers="testr3c1"></td><td headers="testr3c1"></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1"></th><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td></tr><tr><th id="testr2c1"></th><td headers="testr2c1"></td><td headers="testr2c1"></td><td headers="testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr3c1"></td><td headers="testr3c1"></td><td headers="testr3c1"></td></tr></tbody></table>');
 
         $this->showTools(0, 'col');
         $this->clickField('Heading');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('historyUndo');
 
-        $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1"></th><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td></tr><tr><th id="testr2c1"></th><td headers="testr2c1"></td><td headers="testr2c1"></td><td headers="testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr3c1"></td><td headers="testr3c1"></td><td headers="testr3c1"></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><th id="testr1c1"></th><td headers="testr1c1"></td><td headers="testr1c1"></td><td headers="testr1c1"></td></tr><tr><th id="testr2c1"></th><td headers="testr2c1"></td><td headers="testr2c1"></td><td headers="testr2c1"></td></tr><tr><th id="testr3c1"></th><td headers="testr3c1"></td><td headers="testr3c1"></td><td headers="testr3c1"></td></tr></tbody></table>');
 
         $this->clickTopToolbarButton('historyRedo');
 
-        $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p></p>');
+        $this->assertHTMLMatch('<p>Test %1%</p><table style="width: 100%;" id="test" border="1"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
     }//end testUndoRedoForHeaderToNormalCellConversion()
 

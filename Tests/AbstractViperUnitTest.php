@@ -196,13 +196,6 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             self::$_viperVersion = $this->_getGitCommitid();
         }
 
-        // Reset the Sikuli connection and restart the browser if the number of consecutive errors reach the limit.
-        if (ViperTestListener::getErrorStreak() >= self::$_maxErrorStreak) {
-            $this->resetConnection();
-            $this->sikuli->restartBrowser();
-            ViperTestListener::resetErrorStreak();
-        }
-
         // Get the contents of the test file template.
         if (self::$_testContent === null) {
             self::$_testContent = file_get_contents($baseDir.'/Web/test-template.html');
@@ -227,6 +220,14 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $numErrors  = ViperTestListener::getErrors();
         $totalTests = ViperTestListener::getNumberOfTests();
         $testsRun   = ViperTestListener::getTestsRun();
+
+        // Reset the Sikuli connection and restart the browser if the number of consecutive errors reach the limit or
+        // every 100 tests.
+        if (ViperTestListener::getErrorStreak() >= self::$_maxErrorStreak || ($testsRun % 100) === 0) {
+            $this->resetConnection();
+            $this->sikuli->restartBrowser();
+            ViperTestListener::resetErrorStreak();
+        }
 
         ViperTestListener::setSikuli($this->sikuli);
         ViperTestListener::setFilter(getenv('VIPER_TEST_FILTER'));
@@ -257,6 +258,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $this->sikuli->setClickDelay(250);
         }
 
+        // Reset zoom.
+        $this->sikuli->keyDown('Key.CMD + 0');
+
         // Change browser and then change the URL.
         if (self::$_testRun === true) {
             // URL is already changed to the test runner, so just reload.
@@ -280,14 +284,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 }
             }
 
-            /*
-                $matches = $this->sikuli->findAll(dirname(__FILE__).'/Web/favicon.png', NULL, 0.9);
-                if (empty($matches) === FALSE) {
-                $match = array_pop($matches);
-                $this->sikuli->click($match);
-            } else {*/
-                $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
-            // }
+            $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
             $this->sikuli->setAutoWaitTimeout(1);
             $this->_waitForViper();
 
@@ -722,7 +719,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             }
         }
 
-        for ($similarity = 0.93; $similarity < 0.99; $similarity += 0.01) {
+        for ($similarity = 0.92; $similarity < 0.97; $similarity += 0.01) {
             // Find each of the icons, if any fails it will throw an exception.
             $regions = array();
             foreach ($statuses as $status => $className) {
@@ -741,6 +738,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                         }
 
                         $regions[$loc] = $buttonName;
+
+                        // Prevent screensaver turning on.
+                        $this->sikuli->keyDown('Key.ESC');
                     } catch (Exception $e) {
                         continue(3);
                     }
@@ -750,7 +750,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             break;
         }//end for
 
-        $this->addData('buttonSimmilarity', $similarity);
+        $this->addData('buttonSimmilarity', number_format($similarity, 2, '.', ''));
 
     }//end _calibrateIcons()
 
@@ -1640,17 +1640,18 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      * Selector must be given so that the first time the image is found using the
      * selector and the next time using the Sikuli image matching.
      *
-     * @param string  $imageName Name of the image.
-     * @param string  $selector  The jQuery selector to use for finding the element.
-     * @param integer $index     The element index of the resulting array.
+     * @param string  $imageName   Name of the image.
+     * @param string  $selector    The jQuery selector to use for finding the element.
+     * @param integer $index       The element index of the resulting array.
+     * @param boolean $forceUpdate Ignores the cached image.
      *
      * @return string
      */
-    protected function findImage($imageName, $selector, $index=0)
+    protected function findImage($imageName, $selector, $index=0, $forceUpdate=false)
     {
         $filePath = $this->getBrowserImagePath().'/'.$imageName.'.png';
 
-        if (file_exists($filePath) === true) {
+        if ($forceUpdate !== true && file_exists($filePath) === true) {
             return $this->sikuli->find($filePath);
         } else {
             $elemRect = $this->getBoundingRectangle($selector, $index);
@@ -2286,8 +2287,15 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $this->sikuli->keyDown('Key.CMD + v');
         } else {
             $this->sikuli->rightClick($this->sikuli->getMouseLocation());
-            $this->sikuli->keyDown('p');
-            $this->sikuli->keyDown('Key.ENTER');
+
+            if ($this->sikuli->getBrowserid() === 'safari') {
+                $this->sikuli->keyDown('Key.DOWN');
+                $this->sikuli->keyDown('Key.ENTER');
+            } else {
+                $this->sikuli->keyDown('p');
+                $this->sikuli->keyDown('Key.ENTER');
+            }//end if
+
         }//end if
 
     }//end paste()
@@ -2308,24 +2316,6 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
 
     /**
-     * Finds the location of right click paste div and right clicks the paste frame.
-     *
-     * @return void
-     */
-    private function _rightClickPasteDiv()
-    {
-        $targetIcon = $this->sikuli->find(dirname(dirname(__FILE__)).'/Core/Images/window-target2.png');
-        $topLeft    = $this->sikuli->getTopLeft($targetIcon);
-        $loc        = array(
-                       'x' => ($this->sikuli->getX($topLeft) + 50),
-                       'y' => ($this->sikuli->getY($topLeft) + 100),
-                      );
-        $this->sikuli->rightClick($this->sikuli->createLocation($loc['x'], $loc['y']));
-
-    }//end _rightClickPasteDiv()
-
-
-    /**
      * Cut content.
      *
      * Note that if right click is being used then make sure to move the mouse to the
@@ -2340,13 +2330,12 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     protected function cut($rightClick=false)
     {
         if ($rightClick !== true) {
-            $this->sikuli->keyDown('Key.CMD + c');
+            $this->sikuli->keyDown('Key.CMD + x');
         } else {
             $this->sikuli->rightClick($this->sikuli->getMouseLocation());
 
             switch ($this->sikuli->getBrowserid()) {
                 case 'firefox':
-                case 'firefoxNightly':
                 case 'ie11':
                 case 'ie10':
                 case 'ie9':
@@ -2356,8 +2345,6 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 break;
 
                 case 'chrome':
-                case 'chromium':
-                case 'chromeCanary':
                 case 'safari':
                     // Use the shortcut menu to select the menu option and then move the mouse up to cut.
                     $this->sikuli->keyDown('c');
@@ -2373,6 +2360,51 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         }//end if
 
     }//end cut()
+
+
+    /**
+     * Copy content.
+     *
+     * Note that if right click is being used then make sure to move the mouse to the
+     * target location before calling this method.
+     *
+     * @param boolean $rightClick If TRUE then contents will be copied using the
+     *                            browser's right click menu.
+     *
+     * @return void
+     * @throws Exception If the browser is not supported.
+     */
+    protected function copy($rightClick=false)
+    {
+        if ($rightClick !== true) {
+            $this->sikuli->keyDown('Key.CMD + c');
+        } else {
+            $this->sikuli->rightClick($this->sikuli->getMouseLocation());
+
+            switch ($this->sikuli->getBrowserid()) {
+                case 'firefox':
+                case 'ie11':
+                case 'ie10':
+                case 'ie9':
+                case 'ie8':
+                    // Use the shortcut to select the copy menu option.
+                    $this->sikuli->keyDown('c');
+                break;
+
+                case 'chrome':
+                case 'safari':
+                    // Use the shortcut menu to select the menu option and then move the mouse up to copy.
+                    $this->sikuli->keyDown('c');
+                    sleep(2);
+                    $this->sikuli->keyDown('Key.ENTER');
+                break;
+
+                default:
+                throw new Exception('Right click testing for this browser has not been implemented');
+            }//end switch
+        }//end if
+
+    }//end copy()
 
 
     /**
@@ -2512,6 +2544,38 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $this->clickElement('.ViperCursorAssistPlugin');
 
     }//end clickCursorAssistLine()
+
+
+    /**
+     * Clicks outside of Viper.
+     *
+     * @return void
+     */
+    protected function clickOutside()
+    {
+        $this->clickElement('#testTitle');
+
+    }//end clickOutside()
+
+
+    /**
+     * Returns the browser window's scroll coordinates.
+     *
+     * @return void
+     */
+    protected function getScrollCoords()
+    {
+        $coordY = $this->sikuli->execJS('document.getElementById("content").scrollTop');
+        $coordX = $this->sikuli->execJS('document.getElementById("content").scrollLeft');
+
+        $coords = array(
+                   'x' => $coordX,
+                   'y' => $coordY,
+                  );
+
+        return $coords;
+
+    }//end getScrollCoords()
 
 
 }//end class

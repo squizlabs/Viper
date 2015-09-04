@@ -1,7 +1,8 @@
 #ViperPasteDiv,
-#ViperPasteDivIframe {
-    width: 1px;
-    height: 1px;
+#ViperPasteDivIframe,
+#ViperPasteDivNew {
+    width: 0;
+    height: 0;
     overflow: hidden;
     position: fixed;
     left: 0px;

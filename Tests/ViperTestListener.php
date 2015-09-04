@@ -309,9 +309,10 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
         ) {
             self::$_sikuli->stopJSPolling();
 
-            if (self::$_sikuli->getOS() === 'windows') {
-                // Close the browser window.
-                self::$_sikuli->keyDown('Key.CTRL + w');
+            // Close the browser window.
+            $path = $this->getLogPath();
+            if (empty($path) === false) {
+                self::$_sikuli->keyDown('Key.CMD + w');
             }
         }
 

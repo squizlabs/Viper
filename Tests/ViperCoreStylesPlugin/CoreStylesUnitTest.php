@@ -21,27 +21,27 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
         $this->clickTopToolbarButton('subscript');
         $this->clickTopToolbarButton('superscript');
         $this->clickTopToolbarButton('strikethrough');
-        $this->assertHTMLMatch('<p><strong><em><sub><sup><del>%1%</del></sup></sub></em></strong> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->assertHTMLMatch('<p><del><sup><sub><em><strong>%1%</strong></em></sub></sup></del> %2% %3%</p><p>sit<em>%4%</em><strong>%5%</strong></p>');
 
         // Remove strike.
         $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->assertHTMLMatch('<p><strong><em><sub><sup>%1%</sup></sub></em></strong> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->assertHTMLMatch('<p><sup><sub><em><strong>%1%</strong></em></sub></sup> %2% %3%</p><p>sit<em>%4%</em><strong>%5%</strong></p>');
 
         // Remove sub.
         $this->clickTopToolbarButton('subscript', 'active');
-        $this->assertHTMLMatch('<p><strong><em><sup>%1%</sup></em></strong> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->assertHTMLMatch('<p><sup><em><strong>%1%</strong></em></sup> %2% %3%</p><p>sit<em>%4%</em><strong>%5%</strong></p>');
 
         //Remove italics
         $this->clickTopToolbarButton('italic', 'active');
-        $this->assertHTMLMatch('<p><strong><sup>%1%</sup></strong> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->assertHTMLMatch('<p><sup><strong>%1%</strong></sup> %2% %3%</p><p>sit<em>%4%</em><strong>%5%</strong></p>');
 
         //Remove bold
         $this->clickTopToolbarButton('bold', 'active');
-        $this->assertHTMLMatch('<p><sup>%1%</sup> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->assertHTMLMatch('<p><sup>%1%</sup> %2% %3%</p><p>sit<em>%4%</em><strong>%5%</strong></p>');
 
         //Remove superscript
         $this->clickTopToolbarButton('superscript', 'active');
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit<em>%4%</em><strong>%5%</strong></p>');
 
     }//end testAllStyles()
 
@@ -421,6 +421,39 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
         $this->assertHTMLMatch('<p>%1% <em><strong>this is new content</strong></em> %3%</p>');
 
     }//end testDeletingBoldAndItalicContent()
+
+
+    /**
+     * Test that undo and redo buttons for bold formatting.
+     *
+     * @return void
+     */
+    public function testRemoveBoldAndItalicFromLinkInBoldAndItalicParagraph()
+    {
+
+        // Test removing bold and italic for link using inline toolbar
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('bold', 'active');
+        $this->clickInlineToolbarButton('italic', 'active');
+        $this->assertHTMLMatch('<p><strong><em>Test content</em></strong><a href="http://www.squizlabs.com" title="Squiz Labs">XAX</a><strong><em> more test content.</em></strong></p>');
+
+        // Test removing bold and italic for link using top toolbar
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->assertHTMLMatch('<p><strong><em>Test content</em></strong><a href="http://www.squizlabs.com" title="Squiz Labs">XAX</a><strong><em> more test content.</em></strong></p>');
+
+        // Test removing bold and italic for link using the keyboard shortcuts
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->assertHTMLMatch('<p><strong><em>Test content</em></strong><a href="http://www.squizlabs.com" title="Squiz Labs">XAX</a><strong><em> more test content.</em></strong></p>');
+
+    }//end testRemoveBoldAndItalicFromLinkInBoldAndItalicParagraph()
+
 
 }//end class
 

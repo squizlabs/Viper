@@ -225,15 +225,21 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
     public function testLineageWhenAddingClassToAOneItalicWord()
     {
         $this->selectKeyword(7, 8);
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + b');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + i');
+        sleep(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
 
         $this->selectKeyword(7);
+        sleep(1);
         $this->clickInlineToolbarButton('cssClass');
+        sleep(1);
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Italic</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li>', $lineage);
 

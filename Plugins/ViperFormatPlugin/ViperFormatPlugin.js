@@ -346,6 +346,26 @@ ViperFormatPlugin.prototype = {
             }
         );
 
+        this.viper.registerCallback(
+            'Viper:editableElementChanged',
+            'ViperFormatPlugin-stylePicker',
+            function() {
+                var elemDoc = self.viper.getViperElementDocument();
+                if (elemDoc !== document) {
+                    ViperUtil.removeEvent(elemDoc.defaultView, 'scroll.ViperFormatPlugin-stylePicker');
+                    ViperUtil.addEvent(
+                        elemDoc.defaultView,
+                        'scroll.ViperFormatPlugin-stylePicker',
+                        function(e) {
+                            if (popout.isOpen() === true) {
+                                popout.hide();
+                            }
+                        }
+                    );
+                }//end if
+            }
+        );
+
     },
 
     _getToolbarContents: function(toolbarType)
@@ -902,7 +922,7 @@ ViperFormatPlugin.prototype = {
         });
 
         var updateToolbar = function() {
-            var range = self.viper.getCurrentRange();
+            var range = self.viper.getViperRange();
 
             // Make sure passed in range is still valud.
             try {
@@ -1038,6 +1058,13 @@ ViperFormatPlugin.prototype = {
             // Heading button will only be enabled if its a whole node selection or
             // no selection and not in a blockquote with multiple paragraphs.
             if (nodeSelection) {
+                if (ViperUtil.isBlockElement(nodeSelection) === false) {
+                    var surroundParent = ViperUtil.getSurroundingParents(nodeSelection, null, 'block', self.viper.getViperElement());
+                    if (surroundParent.length > 0) {
+                        nodeSelection = surroundParent.shift();
+                    }
+                }
+
                 if (nodeSelection.nodeType === ViperUtil.TEXT_NODE) {
                     if (range.collapsed === true) {
                         // Disable the heading tag if the selection is in a blockquote
@@ -1191,6 +1218,21 @@ ViperFormatPlugin.prototype = {
                             tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
                             tools.enableButton(prefix + 'formats:' + formatButtons[tag]);
                         }
+                    }
+
+                    // Get surrounding parents.
+                    var surroundingParents = ViperUtil.getSurroundingParents(nodeSelection, null, 'block', self.viper.getViperElement());
+                    if (surroundingParents.length > 0) {
+                        var surroundingParent = surroundingParents[0];
+                        var surTagName        = ViperUtil.getTagName(surroundingParent)
+                        if (surroundingParents.length > 1
+                            && surTagName === 'p'
+                            && ViperUtil.getTagName(surroundingParents[1]) === 'blockquote'
+                        ) {
+                            surTagName = 'blockquote';
+                        }
+
+                        tools.setButtonActive(prefix + 'formats:' + formatButtons[surTagName]);
                     }
                 } else {
                     // Its a text selection.
@@ -1976,6 +2018,12 @@ ViperFormatPlugin.prototype = {
             } else {
                 selectedNode = ViperUtil.getFirstBlockParent(range.startContainer);
             }
+        } else if (selectedNode && ViperUtil.isBlockElement(selectedNode) === false) {
+            // Get surrounding parent.
+            var surroundParent = ViperUtil.getSurroundingParents(selectedNode, null, 'block', this.viper.getViperElement());
+            if (surroundParent.length > 0) {
+                selectedNode = surroundParent.shift();
+            }
         }
 
         if (selectedNode) {
@@ -2034,11 +2082,30 @@ ViperFormatPlugin.prototype = {
                     ViperSelection.addRange(range);
                 } else {
                     var newElem = this._convertSingleElement(selectedNode, type);
-
-                    this.viper.selectBookmark(bookmark);
                     if (nodeSelection && newElem) {
-                        range.selectNode(newElem);
+                        this.viper.removeBookmarks();
+
+                        // If the element is empty then collapse range.
+                        if (ViperUtil.hasContent(newElem) === false) {
+                            if (type === 'blockquote') {
+                                ViperUtil.setHtml(newElem, '<p><br/></p>');
+                                range.setStart(newElem.firstElementChild.firstElementChild, 0);
+                            } else if (type === 'pre') {
+                                ViperUtil.setHtml(newElem, ' ');
+                                range.setStart(newElem.firstChild, 0);
+                            } else {
+                                ViperUtil.setHtml(newElem, '<br/>');
+                                range.setStart(newElem.firstElementChild, 0);
+                            }
+
+                            range.collapse(true);
+                        } else {
+                            range.selectNode(newElem);
+                        }
+
                         ViperSelection.addRange(range);
+                    } else {
+                        this.viper.selectBookmark(bookmark);
                     }
                 }
 

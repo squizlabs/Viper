@@ -266,9 +266,9 @@ MatrixCommentsPlugin.prototype = {
             $(showResolvedThreadsSwitch.element).find('.Viper-checkbox-title').html(label);
 
             var deleteResolvedThreadsSwitch = self.viper.ViperTools.getItem('MatrixCommentsPlugin:deleteResolvedThreads');
-            var label = _('Delete %resolved_threads% resolved threads');
+            var label = _('Delete %resolved_threads% resolved threads on Save');
             if(resolvedThreadsCount < 2) {
-                label = _('Delete %resolved_threads% resolved thread');
+                label = _('Delete %resolved_threads% resolved thread on Save');
             }
             label = label.replace('%resolved_threads%', resolvedThreadsCount);
             $(deleteResolvedThreadsSwitch.element).find('.Viper-checkbox-title').html(label);
@@ -979,8 +979,61 @@ MatrixCommentsPlugin.prototype = {
                 }
 
                 var now = jQuery.now();
-                $comment_div.append('<div class="Matrix-Viper-commentdialog-reply-comment-timestamp"><span class="readableAge" data-timestamp="'+ comments[i]['timestamp'] + '">'+ self._readableAge(comments[i]['timestamp'], now) + '</span></div>');
-                $comment_div.append('<div class="Matrix-Viper-commentdialog-reply-comment-content">'+ self._htmlEncode(JSON.parse(comments[i]['content'])) + '</div>');
+                $timestampDiv = $('<div class="Matrix-Viper-commentdialog-reply-comment-timestamp"></div>');
+                $createdTimestamp = $('<span class="readableAge" data-timestamp="'+ comments[i]['timestamp'] + '">'+ self._readableAge(comments[i]['timestamp'], now) + '</span>');
+                $timestampDiv.append($createdTimestamp);
+
+                if(typeof comments[i]['editTimestamp'] !== 'undefined') {
+                    $editTimestamp = $('<span class="Matrix-Viper-commentdialog-reply-comment-edit-timestamp"> - ' + _('Edited') + ' <span class="readableAge" data-timestamp="'+ comments[i]['editTimestamp'] + '">'+ self._readableAge(comments[i]['editTimestamp'], now) + '</span></span>');
+                    $timestampDiv.append($editTimestamp);
+                }
+                $comment_div.append($timestampDiv);
+               
+                // main comment div
+                var showMoreLink = false;
+                var $mainContentDiv = $('<div class="Matrix-Viper-commentdialog-reply-comment-content"></div>');
+                var mainContent = JSON.parse(comments[i]['content']);
+                var contentLength = mainContent.length;
+                // new line worth 40 characters
+                var newlineLength = (mainContent.split(/\r\n|\r|\n/).length - 1) * 40;
+                var totalLength = contentLength + newlineLength;
+
+                // use Show more link if comment exceeds the limit
+                var commentLengthHardLimit = 180;
+                var commentLengthSoftLimit = 190;
+                // the initial thread gets a long limit
+                if(i == 0) {
+                    commentLengthHardLimit = 900;
+                    commentLengthSoftLimit = 1000;
+                }
+
+                if(totalLength > commentLengthHardLimit) {
+                    if(totalLength > commentLengthSoftLimit) {
+                        mainContent = mainContent.substring(0, commentLengthHardLimit); 
+                        // after we trim to the limit length, we need to find out all new lines in the remaining content 
+                        // and keep shrinking the content until it is small enough
+                        while(totalLength > commentLengthHardLimit) {
+                            mainContent = mainContent.substring(0, mainContent.length - 1);
+                            totalLength = mainContent.length + (mainContent.split(/\r\n|\r|\n/).length - 1) * 40;
+                        }
+                        showMoreLink = true;
+                    }
+                }
+                $mainContentDiv.append(self._htmlEncode(mainContent));
+
+                if(showMoreLink) {
+                    $showMoreLinkDiv = $('<div class="Matrix-Viper-commentdialog-reply-comment-showMore"><a href="#" >' + _('Show more') + '</a></div>');
+                    $mainContentDiv.append($showMoreLinkDiv);
+                    $showMoreLinkDiv.click(function (e) {
+                        ViperUtil.preventDefault(e);
+                        var parentContentDiv = $(this).closest('.Matrix-Viper-commentdialog-reply-comment-content');
+                        var parentCommentDiv = $(this).closest('.Matrix-Viper-commentdialog-reply-comment');
+                        var fullContent = comments[parentCommentDiv.data('comment-index')];
+                        parentContentDiv.html(self._htmlEncode(JSON.parse(fullContent['content'])));
+                    })
+                }
+                // finally attach the trimmed main content div
+                $comment_div.append($mainContentDiv);
 
                 // edit comment text area
                 var $editCommentTextArea = jQuery('<textarea class="Matrix-Viper-commentdialog-replyCommentTextArea Matrix-Viper-commentdialog-editCommentTextArea">'+ JSON.parse(comments[i]['content']) + '</textarea>');
@@ -1099,13 +1152,20 @@ MatrixCommentsPlugin.prototype = {
                     var commentIndex = $commentDiv.data('comment-index');
                     var $commentContent = $commentDiv.find('.Matrix-Viper-commentdialog-reply-comment-content');
                     var $commentEditTextArea = $commentDiv.find('.Matrix-Viper-commentdialog-editCommentTextArea');
+                    var $commentTimestampArea = $commentDiv.find('.Matrix-Viper-commentdialog-reply-comment-timestamp');
                     var content = $commentEditTextArea.val();
                     for(var i = 0; i < self._comments[containerId].length; i++) {
                         if(self._comments[containerId][i]['id'] == commentId) {
                             for (var y = 0; y < self._comments[containerId][i]['comments'].length; y++) {
                                 if(y == commentIndex) {
                                     self._comments[containerId][i]['comments'][y]['content'] = JSON.stringify(content);
-                                    self._comments[containerId][i]['comments'][y]['timestamp'] = jQuery.now();
+                                    self._comments[containerId][i]['comments'][y]['editTimestamp'] = jQuery.now();
+                                    if($commentTimestampArea.find('.Matrix-Viper-commentdialog-reply-comment-edit-timestamp').length > 0) {
+                                        $commentTimestampArea.find('.Matrix-Viper-commentdialog-reply-comment-edit-timestamp').remove();
+                                    }
+                                    var now = jQuery.now();
+                                    $editTimestamp = $('<span class="Matrix-Viper-commentdialog-reply-comment-edit-timestamp"> - ' + _('Edited') + ' <span class="readableAge" data-timestamp="'+ now + '">'+ self._readableAge(now, now) + '</span></span>');
+                                    $commentTimestampArea.append($editTimestamp);
                                 }
                             }
                         }

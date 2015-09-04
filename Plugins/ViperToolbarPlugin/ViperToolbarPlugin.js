@@ -348,7 +348,7 @@ ViperToolbarPlugin.prototype = {
 
                 this._subSectionButtons[sectionid] = button;
             },
-            setSubSectionAction: function(subSectionid, action, widgetids) {
+            setSubSectionAction: function(subSectionid, action, widgetids, customButtonid) {
                 widgetids      = widgetids || [];
                 var tools      = self.viper.ViperTools;
                 var subSection = tools.getItem(subSectionid);
@@ -356,21 +356,33 @@ ViperToolbarPlugin.prototype = {
                     return;
                 }
 
-                subSection.form.onsubmit = function(e) {
-                    self.viper.focus();
+                this.updateSubSectionAction(subSectionid, action);
 
+                var buttonid = customButtonid;
+
+                var _self = this;
+
+                subSection.form.onsubmit = function(e) {
                     if (e) {
                         ViperUtil.preventDefault(e);
                     }
 
-                    var button = tools.getItem(subSectionid + '-applyButton');
+                    if (!buttonid) {
+                        buttonid = subSectionid + '-applyButton';
+                    }
+
+                    var button = tools.getItem(buttonid);
                     if (button.isEnabled() === false) {
                         return false;
                     }
 
-                    tools.disableButton(subSectionid + '-applyButton');
+                    self.viper.focus();
 
-                    // IE needs this timeout so focus works <3..
+                    if (!customButtonid) {
+                        tools.disableButton(subSectionid + '-applyButton');
+                    }
+
+                    var action = _self.getSubsectionAction(subSectionid);
                     if (ViperUtil.isBrowser('msie') === false) {
                         try {
                             action.call(this);
@@ -388,6 +400,7 @@ ViperToolbarPlugin.prototype = {
                             }
                         }, 50);
                     } else {
+                        // IE needs this timeout so focus works <3..
                         setTimeout(function() {
                             try {
                                 action.call(this);
@@ -410,11 +423,19 @@ ViperToolbarPlugin.prototype = {
                     return false;
                 };
 
-                var button = tools.createButton(subSectionid + '-applyButton', _('Apply Changes'), _('Apply Changes'), '', subSection.form.onsubmit, true);
-                subSection.form.appendChild(button);
+                if (!buttonid) {
+                    var button = tools.createButton(subSectionid + '-applyButton', _('Apply Changes'), _('Apply Changes'), '', subSection.form.onsubmit, true);
+                    subSection.form.appendChild(button);
+                }
 
                 this.addSubSectionActionWidgets(subSectionid, widgetids);
 
+            },
+            updateSubSectionAction: function (subSectionid, action) {
+                this._subSectionActions[subSectionid] = action;
+            },
+            getSubsectionAction: function (subSectionid) {
+                return this._subSectionActions[subSectionid];
             },
             addSubSectionActionWidgets: function(subSectionid, widgetids)
             {
@@ -469,7 +490,8 @@ ViperToolbarPlugin.prototype = {
             _activeSubSection: null,
             _openCallback: openCallback,
             _closeCallback: closeCallback,
-            _subSectionActionWidgets: {}
+            _subSectionActionWidgets: {},
+            _subSectionActions: {}
         };
 
         if (subSectionElement) {

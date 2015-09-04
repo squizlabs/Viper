@@ -581,7 +581,39 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<p>test content <strong id="testanchor"><em>%1%</em></strong> more test content %2%</p>');
 
     }//end testAnchorFieldRemainsOpenAfterApplyingBoldAndItalic()
-    
+
+
+    /**
+     * Test that anchor can be modified for additional words
+     *
+     *@return void
+     */
+    public function testAnchorFieldCanBeModified()
+    {
+        //Check that anchor field can be created and modified with inline toolbar
+        $this->useTest(6);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test');
+        $this->sikuli->KeyDown('Key.ENTER');
+        $this->moveToKeyword(1, 'right');
+        $this->type(' %3%');
+        $this->assertHTMLMatch('<p>test content <span id="test">%1% %3%</span> %2%</p>');
+
+        //Check that anchor field can be created and modified with top toolbar
+        $this->useTest(6);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test');
+        $this->sikuli->KeyDown('Key.ENTER');
+        $this->moveToKeyword(1, 'right');
+        $this->type(' %3%');
+        $this->assertHTMLMatch('<p>test content <span id="test">%1% %3%</span> %2%</p>');
+        
+    }//end testAnchorFieldCanBeModified()
+
+
 }//end class
 
 ?>

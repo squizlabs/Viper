@@ -681,14 +681,14 @@ var ViperUtil = {
     /**
      * Returns list of parent elements that have only one child.
      *
-     * @param node              {DOMNode} The child element to get parents of.
-     * @param tagName           {string}  The tag name filter.
-     * @param blockElementsOnly {boolean} If true only the block elements is returned.
-     *                                    If the tagName filter is set then this param is ignored.
+     * @param node        {DOMNode} The child element to get parents of.
+     * @param tagName     {string}  The tag name filter.
+     * @param elementType {boolean} Can be one of block|inline|stub.
+     *                              If the tagName filter is set then this param is ignored.
      *
      * @return {array} Parent elements.
      */
-    getSurroundingParents: function(node, tagName, blockElementsOnly, stopElem)
+    getSurroundingParents: function(node, tagName, elementType, stopElem)
     {
         var parents = [];
         if (!node) {
@@ -714,7 +714,25 @@ var ViperUtil = {
             }
 
             if (!tagName) {
-                if (blockElementsOnly !== true || ViperUtil.isBlockElement(parent) === true) {
+                var isOfType = false;
+                switch (elementType) {
+                    case 'block':
+                        isOfType = ViperUtil.isBlockElement(parent);
+                    break;
+
+                    case 'stub':
+                        isOfType = ViperUtil.isStubElement(parent);
+                    break;
+
+                    default:
+                        if (parent.nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isBlockElement(parent) === false) {
+                            // Inline
+                            isOfType = true;
+                        }
+                    break;
+                }
+
+                if (isOfType) {
                     parents.push(parent);
                 }
             } else if (ViperUtil.isTag(parent, tagName) === true) {
@@ -726,6 +744,17 @@ var ViperUtil = {
         }
 
         return parents;
+
+    },
+
+    hasSurroundingParent: function(element, parentTagName, stopEl)
+    {
+        var parents = this.getSurroundingParents(element, parentTagName, null, stopEl);
+        if (parents.length > 0) {
+            return true;
+        }
+
+        return false;
 
     },
 
@@ -781,7 +810,7 @@ var ViperUtil = {
      * Calling getElementsFromTo(x, y);
      * Result: [br, p, div(id=a)]
      */
-    getElementsBetween: function(fromElem, toElem)
+    getElementsBetween: function(fromElem, toElem, range)
     {
         var elements = [];
 
@@ -842,6 +871,7 @@ var ViperUtil = {
             if (lastParent.firstChild === lastParent.lastChild
                 && lastParent.firstChild === fromElem
                 && lastParent !== toElem
+                && (!range || range.startOffset === 0)
             ) {
                elements.push(lastParent);
             }
@@ -1121,6 +1151,31 @@ var ViperUtil = {
         }
 
         return false;
+
+    },
+
+    /**
+     * Returns true if the given element has valid content.
+     *
+     * E.g. <p><br /></p> will not return true but <p><img /></p> will return true.
+     *
+     */
+    hasContent: function (element)
+    {
+        if (ViperUtil.isBlank(ViperUtil.getNodeTextContent(element)) === true) {
+            // Might have stub elements.
+            var tags = ViperUtil.getTag('*', element);
+            var ln   = tags.length;
+            for (var i = 0; i < ln; i++) {
+                if (ViperUtil.isStubElement(tags[i]) === true && ViperUtil.isTag(tags[i], 'br') === false) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        return true;
 
     },
 
@@ -1842,21 +1897,42 @@ var ViperUtil = {
 
     },
 
+    getFrames: function(doc)
+    {
+        doc = doc || document;
+        if (doc.frames) {
+            return doc.frames;
+        } else if (doc.defaultView.frames) {
+            return doc.defaultView.frames;
+        }
+
+        return [];
+    },
+
 
     /**
      * Returns the loaded DOM Documents (main window, iframes, etc).
      *
      * @return {array}
      */
-    getDocuments: function()
-    {
-        var docs = [document];
-        var c    = frames.length;
-        for (var i = 0; i < c; i++) {
-            docs.push(ViperUtil.getIFrameDocument(frames[i]));
-        }
+     getDocuments: function(nested, parentDoc)
+     {
+         parentDoc  = parentDoc || document;
+         var docs   = [parentDoc];
+         var frames = this.getFrames(parentDoc);
+         var c      = frames.length;
+         for (var i = 0; i < c; i++) {
+             var doc = this.getIFrameDocument(frames[i]);
+             if (doc !== null) {
+                 if (nested === true) {
+                     docs = docs.concat(dfx.getDocuments(nested, doc))
+                 } else {
+                     docs.push(doc);
+                 }
+             }
+         }
 
-        return docs;
+         return docs;
 
     },
 
