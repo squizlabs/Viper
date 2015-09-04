@@ -816,7 +816,6 @@ ViperCoreStylesPlugin.prototype = {
     handleHR: function()
     {
         var hr = document.createElement('hr');
-
         this.viper.ViperHistoryManager.begin();
 
         var range = this.viper.getViperRange();
@@ -836,6 +835,15 @@ ViperCoreStylesPlugin.prototype = {
         } else {
             var keyboardEditorPlugin = this.viper.ViperPluginManager.getPlugin('ViperKeyboardEditorPlugin');
             var prev = keyboardEditorPlugin.splitAtRange(true, null);
+            if (ViperUtil.isTag(prev, 'br') === true && prev.nextSibling === null && prev.previousSibling === null) {
+                prev = prev.parentNode;
+                var prevElemSib = prev.previousElementSibling;
+                if (ViperUtil.isTag(prevElemSib, ['ul', 'ol', 'table']) === true) {
+                    // Remove the blank paragraph if its after these tags.
+                    ViperUtil.remove(prev);
+                    prev = prevElemSib;
+                }
+            }
         }
 
         var nextSibling = prev.nextSibling;
@@ -1029,11 +1037,14 @@ ViperCoreStylesPlugin.prototype = {
         // Remove all formating tags.
         var tmpSpan = null;
         if (nodeSelection) {
-            // Bookmark the selection and wrap the node in to a tmp span incase the node it self gets removed.
-            bookmark = this.viper.createBookmark();
-            tmpSpan = document.createElement('span');
-            ViperUtil.insertBefore(nodeSelection, tmpSpan);
-            tmpSpan.appendChild(nodeSelection);
+            var tagName = ViperUtil.getTagName(nodeSelection);
+            if (ViperUtil.inArray(tagName, tags) === true) {
+                // Bookmark the selection and wrap the node in to a tmp span incase the node it self gets removed.
+                bookmark = this.viper.createBookmark();
+                tmpSpan = document.createElement('span');
+                ViperUtil.insertBefore(nodeSelection, tmpSpan);
+                tmpSpan.appendChild(nodeSelection);
+            }
         }
 
         var tln = tags.length;
@@ -1087,6 +1098,8 @@ ViperCoreStylesPlugin.prototype = {
             return;
         }
 
+        // TODO: Fix here: <p><em>text*text</em></p>. Press CMD+I, CMD+B and type p will produce extra p character.
+        // E.g. <p><em>text</em>pp<em>text</em></p>.
         var origData = node.data;
         var style    = null;
         var removeStyle = false;
@@ -1546,10 +1559,12 @@ ViperCoreStylesPlugin.prototype = {
         var startNode    = null;
         var endNode      = null;
 
-        if (!selectedNode || selectedNode === this.viper.getViperElement()) {
-            startNode    = range.getStartNode();
-            endNode      = range.getEndNode();
-            selectedNode = null;
+        if (!selectedNode) {
+            startNode = range.getStartNode();
+            endNode   = range.getEndNode();
+        } else if (selectedNode === this.viper.getViperElement()) {
+            startNode = range._getFirstSelectableChild(selectedNode);
+            endNode   = range._getLastSelectableChild(selectedNode);
         } else {
             startNode = selectedNode;
         }
@@ -1570,14 +1585,18 @@ ViperCoreStylesPlugin.prototype = {
             activeStates.alignment = null;
 
             var startParent = null;
-            if (!selectedNode || ViperUtil.isBlockElement(selectedNode) === false) {
+            if (!selectedNode || selectedNode === viperElement || ViperUtil.isBlockElement(selectedNode) === false) {
                 startParent = ViperUtil.getFirstBlockParent(startNode);
             } else {
                 startParent = selectedNode;
             }
 
             if (startNode !== endNode) {
-                var endParent = ViperUtil.getFirstBlockParent(endNode);
+                var endParent = endNode;
+                if (endNode !== viperElement) {
+                    endParent = ViperUtil.getFirstBlockParent(endNode);
+                }
+
                 var elems     = ViperUtil.getElementsBetween(startParent, endParent);
                 elems.unshift(startParent);
                 elems.push(endParent);

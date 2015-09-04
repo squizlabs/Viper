@@ -1125,6 +1125,15 @@ ViperCopyPastePlugin.prototype = {
                 prevCheckCont = ViperUtil.trim(ViperUtil.getNodeTextContent(prevBlock.nextSibling));
                 if (prevCheckCont === '' || (prevCheckCont.length === 1 && prevCheckCont.charCodeAt(0) === 160)) {
                     ViperUtil.remove(prevBlock.nextSibling);
+
+                    if (prevBlock.lastChild) {
+                        // Also remove the last child of prevBlock if its empty. This is to prevent things like:
+                        // <blockquote><p>text</p><p>*</p></blockquote> where * is the paste location.
+                        prevCheckCont = ViperUtil.trim(ViperUtil.getNodeTextContent(prevBlock.lastChild));
+                        if (prevCheckCont === '' || (prevCheckCont.length === 1 && prevCheckCont.charCodeAt(0) === 160)) {
+                            ViperUtil.remove(prevBlock.lastChild);
+                        }
+                    }
                 }
             }
 

@@ -400,7 +400,7 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         // Test applying to a word and pressing apply changes using top toolbar
         $this->useTest(1);
         $this->selectKeyword(1);
-        sleep(1);
+        sleep(2);
         $this->clickTopToolbarButton('cssClass');
         sleep(1);
         $this->selectStyles(array('ordered-list'));
@@ -505,8 +505,9 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         $this->clickField('Class');
         sleep(1);
         $this->type('test');
-        sleep(1);
+        sleep(2);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->assertHTMLMatch('<p class="test article">This is some content %1% in my unit test</p>');
 
         // Test applying to a word and pressing apply changes using inline toolbar
@@ -522,6 +523,7 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         $this->type('test');
         sleep(1);
         $this->clickInlineToolbarButton('Apply Changes', null, true);
+        sleep(1);
         $this->assertHTMLMatch('<p class="test article">This is some content %1% in my unit test</p>');
 
         // Test applying to a paragraph and pressing enter using top toolbar
@@ -537,6 +539,7 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         $this->type('test');
         sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->assertHTMLMatch('<p class="test article">This is some content %1% in my unit test</p>');
 
         // Test applying to a word and pressing apply changes using top toolbar
@@ -552,6 +555,7 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         $this->type('test');
         sleep(1);
         $this->clickTopToolbarButton('Apply Changes', null, true);
+        sleep(1);
         $this->assertHTMLMatch('<p class="test article">This is some content %1% in my unit test</p>');
 
     }//end testApplyingCustomStyleAndClassToParagraph()

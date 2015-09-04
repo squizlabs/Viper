@@ -797,6 +797,16 @@ ViperKeyboardEditorPlugin.prototype = {
     {
         var range = this.viper.getViperRange();
 
+        if (this._isWholeViperElementSelected(range) === true) {
+            // The whole Viper element is selected, remove all of its content
+            // and then initialise the Viper element.
+            ViperUtil.setHtml(this.viper.getViperElement(), '');
+            this.viper.initEditableElement();
+            this.viper.fireNodesChanged();
+            this.viper.fireSelectionChanged(null, true);
+            return false;
+        }
+
         if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true) {
             // Latest Chrome versions have strange issue with all content deletion, handle it in another method.
             return this._handleDeleteForWebkit(e, range);
@@ -807,11 +817,8 @@ ViperKeyboardEditorPlugin.prototype = {
             return this._handleDeleteFromRight(e, range);
         }
 
-        if (range.startOffset !== 0) {
-            if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
-                && range.collapsed === true
-                && ViperUtil.isBrowser('msie', '<11')
-            ) {
+        if (range.startOffset !== 0 && range.startContainer.nodeType === ViperUtil.TEXT_NODE) {
+            if (range.collapsed === true && ViperUtil.isBrowser('msie', '<11')) {
                 // Delete 1 char in IE.... This resolves the issue where <a href="" />T* backspace here sets the
                 // range to incorrect position..
                 range.startContainer.splitText(range.startOffset);
@@ -869,6 +876,7 @@ ViperKeyboardEditorPlugin.prototype = {
                     }
 
                     if (startNode.nodeType === ViperUtil.TEXT_NODE
+                        && startNode.data.length === 0
                         && ViperUtil.isTag(startNode.parentNode, 'li') === true
                         && ViperUtil.getTag('li', startNode.parentNode.parentNode).length === 1
                     ) {
@@ -1110,6 +1118,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 var skippedBlockElem = [];
                 var endCont = range.endContainer;
                 var node    = range.getPreviousContainer(range.startContainer, skippedBlockElem, true, true);
+                var isList  = false;
 
                 var startOffset = 0;
                 if (!node || ViperUtil.isChildOf(node, this.viper.element) === false) {
@@ -1121,12 +1130,18 @@ ViperKeyboardEditorPlugin.prototype = {
                         }
                     }
 
-                    node = range.getNextContainer(endCont, null, true);
-                    if (this.viper.isOutOfBounds(node) === true) {
-                        node = endCont;
+                    node = endCont;
+                    if (ViperUtil.isTag(node, 'li') === false) {
+                        return false;
+                    } else {
+                        isList = true;
                     }
                 } else if (node.nodeType === ViperUtil.TEXT_NODE) {
                     startOffset = node.data.length;
+                    if (endCont.previousSibling !== null && ViperUtil.isBlockElement(endCont.previousSibling) === false && node.data.length > 0) {
+                        startOffset--;
+                        node.data = node.data.substr(0, startOffset);
+                    }
                 }
 
                 range.setEnd(node, startOffset);
@@ -1152,19 +1167,67 @@ ViperKeyboardEditorPlugin.prototype = {
                     ViperUtil.remove(remove);
                 }
 
-                if (node.nodeType === ViperUtil.TEXT_NODE) {
-                    node.data = node.data.substr(0, node.data.length);
+                if (isList && parent === this.viper.getViperElement()) {
+                    node = range._getFirstSelectableChild(parent, true);
+                    if (!node) {
+                        this.viper.initEditableElement();
+                        node = range._getFirstSelectableChild(parent, true);
+                    }
                 }
 
                 range.setEnd(node, startOffset);
                 range.collapse(false);
                 ViperSelection.addRange(range);
 
+                this.viper.fireNodesChanged();
+                this.viper.fireSelectionChanged(null, true);
                 return false;
             } else if (!range.startContainer.previousSibling) {
                 return false;
             } else if (ViperUtil.isTag(range.startContainer, ['td', 'th']) === true) {
                 return false;
+            }
+        } else if (ViperUtil.isBrowser('firefox') === true) {
+            // Firefox specific fixes.
+            if (range.collapsed === true) {
+                // Range collapsed.
+                if (range.startContainer.nodeType === ViperUtil.ELEMENT_NODE) {
+                    // Container is an element node.
+                    var childCount = range.startContainer.childNodes.length;
+                    if (range.startOffset === childCount || range.startOffset === (childCount - 1)) {
+                        // Range is outside of childNodes count.
+                        var lastChild = range.startContainer.childNodes[(childCount - 1)];
+                        var textNode  = null;
+
+                        // Find the relevant text node.
+                        if (ViperUtil.isStubElement(lastChild) === true) {
+                            // For stub elements get the previous container.
+                            textNode = range.getPreviousContainer(lastChild);
+                        } else if (lastChild.nodeType === ViperUtil.ELEMENT_NODE) {
+                            // Node with content, get the last selectable child.
+                            textNode = range._getLastSelectableChild(lastChild);
+                        } else if (lastChild.nodeType === ViperUtil.TEXT_NODE) {
+                            // Text node.
+                            if (lastChild.data.length > 0) {
+                                textNode = lastChild
+                            } else {
+                                // Empty text node, get previousContainer.
+                                textNode = range.getPreviousContainer(lastChild);
+                            }
+                        }
+
+                        if (textNode) {
+                            textNode.data = textNode.data.substr(0, (textNode.data.length - 1));
+                            range.setStart(textNode, textNode.data.length);
+                            range.collapse(true);
+                            ViperSelection.addRange(range);
+                            this.viper.fireNodesChanged();
+                            this.viper.fireSelectionChanged(null, true);
+                        }
+
+                        return false;
+                    }
+                }
             }
         }
 
@@ -1399,7 +1462,7 @@ ViperKeyboardEditorPlugin.prototype = {
                         range.collapse(true);
                         ViperSelection.addRange(range);
                     } else {
-                        range = this.viper.moveCaretAway(nodeSelection);
+                        range = this.viper.moveCaretAway(nodeSelection, true);
                         ViperUtil.remove(nodeSelection);
                         if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
                             && range.startContainer.data === ' '
@@ -1814,7 +1877,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 }
 
                 // Handle deletion of a whole bold/italic/etc tag.
-                range = this.viper.moveCaretAway(nodeSelection);
+                range = this.viper.moveCaretAway(nodeSelection, e.keyCode === 46);
                 ViperUtil.remove(nodeSelection);
                 if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
                     && range.startContainer.data === ' '

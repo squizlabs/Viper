@@ -1986,7 +1986,7 @@ ViperFormatPlugin.prototype = {
         var viperElement   = this.viper.getViperElement();
         var formatElement  = null;
 
-        if (range.collapsed !== true && !selectedNode) {
+        if (range.collapsed !== true) {
             formatElement = lineage[currentLinIndex];
             if (formatElement && formatElement.nodeType !== ViperUtil.TEXT_NODE) {
                 selectedNode = formatElement;

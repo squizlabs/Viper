@@ -3146,6 +3146,10 @@ Viper.prototype = {
             // Check if it has a parent with this style, if not stop here.
             if (ViperUtil.getParents(nodeSelection, style, this.getViperElement()).length === 0) {
                 range.setStart(startNode, 0);
+                if (endNode.nodeType !== ViperUtil.TEXT_NODE) {
+                    endNode = range._getLastSelectableChild(endNode);
+                }
+
                 range.setEnd(endNode, endNode.data.length);
 
                 ViperSelection.addRange(range);
@@ -3587,7 +3591,7 @@ Viper.prototype = {
                 endPos = ViperUtil.getLastChildTextNode(bookmark.end.previousSibling);
                 if (endPos.nodeType === ViperUtil.TEXT_NODE) {
                     while (endPos && endPos.data.length === 0 && endPos.previousSibling) {
-                        endPos = ViperUtil.getFirstChildTextNode(endPos.previousSibling);
+                        endPos = ViperUtil.getLastChildTextNode(endPos.previousSibling);
                     }
 
                     if (endPos.data) {

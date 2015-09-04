@@ -270,7 +270,7 @@ ViperImagePlugin.prototype = {
             this.viper.setAttribute(img, 'src', url);
 
             if (alt !== null) {
-                this.viper.setAttribute(img, 'alt', alt);
+                this.viper.setAttribute(img, 'alt', alt, true);
             }
 
             if (title !== null && ViperUtil.trim(title).length !== 0) {
