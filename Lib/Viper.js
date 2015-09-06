@@ -211,7 +211,7 @@ Viper.prototype = {
         }
 
         if (!src) {
-            src  = this.getViperPath().replace(/\/build$/, '') + '/Translation/' + code + '.js';
+            src = this.getViperPath().replace(/\/build$/, '') + '/build/Translation/' + code + '.js';
         }
 
         if (ViperTranslation.isLoaded(code) === false && src) {
@@ -548,44 +548,60 @@ Viper.prototype = {
             }
         });
 
-        ViperUtil.addEvent(elem, 'dragover.' + namespace, function(e) {
-            ViperUtil.preventDefault(e);
-            return false;
-        });
-        ViperUtil.addEvent(elem, 'dragenter.' + namespace, function(e) {
-            ViperUtil.preventDefault(e);
-            return false;
+        // This is necessary for IE, because IE does not return the current range when drop event fires.
+        var _dragRange = null;
+        ViperUtil.addEvent(elem, 'dragstart.' + namespace, function(e) {
+            _dragRange = self.getViperRange();
         });
 
         ViperUtil.addEvent(elem, 'drop.' + namespace, function(e) {
             ViperUtil.preventDefault(e);
+
+            e.originalEvent.dataTransfer.dropEffect = 'move';
 
             // Get the range using the mouse pointer (drop location).
             var range        = self.getRangeFromCoords(e.originalEvent.clientX, e.originalEvent.clientY);
             var dataTransfer = e.originalEvent.dataTransfer;
 
             // Call the callback functions with dataTransfer object, range and original event.
-            if (self.fireCallbacks('Viper:dropped', {dataTransfer: dataTransfer, range: range, e: e}) === false) {
+            if (self.fireCallbacks('Viper:dropped', {dataTransfer: dataTransfer, range: range, e: e, origRange: _dragRange}) === false) {
                 return false;
             }
 
             var textPlain = null;
-            for (var i = 0; i < dataTransfer.types.length; i++) {
-                try {
+            if (dataTransfer.types) {
+                for (var i = 0; i < dataTransfer.types.length; i++) {
+                    try {
+                        var data = {
+                            data: dataTransfer.getData(dataTransfer.types[i]),
+                            range: range,
+                            origRange: _dragRange
+                        };
+                    } catch (e) {
+                        continue;
+                    }
+
+                    if (dataTransfer.types[i] === 'text/plain' || dataTransfer.types[i] === 'Text') {
+                        textPlain = data;
+                    }
+
+                    // Fire callbacks for each data type.
+                    if (self.fireCallbacks('Viper:dropped:' + dataTransfer.types[i], data) === false) {
+                        return false;
+                    }
+                }
+            } else if (ViperUtil.isBrowser('msie', '8') === true) {
+                textPlain = dataTransfer.getData('text');
+                 try {
                     var data = {
-                        data: dataTransfer.getData(dataTransfer.types[i]),
-                        range: range
+                        data: textPlain,
+                        range: range,
+                        origRange: _dragRange
                     };
                 } catch (e) {
-                    continue;
                 }
 
-                if (dataTransfer.types[i] === 'text/plain' || dataTransfer.types[i] === 'Text') {
-                    textPlain = data;
-                }
-
-                // Fire callbacks for each data type.
-                if (self.fireCallbacks('Viper:dropped:' + dataTransfer.types[i], data) === false) {
+                if (self.fireCallbacks('Viper:dropped:Text', data) === false) {
                     return false;
                 }
             }
@@ -868,6 +884,13 @@ Viper.prototype = {
             self.fireSelectionChanged(range, true);
         });
 
+        // If the document of this editable is different to Viper then add the highlight class to that document.
+        if (document !== elem.ownerDocument) {
+            var style       = elem.ownerDocument.createElement('style');
+            style.innerHTML = '.__viper_selHighlight {background-color: #CCC !important;}';
+            elem.ownerDocument.head.appendChild(style);
+        }
+
     },
 
     registerEditableElements: function(elements)
@@ -941,7 +964,12 @@ Viper.prototype = {
                 if (!blockTag) {
                     ViperUtil.setHtml(elem, '');
                 } else {
-                    ViperUtil.setHtml(elem, ViperUtil.getHtml(elem) +  '<' + blockTag + '>&nbsp;</' + blockTag + '>');
+                    var emptyCont = '<br/>';
+                    if (ViperUtil.isBrowser('msie') === true) {
+                        emptyCont = '&nbsp;';
+                    }
+
+                    ViperUtil.setHtml(elem, ViperUtil.getHtml(elem) +  '<' + blockTag + '>' + emptyCont + '</' + blockTag + '>');
                 }
 
                 try {
@@ -1130,10 +1158,10 @@ Viper.prototype = {
      *
      * @return {ViperDOMRange} The Vipe DOMRange object.
      */
-    getViperRange: function()
+    getViperRange: function(element)
     {
         if (ViperUtil.isBrowser('msie') === false) {
-            this.highlightToSelection();
+            this.highlightToSelection(element);
         }
 
         if (this._viperRange) {
@@ -1160,6 +1188,33 @@ Viper.prototype = {
     {
         var range = this.getViperRange();
         range.selectNode(element);
+        ViperSelection.addRange(range);
+
+    },
+
+    selectAll: function(elem)
+    {
+        elem      = elem || this.getViperElement();
+        var range = this.getViperRange();
+
+        if (!elem.firstChild) {
+            return;
+        }
+
+        var start = elem.firstChild;
+        if (start.nodeType !== ViperUtil.TEXT_NODE) {
+            start = document.createTextNode('');
+            ViperUtil.insertBefore(elem.firstChild, start);
+        }
+
+        var end = elem.lastChild;
+        if (end.nodeType !== ViperUtil.TEXT_NODE) {
+            end = document.createTextNode('');
+            ViperUtil.insertAfter(elem.lastChild, end);
+        }
+
+        range.setStart(start, 0);
+        range.setEnd(end, end.data.length);
         ViperSelection.addRange(range);
 
     },
@@ -1376,19 +1431,20 @@ Viper.prototype = {
      */
     getRangeFromCoords: function(x, y)
     {
+        var doc = this.getViperElement().ownerDocument;
         var range = null;
-        if (document.caretRangeFromPoint) {
+        if (doc.caretRangeFromPoint) {
             // Webkit.
-            var rangeObj = document.caretRangeFromPoint(x, y);
+            var rangeObj = doc.caretRangeFromPoint(x, y);
             range        = new ViperMozRange(rangeObj);
-        } else if (document.caretPositionFromPoint) {
+        } else if (doc.caretPositionFromPoint) {
             // Firefox.
-            var rangeObj = document.caretPositionFromPoint(x, y);
+            var rangeObj = doc.caretPositionFromPoint(x, y);
             range        = this.getCurrentRange().cloneRange();
             range.setStart(rangeObj.offsetNode, rangeObj.offset);
             range.collapse(true);
-        } else if (document.body.createTextRange) {
-            var rangeObj = document.body.createTextRange();
+        } else if (doc.body.createTextRange) {
+            var rangeObj = doc.body.createTextRange();
             try {
                 rangeObj.moveToPoint(x, y);
             } catch (e) {
@@ -1396,8 +1452,8 @@ Viper.prototype = {
 
             range = new ViperIERange(rangeObj);
 
-            if (Viper.document.createRange) {
-                rangeObj         = Viper.document.createRange();
+            if (Viper.doc.createRange) {
+                rangeObj         = Viper.doc.createRange();
                 var ieToMozRange = new ViperMozRange(rangeObj);
                 ieToMozRange.setStart(range.startContainer, range.startOffset);
                 ieToMozRange.collapse(true);
@@ -1421,9 +1477,10 @@ Viper.prototype = {
     getElementAtCoords: function(x, y)
     {
         var elem = null;
-        if (document.caretRangeFromPoint) {
+        var doc  = this.getViperElement().ownerDocument;
+        if (doc.caretRangeFromPoint) {
             // Webkit.
-            var range = document.caretRangeFromPoint(x, y);
+            var range = doc.caretRangeFromPoint(x, y);
             if (range) {
                 if (range.startContainer === range.endContainer
                     && range.startOffset === range.endOffset
@@ -1435,9 +1492,9 @@ Viper.prototype = {
                     }
                 }
             }
-        } else if (document.caretPositionFromPoint) {
+        } else if (doc.caretPositionFromPoint) {
             // Firefox.
-            var range = document.caretPositionFromPoint(x, y);
+            var range = doc.caretPositionFromPoint(x, y);
             if (range) {
                 if (ViperUtil.isBlockElement(range.offsetNode) === true) {
                     var offset = range.offset;
@@ -1450,9 +1507,9 @@ Viper.prototype = {
                     elem = range.offsetNode;
                 }
             }
-        } else if (document.body.createTextRange) {
+        } else if (doc.body.createTextRange) {
             // IE.
-            range = document.body.createTextRange();
+            range = doc.body.createTextRange();
             try {
                 range.moveToPoint(x, y);
             } catch (e) {
@@ -1465,9 +1522,9 @@ Viper.prototype = {
 
     },
 
-    getDocumentOffset: function()
+    getDocumentOffset: function(doc)
     {
-        var doc    = Viper.document;
+        var doc    = doc || Viper.document;
         var offset = {
             x: 0,
             y: 0
@@ -1561,14 +1618,14 @@ Viper.prototype = {
                 ViperUtil.setHtml(this.element, '');
             } else {
                 range.deleteContents();
+                ViperSelection.addRange(range);
             }
 
             if (ViperUtil.trim(ViperUtil.getHtml(this.element)) === '') {
                 this.initEditableElement();
-
-                // Update the range var.
-                range = this.getCurrentRange();
             }
+
+            range = this.getCurrentRange();
 
             if (range.startContainer === range.endContainer && this.element === range.startContainer) {
                 // The whole editable element is selected. Need to remove everything
@@ -2425,9 +2482,33 @@ Viper.prototype = {
 
         var startContainer = range.getStartNode();
         var endContainer   = range.getEndNode();
+        var nodeSelection  = range.getNodeSelection();
 
         if (startContainer === endContainer) {
             // Selected contents from same node.
+            if (nodeSelection) {
+                // Get the most outer surrounding parent which is not a block element.
+                var parents = ViperUtil.getSurroundingParents(nodeSelection, null, 'inline', this.getViperElement());
+                if (parents.length > 0 || ViperUtil.isBlockElement(nodeSelection) === false && ViperUtil.isStubElement(nodeSelection) === false) {
+                    if (parents.length > 0) {
+                        nodeSelection = parents.pop();
+                    }
+
+                    var node = Viper.document.createElement(tag);
+                    this._setWrapperElemAttributes(node, attributes);
+                    ViperUtil.insertBefore(nodeSelection, node);
+                    node.appendChild(nodeSelection);
+
+                    if (keepSelection !== true) {
+                        range.setStart(range._getFirstSelectableChild(node), 0);
+                        range.setEnd(range._getLastSelectableChild(node), range._getLastSelectableChild(node).data.length);
+                        ViperSelection.addRange(range);
+                    }
+
+                    return node;
+                }
+            }
+
             if (startContainer.nodeType === ViperUtil.TEXT_NODE) {
                 // Selection is a text node.
                 // Just wrap the contents with the specified node.
@@ -2474,8 +2555,6 @@ Viper.prototype = {
                 }, attributes);
             }//end if
         } else {
-            var nodeSelection = range.getNodeSelection();
-
             if (nodeSelection && ViperUtil.isBlockElement(nodeSelection) === false && nodeSelection.nodeType !== ViperUtil.TEXT_NODE) {
                 var newElement = document.createElement(otag);
                 this._setWrapperElemAttributes(newElement, attributes);
@@ -2912,13 +2991,57 @@ Viper.prototype = {
 
     },
 
-    removeStyle: function(style)
+    removeStyle: function(style, nodeSelection)
     {
-        var range        = this.getViperRange();
-        range            = this.adjustRange(range);
-        var startNode    = range.getStartNode();
-        var endNode      = range.getEndNode();
-        var viperElement = this.getViperElement();
+        var range         = this.getViperRange();
+        range             = this.adjustRange(range);
+        var startNode     = range.getStartNode();
+        var endNode       = range.getEndNode();
+        var viperElement  = this.getViperElement();
+        var nodeSelection = nodeSelection || range.getNodeSelection();
+
+        if (nodeSelection) {
+            // A whole node is selected. Remove all nested style tags and the node it self its the same tag.
+            var styleTags = ViperUtil.getTag(style, nodeSelection);
+            var sln       = styleTags.length;
+            for (var i = 0; i < sln; i++) {
+                while (styleTags[i].firstChild) {
+                    ViperUtil.insertBefore(styleTags[i], styleTags[i].firstChild);
+                }
+
+                ViperUtil.remove(styleTags[i]);
+            }
+
+            // Check the surrounding parents.
+            var surrounding = ViperUtil.getSurroundingParents(nodeSelection, style, null, this.getViperElement());
+            for (var i = 0; i < surrounding.length; i++) {
+                if (ViperUtil.isTag(surrounding[i], style) === true) {
+                    while (surrounding[i].firstChild) {
+                        ViperUtil.insertBefore(surrounding[i], surrounding[i].firstChild);
+                    }
+
+                    ViperUtil.remove(surrounding[i]);
+                }
+            }
+
+            if (ViperUtil.isTag(nodeSelection, style) === true) {
+                // This node is the style tag, move all its child nodes and delete it.
+                while (nodeSelection.firstChild) {
+                    ViperUtil.insertBefore(nodeSelection, nodeSelection.firstChild);
+                }
+
+                ViperUtil.remove(nodeSelection);
+            }
+
+            // Check if it has a parent with this style, if not stop here.
+            if (ViperUtil.getParents(nodeSelection, style, this.getViperElement()).length === 0) {
+                range.setStart(startNode, 0);
+                range.setEnd(endNode, endNode.data.length);
+
+                ViperSelection.addRange(range);
+                return;
+            }
+        }//end if
 
         if (startNode.nodeType === ViperUtil.TEXT_NODE
             && ViperUtil.trim(startNode.data) === ''
@@ -3303,7 +3426,7 @@ Viper.prototype = {
         var startPos    = null;
         var endPos      = null;
         var startOffset = 0;
-        var endOffset   = null;
+        var endOffset   = 0;
         if (bookmark.start.nextSibling === bookmark.end
             || ViperUtil.getElementsBetween(bookmark.start, bookmark.end).length === 0
         ) {
@@ -3331,7 +3454,11 @@ Viper.prototype = {
             }
         } else {
             if (bookmark.start.nextSibling) {
+                // Find the next non empty text node.
                 startPos = ViperUtil.getFirstChildTextNode(bookmark.start.nextSibling);
+                while (startPos && startPos.data.length === 0 && startPos.nextSibling) {
+                    startPos = ViperUtil.getFirstChildTextNode(startPos.nextSibling);
+                }
             } else {
                 if (!bookmark.start.previousSibling) {
                     var tmp = Viper.document.createTextNode('');
@@ -3343,9 +3470,22 @@ Viper.prototype = {
             }
 
             if (bookmark.end.previousSibling) {
+                // Find the previous non empty text node.
                 endPos = ViperUtil.getLastChildTextNode(bookmark.end.previousSibling);
-                if (endPos.data) {
-                    endOffset = endPos.data.length;
+                if (endPos.nodeType === ViperUtil.TEXT_NODE) {
+                    while (endPos && endPos.data.length === 0 && endPos.previousSibling) {
+                        endPos = ViperUtil.getFirstChildTextNode(endPos.previousSibling);
+                    }
+
+                    if (endPos.data) {
+                        endOffset = endPos.data.length;
+                    }
+                } else {
+                    // Handle situation where there is no last text node.
+                    var tmpTextNode = document.createTextNode('');
+                    ViperUtil.insertBefore(endPos, tmpTextNode);
+                    endPos    = tmpTextNode;
+                    endOffset = 0;
                 }
             } else {
                 endPos    = ViperUtil.getFirstChildTextNode(bookmark.end.nextSibling);
@@ -3422,6 +3562,10 @@ Viper.prototype = {
         }//end if
 
         try {
+            if (this.isEditableInIframe() === true) {
+                this.focus();
+            }
+
             ViperSelection.addRange(range);
         } catch (e) {
             // IE may throw exception for hidden elements..
@@ -3431,11 +3575,6 @@ Viper.prototype = {
 
     },
 
-    /*
-        TODO: WE need to have id for each bookmark so that we can use
-        ViperUtil.getid() to retrieve a specific bookmark on a page. However,
-        this will not work if the bookmark is not a part of the DOM tree.
-     */
     getBookmark: function(parent, type)
     {
         var bookmarks = ViperUtil.getClass('viperBookmark_' + type, parent);
@@ -3445,6 +3584,23 @@ Viper.prototype = {
         ViperUtil.remove(bookmarks);
 
         return elem;
+
+    },
+
+    getBookmarkById: function(bookmarkid, parent)
+    {
+        parent = parent || this.getViperElement();
+        var bookmarks = ViperUtil.find(parent, '[data-bookmarkid="' + bookmarkid + '"]');
+        if (bookmarks.length !== 2) {
+            return null;
+        }
+
+        var bookmark = {
+            start: bookmarks[0],
+            end: bookmarks[1]
+        }
+
+        return bookmark;
 
     },
 
@@ -3495,7 +3651,7 @@ Viper.prototype = {
 
     },
 
-    createBookmark: function(range, keepOldBookmarks)
+    createBookmark: function(range, keepOldBookmarks, bookmarkid)
     {
         // Remove all bookmarks?
         if (keepOldBookmarks !== true) {
@@ -3543,95 +3699,151 @@ Viper.prototype = {
             }
         }//end if
 
-        // Collapse to the end of range.
-        range.collapse(false);
-
         var endBookmark           = Viper.document.createElement('span');
         endBookmark.style.display = 'none';
         ViperUtil.setHtml(endBookmark, '&nbsp;');
         ViperUtil.addClass(endBookmark, 'viperBookmark viperBookmark_end');
         endBookmark.setAttribute('viperBookmark', 'end');
 
-        var startNode = range.getStartNode();
-        range.insertNode(endBookmark);
-        if (ViperUtil.isChildOf(endBookmark, this.element) === false) {
-            this.element.appendChild(endBookmark);
+        if (bookmarkid) {
+            endBookmark.setAttribute('data-bookmarkid', bookmarkid);
         }
 
-        // Move the range to where it was before.
-        if (startContainer.parentNode) {
-            // This check is to pevent IE11 stuffing up empty text nodes when range is collapsed.
-            range.setStart(startContainer, startOffset);
-            range.collapse(true);
-        }
-
-        // Create the start bookmark.
+         // Create the start bookmark.
         var startBookmark           = Viper.document.createElement('span');
         startBookmark.style.display = 'none';
         ViperUtil.addClass(startBookmark, 'viperBookmark viperBookmark_start');
         ViperUtil.setHtml(startBookmark, '&nbsp;');
         startBookmark.setAttribute('viperBookmark', 'start');
 
-        try {
+        if (bookmarkid) {
+            startBookmark.setAttribute('data-bookmarkid', bookmarkid);
+        }
+
+        var viperElement = this.getViperElement();
+        if (range.getNodeSelection() === viperElement) {
+            // Whole Viper element is selected.
+            if (!viperElement.firstChild) {
+                // There are no contents.
+                viperElement.appendChild(startBookmark);
+                viperElement.appendChild(endBookmark);
+            } else {
+                ViperUtil.insertBefore(viperElement.firstChild, startBookmark);
+                ViperUtil.insertAfter(viperElement.lastChild, endBookmark);
+            }
+        } else {
+            // Collapse to the end of range.
+            range.collapse(false);
+
+            var startNode = range.getStartNode();
+            range.insertNode(endBookmark);
+            if (ViperUtil.isChildOf(endBookmark, this.element) === false) {
+                this.element.appendChild(endBookmark);
+            }
+
+            // Move the range to where it was before.
             if (startContainer.parentNode) {
-                range.insertNode(startBookmark);
-            } else {
+                // This check is to pevent IE11 stuffing up empty text nodes when range is collapsed.
+                range.setStart(startContainer, startOffset);
+                range.collapse(true);
+            }
+
+            try {
+                if (startContainer.parentNode) {
+                    range.insertNode(startBookmark);
+                } else {
+                    ViperUtil.insertBefore(endBookmark, startBookmark);
+                }
+
+                // Make sure start and end are in correct position.
+                if (startBookmark.previousSibling === endBookmark) {
+                    // Reverse..
+                    ViperUtil.insertBefore(endBookmark, startBookmark);
+                }
+            } catch (e) {
+                // NS_ERROR_UNEXPECTED: I believe this is a Firefox bug.
+                // It seems like if the range is collapsed and the text node is empty
+                // (i.e. length = 0) then Firefox tries to split the node for no reason and fails...
                 ViperUtil.insertBefore(endBookmark, startBookmark);
             }
 
-            // Make sure start and end are in correct position.
-            if (startBookmark.previousSibling === endBookmark) {
-                // Reverse..
-                ViperUtil.insertBefore(endBookmark, startBookmark);
+            if (ViperUtil.isChildOf(startBookmark, this.element) === false) {
+                if (this.element.firstChild) {
+                    ViperUtil.insertBefore(this.element.firstChild, startBookmark);
+                } else {
+                    // Should not happen...
+                    this.element.appendChild(startBookmark);
+                }
             }
-        } catch (e) {
-            // NS_ERROR_UNEXPECTED: I believe this is a Firefox bug.
-            // It seems like if the range is collapsed and the text node is empty
-            // (i.e. length = 0) then Firefox tries to split the node for no reason and fails...
-            ViperUtil.insertBefore(endBookmark, startBookmark);
-        }
 
-        if (ViperUtil.isChildOf(startBookmark, this.element) === false) {
-            if (this.element.firstChild) {
-                ViperUtil.insertBefore(this.element.firstChild, startBookmark);
-            } else {
-                // Should not happen...
-                this.element.appendChild(startBookmark);
-            }
-        }
+            if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true) {
+                // Sigh.. Move the range where its suppose to be instead of Webkit deciding that it should
+                // move the end of range to the begining of the next sibling -.-.
+                if (!endBookmark.previousSibling) {
+                    var node = endBookmark.parentNode.previousSibling;
+                    while (node) {
+                        if (node.nodeType !== ViperUtil.TEXT_NODE || ViperUtil.isBlank(node.data) === false) {
+                            break;
+                        }
 
-        if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true) {
-            // Sigh.. Move the range where its suppose to be instead of Webkit deciding that it should
-            // move the end of range to the begining of the next sibling -.-.
-            if (!endBookmark.previousSibling) {
-                var node = endBookmark.parentNode.previousSibling;
-                while (node) {
-                    if (node.nodeType !== ViperUtil.TEXT_NODE || ViperUtil.isBlank(node.data) === false) {
-                        break;
+                        node = node.previousSibling;
                     }
 
-                    node = node.previousSibling;
-                }
-
-                if (node === startBookmark.parentNode) {
-                    startBookmark.parentNode.appendChild(endBookmark);
+                    if (node === startBookmark.parentNode) {
+                        startBookmark.parentNode.appendChild(endBookmark);
+                    }
                 }
             }
+
+            if (!endBookmark.previousSibling) {
+                var tmp = Viper.document.createTextNode('');
+                ViperUtil.insertBefore(endBookmark, tmp);
+            }
+
+            // The original range object must be changed.
+            if (!startBookmark.nextSibling) {
+                var tmp = Viper.document.createTextNode('');
+                ViperUtil.insertAfter(startBookmark, tmp);
+            }
+
+            currRange.setStart(startBookmark.nextSibling, 0);
+            currRange.setEnd(endBookmark.previousSibling, (endBookmark.previousSibling.length || 0));
         }
 
-        if (!endBookmark.previousSibling) {
-            var tmp = Viper.document.createTextNode('');
-            ViperUtil.insertBefore(endBookmark, tmp);
+        var bookmark = {
+            start: startBookmark,
+            end: endBookmark
+        };
+
+        return bookmark;
+
+    },
+
+    /**
+     * Creates a bookmark using the Viper highlight.
+     *
+     * @return object
+     */
+    createBookmarkFromHighlight: function()
+    {
+        var highlights = this.getHighlights();
+        if (highlights.length === 0) {
+            return null;
         }
 
-        // The original range object must be changed.
-        if (!startBookmark.nextSibling) {
-            var tmp = Viper.document.createTextNode('');
-            ViperUtil.insertAfter(startBookmark, tmp);
-        }
+        var startBookmark           = Viper.document.createElement('span');
+        startBookmark.style.display = 'none';
+        ViperUtil.addClass(startBookmark, 'viperBookmark viperBookmark_start');
+        ViperUtil.setHtml(startBookmark, '&nbsp;');
+        startBookmark.setAttribute('viperBookmark', 'start');
+        ViperUtil.insertBefore(highlights[0], startBookmark);
 
-        currRange.setStart(startBookmark.nextSibling, 0);
-        currRange.setEnd(endBookmark.previousSibling, (endBookmark.previousSibling.length || 0));
+        var endBookmark           = Viper.document.createElement('span');
+        endBookmark.style.display = 'none';
+        ViperUtil.setHtml(endBookmark, '&nbsp;');
+        ViperUtil.addClass(endBookmark, 'viperBookmark viperBookmark_end');
+        endBookmark.setAttribute('viperBookmark', 'end');
+        ViperUtil.insertAfter(highlights[(highlights.length - 1)], endBookmark);
 
         var bookmark = {
             start: startBookmark,
@@ -3879,8 +4091,11 @@ Viper.prototype = {
                 highlights[0].removeAttribute('class');
             }
 
-            range.selectNode(highlights[0]);
-            ViperSelection.addRange(range);
+            if (element === this.element) {
+                range.selectNode(highlights[0]);
+                ViperSelection.addRange(range);
+            }
+
             return true;
         }
 
@@ -3937,18 +4152,21 @@ Viper.prototype = {
             }//end if
         }//end for
 
-        ViperSelection.addRange(range);
-
-        this._viperRange = range.cloneRange();
+        if (element === this.element) {
+            ViperSelection.addRange(range);
+            this._viperRange = range.cloneRange();
+        }
 
         return true;
 
     },
 
-    removeHighlights: function()
+    removeHighlights: function(element)
     {
+        element = element || this.element;
+
         // There should be one...
-        var highlights = ViperUtil.getClass('__viper_selHighlight', this.element);
+        var highlights = this.getHighlights(element);
         if (highlights.length === 0) {
             return;
         }
@@ -3973,6 +4191,16 @@ Viper.prototype = {
         }//end for
 
         return true
+
+    },
+
+    getHighlights: function(element)
+    {
+        element = element || this.element;
+
+        // There should be one...
+        var highlights = ViperUtil.getClass('__viper_selHighlight', element);
+        return highlights;
 
     },
 
@@ -4245,6 +4473,35 @@ Viper.prototype = {
                 ) {
                     // Webkit does not fire keypress event for delete and backspace keys..
                     this.fireNodesChanged();
+                } else if (ViperUtil.isBrowser('msie', '10') === true) {
+                    // Strange issue with IE10.. If a paragraph has only an anchor tag and caret is at the end
+                    // of this anchor tag then typing any chracter removes the whole tag...
+                    if (range.startContainer
+                        && range.startContainer === range.endContainer
+                        && range.startOffset === 0
+                        && range.endOffset === range.startOffset
+                        && ViperUtil.isBlockElement(range.startContainer) === true
+                        && ViperUtil.isTag(range.startContainer.firstChild, 'a') === true
+                    ) {
+                        var newTextNode = document.createTextNode('');
+                        ViperUtil.insertAfter(range.startContainer.firstChild, newTextNode);
+                        range.setStart(newTextNode, 0);
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+                    }
+                } else if (ViperUtil.isBrowser('msie') === true
+                    && range.collapsed === true
+                    && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                    && range.startOffset === 0
+                    && range.startContainer.data.charCodeAt(0) === 160
+                    && !range.startContainer.previousSibling
+                ) {
+                    // If the character is being inserted at the start of a container and the first character is a
+                    // nonbreaking space then replace it with a normal space.
+                    range.startContainer.data = ' ' + range.startContainer.data.substr(1);
+                    range.setStart(range.startContainer, 0);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
                 }//end if
 
                 return true;
@@ -4726,6 +4983,19 @@ Viper.prototype = {
                     range.setEnd(lastSelectable, lastSelectable.data.length);
                     ViperSelection.addRange(range);
                 }
+            } else if (range.endOffset > 0
+                && ViperUtil.isBlank(ViperUtil.trim(endNode.data)) === true
+                && range.commonAncestorContainer === this.getViperElement()
+                && range.commonAncestorContainer.firstElementChild === range.commonAncestorContainer.lastElementChild
+                && range._getFirstSelectableChild(range.commonAncestorContainer, startNode)
+                && range._getLastSelectableChild(range.commonAncestorContainer, endNode)
+            ) {
+                // This is the case where selection starts from first selectable and ends at last selectable
+                // where last selectable is empty text node after a block element.
+                // E.g. <viperEl><div><p>[aaa</p><p>bbb</p></div>    ]</viperEl>
+                // Range should be adjusted to select the common parent.
+                range.selectNode(range.commonAncestorContainer.firstElementChild);
+                ViperSelection.addRange(range);
             }
         } else if (startNode && startNode.nodeType === ViperUtil.TEXT_NODE
             && endNode && endNode.nodeType === ViperUtil.TEXT_NODE
@@ -4765,7 +5035,7 @@ Viper.prototype = {
     {
         if (this.element) {
             try {
-                if (ViperUtil.isBrowser('msie', '<11') === true) {
+                if (ViperUtil.isBrowser('msie') === true) {
                     var range = this.getViperRange();
                     ViperSelection.addRange(range);
 
@@ -4790,6 +5060,18 @@ Viper.prototype = {
                 // Catch the IE error: Can't move focus to control because its invisible.
             }//end try
         }//end if
+
+    },
+
+    isEditableInIframe: function(element)
+    {
+        element = element || this.element;
+
+        if (document !== element.ownerDocument) {
+            return true;
+        }
+
+        return false;
 
     },
 
@@ -5027,7 +5309,7 @@ Viper.prototype = {
                     self._fireCallbacks(callbacks, data, doneCallback, retVal);
                 });
             } catch (e) {
-                console.error(e, callback);
+                console.error(e, callback, e.stack);
             }
 
             return this._fireCallbacks(callbacks, data, doneCallback, retVal);
@@ -5091,6 +5373,8 @@ Viper.prototype = {
 
         // Clone the element so we dont modify the actual contents.
         var clone = ViperUtil.cloneNode(elem);
+
+        this.removeHighlights(clone);
         this.removeEmptyNodes(clone);
 
         // Remove special Viper elements.
@@ -5103,6 +5387,11 @@ Viper.prototype = {
         this.fireCallbacks('Viper:getHtml', {element: clone});
         var html = ViperUtil.getHtml(clone);
         html     = this.cleanHTML(html);
+
+        var defaultBlockTag = this.getDefaultBlockTag();
+        if (html === '' && defaultBlockTag) {
+            html = '<' + defaultBlockTag + '></' + defaultBlockTag + '>';
+        }
 
         html = html.replace(/<\/viper:param>/ig, '');
         html = html.replace(/<viper:param /ig, '<param ');
@@ -5329,7 +5618,7 @@ Viper.prototype = {
 
         this._cleanDOM(elem, tagName, true);
 
-        var range    = this.getViperRange();
+        var range    = this.getViperRange(elem);
         var lastElem = range._getLastSelectableChild(elem);
         if (lastElem && lastElem.nodeType === ViperUtil.TEXT_NODE) {
             lastElem.data = ViperUtil.rtrim(lastElem.data.replace(/(&nbsp;)*$/, ''));
@@ -5409,6 +5698,20 @@ Viper.prototype = {
                             return;
                         }
 
+                        // Remove all BR tags and spaces just before this one.
+                        var prev = node.previousSibling;
+                        while (prev) {
+                            if (ViperUtil.isTag(prev, 'br') === true
+                                || (prev.nodeType === ViperUtil.TEXT_NODE && ViperUtil.trim(prev.nodeValue) === '')
+                            ) {
+                                var removeNode = prev;
+                                prev       = prev.previousSibling;
+                                ViperUtil.remove(removeNode);
+                            } else {
+                                break;
+                            }
+                        }
+
                         if (tag) {
                             var newNode = Viper.document.createTextNode(' ');
                             ViperUtil.insertBefore(node, newNode);
@@ -5430,6 +5733,20 @@ Viper.prototype = {
                         }
 
                         if (brLast === true) {
+                            // Rmove all BR tags just before this one.
+                            var prev = node.previousSibling;
+                            while (prev) {
+                                if (ViperUtil.isTag(prev, 'br') === true
+                                    || (prev.nodeType === ViperUtil.TEXT_NODE && ViperUtil.trim(prev.nodeValue) === '')
+                                ) {
+                                    var removeNode = prev;
+                                    prev       = prev.previousSibling;
+                                    ViperUtil.remove(removeNode);
+                                } else {
+                                    break;
+                                }
+                            }
+
                             ViperUtil.remove(node);
                         }
                     }//end if
@@ -5475,9 +5792,11 @@ Viper.prototype = {
                     }
 
                 default:
+                    var cont = ViperUtil.trim(ViperUtil.getHtml(node));
                     if ((ViperUtil.isStubElement(node) === false
                         && !node.firstChild)
-                        || ViperUtil.trim(ViperUtil.getHtml(node)) === '&nbsp;'
+                        || cont === '&nbsp;'
+                        || (cont === '' && ViperUtil.isTag(node, 'p'))
                     ) {
                         ViperUtil.remove(node);
                     }
@@ -5489,6 +5808,15 @@ Viper.prototype = {
                     ViperUtil.remove(node);
                 } else if (ViperUtil.trim(node.data) === '' && node.data.indexOf("\n") === 0) {
                     ViperUtil.remove(node);
+                } else {
+                    // Remove extra spaces from the node.
+                    node.data = node.data.replace(/^\s+/g, ' ');
+                    node.data = node.data.replace(/\s+$/g, ' ');
+                    node.data = node.data.replace(/\s*\n\s*/g, ' ');
+
+                    // Replace two spaces with two &nbsp;.
+                    var nbsp  = String.fromCharCode(160);
+                    node.data = node.data.replace(/\s{2,2}/g, nbsp + nbsp);
                 }
             } else {
                 node.data = node.data.replace(/^\n+\s*$/m, '');
