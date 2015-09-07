@@ -374,7 +374,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->clickTopToolbarButton('PRE', NULL, TRUE);
         sleep(1);
         $this->assertHTMLMatch('<p>First paragraph</p><div><pre>%1%</pre> xtn dolor</div>');
-        $this->assertTrue($this->topToolbarButtonExists('PRE', 'active'), 'Pre format icon should be active in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('PRE', 'active', TRUE), 'Pre format icon should be active in the top toolbar');
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
