@@ -145,12 +145,12 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
     }//end testUndoAndRedoSuperscript()
 
 
-        /**
+    /**
      * Test that you cannot have both subscript and superscript on the same item.
      *
      * @return void
      */
-    public function testSuperscriptAndSubscript()
+   /* public function testSuperscriptAndSubscript()
     {
         $this->useTest(1);
         $this->selectKeyword(1);
@@ -159,7 +159,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
         $this->assertTrue($this->topToolbarButtonExists('subscript', 'disabled'));
         $this->assertHTMLMatch('<p><sup>%1%</sup> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-    }//end testSuperscriptAndSubscript()
+    }*///end testSuperscriptAndSubscript()
 
     /**
      * Test applying and removing superscript for a link in the content of a page.
