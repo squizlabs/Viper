@@ -731,20 +731,26 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
 
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
         $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should not appear in the inline toolbar');
 
         // Apply heading to the P section
         $this->clickTopToolbarButton('headings');
+        sleep(1);
         $this->clickTopToolbarButton('H1', NULL, TRUE);
+        sleep(1);
         $this->assertHTMLMatch('<div><h1>Long paragraph for testing that the heading icon does not appear in the inline toolbar %1%.</h1></div>');
 
         // Test changing the div to a heading
         $this->useTest(6);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->clickTopToolbarButton('headings');
+        sleep(1);
         $this->clickTopToolbarButton('H1', NULL, TRUE);
+        sleep(1);
         $this->assertHTMLMatch('<h1>Long paragraph for testing that the heading icon does not appear in the inline toolbar %1%.</h1>');
 
     }//end testApplyingHeadginsWithOnePInsideADiv()
