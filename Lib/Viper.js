@@ -4897,6 +4897,20 @@ Viper.prototype = {
                     ViperUtil.remove(range.startContainer);
                     range.setStart(textNode, 0);
                     range.collapse(true);
+                } else if (range.startContainer === range.endContainer
+                    && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                    && range.collapsed === true
+                    && range.startOffset === range.startContainer.data.length
+                    && range.startContainer.data.charAt(range.startOffset - 1) === ' '
+                ) {
+                    // Inserting text at the end of a text node that ends with a space to prevent browser removing the
+                    // space.
+                    range.startContainer.data += String.fromCharCode(e.which);
+                    range.setStart(range.startContainer, range.startContainer.data.length);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                    this.fireNodesChanged([range.getStartNode()]);
+                    return false;
                 }//end if
             }//end if
 

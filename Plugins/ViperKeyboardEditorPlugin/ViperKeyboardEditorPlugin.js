@@ -1296,6 +1296,22 @@ ViperKeyboardEditorPlugin.prototype = {
                             // The whole textnode is selected.
                             // Clear the contents of the text node.
                             textNode.data = '';
+
+                            if (this.isEmptyElement(textNode.parentNode) === true) {
+                                // Parent is now empty.
+                                var parent = textNode.parentNode;
+                                if (parent.previousSibling && parent.previousSibling.nodeType === ViperUtil.TEXT_NODE) {
+                                    textNode = parent.previousSibling;
+                                } else {
+                                    ViperUtil.insertBefore(parent, textNode)
+                                }
+
+                                range.setStart(textNode, textNode.data.length);
+                                range.collapse(true);
+
+                                ViperUtil.remove(parent);
+                            }
+
                             this.viper.fireNodesChanged();
                             this.viper.fireSelectionChanged(null, true);
                             return false;
