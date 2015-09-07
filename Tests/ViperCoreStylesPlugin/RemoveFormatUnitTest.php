@@ -309,52 +309,6 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
 
     }//end testRemoveFormatForANestedStyleElement()
 
-
-    /**
-     * Test that remove format works with different types of list
-     *
-     * @return void
-     */
-    public function testRemoveFormatAndLists()
-    {
-        // test removing a single unordered list
-        $this->useTest(8);
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('removeFormat');
-        $this->assertHTMLMatch('<p>Test list:</p><p>%1%</p><p>Test content.</p><p>More test content.</p><p>Another list:</p><ul><li>%3%</li><li>Test content.</li><li>More test content.</li></ul>');
-
-         // test removing all unordered lists from content
-        $this->useTest(8);
-        $this->selectKeyword(1);
-        $this->sikuli->keyDown('Key.CMD + a');
-        $this->clickTopToolbarButton('removeFormat');
-        $this->assertHTMLMatch('<p>Test list:</p><p>%1%</p><p>Test content.</p><p>More test content.</p><p>Another list:</p><p>%3%</p><p>Test content.</p><p>More test content.</p>');
-
-        // test removing a single ordered list
-        $this->useTest(9);
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('removeFormat');
-        $this->assertHTMLMatch('<p>Test list:</p><p>%1%</p><p>Test content.</p><p>More test content.</p><p>Another list:</p><ol><li>%3%</li><li>Test content.</li><li>More test content.</li></ol>');
-
-        // test removing all ordered lists from content
-        $this->useTest(9);
-        $this->selectKeyword(1);
-        $this->sikuli->keyDown('Key.CMD + a');
-        $this->clickTopToolbarButton('removeFormat');
-        $this->assertHTMLMatch('<p>Test list:</p><p>%1%</p><p>Test content.</p><p>More test content.</p><p>Another list:</p><p>%3%</p><p>Test content.</p><p>More test content.</p>');
-
-        // test removing a mix of lists from the content
-        $this->useTest(10);
-        $this->selectKeyword(1);
-        $this->sikuli->keyDown('Key.CMD + a');
-        $this->clickTopToolbarButton('removeFormat');
-        $this->assertHTMLMatch('<p>Test list:</p><p>%1%</p><p>Test content.</p><p>More test content.</p><p>Another list:</p><p>%3%</p><p>Test content.</p><p>More test content.</p>');
-
-    }//end testRemoveFormatAndLists()
-
-
 }//end class
 
 
