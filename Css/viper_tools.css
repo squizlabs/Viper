@@ -141,17 +141,6 @@
 .Viper-subSection .Viper-button {
   border-color: #B1B1B1;
 }
-.Viper-button.Viper-active {
-  background-color: #2b7ce0;
-  border-color: #1768cc;
-  color: #ffffff;
-}
-.Viper-buttonGroup .Viper-button.Viper-active + .Viper-button {
-  border-left-color: #1768cc;
-}
-.Viper-buttonGroup .Viper-button.Viper-active + .Viper-button.Viper-selected.Viper-active {
-  border-left-color: #1a4c8a;
-}
 .Viper-button.Viper-selected {
   background: #cacaca;
   border-color: #b8b8b8;
@@ -160,13 +149,13 @@
 .Viper-buttonGroup .Viper-button.Viper-selected + .Viper-button {
   border-left-color: #b8b8b8;
 }
-.Viper-button.Viper-selected.Viper-active {
-  background: #1a4c8a;
-  border-color: #1a4c8a;
+.Viper-button.Viper-active {
+  background-color: #2b7ce0;
+  border-color: #1768cc;
   color: #ffffff;
 }
-.Viper-buttonGroup .Viper-button.Viper-selected.Viper-active + .Viper-button {
-  border-left-color: #1a4c8a;
+.Viper-buttonGroup .Viper-button.Viper-active + .Viper-button {
+  border-left-color: #1768cc;
 }
 .Viper-button.ViperITP-button-hidden {
   display: none;
