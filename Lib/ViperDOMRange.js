@@ -1119,7 +1119,7 @@ ViperDOMRange.prototype = {
         }
 
         var nextSibling = startParent.nextSibling;
-        if (!nextSibling && startParent.nodeType !== ViperUtil.TEXT_NODE) {
+        if (!nextSibling && startParent.nodeType !== ViperUtil.TEXT_NODE && startParent.parentNode.firstElementChild === startParent) {
             this._nodeSel.node = startNode.parentNode;
             return startNode.parentNode;
         }

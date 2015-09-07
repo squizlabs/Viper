@@ -832,7 +832,7 @@ ViperKeyboardEditorPlugin.prototype = {
             }
 
             // No need to handle any case where caret is not at the start of a node.
-            return;
+            //return;
         }
 
         var defaultTagName  = this.viper.getDefaultBlockTag();
@@ -850,7 +850,7 @@ ViperKeyboardEditorPlugin.prototype = {
         }
 
         // TODO: Should use getNodeSelection to simplify this whole delete method.
-        if (range.collapsed === true && e.keyCode === 8) {
+        if (range.collapsed === true && e.keyCode === 8 && range.startOffset === 0) {
             if (startNode && startNode.nodeType === ViperUtil.TEXT_NODE) {
                 var skippedBlockElem = [];
                 var node      = range.getPreviousContainer(startNode, skippedBlockElem, true, true);
@@ -1187,7 +1187,9 @@ ViperKeyboardEditorPlugin.prototype = {
             } else if (ViperUtil.isTag(range.startContainer, ['td', 'th']) === true) {
                 return false;
             }
-        } else if (ViperUtil.isBrowser('firefox') === true) {
+        }
+
+        if (ViperUtil.isBrowser('firefox') === true) {
             // Firefox specific fixes.
             if (range.collapsed === true) {
                 // Range collapsed.
@@ -1223,9 +1225,122 @@ ViperKeyboardEditorPlugin.prototype = {
                             ViperSelection.addRange(range);
                             this.viper.fireNodesChanged();
                             this.viper.fireSelectionChanged(null, true);
+                            return false;
+                        }
+                    }
+                } else {
+                    // Text node.
+                    if (range.startOffset > 0) {
+                        // Delete a character from left.
+                        var textNode = range.startContainer;
+                        textNode.data = textNode.data.substr(0, range.startOffset - 1) + textNode.data.substr(range.startOffset);
+
+                        // Normalise text nodes.
+                        this._normaliseNextNodes(textNode);
+
+                        range.setStart(textNode, range.startOffset - 1);
+                        range.collapse(true);
+
+                        if (textNode.data.length === 0
+                            && textNode.nextSibling === null
+                            && textNode.previousSibling === null
+                            && ViperUtil.isBlockElement(textNode.parentNode) === true
+                        ) {
+                            // The last character of this text node was deleted and now the block parent has no content.
+                            // Add a BR to keep the blockelement 'selectable'.
+                            var br = document.createElement('br');
+                            textNode.parentNode.appendChild(br);
                         }
 
+                        this.viper.fireNodesChanged();
+                        this.viper.fireSelectionChanged(null, true);
+
                         return false;
+                    } else {
+                        this._normaliseNextNodes(range.startContainer);
+
+                        // At the beginning of text node.
+                        if (range.startContainer.previousSibling === null
+                            && (range.startContainer.nextSibling === null || ViperUtil.isTag(range.startContainer.nextSibling, 'br') === true)
+                        ) {
+                            // This is the only node in the parent.
+                            // Set the range before the parent and remove it.
+                            var parent            = range.startContainer.parentNode;
+                            var previousContainer = range.getPreviousContainer(range.startContainer);
+                            if (previousContainer) {
+                                range.setStart(previousContainer, previousContainer.data.length);
+                                range.collapse(true);
+                                ViperSelection.addRange(range);
+                                ViperUtil.remove(parent);
+                                return;
+                            }
+                        } else {
+                            var previousContainer = range.getPreviousContainer(range.startContainer);
+                            if (previousContainer) {
+                                range.setStart(previousContainer, previousContainer.data.length);
+                                range.collapse(true);
+                                ViperSelection.addRange(range);
+                                return;
+                            }
+                        }
+                    }
+                }
+            } else {
+                // Selection.
+                if (range.startContainer === range.endContainer) {
+                    // Same container.
+                    if (range.startContainer.nodeType === ViperUtil.TEXT_NODE) {
+                        // Text node selection. Modify node content.
+                        var textNode = range.startContainer;
+                        if (range.startOffset === 0 && range.endOffset === textNode.data.length) {
+                            // The whole textnode is selected.
+                            // Clear the contents of the text node.
+                            textNode.data = '';
+                            this.viper.fireNodesChanged();
+                            this.viper.fireSelectionChanged(null, true);
+                            return false;
+                        }
+                    }
+                } else {
+                    // Different start and end containers.
+                    if (range.startContainer.nodeType === ViperUtil.TEXT_NODE) {
+                        // Start container is text node.
+                        if (range.endContainer.nodeType === ViperUtil.TEXT_NODE) {
+                            // And the end container is text node.
+                            var container = null;
+                            var offset    = 0;
+                            if (range.startOffset === 0) {
+                                // Selection is at the start of this text node and the end container is different.
+                                // This means the startContainer will be removed, therfore use endContainer unless it is also empty.
+                                if (range.endOffset === range.endContainer.data.length) {
+                                    // Both the start container and the end container will be removed.
+                                    container = document.createTextNode('');
+                                    ViperUtil.insertBefore(range.startContainer, container);
+                                    offset = 0;
+                                } else {
+                                    // The endContainer will remain after deletion use it to set the range.
+                                    container = range.endContainer;
+                                    offset    = 0;
+                                }
+                            } else {
+                                container = range.startContainer;
+                                offset    = range.startOffset;
+                            }
+
+                            // Let browser delete the contents but adjust the range after.
+                            var self = this;
+                            setTimeout(function () {
+                                if (container.data.length === 0 && container.parentNode.childNodes.length === 1 && ViperUtil.isBlockElement(container.parentNode) === false) {
+                                    var parent = container.parentNode;
+                                    ViperUtil.insertBefore(container.parentNode, container);
+                                    ViperUtil.remove(parent);
+                                }
+
+                                range.setStart(container, offset);
+                                range.collapse(true);
+                                ViperSelection.addRange(range);
+                            }, 10);
+                        }
                     }
                 }
             }
@@ -1338,6 +1453,17 @@ ViperKeyboardEditorPlugin.prototype = {
 
         if (this._isStartToEndOfMultiContainerSelection(range) === true) {
             return this._removeContentFromStartToEndOfContainers(range)
+        }
+
+    },
+
+    _normaliseNextNodes: function (textNode) {
+        while (textNode.nextSibling && textNode.nextSibling.nodeType === ViperUtil.TEXT_NODE) {
+            if (textNode.nextSibling.data.length > 0) {
+                textNode.data += textNode.nextSibling.data;
+            }
+
+            ViperUtil.remove(textNode.nextSibling);
         }
 
     },
@@ -2455,6 +2581,11 @@ ViperKeyboardEditorPlugin.prototype = {
             return false;
         }
 
+        return this.isEmptyElement(element);
+
+    },
+
+    isEmptyElement: function (element) {
         if (!element.firstChild) {
             return true;
         }
