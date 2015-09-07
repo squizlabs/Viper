@@ -20,45 +20,45 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->assertFalse($this->inlineToolbarButtonExists('headings', 'active'));
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('headings', 'active');
-        $this->clickInlineToolbarButton('H2', NULL, TRUE);
+        $this->clickInlineToolbarButton('H2', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h2>Heading %1%</h2>');
-        $this->clickInlineToolbarButton('H3', NULL, TRUE);
+        $this->clickInlineToolbarButton('H3', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h3>Heading %1%</h3>');
-        $this->clickInlineToolbarButton('H4', NULL, TRUE);
+        $this->clickInlineToolbarButton('H4', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h4>Heading %1%</h4>');
-        $this->clickInlineToolbarButton('H5', NULL, TRUE);
+        $this->clickInlineToolbarButton('H5', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h5>Heading %1%</h5>');
-        $this->clickInlineToolbarButton('H1', NULL, TRUE);
+        $this->clickInlineToolbarButton('H1', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h1>Heading %1%</h1>');
 
         // Using the top toolbar and clicking in the heading
         $this->useTest(1);
         $this->moveToKeyword(1);
         $this->clickTopToolbarButton('headings', 'active');
-        $this->clickTopToolbarButton('H2', NULL, TRUE);
+        $this->clickTopToolbarButton('H2', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h2>Heading %1%</h2>');
-        $this->clickTopToolbarButton('H3', NULL, TRUE);
+        $this->clickTopToolbarButton('H3', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h3>Heading %1%</h3>');
-        $this->clickTopToolbarButton('H4', NULL, TRUE);
+        $this->clickTopToolbarButton('H4', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h4>Heading %1%</h4>');
-        $this->clickTopToolbarButton('H5', NULL, TRUE);
+        $this->clickTopToolbarButton('H5', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h5>Heading %1%</h5>');
-        $this->clickTopToolbarButton('H1', NULL, TRUE);
+        $this->clickTopToolbarButton('H1', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h1>Heading %1%</h1>');
 
         // Using the top toolbar and selecting a word
         $this->useTest(1);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('headings', 'active');
-        $this->clickTopToolbarButton('H2', NULL, TRUE);
+        $this->clickTopToolbarButton('H2', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h2>Heading %1%</h2>');
-        $this->clickTopToolbarButton('H3', NULL, TRUE);
+        $this->clickTopToolbarButton('H3', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h3>Heading %1%</h3>');
-        $this->clickTopToolbarButton('H4', NULL, TRUE);
+        $this->clickTopToolbarButton('H4', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h4>Heading %1%</h4>');
-        $this->clickTopToolbarButton('H5', NULL, TRUE);
+        $this->clickTopToolbarButton('H5', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h5>Heading %1%</h5>');
-        $this->clickTopToolbarButton('H1', NULL, TRUE);
+        $this->clickTopToolbarButton('H1', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h1>Heading %1%</h1>');
 
         // Using the top toolbar and selecting the heading
@@ -66,15 +66,15 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('headings', 'active');
-        $this->clickTopToolbarButton('H2', NULL, TRUE);
+        $this->clickTopToolbarButton('H2', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h2>Heading %1%</h2>');
-        $this->clickTopToolbarButton('H3', NULL, TRUE);
+        $this->clickTopToolbarButton('H3', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h3>Heading %1%</h3>');
-        $this->clickTopToolbarButton('H4', NULL, TRUE);
+        $this->clickTopToolbarButton('H4', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h4>Heading %1%</h4>');
-        $this->clickTopToolbarButton('H5', NULL, TRUE);
+        $this->clickTopToolbarButton('H5', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h5>Heading %1%</h5>');
-        $this->clickTopToolbarButton('H1', NULL, TRUE);
+        $this->clickTopToolbarButton('H1', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h1>Heading %1%</h1>');
 
     }//end testEditingAHeading()
