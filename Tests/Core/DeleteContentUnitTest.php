@@ -154,7 +154,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
 
         // Add content to check the position of the cursor
         $this->type('content');
-        $this->assertHTMLMatch('<p>%1% <strong>testcontent</strong></p>');
+        $this->assertHTMLMatch('<p>%1% <strong>test</strong>content</p>');
 
         // Check deleting from the end of the paragraph including bold content
         $this->useTest(4);
@@ -168,7 +168,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
 
         // Add content to check the position of the cursor
         $this->type('content');
-        $this->assertHTMLMatch('<p>%1%content</p>');
+        $this->assertHTMLMatch('<p>%1% content</p>');
 
         // Check deleting from the start of the paragraph
         $this->useTest(4);
@@ -180,7 +180,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
 
         // Add content to check the position of the cursor
         $this->type('content');
-        $this->assertHTMLMatch('<p><strong>contenttest</strong> %2%</p>');
+        $this->assertHTMLMatch('<p>content <strong>test</strong> %2%</p>');
 
         // Check deleting from the start of the paragraph including bold content
         $this->useTest(4);
@@ -194,7 +194,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
 
         // Add content to check the position of the cursor
         $this->type('content');
-        $this->assertHTMLMatch('<p>content%2%</p>');
+        $this->assertHTMLMatch('<p><strong>content</strong> %2%</p>');
 
     }//end testDeletingContentWithBoldFormatting()
 

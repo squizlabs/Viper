@@ -4808,6 +4808,10 @@ Viper.prototype = {
             var nodeSelection = null;
             if (resetContent !== true) {
                 nodeSelection = range.getNodeSelection(range, true);
+                if (nodeSelection) {
+                    nodeSelection = range.getNodeSelection(range, true);
+                }
+
                 if (nodeSelection && nodeSelection === this.element) {
                     resetContent = true;
                 }
@@ -4901,17 +4905,49 @@ Viper.prototype = {
                     && range.startContainer.nodeType === ViperUtil.TEXT_NODE
                     && range.collapsed === true
                     && range.startOffset === range.startContainer.data.length
-                    && range.startContainer.data.charAt(range.startOffset - 1) === ' '
                 ) {
-                    // Inserting text at the end of a text node that ends with a space to prevent browser removing the
-                    // space.
-                    range.startContainer.data += String.fromCharCode(e.which);
-                    range.setStart(range.startContainer, range.startContainer.data.length);
-                    range.collapse(true);
-                    ViperSelection.addRange(range);
-                    this.fireNodesChanged([range.getStartNode()]);
-                    return false;
-                }//end if
+                    if (range.startContainer.data.charAt(range.startOffset - 1) === ' ') {
+                        // Inserting text at the end of a text node that ends with a space to prevent browser removing the
+                        // space.
+                        range.startContainer.data += String.fromCharCode(e.which);
+                        range.setStart(range.startContainer, range.startContainer.data.length);
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+                        this.fireNodesChanged([range.getStartNode()]);
+                        return false;
+                    } else if (range.startContainer.data.length === 0) {
+                        if (range.startContainer.previousSibling
+                            && range.startContainer.previousSibling.nodeType === ViperUtil.TEXT_NODE
+                        ) {
+                            var prevSib = range.startContainer.previousSibling;
+                            if (prevSib.data.charAt(prevSib.data.length - 1) === ' ') {
+                                prevSib.data += String.fromCharCode(e.which);
+                                range.setStart(prevSib, prevSib.data.length);
+                                range.collapse(true);
+                                ViperSelection.addRange(range);
+                                this.fireNodesChanged([range.getStartNode()]);
+                                return false;
+                            }
+                        } else if (range.startContainer.parentNode
+                            && ViperUtil.isEmptyElement(range.startContainer.parentNode) === true
+                        ) {
+                            // Parent node is empty.
+                            var parentPrevSib = range.startContainer.parentNode.previousSibling;
+                            if (parentPrevSib
+                                && parentPrevSib.nodeType === ViperUtil.TEXT_NODE
+                                && parentPrevSib.data.charAt(parentPrevSib.data.length - 1) === ' '
+                            ) {
+                                // Parent's previous sibling has white space at the end.
+                                parentPrevSib.data += String.fromCharCode(e.which);
+                                range.setStart(parentPrevSib, parentPrevSib.data.length);
+                                range.collapse(true);
+                                ViperSelection.addRange(range);
+                                this.fireNodesChanged([range.getStartNode()]);
+                                return false;
+                            }
+                        }
+                    }
+                }
             }//end if
 
             this.fireNodesChanged([range.getStartNode()]);

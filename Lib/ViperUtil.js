@@ -341,6 +341,34 @@ var ViperUtil = {
 
     },
 
+    isEmptyElement: function (element) {
+        if (!element.firstChild) {
+            return true;
+        }
+
+        var brCount = 0;
+        for (var i = 0; i < element.childNodes.length; i++) {
+            var el = element.childNodes[i];
+            if (el.nodeType === ViperUtil.TEXT_NODE) {
+                if (ViperUtil.trim(el.data).length !== 0) {
+                    return false;
+                } else {
+                    // Ignore empty text nodes.
+                    continue;
+                }
+            } else if (ViperUtil.isTag(el, 'br') === false) {
+                return false;
+            } else if (brCount !== 0) {
+                return false;
+            } else {
+                brCount++;
+            }
+        }
+
+        return true;
+
+    },
+
     /**
      * returns a left trimmed string.
      *

@@ -1030,8 +1030,12 @@ ViperKeyboardEditorPlugin.prototype = {
                         ViperUtil.remove(elemsBetween[(elemsBetween.length - 1)]);
                     } else {
                         // If prev parent has BR as last child, remove it.
-                        if (prevParent.lastChild && ViperUtil.isTag(prevParent.firstChild, 'br') === true) {
-                            ViperUtil.remove(prevParent.firstChild);
+                        if (prevParent.lastChild && ViperUtil.isTag(prevParent.lastChild, 'br') === true) {
+                            ViperUtil.remove(prevParent.lastChild);
+                        }
+
+                        if (currentParent.lastChild && ViperUtil.isTag(currentParent.lastChild, 'br') === true) {
+                            ViperUtil.remove(currentParent.lastChild);
                         }
 
                         while (currentParent.firstChild) {
@@ -1042,7 +1046,12 @@ ViperKeyboardEditorPlugin.prototype = {
                             ViperUtil.remove(currentParent);
                         }
 
-                        range.setStart(startNode, 0);
+                        if (prevSelectable.nodeType === ViperUtil.TEXT_NODE) {
+                            range.setStart(prevSelectable, prevSelectable.data.length);
+                        } else {
+                            range.setStart(prevSelectable, 0);
+                        }
+
                         range.collapse(true);
                         ViperSelection.addRange(range);
                     }
@@ -1268,15 +1277,18 @@ ViperKeyboardEditorPlugin.prototype = {
                             var parent            = range.startContainer.parentNode;
                             var previousContainer = range.getPreviousContainer(range.startContainer);
                             if (previousContainer) {
+                                // Remove last character.
+                                console.info(previousContainer);
+                                previousContainer.data = previousContainer.data.substr(0, previousContainer.data.length - 1);
                                 range.setStart(previousContainer, previousContainer.data.length);
                                 range.collapse(true);
                                 ViperSelection.addRange(range);
                                 ViperUtil.remove(parent);
-                                return;
+                                return false;
                             }
                         } else {
                             var previousContainer = range.getPreviousContainer(range.startContainer);
-                            if (previousContainer) {
+                            if (previousContainer) {console.info(previousContainer);
                                 range.setStart(previousContainer, previousContainer.data.length);
                                 range.collapse(true);
                                 ViperSelection.addRange(range);
@@ -1297,7 +1309,7 @@ ViperKeyboardEditorPlugin.prototype = {
                             // Clear the contents of the text node.
                             textNode.data = '';
 
-                            if (this.isEmptyElement(textNode.parentNode) === true) {
+                            if (ViperUtil.isEmptyElement(textNode.parentNode) === true) {
                                 // Parent is now empty.
                                 var parent = textNode.parentNode;
                                 if (parent.previousSibling && parent.previousSibling.nodeType === ViperUtil.TEXT_NODE) {
@@ -2597,35 +2609,7 @@ ViperKeyboardEditorPlugin.prototype = {
             return false;
         }
 
-        return this.isEmptyElement(element);
-
-    },
-
-    isEmptyElement: function (element) {
-        if (!element.firstChild) {
-            return true;
-        }
-
-        var brCount = 0;
-        for (var i = 0; i < element.childNodes.length; i++) {
-            var el = element.childNodes[i];
-            if (el.nodeType === ViperUtil.TEXT_NODE) {
-                if (ViperUtil.trim(el.data).length !== 0) {
-                    return false;
-                } else {
-                    // Ignore empty text nodes.
-                    continue;
-                }
-            } else if (ViperUtil.isTag(el, 'br') === false) {
-                return false;
-            } else if (brCount !== 0) {
-                return false;
-            } else {
-                brCount++;
-            }
-        }
-
-        return true;
+        return ViperUtil.isEmptyElement(element);
 
     }
 
