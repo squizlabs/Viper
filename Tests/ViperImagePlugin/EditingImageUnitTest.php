@@ -22,7 +22,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->type($this->getTestURL('/ViperImagePlugin/Images/hero-shot.jpg'));
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
-        $this->clickInlineToolbarButton('image', 'selected');
+        $this->clickInlineToolbarButton('image', 'active-selected');
         $this->assertHTMLMatch('<p>Image without alt or title %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt=""/></p><p>LABS is ORSM</p>');
 
         // Change URL for an image that has alt and no title tag
@@ -33,7 +33,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->type($this->getTestURL('/ViperImagePlugin/Images/hero-shot.jpg'));
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
-        $this->clickInlineToolbarButton('image', 'selected');
+        $this->clickInlineToolbarButton('image', 'active-selected');
         $this->assertHTMLMatch('<p>Image with alt no title %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="testalt"/></p><p>LABS is ORSM</p>');
 
         // Change URL for an image that has alt and title tag
@@ -43,7 +43,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->clearFieldValue('URL');
         $this->type($this->getTestURL('/ViperImagePlugin/Images/hero-shot.jpg'));
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->clickInlineToolbarButton('image', 'selected');
+        $this->clickInlineToolbarButton('image', 'active-selected');
         $this->assertHTMLMatch('<p>Image with alt and title %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="testalt" title="testtitle"/></p><p>LABS is ORSM</p>');
 
         // Using the top toolbar
@@ -57,7 +57,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->checkPreviewImageSize();
-        $this->clickTopToolbarButton('image', 'selected');
+        $this->clickTopToolbarButton('image', 'active-selected');
         $this->assertHTMLMatch('<p>Image without alt or title %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt=""/></p><p>LABS is ORSM</p>');
 
         // Change URL for an image that has alt and no title tag
@@ -69,7 +69,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->checkPreviewImageSize();
-        $this->clickTopToolbarButton('image', 'selected');
+        $this->clickTopToolbarButton('image', 'active-selected');
         $this->assertHTMLMatch('<p>Image with alt no title %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="testalt"/></p><p>LABS is ORSM</p>');
 
         // Change URL for an image that has alt and title tag
@@ -80,7 +80,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->type($this->getTestURL('/ViperImagePlugin/Images/hero-shot.jpg'));
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->checkPreviewImageSize();
-        $this->clickTopToolbarButton('image', 'selected');
+        $this->clickTopToolbarButton('image', 'active-selected');
         $this->assertHTMLMatch('<p>Image with alt and title %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="testalt" title="testtitle"/></p><p>LABS is ORSM</p>');
 
     }//end testEditingTheURLForAnImage()
