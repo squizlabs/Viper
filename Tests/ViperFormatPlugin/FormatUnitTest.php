@@ -45,7 +45,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'));
         $this->assertFalse($this->inlineToolbarButtonExists('formats-p', 'active'));
         $this->assertFalse($this->inlineToolbarButtonExists('formats', NULL));
 
@@ -54,7 +54,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + i');
-        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'));
         $this->assertFalse($this->inlineToolbarButtonExists('formats-p', 'active'));
         $this->assertFalse($this->inlineToolbarButtonExists('formats', NULL));
 
@@ -63,7 +63,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertTrue($this->topToolbarButtonExists('formats-div', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('formats-div', 'active'));
         $this->assertFalse($this->inlineToolbarButtonExists('formats-div', 'active'));
         $this->assertFalse($this->inlineToolbarButtonExists('formats', NULL));
 
@@ -72,7 +72,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + i');
-        $this->assertTrue($this->topToolbarButtonExists('formats-div', NULL));
+        $this->assertTrue($this->topToolbarButtonExists('formats-div', 'active'));
         $this->assertFalse($this->inlineToolbarButtonExists('formats-div', 'active'));
         $this->assertFalse($this->inlineToolbarButtonExists('formats', NULL));
 
@@ -81,7 +81,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'));
         $this->assertFalse($this->inlineToolbarButtonExists('formats-blockquote', 'active'));
         $this->assertFalse($this->inlineToolbarButtonExists('formats', NULL));
 
@@ -90,7 +90,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + i');
-        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'));
         $this->assertFalse($this->inlineToolbarButtonExists('formats-blockquote', 'active'));
         $this->assertFalse($this->inlineToolbarButtonExists('formats', NULL));
 
@@ -99,7 +99,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertTrue($this->topToolbarButtonExists('formats-pre', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('formats-pre', 'active'));
         $this->assertFalse($this->inlineToolbarButtonExists('formats-pre', 'active'));
         $this->assertFalse($this->inlineToolbarButtonExists('formats', NULL));
 
@@ -108,7 +108,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + i');
-        $this->assertTrue($this->topToolbarButtonExists('formats-pre', 'disabled'));
+        $this->assertTrue($this->topToolbarButtonExists('formats-pre', 'active'));
         $this->assertFalse($this->inlineToolbarButtonExists('formats-pre', 'active'));
         $this->assertFalse($this->inlineToolbarButtonExists('formats', NULL));
 
