@@ -1445,6 +1445,17 @@ var ViperUtil = {
 
     },
 
+    getElementFrameElement: function(element)
+    {
+        if (element.ownerDocument.defaultView) {
+            return element.ownerDocument.defaultView.frameElement;
+        } else {
+            return element.ownerDocument.frames.frameElement;
+        }
+
+        return null;
+
+    },
 
     /**
      * Determines the position of the bubble given a target element.
@@ -1489,7 +1500,7 @@ var ViperUtil = {
         }
 
         // Get target elements position.
-        var relPos     = ViperUtil.getRelativeWindowPosition(targetElement, element.ownerDocument.defaultView.frameElement);
+        var relPos     = ViperUtil.getRelativeWindowPosition(targetElement, this.getElementFrameElement(element));
         var targetRect = {};
         targetRect.x1  = relPos.x;
         targetRect.y1  = relPos.y;
@@ -1668,8 +1679,8 @@ var ViperUtil = {
     isElementCutOff: function(element)
     {
         // Get the actual view size.
-        var win          = element.ownerDocument.defaultView;
-        var scrollCoords = ViperUtil.getScrollCoords(element.ownerDocument.defaultView);
+        var win          = element.ownerDocument.defaultView || window;
+        var scrollCoords = ViperUtil.getScrollCoords(win);
         var winHeight    = ViperUtil.$(win).height();
         var winWidth     = ViperUtil.$(win).width();
         var relPos       = ViperUtil.getRelativeWindowPosition(element);
@@ -1754,7 +1765,7 @@ var ViperUtil = {
     getRelativeWindowPosition: function(elem, topFrame)
     {
         var offset       = null;
-        var frameElement = elem.ownerDocument.defaultView.frameElement;
+        var frameElement = this.getElementFrameElement(elem);
         if (frameElement) {
             offset = ViperUtil.getElementCoords(elem);
             if (frameElement !== topFrame) {
