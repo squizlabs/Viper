@@ -1532,11 +1532,20 @@ ViperListPlugin.prototype = {
 
         if (!endNode) {
             endNode = startNode;
+        } else if (endNode === this.viper.getViperElement()) {
+            endNode = range._getLastSelectableChild(this.viper.getViperElement());
         }
 
         var startParent = null;
 
-        var listElement = this._getListElement(startNode);
+        var listElement = null;
+        if (ViperUtil.isTag(startNode, ['ul', 'ol']) === true) {
+            listElement = startNode;
+            startNode   = range._getFirstSelectableChild(startNode);
+        } else {
+            listElement = this._getListElement(startNode);
+        }
+
         var firstBlock  = startNode;
 
         if (ViperUtil.isBlockElement(startNode) === false) {
