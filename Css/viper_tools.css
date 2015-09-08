@@ -16,66 +16,66 @@
 }
 @keyframes appear-right {
   0% {
-    transform: translateX(-12px);
+    transform: translatex(-12px);
   }
   100% {
-    transform: translateX(0);
+    transform: translatex(0);
   }
 }
 @-webkit-keyframes appear-right {
   0% {
-    -webkit-transform: translateX(-12px);
+    -webkit-transform: translatex(-12px);
   }
   100% {
-    -webkit-transform: translateX(0);
+    -webkit-transform: translatex(0);
   }
 }
 @keyframes appear-left {
   0% {
-    transform: translateX(12px);
+    transform: translatex(12px);
   }
   100% {
-    transform: translateX(0);
+    transform: translatex(0);
   }
 }
 @-webkit-keyframes appear-left {
   0% {
-    -webkit-transform: translateX(12px);
+    -webkit-transform: translatex(12px);
   }
   100% {
-    -webkit-transform: translateX(0);
+    -webkit-transform: translatex(0);
   }
 }
 @keyframes appear-top {
   0% {
-    transform: translateY(12px);
+    transform: translatey(12px);
   }
   100% {
-    transform: translateY(0);
+    transform: translatey(0);
   }
 }
 @-webkit-keyframes appear-top {
   0% {
-    -webkit-transform: translateY(12px);
+    -webkit-transform: translatey(12px);
   }
   100% {
-    -webkit-transform: translateY(0);
+    -webkit-transform: translatey(0);
   }
 }
 @keyframes appear-bottom {
   0% {
-    transform: translateY(-12px);
+    transform: translatey(-12px);
   }
   100% {
-    transform: translateY(0);
+    transform: translatey(0);
   }
 }
 @-webkit-keyframes appear-bottom {
   0% {
-    -webkit-transform: translateY(-12px);
+    -webkit-transform: translatey(-12px);
   }
   100% {
-    -webkit-transform: translateY(0);
+    -webkit-transform: translatey(0);
   }
 }
 .Viper-button {
@@ -141,21 +141,32 @@
 .Viper-subSection .Viper-button {
   border-color: #B1B1B1;
 }
-.Viper-button.Viper-selected {
-  background: #cacaca;
-  border-color: #b8b8b8;
-  color: #2b2b2b;
-}
-.Viper-buttonGroup .Viper-button.Viper-selected + .Viper-button {
-  border-left-color: #b8b8b8;
-}
 .Viper-button.Viper-active {
   background-color: #2b7ce0;
   border-color: #1768cc;
   color: #ffffff;
 }
-.Viper-buttonGroup .Viper-button.Viper-active + .Viper-button {
+.Viper-buttonGroup .Viper-button.Viper-active  + .Viper-button {
   border-left-color: #1768cc;
+}
+.Viper-buttonGroup .Viper-button.Viper-active  + .Viper-button.Viper-selected.Viper-active {
+  border-left-color: #1a4c8a;
+}
+.Viper-button.Viper-selected {
+  background: #cacaca;
+  border-color: #b8b8b8;
+  color: #2b2b2b;
+}
+.Viper-buttonGroup .Viper-button.Viper-selected  + .Viper-button {
+  border-left-color: #b8b8b8;
+}
+.Viper-button.Viper-selected.Viper-active {
+  background: #1a4c8a;
+  border-color: #1a4c8a;
+  color: #ffffff;
+}
+.Viper-buttonGroup .Viper-button.Viper-selected.Viper-active  + .Viper-button {
+  border-left-color: #1a4c8a;
 }
 .Viper-button.ViperITP-button-hidden {
   display: none;
@@ -174,6 +185,7 @@
   margin-left: -13px;
   background-image: url("../Images/buttonIcons.svg");
   /* PNG fallback for older trowsers */
+
 }
 .Viper-browserVer-msie8 .Viper-buttonIcon {
   background-image: url("../Images/buttonIcons.png");
@@ -806,6 +818,7 @@
   top: 50%;
   margin-top: -9px;
   /* PNG fallback for older trowsers */
+
 }
 .Viper-browserVer-msie8 .Viper-textbox-action,
 .Viper-browserVer-msie8 .Viper-textbox.Viper-required .Viper-textbox-main:after {
@@ -924,6 +937,7 @@
   -moz-transition: 0.2s opacity ease-in;
   -webkit-transition: 0.2s opacity ease-in;
   /* PNG fallback for older trowsers */
+
 }
 .Viper-browserVer-msie8 .Viper-checkbox-switch:before {
   filter: alpha(opacity = 0);

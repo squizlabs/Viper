@@ -624,10 +624,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $browserClass = '';
         $buttonNames  = array_values(array_unique($matches[1]));
         $statuses     = array(
-                         ''          => ' Viper-dummyClass',
-                         '_selected' => ' Viper-selected',
-                         '_active'   => ' Viper-active',
-                         '_disabled' => ' Viper-disabled',
+                         ''             => ' Viper-dummyClass',
+                         '_selected'    => ' Viper-selected',
+                         '_active'      => ' Viper-active',
+                         '_disabled'    => ' Viper-disabled',
+                         '_active-selected' => 'Viper-selected Viper-active',
                         );
 
         if ($this->sikuli->getBrowserid() === 'ie8') {

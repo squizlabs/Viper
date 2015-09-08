@@ -160,6 +160,20 @@
                 border-color: #B1B1B1;
             }
 
+        &.Viper-active {
+            background-color: @buttonBg-active;
+            border-color: @buttonBorder-active;
+            color: @buttonText-active;
+
+            .Viper-buttonGroup & + .Viper-button {
+                border-left-color: @buttonBorder-active;
+
+                &.Viper-selected.Viper-active {
+                    border-left-color: @buttonBorder-selectedActive;
+                }
+            }
+        }
+
         &.Viper-selected {
             background: @buttonBg-selected;
             border-color: @buttonBorder-selected;
@@ -170,27 +184,13 @@
             }
         }
 
-        &.Viper-active {
-            background-color: @buttonBg-active;
-            border-color: @buttonBorder-active;
+        &.Viper-selected.Viper-active {
+            background: @buttonBg-selectedActive;
+            border-color: @buttonBorder-selectedActive;
             color: @buttonText-active;
 
             .Viper-buttonGroup & + .Viper-button {
-                border-left-color: @buttonBorder-active;
-
-                &.Viper-selected.Viper-active {
-                    // border-left-color: @buttonBorder-selectedActive;
-                }
-            }
-        }
-
-        &.Viper-selected.Viper-active {
-            // background: @buttonBg-selectedActive;
-            // border-color: @buttonBorder-selectedActive;
-            // color: @buttonText-active;
-
-            .Viper-buttonGroup & + .Viper-button {
-                // border-left-color: @buttonBorder-selectedActive;
+                border-left-color: @buttonBorder-selectedActive;
             }
         }
 
