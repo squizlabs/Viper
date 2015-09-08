@@ -162,9 +162,9 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
      *
      * @return void
      */
-    protected function clickMergeSplitIcon($icon)
+    protected function clickMergeSplitIcon($icon, $clickMergeSplitIcon=TRUE)
     {
-        if ($this->inlineToolbarButtonExists('splitMerge')) {
+        if ($clickMergeSplitIcon) {
             $this->clickInlineToolbarButton('splitMerge');
         }
 
