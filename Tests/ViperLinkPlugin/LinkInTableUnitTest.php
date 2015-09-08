@@ -579,8 +579,12 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
     {
         // Highlight all of the content in the cell, deleting it and adding new content
         $this->useTest(2);
-        $this->selectKeyword(1, 2);
-        $this->sikuli->keyDown('Key.DELETE');
+        $this->moveToKeyword(1, 'left');
+
+        for ($i = 1; $i <= 28; $i++) {
+            $this->sikuli->keyDown('Key.DELETE');
+        }
+        sleep(1);
         $this->type('new content');
         $this->assertHTMLMatchNoHeaders('<table><tbody><tr><th>Gate</th><th>Standard</th><th>Imp</th><th>Reviewer</th></tr><tr><td>Q1/Q2</td><td>new content</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table>');
 
@@ -588,7 +592,7 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
         $this->useTest(2);
         $this->moveToKeyword(2, 'right');
 
-        for ($i = 1; $i <= 29; $i++) {
+        for ($i = 1; $i <= 27; $i++) {
             $this->sikuli->keyDown('Key.BACKSPACE');
         }
 
