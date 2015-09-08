@@ -1271,8 +1271,12 @@ ViperFormatPlugin.prototype = {
                                 }
 
                                 if (tag === commonTagName) {
-                                    if (tag !== 'div' || commonParent !== viperElement) {
-                                        tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
+                                    if (commonParent !== viperElement) {
+                                        if (tag !== 'div') {
+                                            tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
+                                        } else {
+                                            tools.enableButton(prefix + 'formats:' + formatButtons[tag]);
+                                        }
                                     }
 
                                     tools.enableButton('formats');
