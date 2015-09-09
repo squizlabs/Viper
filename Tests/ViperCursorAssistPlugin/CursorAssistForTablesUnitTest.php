@@ -36,7 +36,7 @@ class Viper_Tests_ViperCursorAssistPlugin_CursorAssistForTablesUnitTest extends 
      */
     public function testCursorAssistBelowTable()
     {
-        $this->clickKeyword(3);
+        $this->clickKeyword(2);
 
         sleep(2);
         $this->moveMouseToElement('table', 'bottom');
