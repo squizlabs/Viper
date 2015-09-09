@@ -24,7 +24,7 @@ abstract class AbstractViperImagePluginUnitTest extends AbstractViperUnitTest
         $rightHandle = $this->findImage('ImageHandle-se', '.Viper-image-handle-se', 0, true);
         $width = ($imageRect['x2'] - $imageRect['x1']);
         $diff  = ($size - $width);
-        $newX  = ($this->sikuli->getX($rightHandle) + $diff + 9);
+        $newX  = ($this->sikuli->getX($rightHandle) + $diff + 7);
         $newY  = $this->sikuli->getY($rightHandle);
         $loc = $this->sikuli->createLocation($newX, $newY);
         $this->sikuli->dragDrop($rightHandle, $loc);
