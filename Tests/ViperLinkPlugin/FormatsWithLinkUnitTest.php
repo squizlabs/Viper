@@ -20,7 +20,7 @@ class Viper_Tests_ViperLinkPlugin_FormatsWithLinkUnitTest extends AbstractViperU
         $this->type('http://www.squizlabs.com');
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>Text with class and anchor tags <a href="http://www.squizlabs.com" class="class" id="anchor">%1%</a></p>');
-        $this->assertTrue($this->inlineToolbarButtonExists('link', 'selected'), 'Link icon should be active in the inline toolbar.');
+        $this->assertTrue($this->inlineToolbarButtonExists('link', 'active-selected'), 'Link icon should be active in the inline toolbar.');
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'), 'Link icon should be active in the top toolbar.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon should be active in the inline toolbar.');
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon should be active in the top toolbar.');
@@ -36,7 +36,7 @@ class Viper_Tests_ViperLinkPlugin_FormatsWithLinkUnitTest extends AbstractViperU
         sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>Text with class and anchor tags <a href="http://www.squizlabs.com" target="_blank" class="class" id="anchor">%1%</a></p>');
-        $this->assertTrue($this->inlineToolbarButtonExists('link', 'selected'), 'Link icon should be active in the inline toolbar.');
+        $this->assertTrue($this->inlineToolbarButtonExists('link', 'active-selected'), 'Link icon should be active in the inline toolbar.');
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'), 'Link icon should be active in the top toolbar.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon should be active in the inline toolbar.');
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon should be active in the top toolbar.');
@@ -53,7 +53,7 @@ class Viper_Tests_ViperLinkPlugin_FormatsWithLinkUnitTest extends AbstractViperU
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>Text with class and anchor tags <a href="http://www.squizlabs.com" class="class" id="anchor" title="Squiz Labs">%1%</a></p>');
 
-        $this->assertTrue($this->inlineToolbarButtonExists('link', 'selected'), 'Link icon should be active in the inline toolbar.');
+        $this->assertTrue($this->inlineToolbarButtonExists('link', 'active-selected'), 'Link icon should be active in the inline toolbar.');
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'), 'Link icon should be active in the top toolbar.');
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'), 'Class icon should be active in the inline toolbar.');
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'), 'Class icon should be active in the top toolbar.');
