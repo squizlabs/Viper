@@ -642,6 +642,7 @@ ViperListPlugin.prototype = {
 
             var c = elems.length;
             for (var i = 0; i < c; i++) {
+                var elem = elems[i];
                 if (!elems[i]) {
                     continue;
                 } else if (ViperUtil.isTag(elems[i], 'li') === false && ViperUtil.isTag(elems[i], 'ol') === false && ViperUtil.isTag(elems[i], 'ul') === false) {
@@ -654,7 +655,7 @@ ViperListPlugin.prototype = {
                         listItems.push(li);
                     }
                 } else {
-                    if (li && ViperUtil.inArray(elems[i], listItems) === false) {
+                    if (ViperUtil.inArray(elems[i], listItems) === false) {
                         listItems.push(elems[i]);
                     }
 
@@ -1180,15 +1181,17 @@ ViperListPlugin.prototype = {
         var listItems = this._getListItemsFromRange(range, false, true);
         var bookmark  = this.viper.createBookmark();
         var prevElem  = null;
+        var prevList  = null;
 
         for (var i = 0; i < listItems.length; i++) {
             if (ViperUtil.isTag(listItems[i], 'li') === false) {
                 // Must be a whole list. Gell all li tags inside it.
                 var childItems = ViperUtil.getTag('li', listItems[i]);
-
+                
                 var parent = null;
                 if (!prevElem) {
-                    parent = listItems[i].parentNode;
+                    parent   = listItems[i];
+                    prevList = parent;
                 }
 
                 for (var j = 0; j < childItems.length; j++) {
@@ -1201,13 +1204,20 @@ ViperListPlugin.prototype = {
 
                     prevElem = p;
                 }
+
+                prevElem = null;
             } else {
-                var p = this.splitListAtItem(listItems[i]);
+                var parent = listItems[i].parentNode;
+                var p      = this.splitListAtItem(listItems[i]);
                 if (prevElem) {
                     ViperUtil.insertAfter(prevElem, p);
                 }
 
-                prevElem = p;
+                if (prevList !== parent) {
+                    prevList = parent;
+                } else {
+                    prevElem = p;
+                }
             }//end if
         }//end for
 

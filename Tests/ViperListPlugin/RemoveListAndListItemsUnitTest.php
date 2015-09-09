@@ -659,11 +659,11 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsUnitTest extends Abstrac
         $this->assertHTMLMatch('<p>Ordered List:</p><p>%1% first item</p><p>second item</p><p>third item</p><p>Another list:</p><p>first item</p><p>second item</p><p>third item %2%</p>');
 
          // Removing multiple lists from content
-        $this->useTest(6);
+        $this->useTest(8);
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('listUl', 'active');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item</li><li>third item</li></ul><p>Another list:</p><ol><li>first item</li><li>second item</li><li>third item %2%</li></ol>');
-        
+        $this->assertHTMLMatch('<p>Unordered List:</p><p>XAX first item</p><p>second item</p><p>third item</p><p>Another list:</p><p>first item</p><p>second item</p><p>third item XBX</p>');
+
     }//end testRemoveMultipleLists
 
 
