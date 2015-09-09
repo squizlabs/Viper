@@ -10,12 +10,9 @@ class Viper_Tests_ViperImagePlugin_MovingImageUnitTest extends AbstractViperImag
      *
      * @return void
      */
-    public function testMovingAnImageAA()
+    public function testMovingAnImage()
     {
         $this->useTest(1);
-        $this->sikuli->mouseMove($this->findKeyword(1));
-        $this->sikuli->mouseMoveOffset(15, 0);
-        $this->sikuli->click($this->sikuli->getMouseLocation());
         $this->clickElement('img', 0);
         $this->clickInlineToolbarButton('move');
         $this->sikuli->mouseMove($this->findKeyword(1));
