@@ -1038,6 +1038,7 @@ ViperKeyboardEditorPlugin.prototype = {
                             ViperUtil.remove(currentParent.lastChild);
                         }
 
+                        var firstChild = currentParent.firstChild;
                         while (currentParent.firstChild) {
                             prevParent.appendChild(currentParent.firstChild);
                         }
@@ -1048,6 +1049,13 @@ ViperKeyboardEditorPlugin.prototype = {
 
                         if (prevSelectable.nodeType === ViperUtil.TEXT_NODE) {
                             range.setStart(prevSelectable, prevSelectable.data.length);
+                        } else if (prevSelectable.parentNode === null) {
+                            // Prev selectable was most likely a BR tag that got removed.
+                            if (firstChild.nodeType === ViperUtil.TEXT_NODE) {
+                                range.setStart(firstChild, 0);
+                            } else {
+                                range.selectNode(firstChild);
+                            }
                         } else {
                             range.selectNode(prevSelectable);
                         }
