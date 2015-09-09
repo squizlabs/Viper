@@ -217,7 +217,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
 
         // Add content to check the position of the cursor
         $this->type('content');
-        $this->assertHTMLMatch('<p>%1% <em>testcontent</em></p>');
+        $this->assertHTMLMatch('<p>%1% <em>test</em>content</p>');
 
         // Check deleting from the end of the paragraph including italic content
         $this->useTest(5);
@@ -231,7 +231,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
 
         // Add content to check the position of the cursor
         $this->type('content');
-        $this->assertHTMLMatch('<p>%1%content</p>');
+        $this->assertHTMLMatch('<p>%1% content</p>');
 
         // Check deleting from the start of the paragraph
         $this->useTest(5);
@@ -243,7 +243,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
 
         // Add content to check the position of the cursor
         $this->type('content');
-        $this->assertHTMLMatch('<p><em>contenttest</em> %2%</p>');
+        $this->assertHTMLMatch('<p>content<em>test</em> %2%</p>');
 
         // Check deleting from the start of the paragraph including italic content
         $this->useTest(5);
@@ -257,7 +257,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
 
         // Add content to check the position of the cursor
         $this->type('content');
-        $this->assertHTMLMatch('<p>content%2%</p>');
+        $this->assertHTMLMatch('<p><em>content</em> %2%</p>');
 
     }//end testDeletingContentWithItalicFormatting()
 
