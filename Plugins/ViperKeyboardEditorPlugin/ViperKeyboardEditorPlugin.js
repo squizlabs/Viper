@@ -1207,6 +1207,24 @@ ViperKeyboardEditorPlugin.prototype = {
         }
 
         if (ViperUtil.isBrowser('firefox') === true) {
+            var nodeSelection = range.getNodeSelection();
+            if (nodeSelection && ViperUtil.isBlockElement(nodeSelection) === true) {
+                // A block element is selected.
+                if (ViperUtil.inArray(ViperUtil.getTagName(nodeSelection), this._keepContainerList) === true) {
+                    // Cannot remove this parent, clear contents instead.
+                    ViperUtil.setHtml(nodeSelection, '<br/>');
+                    range.setStart(nodeSelection, 0);
+                    range.collapse(true);
+                } else {
+                    this.viper.moveCaretAway(nodeSelection, true);
+                    ViperUtil.remove(nodeSelection);
+                }
+
+                this.viper.fireNodesChanged();
+                this.viper.fireSelectionChanged(null, true);
+                return false;
+            }
+
             // Firefox specific fixes.
             if (range.collapsed === true) {
                 // Range collapsed.
@@ -1286,7 +1304,6 @@ ViperKeyboardEditorPlugin.prototype = {
                             var previousContainer = range.getPreviousContainer(range.startContainer);
                             if (previousContainer) {
                                 // Remove last character.
-                                console.info(previousContainer);
                                 previousContainer.data = previousContainer.data.substr(0, previousContainer.data.length - 1);
                                 range.setStart(previousContainer, previousContainer.data.length);
                                 range.collapse(true);
@@ -1296,7 +1313,7 @@ ViperKeyboardEditorPlugin.prototype = {
                             }
                         } else {
                             var previousContainer = range.getPreviousContainer(range.startContainer);
-                            if (previousContainer) {console.info(previousContainer);
+                            if (previousContainer) {
                                 range.setStart(previousContainer, previousContainer.data.length);
                                 range.collapse(true);
                                 ViperSelection.addRange(range);
@@ -1320,7 +1337,13 @@ ViperKeyboardEditorPlugin.prototype = {
                             if (ViperUtil.isEmptyElement(textNode.parentNode) === true) {
                                 // Parent is now empty.
                                 var parent = textNode.parentNode;
-                                if (parent.previousSibling && parent.previousSibling.nodeType === ViperUtil.TEXT_NODE) {
+                                if (ViperUtil.isBlockElement(parent) === true) {
+                                    this.viper.moveCaretAway(parent, true);
+                                    ViperUtil.remove(parent);
+                                    this.viper.fireNodesChanged();
+                                    this.viper.fireSelectionChanged(null, true);
+                                    return false;
+                                } else if (parent.previousSibling && parent.previousSibling.nodeType === ViperUtil.TEXT_NODE) {
                                     textNode = parent.previousSibling;
                                 } else {
                                     ViperUtil.insertBefore(parent, textNode)
@@ -1342,6 +1365,13 @@ ViperKeyboardEditorPlugin.prototype = {
                     if (range.startContainer.nodeType === ViperUtil.TEXT_NODE) {
                         // Start container is text node.
                         if (range.endContainer.nodeType === ViperUtil.TEXT_NODE) {
+                            // If the containers are part of two different block parents then let Firefox handle it.
+                            var startParent = ViperUtil.getFirstBlockParent(range.startContainer);
+                            var endParent   = ViperUtil.getFirstBlockParent(range.endContainer);
+                            if (startParent !== endParent) {
+                                return;
+                            }
+
                             // And the end container is text node.
                             var container = null;
                             var offset    = 0;
