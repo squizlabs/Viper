@@ -265,24 +265,38 @@ ViperCursorAssistPlugin.prototype = {
                     ViperUtil.setStyle(line, 'left', elemRect.x1 + 'px');
                     ViperUtil.setStyle(line, 'width', (elemRect.x2 - elemRect.x1) + 'px');
                     self.viper.addElement(line);
+
+                    setTimeout(function() {
+                        if (self.isInToolbarBounds(relYPoint) === true) {
+                            _removeLine(line);
+                            return;
+                        }
+                    }, 100)
                 }, 200);
             });
         });
 
-        this.viper.registerCallback('Viper:mouseDown', 'ViperCursorAssistPlugin', function() {
-            var line = ViperUtil.getid(self.viper.getId() + '-cursorAssist');
-            if (line) {
-                _removeLine(line, false);
-            }
+        this.viper.registerCallback(['Viper:mouseDown', 'Viper:mouseUp'], 'ViperCursorAssistPlugin', function() {
+            setTimeout(
+                function() {
+                    var line = ViperUtil.getid(self.viper.getId() + '-cursorAssist');
+                    if (line) {
+                        _removeLine(line, false);
+                    }
+                },
+                50
+            );
         });
+
     },
 
     isInToolbarBounds: function(yPoint)
     {
+        var gap             = 30;
         var visibleToolbars = this.viper.ViperTools.getVisibleToolbarRectangles();
         for (var i = 0; i < visibleToolbars.length; i++) {
-            if (yPoint >= (visibleToolbars[i].y1 - 15) && yPoint <= (visibleToolbars[i].y2 + 15)) {
-                return true;;
+            if (yPoint >= (visibleToolbars[i].y1 - gap) && yPoint <= (visibleToolbars[i].y2 + gap)) {
+                return true;
             }
         }
 
