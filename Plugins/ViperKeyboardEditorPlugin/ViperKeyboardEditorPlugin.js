@@ -1049,7 +1049,7 @@ ViperKeyboardEditorPlugin.prototype = {
                         if (prevSelectable.nodeType === ViperUtil.TEXT_NODE) {
                             range.setStart(prevSelectable, prevSelectable.data.length);
                         } else {
-                            range.setStart(prevSelectable, 0);
+                            range.selectNode(prevSelectable);
                         }
 
                         range.collapse(true);
