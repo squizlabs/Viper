@@ -4929,6 +4929,7 @@ Viper.prototype = {
                                 return false;
                             }
                         } else if (range.startContainer.parentNode
+                            && ViperUtil.isBlockElement(range.startContainer.parentNode) === false
                             && ViperUtil.isEmptyElement(range.startContainer.parentNode) === true
                         ) {
                             // Parent node is empty.
