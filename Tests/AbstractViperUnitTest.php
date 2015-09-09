@@ -720,6 +720,8 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             }
         }
 
+        unset($statuses['_active-selected']);
+
         for ($similarity = 0.92; $similarity < 0.97; $similarity += 0.01) {
             // Find each of the icons, if any fails it will throw an exception.
             $regions = array();
