@@ -349,7 +349,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->clickField('Image is decorative');
         // Check Apply Changes button is disabled
         $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE));
-        $this->clickField('Alt');
+        $this->clickField('Alt', TRUE);
         $this->type('Alt tag');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>Image with title no alt %1%</p><p><img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" title="testtitle"/></p><p>LABS is ORSM</p>');
@@ -361,7 +361,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->clickField('Image is decorative');
         // Check Apply Changes button is disabled
         $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE));
-        $this->clickField('Alt');
+        $this->clickField('Alt', TRUE);
         $this->type('Alt tag');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->checkPreviewImageSize();

@@ -1946,9 +1946,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    protected function clickField($label)
+    protected function clickField($label, $required=FALSE)
     {
-        $this->sikuli->click($this->sikuli->find($this->_getLabel($label), null, 0.7));
+        $this->sikuli->click($this->sikuli->find($this->_getLabel($label, false, $required), null, 0.7));
 
     }//end clickField()
 
@@ -2028,14 +2028,20 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     /**
      * Returns the label image for the specified label element.
      *
-     * @param string  $label The label of a field.
-     * @param boolean $force Force update the label screenshot.
+     * @param string  $label    The label of a field.
+     * @param boolean $force    Force update the label screenshot.
+     * @param boolean $required If true then required label image is used.
      *
      * @return string
      */
-    private function _getLabel($label, $force=false)
+    private function _getLabel($label, $force=false, $required=false)
     {
         $labelImg  = preg_replace('#\W#', '_', $label);
+
+        if ($required === true) {
+            $labelImg .= '_required';
+        }
+
         $imagePath = $this->getBrowserImagePath().'/label_'.$labelImg.'.png';
 
         if (file_exists($imagePath) === false || $force === true) {
