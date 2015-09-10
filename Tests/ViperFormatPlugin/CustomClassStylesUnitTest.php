@@ -436,6 +436,7 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         $this->type('ordered-list-test');
         sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->assertHTMLMatch('<p>This is some content <span class="ordered-list-test ordered-list">%1%</span> in my unit test</p>');
 
         $this->useTest(1);
