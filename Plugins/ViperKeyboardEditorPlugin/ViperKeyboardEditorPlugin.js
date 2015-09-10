@@ -1995,6 +1995,10 @@ ViperKeyboardEditorPlugin.prototype = {
                     // Two different parents. We need to join these parents.
                     // First remove all elements in between.
                     range.deleteContents();
+                    
+                    if (range.startContainer.parentNode && ViperUtil.isEmptyElement(range.startContainer.parentNode) === true) {
+                        ViperUtil.remove(range.startContainer.parentNode);
+                    }
 
                     // If the startParent is empty remove it if the endParent is the viperElement.
                     if (ViperUtil.isBlank(ViperUtil.trim(ViperUtil.getHtml(startParent))) !== true
