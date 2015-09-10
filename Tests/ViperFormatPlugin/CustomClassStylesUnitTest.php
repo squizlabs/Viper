@@ -431,6 +431,7 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         $this->clickInlineToolbarButton('cssClass');
         $this->selectStyles(array('ordered-list'));
         sleep(1);
+        $this->sikuli->keyDown('Key.ENTER');
         $this->clickField('Class');
         sleep(1);
         $this->type('ordered-list-test');
