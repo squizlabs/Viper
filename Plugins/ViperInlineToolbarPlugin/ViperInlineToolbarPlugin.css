@@ -1,275 +1,304 @@
-.ViperITP form,
-.ViperITP ul,
-.ViperITP ol {
-  padding: 0;
-  margin: 0;
+/* Main Bubble */
+
+    /* Bubble Config */
+
+    .ViperITP {
+        z-index: 1000;
+        margin-top: 3px;
+        font-family: Arial, Sans Serif;
+        font-size: 9px;
+        position: absolute;
+        border-radius: 0.5em;
+        display: none;
+
+        animation-duration: 90ms;
+        animation-timing-function: ease-out;
+        animation-fill-mode: forwards;
+
+        -webkit-animation-duration: 90ms;
+        -webkit-animation-timing-function: ease-out;
+        -webkit-animation-fill-mode: forwards;
+
+        /* Colours */
+            background-color: #FFF;
+            color: #2b2b2b;
+
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.3), 0 0 1px rgba(0, 0, 0, 0.6);
+    }
+
+    .ViperITP.Viper-forTopbar {
+        z-index: 1000;
+        position: absolute;
+
+        /* Colours */
+            background-color: #ededed;
 }
 
-.ViperITP {
-    z-index: 1000;
-    margin-top: 3px;
-    font-family: Arial, Sans Serif;
-    font-size: 9px;
-    position: absolute;
-    border: 1px solid transparent;
-    border-radius: 0.8em;
-    background-color: #000;
-    color: #FFF;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.7), 0 1px 0 rgba(255,255,255,0.4) inset;
-    display: none;
+    .ViperITP.Viper-visible {
+        display: block;
+        animation-name: fade-in, appear-bottom;
+        -webkit-animation-name: fade-in, appear-bottom;
+    }
 
-    animation-duration: 90ms;
-    animation-timing-function: ease-out;
-    animation-fill-mode: forwards;
+    /* Pointer Arrow Config */
 
-    -webkit-animation-duration: 90ms;
-    -webkit-animation-timing-function: ease-out;
-    -webkit-animation-fill-mode: forwards;
+        .ViperITP:before,
+        .ViperITP:after {
+            content: "";
+            width: 0px;
+            height: 0px;
+            display: block;
+            position: absolute;
+            left: 50%;
+            top: 0;
+            z-index: 2;
+            margin: -21px 0 0 -12px;
+            border: 12px solid transparent;
+
+            /* Colours */
+                border-bottom-color: #FFF;
+        }
+
+        .ViperITP:after {
+            border-width: 10px;
+            margin-top: -20px;
+            margin-left: -10px;
+            opacity: 0.28;
+            filter: blur(1px);
+            -webkit-filter: blur(1px);
+            z-index: 1;
+
+            /* Colours */
+                border-bottom-color: #000;
+        }
+
+        .ViperITP.Viper-noTools:before  {
+            margin-top: -24px;
+        }
+
+        .ViperITP.Viper-forTopbar:before {
+
+            /* Colours */
+                border-bottom-color: #ededed;
+        }
+
+        .Viper-browserVer-msie8 .ViperITP.Viper-forTopbar:before {
+            /* Colours */
+                border-top-color: #919097;
+        }
+
+     /* Orientation Tweaks */
+
+        .ViperITP.Viper-orientationLeft {
+            margin-left: -15px;
+        }
+
+        .ViperITP.Viper-orientationRight {
+            margin-left: 12px;
+        }
+
+        .ViperITP.Viper-orientationLeft:before {
+            left: 0;
+            margin-left: 3px;
+        }
+
+        .ViperITP.Viper-orientationRight:before {
+            left: 100%;
+            margin-left: -25px;
+        }
+
+    /* Compact Variations */
+
+        .ViperITP.Viper-compact {
+            line-height: 0.8em;
+        }
+
+        .ViperITP.Viper-compact:before {
+            border-width: 10px;
+            margin-top: -18px;
+            margin-left: -10px;
+
+            border-bottom-color: #EDEDED;
 }
 
-.ViperITP.Viper-visible {
-    display: block;
-    animation-name: fade-in, appear-bottom;
-    -webkit-animation-name: fade-in, appear-bottom;
+/* Position Calculation Helper */
+
+    .ViperITP.Viper-calcWidth,
+    .ViperITP.Viper-calcWidth .ViperITP-subSectionWrapper,
+    .ViperITP.Viper-calcWidth .ViperITP-subSectionWrapper .Viper-subSection {
+        visibility: hidden;
+        display: block;
+    }
+
+/* Primary Row of Buttons */
+
+    .ViperITP-tools {
+        padding: 0.4em 0.5em 0.6em;
+        border-bottom-left-radius: 0.75em;
+        border-bottom-right-radius: 0.75em;
+        text-align: center;
+        border-top: 1px solid transparent;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+        /* Colours */
+
+            .ViperITP-tools {
+                background: #EDEDED;
+                border-top-color: #DADADA;
+            }
+
+    .ViperITP.Viper-compact .ViperITP-tools {
+        border-radius: 0.75em;
+    }
+
+    .ViperITP.Viper-subSectionVisible .ViperITP-tools {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .ViperITP.Viper-subSectionVisible .ViperITP-tools {
+        padding-bottom: 0.9em;
+    }
+
+/* DOM Lineage & Bubble Header */
+
+    /* Shared Config */
+
+        .ViperITP-lineage,
+        .ViperITP-header {
+            font-size: 1.3em;
+            line-height: 1.7em;
+            margin: 0;
+            list-style: none;
+            border-bottom:  1px solid transparent;
+            white-space: nowrap;
+        }
+
+    /* Header */
+
+        .ViperITP-header {
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+    /* Lineage Items */
+
+        .ViperITP-lineage .ViperITP-lineageItem {
+            display: inline-block;
+            cursor: pointer;
+            padding: 0 0.8em 0 0.5em;
+            background-position: 100% 50%;
+            background-repeat: no-repeat;
+        }
+
+        .ViperITP-lineage .ViperITP-lineageItem:last-child {
+            background-image: none !important;
+            padding-right: 0.4em;
+        }
+
+        .ViperITP-lineage .ViperITP-lineageItem:last-child::after {
+            display: none;
+        }
+
+/* Bubble Subsection */
+
+    .ViperITP .ViperITP-subSectionWrapper {
+        display: none;
+        border-bottom-left-radius: 0.55em;
+        border-bottom-right-radius: 0.55em;
+    }
+
+    .ViperITP.Viper-noTools .ViperITP-subSectionWrapper {
+        border-radius: 0.75em;
+    }
+
+    .ViperITP.Viper-subSectionVisible .ViperITP-subSectionWrapper {
+        display: block;
+    }
+
+    .ViperITP  .ViperITP-subSectionWrapper .Viper-subSectionArrow {
+        width: 0px;
+        height: 0px;
+        display: block;
+        position: absolute;
+        left: 50%;
+        margin: -8px 0 0 -4px;
+        border: 4px solid transparent;
+        -moz-transition: left 0.2s ease-out;
+        -webkit-transition: left 0.2s ease-out;
+    }
+
+    .ViperITP.Viper-noTools  .ViperITP-subSectionWrapper .Viper-subSectionArrow {
+        display: none;
+    }
+
+    .ViperITP.Viper-forTopbar  .ViperITP-subSectionWrapper:before {
+        display: none;
+    }
+
+    .ViperITP .Viper-subSection {
+        position: relative;
+        -moz-transition-duration: 0.3s;
+        -moz-transition-property: opacity;
+        -moz-transition-timing-function: ease-out;
+        display: none;
+        opacity: 0;
+        text-align: center;
+        padding: 0.6em;
+    }
+
+    .ViperITP .Viper-subSection.Viper-active {
+        display: block;
+        opacity: 1;
+    }
+
+/* Colours */
+
+ .ViperITP-lineage {
+    color: #222;
 }
 
-.ViperITP.Viper-forTopbar {
-    z-index: 1000;
-    position: absolute;
-}
-
-.ViperITP:before {
-    content: "";
-    width: 0px;
-    height: 0px;
-    display: block;
-    position: absolute;
-    left: 50%;
-    margin: -23px 0 0 -12px;
-    border: 12px solid transparent;
-}
-
-.ViperITP.Viper-noTools:before  {
-    margin-top: -24px;
-}
-
-.ViperITP.Viper-orientationLeft {
-    margin-left: -15px;
-}
-
-.ViperITP.Viper-orientationRight {
-    margin-left: 12px;
-}
-
-.ViperITP.Viper-orientationLeft:before {
-    left: 0;
-    margin-left: 3px;
-}
-
-.ViperITP.Viper-orientationRight:before {
-    left: 100%;
-    margin-left: -25px;
-}
-
-.ViperITP.Viper-compact {
-    line-height: 0;
-}
-
-.ViperITP.Viper-compact:before {
-    border-width: 6px;
-    margin-top: -12px;
-    margin-left: -6px;
-}
-
-.ViperITP.Viper-forTopbar:before {
-    margin-top: -7px;
-}
-
-.ViperITP.Viper-calcWidth,
-.ViperITP.Viper-calcWidth .ViperITP-subSectionWrapper,
-.ViperITP.Viper-calcWidth .ViperITP-subSectionWrapper .Viper-subSection {
-    visibility: hidden;
-    display: block;
-}
-
-.ViperITP-tools {
-    padding: 0.4em 0.5em 0.6em;
-    border-bottom-left-radius: 0.75em;
-    border-bottom-right-radius: 0.75em;
-    text-align: center;
-    border-top: 1px solid transparent;
-    white-space: nowrap;
-    overflow: hidden;
-}
-
-.ViperITP.Viper-compact .ViperITP-tools {
-    border-radius: 0.75em;
-}
-
-.ViperITP.Viper-subSectionVisible .ViperITP-tools {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-}
-
-.ViperITP.Viper-subSectionVisible .ViperITP-tools {
-    padding-bottom: 0.9em;
-}
-
-.ViperITP-lineage,
-.ViperITP-header {
-    font-size: 1.2em;
-    line-height: 1.8em;
-    margin: 0;
-    padding: 0.1em 0 0;
-    list-style: none;
-    border-bottom:  1px solid transparent;
-    white-space: nowrap;
-}
-.ViperITP-header {
-    text-align: center;
-    font-size: 1.2em;
-    padding-top: 0.5em;
-}
-
-.ViperITP-lineage .ViperITP-lineageItem {
-    display: inline-block;
-    cursor: pointer;
-    padding: 0 0.8em 0 0.5em;
-    background-position: 100% 50%;
-    background-repeat: no-repeat;
-}
-
-.ViperITP-lineage .ViperITP-lineageItem:last-child {
-    background-image: none !important;
-    padding-right: 0.4em;
-}
-
-.ViperITP .ViperITP-subSectionWrapper {
-    display: none;
-    border-bottom-left-radius: 0.75em;
-    border-bottom-right-radius: 0.75em;
-}
-
-.ViperITP.Viper-noTools .ViperITP-subSectionWrapper {
-    border-radius: 0.75em;
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.3) inset;
-}
-
-.ViperITP.Viper-subSectionVisible .ViperITP-subSectionWrapper {
-    display: block;
-}
-
-.ViperITP  .ViperITP-subSectionWrapper .Viper-subSectionArrow {
-    width: 0px;
-    height: 0px;
-    display: block;
-    position: absolute;
-    left: 50%;
-    margin: -8px 0 0 -4px;
-    border: 4px solid transparent;
-    -moz-transition: left 0.2s ease-out;
-    -webkit-transition: left 0.2s ease-out;
-}
-
-.ViperITP.Viper-noTools  .ViperITP-subSectionWrapper .Viper-subSectionArrow {
-    display: none;
-}
-
-.ViperITP.Viper-forTopbar  .ViperITP-subSectionWrapper:before {
-    display: none;
-}
-
-.ViperITP .Viper-subSection {
-    position: relative;
-    -moz-transition-duration: 0.3s;
-    -moz-transition-property: opacity;
-    -moz-transition-timing-function: ease-out;
-    display: none;
-    opacity: 0;
-    text-align: center;
-    padding: 0.6em;
-}
-
-.ViperITP .Viper-subSection.Viper-active {
-    display: block;
-    opacity: 1;
-}
-
-/* Theme - Dark Grey (default) */
-
-.Viper-themeDark.ViperITP {
-    background-color: #2b2b2b;
-    color: #2b2b2b;
-    text-shadow: 0 1px 0 #fff;
-    border-color: #2b2b2b;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.7), 0 1px 0 #555 inset;
-    -webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.7), 0 1px 0 #555 inset;
-}
-
-.Viper-themeDark.ViperITP.Viper-forTopbar {
-    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.7), 0 1px 0 #646464 inset;
-    -webkit-box-shadow: 0 5px 12px rgba(0, 0, 0, 0.7), 0 1px 0 #646464 inset;
-}
-
-.Viper-themeDark.ViperITP.Viper-compact {
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
-    -webkit-box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
-}
-
-.Viper-themeDark.ViperITP:before {
-    border-bottom-color: #2b2b2b;
-}
-
-.Viper-themeDark.ViperITP.Viper-forTopbar:before {
-    border-bottom-color: transparent;
-    border-top-color: #727179;
-}
-
-.Viper-browserVer-msie8 .Viper-themeDark.ViperITP.Viper-forTopbar:before {
-    border-top-color: #919097;
-}
-
-.Viper-themeDark .ViperITP-tools {
-    background: #919097;
-    background: -webkit-gradient(linear, left top, left bottom, from(#919097), to(#727179));
-    background: -moz-linear-gradient(top,  #919097,  #727179);
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient (GradientType=0, startColorstr=#919097, endColorstr=#727179)";
-    border-top-color: #A2A1A8;
-}
-
-.Viper-themeDark .ViperITP-lineage {
-    border-bottom-color: #2b2b2b;
-    color: #222222;
-    text-shadow: 0 -1px 0 #000;
-}
-
-.Viper-themeDark .ViperITP-header {
-    color: #AAA;
-    text-shadow: 0 -1px 0 #000;
+ .ViperITP-header {
+    color: #4f4f4f;
     text-transform: uppercase;
 }
 
-.Viper-themeDark .ViperITP-lineage .ViperITP-lineageItem {
-    background-image: url(images/lineageDivider-dark.png);
-    color: #AAA;
+.ViperITP-lineage .ViperITP-lineageItem {
+    position: relative;
 }
 
-.Viper-themeDark .ViperITP-lineage .ViperITP-lineageItem:hover {
-    color: #fff;
+ .ViperITP-lineage .ViperITP-lineageItem::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 4px;
+    height: 7px;
+    background: transparent url("../../Images/viperTools.svg") -9px -80px no-repeat;
+    margin-top: -3px;
+    color: #797979;
 }
 
-.Viper-themeDark .ViperITP-lineage .ViperITP-lineageItem.Viper-selected {
-    color: #5a8bd0;
+/* PNG fallback for older trowsers */
+
+    .Viper-browserVer-msie8  .ViperITP-lineage .ViperITP-lineageItem::after {
+        background-image: url("../../Images/viperTools.png");
+    }
+
+ .ViperITP-lineage .ViperITP-lineageItem.Viper-selected {
+    color: #1E59A1;
     font-weight: bold;
 }
 
-.Viper-themeDark.ViperITP .ViperITP-subSectionWrapper {
-/*     background-color: #54535A; */
-    background: #54535A url(../../Images/bgTexture-dark1.gif) 0 0 repeat;
+.ViperITP .ViperITP-subSectionWrapper {
+    background-color: #D4D4D4;
+    color: #3f3f3f;
 }
 
-.Viper-themeDark.ViperITP .ViperITP-subSectionWrapper .Viper-subSectionArrow {
-    border-bottom-color: #54535A;
+.ViperITP .ViperITP-subSectionWrapper .Viper-subSectionArrow {
+    border-bottom-color: #D3D3D3;
 }
 
 /* SubSection Rows */
@@ -284,52 +313,50 @@
 
 /* SubSection Lists */
 
-.Viper-subSectionList-title {
-    background-color: rgba(255,255,255,0.2);
-    border-top: 1px solid #404046;
-    border-bottom: 1px solid #727179;
-    border-radius: 0.3em;
-    padding: 0.4em;
-    text-shadow: none;
-    color: #DCDCDC;
-    font-size: 1.2em;
-}
-.Viper-subSectionList {
-    margin: 0.3em -0.6em -0.6em -0.6em;
-    padding: 0;
-    list-style: none;
-    text-align: left;
-}
+    .Viper-subSectionList-title {
+        background-color: rgba(255,255,255,0.2);
+        border-top: 1px solid #404046;
+        border-bottom: 1px solid #727179;
+        border-radius: 0.3em;
+        padding: 0.4em;
+        color: #DCDCDC;
+        font-size: 1.2em;
+    }
+    .Viper-subSectionList {
+        margin: 0.3em -0.6em -0.6em -0.6em;
+        padding: 0;
+        list-style: none;
+        text-align: left;
+    }
 
-.Viper-subSectionList .Viper-subSectionList-item {
-    position: relative;
-    border-top: 1px solid #727179;
-    border-bottom: 1px solid #404046;
-    padding: 0.4em;
-    color: #FFF;
-    text-shadow: none;
-}
+    .Viper-subSectionList .Viper-subSectionList-item {
+        position: relative;
+        border-top: 1px solid #727179;
+        border-bottom: 1px solid #404046;
+        padding: 0.4em;
+        color: #FFF;
+    }
 
-.Viper-subSectionList .Viper-subSectionList-item:after {
-    display: block;
-    clear: both;
-    content: "";
-    background-color: red;
-}
+    .Viper-subSectionList .Viper-subSectionList-item:after {
+        display: block;
+        clear: both;
+        content: "";
+        background-color: red;
+    }
 
-.Viper-subSectionList .Viper-subSectionList-item:first-child {
-    border-top: none;
-}
+    .Viper-subSectionList .Viper-subSectionList-item:first-child {
+        border-top: none;
+    }
 
-.Viper-subSectionList .Viper-subSectionList-item:last-child {
-    border-bottom: none;
-}
-.Viper-subSectionList .Viper-subSectionList-item .Viper-listItem-text {
-    display: block;
-    font-size: 1.3em;
-    padding: 0.45em 0 0.4em 0.2em;
-    max-width: 15em;
-}
+    .Viper-subSectionList .Viper-subSectionList-item:last-child {
+        border-bottom: none;
+    }
+    .Viper-subSectionList .Viper-subSectionList-item .Viper-listItem-text {
+        display: block;
+        font-size: 1.3em;
+        padding: 0.45em 0 0.4em 0.2em;
+        max-width: 15em;
+    }
 
 /* subSection List - Cell Lineage */
 
@@ -389,6 +416,7 @@
 }
 
 /* Temp new styles for tweaking Link in new window button layout */
+
 .ViperITP-label.Viper-expandable {
     -moz-transition-property: margin-left, margin-right;
     -moz-transition-duration: 0.2s;

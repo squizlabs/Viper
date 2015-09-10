@@ -797,6 +797,16 @@ ViperKeyboardEditorPlugin.prototype = {
     {
         var range = this.viper.getViperRange();
 
+        if (this._isWholeViperElementSelected(range) === true) {
+            // The whole Viper element is selected, remove all of its content
+            // and then initialise the Viper element.
+            ViperUtil.setHtml(this.viper.getViperElement(), '');
+            this.viper.initEditableElement();
+            this.viper.fireNodesChanged();
+            this.viper.fireSelectionChanged(null, true);
+            return false;
+        }
+
         if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true) {
             // Latest Chrome versions have strange issue with all content deletion, handle it in another method.
             return this._handleDeleteForWebkit(e, range);
@@ -807,11 +817,8 @@ ViperKeyboardEditorPlugin.prototype = {
             return this._handleDeleteFromRight(e, range);
         }
 
-        if (range.startOffset !== 0) {
-            if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
-                && range.collapsed === true
-                && ViperUtil.isBrowser('msie', '<11')
-            ) {
+        if (range.startOffset !== 0 && range.startContainer.nodeType === ViperUtil.TEXT_NODE) {
+            if (range.collapsed === true && ViperUtil.isBrowser('msie', '<11')) {
                 // Delete 1 char in IE.... This resolves the issue where <a href="" />T* backspace here sets the
                 // range to incorrect position..
                 range.startContainer.splitText(range.startOffset);
@@ -825,7 +832,7 @@ ViperKeyboardEditorPlugin.prototype = {
             }
 
             // No need to handle any case where caret is not at the start of a node.
-            return;
+            //return;
         }
 
         var defaultTagName  = this.viper.getDefaultBlockTag();
@@ -843,7 +850,7 @@ ViperKeyboardEditorPlugin.prototype = {
         }
 
         // TODO: Should use getNodeSelection to simplify this whole delete method.
-        if (range.collapsed === true && e.keyCode === 8) {
+        if (range.collapsed === true && e.keyCode === 8 && range.startOffset === 0) {
             if (startNode && startNode.nodeType === ViperUtil.TEXT_NODE) {
                 var skippedBlockElem = [];
                 var node      = range.getPreviousContainer(startNode, skippedBlockElem, true, true);
@@ -869,6 +876,7 @@ ViperKeyboardEditorPlugin.prototype = {
                     }
 
                     if (startNode.nodeType === ViperUtil.TEXT_NODE
+                        && startNode.data.length === 0
                         && ViperUtil.isTag(startNode.parentNode, 'li') === true
                         && ViperUtil.getTag('li', startNode.parentNode.parentNode).length === 1
                     ) {
@@ -1022,10 +1030,15 @@ ViperKeyboardEditorPlugin.prototype = {
                         ViperUtil.remove(elemsBetween[(elemsBetween.length - 1)]);
                     } else {
                         // If prev parent has BR as last child, remove it.
-                        if (prevParent.lastChild && ViperUtil.isTag(prevParent.firstChild, 'br') === true) {
-                            ViperUtil.remove(prevParent.firstChild);
+                        if (prevParent.lastChild && ViperUtil.isTag(prevParent.lastChild, 'br') === true) {
+                            ViperUtil.remove(prevParent.lastChild);
                         }
 
+                        if (currentParent.lastChild && ViperUtil.isTag(currentParent.lastChild, 'br') === true) {
+                            ViperUtil.remove(currentParent.lastChild);
+                        }
+
+                        var firstChild = currentParent.firstChild;
                         while (currentParent.firstChild) {
                             prevParent.appendChild(currentParent.firstChild);
                         }
@@ -1034,7 +1047,19 @@ ViperKeyboardEditorPlugin.prototype = {
                             ViperUtil.remove(currentParent);
                         }
 
-                        range.setStart(startNode, 0);
+                        if (prevSelectable.nodeType === ViperUtil.TEXT_NODE) {
+                            range.setStart(prevSelectable, prevSelectable.data.length);
+                        } else if (prevSelectable.parentNode === null) {
+                            // Prev selectable was most likely a BR tag that got removed.
+                            if (firstChild.nodeType === ViperUtil.TEXT_NODE) {
+                                range.setStart(firstChild, 0);
+                            } else {
+                                range.selectNode(firstChild);
+                            }
+                        } else {
+                            range.selectNode(prevSelectable);
+                        }
+
                         range.collapse(true);
                         ViperSelection.addRange(range);
                     }
@@ -1089,6 +1114,7 @@ ViperKeyboardEditorPlugin.prototype = {
                             }
 
                             this.viper.fireNodesChanged();
+                            this.viper.fireSelectionChanged(null, true);
                             return false;
                         }//end if
                     }//end if
@@ -1109,6 +1135,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 var skippedBlockElem = [];
                 var endCont = range.endContainer;
                 var node    = range.getPreviousContainer(range.startContainer, skippedBlockElem, true, true);
+                var isList  = false;
 
                 var startOffset = 0;
                 if (!node || ViperUtil.isChildOf(node, this.viper.element) === false) {
@@ -1120,12 +1147,18 @@ ViperKeyboardEditorPlugin.prototype = {
                         }
                     }
 
-                    node = range.getNextContainer(endCont, null, true);
-                    if (this.viper.isOutOfBounds(node) === true) {
-                        node = endCont;
+                    node = endCont;
+                    if (ViperUtil.isTag(node, 'li') === false) {
+                        return false;
+                    } else {
+                        isList = true;
                     }
                 } else if (node.nodeType === ViperUtil.TEXT_NODE) {
                     startOffset = node.data.length;
+                    if (endCont.previousSibling !== null && ViperUtil.isBlockElement(endCont.previousSibling) === false && node.data.length > 0) {
+                        startOffset--;
+                        node.data = node.data.substr(0, startOffset);
+                    }
                 }
 
                 range.setEnd(node, startOffset);
@@ -1151,19 +1184,231 @@ ViperKeyboardEditorPlugin.prototype = {
                     ViperUtil.remove(remove);
                 }
 
-                if (node.nodeType === ViperUtil.TEXT_NODE) {
-                    node.data = node.data.substr(0, node.data.length);
+                if (isList && parent === this.viper.getViperElement()) {
+                    node = range._getFirstSelectableChild(parent, true);
+                    if (!node) {
+                        this.viper.initEditableElement();
+                        node = range._getFirstSelectableChild(parent, true);
+                    }
                 }
 
                 range.setEnd(node, startOffset);
                 range.collapse(false);
                 ViperSelection.addRange(range);
 
+                this.viper.fireNodesChanged();
+                this.viper.fireSelectionChanged(null, true);
                 return false;
             } else if (!range.startContainer.previousSibling) {
                 return false;
             } else if (ViperUtil.isTag(range.startContainer, ['td', 'th']) === true) {
                 return false;
+            }
+        }
+
+        if (ViperUtil.isBrowser('firefox') === true) {
+            var nodeSelection = range.getNodeSelection();
+            if (nodeSelection && ViperUtil.isBlockElement(nodeSelection) === true) {
+                // A block element is selected.
+                if (ViperUtil.inArray(ViperUtil.getTagName(nodeSelection), this._keepContainerList) === true) {
+                    // Cannot remove this parent, clear contents instead.
+                    ViperUtil.setHtml(nodeSelection, '<br/>');
+                    range.setStart(nodeSelection, 0);
+                    range.collapse(true);
+                } else {
+                    this.viper.moveCaretAway(nodeSelection, true);
+                    ViperUtil.remove(nodeSelection);
+                }
+
+                this.viper.fireNodesChanged();
+                this.viper.fireSelectionChanged(null, true);
+                return false;
+            }
+
+            // Firefox specific fixes.
+            if (range.collapsed === true) {
+                // Range collapsed.
+                if (range.startContainer.nodeType === ViperUtil.ELEMENT_NODE) {
+                    // Container is an element node.
+                    var childCount = range.startContainer.childNodes.length;
+                    if (range.startOffset === childCount || range.startOffset === (childCount - 1)) {
+                        // Range is outside of childNodes count.
+                        var lastChild = range.startContainer.childNodes[(childCount - 1)];
+                        var textNode  = null;
+
+                        // Find the relevant text node.
+                        if (ViperUtil.isStubElement(lastChild) === true) {
+                            // For stub elements get the previous container.
+                            textNode = range.getPreviousContainer(lastChild);
+                        } else if (lastChild.nodeType === ViperUtil.ELEMENT_NODE) {
+                            // Node with content, get the last selectable child.
+                            textNode = range._getLastSelectableChild(lastChild);
+                        } else if (lastChild.nodeType === ViperUtil.TEXT_NODE) {
+                            // Text node.
+                            if (lastChild.data.length > 0) {
+                                textNode = lastChild
+                            } else {
+                                // Empty text node, get previousContainer.
+                                textNode = range.getPreviousContainer(lastChild);
+                            }
+                        }
+
+                        if (textNode) {
+                            textNode.data = textNode.data.substr(0, (textNode.data.length - 1));
+                            range.setStart(textNode, textNode.data.length);
+                            range.collapse(true);
+                            ViperSelection.addRange(range);
+                            this.viper.fireNodesChanged();
+                            this.viper.fireSelectionChanged(null, true);
+                            return false;
+                        }
+                    }
+                } else {
+                    // Text node.
+                    if (range.startOffset > 0) {
+                        // Delete a character from left.
+                        var textNode = range.startContainer;
+                        textNode.data = textNode.data.substr(0, range.startOffset - 1) + textNode.data.substr(range.startOffset);
+
+                        // Normalise text nodes.
+                        this._normaliseNextNodes(textNode);
+
+                        range.setStart(textNode, range.startOffset - 1);
+                        range.collapse(true);
+
+                        if (textNode.data.length === 0
+                            && textNode.nextSibling === null
+                            && textNode.previousSibling === null
+                            && ViperUtil.isBlockElement(textNode.parentNode) === true
+                        ) {
+                            // The last character of this text node was deleted and now the block parent has no content.
+                            // Add a BR to keep the blockelement 'selectable'.
+                            var br = document.createElement('br');
+                            textNode.parentNode.appendChild(br);
+                        }
+
+                        this.viper.fireNodesChanged();
+                        this.viper.fireSelectionChanged(null, true);
+
+                        return false;
+                    } else {
+                        this._normaliseNextNodes(range.startContainer);
+
+                        // At the beginning of text node.
+                        if (range.startContainer.previousSibling === null
+                            && (range.startContainer.nextSibling === null || ViperUtil.isTag(range.startContainer.nextSibling, 'br') === true)
+                        ) {
+                            // This is the only node in the parent.
+                            // Set the range before the parent and remove it.
+                            var parent            = range.startContainer.parentNode;
+                            var previousContainer = range.getPreviousContainer(range.startContainer);
+                            if (previousContainer) {
+                                // Remove last character.
+                                previousContainer.data = previousContainer.data.substr(0, previousContainer.data.length - 1);
+                                range.setStart(previousContainer, previousContainer.data.length);
+                                range.collapse(true);
+                                ViperSelection.addRange(range);
+                                ViperUtil.remove(parent);
+                                return false;
+                            }
+                        } else {
+                            var previousContainer = range.getPreviousContainer(range.startContainer);
+                            if (previousContainer) {
+                                range.setStart(previousContainer, previousContainer.data.length);
+                                range.collapse(true);
+                                ViperSelection.addRange(range);
+                                return;
+                            }
+                        }
+                    }
+                }
+            } else {
+                // Selection.
+                if (range.startContainer === range.endContainer) {
+                    // Same container.
+                    if (range.startContainer.nodeType === ViperUtil.TEXT_NODE) {
+                        // Text node selection. Modify node content.
+                        var textNode = range.startContainer;
+                        if (range.startOffset === 0 && range.endOffset === textNode.data.length) {
+                            // The whole textnode is selected.
+                            // Clear the contents of the text node.
+                            textNode.data = '';
+
+                            if (ViperUtil.isEmptyElement(textNode.parentNode) === true) {
+                                // Parent is now empty.
+                                var parent = textNode.parentNode;
+                                if (ViperUtil.isBlockElement(parent) === true) {
+                                    this.viper.moveCaretAway(parent, true);
+                                    ViperUtil.remove(parent);
+                                    this.viper.fireNodesChanged();
+                                    this.viper.fireSelectionChanged(null, true);
+                                    return false;
+                                } else if (parent.previousSibling && parent.previousSibling.nodeType === ViperUtil.TEXT_NODE) {
+                                    textNode = parent.previousSibling;
+                                } else {
+                                    ViperUtil.insertBefore(parent, textNode)
+                                }
+
+                                range.setStart(textNode, textNode.data.length);
+                                range.collapse(true);
+
+                                ViperUtil.remove(parent);
+                            }
+
+                            this.viper.fireNodesChanged();
+                            this.viper.fireSelectionChanged(null, true);
+                            return false;
+                        }
+                    }
+                } else {
+                    // Different start and end containers.
+                    if (range.startContainer.nodeType === ViperUtil.TEXT_NODE) {
+                        // Start container is text node.
+                        if (range.endContainer.nodeType === ViperUtil.TEXT_NODE) {
+                            // If the containers are part of two different block parents then let Firefox handle it.
+                            var startParent = ViperUtil.getFirstBlockParent(range.startContainer);
+                            var endParent   = ViperUtil.getFirstBlockParent(range.endContainer);
+                            if (startParent !== endParent) {
+                                return;
+                            }
+
+                            // And the end container is text node.
+                            var container = null;
+                            var offset    = 0;
+                            if (range.startOffset === 0) {
+                                // Selection is at the start of this text node and the end container is different.
+                                // This means the startContainer will be removed, therfore use endContainer unless it is also empty.
+                                if (range.endOffset === range.endContainer.data.length) {
+                                    // Both the start container and the end container will be removed.
+                                    container = document.createTextNode('');
+                                    ViperUtil.insertBefore(range.startContainer, container);
+                                    offset = 0;
+                                } else {
+                                    // The endContainer will remain after deletion use it to set the range.
+                                    container = range.endContainer;
+                                    offset    = 0;
+                                }
+                            } else {
+                                container = range.startContainer;
+                                offset    = range.startOffset;
+                            }
+
+                            // Let browser delete the contents but adjust the range after.
+                            var self = this;
+                            setTimeout(function () {
+                                if (container.data.length === 0 && container.parentNode.childNodes.length === 1 && ViperUtil.isBlockElement(container.parentNode) === false) {
+                                    var parent = container.parentNode;
+                                    ViperUtil.insertBefore(container.parentNode, container);
+                                    ViperUtil.remove(parent);
+                                }
+
+                                range.setStart(container, offset);
+                                range.collapse(true);
+                                ViperSelection.addRange(range);
+                            }, 10);
+                        }
+                    }
+                }
             }
         }
 
@@ -1274,6 +1519,17 @@ ViperKeyboardEditorPlugin.prototype = {
 
         if (this._isStartToEndOfMultiContainerSelection(range) === true) {
             return this._removeContentFromStartToEndOfContainers(range)
+        }
+
+    },
+
+    _normaliseNextNodes: function (textNode) {
+        while (textNode.nextSibling && textNode.nextSibling.nodeType === ViperUtil.TEXT_NODE) {
+            if (textNode.nextSibling.data.length > 0) {
+                textNode.data += textNode.nextSibling.data;
+            }
+
+            ViperUtil.remove(textNode.nextSibling);
         }
 
     },
@@ -1398,7 +1654,7 @@ ViperKeyboardEditorPlugin.prototype = {
                         range.collapse(true);
                         ViperSelection.addRange(range);
                     } else {
-                        range = this.viper.moveCaretAway(nodeSelection);
+                        range = this.viper.moveCaretAway(nodeSelection, true);
                         ViperUtil.remove(nodeSelection);
                         if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
                             && range.startContainer.data === ' '
@@ -1596,11 +1852,8 @@ ViperKeyboardEditorPlugin.prototype = {
 
             var selectable = range.getNextContainer(startNode, null, true, true);
             if (!selectable || this.viper.isOutOfBounds(selectable) === true) {
-                selectable = range.getPreviousContainer(startNode, null, true);
-                if (!selectable || this.viper.isOutOfBounds(selectable) === true) {
-                    // Cant remove anything.
-                    return false;
-                }
+                // Stop here nothing else to delete.
+                return false;
             }
 
             var parent = startNode.parentNode;
@@ -1742,6 +1995,10 @@ ViperKeyboardEditorPlugin.prototype = {
                     // Two different parents. We need to join these parents.
                     // First remove all elements in between.
                     range.deleteContents();
+                    
+                    if (range.startContainer.parentNode && ViperUtil.isEmptyElement(range.startContainer.parentNode) === true) {
+                        ViperUtil.remove(range.startContainer.parentNode);
+                    }
 
                     // If the startParent is empty remove it if the endParent is the viperElement.
                     if (ViperUtil.isBlank(ViperUtil.trim(ViperUtil.getHtml(startParent))) !== true
@@ -1773,6 +2030,7 @@ ViperKeyboardEditorPlugin.prototype = {
             range.collapse(true);
             ViperSelection.addRange(range);
             this.viper.fireNodesChanged();
+            this.viper.fireSelectionChanged(null, true);
             return false;
         } else if (this._isWholeViperElementSelected(range) === true) {
             // The whole Viper element is selected, remove all of its content
@@ -1780,6 +2038,7 @@ ViperKeyboardEditorPlugin.prototype = {
             ViperUtil.setHtml(this.viper.getViperElement(), '');
             this.viper.initEditableElement();
             this.viper.fireNodesChanged();
+            this.viper.fireSelectionChanged(null, true);
             return false;
         } else if (range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
             && range.startContainer === range.endContainer
@@ -1811,7 +2070,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 }
 
                 // Handle deletion of a whole bold/italic/etc tag.
-                range = this.viper.moveCaretAway(nodeSelection);
+                range = this.viper.moveCaretAway(nodeSelection, e.keyCode === 46);
                 ViperUtil.remove(nodeSelection);
                 if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
                     && range.startContainer.data === ' '
@@ -1857,7 +2116,61 @@ ViperKeyboardEditorPlugin.prototype = {
 
         }//end if
 
+        if (e.keyCode === 8) {
+            if (range.collapsed === true) {
+                if (range.startContainer.nodeType === ViperUtil.TEXT_NODE) {
+                    if (range.startOffset === 1) {
+                        // Delete a character from left.
+                        var textNode = range.startContainer;
+                        textNode.data = textNode.data.substr(0, range.startOffset - 1) + textNode.data.substr(range.startOffset);
 
+                        // Normalise text nodes.
+                        this._normaliseNextNodes(textNode);
+
+                        range.setStart(textNode, range.startOffset - 1);
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+
+                        if (textNode.data.length === 0
+                            && textNode.nextSibling === null
+                            && textNode.previousSibling === null
+                            && ViperUtil.isBlockElement(textNode.parentNode) === true
+                        ) {
+                            // The last character of this text node was deleted and now the block parent has no content.
+                            // Add a BR to keep the blockelement 'selectable'.
+                            var br = document.createElement('br');
+                            textNode.parentNode.appendChild(br);
+                        }
+
+                        ViperUtil.preventDefault(e);
+                        this.viper.fireNodesChanged();
+                        this.viper.fireSelectionChanged(null, true);
+                        return false;
+                    }
+                }
+            }
+        } else {
+            // Delete from right.
+            if (range.collapsed === true) {
+                var startCont = range.startContainer;
+                if (startCont.nodeType === ViperUtil.TEXT_NODE) {
+                    if (range.startOffset === 0) {
+                        if (startCont.data.length === 2 && startCont.data.charAt(1) === ' ') {
+                            // When the text node ends with a space and it will be the only remaining character in the
+                            // node then replace it with non breaking space character as Webkit destroys the text node
+                            // and make it appear like both 2nd last and space deleted.
+                            startCont.data = String.fromCharCode(160);
+                            range.setStart(startCont, 0);
+                            range.collapse(true);
+                            ViperSelection.addRange(range);
+                            this.viper.fireNodesChanged();
+                            this.viper.fireSelectionChanged(null, true);
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
 
     },
 
@@ -2389,30 +2702,7 @@ ViperKeyboardEditorPlugin.prototype = {
             return false;
         }
 
-        if (!element.firstChild) {
-            return true;
-        }
-
-        var brCount = 0;
-        for (var i = 0; i < element.childNodes.length; i++) {
-            var el = element.childNodes[i];
-            if (el.nodeType === ViperUtil.TEXT_NODE) {
-                if (ViperUtil.trim(el.data).length !== 0) {
-                    return false;
-                } else {
-                    // Ignore empty text nodes.
-                    continue;
-                }
-            } else if (ViperUtil.isTag(el, 'br') === false) {
-                return false;
-            } else if (brCount !== 0) {
-                return false;
-            } else {
-                brCount++;
-            }
-        }
-
-        return true;
+        return ViperUtil.isEmptyElement(element);
 
     }
 

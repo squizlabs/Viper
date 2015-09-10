@@ -573,12 +573,13 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('anchorID');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>test content <strong id="test"><em>%1%</em></strong> more test content %2%</p>');
+
+        $this->assertHTMLMatch('<p>test content <em id="test"><strong>%1%</strong></em> more test content %2%</p>');
 
         // Check that the anchor field stayed open in the inline toolbar has remaind open with the anchor field
         $this->type('anchor');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>test content <strong id="testanchor"><em>%1%</em></strong> more test content %2%</p>');
+        $this->assertHTMLMatch('<p>test content <em id="testanchor"><strong>%1%</strong></em> more test content %2%</p>');
 
     }//end testAnchorFieldRemainsOpenAfterApplyingBoldAndItalic()
 

@@ -1,4 +1,5 @@
 <?php
+
 require_once 'AbstractViperUnitTest.php';
 
 /**
@@ -6,8 +7,6 @@ require_once 'AbstractViperUnitTest.php';
  */
 abstract class AbstractViperImagePluginUnitTest extends AbstractViperUnitTest
 {
-
-
     /**
      * Resize specified image to given width.
      *
@@ -21,22 +20,16 @@ abstract class AbstractViperImagePluginUnitTest extends AbstractViperUnitTest
     public function resizeImage($size, $imageIndex=0)
     {
         $selector = 'img';
-
         $imageRect   = $this->getBoundingRectangle($selector, $imageIndex);
         $rightHandle = $this->findImage('ImageHandle-se', '.Viper-image-handle-se', 0, true);
-
         $width = ($imageRect['x2'] - $imageRect['x1']);
         $diff  = ($size - $width);
-        $newX  = ($this->sikuli->getX($rightHandle) + $diff + 9);
+        $newX  = ($this->sikuli->getX($rightHandle) + $diff + 7);
         $newY  = $this->sikuli->getY($rightHandle);
-
         $loc = $this->sikuli->createLocation($newX, $newY);
-
         $this->sikuli->dragDrop($rightHandle, $loc);
-
         $imageRect = $this->getBoundingRectangle($selector, $imageIndex);
         return $imageRect;
-
     }//end resizeImage()
 
 
@@ -52,20 +45,14 @@ abstract class AbstractViperImagePluginUnitTest extends AbstractViperUnitTest
     {
         // Get the image rectangle.
         $image = $this->getBoundingRectangle($selector, $index);
-
         // Get both of the resize handles rectangles.
         $leftHandle  = $this->getBoundingRectangle('.Viper-image-handle-sw');
         $rightHandle = $this->getBoundingRectangle('.Viper-image-handle-se');
-
         $this->assertEquals(($image['x1'] - 10), $leftHandle['x1']);
         $this->assertEquals(($image['y2'] - 10), $leftHandle['y1']);
-
         $this->assertEquals(($image['x2'] - 10), $rightHandle['x1']);
         $this->assertEquals(($image['y2'] - 10), $rightHandle['y1']);
-
     }//end checkResizeHandles()
-
-
     /**
      * Checks that the preview image size is correct.
      *
@@ -79,17 +66,12 @@ abstract class AbstractViperImagePluginUnitTest extends AbstractViperUnitTest
         $parent         = $this->getBoundingRectangle('.ViperImagePlugin-previewPanel');
         $maxPreviewSize = 185;
         $imageWidth     = ($image['x2'] - $image['x1']);
-
         if ($imageWidth < $maxPreviewSize) {
             $maxPreviewSize = $imageWidth;
         }
-
         $this->assertEquals($imageWidth, $maxPreviewSize);
         $this->assertTrue($parent['y2'] > $image['y2']);
-
     }//end checkPreviewImageSize()
-
-
     /**
      * Drags and drops testing image to specified location.
      *
@@ -115,23 +97,24 @@ abstract class AbstractViperImagePluginUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown($showDesktopShortcut);
         sleep(1);
 
-        // Find the target image.
-        $match = $this->sikuli->find($imageFilePath, -1, 0.6);
+        try {
+            // Find the target image.
+            $match = $this->sikuli->find($imageFilePath, -1, 0.6);
+        } catch (Exception $e) {
+            // Show the browser again.
+            $this->sikuli->keyDown($showDesktopShortcut);
+            return false;
+        }
 
         // Start drag operation.
         $this->sikuli->drag($match);
-
         $this->sikuli->mouseMoveOffset(30, 30);
         $this->sikuli->mouseMoveOffset(-30, -30);
-
         // Show the windows again.
         $this->sikuli->keyDown($showDesktopShortcut);
         sleep(1);
-
         // Drop the image file at given location.
         $this->sikuli->dropAt($dropOn);
-
     }//end dragDropFromDesktop()
-
 
 }//end class

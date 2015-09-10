@@ -23,7 +23,7 @@
                 var contentElement = ViperUtil.getid('content');
 
                 viper = new Viper('test', null, null, [contentElement]);
-                viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin', 'ViperCursorAssistPlugin']);
+                viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin', 'ViperCursorAssistPlugin', 'ViperReplacementPlugin']);
 
                 $('.Viper-button[title]').removeAttr('title');
 
@@ -45,6 +45,45 @@
                     viperTest.set('testCases', testCasesHtml);
                     ViperUtil.empty(contentElement);
                 }
+
+                // Setup keywords.
+                var repPlugin = viper.getPluginManager().getPlugin('ViperReplacementPlugin');
+                repPlugin.setSearchPattern('\\(\\([^\\)]+\\)\\)');
+                repPlugin.setReplacementsCallback(
+                    function(keywords, callback) {
+                        for (var keyword in keywords) {
+                            var rep = '';
+                            switch (keyword) {
+                                case '((prop:productName))':
+                                    rep = 'Viper';
+                                break;
+
+                                case '((prop:url))':
+                                    rep = '../../Examples/Paper-reel/Images/testImage.png';
+                                break;
+
+                                case '((prop:className))':
+                                    rep = 'replaced-className';
+                                break;
+
+                                case '((prop:width))':
+                                    rep = '100px';
+                                break;
+
+                                case '((prop:height))':
+                                    rep = '200px';
+                                break;
+                            }
+
+                            keywords[keyword] = rep;
+                        }
+
+                        setTimeout(function() {
+                            callback.call(this, keywords);
+                        }, 200);
+                    }
+                );
+
             };
         </script>
     </head>

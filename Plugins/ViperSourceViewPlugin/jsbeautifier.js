@@ -226,7 +226,7 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
         // -- SQUIZ
       }
       // --> SQUIZ
-      else if (('|pre|strong|em|i|sub|sup|u|strike|').indexOf('|' + tag_check + '|') >= 0) {
+      else if (('|pre|strong|em|i|sub|sup|u|strike|span|').indexOf('|' + tag_check + '|') >= 0) {
         content.push(this.get_unformatted('</' + tag_check + '>'));
         this.tag_type = 'INLINE';
       }

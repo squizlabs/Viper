@@ -84,7 +84,6 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
         $this->assertHTMLMatch('<p><strong><em>%1% %2% %3%</em></strong></p><p><em><strong>sit %4%</strong></em> <strong>%5%</strong></p>');
 
-        $this->selectKeyword(1, 4);
         $this->sikuli->keyDown('Key.CMD + i');
         sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('italic'), 'Italic icon in the inline toolbar should not be active');
@@ -141,7 +140,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon is not active in the top toolbar');
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon is not active in the inline toolbar');
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon is not active in the top toolbar');
-        $this->assertHTMLMatch('<p><strong><em>%1%</em></strong> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->assertHTMLMatch('<p><em><strong>%1%</strong></em> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         //Remove italics
         $this->selectKeyword(1);
@@ -254,7 +253,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + i');
         $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertHTMLMatch('<p><em><strong>%1% %2% %3%</strong></em></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->assertHTMLMatch('<p><strong><em>%1% %2% %3%</em></strong></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         $this->moveToKeyword(1, 'right');
 
@@ -278,7 +277,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
         $this->sikuli->keyDown('Key.CMD + i');
         $this->type('TEST');
 
-        $this->assertHTMLMatch('<p><em><strong>%1%</strong></em>TESTTEST<strong>TEST</strong>TEST<strong><em>TEST</em></strong><em><strong> %2% %3%</strong></em></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->assertHTMLMatch('<p><strong><em>%1%</em></strong>TEST<em>TEST<strong>TEST</strong>TEST<strong><em>TEST</em></strong><em><strong> %2% %3%</strong></em></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testStartAndStopStylesInActiveStyles()
 
@@ -296,7 +295,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + i');
         $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertHTMLMatch('<p><em><strong>%1% %2% %3%</strong></em></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->assertHTMLMatch('<p><strong><em>%1% %2% %3%</em></strong></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         $this->moveToKeyword(3, 'right');
 
@@ -306,7 +305,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
         $this->assertTrue($this->topToolbarButtonExists('italic'), 'italic icon in the top toolbar is active');
         $this->type('TEST');
 
-        $this->assertHTMLMatch('<p><em><strong>%1% %2% %3%</strong></em>TEST</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->assertHTMLMatch('<p><strong><em>%1% %2% %3%</em></strong>TEST</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testStopStyleAtTheEndOfStyleTag()
 

@@ -70,7 +70,7 @@ ViperTableEditorPlugin.prototype = {
             }
         });
 
-        this.viper.registerCallback('setHtml', 'ViperTableEditorPlugin', function(data) {
+        this.viper.registerCallback('Viper:setHtml', 'ViperTableEditorPlugin', function(data, callback) {
             var vap = self.viper.ViperPluginManager.getPlugin('ViperAccessibilityPlugin');
             if (vap) {
                 vap.loadHTMLCS(function() {
@@ -79,13 +79,19 @@ ViperTableEditorPlugin.prototype = {
                         self.setTableHeaders(tables[i]);
                         self._initTable(tables[i]);
                     }
+
+                    callback.call(this);
                 });
             } else {
                 var tables = ViperUtil.getTag('table', data.element);
                 for (var i = 0; i < tables.length; i++) {
                     self._initTable(tables[i]);
                 }
+
+                callback.call(this);
             }
+
+            return function() {};
         });
 
         this.viper.registerCallback('Viper:enabled', 'ViperTableEditorPlugin', function() {
@@ -218,7 +224,7 @@ ViperTableEditorPlugin.prototype = {
             }//end if
         });
 
-        this.viper.registerCallback('Viper:clickedOutside', 'ViperTableEditorPlugin', function(data) {
+        this.viper.registerCallback(['Viper:clickedOutside', 'Viper:disabled'], 'ViperTableEditorPlugin', function(data) {
             self.hideCellToolsIcon();
             self.removeHighlights();
         });
@@ -907,7 +913,7 @@ ViperTableEditorPlugin.prototype = {
         var tableWidth = this.getTableWidth(table);
         this._tools.getItem('VTEP:tableProps:width').setValue(tableWidth);
 
-        var summary = table.getAttribute('summary') || '';
+        var summary = this.viper.getAttribute(table, 'summary') || '';
         this._tools.getItem('VTEP:tableProps:summary').setValue(summary);
 
         this._tools.getItem('VTEP:tableProps:caption').setValue((ViperUtil.getTag('caption', table).length > 0));

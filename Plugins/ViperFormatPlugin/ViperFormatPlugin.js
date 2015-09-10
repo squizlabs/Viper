@@ -409,7 +409,7 @@ ViperFormatPlugin.prototype = {
 
         node = this.getNodeWithAttributeFromRange(attribute, node);
         if (node) {
-            var value = node.getAttribute(attribute);
+            var value = this.viper.getAttribute(node, attribute);
             if (attribute === 'class') {
                 value = this._removeViperHighlightClass(value);
             }
@@ -1271,8 +1271,12 @@ ViperFormatPlugin.prototype = {
                                 }
 
                                 if (tag === commonTagName) {
-                                    if (tag !== 'div' || commonParent !== viperElement) {
-                                        tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
+                                    if (commonParent !== viperElement) {
+                                        if (tag !== 'div') {
+                                            tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
+                                        } else {
+                                            tools.enableButton(prefix + 'formats:' + formatButtons[tag]);
+                                        }
                                     }
 
                                     tools.enableButton('formats');
@@ -1373,8 +1377,6 @@ ViperFormatPlugin.prototype = {
 
             classAttribute = this._getClassInitialValue(classAttribute, element);
             this.viper.ViperTools.getItem(prefix + 'class:input').setValue(classAttribute);
-
-            //this._updateDefinedStylesList()
 
             data.toolbar.showButton(prefix + 'classBtn-' + data.type);
         }
@@ -1988,7 +1990,7 @@ ViperFormatPlugin.prototype = {
         var viperElement   = this.viper.getViperElement();
         var formatElement  = null;
 
-        if (range.collapsed !== true && !selectedNode) {
+        if (range.collapsed !== true) {
             formatElement = lineage[currentLinIndex];
             if (formatElement && formatElement.nodeType !== ViperUtil.TEXT_NODE) {
                 selectedNode = formatElement;

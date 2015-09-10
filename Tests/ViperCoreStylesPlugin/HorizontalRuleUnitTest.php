@@ -144,7 +144,7 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->sikuli->keyDown('Key.ENTER');
         $this->clickTopToolbarButton('insertHr');
 
-        $this->assertHTMLMatch('<p>%1% <sub>%2%</sub> dolor sit <em>amet</em> <strong><del>%3%</del></strong></p><hr />');
+        $this->assertHTMLMatch('<p>%1% <sub>%2%</sub> dolor sit <em>amet</em> <del><strong>%3%</strong></del></p><hr />');
 
     }//end testAddingHorizontalRuleAfterFormattedText()
 

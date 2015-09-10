@@ -54,6 +54,20 @@ function gHtml(selector, index, removeTableHeaders)
 
 }
 
+function getRawHTML(selector, index)
+{
+    var html = '';
+    index = index || 0;
+    if (selector) {
+        html = ViperUtil.getHtml(ViperUtil.$(selector)[index]).replace("\n", '');
+    } else {
+        html = ViperUtil.getHtml(viper.getViperElement());
+    }
+
+    return html;
+
+}
+
 function gText()
 {
     var selection    = '';

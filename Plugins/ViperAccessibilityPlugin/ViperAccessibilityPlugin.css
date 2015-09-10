@@ -88,6 +88,7 @@
     display: block;
     clear: both;
     margin-bottom: 5%;
+    color: #FFF;
 }
 .ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueRecheck .Viper-button {
     font-weight: bold;
@@ -122,7 +123,8 @@
     padding: 0 0.5em;
     position: relative;
     text-align: center;
-    background-color: #E9E9EB;
+    background-color: #FFFFFF;
+    border-color: #3C3C3C;
 }
 
 .ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-buttonIcon.Viper-locate {
@@ -130,14 +132,20 @@
 }
 
 .ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-buttonIcon {
-    background-image: url("../../Images/buttonIcons.png");
+     background-image: url("../../Images/buttonIcons.svg");
     height: 20px;
     left: 50%;
-    margin: -10px 0 0 -12.5px;
+    margin: -11px 0 0 -12.5px;
     position: absolute;
     top: 50%;
     width: 25px;
 }
+
+/* PNG fallback for older trowsers */
+
+    .Viper-browserVer-msie8 .ViperAccessibilityPlugin #HTMLCS-wrapper .Viper-buttonIcon {
+        background-image: url("../../Images/buttonIcons.png");
+    }
 
 .ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issuePane {
     text-shadow: none;
@@ -296,6 +304,7 @@
     padding: 4px 2px;
     position: relative;
     text-align: left;
+    border-color: #0A0A0A;
 }
 
 .ViperAccessibilityPlugin #HTMLCS-wrapper .ViperAP-issueResolution .Viper-resolutionInstructions {

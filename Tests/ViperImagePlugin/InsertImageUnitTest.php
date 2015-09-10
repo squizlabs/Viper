@@ -365,7 +365,7 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
 
         $this->clickField('Image is decorative');
         sleep(1);
-        $this->clickField('Alt');
+        $this->clickField('Alt', TRUE);
         $this->type('alt tag');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         sleep(1);
