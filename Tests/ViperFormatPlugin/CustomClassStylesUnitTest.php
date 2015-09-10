@@ -446,6 +446,7 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         $this->clickTopToolbarButton('cssClass');
         $this->selectStyles(array('ordered-list'));
         sleep(1);
+        $this->sikuli->keyDown('Key.ENTER');
         $this->clickField('Class');
         sleep(1);
         $this->type('test-ordered-list');
@@ -461,6 +462,7 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         $this->clickInlineToolbarButton('cssClass');
         sleep(1);
         $this->selectStyles(array('article'));
+        $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->clickField('Class');
         sleep(1);
@@ -476,6 +478,7 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         $this->clickTopToolbarButton('cssClass');
         sleep(1);
         $this->selectStyles(array('article'));
+        $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->clickField('Class');
         sleep(1);
