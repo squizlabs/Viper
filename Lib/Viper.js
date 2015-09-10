@@ -4949,6 +4949,21 @@ Viper.prototype = {
                         }
                     }
                 }
+
+                if (range.startContainer === range.endContainer
+                    && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                    && range.collapsed === true
+                    && range.startOffset === 0
+                ) {
+                    // At the start of a text node with an element sibling. Make sure character is inserted in this
+                    // text node.
+                    range.startContainer.data = String.fromCharCode(e.which) + range.startContainer.data;
+                    range.setStart(range.startContainer, 1);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                    this.fireNodesChanged([range.getStartNode()]);
+                    return false;
+                }
             }//end if
 
             this.fireNodesChanged([range.getStartNode()]);

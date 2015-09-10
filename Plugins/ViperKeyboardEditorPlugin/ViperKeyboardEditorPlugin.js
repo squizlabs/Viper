@@ -2115,7 +2115,63 @@ ViperKeyboardEditorPlugin.prototype = {
 
         }//end if
 
+        if (e.keyCode === 8) {
+            if (range.collapsed === true) {
+                if (range.startContainer.nodeType === ViperUtil.TEXT_NODE) {
+                    if (range.startOffset === 1) {
+                        // Delete a character from left.
+                        var textNode = range.startContainer;
+                        textNode.data = textNode.data.substr(0, range.startOffset - 1) + textNode.data.substr(range.startOffset);
 
+                        // Normalise text nodes.
+                        this._normaliseNextNodes(textNode);
+
+                        range.setStart(textNode, range.startOffset - 1);
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+
+                        if (textNode.data.length === 0
+                            && textNode.nextSibling === null
+                            && textNode.previousSibling === null
+                            && ViperUtil.isBlockElement(textNode.parentNode) === true
+                        ) {
+                            // The last character of this text node was deleted and now the block parent has no content.
+                            // Add a BR to keep the blockelement 'selectable'.
+                            var br = document.createElement('br');
+                            textNode.parentNode.appendChild(br);
+                        }
+
+                        ViperUtil.preventDefault(e);
+                        this.viper.fireNodesChanged();
+                        this.viper.fireSelectionChanged(null, true);
+                        return false;
+                    }
+                }
+            }
+        } else {
+            // Delete from right.
+            if (range.collapsed === true) {
+                var startCont = range.startContainer;
+                if (startCont.nodeType === ViperUtil.TEXT_NODE) {
+                    if (range.startOffset === 0) {
+                        if (startCont.data.length === 2 && startCont.data.charAt(1) === ' ') {
+                            // When the text node ends with a space and it will be the only remaining character in the
+                            // node then replace it with non breaking space character as Webkit destroys the text node
+                            // and make it appear like both 2nd last and space deleted.
+                            startCont.data = String.fromCharCode(160);
+                            range.setStart(startCont, 0);
+                            range.collapse(true);
+                            ViperSelection.addRange(range);
+                            this.viper.fireNodesChanged();
+                            this.viper.fireSelectionChanged(null, true);
+                            return false;
+                        } else {
+                            ViperUtil.dcall()
+                        }
+                    }
+                }
+            }
+        }
 
     },
 

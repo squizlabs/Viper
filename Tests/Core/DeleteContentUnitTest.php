@@ -194,7 +194,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
 
         // Add content to check the position of the cursor
         $this->type('content');
-        $this->assertHTMLMatch('<p><strong>content</strong> %2%</p>');
+        $this->assertHTMLMatch('<p>content %2%</p>');
 
     }//end testDeletingContentWithBoldFormatting()
 
