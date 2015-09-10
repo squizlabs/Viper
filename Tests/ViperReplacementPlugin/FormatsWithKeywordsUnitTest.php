@@ -2,7 +2,7 @@
 
 require_once 'AbstractViperUnitTest.php';
 
-class Viper_Tests_ViperKeywordPlugin_KeywordFormatUnitTest extends AbstractViperUnitTest
+class Viper_Tests_ViperReplacementPlugin_FormatsWithKeywordsUnitTest extends AbstractViperUnitTest
 {
 
     /**
