@@ -1397,13 +1397,15 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      * @param string  $buttonIcon The name of the button.
      * @param string  $state      The name of the button state (active, selected).
      * @param boolean $isText     If TRUE then the button is a text button (i.e. no icon).
+     * @param boolean $forceJSPos If isText option is set to TRUE and this is set to TRUE then
+     *                            image will not be used.
      *
      * @return void
      * @throws Exception If the specified icon file not found.
      */
-    protected function clickInlineToolbarButton($buttonIcon, $state=null, $isText=false)
+    protected function clickInlineToolbarButton($buttonIcon, $state=null, $isText=false, $forceJSPos=false)
     {
-        $this->_clickButton($buttonIcon, $state, $isText, 'inlineToolbar');
+        $this->_clickButton($buttonIcon, $state, $isText, 'inlineToolbar', $forceJSPos);
 
     }//end clickInlineToolbarButton()
 
