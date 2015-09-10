@@ -1852,11 +1852,8 @@ ViperKeyboardEditorPlugin.prototype = {
 
             var selectable = range.getNextContainer(startNode, null, true, true);
             if (!selectable || this.viper.isOutOfBounds(selectable) === true) {
-                selectable = range.getPreviousContainer(startNode, null, true);
-                if (!selectable || this.viper.isOutOfBounds(selectable) === true) {
-                    // Cant remove anything.
-                    return false;
-                }
+                // Stop here nothing else to delete.
+                return false;
             }
 
             var parent = startNode.parentNode;
@@ -2165,8 +2162,6 @@ ViperKeyboardEditorPlugin.prototype = {
                             this.viper.fireNodesChanged();
                             this.viper.fireSelectionChanged(null, true);
                             return false;
-                        } else {
-                            ViperUtil.dcall()
                         }
                     }
                 }
