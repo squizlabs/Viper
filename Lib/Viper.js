@@ -1295,6 +1295,8 @@ Viper.prototype = {
         if (!value && keepEmptyAttribute !== true && ViperUtil.hasAttribute(element, attribute) === true) {
             element.removeAttribute(attribute);
 
+            this.fireCallbacks('Viper:attributeRemoved', {element: element, attribute: attribute});
+
             if (ViperUtil.isTag(element, 'span') === true
                 && element.attributes
                 && element.attributes.length === 0
