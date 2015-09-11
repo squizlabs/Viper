@@ -3,6 +3,7 @@ function MatrixCopyPastePlugin(viper)
     ViperUtil.inherits('MatrixCopyPastePlugin', 'ViperCopyPastePlugin');
     ViperCopyPastePlugin.call(this, viper);
     this.viper = viper;
+    this._aggressiveMode = false;
 
 }
 
