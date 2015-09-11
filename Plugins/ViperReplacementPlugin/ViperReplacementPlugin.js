@@ -73,11 +73,14 @@ ViperReplacementPlugin.prototype = {
         });
 
         // Shift, Control, Alt, Caps lock, esc, L-CMD, R-CMD, arrow keys.
-        var ignoredKeys = [16, 17, 18, 20, 27, 91, 93, 37, 38, 39, 40];
+        var ignoredKeys = [16, 17, 18, 20, 27, 91, 93, 37, 38, 39, 40, 224];
         this.viper.registerCallback('Viper:keyDown', 'ViperReplacementPlugin', function(e) {
             switch (e.which) {
                 default:
                     if (ViperUtil.inArray(e.which, ignoredKeys) === true) {
+                        return;
+                    } else if ((e.which === 88 || e.which === 67) && (e.metaKey === true || e.ctrlKey === true)) {
+                        // Copy/Cut operation.
                         return;
                     }
 
@@ -253,6 +256,14 @@ ViperReplacementPlugin.prototype = {
                 ViperSelection.addRange(range);
             }
 
+        });
+
+        this.viper.registerCallback('Viper:attributeRemoved', 'ViperReplacementPlugin', function(data) {
+            // If the removed attribute has a replacement backup attribute remove that too.
+            var cloneName = 'data-viper-' + data.attribute;
+            if (ViperUtil.hasAttribute(data.element, cloneName) === true) {
+                ViperUtil.removeAttr(data.element, cloneName);
+            }
         });
 
         this.viper.addAttributeGetModifier(
