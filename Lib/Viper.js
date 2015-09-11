@@ -4952,7 +4952,8 @@ Viper.prototype = {
                     }
                 }
 
-                if (range.startContainer === range.endContainer
+                if (e.which !== 0
+                    && range.startContainer === range.endContainer
                     && range.startContainer.nodeType === ViperUtil.TEXT_NODE
                     && range.collapsed === true
                     && range.startOffset === 0
