@@ -33,11 +33,11 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
     public function testRemoveAlignmentForAList()
     {
         $this->useTest(2);
-
-        $this->selectKeyword(1);
+        $this->clickKeyword(1);
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('removeFormat');
-        $this->assertHTMLMatch('<p>This is a list</p><ul><li>Test removing bullet points</li><li>purus %1% luctus</li><li>vel molestie arcu</li></ul>');
+        $this->assertHTMLMatch('<p>%1% This is a list</p><ul><li>Test removing bullet points</li><li>purus %2% luctus</li><li>vel molestie arcu</li></ul>');
 
     }//end testRemoveAlignmentForAList()
 
