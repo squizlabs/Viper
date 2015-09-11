@@ -45,13 +45,13 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->moveToKeyword(2, 'right');
         $this->clickTopToolbarButton('insertHr');
         $this->type('%4% new content');
-        $this->assertHTMLMatch('<p>%1% %2%</p><hr /><p>%4% new contentdolor sit <em>amet</em> <strong>%3%</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2%</p><hr /><p>%4% new content dolor sit <em>amet</em> <strong>%3%</strong></p>');
 
         // Delete hr
         $this->selectKeyword(4);
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>%1% %2%</p><p>%4% new contentdolor sit <em>amet</em> <strong>%3%</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2%</p><p>%4% new content dolor sit <em>amet</em> <strong>%3%</strong></p>');
 
     }//end testAddingAndDeletingHorizontalRuleInMiddleOfParagraph()
 
