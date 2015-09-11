@@ -28,9 +28,9 @@ function ViperCopyPastePlugin(viper)
     this._isMSIE         = ViperUtil.isBrowser('msie');
     this._toolbarElement = null;
     this._selectedRows   = null;
-
-    this._pasteProcess = 0;
-    this._isRightClick = false;
+    this._pasteProcess   = 0;
+    this._isRightClick   = false;
+    this._aggressiveMode = true;
 
 }
 
@@ -99,6 +99,10 @@ ViperCopyPastePlugin.prototype = {
 
         if (ViperUtil.isset(settings.convertTags) === true) {
             this.convertTags = settings.convertTags;
+        }
+
+        if (ViperUtil.isset(settings.aggressiveMode) === true) {
+            this._aggressiveMode = settings.aggressiveMode;
         }
 
     },
@@ -1286,6 +1290,11 @@ ViperCopyPastePlugin.prototype = {
             content = content.replace(/<span class="Apple-converted-space">&nbsp;<\/span>/g, ' ');
         }
 
+        var tmp = document.createElement('div');
+        ViperUtil.setHtml(tmp, content);
+        this._convertSpansToStyleTags(tmp);
+        content = ViperUtil.getHtml(tmp);
+
         // Remove span and o:p etc. tags.
         content = content.replace(/<\/?span[^>]*>/gi, "");
         content = content.replace(/<\/?\w+:[^>]*>/gi, '' );
@@ -1565,14 +1574,31 @@ ViperCopyPastePlugin.prototype = {
         }
 
         var styleName     = style.split(':');
-        var allowedStyles = ['height', 'width', 'padding', 'text-align', 'text-indent', 'border-collapse', 'border', 'border-top', 'border-bottom', 'border-right', 'border-left', 'list-style-type'];
+        var allowedStyles = ['height', 'width', 'list-style-type'];
 
-        if (contentType === 'google_docs') {
-            allowedStyles = allowedStyles.concat(['font-weight', 'font-style', 'vertical-align', 'text-decoration']);
+        if (this._aggressiveMode === false) {
+            // Aggressive mode is turned off, allow these styles.
+            allowedStyles = allowedStyles.concat(['padding', 'text-align', 'text-indent', 'border-collapse', 'border', 'border-top', 'border-bottom', 'border-right', 'border-left']);
+
+            if (contentType === 'google_docs') {
+                allowedStyles = allowedStyles.concat(['font-weight', 'font-style', 'vertical-align', 'text-decoration']);
+            }
         }
 
         if (ViperUtil.inArray(styleName[0], allowedStyles) === true) {
-            return true;
+            // Style is allowed but its value might not be.
+            var invalidStyleValues = {
+                'text-indent': ['0px'],
+                'text-align': ['start', 'left', 'initial'],
+                'padding': ['0px'],
+                'text-indent': ['0px']
+            };
+
+            if (!invalidStyleValues[styleName[0]]
+                || ViperUtil.inArray(ViperUtil.trim(styleName[1]), invalidStyleValues[styleName[0]]) === false
+            ) {
+                return true;
+            }
         }
 
         return false;

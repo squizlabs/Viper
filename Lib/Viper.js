@@ -1357,7 +1357,9 @@ Viper.prototype = {
                         self._valuesRetrievedCallback.call(self);
                     }
                 }
-            }
+            } else {
+                element.setAttribute(attribute, value);
+            }//end if
         }//end if
 
     },
