@@ -51,11 +51,11 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
     {
         $this->useTest(3);
 
-        $this->selectKeyword(1);
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('removeFormat');
-        $this->assertHTMLMatch('<p>Lorem %1% dolor sit amet WoW</p>');
-        $this->assertEquals($this->replaceKeywords('Lorem %1% dolor sit amet WoW'), $this->getSelectedText(), 'Original selection is not selected');
+        $this->assertHTMLMatch('<p>%1% Content</p><p>Lorem %2% dolor sit amet WoW</p>');
+        $this->assertEquals($this->replaceKeywords('Lorem %2% dolor sit amet WoW'), $this->getSelectedText(), 'Original selection is not selected');
 
     }//end testSelectionMaintainedWhenClickingRemoveFormat()
 
