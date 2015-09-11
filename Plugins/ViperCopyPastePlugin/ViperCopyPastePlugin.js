@@ -30,7 +30,7 @@ function ViperCopyPastePlugin(viper)
     this._selectedRows   = null;
     this._pasteProcess   = 0;
     this._isRightClick   = false;
-    this._aggressiveMode = false;
+    this._aggressiveMode = true;
 
 }
 
