@@ -4956,14 +4956,25 @@ Viper.prototype = {
 
                 if (e.which !== 0
                     && range.startContainer === range.endContainer
-                    && range.startContainer.nodeType === ViperUtil.TEXT_NODE
                     && range.collapsed === true
                     && range.startOffset === 0
                 ) {
+                    var textContainer = null;
+                    if (range.startContainer.nodeType === ViperUtil.ELEMENT_NODE) {
+                        if (range.startContainer.childNodes[range.startOffset]
+                            && range.startContainer.childNodes[range.startOffset]
+                            && range.startContainer.childNodes[range.startOffset].nodeType === ViperUtil.TEXT_NODE
+                        ) {
+                            textContainer = range.startContainer.childNodes[range.startOffset];
+                        }
+                    } else {
+                        textContainer = range.startContainer;
+                    }
+
                     // At the start of a text node with an element sibling. Make sure character is inserted in this
                     // text node.
-                    range.startContainer.data = String.fromCharCode(e.which) + range.startContainer.data;
-                    range.setStart(range.startContainer, 1);
+                    textContainer.data = String.fromCharCode(e.which) + textContainer.data;
+                    range.setStart(textContainer, 1);
                     range.collapse(true);
                     ViperSelection.addRange(range);
                     this.fireNodesChanged([range.getStartNode()]);
