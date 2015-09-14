@@ -126,8 +126,9 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViper
 
         $closeIcon = $this->findImage('closePopupIcon', '.Viper-popup-closeIcon');
         $this->sikuli->click($closeIcon);
-
+        sleep(1);
         $this->clickButton('Discard', NULL, TRUE);
+        sleep(1);
 
         $this->assertHTMLMatch('<p>Lorem dolor %1%</p><p><strong>%2%</strong> sit amet</p><p>%3% test <em>XuT</em></p>');
 
