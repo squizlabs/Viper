@@ -115,7 +115,6 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
         sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
-        $this->clickTopToolbarButton('image', 'selected');
         $this->assertHTMLMatch('<p>%1%<img src="%url%/ViperImagePlugin/Images/editing.png" alt=""/> Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
 
         $this->selectKeyword(2);
@@ -142,7 +141,6 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
         sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
-        $this->clickTopToolbarButton('image', 'selected');
         $this->assertHTMLMatch('<p>%1%<img src="%url%/ViperImagePlugin/Images/editing.png" alt=""/> Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
 
         $this->selectKeyword(2);
@@ -180,6 +178,7 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
         $this->clickField('Title');
         $this->type('Title tag');
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         // The image should not have been inserted into the content as there is no alt tag
         $this->assertHTMLMatch('<p>%1% Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
         // Add alt tag
@@ -254,7 +253,6 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
         sleep(1);
         $this->clickField('Image is decorative');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton('image', 'selected');
         $this->assertHTMLMatch('<p>%1% Content to test inserting images</p><p>Another paragraph in the content %2%<img src="%url%/ViperImagePlugin/Images/editing.png" alt=""/></p>');
         $this->clickElement('img', 0);
         $this->assertTrue($this->inlineToolbarButtonExists('image', 'active'), 'Image icon should be active.');
@@ -274,7 +272,7 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
         $this->assertTrue($this->inlineToolbarButtonExists('image', 'active'), 'Image icon should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('move'), 'Move icon should appear in the inline toolbar.');
 
-    }//end testImageIconWhenInsertingImageInParagraph()
+    }//end testInsertingImageInAParagraph()
 
 
     /**
