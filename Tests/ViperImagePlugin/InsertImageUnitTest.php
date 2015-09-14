@@ -182,7 +182,7 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
         // The image should not have been inserted into the content as there is no alt tag
         $this->assertHTMLMatch('<p>%1% Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
         // Add alt tag
-        $this->clickField('Alt');
+        $this->clickField('Alt', TRUE);
         $this->type('Alt tag');
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>%1%<img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" title="Title tag"/> Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
@@ -203,7 +203,7 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
         // The image should not have been inserted into the content as there is no alt tag
         $this->assertHTMLMatch('<p>%1%<img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" title="Title tag"/> Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
         // Add alt tag
-        $this->clickField('Alt');
+        $this->clickField('Alt', TRUE);
         $this->type('Another Alt tag');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         sleep(1);
