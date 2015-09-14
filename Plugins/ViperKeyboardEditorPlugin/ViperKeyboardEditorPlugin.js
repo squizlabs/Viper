@@ -783,6 +783,22 @@ ViperKeyboardEditorPlugin.prototype = {
                     self.viper.fireSelectionChanged(null, true);
                     return false;
                 }
+            } else if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true
+                && range.startOffset === 0
+                && range.collapsed === true
+                && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                && range._getFirstSelectableChild(ViperUtil.getFirstBlockParent(range.startContainer)) === range.startContainer
+            ) {
+                // Caret is at the start of a block element and pressing enter needs to create a new element before this.
+                var parent    = ViperUtil.getFirstBlockParent(range.startContainer);
+                var newParent = document.createElement(ViperUtil.getTagName(parent));
+                ViperUtil.setHtml(newParent, '<br />');
+                ViperUtil.insertBefore(parent, newParent);
+                range.setStart(newParent.firstChild, 0);
+                range.collapse(true);
+                ViperSelection.addRange(range);
+                self.viper.fireSelectionChanged(null, true);
+                return false;
             }//end if
 
             setTimeout(function() {
