@@ -762,6 +762,27 @@ ViperKeyboardEditorPlugin.prototype = {
                 range.setStart(parentNextSibling, 0);
                 range.collapse(true);
                 ViperSelection.addRange(range);
+            } else if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                && range.collapsed === true
+                && range.startOffset === (range.startContainer.data.length + 1)
+                && range.startContainer.previousSibling
+                && range.startContainer.previousSibling.nodeType !== ViperUtil.TEXT_NODE
+                && (range.startContainer.nextSibling === null || ViperUtil.isTag(range.startContainer.nextSibling, 'br') === true)
+                && ViperUtil.trim(range.startContainer.data) === ''
+            ) {
+                // Handle case where <p>text<strong>text</strong> *</p> or <p>text<strong>text</strong> *<br/></p>
+                // causes caret to stay in the same paragraph.
+                var parent = ViperUtil.getFirstBlockParent(range.startContainer);
+                if (parent) {
+                    var newParent = document.createElement(ViperUtil.getTagName(parent));
+                    ViperUtil.setHtml(newParent, '<br />');
+                    ViperUtil.insertAfter(parent, newParent);
+                    range.setStart(newParent.firstChild, 0);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                    self.viper.fireSelectionChanged(null, true);
+                    return false;
+                }
             }//end if
 
             setTimeout(function() {
@@ -1689,7 +1710,7 @@ ViperKeyboardEditorPlugin.prototype = {
             } else if (ViperUtil.isBrowser('firefox') === true) {
                 var nodeSelection = range.getNodeSelection();
                 if (nodeSelection && ViperUtil.isStubElement(nodeSelection) === false) {
-                    // When a block element is selected and removed in Firefox it leaves the content as <p>NULL CHAR</p>.
+                    // When a block element is selected and removed in Firefox it leaves the content as <p>null char</p>.
                     // Handle the deletion here.
                     if (ViperUtil.isTag(nodeSelection, 'td') === true
                         || ViperUtil.isTag(nodeSelection, 'th') === true
