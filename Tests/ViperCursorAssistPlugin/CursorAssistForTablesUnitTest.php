@@ -40,7 +40,7 @@ class Viper_Tests_ViperCursorAssistPlugin_CursorAssistForTablesUnitTest extends 
 
         sleep(2);
         $this->moveMouseToElement('table', 'bottom');
-        sleep(2);
+        sleep(4);
 
         // Check to see if the cursor assit line appears above the table
         $this->assertTrue($this->isCursorAssistLineVisible('table', 'bottom'));
