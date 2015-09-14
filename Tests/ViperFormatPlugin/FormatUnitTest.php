@@ -512,6 +512,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
 
         // Check the status of the icons
         $this->selectKeyword(1, 3);
+        sleep(1);
         $this->clickTopToolbarButton('formats');
         $this->checkStatusOfFormatIconsInTheTopToolbar('disabled', NULL, 'disabled', 'disabled');
 
