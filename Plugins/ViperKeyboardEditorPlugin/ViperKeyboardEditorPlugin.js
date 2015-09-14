@@ -800,7 +800,27 @@ ViperKeyboardEditorPlugin.prototype = {
                 ViperSelection.addRange(range);
                 self.viper.fireSelectionChanged(null, true);
                 return false;
-            }
+            } else if (range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
+                && range.collapsed === true
+                && range.startOffset === 0
+                && range.startContainer.previousSibling
+                && range.startContainer.previousSibling.nodeType === ViperUtil.TEXT_NODE
+                && range.startContainer.nextSibling === null
+                && ViperUtil.isTag(range.startContainer, 'br') === true
+            ) {
+                // Handle case where <p>test test[<br/>]</p>, element ending with br and range is set to br.
+                var parent = ViperUtil.getFirstBlockParent(range.startContainer);
+                if (parent) {
+                    var newParent = document.createElement(ViperUtil.getTagName(parent));
+                    ViperUtil.setHtml(newParent, '<br />');
+                    ViperUtil.insertAfter(parent, newParent);
+                    range.setStart(newParent.firstChild, 0);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                    self.viper.fireSelectionChanged(null, true);
+                    return false;
+                }
+            }//end if
 
             if (range.startOffset === 0
                 && range.collapsed === true
