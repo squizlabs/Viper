@@ -114,6 +114,7 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
         $this->clickField('Image is decorative');
         sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->clickTopToolbarButton('image', 'selected');
         $this->assertHTMLMatch('<p>%1%<img src="%url%/ViperImagePlugin/Images/editing.png" alt=""/> Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
 
@@ -140,6 +141,7 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
         $this->clickField('Image is decorative');
         sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->clickTopToolbarButton('image', 'selected');
         $this->assertHTMLMatch('<p>%1%<img src="%url%/ViperImagePlugin/Images/editing.png" alt=""/> Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
 
