@@ -455,6 +455,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         // Do the same to a bold keyword
         $this->useTest(4);
         $this->selectKeyword(1);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
         $this->clickTopToolbarButton('formats-div');
         $this->clickTopToolbarButton('Quote', NULL, TRUE, TRUE);
@@ -462,6 +463,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->assertTrue($this->topToolbarButtonExists('Quote', 'active', TRUE), 'Blockquote format icon should be active in the top toolbar');
 
         $this->selectKeyword(1);
+        sleep(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('Quote', 'active', TRUE, TRUE);
@@ -471,6 +473,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         // Do the same to an italic keyword
         $this->useTest(5);
         $this->selectKeyword(1);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
         $this->clickTopToolbarButton('formats-div');
         $this->clickTopToolbarButton('Quote', NULL, TRUE, TRUE);
@@ -478,6 +481,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->assertTrue($this->topToolbarButtonExists('Quote', 'active', TRUE), 'Blockquote format icon should be active in the top toolbar');
 
         $this->selectKeyword(1);
+        sleep(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
         $this->clickTopToolbarButton('Quote', 'active', TRUE, TRUE);
