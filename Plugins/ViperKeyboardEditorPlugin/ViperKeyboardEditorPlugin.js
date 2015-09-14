@@ -1365,11 +1365,9 @@ ViperKeyboardEditorPlugin.prototype = {
                     if (range.startContainer.nodeType === ViperUtil.TEXT_NODE) {
                         // Start container is text node.
                         if (range.endContainer.nodeType === ViperUtil.TEXT_NODE) {
-                            // If the containers are part of two different block parents then let Firefox handle it.
-                            var startParent = ViperUtil.getFirstBlockParent(range.startContainer);
-                            var endParent   = ViperUtil.getFirstBlockParent(range.endContainer);
-                            if (startParent !== endParent) {
-                                return;
+                            if (this._deleteFromDifferentBlockParents(range) === false) {
+                                // Delete op was handled.
+                                return false;
                             }
 
                             // And the end container is text node.
@@ -1530,6 +1528,54 @@ ViperKeyboardEditorPlugin.prototype = {
             }
 
             ViperUtil.remove(textNode.nextSibling);
+        }
+
+    },
+
+    _deleteFromDifferentBlockParents: function (range)
+    {
+        if (this._isStartToEndOfMultiContainerSelection(range) === true) {
+            return this._removeContentFromStartToEndOfContainers(range);
+        }
+
+        var startParent = ViperUtil.getFirstBlockParent(range.startContainer);
+        var endParent   = ViperUtil.getFirstBlockParent(range.endContainer);
+
+        if (startParent !== endParent) {
+            // Two different parents. We need to join these parents.
+            // First remove all elements in between.
+            range.deleteContents();
+
+            if (range.startContainer.parentNode && ViperUtil.isEmptyElement(range.startContainer.parentNode) === true) {
+                ViperUtil.remove(range.startContainer.parentNode);
+            }
+
+            // If the startParent is empty remove it if the endParent is the viperElement.
+            if (ViperUtil.isBlank(ViperUtil.trim(ViperUtil.getHtml(startParent))) !== true
+                || endParent != this.viper.getViperElement()
+            ) {
+                // Now bring the contents of the next selectable to the
+                // start parent.
+                var nextSelectable = range.getNextContainer(range.startContainer, null, true);
+                if (this.viper.isOutOfBounds(nextSelectable) === false) {
+                    var nextParent = ViperUtil.getFirstBlockParent(nextSelectable);
+                    if (startParent !== nextParent) {
+                        while (nextParent.firstChild) {
+                            startParent.appendChild(nextParent.firstChild);
+                        }
+
+                        ViperUtil.remove(nextParent);
+                    }
+                }
+            } else {
+                ViperUtil.remove(startParent);
+            }
+
+            range.collapse(true);
+            ViperSelection.addRange(range);
+            this.viper.fireNodesChanged();
+            this.viper.fireSelectionChanged(null, true);
+            return false;
         }
 
     },
@@ -1989,41 +2035,7 @@ ViperKeyboardEditorPlugin.prototype = {
             } else if (this._isStartToEndOfMultiContainerSelection(range) === true) {
                 return this._removeContentFromStartToEndOfContainers(range);
             } else {
-                var startParent = ViperUtil.getFirstBlockParent(range.startContainer);
-                var endParent   = ViperUtil.getFirstBlockParent(range.endContainer);
-                if (startParent !== endParent) {
-                    // Two different parents. We need to join these parents.
-                    // First remove all elements in between.
-                    range.deleteContents();
-                    
-                    if (range.startContainer.parentNode && ViperUtil.isEmptyElement(range.startContainer.parentNode) === true) {
-                        ViperUtil.remove(range.startContainer.parentNode);
-                    }
-
-                    // If the startParent is empty remove it if the endParent is the viperElement.
-                    if (ViperUtil.isBlank(ViperUtil.trim(ViperUtil.getHtml(startParent))) !== true
-                        || endParent != this.viper.getViperElement()
-                    ) {
-                        // Now bring the contents of the next selectable to the
-                        // start parent.
-                        var nextSelectable = range.getNextContainer(range.startContainer, null, true);
-                        if (this.viper.isOutOfBounds(nextSelectable) === false) {
-                            var nextParent = ViperUtil.getFirstBlockParent(nextSelectable);
-                            if (startParent !== nextParent) {
-                                while (nextParent.firstChild) {
-                                    startParent.appendChild(nextParent.firstChild);
-                                }
-
-                                ViperUtil.remove(nextParent);
-                            }
-                        }
-                    } else {
-                        ViperUtil.remove(startParent);
-                    }
-                } else {
-                    // Same container just remove contents.
-                    range.deleteContents();
-                }//end if
+                this._deleteFromDifferentBlockParents(range);
             }//end if
 
             ViperUtil.preventDefault(e);
