@@ -3115,6 +3115,9 @@ Viper.prototype = {
         var nodeSelection = nodeSelection || range.getNodeSelection();
 
         if (nodeSelection) {
+            var startSelNode = range._getFirstSelectableChild(nodeSelection);
+            var endSelNode   = range._getLastSelectableChild(nodeSelection);
+
             // A whole node is selected. Remove all nested style tags and the node it self its the same tag.
             var styleTags = ViperUtil.getTag(style, nodeSelection);
             var sln       = styleTags.length;
@@ -3149,12 +3152,8 @@ Viper.prototype = {
 
             // Check if it has a parent with this style, if not stop here.
             if (ViperUtil.getParents(nodeSelection, style, this.getViperElement()).length === 0) {
-                range.setStart(startNode, 0);
-                if (endNode.nodeType !== ViperUtil.TEXT_NODE) {
-                    endNode = range._getLastSelectableChild(endNode);
-                }
-
-                range.setEnd(endNode, endNode.data.length);
+                range.setStart(startSelNode, 0);
+                range.setEnd(endSelNode, endSelNode.data.length);
 
                 ViperSelection.addRange(range);
                 return;
