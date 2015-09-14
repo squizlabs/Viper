@@ -2212,7 +2212,7 @@ ViperCopyPastePlugin.prototype = {
                             var match = html.match(r);
                             if (match.length === 2) {
                                 match = match[1].match(/\d+/);
-                                if (match.length !== 0 && parseInt(match[0])) {
+                                if (match && parseInt(match[0])) {
                                     start = parseInt(match[0]);
                                 }
                             }
