@@ -741,6 +741,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 || ViperUtil.isBrowser('firefox') === true)
                 && startNode.nodeType === ViperUtil.TEXT_NODE
                 && range.endOffset === startNode.data.length
+                && startNode.data.length !== 0
                 && range.collapsed === true
                 && startNode.nextSibling === null
                 && ViperUtil.isBlockElement(startNode.parentNode) === false
@@ -799,13 +800,16 @@ ViperKeyboardEditorPlugin.prototype = {
                 ViperSelection.addRange(range);
                 self.viper.fireSelectionChanged(null, true);
                 return false;
-            } else if (range.startOffset === 0
+            }
+
+            if (range.startOffset === 0
                 && range.collapsed === true
                 && ViperUtil.isBrowser('firefox') === true
                 && range.startContainer.nodeType === ViperUtil.TEXT_NODE
-                && range.startContainer.previousSibling
-                && range.startContainer.previousSibling.nodeType !== ViperUtil.TEXT_NODE
+                && (range.startContainer.previousSibling === null || (range.startContainer.previousSibling
+                && range.startContainer.previousSibling.nodeType !== ViperUtil.TEXT_NODE))
             ) {
+                // Hande enter when <p><strong>test</strong><em>*test</em></p> and  <p><strong>test</strong>*test</p>.
                 this.splitAtRange();
                 return false;
             }//end if
