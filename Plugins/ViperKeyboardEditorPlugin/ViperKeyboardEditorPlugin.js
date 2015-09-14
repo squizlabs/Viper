@@ -921,7 +921,7 @@ ViperKeyboardEditorPlugin.prototype = {
 
         // TODO: Should use getNodeSelection to simplify this whole delete method.
         if (range.collapsed === true && e.keyCode === 8 && range.startOffset === 0) {
-            if (startNode && startNode.nodeType === ViperUtil.TEXT_NODE) {
+            if (startNode && (startNode.nodeType === ViperUtil.TEXT_NODE || ViperUtil.isTag(startNode, 'br') === true)) {
                 var skippedBlockElem = [];
                 var node      = range.getPreviousContainer(startNode, skippedBlockElem, true, true);
                 if (this.viper.isOutOfBounds(node) === true) {
@@ -945,14 +945,18 @@ ViperKeyboardEditorPlugin.prototype = {
                         ViperUtil.remove(nonSelectableElements);
                     }
 
-                    if (startNode.nodeType === ViperUtil.TEXT_NODE
-                        && startNode.data.length === 0
+                    if (((startNode.nodeType === ViperUtil.TEXT_NODE
+                        && startNode.data.length === 0)
+                        || ViperUtil.isTag(startNode, 'br') === true)
                         && ViperUtil.isTag(startNode.parentNode, 'li') === true
                         && ViperUtil.getTag('li', startNode.parentNode.parentNode).length === 1
                     ) {
                         // If the list item is the first container in the content and its being removed and its the
                         // only list item then remove the list element.
+                        this.viper.moveCaretAway(startNode.parentNode.parentNode, true);
                         ViperUtil.remove(startNode.parentNode.parentNode);
+                        this.viper.fireNodesChanged();
+                        this.viper.fireSelectionChanged(null, true);
                     }
 
                     return false;
