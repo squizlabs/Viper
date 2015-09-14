@@ -4336,6 +4336,14 @@ Viper.prototype = {
 
     },
 
+    isSpecialElement: function(element)
+    {
+        var isSpecialElem = false;
+        isSpecialElem     = this.getPluginManager().isSpecialElement(element);
+        return isSpecialElem;
+
+    },
+
     hasBlockChildren: function(parent)
     {
         var c = parent.childNodes.length;

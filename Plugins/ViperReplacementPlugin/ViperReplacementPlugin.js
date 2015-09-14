@@ -42,6 +42,14 @@ ViperReplacementPlugin.prototype = {
         );
     },
 
+    isSpecialElement: function(element) {
+        if (ViperUtil.hasAttribute(element, 'data-viper-keyword') === true) {
+            return true;
+        }
+
+        return false;
+    },
+
     init: function () {
         var self = this;
 
