@@ -783,7 +783,7 @@ ViperKeyboardEditorPlugin.prototype = {
                     self.viper.fireSelectionChanged(null, true);
                     return false;
                 }
-            } else if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true
+            } else if ((ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true)
                 && range.startOffset === 0
                 && range.collapsed === true
                 && range.startContainer.nodeType === ViperUtil.TEXT_NODE
@@ -798,6 +798,15 @@ ViperKeyboardEditorPlugin.prototype = {
                 range.collapse(true);
                 ViperSelection.addRange(range);
                 self.viper.fireSelectionChanged(null, true);
+                return false;
+            } else if (range.startOffset === 0
+                && range.collapsed === true
+                && ViperUtil.isBrowser('firefox') === true
+                && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                && range.startContainer.previousSibling
+                && range.startContainer.previousSibling.nodeType !== ViperUtil.TEXT_NODE
+            ) {
+                this.splitAtRange();
                 return false;
             }//end if
 
