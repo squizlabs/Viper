@@ -2624,6 +2624,14 @@ ViperKeyboardEditorPlugin.prototype = {
             range.collapse(true);
         } else {
             var br = document.createElement('br');
+
+            // Remove any extra white space only text nodes.
+            var sibling = startParent.previousSibling;
+            while (sibling && sibling.nodeType === ViperUtil.TEXT_NODE && ViperUtil.trim(sibling.data) === '') {
+                ViperUtil.remove(sibling);
+                sibling = sibling.previousSibling;
+            }
+
             ViperUtil.insertBefore(startParent, br);
             ViperUtil.remove(ViperUtil.getElementsBetween(startParent, endParent));
             ViperUtil.remove(startParent);
