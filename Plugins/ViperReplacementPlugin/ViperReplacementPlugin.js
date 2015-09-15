@@ -107,7 +107,7 @@ ViperReplacementPlugin.prototype = {
                                 if (rep) {
                                     if (e.which === ViperUtil.DOM_VK_BACKSPACE || e.which === ViperUtil.DOM_VK_DELETE) {
                                         // This is a backspace. Need to remove the keyword element and prevent default
-                                        // action.
+                                        // action so mo.
                                         var elem = ViperUtil.getTopSurroundingParent(rep) || rep;
                                         ViperUtil.remove(elem);
                                         self.viper.fireSelectionChanged(null, true);
@@ -115,8 +115,20 @@ ViperReplacementPlugin.prototype = {
                                         return false;
                                     }
 
+                                    // Add a space between the keyword element and the caret container.
+                                    if (e.which === 32 && range.startContainer.data === '') {
+                                        // The first character of this text node is a space so we need to add non breaking
+                                        // space.
+                                        startNode.data = String.fromCharCode(160);
+                                        range.setStart(startNode, 1);
+                                        range.collapse(true);
+                                        ViperSelection.addRange(range);
+                                        return false;
+                                    } else {
+                                        range.setStart(startNode, 0);
+                                    }
+
                                     // When the keyDown executes insert the character after the first space character.
-                                    range.setStart(startNode, 0);
                                     range.collapse(true);
                                     ViperSelection.addRange(range);
                                 } else {
