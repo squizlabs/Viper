@@ -168,20 +168,7 @@ ViperReplacementPlugin.prototype = {
                                     }
                                 }
                                 return;
-                            } else if (range.startOffset >= startNode.data.length) {
-                                rep = self._getKeywordElement(range.getPreviousContainer(startNode, null, false, false, true));
-                                if (rep) {
-                                    if (e.which === ViperUtil.DOM_VK_BACKSPACE || e.which === ViperUtil.DOM_VK_DELETE) {
-                                        // This is a delete. Need to remove the keyword element and prevent default
-                                        // action so mo.
-                                        var elem = ViperUtil.getTopSurroundingParent(rep) || rep;
-                                        ViperUtil.remove(elem);
-                                        self.viper.fireSelectionChanged(null, true);
-                                        self.viper.fireNodesChanged();
-                                        return false;
-                                    }
-                                }
-                            }
+                            }//end if
 
                             if (!rep) {
                                 return;
