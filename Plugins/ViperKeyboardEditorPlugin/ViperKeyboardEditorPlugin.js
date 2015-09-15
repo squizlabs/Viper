@@ -833,7 +833,6 @@ ViperKeyboardEditorPlugin.prototype = {
 
             if (range.startOffset === 0
                 && range.collapsed === true
-                && ViperUtil.isBrowser('firefox') === true
                 && range.startContainer.nodeType === ViperUtil.TEXT_NODE
                 && (range.startContainer.previousSibling === null || (range.startContainer.previousSibling
                 && range.startContainer.previousSibling.nodeType !== ViperUtil.TEXT_NODE))
