@@ -4970,14 +4970,16 @@ Viper.prototype = {
                         textContainer = range.startContainer;
                     }
 
-                    // At the start of a text node with an element sibling. Make sure character is inserted in this
-                    // text node.
-                    textContainer.data = String.fromCharCode(e.which) + textContainer.data;
-                    range.setStart(textContainer, 1);
-                    range.collapse(true);
-                    ViperSelection.addRange(range);
-                    this.fireNodesChanged([range.getStartNode()]);
-                    return false;
+                    if (textContainer && textContainer.nodeType === ViperUtil.TEXT_NODE) {
+                        // At the start of a text node with an element sibling. Make sure character is inserted in this
+                        // text node.
+                        textContainer.data = String.fromCharCode(e.which) + textContainer.data;
+                        range.setStart(textContainer, 1);
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+                        this.fireNodesChanged([range.getStartNode()]);
+                        return false;
+                    }
                 }
             }//end if
 

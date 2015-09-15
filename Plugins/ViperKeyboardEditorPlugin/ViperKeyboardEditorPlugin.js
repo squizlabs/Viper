@@ -822,6 +822,8 @@ ViperKeyboardEditorPlugin.prototype = {
                 && range.startOffset === range.startContainer.data.length
                 && range.startContainer.nextSibling
                 && range.startContainer.nextSibling.nodeType !== ViperUtil.TEXT_NODE
+                && ViperUtil.isTag(range.startContainer.nextSibling, 'br') === false
+                && ViperUtil.isBlockElement(range.startContainer.nextSibling) === false
             ) {
                 // Handle <p>test *<strong>text</strong></p>.
                 this.splitAtRange();
