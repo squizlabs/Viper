@@ -820,6 +820,15 @@ ViperKeyboardEditorPlugin.prototype = {
                     self.viper.fireSelectionChanged(null, true);
                     return false;
                 }
+            } else if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                && range.collapsed === true
+                && range.startOffset === range.startContainer.data.length
+                && range.startContainer.nextSibling
+                && range.startContainer.nextSibling.nodeType !== ViperUtil.TEXT_NODE
+            ) {
+                // Handle <p>test *<strong>text</strong></p>.
+                this.splitAtRange();
+                return false;
             }//end if
 
             if (range.startOffset === 0
