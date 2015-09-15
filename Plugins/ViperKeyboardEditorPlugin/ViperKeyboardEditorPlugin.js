@@ -790,15 +790,12 @@ ViperKeyboardEditorPlugin.prototype = {
                 && range.startContainer.nodeType === ViperUtil.TEXT_NODE
                 && range._getFirstSelectableChild(ViperUtil.getFirstBlockParent(range.startContainer)) === range.startContainer
             ) {
-                // Caret is at the start of a block element and pressing enter needs to create a new element before this.
+                // Caret is at the start of a block element and pressing enter needs to create a new element before this. and
+                // leave the caret where it is.
                 var parent    = ViperUtil.getFirstBlockParent(range.startContainer);
                 var newParent = document.createElement(ViperUtil.getTagName(parent));
                 ViperUtil.setHtml(newParent, '<br />');
                 ViperUtil.insertBefore(parent, newParent);
-                range.setStart(newParent.firstChild, 0);
-                range.collapse(true);
-                ViperSelection.addRange(range);
-                self.viper.fireSelectionChanged(null, true);
                 return false;
             } else if (range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
                 && range.collapsed === true
