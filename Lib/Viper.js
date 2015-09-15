@@ -4656,14 +4656,6 @@ Viper.prototype = {
                 self.fireSelectionChanged();
             }, 10);
             return true;
-        } else if ((e.which === 37 || e.which === 39) && (e.metaKey === true && ViperUtil.isOS('mac') === true)) {
-            // Prevent browser history triger on OSX.
-            ViperUtil.preventDefault(e);
-            return false;
-        } else if ((e.which === 37 || e.which === 39) && (e.altKey === true && (ViperUtil.isOS('windows') === true || ViperUtil.isOS('linux') === true))) {
-            // Prevent browser history triger on Windows and Linux.
-            ViperUtil.preventDefault(e);
-            return false;
         }//end if
 
     },
