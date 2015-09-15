@@ -1818,7 +1818,7 @@ ViperKeyboardEditorPlugin.prototype = {
             }
 
             return;
-        }
+        }//end if
 
         // Range collapsed.
         var startNode = range.getStartNode();
@@ -1837,6 +1837,17 @@ ViperKeyboardEditorPlugin.prototype = {
             // In a text node.
             if (range.startOffset === startNode.data.length) {
                 // End of the text node.
+                if (startNode.nextSibling && this.viper.isSpecialElement(startNode.nextSibling) === true) {
+                    // Remove the whole special element.
+                    ViperUtil.remove(startNode.nextSibling);
+                } else if (!startNode.nextSibling) {
+                    // Check if the next container is a special element.
+                    var nextSelectable = range.getNextContainer(startNode, null, true, true, true);
+                    if (nextSelectable && this.viper.isSpecialElement(nextSelectable.parentNode) === true) {
+                        ViperUtil.remove(nextSelectable.parentNode);
+                    }
+                }
+
                 // Check for HR element.
                 var foundSib  = false;
                 while (startNode) {
@@ -2252,6 +2263,17 @@ ViperKeyboardEditorPlugin.prototype = {
                             this.viper.fireNodesChanged();
                             this.viper.fireSelectionChanged(null, true);
                             return false;
+                        }
+                    } else if (range.startOffset === startCont.data.length) {
+                        // At the end of a text node.
+                        if (startCont.nextSibling && this.viper.isSpecialElement(startCont.nextSibling) === true) {
+                            ViperUtil.remove(startCont.nextSibling);
+                        } else if (!startCont.nextSibling) {
+                            // Check if the next container is a special element.
+                            var nextSelectable = range.getNextContainer(startCont, null, true, true, true);
+                            if (nextSelectable && this.viper.isSpecialElement(nextSelectable.parentNode) === true) {
+                                ViperUtil.remove(nextSelectable.parentNode);
+                            }
                         }
                     }
                 }
