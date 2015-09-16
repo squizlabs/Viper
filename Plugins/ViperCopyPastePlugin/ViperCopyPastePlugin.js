@@ -2189,11 +2189,13 @@ ViperCopyPastePlugin.prototype = {
             return null;
         }
 
+        var tmp   = document.createElement('div');
+        var range = this.viper.getViperRange();
+
         var elContent = ViperUtil.getNodeTextContent(elem);
         elContent     = elContent.replace(/\n/, '');
         elContent     = elContent.replace(/^(&nbsp;)+/m, '');
         elContent     = ViperUtil.trim(elContent);
-
         var info      = null;
         ViperUtil.foreach(listTypes, function(k) {
             ViperUtil.foreach(listTypes[k], function(j) {
@@ -2209,7 +2211,7 @@ ViperCopyPastePlugin.prototype = {
 
                         var start = 1;
                         if (k === 'ol') {
-                            var match = html.match(r);
+                            var match = elContent.match(r);
                             if (match && match.length === 2) {
                                 match = match[1].match(/\d+/);
                                 if (match && parseInt(match[0])) {
@@ -2218,10 +2220,17 @@ ViperCopyPastePlugin.prototype = {
                             }
                         }
 
-                        html = html.replace(r, '');
+                        var replacedHTML = html.replace(r, '');
+                        if (replacedHTML === html) {
+                            // The content must be in an inline tag. E.g. <strong>1.   </strong>.
+                            ViperUtil.setHtml(tmp, html);
+                            var firstChild  = range._getFirstSelectableChild(tmp);
+                            firstChild.data = firstChild.data.replace(r, '');
+                            replacedHTML    = ViperUtil.getHtml(tmp);
+                        }
 
                         info = {
-                            html: html,
+                            html: replacedHTML,
                             listType: k,
                             listStyle: j,
                             listStart: start,
