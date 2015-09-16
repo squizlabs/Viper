@@ -246,6 +246,11 @@ Viper.prototype = {
         ViperChangeTracker.addChangeType('merged', 'Merged', 'remove');
         ViperSelection._viper = this;
 
+        this.registerCallback('Viper:setHtmlContent', 'Viper', function(content, callback) {
+            callback.call(this, content);
+            return function() {};
+        });
+
     },
 
     destroy: function()
