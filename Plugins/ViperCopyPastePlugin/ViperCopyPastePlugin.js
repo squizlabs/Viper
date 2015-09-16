@@ -2210,7 +2210,7 @@ ViperCopyPastePlugin.prototype = {
                         var start = 1;
                         if (k === 'ol') {
                             var match = html.match(r);
-                            if (match.length === 2) {
+                            if (match && match.length === 2) {
                                 match = match[1].match(/\d+/);
                                 if (match && parseInt(match[0])) {
                                     start = parseInt(match[0]);
