@@ -269,22 +269,21 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that command left and right does nothing in the browser.
+     * Test that command left and right moves the caret to the start and end of the line.
      *
      * @return void
      */
     public function testCommandLeftAndCommandRight()
     {
-        $this->useTest(1);
-        $this->moveToKeyword(1, 'right');
-        sleep(1);
-        $this->sikuli->keyDown('Key.CMD + Key.LEFT');
-        $this->type(' test');
-        $this->assertHTMLMatch('<p>%1% test</p><p>EIB MOZ %2%</p>');
+        $this->useTest(9);
+        $this->clickKeyword(1);
 
+        $this->sikuli->keyDown('Key.CMD + Key.LEFT');
+        $this->type('left');
         $this->sikuli->keyDown('Key.CMD + Key.RIGHT');
-        $this->type(' test');
-        $this->assertHTMLMatch('<p>%1% test test</p><p>EIB MOZ %2%</p>');
+        $this->type('right');
+
+        $this->assertHTMLMatch('<p>leftLorem ipsum dolor sit XAX amet, consectetur adipiscing elit. Duis ac augue mi. rightNam risus massa, aliquam non porta vel, lacinia a sapien.</p>');
 
     }//end testCommandLeftAndCommandRight()
 
