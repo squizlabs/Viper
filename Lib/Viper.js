@@ -4978,7 +4978,21 @@ Viper.prototype = {
                     if (textContainer && textContainer.nodeType === ViperUtil.TEXT_NODE) {
                         // At the start of a text node with an element sibling. Make sure character is inserted in this
                         // text node.
-                        textContainer.data = String.fromCharCode(e.which) + textContainer.data;
+                        // Also make sure that there is no non breaking space at the start text node followed by a non
+                        // space character.
+                        var char = String.fromCharCode(e.which);
+                        if (textContainer.data.length > 1
+                            && textContainer.data.charCodeAt(0) === 160
+                            && textContainer.data[1] !== ' '
+                        ) {
+                            if (char === ' ') {
+                                char = String.fromCharCode(160);
+                            } else {
+                                textContainer.data = ' ' + textContainer.data.substr(1);
+                            }
+                        }
+
+                        textContainer.data = char + textContainer.data;
                         range.setStart(textContainer, 1);
                         range.collapse(true);
                         ViperSelection.addRange(range);
