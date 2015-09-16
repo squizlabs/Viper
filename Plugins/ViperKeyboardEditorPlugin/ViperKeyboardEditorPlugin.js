@@ -1985,7 +1985,9 @@ ViperKeyboardEditorPlugin.prototype = {
         ) {
             var startNode = range.getStartNode();
             if (ViperUtil.isTag(startNode.parentNode, 'td') === true || ViperUtil.isTag(startNode.parentNode, 'th') === true) {
-                return false;
+                if (!startNode.nextSibling) {
+                    return false;
+                }
             }
 
             var selectable = range.getNextContainer(startNode, null, true, true);
