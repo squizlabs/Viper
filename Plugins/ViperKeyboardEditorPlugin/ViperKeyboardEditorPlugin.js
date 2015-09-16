@@ -2129,7 +2129,14 @@ ViperKeyboardEditorPlugin.prototype = {
             } else if (this._isStartToEndOfMultiContainerSelection(range) === true) {
                 return this._removeContentFromStartToEndOfContainers(range);
             } else {
-                this._deleteFromDifferentBlockParents(range);
+                var startParent = ViperUtil.getFirstBlockParent(range.startContainer);
+                var endParent   = ViperUtil.getFirstBlockParent(range.endContainer);
+                if (startParent === endParent) {
+                    // Deletion between two different parents within the same block parent. Let browser handle it.
+                    return;
+                } else {
+                    this._deleteFromDifferentBlockParents(range);
+                }
             }//end if
 
             ViperUtil.preventDefault(e);
