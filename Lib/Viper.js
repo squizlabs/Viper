@@ -6057,13 +6057,34 @@ Viper.prototype = {
                 } else if (ViperUtil.trim(node.data) === '' && node.data.indexOf("\n") === 0) {
                     ViperUtil.remove(node);
                 } else {
+                    var nbsp = String.fromCharCode(160);
+
                     // Remove extra spaces from the node.
                     node.data = node.data.replace(/^\s+/g, ' ');
                     node.data = node.data.replace(/\s+$/g, ' ');
                     node.data = node.data.replace(/\s*\n\s*/g, ' ');
 
+                    // TODO: We should normalise these text nodes before calling this method. This way there is no
+                    // reason to do this check here as there will be no sibling text nodes.
+                    if (node.data.charAt(0) === ' '
+                       && node.previousSibling
+                       && node.previousSibling.nodeType === ViperUtil.TEXT_NODE
+                       && (node.previousSibling.data.charAt(node.previousSibling.data.length - 1) === nbsp
+                       || node.previousSibling.data.charAt(node.previousSibling.data.length - 1) === ' ')
+                    ) {
+                       node.data = node.data.replace(/^\s+/g, nbsp);
+                    }
+
+                    if (node.data.charAt(node.data.length - 1) === ' '
+                        && node.nextSibling
+                        && node.nextSibling.nodeType === ViperUtil.TEXT_NODE
+                        && (node.nextSibling.data.charAt(0) === ' '
+                        || node.nextSibling.data.charAt(0) === nbsp)
+                    ) {
+                        node.data = node.data.replace(/\s+$/g, nbsp);
+                    }
+
                     // Replace two spaces with two &nbsp;.
-                    var nbsp  = String.fromCharCode(160);
                     node.data = node.data.replace(/\s{2,2}/g, nbsp + nbsp);
                 }
             } else {
