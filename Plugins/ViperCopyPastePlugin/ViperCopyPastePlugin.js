@@ -1293,6 +1293,22 @@ ViperCopyPastePlugin.prototype = {
         var tmp = document.createElement('div');
         ViperUtil.setHtml(tmp, content);
         this._convertSpansToStyleTags(tmp);
+
+        // Clean Word track changes comments.
+        var msocomanchor = ViperUtil.find(tmp, 'a[class="msocomanchor"]');
+        ViperUtil.remove(msocomanchor);
+
+        // Remove everything after this element.
+        var msocomoff = ViperUtil.find(tmp, 'hr[class="msocomoff"]');
+        if (msocomoff.length > 0) {
+            msocomoff = msocomoff[0];
+            while (msocomoff.nextSibling) {
+                ViperUtil.remove(msocomoff.nextSibling);
+            }
+
+            ViperUtil.remove(msocomoff);
+        }
+
         content = ViperUtil.getHtml(tmp);
 
         // Remove span and o:p etc. tags.
