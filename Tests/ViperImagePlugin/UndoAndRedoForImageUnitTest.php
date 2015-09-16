@@ -84,7 +84,7 @@ class Viper_Tests_ViperImagePlugin_UndoAndRedoForImageUnitTest extends AbstractV
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Title tag');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton('image', 'selected');
+        $this->clickTopToolbarButton('image', 'active-selected');
         $this->assertHTMLMatch('<p><img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" title="Title tag"/> Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
 
         // Insert second image
@@ -246,7 +246,7 @@ class Viper_Tests_ViperImagePlugin_UndoAndRedoForImageUnitTest extends AbstractV
         $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1%<img alt="" src="%url%/ViperImagePlugin/Images/editing.png" /> XuT</p><p>LABS is ORSM</p>');
 
     }//end testUndoMoveImage()
-    
+
 }//end class
 
 ?>
