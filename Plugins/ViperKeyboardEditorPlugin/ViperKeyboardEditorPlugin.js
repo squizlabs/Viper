@@ -2272,12 +2272,30 @@ ViperKeyboardEditorPlugin.prototype = {
                         if (textNode.data.length === 0
                             && textNode.nextSibling === null
                             && textNode.previousSibling === null
-                            && ViperUtil.isBlockElement(textNode.parentNode) === true
                         ) {
-                            // The last character of this text node was deleted and now the block parent has no content.
-                            // Add a BR to keep the blockelement 'selectable'.
-                            var br = document.createElement('br');
-                            textNode.parentNode.appendChild(br);
+                            if (ViperUtil.isBlockElement(textNode.parentNode) === true) {
+                                // The last character of this text node was deleted and now the block parent has no content.
+                                // Add a BR to keep the blockelement 'selectable'.
+                                var br = document.createElement('br');
+                                textNode.parentNode.appendChild(br);
+                            } else if (textNode.parentNode.previousSibling
+                                && textNode.parentNode.previousSibling.nodeType === ViperUtil.TEXT_NODE
+                            ) {
+                                // Remove the parent element and use the previous text node.
+                                var parent = textNode.parentNode;
+                                textNode   = textNode.parentNode.previousSibling;
+                                ViperUtil.remove(parent);
+
+                                if (textNode.data.charAt(textNode.data.length - 1) === ' ') {
+                                    // If this text node ends with space then convert it to a non breaking space to
+                                    // prevent Safari/Chrome removing the space.
+                                    textNode.data = textNode.data.substr(0, textNode.data.length - 1) + String.fromCharCode(160);
+                                }
+
+                                range.setStart(textNode, textNode.data.length);
+                                range.collapse(true);
+                                ViperSelection.addRange(range);
+                            }
                         }
 
                         ViperUtil.preventDefault(e);
