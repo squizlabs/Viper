@@ -101,11 +101,11 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
 
 
     /**
-     * Test that keywords can have formats removed with remove format key applied.
+     * Test that keywords can have content around it and be edited.
      *
      * @return void
      */
-    public function testAddingConentAroundKeywords()
+    public function testAddingContentAroundKeywords()
     {
         // Test before keyword
         $this->useTest(4);
@@ -220,6 +220,40 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
     }//end testDeletingKeywords()
+
+
+    /**
+     * Test that selections with keywords can be edited.
+     *
+     * @return void
+     */
+    public function testRetainSelectionWithOneWordNotKeyword()
+    {
+        $this->useTest(6);
+        $this->clickKeyword(1);
+        sleep(1);
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('removeFormat');
+        $this->assertEquals($this->replaceKeywords('%2%'), $this->getSelectedText(), '%2% should be selected');
+
+    }//end testRetainSelectionWithOneWordNotKeyword()
+
+
+    /**
+     * Test that selections with keywords can be edited.
+     *
+     * @return void
+     */
+    public function testRetainSelectionWithParagraphNotKeyword()
+    {
+        $this->useTest(6);
+        $this->clickKeyword(1);
+        sleep(1);
+        $this->selectKeyword(1,4);
+        $this->clickTopToolbarButton('removeFormat');
+        $this->assertEquals($this->replaceKeywords('%1%Test content Viper %2% more test content %3% still test content.%4%'), $this->getSelectedText(), 'First line should be selected');
+    
+    }//end testRetainSelectionWithParagraphNotKeyword()
 
 }//end class
 
