@@ -271,7 +271,7 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
         sleep(1);
         $this->selectKeyword(1,4);
         $this->clickTopToolbarButton('removeFormat');
-        $this->assertEquals($this->replaceKeywords('%1%Test content Viper %2% more test content %3% still test content.%4%'), $this->getSelectedText(), 'First line should be selected');
+        $this->assertEquals($this->replaceKeywords('%1% Test content Viper %2% more test content %3% still test content. %4%'), $this->getSelectedText(), 'First line should be selected');
     
     }//end testRetainSelectionWithParagraphNotKeyword()
 
