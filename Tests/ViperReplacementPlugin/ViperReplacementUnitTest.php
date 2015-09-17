@@ -134,18 +134,19 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
         sleep(1);
         $this->assertHTMLMatch('<p>%1% Test content ((prop:productName)) %2%</p>');
 
-        $expectedRawHTML = '<p>%1% Test content <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span> %2%</p>';
+        $expectedRawHTML = '<p>%1% Test content&nbsp;<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %2%</p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
         // Test after keyword
         $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.LEFT');
+        sleep(2);
         $this->type(' more test content');
         sleep(1);
         $this->assertHTMLMatch('<p>%1% Test content ((prop:productName)) more test content %2%</p>');
 
-        $expectedRawHTML = '<p>%1% Test content <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span> more test content %2%</p>';
+        $expectedRawHTML = '<p>%1% Test content&nbsp;<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span>&nbsp;more test content %2%</p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
