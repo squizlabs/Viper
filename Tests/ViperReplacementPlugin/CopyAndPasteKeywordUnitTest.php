@@ -21,7 +21,7 @@ class Viper_Tests_ViperReplacementPlugin_CopyAndPasteKeywordUnitTest extends Abs
         $this->sikuli->keyDown('Key.CMD + c');
         $this->moveToKeyword(1, 'left');
         $this->sikuli->keyDown('Key.CMD + v');
-        $this->assertHTMLMatch('<p>((prop:productName))%1% ((prop:productName))</p><p>%2% %3%</p><p>%4% ((prop:productName))</p><p>%5% %6%</p>');
+        $this->assertHTMLMatch('<p>((prop:productName)) %1% ((prop:productName))</p><p>%2% %3%</p><p>%4% ((prop:productName))</p><p>%5% %6%</p>');
 
         $expectedRawHTML = '<p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span>%1% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p><p>%2% %3%</p><p>%4% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p><p>%5% %6%</p>';
         $actualRawHTML = $this->getRawHtml();
@@ -30,7 +30,7 @@ class Viper_Tests_ViperReplacementPlugin_CopyAndPasteKeywordUnitTest extends Abs
         // Middle of paragraph using keyboard shortcuts
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.CMD + v');
-        $this->assertHTMLMatch('<p>((prop:productName))%1% ((prop:productName))</p><p>%2%((prop:productName)) %3%</p><p>%4% ((prop:productName))</p><p>%5% %6%</p>');
+        $this->assertHTMLMatch('<p>((prop:productName)) %1% ((prop:productName))</p><p>%2%((prop:productName)) %3%</p><p>%4% ((prop:productName))</p><p>%5% %6%</p>');
 
         $expectedRawHTML = '<p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span>%1% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p><p>%2%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span> %3%</p><p>%4% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p><p>%5% %6%</p>';
         $actualRawHTML = $this->getRawHtml();
@@ -39,7 +39,7 @@ class Viper_Tests_ViperReplacementPlugin_CopyAndPasteKeywordUnitTest extends Abs
         // End of paragraph using keyboard shortcuts
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.CMD + v');
-        $this->assertHTMLMatch('<p>((prop:productName))%1% ((prop:productName))</p><p>%2%((prop:productName)) %3%((prop:productName))</p><p>%4% ((prop:productName))</p><p>%5% %6%</p>');
+        $this->assertHTMLMatch('<p>((prop:productName)) %1% ((prop:productName))</p><p>%2%((prop:productName)) %3%((prop:productName))</p><p>%4% ((prop:productName))</p><p>%5% %6%</p>');
 
         $expectedRawHTML = '<p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span>%1% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p><p>%2%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span> %3%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p><p>%4% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p><p>%5% %6%</p>';
         $actualRawHTML = $this->getRawHtml();
@@ -53,7 +53,7 @@ class Viper_Tests_ViperReplacementPlugin_CopyAndPasteKeywordUnitTest extends Abs
         $this->copy(true);
         $this->moveToKeyword(4, 'left');
         $this->paste(true);
-        $this->assertHTMLMatch('<p>((prop:productName))%1% ((prop:productName))</p><p>%2%((prop:productName)) %3%((prop:productName))</p><p>((prop:productName))%4% ((prop:productName))</p><p>%5% %6%</p>');
+        $this->assertHTMLMatch('<p>((prop:productName)) %1% ((prop:productName))</p><p>%2%((prop:productName)) %3%((prop:productName))</p><p>((prop:productName))%4% ((prop:productName))</p><p>%5% %6%</p>');
 
         $expectedRawHTML = '<p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span>%1% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p><p>%2%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span> %3%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p><p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span>%4% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p><p>%5% %6%</p>';
         $actualRawHTML = $this->getRawHtml();
@@ -62,7 +62,7 @@ class Viper_Tests_ViperReplacementPlugin_CopyAndPasteKeywordUnitTest extends Abs
         // Middle of paragraph using right click
         $this->moveToKeyword(5, 'right');
         $this->paste(true);
-        $this->assertHTMLMatch('<p>((prop:productName))%1% ((prop:productName))</p><p>%2%((prop:productName)) %3%((prop:productName))</p><p>((prop:productName))%4% ((prop:productName))</p><p>%5%((prop:productName)) %6%</p>');
+        $this->assertHTMLMatch('<p>((prop:productName)) %1% ((prop:productName))</p><p>%2%((prop:productName)) %3%((prop:productName))</p><p>((prop:productName))%4% ((prop:productName))</p><p>%5%((prop:productName)) %6%</p>');
 
         $expectedRawHTML = '<p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span>%1% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p><p>%2%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span> %3%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p><p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span>%4% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p><p>%5%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span> %6%</p>';
         $actualRawHTML = $this->getRawHtml();
@@ -71,7 +71,7 @@ class Viper_Tests_ViperReplacementPlugin_CopyAndPasteKeywordUnitTest extends Abs
         // End of paragraph using right click
         $this->moveToKeyword(6, 'right');
         $this->paste(true);
-        $this->assertHTMLMatch('<p>((prop:productName))%1% ((prop:productName))</p><p>%2%((prop:productName)) %3%((prop:productName))</p><p>((prop:productName))%4% ((prop:productName))</p><p>%5%((prop:productName)) %6%((prop:productName))</p>');
+        $this->assertHTMLMatch('<p>((prop:productName)) %1% ((prop:productName))</p><p>%2%((prop:productName)) %3%((prop:productName))</p><p>((prop:productName))%4% ((prop:productName))</p><p>%5%((prop:productName)) %6%((prop:productName))</p>');
 
         $expectedRawHTML = '<p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span>%1% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p><p>%2%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span> %3%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p><p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span>%4% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p><p>%5%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span> %6%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p>';
         $actualRawHTML = $this->getRawHtml();
