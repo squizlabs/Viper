@@ -220,7 +220,7 @@ class Viper_Tests_ViperReplacementsPlugin_UndoAndRedoKeywordUnitTest extends Abs
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<p>%1% ((prop:productName)) %2%</p><p>%3% %4%</p>');
 
-        $expectedRawHTML = '<p>%1% <keyword data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</keyword> %2%</p><p>%3% %4%</p>';
+        $expectedRawHTML = '<p>%1% <keyword data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</keyword> %2%</p><p>%3% %4%</p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
@@ -233,7 +233,7 @@ class Viper_Tests_ViperReplacementsPlugin_UndoAndRedoKeywordUnitTest extends Abs
         $this->clickTopToolbarButton('historyUndo');
         $this->assertHTMLMatch('<p>%1% <a href="www.squizlabs.com.au">((prop:productName))</a> %2%</p><p>%3% %4%</p>');
 
-        $expectedRawHTML = '<p>%1% <a href="www.squizlabs.com.au"><keyword data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</keyword></a> %2%</p><p>%3% %4%</p>';
+        $expectedRawHTML = '<p>%1% <a href="www.squizlabs.com.au"><keyword data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</keyword></a> %2%</p><p>%3% %4%</p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
@@ -241,7 +241,7 @@ class Viper_Tests_ViperReplacementsPlugin_UndoAndRedoKeywordUnitTest extends Abs
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<p>%1% ((prop:productName)) %2%</p><p>%3% %4%</p>');
 
-        $expectedRawHTML = '<p>%1% <keyword data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</keyword> %2%</p><p>%3% %4%</p>';
+        $expectedRawHTML = '<p>%1% <keyword data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</keyword> %2%</p><p>%3% %4%</p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 

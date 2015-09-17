@@ -23,7 +23,7 @@ class Viper_Tests_ViperReplacementPlugin_CutAndPasteKeywordUnitTest extends Abst
         $this->sikuli->keyDown('Key.CMD + v');
         $this->assertHTMLMatch('<p>((prop:productName))%1%</p><p>%2% %3%</p><p>%4% ((prop:productName))</p><p>%5% %6%</p>');
 
-        $expectedRawHTML = '<p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span>%1%</p><p>%2% %3%</p><p>%4% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p><p>%5% %6%</p>';
+        $expectedRawHTML = '<p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span>%1%</p><p>%2% %3%</p><p>%4% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%5% %6%</p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
@@ -32,7 +32,7 @@ class Viper_Tests_ViperReplacementPlugin_CutAndPasteKeywordUnitTest extends Abst
         $this->sikuli->keyDown('Key.CMD + v');
         $this->assertHTMLMatch('<p>((prop:productName))%1%</p><p>%2% %3%</p><p>%4% ((prop:productName))</p><p>%5% %6%</p>');
        
-        $expectedRawHTML = '<p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span>%1%</p><p>%2%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span> %3%</p><p>%4%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p><p>%5% %6%</p>';
+        $expectedRawHTML = '<p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span>%1%</p><p>%2%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %3%</p><p>%4%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%5% %6%</p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
@@ -41,7 +41,7 @@ class Viper_Tests_ViperReplacementPlugin_CutAndPasteKeywordUnitTest extends Abst
         $this->sikuli->keyDown('Key.CMD + v');
         $this->assertHTMLMatch('<p>((prop:productName))%1%</p><p>%2%((prop:productName)) %3%((prop:productName))</p><p>%4%((prop:productName))</p><p>%5% %6%</p>');
 
-        $expectedRawHTML = '<p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span>%1%</p><p>%2%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span> %3%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p><p>%4%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p><p>%5% %6%</p>';
+        $expectedRawHTML = '<p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span>%1%</p><p>%2%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %3%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%4%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%5% %6%</p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
@@ -55,7 +55,7 @@ class Viper_Tests_ViperReplacementPlugin_CutAndPasteKeywordUnitTest extends Abst
         $this->paste(true);
         $this->assertHTMLMatch('<p>((prop:productName))%1%</p><p>%2%((prop:productName)) %3%((prop:productName))</p><p>((prop:productName))%4%</p><p>%5% %6%</p>');
 
-        $expectedRawHTML = '<p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span>%1%</p><p>%2%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span> %3%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p><p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span>%4%</p><p>%5% %6%</p>';
+        $expectedRawHTML = '<p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span>%1%</p><p>%2%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %3%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span>%4%</p><p>%5% %6%</p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
@@ -64,7 +64,7 @@ class Viper_Tests_ViperReplacementPlugin_CutAndPasteKeywordUnitTest extends Abst
         $this->paste(true);
         $this->assertHTMLMatch('<p>((prop:productName))%1%</p><p>%2%((prop:productName)) %3%((prop:productName))</p><p>((prop:productName))%4%</p><p>%5%((prop:productName)) %6%</p>');
 
-        $expectedRawHTML = '<p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span>%1% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p><p>%2%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span> %3%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p><p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span>%4%</p><p>%5%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span> %6%</p>';
+        $expectedRawHTML = '<p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span>%1% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%2%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %3%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span>%4%</p><p>%5%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %6%</p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
@@ -73,7 +73,7 @@ class Viper_Tests_ViperReplacementPlugin_CutAndPasteKeywordUnitTest extends Abst
         $this->paste(true);
         $this->assertHTMLMatch('<p>((prop:productName))%1% %3%((prop:productName))</p><p>((prop:productName))%4%</p><p>%5%((prop:productName)) %6%((prop:productName))</p>');
 
-        $expectedRawHTML = '<p><span <keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span>%1%</p><p>%2%<span <keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span> %3%<span <keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p><p><span <keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span>%4%</p><p>%5%<span <keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span> %6%<span <keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p>';
+        $expectedRawHTML = '<p><span <keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span>%1%</p><p>%2%<span <keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %3%<span <keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p><span <keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span>%4%</p><p>%5%<span <keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %6%<span <keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
@@ -98,7 +98,7 @@ class Viper_Tests_ViperReplacementPlugin_CutAndPasteKeywordUnitTest extends Abst
         $this->sikuli->keyDown('Key.CMD + v');
         $this->assertHTMLMatch('<p><a href="www.squizlabs.com.au">((prop:productName))</a>%1%</p><p>%2% %3%</p><p>%4% <a href="www.squizlabs.com.au">((prop:productName))</a></p><p>%5% %6%</p>');
 
-        $expectedRawHTML = '<p><a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a>%1%</p><p>%2% %3%</p><p>%4% <a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a></p><p>%5% %6%</p>';
+        $expectedRawHTML = '<p><a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a>%1%</p><p>%2% %3%</p><p>%4% <a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a></p><p>%5% %6%</p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
@@ -107,7 +107,7 @@ class Viper_Tests_ViperReplacementPlugin_CutAndPasteKeywordUnitTest extends Abst
         $this->sikuli->keyDown('Key.CMD + v');
         $this->assertHTMLMatch('<p><a href="www.squizlabs.com.au">((prop:productName))</a>%1%</p><p>%2% %3%</p><p>%4% <a href="www.squizlabs.com.au">((prop:productName))</a></p><p>%5% %6%</p>');
        
-        $expectedRawHTML = '<p><a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a>%1%</p><p>%2%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a> %3%</p><p>%4%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a></p><p>%5% %6%</p>';
+        $expectedRawHTML = '<p><a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a>%1%</p><p>%2%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a> %3%</p><p>%4%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a></p><p>%5% %6%</p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
@@ -116,7 +116,7 @@ class Viper_Tests_ViperReplacementPlugin_CutAndPasteKeywordUnitTest extends Abst
         $this->sikuli->keyDown('Key.CMD + v');
         $this->assertHTMLMatch('<p><a href="www.squizlabs.com.au">((prop:productName))</a>%1%</p><p>%2%<a href="www.squizlabs.com.au">((prop:productName))</a> %3%<a href="www.squizlabs.com.au">((prop:productName))</a></p><p>%4%<a href="www.squizlabs.com.au">((prop:productName))</a></p><p>%5% %6%</p>');
 
-        $expectedRawHTML = '<p><a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a>%1%</p><p>%2%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a> %3%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a></p><p>%4%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a></p><p>%5% %6%</p>';
+        $expectedRawHTML = '<p><a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a>%1%</p><p>%2%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a> %3%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a></p><p>%4%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a></p><p>%5% %6%</p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
@@ -130,7 +130,7 @@ class Viper_Tests_ViperReplacementPlugin_CutAndPasteKeywordUnitTest extends Abst
         $this->paste(true);
         $this->assertHTMLMatch('<p><a href="www.squizlabs.com.au">((prop:productName))</a>%1%</p><p>%2%<a href="www.squizlabs.com.au">((prop:productName))</a> %3%<a href="www.squizlabs.com.au">((prop:productName))</a></p><p><a href="www.squizlabs.com.au">((prop:productName))</a>%4%</p><p>%5% %6%</p>');
 
-        $expectedRawHTML = '<p><a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a>%1%</p><p>%2%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a> %3%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a></p><p><a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a>%4%</p><p>%5% %6%</p>';
+        $expectedRawHTML = '<p><a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a>%1%</p><p>%2%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a> %3%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a></p><p><a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a>%4%</p><p>%5% %6%</p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
@@ -139,7 +139,7 @@ class Viper_Tests_ViperReplacementPlugin_CutAndPasteKeywordUnitTest extends Abst
         $this->paste(true);
         $this->assertHTMLMatch('<p><a href="www.squizlabs.com.au">((prop:productName))</a>%1%</p><p>%2%<a href="www.squizlabs.com.au">((prop:productName))</a> %3%<a href="www.squizlabs.com.au">((prop:productName))</a></p><p><a href="www.squizlabs.com.au">((prop:productName))</a>%4%</p><p>%5%<a href="www.squizlabs.com.au">((prop:productName))</a> %6%</p>');
 
-        $expectedRawHTML = '<p><a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a>%1% <a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a></p><p>%2%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a> %3%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a></p><p><a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a>%4%</p><p>%5%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></a> %6%</p>';
+        $expectedRawHTML = '<p><a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a>%1% <a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a></p><p>%2%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a> %3%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a></p><p><a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a>%4%</p><p>%5%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a> %6%</p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
@@ -148,7 +148,7 @@ class Viper_Tests_ViperReplacementPlugin_CutAndPasteKeywordUnitTest extends Abst
         $this->paste(true);
         $this->assertHTMLMatch('<p><a href="www.squizlabs.com.au">((prop:productName))</a>%1% %3%<a href="www.squizlabs.com.au">((prop:productName))</a></p><p><a href="www.squizlabs.com.au">((prop:productName))</a>%4%</p><p>%5%<a href="www.squizlabs.com.au">((prop:productName))</a> %6%<a href="www.squizlabs.com.au">((prop:productName))</a></p>');
 
-        $expectedRawHTML = '<p><span <a href="www.squizlabs.com.au"><keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</a></span>%1%</p><p>%2%<span <a href="www.squizlabs.com.au"><keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</a></span> %3%<span <a href="www.squizlabs.com.au"><keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</a></span></p><p><span <a href="www.squizlabs.com.au"><keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</a></span>%4%</p><p>%5%<span <a href="www.squizlabs.com.au"><keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</a></span> %6%<span <a href="www.squizlabs.com.au"><keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</a></span></p>';
+        $expectedRawHTML = '<p><span <a href="www.squizlabs.com.au"><keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</a></span>%1%</p><p>%2%<span <a href="www.squizlabs.com.au"><keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</a></span> %3%<span <a href="www.squizlabs.com.au"><keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</a></span></p><p><span <a href="www.squizlabs.com.au"><keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</a></span>%4%</p><p>%5%<span <a href="www.squizlabs.com.au"><keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</a></span> %6%<span <a href="www.squizlabs.com.au"><keyword contenteditable="false" data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</a></span></p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
         

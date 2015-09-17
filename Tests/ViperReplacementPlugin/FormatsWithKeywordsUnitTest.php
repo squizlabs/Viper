@@ -33,7 +33,7 @@ class Viper_Tests_ViperReplacementPlugin_FormatsWithKeywordsUnitTest extends Abs
         $this->clickInlineToolbarButton('bold');
         $this->assertHTMLMatch('<p>%1% <strong>((prop:productName))</strong></p><p>%2% <strong>((prop:productName))</strong></p><p>%3% ((prop:productName))</p>');
 
-        $expectedRawHTML = '<p>%1% <strong><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></strong></p><p>%2% <strong><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></strong></p><p>%3% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p>';
+        $expectedRawHTML = '<p>%1% <strong><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></strong></p><p>%2% <strong><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></strong></p><p>%3% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
@@ -45,7 +45,7 @@ class Viper_Tests_ViperReplacementPlugin_FormatsWithKeywordsUnitTest extends Abs
         $this->sikuli->keyDown('Key.CMD + b');
         $this->assertHTMLMatch('<p>%1% <strong>((prop:productName))</strong></p><p>%2% <strong>((prop:productName))</strong></p><p>%3% <strong>((prop:productName))</strong></p>');
 
-        $expectedRawHTML = '<p>%1% <strong><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></strong></p><p>%2% <strong><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></strong></p><p>%3% <strong><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></strong></p>';
+        $expectedRawHTML = '<p>%1% <strong><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></strong></p><p>%2% <strong><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></strong></p><p>%3% <strong><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></strong></p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
@@ -106,7 +106,7 @@ class Viper_Tests_ViperReplacementPlugin_FormatsWithKeywordsUnitTest extends Abs
         $this->clickInlineToolbarButton('italic');
         $this->assertHTMLMatch('<p>%1% <em>((prop:productName))</em></p><p>%2% <em>((prop:productName))</em></p><p>%3% ((prop:productName))</p>');
 
-        $expectedRawHTML = '<p>%1% <em><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></em></p><p>%2% <em><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></em></p><p>%3% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></p>';
+        $expectedRawHTML = '<p>%1% <em><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></em></p><p>%2% <em><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></em></p><p>%3% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
@@ -118,7 +118,7 @@ class Viper_Tests_ViperReplacementPlugin_FormatsWithKeywordsUnitTest extends Abs
         $this->sikuli->keyDown('Key.CMD + i');
         $this->assertHTMLMatch('<p>%1% <em>((prop:productName))</em></p><p>%2% <em>((prop:productName))</em></p><p>%3% <em>((prop:productName))</em></p>');
 
-        $expectedRawHTML = '<p>%1% <em><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></em></p><p>%2% <em><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></em></p><p>%3% <em><span data-viper-keyword="((prop:productName))" title="((prop:productName))">VIPER</span></em></p>';
+        $expectedRawHTML = '<p>%1% <em><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></em></p><p>%2% <em><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></em></p><p>%3% <em><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></em></p>';
         $actualRawHTML = $this->getRawHtml();
         $this->assertEquals($expectedRawHTML, $actualRawHTML);
 
