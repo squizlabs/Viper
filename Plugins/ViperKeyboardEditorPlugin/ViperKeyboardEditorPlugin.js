@@ -1354,7 +1354,23 @@ ViperKeyboardEditorPlugin.prototype = {
                         // Normalise text nodes.
                         this._normaliseNextNodes(textNode);
 
-                        range.setStart(textNode, range.startOffset - 1);
+                        if (textNode.data === ' '
+                            && textNode.nextSibling === null
+                            && textNode.previousSibling
+                            && ViperUtil.isTag(textNode.previousSibling, 'br') === true
+                        ) {
+                            // Handle case: <td>text <strong>text</strong><br> t*</td>. This will cause "line" to collapse
+                            // which causes caret to appear between previous line and the line where delete happened.
+                            // To prevent that add a BR at the end of the container and remove the space as its not
+                            // visible.
+                            textNode.data = '';
+                            var br        = document.createElement('br');
+                            textNode.parentNode.appendChild(br);
+                            range.setStart(textNode, 0);
+                        } else {
+                            range.setStart(textNode, range.startOffset - 1);
+                        }
+
                         range.collapse(true);
 
                         if (textNode.data.length === 0
@@ -1395,7 +1411,16 @@ ViperKeyboardEditorPlugin.prototype = {
                         } else {
                             var previousContainer = range.getPreviousContainer(range.startContainer);
                             if (previousContainer) {
-                                range.setStart(previousContainer, previousContainer.data.length);
+                                if (previousContainer.nodeType === ViperUtil.TEXT_NODE) {
+                                    range.setStart(previousContainer, previousContainer.data.length);
+                                } else if (ViperUtil.isTag(previousContainer, 'br') === true) {
+                                    // Handle case <p>text<strong>text</strong><br/>*</p>.
+                                    ViperUtil.remove(previousContainer);
+                                    return false;
+                                } else {
+                                    range.setStart(previousContainer, 0);
+                                }
+
                                 range.collapse(true);
                                 ViperSelection.addRange(range);
                                 return;

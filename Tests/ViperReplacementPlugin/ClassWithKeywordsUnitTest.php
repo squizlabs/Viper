@@ -66,6 +66,7 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
         $this->clickTopToolbarButton('cssClass');
         $this->clearFieldValue('Class');
         $this->sikuli->KeyDown('Key.ENTER');
+        
         $this->assertHTMLMatch('<p>Test content %1% more test content</p>');
 
         $expectedRawHTML = '<p>Test content %1% more test content</p>';
