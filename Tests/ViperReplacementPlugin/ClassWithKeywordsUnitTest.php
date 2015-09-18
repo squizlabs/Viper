@@ -21,7 +21,7 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
         $this->clickKeyword(1);
         
         $this->assertHTMLMatch('<p>Test content <span class="footnote-ref ((prop:className)) ((prop:className))">%1%</span> more test content</p>');
-        $this->assertRawHTMLMatch('<p>Test content <span data-viper-class="footnote-ref ((prop:className)) ((prop:className))" class="footnote-ref replaced-className ((prop:className))" data-viper-attribite-keywords="true">XAX</span> more test content</p>');
+        $this->assertRawHTMLMatch('<p>Test content <span data-viper-class="footnote-ref ((prop:className)) ((prop:className))" class="footnote-ref replaced-className ((prop:className))" data-viper-attribite-keywords="true">%1%</span> more test content</p>');
         
         // Using top toolbar
         $this->useTest(1);
@@ -32,7 +32,7 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
         $this->clickKeyword(1);
         
         $this->assertHTMLMatch('<p>Test content <span class="footnote-ref ((prop:className)) ((prop:className))">%1%</span> more test content</p>');
-        $this->assertRawHTMLMatch('<p>Test content <span data-viper-attribite-keywords="true" data-viper-class="footnote-ref ((prop:className)) ((prop:className))" class="footnote-ref replaced-className ((prop:className))">%1%</span> more test content</p>');
+        $this->assertRawHTMLMatch('<p>Test content <span data-viper-class="footnote-ref ((prop:className)) ((prop:className))" class="footnote-ref replaced-className ((prop:className))" data-viper-attribite-keywords="true">%1%</span> more test content</p>');
         
     }//end testApplyKeywordClassNames()
 
@@ -49,7 +49,8 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('cssClass','active');
         $this->clearFieldValue('Class');
-        $this->sikuli->KeyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->clickKeyword(1);
         
         $this->assertHTMLMatch('<p>Test content %1% more test content</p>');
         $this->assertRawHTMLMatch('<p>Test content %1% more test content</p>');
@@ -57,9 +58,10 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
         // Using top toolbar
         $this->useTest(2);
         $this->selectKeyword(1);
-        $this->clickTopToolbarButton('cssClass');
+        $this->clickTopToolbarButton('cssClass','active');
         $this->clearFieldValue('Class');
-        $this->sikuli->KeyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->clickKeyword(1);
         
         $this->assertHTMLMatch('<p>Test content %1% more test content</p>');
         $this->assertRawHTMLMatch('<p>Test content %1% more test content</p>');

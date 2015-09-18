@@ -158,6 +158,7 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
         sleep(1);
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.ENTER');
         
         $this->assertHTMLMatch('<p>%1% </p><p>%2%</p><p>%3% ((prop:productName))</p><p>%4% ((prop:productName))</p><p>%5% ((prop:productName))</p><p>%6% ((prop:productName))</p>');
         $this->assertRawHTMLMatch('<p>%1% </p><p>%2% </p><p>%3% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%4% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%5% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%6% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p>');
