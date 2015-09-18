@@ -70,7 +70,7 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
         $bubble = $this->getActiveBubble();
 
         // View source.
-        $this->clickButton('sourceView', NULL, FALSE, $bubble);
+        $this->clickElement('.Viper-resolutionHeader .Viper-button.Viper-sourceView');
         sleep(2);
 
         // Check to make sure the source view appears.
@@ -110,12 +110,12 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
         sleep(3);
 
         // Click alt field.
-        $this->clickField('Alt');
+        $this->clickElement('.Viper-textbox-title:contains(\'Alt\')', 1);
         sleep(2);
         $this->type('alt');
 
         // Click title field.
-        $this->clickField('Title');
+        $this->clickElement('.Viper-textbox-title:contains(\'Title\')', 2);
         sleep(2);
         $this->type('test');
         sleep(4);
