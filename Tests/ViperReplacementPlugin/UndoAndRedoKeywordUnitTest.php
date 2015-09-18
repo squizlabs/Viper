@@ -87,6 +87,7 @@ class Viper_Tests_ViperReplacementsPlugin_UndoAndRedoKeywordUnitTest extends Abs
     {   
         // Using inline toolbar
         $this->useTest(2);
+        sleep(1);
         $this->clickKeyword(1);
         sleep(1);
         $this->clickElement('img', 0);

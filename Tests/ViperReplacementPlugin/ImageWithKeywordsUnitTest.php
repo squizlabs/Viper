@@ -112,7 +112,9 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         sleep(1);
         $this->clickElement('img', 0);
         $this->clickInlineToolbarButton('image', 'active');
+        sleep(3);
         $this->clickField('Image is decorative');
+        sleep(1);
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         
         $this->assertHTMLMatch('<p>test content %1%</p><p>more content<img src="((prop:url))" alt="" /> even more content</p>');
