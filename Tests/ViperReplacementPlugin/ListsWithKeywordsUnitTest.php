@@ -17,23 +17,17 @@ class Viper_Tests_ViperReplacementPlugin_ListsWithKeywordsUnitTest extends Abstr
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickTopToolbarButton('listOL');
+        
         $this->assertHTMLMatch('<ol><li>%1%((prop:productName))</li></ol>');
-
-        $expectedRawHTML = '<ol><li>%1%<span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></li></ol>';
-        $actualRawHTML = $this->getRawHtml();
-        $this->assertEquals($expectedRawHTML, $actualRawHTML);
-
+        $this->assertRawHTMLMatch('<ol><li>%1%<span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></li></ol>');
         // Test for revert
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickTopToolbarButton('listOL', 'active');
+        
         $this->assertHTMLMatch('<p>%1%((prop:productName))</p>');
-
-        $expectedRawHTML = '<p>%1%<span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p>';
-        $actualRawHTML = $this->getRawHtml();
-        $this->assertEquals($expectedRawHTML, $actualRawHTML);
-    }//end testKeywordOrderedList()
-
+        $this->assertRawHTMLMatch('<p>%1%<span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p>');
+        
 
     /**
      * Test that linked keyword can be added to ordered lists.
@@ -47,23 +41,17 @@ class Viper_Tests_ViperReplacementPlugin_ListsWithKeywordsUnitTest extends Abstr
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickTopToolbarButton('listOL');
+        
         $this->assertHTMLMatch('<ol><li>%1%<a href="www.squizlabs.com.au">((prop:productName))</a></li></ol>');
-
-        $expectedRawHTML = '<ol><li>%1%<a href="www.squizlabs.com.au"><span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></a></li></ol>';
-        $actualRawHTML = $this->getRawHtml();
-        $this->assertEquals($expectedRawHTML, $actualRawHTML);
-
+        $this->assertRawHTMLMatch('<ol><li>%1%<a href="www.squizlabs.com.au"><span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></a></li></ol>');
         // Test for revert
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickTopToolbarButton('listOL', 'active');
+        
         $this->assertHTMLMatch('<p>%1%<a href="www.squizlabs.com.au">((prop:productName))</a></p>');
-
-        $expectedRawHTML = '<p>%1%<a href="www.squizlabs.com.au"><span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></a></p>';
-        $actualRawHTML = $this->getRawHtml();
-        $this->assertEquals($expectedRawHTML, $actualRawHTML);
-    }//end testLinkedKeywordOrderedList()
-
+        $this->assertRawHTMLMatch('<p>%1%<a href="www.squizlabs.com.au"><span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></a></p>');
+        
 
     /**
      * Test that keyword can be added unordered to lists.
@@ -77,23 +65,17 @@ class Viper_Tests_ViperReplacementPlugin_ListsWithKeywordsUnitTest extends Abstr
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickTopToolbarButton('listUL');
+        
         $this->assertHTMLMatch('<ul><li>%1%((prop:productName))</li></ul>');
-
-        $expectedRawHTML = '<ul><li>%1%<span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></li></ul>';
-        $actualRawHTML = $this->getRawHtml();
-        $this->assertEquals($expectedRawHTML, $actualRawHTML);
-
+        $this->assertRawHTMLMatch('<ul><li>%1%<span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></li></ul>');
         // Test for revert
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickTopToolbarButton('listUL', 'active');
+        
         $this->assertHTMLMatch('<p>%1%((prop:productName))</p>');
-
-        $expectedRawHTML = '<p>%1%<span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p>';
-        $actualRawHTML = $this->getRawHtml();
-        $this->assertEquals($expectedRawHTML, $actualRawHTML);
-    }//end testKeywordUnorderedList()
-
+        $this->assertRawHTMLMatch('<p>%1%<span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p>');
+        
 
     /**
      * Test that linked keyword can be added to unordered lists.
@@ -107,22 +89,16 @@ class Viper_Tests_ViperReplacementPlugin_ListsWithKeywordsUnitTest extends Abstr
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickTopToolbarButton('listUL');
+        
         $this->assertHTMLMatch('<ul><li>%1%<a href="www.squizlabs.com.au">((prop:productName))</a></li></ul>');
-
-        $expectedRawHTML = '<ul><li>%1%<a href="www.squizlabs.com.au"><span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></a></li></ul>';
-        $actualRawHTML = $this->getRawHtml();
-        $this->assertEquals($expectedRawHTML, $actualRawHTML);
-
+        $this->assertRawHTMLMatch('<ul><li>%1%<a href="www.squizlabs.com.au"><span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></a></li></ul>');
         // Test for revert
         $this->selectKeyword(1,2);
         $this->clickTopToolbarButton('listUL', 'active');
+        
         $this->assertHTMLMatch('<p>%1%<a href="www.squizlabs.com.au">((prop:productName))</a></p>');
-
-        $expectedRawHTML = '<p>%1%<a href="www.squizlabs.com.au"><span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></a></p>';
-        $actualRawHTML = $this->getRawHtml();
-        $this->assertEquals($expectedRawHTML, $actualRawHTML);
-    }//end testLinkedKeywordUnorderedList()
-
+        $this->assertRawHTMLMatch('<p>%1%<a href="www.squizlabs.com.au"><span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></a></p>');
+        
 
     /**
      * Test that images using keywords can be added to unordered lists.
@@ -135,22 +111,16 @@ class Viper_Tests_ViperReplacementPlugin_ListsWithKeywordsUnitTest extends Abstr
         $this->clickKeyword(1);
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('listUL');
+        
         $this->assertHTMLMatch('<ul><li>%1%<img alt="TITLE" src="((prop:url))" /></li></ul>');
-
-        $expectedRawHTML = '<ul><li>%1% Test content <img alt="TITLE" src="./Images/testImage.png" data-viper-src="((prop:url))"> more test content.%2%</li></ul>';
-        $actualRawHTML = $this->getRawHtml();
-        $this->assertEquals($expectedRawHTML, $actualRawHTML);
-
+        $this->assertRawHTMLMatch('<ul><li>%1% Test content <img alt="TITLE" src="./Images/testImage.png" data-viper-src="((prop:url))"> more test content.%2%</li></ul>');
         // Test for revert
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('listUL', 'active');
+        
         $this->assertHTMLMatch('<p>%1% Test content <img alt="TITLE" src="((prop:url))" /> more test content.%2%</p>');
-
-        $expectedRawHTML = '<p>%1% Test content <img alt="TITLE" src="./Images/testImage.png" data-viper-src="((prop:url))"> more test content.%2%</p>';
-        $actualRawHTML = $this->getRawHtml();
-        $this->assertEquals($expectedRawHTML, $actualRawHTML);
-    }//end testImageKeywordUnorderedList()
-
+        $this->assertRawHTMLMatch('<p>%1% Test content <img alt="TITLE" src="./Images/testImage.png" data-viper-src="((prop:url))"> more test content.%2%</p>');
+        
 
     /**
      * Test that images using keywords can be added to ordered lists.
@@ -163,20 +133,14 @@ class Viper_Tests_ViperReplacementPlugin_ListsWithKeywordsUnitTest extends Abstr
         $this->clickKeyword(1);
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('listOL');
+        
         $this->assertHTMLMatch('<ol><li>%1%<img alt="TITLE" src="((prop:url))" /></li></ol>');
-
-        $expectedRawHTML = '<ol><li>%1% Test content <img alt="TITLE" src="./Images/testImage.png" data-viper-src="((prop:url))"> more test content.%2%</li></ol>';
-        $actualRawHTML = $this->getRawHtml();
-        $this->assertEquals($expectedRawHTML, $actualRawHTML);
-
+        $this->assertRawHTMLMatch('<ol><li>%1% Test content <img alt="TITLE" src="./Images/testImage.png" data-viper-src="((prop:url))"> more test content.%2%</li></ol>');
         // Test for revert
         $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickTopToolbarButton('listOL', 'active');
+        
         $this->assertHTMLMatch('<p>%1% Test content <img alt="TITLE" src="((prop:url))" /> more test content.%2%</p>');
-
-        $expectedRawHTML = '<p>%1% Test content <img alt="TITLE" src="./Images/testImage.png" data-viper-src="((prop:url))"> more test content.%2%</p>';
-        $actualRawHTML = $this->getRawHtml();
-        $this->assertEquals($expectedRawHTML, $actualRawHTML);
-    }//end testImageKeywordOnorderedList()
-}
+        $this->assertRawHTMLMatch('<p>%1% Test content <img alt="TITLE" src="./Images/testImage.png" data-viper-src="((prop:url))"> more test content.%2%</p>');
+        

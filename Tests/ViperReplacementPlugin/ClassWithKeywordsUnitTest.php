@@ -19,12 +19,10 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
         $this->type('footnote-ref ((prop:className)) ((prop:className))');
         $this->sikuli->KeyDown('Key.ENTER');
         $this->clickKeyword(1);
+        
         $this->assertHTMLMatch('<p>Test content <span class="footnote-ref ((prop:className)) ((prop:className))">%1%</span> more test content</p>');
-
-        $expectedRawHTML = '<p>Test content <span data-viper-attribite-keywords="true" class="footnote-ref replaced-className ((prop:className))" data-viper-class="footnote-ref ((prop:className)) ((prop:className))">%1%</span> more test content</p>';
-        $actualRawHTML = $this->getRawHtml();
-        $this->assertEquals($expectedRawHTML, $actualRawHTML);
-
+        $this->assertRawHTMLMatch('<p>Test content <span data-viper-class="footnote-ref ((prop:className)) ((prop:className))" class="footnote-ref replaced-className ((prop:className))" data-viper-attribite-keywords="true">XAX</span> more test content</p>');
+        
         // Using top toolbar
         $this->useTest(1);
         $this->selectKeyword(1);
@@ -32,12 +30,10 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
         $this->type('footnote-ref ((prop:className)) ((prop:className))');
         $this->sikuli->KeyDown('Key.ENTER');
         $this->clickKeyword(1);
+        
         $this->assertHTMLMatch('<p>Test content <span class="footnote-ref ((prop:className)) ((prop:className))">%1%</span> more test content</p>');
-
-        $expectedRawHTML = '<p>Test content <span data-viper-attribite-keywords="true" data-viper-class="footnote-ref ((prop:className)) ((prop:className))" class="footnote-ref replaced-className ((prop:className))">%1%</span> more test content</p>';
-        $actualRawHTML = $this->getRawHtml();
-        $this->assertEquals($expectedRawHTML, $actualRawHTML);
-
+        $this->assertRawHTMLMatch('<p>Test content <span data-viper-attribite-keywords="true" data-viper-class="footnote-ref ((prop:className)) ((prop:className))" class="footnote-ref replaced-className ((prop:className))">%1%</span> more test content</p>');
+        
     }//end testApplyKeywordClassNames()
 
 
@@ -54,12 +50,10 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
         $this->clickInlineToolbarButton('cssClass','active');
         $this->clearFieldValue('Class');
         $this->sikuli->KeyDown('Key.ENTER');
+        
         $this->assertHTMLMatch('<p>Test content %1% more test content</p>');
-
-        $expectedRawHTML = '<p>Test content %1% more test content</p>';
-        $actualRawHTML = $this->getRawHtml();
-        $this->assertEquals($expectedRawHTML, $actualRawHTML);
-
+        $this->assertRawHTMLMatch('<p>Test content %1% more test content</p>');
+        
         // Using top toolbar
         $this->useTest(2);
         $this->selectKeyword(1);
@@ -68,11 +62,8 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
         $this->sikuli->KeyDown('Key.ENTER');
         
         $this->assertHTMLMatch('<p>Test content %1% more test content</p>');
-
-        $expectedRawHTML = '<p>Test content %1% more test content</p>';
-        $actualRawHTML = $this->getRawHtml();
-        $this->assertEquals($expectedRawHTML, $actualRawHTML);
-
+        $this->assertRawHTMLMatch('<p>Test content %1% more test content</p>');
+        
     }//end testRemoveKeywordClassNames()
 
 }
