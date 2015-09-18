@@ -5276,13 +5276,16 @@ Viper.prototype = {
                     return;
                 }
 
-                var scrollCoords = ViperUtil.getScrollCoords(this.getDocumentWindow());
+                var elementScrollCoords = ViperUtil.getElementScrollCoords(this.element);
+                var scrollCoords        = ViperUtil.getScrollCoords(this.getDocumentWindow());
                 this.element.focus();
 
                 var range = this.getViperRange();
                 ViperSelection.addRange(range);
 
                 // IE and Webkit fix.
+                this.element.scrollTop  = elementScrollCoords.y;
+                this.element.scrollLeft = elementScrollCoords.x;
                 Viper.window.scrollTo(scrollCoords.x, scrollCoords.y);
 
                 this.fireCaretUpdated();
