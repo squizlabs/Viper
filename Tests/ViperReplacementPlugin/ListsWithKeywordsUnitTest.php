@@ -27,7 +27,7 @@ class Viper_Tests_ViperReplacementPlugin_ListsWithKeywordsUnitTest extends Abstr
         
         $this->assertHTMLMatch('<p>%1%((prop:productName))</p>');
         $this->assertRawHTMLMatch('<p>%1%<span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p>');
-        
+    }//end testKeywordOrderedList() 
 
     /**
      * Test that linked keyword can be added to ordered lists.
@@ -51,7 +51,7 @@ class Viper_Tests_ViperReplacementPlugin_ListsWithKeywordsUnitTest extends Abstr
         
         $this->assertHTMLMatch('<p>%1%<a href="www.squizlabs.com.au">((prop:productName))</a></p>');
         $this->assertRawHTMLMatch('<p>%1%<a href="www.squizlabs.com.au"><span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></a></p>');
-        
+    }//end testLinkedKeywordOrderedList() 
 
     /**
      * Test that keyword can be added unordered to lists.
@@ -75,7 +75,7 @@ class Viper_Tests_ViperReplacementPlugin_ListsWithKeywordsUnitTest extends Abstr
         
         $this->assertHTMLMatch('<p>%1%((prop:productName))</p>');
         $this->assertRawHTMLMatch('<p>%1%<span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p>');
-        
+    }//end testKeywordUnorderedList()
 
     /**
      * Test that linked keyword can be added to unordered lists.
@@ -98,7 +98,7 @@ class Viper_Tests_ViperReplacementPlugin_ListsWithKeywordsUnitTest extends Abstr
         
         $this->assertHTMLMatch('<p>%1%<a href="www.squizlabs.com.au">((prop:productName))</a></p>');
         $this->assertRawHTMLMatch('<p>%1%<a href="www.squizlabs.com.au"><span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></a></p>');
-        
+    }//end testLinkedKeywordUnorderedList()
 
     /**
      * Test that images using keywords can be added to unordered lists.
@@ -120,7 +120,7 @@ class Viper_Tests_ViperReplacementPlugin_ListsWithKeywordsUnitTest extends Abstr
         
         $this->assertHTMLMatch('<p>%1% Test content <img alt="TITLE" src="((prop:url))" /> more test content.%2%</p>');
         $this->assertRawHTMLMatch('<p>%1% Test content <img alt="TITLE" src="./Images/testImage.png" data-viper-src="((prop:url))"> more test content.%2%</p>');
-        
+    }//end testImageKeywordUnorderedList()
 
     /**
      * Test that images using keywords can be added to ordered lists.
@@ -143,4 +143,5 @@ class Viper_Tests_ViperReplacementPlugin_ListsWithKeywordsUnitTest extends Abstr
         
         $this->assertHTMLMatch('<p>%1% Test content <img alt="TITLE" src="((prop:url))" /> more test content.%2%</p>');
         $this->assertRawHTMLMatch('<p>%1% Test content <img alt="TITLE" src="./Images/testImage.png" data-viper-src="((prop:url))"> more test content.%2%</p>');
-        
+    }//end testImageKeywordOrderedList()
+}

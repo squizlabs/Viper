@@ -74,7 +74,8 @@ class Viper_Tests_ViperReplacementsPlugin_UndoAndRedoKeywordUnitTest extends Abs
         
         $this->assertHTMLMatch('<p>test content %1%</p><p>more content&nbsp;&nbsp;even more content</p>');
         $this->assertRawHTMLMatch('<p>test content %1%</p><p>more content  even more content</p>');
-        nd testUndoAndRedoDeletingImageKeywords()
+        
+    }//end testUndoAndRedoDeletingImageKeywords()
 
 
     /**

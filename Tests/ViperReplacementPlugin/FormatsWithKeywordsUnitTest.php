@@ -162,7 +162,8 @@ class Viper_Tests_ViperReplacementPlugin_FormatsWithKeywordsUnitTest extends Abs
         
         $this->assertHTMLMatch('<p>%1% ((prop:productName))</p><p>%2% ((prop:productName))</p><p>%3% ((prop:productName))</p>');
         $this->assertRawHTMLMatch('<p>%1% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p><p>%2% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p><p>%3% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p>');
-        nd testApplyingSubscriptToKeywords()
+    
+    }//end testApplyingSubscriptToKeywords()
 
 
     /**
