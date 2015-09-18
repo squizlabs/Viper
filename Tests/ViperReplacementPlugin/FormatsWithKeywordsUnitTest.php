@@ -21,7 +21,7 @@ class Viper_Tests_ViperReplacementPlugin_FormatsWithKeywordsUnitTest extends Abs
         $this->clickTopToolbarButton('bold');
         
         $this->assertHTMLMatch('<p>%1% <strong>((prop:productName))</strong></p><p>%2% ((prop:productName))</p><p>%3% ((prop:productName))</p>');
-        $this->assertRawHTMLMatch('<p>%1% <span title="((prop:productName))" data-viper-keyword="((prop:productName))"><strong>Viper</strong></span></p><p>%2% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p><p>%3% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p>');
+        $this->assertRawHTMLMatch('<p>%1% <strong><span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></strong></p><p>%2% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p><p>%3% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p>');
         
         // Using inline toolbar
         $this->moveToKeyword(2 , 'right');
@@ -86,7 +86,7 @@ class Viper_Tests_ViperReplacementPlugin_FormatsWithKeywordsUnitTest extends Abs
         $this->clickTopToolbarButton('italic');
         
         $this->assertHTMLMatch('<p>%1% <em>((prop:productName))</em></p><p>%2% ((prop:productName))</p><p>%3% ((prop:productName))</p>');
-        $this->assertRawHTMLMatch('<p>%1% <span title="((prop:productName))" data-viper-keyword="((prop:productName))"><em>Viper</em></span></p><p>%2% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p><p>%3% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p>');
+        $this->assertRawHTMLMatch('<p>%1% <em><span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></em></p><p>%2% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p><p>%3% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p>');
         
         // Using inline toolbar
         $this->moveToKeyword(2 , 'right');
@@ -151,7 +151,7 @@ class Viper_Tests_ViperReplacementPlugin_FormatsWithKeywordsUnitTest extends Abs
         $this->clickTopToolbarButton('subscript');
         
         $this->assertHTMLMatch('<p>%1% <sub>((prop:productName))</sub></p><p>%2% ((prop:productName))</p><p>%3% ((prop:productName))</p>');
-        $this->assertRawHTMLMatch('<p>%1% <span title="((prop:productName))" data-viper-keyword="((prop:productName))"><sub>Viper</sub></span></p><p>%2% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p><p>%3% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p>');
+        $this->assertRawHTMLMatch('<p>%1% <sub><span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></sub></p><p>%2% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p><p>%3% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p>');
         
         // Test for revert
         $this->moveToKeyword(1, 'right');
@@ -182,7 +182,7 @@ class Viper_Tests_ViperReplacementPlugin_FormatsWithKeywordsUnitTest extends Abs
         $this->clickTopToolbarButton('superscript');
         
         $this->assertHTMLMatch('<p>%1% <sup>((prop:productName))</sup></p><p>%2% ((prop:productName))</p><p>%3% ((prop:productName))</p>');
-        $this->assertRawHTMLMatch('<p>%1% <span title="((prop:productName))" data-viper-keyword="((prop:productName))"><sup>Viper</sup></span></p><p>%2% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p><p>%3% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p>');
+        $this->assertRawHTMLMatch('<p>%1% <sup><span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></sup></p><p>%2% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p><p>%3% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p>');
         
         // Test for revert
         $this->moveToKeyword(1, 'right');
@@ -213,7 +213,7 @@ class Viper_Tests_ViperReplacementPlugin_FormatsWithKeywordsUnitTest extends Abs
         $this->clickTopToolbarButton('strikethrough');
         
         $this->assertHTMLMatch('<p>%1% <del>((prop:productName))</del></p><p>%2% ((prop:productName))</p><p>%3% ((prop:productName))</p>');
-        $this->assertRawHTMLMatch('<p>%1% <span title="((prop:productName))" data-viper-keyword="((prop:productName))"><del>Viper</del></span></p><p>%2% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p><p>%3% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p>');
+        $this->assertRawHTMLMatch('<p>%1% <del><span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></del></p><p>%2% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p><p>%3% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p>');
         
         // Test for revert
         $this->moveToKeyword(1, 'right');
