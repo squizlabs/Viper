@@ -660,6 +660,8 @@ MatrixCommentsPlugin.prototype = {
             // show new comment dialog
             $commentDialog.append($commentDialogNewComment);
 
+            $commentDialog.addClass('Matrix-Viper-commentdialog-new');
+
             $commentDialogNewComment.append('<div class="Matrix-Viper-commentdialog-currentUserName">'+ this._currentUserFirstName + ' ' + this._currentUserLastName + '</div>');
             $commentDialogNewComment.append('<div class="Matrix-Viper-commentdialog-newCommentText">'+ _('New Comment') + '</div>');
 
