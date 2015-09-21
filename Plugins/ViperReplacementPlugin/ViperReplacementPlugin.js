@@ -308,6 +308,35 @@ ViperReplacementPlugin.prototype = {
 
     },
 
+    replaceKeywords: function (string, callback)
+    {
+        if (!callback) {
+            return;
+        }
+
+        var regex = this.getReplacementRegex();
+        if (!regex) {
+            callback.call(this, string);
+            return;
+        }
+
+        regex       = new RegExp(regex, 'gi');
+        var matches = string.match(regex);
+        if (matches) {
+            this.getKeywordReplacements(
+                matches,
+                function (replacements) {
+                    for (var keyword in replacements) {
+                        string = string.replace(keyword, replacements[keyword]);
+                    }
+
+                    callback.call(this, string);
+                }
+            );
+        }
+
+    },
+
     _trimExtraSpaceFromStart: function(textNode, useNbsp)
     {
         var fromIdx = -1;
@@ -553,6 +582,16 @@ ViperReplacementPlugin.prototype = {
     },
 
     getKeywordReplacements: function (keywords, callback) {
+        if (ViperUtil.isArray(keywords) === true) {
+            // Convert to object.
+            var keywordsObj = {};
+            for (var i = 0; i < keywords.length; i++) {
+                keywordsObj[keywords[i]] = '';
+            }
+
+            keywords = keywordsObj;
+        }
+
         // The function that is going to retrieve all the replacements.
         var repCallback = this.getReplacementsCallback();
         if (!repCallback) {
