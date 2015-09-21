@@ -35,7 +35,7 @@
   color: #FFF;
   background: #0583db none repeat scroll 0% 0%;
   cursor: pointer;
-  z-index: 97;
+  z-index: 8;
 }
 .Matrix-Viper-commentmark-number-count {
   width: 100%;
@@ -124,7 +124,7 @@
   font-family: arial,sans-serif;
   background-color: white;
   box-shadow: 0 1px 2px 0px rgba(0, 0, 0, 0.2);
-  z-index: 97;
+  z-index: 8;
 }
 .Matrix-Viper-commentdialog::before {
   content: "";
