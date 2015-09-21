@@ -2,7 +2,7 @@
 
 require_once 'AbstractViperImagePluginUnitTest.php';
 
-class Viper_Tests_ViperReplacementsPlugin_UndoAndRedoKeywordUnitTest extends AbstractViperImagePluginUnitTest
+class Viper_Tests_ViperReplacementPlugin_UndoAndRedoKeywordUnitTest extends AbstractViperImagePluginUnitTest
 {
 
     /**
@@ -14,24 +14,26 @@ class Viper_Tests_ViperReplacementsPlugin_UndoAndRedoKeywordUnitTest extends Abs
     {
         // Using keyboard shortcuts
         $this->useTest(1);
+        $this->clickKeyword(1);
         $this->moveToKeyword(1 , 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        sleep(1);
         $this->sikuli->keyDown('Key.DELETE');
+        sleep(3);
         $this->sikuli->keyDown('Key.CMD + z');
+        sleep(5);
         
         $this->assertHTMLMatch('<p>%1% ((prop:productName)) %2%</p><p>%3% %4%</p>');
-        $this->assertRawHTMLMatch('<p><keyword title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</keyword>%1% <keyword title="((prop:productName))" data-viper-keyword="((prop:productName))" contenteditable="false"></keyword> %2%</p><p>%3% %4%</p>');
+        $this->assertRawHTMLMatch('<p>%1%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %2%</p><p>%3% %4%</p>');
         
         // Test for redo
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         
         $this->assertHTMLMatch('<p>%1%&nbsp;&nbsp;%2%</p><p>%3% %4%</p>');
-        $this->assertRawHTMLMatch('<p>%1%&nbsp;&nbsp;%2%</p><p>%3% %4%</p>');
+        $this->assertRawHTMLMatch('<p>%1%  %2%</p><p>%3% %4%</p>');
         
         // Using top toolbar
-        $this->useTest(1);
+        $this->sikuli->keyDown('Key.CMD + z');
         $this->moveToKeyword(1 , 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
@@ -40,13 +42,13 @@ class Viper_Tests_ViperReplacementsPlugin_UndoAndRedoKeywordUnitTest extends Abs
         $this->sikuli->keyDown('Key.CMD + z');
         
         $this->assertHTMLMatch('<p>%1% ((prop:productName)) %2%</p><p>%3% %4%</p>');
-        $this->assertRawHTMLMatch('<p><keyword title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</keyword>%1% <keyword title="((prop:productName))" data-viper-keyword="((prop:productName))" contenteditable="false"></keyword> %2%</p><p>%3% %4%</p>');
+        $this->assertRawHTMLMatch('<p>%1%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %2%</p><p>%3% %4%</p>');
         
         // Test for redo
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         
         $this->assertHTMLMatch('<p>%1%&nbsp;&nbsp;%2%</p><p>%3% %4%</p>');
-        $this->assertRawHTMLMatch('<p>%1%&nbsp;&nbsp;%2%</p><p>%3% %4%</p>');
+        $this->assertRawHTMLMatch('<p>%1%  %2%</p><p>%3% %4%</p>');
         
     }//end testUndoAndRedoDeletingKeywords()
 
@@ -184,22 +186,23 @@ class Viper_Tests_ViperReplacementsPlugin_UndoAndRedoKeywordUnitTest extends Abs
         sleep(1);
         $this->clickInlineToolbarButton('linkremove');
         $this->clickTopToolbarButton('historyUndo');
+        sleep(5);
         
         $this->assertHTMLMatch('<p>%1% <a href="www.squizlabs.com.au">((prop:productName))</a> %2%</p><p>%3% %4%</p>');
-        $this->assertRawHTMLMatch('<p>%1% <keyword title="((prop:productName))" data-viper-keyword="((prop:productName))" contenteditable="false">Viper</keyword> %2%</p><p>%3% %4%</p>');
+        $this->assertRawHTMLMatch('<p>%1%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a> %2%</p><p>%3% %4%</p>');
         
         // Test for redo
         $this->clickTopToolbarButton('historyRedo');
         
         $this->assertHTMLMatch('<p>%1% ((prop:productName)) %2%</p><p>%3% %4%</p>');
-        $this->assertRawHTMLMatch('<p>%1% <keyword data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</keyword> %2%</p><p>%3% %4%</p>');
+        $this->assertRawHTMLMatch('<p>%1%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %2%</p><p>%3% %4%</p>');
         
         // Removing Link using top toolbar
         $this->moveToKeyword(1 , 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         sleep(1);
-        $this->clickTopToolbarButton('linkremove');
+        $this->clickTopToolbarButton('linkremove', NULL);
         $this->clickTopToolbarButton('historyUndo');
         
         $this->assertHTMLMatch('<p>%1% <a href="www.squizlabs.com.au">((prop:productName))</a> %2%</p><p>%3% %4%</p>');
