@@ -61,7 +61,7 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT + Key.SHIFT');
         sleep(1);
-        $this->clickTopToolbarButton('removeFormat');
+        $this->clickTopToolbarButton('removeFormat', NULL);
         $this->assertHTMLMatch('<p>%1% ((prop:productName))</p><p>%2% <strong>((prop:productName))</strong></p><p>%3% <del>((prop:productName))</del></p><p>%4% <sub>((prop:productName))</sub></p><p>%5% <sup>((prop:productName))</sup></p>');
         $this->assertRawHTMLMatch('<p>%1% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%2% <strong><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></strong></p><p>%3% <del><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></del></p><p>%4% <sub><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></sub></p><p>%5% <sup><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></sup></p>');
 
@@ -70,7 +70,7 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         sleep(1);
-        $this->clickTopToolbarButton('removeFormat');
+        $this->clickTopToolbarButton('removeFormat', NULL);
         $this->assertHTMLMatch('<p>%1% ((prop:productName))</p><p>%2% ((prop:productName))</p><p>%3% <del>((prop:productName))</del></p><p>%4% <sub>((prop:productName))</sub></p><p>%5% <sup>((prop:productName))</sup></p>');
         $this->assertRawHTMLMatch('<p>%1% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%2% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%3% <del><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></del></p><p>%4% <sub><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></sub></p><p>%5% <sup><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></sup></p>');
 
@@ -79,7 +79,7 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         sleep(1);
-        $this->clickTopToolbarButton('removeFormat');
+        $this->clickTopToolbarButton('removeFormat', NULL);
         $this->assertHTMLMatch('<p>%1% ((prop:productName))</p><p>%2% ((prop:productName))</p><p>%3% ((prop:productName))</p><p>%4% <sub>((prop:productName))</sub></p><p>%5% <sup>((prop:productName))</sup></p>');
         $this->assertRawHTMLMatch('<p>%1% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%2% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%3% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%4% <sub><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></sub></p><p>%5% <sup><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></sup></p>');
 
@@ -88,7 +88,7 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         sleep(1);
-        $this->clickTopToolbarButton('removeFormat');
+        $this->clickTopToolbarButton('removeFormat', NULL);
         $this->assertHTMLMatch('<p>%1% ((prop:productName))</p><p>%2% ((prop:productName))</p><p>%3% ((prop:productName))</p><p>%4% ((prop:productName))</p><p>%5% <sup>((prop:productName))</sup></p>');
         $this->assertRawHTMLMatch('<p>%1% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%2% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%3% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%4% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%5% <sup><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></sup></p>');
 
@@ -97,7 +97,7 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         sleep(1);
-        $this->clickTopToolbarButton('removeFormat');
+        $this->clickTopToolbarButton('removeFormat', NULL);
         $this->assertHTMLMatch('<p>%1% ((prop:productName))</p><p>%2% ((prop:productName))</p><p>%3% ((prop:productName))</p><p>%4% ((prop:productName))</p><p>%5% ((prop:productName))</p>');
         $this->assertRawHTMLMatch('<p>%1% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%2% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%3% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%4% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%5% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p>');
 
