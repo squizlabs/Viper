@@ -110,12 +110,12 @@ notepad C:\wamp\www\Viper\.git\config
     url = git@github.com:squizlabs/php-sikuli.git
 ```
 - Note that if this setup is not going to be used as a SquizCI runner then following steps can be ignored.
-- Add Host entry for the CI server.
 - Create runner settings file C:\wamp\www\runner.json :
 ```
 {"projects":{"1":{"command":"php runTests.php -b[params:browser] -t[filter]","testPath":"C:\\wamp\\www\\Viper\\Tests\\"}}}
 ```
 - Add the runner script from CI to C:\wamp\www\runner.php
+- Download the CA root certificate bundle (PEM format) from http://curl.haxx.se/docs/caextract.html and place it in C:\wamp\www\cacert.pem
 - Schedule runner task for windows (run cmd.exe ... command every 2 minutes)
 ```
 schtasks /create /sc MINUTE /mo 2 /tn SquizRunner /tr "cmd.exe /c start /MIN 'Squiz Runner Task2' php C:\wamp\www\runner.php"
