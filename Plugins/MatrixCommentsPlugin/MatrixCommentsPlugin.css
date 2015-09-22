@@ -206,6 +206,15 @@
 .Matrix-Viper-commentdialog-deletion .GUI-switch-button {
   opacity: 0.5;
 }
+.Matrix-Viper-commentdialog-deletion .Matrix-Viper-commentdialog-mainArea {
+  display: none;
+}
+.Matrix-Viper-commentdialog-deletion .Matrix-Viper-commentdialog-buttonArea {
+  display: none;
+}
+.Matrix-Viper-commentdialog-deletion .GUI-switch-button {
+  cursor: initial;
+}
 
 /* comment dialog textarea */
 .Matrix-Viper-commentdialog-newCommentTextArea,
@@ -433,6 +442,7 @@
   font-family: arial,sans-serif;
   background-color: white;
   box-shadow: 0 1px 2px 0px rgba(0, 0, 0, 0.2);
+  z-index: 9;
 }
 .Matrix-Viper-commentdialog-comment-action:before {
     content: "";
@@ -446,6 +456,7 @@
     left: auto;
     right: 8px;
     border-width: 0 7px 7px;
+    z-index: 9;
 }
 .Matrix-Viper-commentdialog-comment-action:after {
     content: "";
@@ -459,6 +470,7 @@
     border-color: #fff transparent;
     display: block;
     width: 0;
+    z-index: 9;
 }
 .Matrix-Viper-commentdialog-inAdmin:before {
     content: "";

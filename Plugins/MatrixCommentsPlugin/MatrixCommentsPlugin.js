@@ -374,7 +374,7 @@ MatrixCommentsPlugin.prototype = {
         if(!self._comments[self._containerId]) return;
         jQuery.each(self._comments[self._containerId], function(key, value) {
             // do not display unattached comments
-            if(typeof value['status'] != 'undefined' && value['status'] == 'unattached') return;
+            if(typeof value['status'] != 'undefined' && value['unattached'] == true) return;
 
             var targetElement = $('[data-comment-id=' + value['id'] + '][data-comment-container-id=' + self._containerId + ']').get(0);
             if(typeof value['commentMark'] == 'undefined' || value['commentMark'] == null) {
@@ -555,7 +555,7 @@ MatrixCommentsPlugin.prototype = {
             if(typeof self._comments[self._containerId] == 'undefined') {
                 self._comments[self._containerId] = [];
             }
-            self._comments[self._containerId].push({'id' : this._commentId, 'commentMark' : commentMark, 'color' : self._commentColor, 'userId' : self._currentUserId, 'containerid' : self._containerId, 'comments' : [], 'status' : 'open'});
+            self._comments[self._containerId].push({'id' : this._commentId, 'commentMark' : commentMark, 'color' : self._commentColor, 'userId' : self._currentUserId, 'containerid' : self._containerId, 'comments' : [], 'status' : 'open', 'unattached' : false});
     	}
         else {
             // open the comment mark's dialog
@@ -753,8 +753,10 @@ MatrixCommentsPlugin.prototype = {
             // reply comment dialog, displayed when there are comments under this thread
             $commentDialog.append($commentDialogReplyComment);
 
+            var isMarkForDeletion = $(commentMark).hasClass('Matrix-Viper-commentmark-color-red');
+
             // if it's a comment for deletion, add the css class
-            if($(commentMark).hasClass('Matrix-Viper-commentmark-color-red')) {
+            if(isMarkForDeletion) {
                 $commentDialog.addClass('Matrix-Viper-commentdialog-deletion');
             }
 
@@ -831,7 +833,8 @@ MatrixCommentsPlugin.prototype = {
                 $comment_div.append($replyCommentUserName);
 
                 // only show the comment action button if current user is the one who created it
-                if(self._currentUserId == comments[i]['userid'] && !isSystemComment) {
+                // and not a system comment and if it's the first comment thread, it's not marked for deletion
+                if(self._currentUserId == comments[i]['userid'] && !isSystemComment && (i == 0 || !isMarkForDeletion)) {
                     $replyCommentsAction = jQuery('<div class="Matrix-Viper-commentdialog-reply-comment-action" data-comment-id="' + id + '" data-comment-index="' + i + '"></div>');
                     $comment_div.append($replyCommentsAction);
                 }
@@ -929,7 +932,7 @@ MatrixCommentsPlugin.prototype = {
                         var deleteText = _('Delete Comment');
 
                         if(index == 0 ) {
-                            if($(commentMark).hasClass('Matrix-Viper-commentmark-color-red')) {
+                            if(isMarkForDeletion) {
                                 deleteText = _('Unmark For Deletion');
                             }
                             else {
@@ -939,7 +942,10 @@ MatrixCommentsPlugin.prototype = {
                         var $commentActionDiv = jQuery('<div class="Matrix-Viper-commentdialog-comment-action"></div>');
                         var $commentActionDivEdit = jQuery('<div class="Matrix-Viper-commentdialog-comment-action-edit" data-comment-id="' + id + '" data-comment-index="' + index + '" >' + _('Edit Comment') + '</div>');
                         var $commentActionDivDelete = jQuery('<div class="Matrix-Viper-commentdialog-comment-action-edit" data-comment-id="' + id + '" data-comment-index="' + index + '" >' + deleteText + '</div>');
-                        $commentActionDiv.append($commentActionDivEdit);
+                        // mark for deletion dialog don't need edit button
+                        if(!isMarkForDeletion) {
+                            $commentActionDiv.append($commentActionDivEdit);
+                        }
                         $commentActionDiv.append($commentActionDivDelete);
                         document.body.appendChild($commentActionDiv.get(0));
                         $commentActionDiv.css({
@@ -1153,6 +1159,9 @@ MatrixCommentsPlugin.prototype = {
 
             // click resolve button
             $resolve_switch.click(function() {
+                
+                if(isMarkForDeletion) return;
+
                 var $commentDialog = $(this).closest('.Matrix-Viper-commentdialog');
                 var containerId = $commentDialog.data('comment-container-id');
                 var commentId = $commentDialog.data('comment-id');
@@ -1264,11 +1273,11 @@ MatrixCommentsPlugin.prototype = {
             }
 
 
-             // delete stored comments that doesn't have matching target
+             // stash stored comments that doesn't have matching target
             for (var i = 0; i < self._comments[containerid].length; i++) {
                 var comment = self._comments[containerid][i];
                 if(typeof comment == 'undefined' || !$container.find('[data-comment-id=' + comment['id'] + '][data-comment-container-id=' + containerid + ']').length){
-                    comment['status'] = 'unattached';
+                    comment['unattached'] = true;
                 }
             };
 
@@ -1633,7 +1642,7 @@ MatrixCommentsPlugin.prototype = {
         // we need <a> link still work though
 
         newValue = String(newValue).replace(/(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/, function(match, $1, $2, offset, original) {
-            return '<a href="' + match + '">' + match + '</a>';
+            return '<a href="' + match + '" target="_blank" >' + match + '</a>';
         })
 
         return newValue;
