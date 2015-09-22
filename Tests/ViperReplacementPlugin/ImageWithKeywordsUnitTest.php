@@ -113,12 +113,12 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         // Using inline toolbar
         $this->useTest(3);
         $this->clickKeyword(1);
-        sleep(1);
+        sleep(3);
         $this->clickElement('img', 0);
         $this->clickInlineToolbarButton('image', 'active');
         sleep(3);
         $this->clickField('Image is decorative');
-        sleep(1);
+        sleep(3);
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>test content %1%</p><p>more content<img src="((prop:url))" alt="" /> even more content</p>');
@@ -128,6 +128,7 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
 		$this->clickField('Image is decorative');
 		$this->clickField('Alt');
 		$this->type('TITLE');
+        sleep(2);
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>test content %1%</p><p>more content<img alt="TITLE" src="((prop:url))" /> even more content</p>');
@@ -136,11 +137,13 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         // Using top toolbar
         $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
+        sleep(1);
         $this->clickField('Image is decorative');
+        sleep(3);
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>test content %1%</p><p>more content<img alt="" src="((prop:url))" /> even more content</p>');
-        $this->assertRawHTMLMatch('<p>test content %1%</p><p>more content<img alt="" data-viper-attribite-keywords="true" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'"> even more content</p>');
+        $this->assertRawHTMLMatch('<p>test content %1%</p><p>more content<img alt="" class="__viper_selHighlight __viper_cleanOnly" data-viper-attribite-keywords="true" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'"> even more content</p>');
 
         // Changing back
 		$this->clickField('Image is decorative');
@@ -149,7 +152,7 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>test content %1%</p><p>more content<img alt="TITLE" src="((prop:url))" /> even more content</p>');
-        $this->assertRawHTMLMatch('<p>test content %1%</p><p>more content<img alt="TITLE" data-viper-attribite-keywords="true" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'"> even more content</p>');
+        $this->assertRawHTMLMatch('<p>test content %1%</p><p>more content<img alt="TITLE" class="__viper_selHighlight __viper_cleanOnly" data-viper-attribite-keywords="true" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'"> even more content</p>');
 
     }//end testChangeImageKeywordDecorative()
 
