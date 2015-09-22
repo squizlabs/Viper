@@ -250,6 +250,7 @@ ViperReplacementPlugin.prototype = {
 
                 range.selectNode(startKeyword);
                 ViperSelection.addRange(range);
+                self.viper.fireSelectionChanged(null, true);
             }
 
         });
