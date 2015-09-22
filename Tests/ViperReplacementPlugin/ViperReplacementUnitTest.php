@@ -36,10 +36,10 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
 
         $this->selectKeyword(9);
         $this->sikuli->keyDown('Key.CMD + i');
-        $this->assertHTMLMatch('%1%</p><p><strong>XBX</strong> sit amet</p><p>test <img src="../../Examples/Paper-reel/Images/testImage.png" data-viper-src="((prop:url))" alt="Viper" data-viper-alt="((prop:productName))" title="Test Image" data-viper-height="((prop:height))" data-viper-width="((prop:width))" height="200px" width="100px"></p>');
+        $this->assertHTMLMatch('%1%</p><p><strong>XBX</strong> sit amet</p><p>test <img src="'.$this->getTestURL('/Web/testImage.png').'" data-viper-src="((prop:url))" alt="Viper" data-viper-alt="((prop:productName))" title="Test Image" data-viper-height="((prop:height))" data-viper-width="((prop:width))" height="200px" width="100px"></p>');
 
         $raw = $this->getRawHTML();
-        $this->assertEquals('<p>%1%</p><p><strong>%2%</strong> sit amet</p><p>test<img src="../../Examples/Paper-reel/Images/testImage.png" data-viper-src="((prop:url))" alt="Viper" data-viper-alt="((prop:productName))" title="Test Image" data-viper-height="((prop:height))" data-viper-width="((prop:width))" height="200px" width="100px"></p>');
+        $this->assertEquals('<p>%1%</p><p><strong>%2%</strong> sit amet</p><p>test<img src="'.$this->getTestURL('/Web/testImage.png').'" data-viper-src="((prop:url))" alt="Viper" data-viper-alt="((prop:productName))" title="Test Image" data-viper-height="((prop:height))" data-viper-width="((prop:width))" height="200px" width="100px"></p>');
 
         $visible = $this->getHtml();
         $this->assertHTMLMatch('<p>Lorem ((prop:productName)) %1%</p><p><strong>%2%</strong> sit amet</p><p>test <img src="((prop:url))" alt="((prop:productName))" title="Test Image" height="((prop:height))" width="((prop:width))" /></p>');
