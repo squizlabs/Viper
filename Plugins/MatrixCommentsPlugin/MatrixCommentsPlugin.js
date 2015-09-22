@@ -102,6 +102,9 @@ MatrixCommentsPlugin.prototype = {
             // remove comment action dialog
             $('.Matrix-Viper-commentdialog-comment-action').remove();
 
+            // udpate existing comments (just in event like viper automatically removes empty paragraphs, remats)
+            self.updateExistingComments();
+
             // if we have active comment dialog, let user finish it
             if($('.Matrix-Viper-commentdialog').length > 0)  return;
 
