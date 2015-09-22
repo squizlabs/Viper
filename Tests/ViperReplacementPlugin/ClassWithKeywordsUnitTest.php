@@ -57,9 +57,13 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
         
         // Using top toolbar
         $this->useTest(2);
+        sleep(1);
         $this->selectKeyword(1);
+        sleep(1);
         $this->clickTopToolbarButton('cssClass','active');
+        sleep(1);
         $this->clearFieldValue('Class');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
         $this->clickKeyword(1);
         
