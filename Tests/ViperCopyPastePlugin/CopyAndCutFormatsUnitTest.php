@@ -247,10 +247,18 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutFormatsUnitTest extends Abstrac
         $this->type(' ');
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
-        $this->assertHTMLMatch('<p>First paragraph<strong>XAX bold content XBX</strong></p><pre>&lt;strong&gt;XAX bold content XBX&lt;/strong&gt;<strong>XAX bold content XBX</strong> &lt;strong&gt;XAX bold content XBX&lt;/strong&gt;</pre><pre>Lorum this is more content XCX to test</pre>');
-        $this->clickTopToolbarButton('PRE', 'active', TRUE);
-        sleep(1);
-        $this->assertHTMLMatch('<p>First paragraph<strong>XAX bold content XBX</strong></p><p>&lt;strong&gt;XAX bold content XBX&lt;/strong&gt;<strong>XAX bold content XBX</strong> &lt;strong&gt;XAX bold content XBX&lt;/strong&gt;</p><pre>Lorum this is more content XCX to test</pre>');
+
+        if ($this->sikuli->getBrowserid() === 'safari') {
+            $this->assertHTMLMatch('<p>First paragraph<strong>XAX bold content XBX</strong></p><pre>&lt;strong&gt;XAX bold content XBX&lt;/strong&gt;<strong>XAX bold content XBX &lt;strong&gt;XAX bold content XBX&lt;/strong&gt;</strong></pre><pre>Lorum this is more content XCX to test</pre>');
+            $this->clickTopToolbarButton('PRE', 'active', TRUE);
+            sleep(1);
+            $this->assertHTMLMatch('<p>First paragraph<strong>XAX bold content XBX</strong></p><p>&lt;strong&gt;XAX bold content XBX&lt;/strong&gt;<strong>XAX bold content XBX &lt;strong&gt;XAX bold content XBX&lt;/strong&gt;</strong></p><pre>Lorum this is more content XCX to test</pre>');
+        } else {
+            $this->assertHTMLMatch('<p>First paragraph<strong>XAX bold content XBX</strong></p><pre>&lt;strong&gt;XAX bold content XBX&lt;/strong&gt;<strong>XAX bold content XBX</strong> &lt;strong&gt;XAX bold content XBX&lt;/strong&gt;</pre><pre>Lorum this is more content XCX to test</pre>');
+            $this->clickTopToolbarButton('PRE', 'active', TRUE);
+            sleep(1);
+            $this->assertHTMLMatch('<p>First paragraph<strong>XAX bold content XBX</strong></p><p>&lt;strong&gt;XAX bold content XBX&lt;/strong&gt;<strong>XAX bold content XBX</strong> &lt;strong&gt;XAX bold content XBX&lt;/strong&gt;</p><pre>Lorum this is more content XCX to test</pre>');
+        }
 
     }//end testPastingHtmlIntoPre()
 

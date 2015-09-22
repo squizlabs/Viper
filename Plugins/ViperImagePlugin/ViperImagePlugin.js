@@ -761,7 +761,20 @@ ViperImagePlugin.prototype = {
             callback.call(this, false);
         };
 
-        this.viper.setAttribute(img, 'src', url);
+        var replacementPlugin = this.viper.getPluginManager().getPlugin('ViperReplacementPlugin');
+        if (replacementPlugin) {
+            // Replace the url keyword.
+            var self = this;
+            replacementPlugin.replaceKeywords(
+                url,
+                function(replaced) {
+                    self.viper.setAttribute(img, 'src', replaced);
+                }
+            )
+
+        } else {
+            this.viper.setAttribute(img, 'src', url);
+        }
 
     },
 

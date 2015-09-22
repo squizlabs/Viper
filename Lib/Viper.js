@@ -246,6 +246,11 @@ Viper.prototype = {
         ViperChangeTracker.addChangeType('merged', 'Merged', 'remove');
         ViperSelection._viper = this;
 
+        this.registerCallback('Viper:setHtmlContent', 'Viper', function(content, callback) {
+            callback.call(this, content);
+            return function() {};
+        });
+
     },
 
     destroy: function()
@@ -4973,7 +4978,21 @@ Viper.prototype = {
                     if (textContainer && textContainer.nodeType === ViperUtil.TEXT_NODE) {
                         // At the start of a text node with an element sibling. Make sure character is inserted in this
                         // text node.
-                        textContainer.data = String.fromCharCode(e.which) + textContainer.data;
+                        // Also make sure that there is no non breaking space at the start text node followed by a non
+                        // space character.
+                        var char = String.fromCharCode(e.which);
+                        if (textContainer.data.length > 1
+                            && textContainer.data.charCodeAt(0) === 160
+                            && textContainer.data[1] !== ' '
+                        ) {
+                            if (char === ' ') {
+                                char = String.fromCharCode(160);
+                            } else {
+                                textContainer.data = ' ' + textContainer.data.substr(1);
+                            }
+                        }
+
+                        textContainer.data = char + textContainer.data;
                         range.setStart(textContainer, 1);
                         range.collapse(true);
                         ViperSelection.addRange(range);
@@ -5257,13 +5276,16 @@ Viper.prototype = {
                     return;
                 }
 
-                var scrollCoords = ViperUtil.getScrollCoords(this.getDocumentWindow());
+                var elementScrollCoords = ViperUtil.getElementScrollCoords(this.element);
+                var scrollCoords        = ViperUtil.getScrollCoords(this.getDocumentWindow());
                 this.element.focus();
 
                 var range = this.getViperRange();
                 ViperSelection.addRange(range);
 
                 // IE and Webkit fix.
+                this.element.scrollTop  = elementScrollCoords.y;
+                this.element.scrollLeft = elementScrollCoords.x;
                 Viper.window.scrollTo(scrollCoords.x, scrollCoords.y);
 
                 this.fireCaretUpdated();
@@ -6038,13 +6060,34 @@ Viper.prototype = {
                 } else if (ViperUtil.trim(node.data) === '' && node.data.indexOf("\n") === 0) {
                     ViperUtil.remove(node);
                 } else {
+                    var nbsp = String.fromCharCode(160);
+
                     // Remove extra spaces from the node.
                     node.data = node.data.replace(/^\s+/g, ' ');
                     node.data = node.data.replace(/\s+$/g, ' ');
                     node.data = node.data.replace(/\s*\n\s*/g, ' ');
 
+                    // TODO: We should normalise these text nodes before calling this method. This way there is no
+                    // reason to do this check here as there will be no sibling text nodes.
+                    if (node.data.charAt(0) === ' '
+                       && node.previousSibling
+                       && node.previousSibling.nodeType === ViperUtil.TEXT_NODE
+                       && (node.previousSibling.data.charAt(node.previousSibling.data.length - 1) === nbsp
+                       || node.previousSibling.data.charAt(node.previousSibling.data.length - 1) === ' ')
+                    ) {
+                       node.data = node.data.replace(/^\s+/g, nbsp);
+                    }
+
+                    if (node.data.charAt(node.data.length - 1) === ' '
+                        && node.nextSibling
+                        && node.nextSibling.nodeType === ViperUtil.TEXT_NODE
+                        && (node.nextSibling.data.charAt(0) === ' '
+                        || node.nextSibling.data.charAt(0) === nbsp)
+                    ) {
+                        node.data = node.data.replace(/\s+$/g, nbsp);
+                    }
+
                     // Replace two spaces with two &nbsp;.
-                    var nbsp  = String.fromCharCode(160);
                     node.data = node.data.replace(/\s{2,2}/g, nbsp + nbsp);
                 }
             } else {

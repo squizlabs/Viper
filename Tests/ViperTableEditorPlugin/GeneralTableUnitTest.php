@@ -218,6 +218,9 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
     {
         $this->useTest(2);
 
+        // Test highlights in heading.
+        $icon = $this->_getTableToolsIcon(0);
+
         $table   = $this->getBoundingRectangle('table');
         $tbody   = $this->getBoundingRectangle('tbody');
         $tfoot   = $this->getBoundingRectangle('tfoot');
@@ -225,9 +228,6 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $caption = $this->getBoundingRectangle('caption');
 
         $firstCell = $this->getBoundingRectangle('th');
-
-        // Test highlights in heading.
-        $icon = $this->_getTableToolsIcon(0);
 
         // Move mouse on top of the icon.
         $this->sikuli->mouseMove($icon);
@@ -455,6 +455,9 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
     {
         $this->useTest(3);
 
+        // Test highlights in heading.
+        $icon = $this->_getTableToolsIcon(7);
+
         $table   = $this->getBoundingRectangle('table');
         $tbody   = $this->getBoundingRectangle('tbody');
         $thead   = $this->getBoundingRectangle('thead');
@@ -462,9 +465,6 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
 
         $cell = $this->getBoundingRectangle('td', 4);
         sleep(1);
-
-        // Test highlights in heading.
-        $icon = $this->_getTableToolsIcon(7);
 
         // Move mouse on top of the icon.
         $this->sikuli->mouseMove($icon);
@@ -527,6 +527,9 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
     {
         $this->useTest(4);
 
+        // Test highlights in heading.
+        $icon = $this->_getTableToolsIcon(4);
+
         $table   = $this->getBoundingRectangle('table');
         $tbody   = $this->getBoundingRectangle('tbody');
         $tfoot   = $this->getBoundingRectangle('tfoot');
@@ -534,9 +537,6 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
 
         $cell = $this->getBoundingRectangle('td', 4);
         sleep(1);
-
-        // Test highlights in heading.
-        $icon = $this->_getTableToolsIcon(4);
 
         // Move mouse on top of the icon.
         $this->sikuli->mouseMove($icon);
@@ -599,6 +599,9 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
     {
         $this->useTest(5);
 
+        // Test highlights in heading.
+        $icon = $this->_getTableToolsIcon(7);
+
         $table   = $this->getBoundingRectangle('table');
         $tbody   = $this->getBoundingRectangle('tbody');
         $tfoot   = $this->getBoundingRectangle('tfoot');
@@ -606,9 +609,6 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
 
         $cell = $this->getBoundingRectangle('td', 4);
         sleep(1);
-
-        // Test highlights in heading.
-        $icon = $this->_getTableToolsIcon(7);
 
         // Move mouse on top of the icon.
         $this->sikuli->mouseMove($icon);
