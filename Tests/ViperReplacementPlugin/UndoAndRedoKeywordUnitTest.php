@@ -103,7 +103,7 @@ class Viper_Tests_ViperReplacementPlugin_UndoAndRedoKeywordUnitTest extends Abst
         
         // Test for redo
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        sleep(1);
+        sleep(2);
         $this->assertHTMLMatch('<p>%1% test content<img alt="TITLE" src="((prop:url))" /></p><p>more content&nbsp;&nbsp;even more content</p>');
         $this->assertRawHTMLMatch('<p>%1% test content<img alt="TITLE" data-viper-src="((prop:url))" src="../../Examples/Paper-reel/Images/testImage.png"></p><p>more content  even more content</p>');
 
