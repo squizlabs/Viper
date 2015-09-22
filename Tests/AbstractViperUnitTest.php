@@ -247,6 +247,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $contents = str_replace('__TEST_TITLE__', $testTitle, $contents);
         $contents = str_replace('__TEST_JS_INCLUDE__', $jsInclude, $contents);
         $contents = str_replace('__TEST_VIPER_VERSION__', self::$_viperVersion, $contents);
+        $contents = str_replace('__TEST_URL__', $this->_getBaseUrl(), $contents);
 
         $dest = $baseDir.'/tmp/test_tmp.html';
         file_put_contents($dest, $contents);

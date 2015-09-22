@@ -8,6 +8,7 @@
         <script type="text/javascript" src="../../Examples/jquery.ui.js"></script>
         <script type="text/javascript">
             ViperVersion = '__TEST_VIPER_VERSION__';
+            ViperTestURL = '__TEST_URL__';
         </script>
         __TEST_VIPER_INCLUDE__
         <script type="text/javascript" src="../Web/test.js?v=__TEST_VIPER_VERSION__"></script>
@@ -59,7 +60,7 @@
                                 break;
 
                                 case '((prop:url))':
-                                    rep = '../../Examples/Paper-reel/Images/testImage.png';
+                                    rep = ViperTestURL + '/Web/testImage.png';
                                 break;
 
                                 case '((prop:className))':
