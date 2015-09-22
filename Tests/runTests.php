@@ -20,6 +20,7 @@
                  'ie9',
                  'ie10',
                  'ie11',
+                 'edge',
                 );
 
     // Browsers.

@@ -453,7 +453,7 @@ ViperCopyPastePlugin.prototype = {
 
         elem.oncopy = onCopy;
 
-        // Handle cut event for Chrome.
+        // Handle cut event for Chrome/FF/Safari.
         if (ViperUtil.isBrowser('msie', '<11') !== true) {
             elem.oncut = function(e) {
                 onCopy(e);
@@ -1293,6 +1293,22 @@ ViperCopyPastePlugin.prototype = {
         var tmp = document.createElement('div');
         ViperUtil.setHtml(tmp, content);
         this._convertSpansToStyleTags(tmp);
+
+        // Clean Word track changes comments.
+        var msocomanchor = ViperUtil.find(tmp, 'a[class="msocomanchor"]');
+        ViperUtil.remove(msocomanchor);
+
+        // Remove everything after this element.
+        var msocomoff = ViperUtil.find(tmp, 'hr[class="msocomoff"]');
+        if (msocomoff.length > 0) {
+            msocomoff = msocomoff[0];
+            while (msocomoff.nextSibling) {
+                ViperUtil.remove(msocomoff.nextSibling);
+            }
+
+            ViperUtil.remove(msocomoff);
+        }
+
         content = ViperUtil.getHtml(tmp);
 
         // Remove span and o:p etc. tags.
@@ -1393,6 +1409,8 @@ ViperCopyPastePlugin.prototype = {
             }
         }
 
+        this._joinSplitLists(tmp);
+
         // Remove BR tags from main element.
         var brTags = ViperUtil.find(tmp, ' > br');
         if (brTags.length > 0) {
@@ -1442,6 +1460,38 @@ ViperCopyPastePlugin.prototype = {
         }
 
         return false;
+
+    },
+
+    _joinSplitLists: function(parentElement)
+    {
+        // If there are lists like <ol></ol><ol start="2"></ol><ol start="3"></ol> convert it to a single list.
+        var lists = ViperUtil.find(parentElement, 'ol');
+        for (var i = lists.length - 1; i >= 0; i--) {
+            var list  = lists[i];
+            var start = parseInt(ViperUtil.attr(list, 'start')) || 1;
+            if (start > 1 && i > 0) {
+                // The start attribute is set. Check if the list before this has (start - 1).
+                var prevList  = lists[(i - 1)];
+                var prevStart = parseInt(ViperUtil.attr(prevList, 'start')) || 1;
+                if (prevStart === (start - 1)) {
+                    var elemsBetween = ViperUtil.getElementsBetween(prevList, list);
+
+                    // Move elements in between to the prevList last child.
+                    var lastLi = ViperUtil.find(prevList, ' > li')[0];
+                    for (var j = 0; j < elemsBetween.length; j++) {
+                        lastLi.appendChild(elemsBetween[j]);
+                    }
+
+                    // Move the child list items of the current list to previous list.
+                    while (list.firstChild) {
+                        prevList.appendChild(list.firstChild)
+                    }
+
+                    ViperUtil.remove(list);
+                }
+            }
+        }
 
     },
 
@@ -2155,28 +2205,51 @@ ViperCopyPastePlugin.prototype = {
             return null;
         }
 
+        var tmp   = document.createElement('div');
+        var range = this.viper.getViperRange();
+
         var elContent = ViperUtil.getNodeTextContent(elem);
         elContent     = elContent.replace(/\n/, '');
         elContent     = elContent.replace(/^(&nbsp;)+/m, '');
         elContent     = ViperUtil.trim(elContent);
-
         var info      = null;
         ViperUtil.foreach(listTypes, function(k) {
             ViperUtil.foreach(listTypes[k], function(j) {
                 ViperUtil.foreach(listTypes[k][j], function(m) {
-                    if ((new RegExp(listTypes[k][j][m])).test(elContent) === true) {
+                    var r = new RegExp(listTypes[k][j][m]);
+                    if (r.test(elContent) === true) {
                         var origHtml = ViperUtil.getHtml(elem);
                         var html = origHtml.replace(/\n/mg, ' ');
                         html     = ViperUtil.trim(html);
                         html     = html.replace(/^(&nbsp;)+/m, '');
                         html     = html.replace(/(&nbsp;)+$/m, '');
                         html     = ViperUtil.trim(html);
-                        html     = html.replace(new RegExp(listTypes[k][j][m]), '');
+
+                        var start = 1;
+                        if (k === 'ol') {
+                            var match = elContent.match(r);
+                            if (match && match.length === 2) {
+                                match = match[1].match(/\d+/);
+                                if (match && parseInt(match[0])) {
+                                    start = parseInt(match[0]);
+                                }
+                            }
+                        }
+
+                        var replacedHTML = html.replace(r, '');
+                        if (replacedHTML === html) {
+                            // The content must be in an inline tag. E.g. <strong>1.   </strong>.
+                            ViperUtil.setHtml(tmp, html);
+                            var firstChild  = range._getFirstSelectableChild(tmp);
+                            firstChild.data = firstChild.data.replace(r, '');
+                            replacedHTML    = ViperUtil.getHtml(tmp);
+                        }
 
                         info = {
-                            html: html,
+                            html: replacedHTML,
                             listType: k,
                             listStyle: j,
+                            listStart: start,
                             origHtml: origHtml
                         };
 
@@ -2281,6 +2354,10 @@ ViperCopyPastePlugin.prototype = {
                 // Start a new list.
                 ul        = document.createElement(listType);
                 indentLvl = {};
+
+                if (listTypeInfo.listStart > 1) {
+                    ViperUtil.attr(ul, 'start', listTypeInfo.listStart);
+                }
 
                 if (listStyle !== 'decimal' && listStyle !== 'circle') {
                     ul.setAttribute('type', listStyle);
@@ -2391,6 +2468,8 @@ ViperCopyPastePlugin.prototype = {
 
             ViperUtil.remove(pInLI[i]);
         }
+
+        this._joinSplitLists(div);
 
         content = ViperUtil.getHtml(div);
 

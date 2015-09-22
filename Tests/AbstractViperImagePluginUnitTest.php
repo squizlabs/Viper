@@ -87,10 +87,10 @@ abstract class AbstractViperImagePluginUnitTest extends AbstractViperUnitTest
         $imageFilePath       = dirname(__FILE__);
         if ($this->sikuli->getOS() === 'windows') {
             $showDesktopShortcut = 'Key.WIN + d';
-            $imageFilePath      .= '\Images\dragDropTargetingImage-windows.png';
+            $imageFilePath      .= '\ViperImagePlugin\Images\dragDropTargetingImage-windows.png';
         } else {
             $showDesktopShortcut = 'Key.F11';
-            $imageFilePath      .= '/Images/dragDropTargetingImage-osx.png';
+            $imageFilePath      .= '/ViperImagePlugin/Images/dragDropTargetingImage-osx.png';
         }
 
         // Hide all windows to view the desktop.

@@ -224,6 +224,20 @@ ViperPluginManager.prototype = {
 
         return false;
 
-    }
+    },
+
+    isSpecialElement: function(element)
+    {
+        for (var i in this._plugins) {
+            if (this._plugins[i].isSpecialElement) {
+                if (this._plugins[i].isSpecialElement(element) === true) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+
+    },
 
 };

@@ -1368,6 +1368,24 @@ var ViperUtil = {
 
     },
 
+    getElementScrollCoords: function(element)
+    {
+        var scrollX = 0;
+        var scrollY = 0;
+
+        if (ViperUtil.isset(element.scrollLeft) === true) {
+            scrollX = element.scrollLeft;
+            scrollY = element.scrollTop;
+        }
+
+        var coords = {
+            x: scrollX,
+            y: scrollY
+        };
+        return coords;
+
+    },
+
     /**
      * Returns the width of the scrollbar programmatically.
      *

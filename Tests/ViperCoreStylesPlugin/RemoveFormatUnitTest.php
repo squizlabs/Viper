@@ -33,11 +33,11 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
     public function testRemoveAlignmentForAList()
     {
         $this->useTest(2);
-
-        $this->selectKeyword(1);
+        $this->clickKeyword(1);
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('removeFormat');
-        $this->assertHTMLMatch('<p>This is a list</p><ul><li>Test removing bullet points</li><li>purus %1% luctus</li><li>vel molestie arcu</li></ul>');
+        $this->assertHTMLMatch('<p>%1% This is a list</p><ul><li>Test removing bullet points</li><li>purus %2% luctus</li><li>vel molestie arcu</li></ul>');
 
     }//end testRemoveAlignmentForAList()
 
@@ -51,11 +51,11 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
     {
         $this->useTest(3);
 
-        $this->selectKeyword(1);
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('removeFormat');
-        $this->assertHTMLMatch('<p>Lorem %1% dolor sit amet WoW</p>');
-        $this->assertEquals($this->replaceKeywords('Lorem %1% dolor sit amet WoW'), $this->getSelectedText(), 'Original selection is not selected');
+        $this->assertHTMLMatch('<p>%1% Content</p><p>Lorem %2% dolor sit amet WoW</p>');
+        $this->assertEquals($this->replaceKeywords('Lorem %2% dolor sit amet WoW'), $this->getSelectedText(), 'Original selection is not selected');
 
     }//end testSelectionMaintainedWhenClickingRemoveFormat()
 
@@ -69,10 +69,10 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
     {
         $this->useTest(4);
 
-        $this->selectKeyword(1);
+        $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('removeFormat');
-        $this->assertHTMLMatch('<p>%1% government agencies must update all government websites (as specified within scope under the Website Accessibility National Transition Strategy (NTS)) to WCAG 2.0 conformance. Agencies should use the principle of progressive enhancement when building and managing websites, and test for conformance across multiple browsers and operating system configurations.</p>');
+        $this->assertHTMLMatch('<p>%1% content</p><p>%2% government agencies must update all government websites (as specified within scope under the Website Accessibility National Transition Strategy (NTS)) to WCAG 2.0 conformance. Agencies should use the principle of progressive enhancement when building and managing websites, and test for conformance across multiple browsers and operating system configurations.</p>');
 
     }//end testRemoveFormatForAParagraph()
 

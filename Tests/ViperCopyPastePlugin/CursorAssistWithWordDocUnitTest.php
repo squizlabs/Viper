@@ -86,6 +86,8 @@ class Viper_Tests_ViperCopyPastePlugin_CursorAssistWithWordDocUnitTest extends A
      */
     public function testUsingCursorAssistWhenPastingContentFromGoogleDocs()
     {
+        $this->setPluginSettings('ViperCopyPastePlugin', array('aggressiveMode' => false));
+
         $testFile = '';
 
         switch ($this->sikuli->getOS()) {

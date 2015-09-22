@@ -37,11 +37,11 @@ class Viper_Tests_Core_ScrollingUnitTest extends AbstractViperUnitTest
         $currentCursorCoords = $this->getScrollCoords();
 
         // Check the x coordinate
-        $this->assertEquals($initalCursorCoords[0], $currentCursorCoords[0]);
+        $this->assertEquals($initalCursorCoords['x'], $currentCursorCoords['x']);
 
         // Check the y coordinate
-        $this->assertEquals($initalCursorCoords[1], $currentCursorCoords[1]);
-        
+        $this->assertEquals($initalCursorCoords['y'], $currentCursorCoords['y']);
+
     }//end testScollWhenClickingOutsideWindow()
 
 

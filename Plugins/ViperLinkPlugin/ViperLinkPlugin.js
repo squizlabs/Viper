@@ -200,7 +200,7 @@ ViperLinkPlugin.prototype = {
 
         range.selectNode(node);
         ViperSelection.addRange(range);
-        
+
         this.viper.fireSelectionChanged(range, true);
         this.viper.fireNodesChanged([node]);
 
@@ -236,6 +236,9 @@ ViperLinkPlugin.prototype = {
                 || ViperUtil.isTag(node, 'ul') === true
                 || ViperUtil.isTag(node, 'ol') === true
             ) {
+                ViperUtil.insertBefore(node, a);
+                a.appendChild(node);
+            } else if (this.viper.isSpecialElement(node) === true) {
                 ViperUtil.insertBefore(node, a);
                 a.appendChild(node);
             } else {

@@ -42,6 +42,14 @@ ViperReplacementPlugin.prototype = {
         );
     },
 
+    isSpecialElement: function(element) {
+        if (ViperUtil.hasAttribute(element, 'data-viper-keyword') === true) {
+            return true;
+        }
+
+        return false;
+    },
+
     init: function () {
         var self = this;
 
@@ -72,8 +80,8 @@ ViperReplacementPlugin.prototype = {
             return function() {};
         });
 
-        // Shift, Control, Alt, Caps lock, esc, L-CMD, R-CMD, arrow keys.
-        var ignoredKeys = [16, 17, 18, 20, 27, 91, 93, 37, 38, 39, 40, 224];
+        // Enter, Shift, Control, Alt, Caps lock, esc, L-CMD, R-CMD, arrow keys.
+        var ignoredKeys = [13, 16, 17, 18, 20, 27, 91, 93, 37, 38, 39, 40, 224];
         this.viper.registerCallback('Viper:keyDown', 'ViperReplacementPlugin', function(e) {
             switch (e.which) {
                 default:
@@ -108,18 +116,19 @@ ViperReplacementPlugin.prototype = {
                                     }
 
                                     // Add a space between the keyword element and the caret container.
-                                    if (startNode.data[0] === ' ') {
+                                    if (e.which === 32 && range.startContainer.data === '') {
                                         // The first character of this text node is a space so we need to add non breaking
                                         // space.
-                                        startNode.data = String.fromCharCode(160) + startNode.data;
-                                    } else if (startNode.data.length === 0) {
                                         startNode.data = String.fromCharCode(160);
+                                        range.setStart(startNode, 1);
+                                        range.collapse(true);
+                                        ViperSelection.addRange(range);
+                                        return false;
                                     } else {
-                                        startNode.data = ' ' + startNode.data;
+                                        range.setStart(startNode, 0);
                                     }
 
                                     // When the keyDown executes insert the character after the first space character.
-                                    range.setStart(startNode, 1);
                                     range.collapse(true);
                                     ViperSelection.addRange(range);
                                 } else {
@@ -160,20 +169,7 @@ ViperReplacementPlugin.prototype = {
                                     }
                                 }
                                 return;
-                            } else if (range.startOffset >= startNode.data.length) {
-                                rep = self._getKeywordElement(range.getPreviousContainer(startNode, null, false, false, true));
-                                if (rep) {
-                                    if (e.which === ViperUtil.DOM_VK_BACKSPACE || e.which === ViperUtil.DOM_VK_DELETE) {
-                                        // This is a delete. Need to remove the keyword element and prevent default
-                                        // action so mo.
-                                        var elem = ViperUtil.getTopSurroundingParent(rep) || rep;
-                                        ViperUtil.remove(elem);
-                                        self.viper.fireSelectionChanged(null, true);
-                                        self.viper.fireNodesChanged();
-                                        return false;
-                                    }
-                                }
-                            }
+                            }//end if
 
                             if (!rep) {
                                 return;
@@ -254,6 +250,7 @@ ViperReplacementPlugin.prototype = {
 
                 range.selectNode(startKeyword);
                 ViperSelection.addRange(range);
+                self.viper.fireSelectionChanged(null, true);
             }
 
         });
@@ -309,6 +306,35 @@ ViperReplacementPlugin.prototype = {
                 return value;
             }
         );
+
+    },
+
+    replaceKeywords: function (string, callback)
+    {
+        if (!callback) {
+            return;
+        }
+
+        var regex = this.getReplacementRegex();
+        if (!regex) {
+            callback.call(this, string);
+            return;
+        }
+
+        regex       = new RegExp(regex, 'gi');
+        var matches = string.match(regex);
+        if (matches) {
+            this.getKeywordReplacements(
+                matches,
+                function (replacements) {
+                    for (var keyword in replacements) {
+                        string = string.replace(keyword, replacements[keyword]);
+                    }
+
+                    callback.call(this, string);
+                }
+            );
+        }
 
     },
 
@@ -506,10 +532,20 @@ ViperReplacementPlugin.prototype = {
         var keywordElements = ViperUtil.find(parentElem, '[data-viper-keyword]');
         var ln              = keywordElements.length;
         for (var i = 0; i < ln; i++) {
-            var keyword  = ViperUtil.attr(keywordElements[i], 'data-viper-keyword');
-            var textNode = document.createTextNode(keyword);
-            ViperUtil.insertAfter(keywordElements[i], textNode);
-            ViperUtil.remove(keywordElements[i]);
+            var keywordElem = keywordElements[i];
+            var keyword  = ViperUtil.attr(keywordElem, 'data-viper-keyword');
+            if (keywordElem.attributes.length > 2) {
+                // Need to keep this span tag as it has extra attributes applied to it but remove the keyword attributes.
+                ViperUtil.removeAttr(keywordElem, 'data-viper-keyword')
+                ViperUtil.removeAttr(keywordElem, 'title');
+
+                // Also set the content of the keyword to be the keyword.
+                ViperUtil.setHtml(keywordElem, keyword);
+            } else {
+                var textNode = document.createTextNode(keyword);
+                ViperUtil.insertAfter(keywordElem, textNode);
+                ViperUtil.remove(keywordElem);
+            }
         }
 
     },
@@ -547,6 +583,16 @@ ViperReplacementPlugin.prototype = {
     },
 
     getKeywordReplacements: function (keywords, callback) {
+        if (ViperUtil.isArray(keywords) === true) {
+            // Convert to object.
+            var keywordsObj = {};
+            for (var i = 0; i < keywords.length; i++) {
+                keywordsObj[keywords[i]] = '';
+            }
+
+            keywords = keywordsObj;
+        }
+
         // The function that is going to retrieve all the replacements.
         var repCallback = this.getReplacementsCallback();
         if (!repCallback) {
@@ -694,34 +740,42 @@ ViperReplacementPlugin.prototype = {
                 var textNode = this._cache.textNodes[i].elem;
                 var keyword  = this._cache.textNodes[i].keywords[j];
 
-                // Need to split the text node at the start of keyword and create a new text node to put the
-                // rest of the content. For this reason we have to start replacing from the end of the string.
-                var startIndex = textNode.data.lastIndexOf(keyword);
-                if (startIndex < 0) {
-                    // Could not find the keyword.
-                    continue;
-                }
-
-                var startText = textNode.data.substr(0, startIndex);
-                var endText   = textNode.data.substr(startIndex + keyword.length);
-
-                var newTextNode = document.createTextNode(endText);
-                textNode.data   = startText;
-                ViperUtil.insertAfter(textNode, newTextNode);
-
-                // Now create the new un editable element.
-                var keywordHolder = this._createUneditableElement(
-                    {
-                        attributes: {
-                            'data-viper-keyword': keyword,
-                            title: keyword
-                        },
-                        content: replacements[keyword]
+                if (textNode.data === keyword && ViperUtil.isTag(textNode.parentNode, 'span') === true) {
+                    // No need to create a new element.
+                    var parent = textNode.parentNode;
+                    ViperUtil.attr(parent, 'data-viper-keyword', keyword);
+                    ViperUtil.attr(parent, 'title', keyword);
+                    ViperUtil.setHtml(parent, replacements[keyword]);
+                } else {
+                    // Need to split the text node at the start of keyword and create a new text node to put the
+                    // rest of the content. For this reason we have to start replacing from the end of the string.
+                    var startIndex = textNode.data.lastIndexOf(keyword);
+                    if (startIndex < 0) {
+                        // Could not find the keyword.
+                        continue;
                     }
-                );
 
-                // Add it after the original textNode.
-                ViperUtil.insertAfter(textNode, keywordHolder);
+                    var startText = textNode.data.substr(0, startIndex);
+                    var endText   = textNode.data.substr(startIndex + keyword.length);
+
+                    var newTextNode = document.createTextNode(endText);
+                    textNode.data   = startText;
+                    ViperUtil.insertAfter(textNode, newTextNode);
+
+                    // Now create the new un editable element.
+                    var keywordHolder = this._createUneditableElement(
+                        {
+                            attributes: {
+                                'data-viper-keyword': keyword,
+                                title: keyword
+                            },
+                            content: replacements[keyword]
+                        }
+                    );
+
+                    // Add it after the original textNode.
+                    ViperUtil.insertAfter(textNode, keywordHolder);
+                }//end if
             }
         }
 

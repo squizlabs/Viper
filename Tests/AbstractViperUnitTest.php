@@ -247,6 +247,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $contents = str_replace('__TEST_TITLE__', $testTitle, $contents);
         $contents = str_replace('__TEST_JS_INCLUDE__', $jsInclude, $contents);
         $contents = str_replace('__TEST_VIPER_VERSION__', self::$_viperVersion, $contents);
+        $contents = str_replace('__TEST_URL__', $this->_getBaseUrl(), $contents);
 
         $dest = $baseDir.'/tmp/test_tmp.html';
         file_put_contents($dest, $contents);
@@ -994,42 +995,55 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function assertHTMLMatch($html, $msg=null, $removeTableHeaders=false)
     {
-        $html = $this->replaceKeywords($html);
-
-        $pageHtml = $this->getHtml(null, 0, $removeTableHeaders, true);
-
-        $pageHtml = preg_replace("/<([a-z0-9]+)\n([a-z0-9]*)/i", '<$1$2', $pageHtml);
-        $pageHtml = str_replace("<\n", '<', $pageHtml);
-        $pageHtml = str_replace("\n", ' ', $pageHtml);
-        $pageHtml = str_replace('\n', ' ', $pageHtml);
-        $html     = str_replace("\n", ' ', $html);
-
-        // Chrome requires &nbsp; inside block elements unlike Firefox, remove all
-        // single &nbsp; from tags and just before a start tag.
-        $pageHtml = str_replace('>&nbsp;<', '><', $pageHtml);
-        $pageHtml = str_replace('&nbsp;<', '<', $pageHtml);
-        $pageHtml = str_replace('&nbsp;<', '<', $pageHtml);
-        $pageHtml = str_replace('>&nbsp;', '> ', $pageHtml);
-        $html     = str_replace('>&nbsp;<', '><', $html);
-        $html     = str_replace('&nbsp;<', '<', $html);
-        $html     = str_replace('&nbsp;<', '<', $html);
-        $html     = str_replace('>&nbsp;', '> ', $html);
-        $pageHtml = str_replace('> <', '><', $pageHtml);
-        $pageHtml = str_replace(' <', '<', $pageHtml);
-        $html     = str_replace('> <', '><', $html);
-        $html     = str_replace(' <', '<', $html);
-
-        // Remove the Viper version from the end of URLs.
-        $pageHtml = preg_replace('#\?v=[\d\w]+"#', '"', $pageHtml);
-
-        if ($html !== $pageHtml) {
-            $pageHtml = $this->_orderTagAttributes($pageHtml);
-            $html     = $this->_orderTagAttributes($html);
-        }
+        $html     = $this->_normaliseHTML($this->replaceKeywords($html));
+        $pageHtml = $this->_normaliseHTML($this->getHtml(null, 0, $removeTableHeaders, true));
 
         $this->assertEquals($html, $pageHtml, $msg);
 
     }//end assertHTMLMatch()
+
+
+    /**
+     * Assert that given HTML string matches the tests page's HTML.
+     *
+     * @param string $html The HTML string to compare.
+     * @param string $msg  The error message to print.
+     *
+     */
+    protected function assertRawHTMLMatch($html, $msg=null)
+    {
+        $html     = $this->_normaliseHTML($this->replaceKeywords($html));
+        $pageHTML = $this->_normaliseHTML($this->getRawHtml());
+
+        $this->assertEquals($html, $pageHTML, $msg);
+
+    }//end assertRawHTMLMatch()
+
+
+    private function _normaliseHTML($html)
+    {
+        $html = preg_replace("/<([a-z0-9]+)\n([a-z0-9]*)/i", '<$1$2', $html);
+        $html = str_replace("<\n", '<', $html);
+        $html = str_replace("\n", ' ', $html);
+        $html = str_replace('\n', ' ', $html);
+
+        // Chrome requires &nbsp; inside block elements unlike Firefox, remove all
+        // single &nbsp; from tags and just before a start tag.
+        $html     = str_replace('>&nbsp;<', '><', $html);
+        $html     = str_replace('&nbsp;<', '<', $html);
+        $html     = str_replace('&nbsp;<', '<', $html);
+        $html     = str_replace('>&nbsp;', '> ', $html);
+        $html     = str_replace('> <', '><', $html);
+        $html     = str_replace(' <', '<', $html);
+
+        // Remove the Viper version from the end of URLs.
+        $html = preg_replace('#\?v=[\d\w]+"#', '"', $html);
+
+        $html = $this->_orderTagAttributes($html);
+
+        return $html;
+
+    }//end _normaliseHTML()
 
 
     /**
@@ -1130,7 +1144,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     private function _orderTagAttributes($html)
     {
-        $attrRegex = '(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"))?)+)?(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"))?)+)?\s*\/?';
+        $attrRegex = '(?:(?:\s+[\w-]+(?:\s*=\s*(?:"(?:[^"]+)?"))?)+)?(?:(?:\s+[\w-]+(?:\s*=\s*(?:"(?:[^"]+)?"))?)+)?\s*\/?';
         $matches   = preg_split(
             '/(<\w+'.$attrRegex.'>)/i',
             $html,
@@ -1149,7 +1163,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                     // This tag has attributes, which need to be ordered
                     // alphabetically as the browser changes the order sometimes.
                     $attrs = array();
-                    preg_match_all('/\s+(\w+)\s*=\s*(?:"([^"]+)?")/i', $match, $attrs);
+                    preg_match_all('/\s+([\w-]+)\s*=\s*(?:"([^"]+)?")/i', $match, $attrs);
                     asort($attrs[1]);
                     $match = $tagMatches[1];
                     foreach ($attrs[1] as $attrIndex => $attrName) {
