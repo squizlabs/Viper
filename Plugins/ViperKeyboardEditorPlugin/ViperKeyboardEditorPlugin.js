@@ -1872,6 +1872,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 if (startNode.nextSibling && this.viper.isSpecialElement(startNode.nextSibling) === true) {
                     // Remove the whole special element.
                     ViperUtil.remove(startNode.nextSibling);
+                    return false;
                 } else if (!startNode.nextSibling) {
                     // Check if the next container is a special element.
                     var nextSelectable = range.getNextContainer(startNode, null, true, true, true);
