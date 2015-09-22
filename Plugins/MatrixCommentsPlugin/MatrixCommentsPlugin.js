@@ -1507,7 +1507,7 @@ MatrixCommentsPlugin.prototype = {
                 // If 30+ days no longer needs updating.
                 // Give extra 60 sec to allow tick over.
                 if (secs > (2592000 + 60)) {
-                    jQuery.removeClass(elem, 'readableAge');
+                    jQuery(elem).removeClass('readableAge');
                 } else {
                     jQuery(elem).html(self._readableAge(timestamp, now));
                 }
