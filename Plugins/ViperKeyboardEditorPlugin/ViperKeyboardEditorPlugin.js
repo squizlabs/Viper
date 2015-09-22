@@ -686,6 +686,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 }
 
                 ViperUtil.insertBefore(parent, newEl);
+                this.viper.fireNodesChanged();
                 return false;
             } else if (ViperUtil.isBrowser('msie', '>=11') === true
                 && startNode === endNode
@@ -796,6 +797,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 var newParent = document.createElement(ViperUtil.getTagName(parent));
                 ViperUtil.setHtml(newParent, '<br />');
                 ViperUtil.insertBefore(parent, newParent);
+                this.viper.fireNodesChanged();
                 return false;
             } else if (range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
                 && range.collapsed === true
