@@ -150,8 +150,11 @@
   position: absolute;
 }
 
-.Matrix-Viper-commentdialog.Matrix-Viper-commentdialog-new::after {
+.Matrix-Viper-commentdialog.Matrix-Viper-commentdialog-new::after{
   border-color: transparent #FFFFFF;
+}
+.Matrix-Viper-commentdialog-inAdmin.Matrix-Viper-commentdialog.Matrix-Viper-commentdialog-new::after{
+  border-color: #FFFFFF transparent;
 }
 
 .Matrix-Viper-commentdialog-mainArea {

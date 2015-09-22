@@ -685,8 +685,7 @@ MatrixCommentsPlugin.prototype = {
                 // remove the actual target element's comment attribute
                 var commentId = $(commentMark).data('comment-id');
                 var commentContainerId = $(commentMark).data('comment-container-id');
-                var editableElement = self.viper.getEditableElement();
-                var $targetElement = $(editableElement).find('[data-comment-id=' + commentId + '][data-comment-container-id=' + commentContainerId + ']');
+                var $targetElement = self._bodycopyContainer.find('[data-comment-id=' + commentId + '][data-comment-container-id=' + commentContainerId + ']');
                 $targetElement.removeClass('Matrix-Viper-comment-highlighted');
                 $.each($targetElement, function( key, value ) {
                   self.removeComment(value);
@@ -1467,7 +1466,7 @@ MatrixCommentsPlugin.prototype = {
             var currentContainerId = $container.data('container-id');
             for(var i = 0; i< self._comments[currentContainerId].length; i++) {
                 value = self._comments[currentContainerId][i];
-                    var targetElement = $(document).find('[data-comment-id=' + value['id'] + '][data-comment-container-id=' + currentContainerId + ']').get(0);
+                    var targetElement = $container.find('[data-comment-id=' + value['id'] + '][data-comment-container-id=' + currentContainerId + ']').get(0);
                     if(targetElement) {
                         self._positionCommentMark(targetElement, value['commentMark']);
                         if($('#Matrix-Viper-commentdialog-' + value['containerid'] + '-' + value['id']).length) {
