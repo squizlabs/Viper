@@ -95,7 +95,7 @@ class Viper_Tests_ViperReplacementPlugin_CopyAndPasteKeywordUnitTest extends Abs
      *
      * @return void
      */
-    public function testCopyAndPasteKeywordWithLinkAA()
+    public function testCopyAndPasteKeywordWithLink()
     {
         // Beginning of paragraph using keyboard shortcuts
         $this->useTest(3);
