@@ -102,13 +102,14 @@ MatrixCommentsPlugin.prototype = {
             // remove comment action dialog
             $('.Matrix-Viper-commentdialog-comment-action').remove();
 
-            // udpate existing comments (just in event like viper automatically removes empty paragraphs, remats)
+            // udpate existing comments (just in event like viper automatically removes empty paragraphs)
             self.updateExistingComments();
 
             // if we have active comment dialog, let user finish it
             if($('.Matrix-Viper-commentdialog').length > 0)  return;
 
         });
+
 
 
         // insert all comments
@@ -754,6 +755,7 @@ MatrixCommentsPlugin.prototype = {
             $commentDialog.append($commentDialogReplyComment);
 
             var isMarkForDeletion = $(commentMark).hasClass('Matrix-Viper-commentmark-color-red');
+            var isResolved = (status == 'resolved');
 
             // if it's a comment for deletion, add the css class
             if(isMarkForDeletion) {
@@ -834,7 +836,8 @@ MatrixCommentsPlugin.prototype = {
 
                 // only show the comment action button if current user is the one who created it
                 // and not a system comment and if it's the first comment thread, it's not marked for deletion
-                if(self._currentUserId == comments[i]['userid'] && !isSystemComment && (i == 0 || !isMarkForDeletion)) {
+                $replyCommentsAction = null;
+                if(self._currentUserId == comments[i]['userid'] && !isSystemComment && (i == 0 || !isMarkForDeletion) && (i == 0 || !isResolved)) {
                     $replyCommentsAction = jQuery('<div class="Matrix-Viper-commentdialog-reply-comment-action" data-comment-id="' + id + '" data-comment-index="' + i + '"></div>');
                     $comment_div.append($replyCommentsAction);
                 }
@@ -925,8 +928,14 @@ MatrixCommentsPlugin.prototype = {
                 }
 
                 // actions on each comment
-                if(typeof $replyCommentsAction !== 'undefined') {
+                if(typeof $replyCommentsAction !== 'undefined' && $replyCommentsAction != null) {
                     $replyCommentsAction.click(function () {
+
+                        // close all action dialog if clicked on the main dialog
+                        $('.Matrix-Viper-commentdialog').mousedown(function(){
+                            $('.Matrix-Viper-commentdialog-comment-action').remove();
+                        });
+
                         var id = jQuery(this).data('comment-id');
                         var index = jQuery(this).data('comment-index');
                         var deleteText = _('Delete Comment');
@@ -943,7 +952,7 @@ MatrixCommentsPlugin.prototype = {
                         var $commentActionDivEdit = jQuery('<div class="Matrix-Viper-commentdialog-comment-action-edit" data-comment-id="' + id + '" data-comment-index="' + index + '" >' + _('Edit Comment') + '</div>');
                         var $commentActionDivDelete = jQuery('<div class="Matrix-Viper-commentdialog-comment-action-edit" data-comment-id="' + id + '" data-comment-index="' + index + '" >' + deleteText + '</div>');
                         // mark for deletion dialog don't need edit button
-                        if(!isMarkForDeletion) {
+                        if(!isMarkForDeletion && !isResolved) {
                             $commentActionDiv.append($commentActionDivEdit);
                         }
                         $commentActionDiv.append($commentActionDivDelete);
@@ -955,6 +964,9 @@ MatrixCommentsPlugin.prototype = {
 
                         // click on delete comment
                         $commentActionDivDelete.mousedown(function (e) {
+
+                            $('.Matrix-Viper-commentdialog-comment-action').remove();
+
                             var commentIndex = jQuery(this).data('comment-index');
                             var commentId = jQuery(this).data('comment-id');
 
@@ -1008,6 +1020,9 @@ MatrixCommentsPlugin.prototype = {
 
                         // click on edit comment
                         $commentActionDivEdit.mousedown(function (e) {
+
+                            $('.Matrix-Viper-commentdialog-comment-action').remove();
+
                             var commentIndex = jQuery(this).data('comment-index');
                             var commentId = jQuery(this).data('comment-id');
                             var $commentDiv = jQuery('.Matrix-Viper-commentdialog-reply-comment[data-comment-id=' + commentId + '][data-comment-index=' + commentIndex + ']');
