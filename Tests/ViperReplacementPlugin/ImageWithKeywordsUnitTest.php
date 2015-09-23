@@ -126,7 +126,7 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
 
         // Changing back
 		$this->clickField('Image is decorative');
-		$this->clickField('Alt');
+		$this->clickField('Alt', true);
 		$this->type('TITLE');
         sleep(2);
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
@@ -147,7 +147,7 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
 
         // Changing back
 		$this->clickField('Image is decorative');
-		$this->clickField('Alt');
+		$this->clickField('Alt', true);
 		$this->type('TITLE');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 

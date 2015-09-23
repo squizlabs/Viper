@@ -226,6 +226,76 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperUnitT
 
     }//end testInlineToolbarDoesNotAppearAfterClosingLinkWindow()
 
+
+    /**
+     * Test that fields that are required when adding a link appear as required.
+     *
+     * @return void
+     */
+    public function testRequiredFieldsWhenAddingALink()
+    {
+        // Test using inline toolbar
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('link', NULL);
+        $this->clickField('Title');
+        sleep(1);
+        $this->clickField('URL', true);
+        $this->type('http://www.squizlabs.com');
+        $this->clickinlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs.com">%1%</a> test %2%</p>');
+
+        // Test using top toolbar
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('link', NULL);
+        $this->clickField('Title');
+        sleep(1);
+        $this->clickField('URL', true);
+        $this->type('http://www.squizlabs.com');
+        $this->clicktopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs.com">%1%</a> test %2%</p>');
+
+    }//end testRequiredFieldsWhenAddingALink()
+
+
+    /**
+     * Test that fields that are required when adding a link appear as required.
+     *
+     * @return void
+     */
+    public function testRequiredFieldsWhenModifyingALink()
+    {
+        // Test using inline toolbar
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('link', 'active');
+        $this->clearFieldValue('Title');
+        $this->clearFieldValue('URL');
+        sleep(1);
+        $this->clickField('Title');
+        $this->type('test');
+        $this->clickField('URL', true);
+        $this->type('http://www.squizlabs.com');
+        $this->clickinlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs.com" title="test">%1%</a> test</p>');
+
+        // Test using top toolbar
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('link', 'active');
+        $this->clearFieldValue('Title');
+        $this->clearFieldValue('URL');
+        sleep(1);
+        $this->clickField('Title');
+        $this->type('test');
+        $this->clickField('URL', true);
+        $this->type('http://www.squizlabs.com');
+        $this->clicktopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs.com" title="test">%1%</a> test</p>');
+
+    }//end testRequiredFieldsWhenModifyingALink()
+
 }//end class
 
 ?>
