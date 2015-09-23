@@ -13,7 +13,7 @@ class Viper_Tests_ViperReplacementPlugin_CutAndPasteKeywordUnitTest extends Abst
     public function testCutAndPasteKeyword()
     {
         // Beginning of paragraph using keyboard shortcuts
-        $this->useTest(3);
+        $this->useTest(4);
         $this->moveToKeyword(1 , 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');

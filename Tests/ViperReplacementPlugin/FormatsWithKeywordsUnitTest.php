@@ -273,6 +273,7 @@ class Viper_Tests_ViperReplacementPlugin_FormatsWithKeywordsUnitTest extends Abs
      */
     public function testRemoveMultipleFormats()
     {
+        // Italic then bold tag 
         $this->useTest(1);
         $this->clickKeyword(1);
         sleep(1);
@@ -288,7 +289,7 @@ class Viper_Tests_ViperReplacementPlugin_FormatsWithKeywordsUnitTest extends Abs
         
         $this->assertHTMLMatch('<p>%1% ((prop:productName))</p><p>%2% ((prop:productName))</p><p>%3% ((prop:productName))</p>');
         $this->assertRawHTMLMatch('<p>%1% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p><p>%2% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p><p>%3% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p>');
-        
+         // Bold then Italic tag
         $this->moveToKeyword(2 , 'left');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
