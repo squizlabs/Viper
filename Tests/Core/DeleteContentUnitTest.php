@@ -769,7 +769,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
     public function testDeletingBoldFormattedContentWithinUnorderedLists()
     {
         // Check deleting a word after the bold content
-        $this->useTest(5);
+        $this->useTest(4);
         $this->selectKeyword(1,2);
         $this->clickTopToolbarButton('ListUl', NULL);
         $this->moveToKeyword(2, 'right');
@@ -790,7 +790,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
         }
 
         // Check deleting from the end of the paragraph including bold content
-        $this->useTest(5);
+        $this->useTest(4);
         $this->selectKeyword(1,2);
         $this->clickTopToolbarButton('ListUl', NULL);
         $this->moveToKeyword(2, 'right');
@@ -806,7 +806,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<ul><li>%1% content</li></ul>');
 
         // Check deleting from the start of the paragraph
-        $this->useTest(5);
+        $this->useTest(4);
         $this->selectKeyword(1,2);
         $this->clickTopToolbarButton('ListUl', NULL);
         $this->moveToKeyword(1, 'left');
@@ -820,7 +820,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<ul><li>content<strong>test</strong> %2%</li></ul>');
 
         // Check deleting from the start of the paragraph including bold content
-        $this->useTest(5);
+        $this->useTest(4);
         $this->selectKeyword(1,2);
         $this->clickTopToolbarButton('ListUl', NULL);
         $this->moveToKeyword(1, 'left');
