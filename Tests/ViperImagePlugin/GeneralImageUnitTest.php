@@ -115,7 +115,7 @@ class Viper_Tests_ViperImagePlugin_GeneralImageUnitTest extends AbstractViperIma
      * @return void
      */
     public function testRequiredFieldsWhenAddingAnImage()
-    {
+    { 
         // Test fields in top toolbar
         $this->moveToKeyword(1, 'left');
         $this->clicktopToolbarButton('image', NULL);

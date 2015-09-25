@@ -269,7 +269,7 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperUnitT
         // Test using inline toolbar
         $this->useTest(2);
         $this->selectKeyword(1);
-        $this->clickInlineToolbarButton('link', 'active');
+        $this->clickInlineToolbarButton('link', 'active'); 
         $this->clearFieldValue('Title');
         $this->clearFieldValue('URL');
         sleep(1);
