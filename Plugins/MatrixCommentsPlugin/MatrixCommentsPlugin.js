@@ -102,12 +102,6 @@ MatrixCommentsPlugin.prototype = {
             // remove comment action dialog
             $('.Matrix-Viper-commentdialog-comment-action').remove();
 
-            // udpate existing comments (just in event like viper automatically removes empty paragraphs)
-            self.updateExistingComments();
-
-            // if we have active comment dialog, let user finish it
-            if($('.Matrix-Viper-commentdialog').length > 0)  return;
-
         });
 
 
@@ -203,6 +197,9 @@ MatrixCommentsPlugin.prototype = {
                 }
             });
 
+            // update existing comments in case viper automatically adjust fomats
+            self.updateExistingComments();
+
         });
 
 
@@ -216,10 +213,14 @@ MatrixCommentsPlugin.prototype = {
         });
 
         // when resize window, we have to re-position our comment makrs as well
+        var resizeTimeout;
         $( window ).resize(function() {
-            // just close those comment action dialogs, no need to re-position them
-            jQuery('.Matrix-Viper-commentdialog-comment-action').remove();
-            self.updateExistingComments();
+             clearTimeout(resizeTimeout);
+             resizeTimeout = setTimeout(function() {
+                // just close those comment action dialogs, no need to re-position them
+                jQuery('.Matrix-Viper-commentdialog-comment-action').remove();
+                self.updateExistingComments();
+             }, 100);
         });
 
 
@@ -307,7 +308,7 @@ MatrixCommentsPlugin.prototype = {
     /*
     * this function is called to determine if the view next/prev button should be on or off
     */
-    _updateNextPrevCommentButtons: function ($prevCommentButton, $nextCommentButton) {
+    _updateNextPrevCommentButtons: function ($prevCommentButton, $nextCommentButton, $commentCounter, commentMark) {
         var self  = this;
         commentArrayIndexNext = this._findNextViewableComment();
         commentArrayIndexPrev = this._findPrevViewableComment();
@@ -326,6 +327,18 @@ MatrixCommentsPlugin.prototype = {
         else {
             $prevCommentButton.removeClass('arrow-disabled');
         }
+
+        $allMarks = self.getSortedCommentMarks();
+        var currentCounter = 0;
+        var totalCounter = $allMarks.length;
+        for(var i = 0; i < $allMarks.length; i++) {
+            if($allMarks[i].id == commentMark.id) {
+                currentCounter = i + 1;
+                break;
+            }
+        }
+        $commentCounter.html(currentCounter + '/' + totalCounter);
+
     },
 
     /*
@@ -640,9 +653,7 @@ MatrixCommentsPlugin.prototype = {
         $commentDialog.attr('data-comment-id', id);
         $commentDialog.attr('data-comment-container-id', containerId);
         $commentDialog.addClass('Matrix-Viper-commentdialog');
-        if(!self._inEditPlus) {
-            $commentDialog.addClass('Matrix-Viper-commentdialog-inAdmin');
-        }
+
         // position the created dialog
         self._positionCommentDialog(commentMark, $commentDialog.get(0));
 
@@ -767,6 +778,7 @@ MatrixCommentsPlugin.prototype = {
             $scrollDiv = $('<div class="Matrix-Viper-commentdialog-scroll-comments"></div>');
             $prev_arrow = $('<div class="Matrix-Viper-commentdialog-reply-header-prev" title="' + _('Go to previous comment thread') + '"></div>');
             $next_arrow = $('<div class="Matrix-Viper-commentdialog-reply-header-next" title="' + _('Go to next comment thread') + '"></div>');
+            $commentCounter = $('<div class="Matrix-Viper-commentdialog-reply-header-counter"></div>');
 
             $resolve_switch = jQuery('<div class="Matrix-Viper-commentdialog-reply-header-resolve GUI-switch"></div>');
             $resolve_switch_label = jQuery('<span class="Matrix-Viper-commentdialog-reply-header-resolve-label">' + _('Mark as resolved')+ '</span>');
@@ -779,13 +791,14 @@ MatrixCommentsPlugin.prototype = {
             }
 
             $header_div.append($prev_arrow);
+            $header_div.append($commentCounter);
             $header_div.append($next_arrow);
             $header_div.append($resolve_switch);
 
             $commentDialogReplyComment.append($header_div);
 
             // disable arrows if needed
-            self._updateNextPrevCommentButtons($prev_arrow, $next_arrow);
+            self._updateNextPrevCommentButtons($prev_arrow, $next_arrow, $commentCounter, commentMark);
 
              // click view next comment
             $next_arrow.click(function() {
@@ -1332,12 +1345,22 @@ MatrixCommentsPlugin.prototype = {
         })
 
 
+        var commentsToSave = self._comments;
+        $('div[data-container-id]').each(function() {
+            var $container = $(this);
+            var containerid = $container.data('container-id');
+            for (var i = 0; i < commentsToSave[containerid].length; i++) {
+                commentsToSave[containerid][i]['commentMark'] = null;
+            };
+        });
+
+
         // if we are in Edit+
         if(typeof EasyEditEventManager != 'undefined') {
-            callback.call(this, self._comments);
+            callback.call(this, commentsToSave);
         }
         else {
-            jQuery.each(self._comments, function(containerid, value) {
+            jQuery.each(commentsToSave, function(containerid, value) {
                     jQuery('#container_comments_' + containerid).val(encodeURIComponent(JSON.stringify(value)));
             });
         }
@@ -1464,13 +1487,15 @@ MatrixCommentsPlugin.prototype = {
         var width = $(commentMark).outerWidth();
 
         // the dialog position is different in admin interface
-        if(this._inEditPlus) {
-            var widthoffset = 20;
-            var heightoffset = -50;
-        }
-        else {
+        if(!this._inEditPlus || $(window).width() < 1345) {
             var widthoffset = -242;
             var heightoffset = 41;
+            $(commentDialog).addClass('Matrix-Viper-commentdialog-inAdmin');
+        }
+        else {
+            var widthoffset = 20;
+            var heightoffset = -50;
+            $(commentDialog).removeClass('Matrix-Viper-commentdialog-inAdmin');
         }
 
         $(commentDialog).css({

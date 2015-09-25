@@ -330,7 +330,7 @@
   border-bottom: 6px solid transparent;
   border-right: 9px solid #55545A;
   float: left;
-  margin-right: 10px;
+  margin-right: 6px;
   margin-left: 5px;
   margin-top: 2px;
   display: inline-block;
@@ -344,6 +344,7 @@
   border-bottom: 6px solid transparent;
   border-left:  9px solid #55545A;
   margin-top: 2px;
+  margin-left: 6px;
   display: inline-block;
   cursor: pointer;
 }
@@ -355,6 +356,19 @@
   border-left-color: #B1B0B9;
   cursor: inherit;
 }
+
+/* comment counter */
+.Matrix-Viper-commentdialog-reply-header-counter {
+  padding-top: 1px;
+  width: 16px;
+  height: 10px;
+  float: left;
+  font: 13px/16px Arial,sans-serif;
+  color: #8A898F;
+}
+
+
+
 
 /* reply dialog comments */
 .Matrix-Viper-commentdialog-reply-comment {
