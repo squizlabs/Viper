@@ -45,7 +45,9 @@ class Viper_Tests_ViperReplacementPlugin_CutAndPasteKeywordUnitTest extends Abst
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         sleep(1);
         $this->cut(true);
+        sleep(2);
         $this->moveToKeyword(4, 'left');
+        sleep(2);
         $this->paste(true);
         
         $this->assertHTMLMatch('<p>((prop:productName))%1%</p><p>%2%((prop:productName)) %3%((prop:productName))</p><p>((prop:productName))%4%</p><p>%5% %6%</p>');

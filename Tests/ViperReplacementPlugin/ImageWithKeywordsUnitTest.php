@@ -42,7 +42,6 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         $this->clearFieldValue('Title');
         $this->type('test');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-        $this->checkPreviewImageSize();
         $this->clickKeyword(1);
 
         $this->assertHTMLMatch('<p>test content %1%</p><p>more content <img alt="TITLE" title="test" src="((prop:url))" /> even more content</p>');
@@ -54,7 +53,6 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         $this->clearFieldValue('Title');
         $this->type('test title');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-        $this->checkPreviewImageSize();
         $this->clickKeyword(1);
 
         $this->assertHTMLMatch('<p>test content %1%</p><p>more content <img alt="TITLE" title="test title" src="((prop:url))" /> even more content</p>');
@@ -170,7 +168,7 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         // Using keyboard shortcuts
         $this->useTest(3);
         $this->clickKeyword(1);
-        sleep(1);
+        sleep(3);
         $this->clickElement('img', 0);
         $this->sikuli->keyDown('Key.CMD + c');
         $this->moveToKeyword(1, 'right');
@@ -185,11 +183,12 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         sleep(1);
         $this->clickElement('img', 0);
         $this->copy(true);
+        sleep(3);
         $this->moveToKeyword(1, 'left');
         $this->paste(true);
 
-        $this->assertHTMLMatch('<p>test content %1%</p><p><img alt="TITLE" src="((prop:url))" /></p><p><img alt="TITLE" src="((prop:url))" /></p><p>more content<img alt="TITLE" src="((prop:url))" /> even more content</p>');
-        $this->assertRawHTMLMatch('<p>test content %1%</p><p><img alt="TITLE" src="'.$this->getTestURL('/Web/testImage.png').'" data-viper-src="((prop:url))"></p><p><img alt="TITLE" src="'.$this->getTestURL('/Web/testImage.png').'" data-viper-src="((prop:url))"></p><p>more content <img alt="TITLE" src="'.$this->getTestURL('/Web/testImage.png').'" data-viper-src="((prop:url))"> even more content</p>');
+        $this->assertHTMLMatch('<p>test content %1%</p><p><img alt="TITLE" src="((prop:url))" /></img></p><p>more content<img alt="TITLE" src="((prop:url))" /> even more content</p>');
+        $this->assertRawHTMLMatch('<p>test content %1%</p><p><img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'"></img></p><p>more content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'"> even more content</p>');
 
     }//end testCopyAndPasteImageKeyword()
 
@@ -223,7 +222,7 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         $this->paste(true);
 
         $this->assertHTMLMatch('<p>test content %1%</p><p><img alt="TITLE" src="((prop:url))" /></p><p>more content&nbsp;&nbsp;even more content</p>');
-        $this->assertRawHTMLMatch('<p>test content %1%</p><p><img alt="TITLE" src="'.$this->getTestURL('/Web/testImage.png').'" data-viper-src="((prop:url))"></p><p></p><p>more content  even more content</p>');
+        $this->assertRawHTMLMatch('<p>test content %1%</p><p><img alt="TITLE" src="'.$this->getTestURL('/Web/testImage.png').'" data-viper-src="((prop:url))"></p><p>more content  even more content</p>');
 
     }//end testCutAndPasteImageKeyword()
 
