@@ -105,7 +105,7 @@ ViperSourceViewPlugin.prototype = {
                 }
 
                 self._originalSource = content;
-                self.showSourceView(content, callback);
+                self.showSourceView(null, callback);
             });
         } else {
             if (!content) {
@@ -344,8 +344,6 @@ ViperSourceViewPlugin.prototype = {
                 // Setup the Ace editor.
                 var editor   = ace.edit(source);
                 self._editor = editor;
-                editor.$blockScrolling = Infinity;
-
                 editor.$blockScrolling = Infinity;
 
                 self.applyEditorSettings(editor);
@@ -645,7 +643,6 @@ ViperSourceViewPlugin.prototype = {
         }
 
         var html = this.viper.getHtml(null, {emptyTableCellContent:''});
-
         if (window.StyleHTML) {
             html = StyleHTML(html);
         }
