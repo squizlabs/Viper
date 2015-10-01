@@ -9,8 +9,6 @@
     box-shadow: 0 0 13px #222;
     z-index: 150;
     border-radius: 5px;
-    background: -webkit-gradient(linear, left top, left bottom, from(#919097), to(#727179));
-    background: -moz-linear-gradient(center top , #919097, #727179) repeat scroll 0 0 transparent;
     border-top-color: #A2A1A8;
 }
 
@@ -34,28 +32,31 @@
 
 .VSVP-confirmText {
     display: inline-block;
-    font-size: 1.6em;
+    font-size: 1.5em;
     padding-right: 1em;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+    font-weight: bold;
+    color: #4F4F4F;
 }
 
 .VSVP-confirmText,
-.VSVP-confirmButton-discard,
-.VSVP-confirmButton-apply,
-.VSVP-bottomPanel-apply,
-.VSVP-bottomPanel-newWindow {
+.VSVP-confirmPanel .Viper-button,
+.VSVP-bottomPanel .Viper-button {
     border-color: #B9B9B9;
 }
 
+#ViperSourceViewPlugin-window {
+    margin: 0;
+    padding: 0;
+}
 #ViperSourceViewPlugin-window .Viper-popup {
-    background: url(../../Images/bgTexture-dark1.gif) repeat 0 0 #54535A;
+    background-color: #D4D4D4;
 }
 
 .VSVP-confirmPanel {
     display: none;
     text-align: right;
-    background: url(../../Images/bgTexture-dark1.gif) repeat 0 0 #54535A;
-    padding: 0.8em 0.8em 0;
+    background-color: #D4D4D4;
+    padding: 0.7em 0.7em 0;
 }
 
 .ViperSourceViewPlugin-window .VSVP-popup {
@@ -70,6 +71,7 @@
 .ViperSourceViewPlugin-window .VSVP-popup #editor {
     height: 100%;
     position: relative;
+    margin: 0;
 }
 
 .ViperSourceViewPlugin-window .VSVP-confirmPanel {
