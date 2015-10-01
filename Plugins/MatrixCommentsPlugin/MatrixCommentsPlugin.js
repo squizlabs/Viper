@@ -125,7 +125,11 @@ MatrixCommentsPlugin.prototype = {
         }
         else {
             // in admin, when page is ready
-            $(document).ready(loadAllComments);
+            $(document).ready( function() {
+                setTimeout(function(){
+                    loadAllComments.call();
+                }, 500);
+            });
         }
 
 
