@@ -1126,7 +1126,7 @@ ViperDOMRange.prototype = {
             return startNode.parentNode;
         }
 
-        var endParent = endNode;
+        /*var endParent = endNode;
         while (endParent && endParent.parentNode !== common) {
             endParent = endParent.parentNode;
         }
@@ -1139,9 +1139,9 @@ ViperDOMRange.prototype = {
         }
 
         if (nextSibling === endParent) {
-            this._nodeSel.node = startParent;
+            this._nodeSel.node = null;
             return startParent;
-        }
+        }*/
 
         this._nodeSel.node = null;
         return null;
