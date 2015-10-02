@@ -251,6 +251,26 @@ ViperReplacementPlugin.prototype = {
                 range.selectNode(startKeyword);
                 ViperSelection.addRange(range);
                 self.viper.fireSelectionChanged(null, true);
+            } else if (startKeyword !== false && endKeyword === false) {
+                // Start of selection is inside a keyword. Extend the range.
+                var node = startKeyword.previousSibling;
+                if (!node || node.nodeType !== ViperUtil.TEXT_NODE) {
+                    node = document.createTextNode('');
+                    ViperUtil.insertBefore(startKeyword, node);
+                }
+
+                range.setStart(node, node.data.length);
+                ViperSelection.addRange(range);
+            } else if (endKeyword !== false && startKeyword === false) {
+                // Start of selection is inside a keyword. Extend the range.
+                var node = endKeyword.nextSibling;
+                if (!node || node.nodeType !== ViperUtil.TEXT_NODE) {
+                    node = document.createTextNode('');
+                    ViperUtil.insertAfter(endKeyword, node);
+                }
+
+                range.setEnd(node, 0);
+                ViperSelection.addRange(range);
             }
 
         });
