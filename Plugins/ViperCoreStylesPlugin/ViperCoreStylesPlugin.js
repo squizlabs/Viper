@@ -1367,8 +1367,10 @@ ViperCoreStylesPlugin.prototype = {
         }
 
         if (this._canStyleNode(data.lineage[data.current]) !== true) {
+            this._selectedImage = null;
             return;
         } else if (ViperUtil.isTag(data.lineage[data.current], 'img') === true) {
+            this._selectedImage = data.lineage[data.current];
             return;
         }
 
