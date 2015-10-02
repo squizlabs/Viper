@@ -1378,10 +1378,7 @@ MatrixCommentsPlugin.prototype = {
     _positionCommentMark: function(element, commentMark)
     {
         // those offsets are used in Edit+
-        var commentMarkOffetLeft = 14;
-        if(this._inEditPlus) {
-            commentMarkOffetLeft = 35;
-        }
+        var commentMarkOffetLeft = -5;
         var commentMarkOffetTop = -14;
 
         // sometime we have position comment before viper has editable element set,then we have to use registered element.
@@ -1391,7 +1388,7 @@ MatrixCommentsPlugin.prototype = {
         var editableOffset = $(editableElement).offset();
         var currentElementOffset = $(element).offset();
         var commentMarkTop = currentElementOffset.top + $(element).height()/2 + commentMarkOffetTop;
-        var commentMarkLeft = editableOffset.left + $(editableElement).width() + commentMarkOffetLeft;
+        var commentMarkLeft = editableOffset.left + $(editableElement).outerWidth() + commentMarkOffetLeft;
         var elementLeft = currentElementOffset.left;
         var elementTop = currentElementOffset.top;
 
