@@ -1646,8 +1646,16 @@ ViperKeyboardEditorPlugin.prototype = {
             return this._removeContentFromStartToEndOfContainers(range);
         }
 
-        var startParent = ViperUtil.getFirstBlockParent(range.startContainer);
-        var endParent   = ViperUtil.getFirstBlockParent(range.endContainer);
+        var startParent = range.startContainer;
+        var endParent   = range.endContainer;
+
+        if (ViperUtil.isBlockElement(startParent) === false) {
+            startParent = ViperUtil.getFirstBlockParent(range.startContainer);
+        }
+
+        if (ViperUtil.isBlockElement(endParent) === false) {
+            endParent = ViperUtil.getFirstBlockParent(range.endContainer);
+        }
 
         if (startParent !== endParent) {
             // Two different parents. We need to join these parents.
@@ -1672,7 +1680,9 @@ ViperKeyboardEditorPlugin.prototype = {
                             startParent.appendChild(nextParent.firstChild);
                         }
 
-                        ViperUtil.remove(nextParent);
+                        if (this.canRemoveNode(nextParent) === true) {
+                            ViperUtil.remove(nextParent);
+                        }
                     }
                 }
             } else {
@@ -2338,6 +2348,26 @@ ViperKeyboardEditorPlugin.prototype = {
                             }
                         }
                     }
+                } else {
+                    var startNode = range.getStartNode();
+                    if (startNode && startNode.nodeType !== ViperUtil.TEXT_NODE) {
+                        var nextSelectable = range.getNextContainer(startCont, null, true, true, true);
+
+                        if (nextSelectable) {
+                            var startParent = range.startContainer;
+                            var endParent   = ViperUtil.getFirstBlockParent(nextSelectable);
+                            if (ViperUtil.isBlockElement(startParent) === false) {
+                                startParent = ViperUtil.getFirstBlockParent(startParent);
+                            }
+
+                            if (startParent !== nextSelectable) {
+                                // Handle: <p><img />*</p><p>text</p> -> <p><img />text</p>.
+                                range.setEnd(nextSelectable, 0);
+                                this._deleteFromDifferentBlockParents(range);
+                                return false;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -2818,6 +2848,16 @@ ViperKeyboardEditorPlugin.prototype = {
                 ViperChangeTracker.addChange('textAdded', [ctNode]);
             }
         }
+
+    },
+
+    canRemoveNode: function(node)
+    {
+        if (ViperUtil.inArray(ViperUtil.getTagName(node), this._keepContainerList) === true) {
+            return false;
+        }
+
+        return true;
 
     },
 
