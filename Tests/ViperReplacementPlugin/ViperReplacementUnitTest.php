@@ -161,7 +161,7 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
         $this->sikuli->keyDown('Key.DELETE');
 
         $this->assertHTMLMatch('<p>%1% </p><p>%2%</p><p>%3% ((prop:productName))</p><p>%4% ((prop:productName))</p><p>%5% ((prop:productName))</p><p>%6% ((prop:productName))</p>');
-        $this->assertRawHTMLMatch('<p>%1% </p><p>%2% </p><p><br></p><p>%3% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%4% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%5% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%6% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p>');
+        $this->assertRawHTMLMatch('<p>%1% </p><p>%2% </p><p>%3% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%4% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%5% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%6% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p>');
 
         // Test backspace key on content after keyword
         $this->moveToKeyword(3 , 'right');
@@ -175,7 +175,7 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
         $this->sikuli->keyDown('Key.BACKSPACE');
 
         $this->assertHTMLMatch('<p>%1% </p><p>%2%</p><p>%3% -</p><p>%4% ((prop:productName))</p><p>%5% ((prop:productName))</p><p>%6% ((prop:productName))</p>');
-        $this->assertRawHTMLMatch('<p>%1%</p><p>%2%</p><p><br></p><p>%3% -</p><p>%4%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%5%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%6%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p>');
+        $this->assertRawHTMLMatch('<p>%1%</p><p>%2%</p><p>%3% -</p><p>%4%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%5%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%6%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p>');
 
         // Using delete key on content after keyword
         $this->moveToKeyword(4 , 'right');
@@ -188,7 +188,7 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
         $this->sikuli->keyDown('Key.DELETE');
 
         $this->assertHTMLMatch('<p>%1% </p><p>%2%</p><p>%3% -</p><p>%4% ((prop:productName))B</p><p>%5% ((prop:productName))</p><p>%6% ((prop:productName))</p>');
-        $this->assertRawHTMLMatch('<p>%1% </p><p>%2% </p><p><br></p><p>%3% -</p><p>%4% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span>B</p><p>%5% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%6% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p>');
+        $this->assertRawHTMLMatch('<p>%1% </p><p>%2% </p><p>%3% -</p><p>%4% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span>B</p><p>%5% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%6% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p>');
 
         // Test backspace key on content before keyword
         $this->moveToKeyword(5 , 'right');
@@ -199,7 +199,7 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
         $this->sikuli->keyDown('Key.BACKSPACE');
 
         $this->assertHTMLMatch('<p>%1% </p><p>%2%</p><p>%3% -</p><p>%4% B</p><p>%5% -((prop:productName))</p><p>%6% ((prop:productName))</p>');
-        $this->assertRawHTMLMatch('<p>%1% </p><p>%2% </p><p><br></p><p>%3% -</p><p>%4% B</p><p>%5% -<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%6% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p>');
+        $this->assertRawHTMLMatch('<p>%1% </p><p>%2% </p><p>%3% -</p><p>%4% B</p><p>%5% -<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%6% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p>');
 
         // Using delete key on content before keyword
         $this->moveToKeyword(6 , 'right');
@@ -210,7 +210,7 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
         $this->sikuli->keyDown('Key.DELETE');
 
         $this->assertHTMLMatch('<p>%1%</p><p>%2%</p><p>%3% -</p><p>%4% B</p><p>%5% -((prop:productName))</p><p>%6% D((prop:productName))</p>');
-        $this->assertRawHTMLMatch('<p>%1% </p><p>%2% </p><p><br></p><p>%3% -</p><p>%4% B</p><p>%5% -<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%6% D<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p>');
+        $this->assertRawHTMLMatch('<p>%1% </p><p>%2% </p><p>%3% -</p><p>%4% B</p><p>%5% -<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%6% D<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p>');
 
     }//end testDeletingKeywords()
 

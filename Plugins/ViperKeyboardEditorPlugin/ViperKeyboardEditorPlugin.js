@@ -2190,8 +2190,8 @@ ViperKeyboardEditorPlugin.prototype = {
             } else if (this._isStartToEndOfMultiContainerSelection(range) === true) {
                 return this._removeContentFromStartToEndOfContainers(range);
             } else {
-                var startParent = ViperUtil.getFirstBlockParent(range.startContainer);
-                var endParent   = ViperUtil.getFirstBlockParent(range.endContainer);
+                var startParent = ViperUtil.getFirstBlockParent(range.startContainer, null, true);
+                var endParent   = ViperUtil.getFirstBlockParent(range.endContainer, null, true);
                 if (startParent === endParent) {
                     // Deletion between two different parents within the same block parent. Let browser handle it.
                     return;

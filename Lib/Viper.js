@@ -4714,7 +4714,12 @@ Viper.prototype = {
         } else {
             var startNode = range.getStartNode();
             var endNode   = range.getEndNode();
-            if (startNode && startNode === endNode && startNode.nodeType === ViperUtil.ELEMENT_NODE) {
+            if (startNode
+                && startNode === endNode
+                && startNode.nodeType === ViperUtil.ELEMENT_NODE
+                && startNode.parentNode === this.element
+                && range.startOffset === 0
+            ) {
                 var firstChild = range._getFirstSelectableChild(startNode);
                 if (firstChild) {
                     range.setStart(firstChild, 0);

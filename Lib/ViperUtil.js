@@ -680,8 +680,12 @@ var ViperUtil = {
 
     },
 
-    getFirstBlockParent: function(elem, stopEl)
+    getFirstBlockParent: function(elem, stopEl, incSelf)
     {
+        if (incSelf === true && ViperUtil.isBlockElement(elem) === true) {
+            return elem;
+        }
+
         while (elem.parentNode) {
             elem = elem.parentNode;
             if (stopEl && elem === stopEl) {
