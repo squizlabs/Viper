@@ -1132,7 +1132,7 @@ ViperKeyboardEditorPlugin.prototype = {
 
                         if (prevSelectable.nodeType === ViperUtil.TEXT_NODE) {
                             range.setStart(prevSelectable, prevSelectable.data.length);
-                        } else if (prevSelectable.parentNode === null) {
+                        } else if (prevSelectable.parentNode === null || ViperUtil.isStubElement(prevSelectable) === true) {
                             // Prev selectable was most likely a BR tag that got removed.
                             if (firstChild.nodeType === ViperUtil.TEXT_NODE) {
                                 range.setStart(firstChild, 0);
@@ -1415,7 +1415,7 @@ ViperKeyboardEditorPlugin.prototype = {
                             if (previousContainer) {
                                 if (previousContainer.nodeType === ViperUtil.TEXT_NODE) {
                                     range.setStart(previousContainer, previousContainer.data.length);
-                                } else if (ViperUtil.isTag(previousContainer, 'br') === true) {
+                                } else if (ViperUtil.isStubElement(previousContainer) === true) {
                                     // Handle case <p>text<strong>text</strong><br/>*</p>.
                                     ViperUtil.remove(previousContainer);
                                     return false;
@@ -1977,6 +1977,29 @@ ViperKeyboardEditorPlugin.prototype = {
             && ViperUtil.getHtml(startNode.parentNode) === '<br>'
         ) {
             return false;
+        }
+
+        var startCont = range.startContainer;
+        if (startCont.nodeType !== ViperUtil.TEXT_NODE) {
+            var startNode = range.getStartNode();
+            if (startNode && startNode.nodeType !== ViperUtil.TEXT_NODE) {
+                var nextSelectable = range.getNextContainer(startCont, null, true, true, true);
+
+                if (nextSelectable) {
+                    var startParent = range.startContainer;
+                    var endParent   = ViperUtil.getFirstBlockParent(nextSelectable);
+                    if (ViperUtil.isBlockElement(startParent) === false) {
+                        startParent = ViperUtil.getFirstBlockParent(startParent);
+                    }
+
+                    if (startParent !== nextSelectable) {
+                        // Handle: <p><img />*</p><p>text</p> -> <p><img />text</p>.
+                        range.setEnd(nextSelectable, 0);
+                        this._deleteFromDifferentBlockParents(range);
+                        return false;
+                    }
+                }
+            }
         }
 
     },
