@@ -1,4 +1,4 @@
-`<?php
+<?php
 
 require_once 'AbstractViperUnitTest.php';
 
@@ -21,7 +21,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertHTMLMatch('<p style="text-align: left;">%1% test content %2%</p>');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
-        
+
         // Remove left justify
         $this->moveToKeyword(1);
         $this->clickTopToolbarButton('justifyLeft', 'active');
@@ -85,7 +85,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertHTMLMatch('<p style="text-align: left;">%1% test content %2%</p>');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
-        
+
         // Remove left justify
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('justifyLeft', 'active');
@@ -149,7 +149,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertHTMLMatch('<p style="text-align: left;">%1% test content %2%</p>');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
-        
+
         // Remove left justify
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('justifyLeft', 'active');
@@ -444,7 +444,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
      */
     public function testUndoAndRedoForAlignments()
     {
-        
+
         // Test left justification
         $this->useTest(1);
         $this->selectKeyword(1);
@@ -466,7 +466,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         $this->assertHTMLMatch('<p>%1% test content %2%</p>');
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<p style="text-align: center;">%1% test content %2%</p>');
-        
+
         // Test right justification
         $this->useTest(1);
         $this->selectKeyword(1);
@@ -474,21 +474,21 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         $this->clickTopToolbarButton('justifyRight');
         $this->assertHTMLMatch('<p style="text-align: right;">%1% test content %2%</p>');
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>%1% test content %2%</p>');     
+        $this->assertHTMLMatch('<p>%1% test content %2%</p>');
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<p style="text-align: right;">%1% test content %2%</p>');
-        
+
         // Test block justification
         $this->useTest(1);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyBlock');
-        $this->assertHTMLMatch('<p style="text-align: justify;">%1% test content %2%</p>');        
+        $this->assertHTMLMatch('<p style="text-align: justify;">%1% test content %2%</p>');
         $this->clickTopToolbarButton('historyUndo');
         $this->assertHTMLMatch('<p>%1% test content %2%</p>');
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<p style="text-align: justify;">%1% test content %2%</p>');
-        
+
     }//end testUndoAndRedoForAlignments()
 
 
