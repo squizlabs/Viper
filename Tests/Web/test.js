@@ -57,11 +57,17 @@ function gHtml(selector, index, removeTableHeaders)
 function getRawHTML(selector, index)
 {
     var html = '';
-    index = index || 0;
+    index    = index || 0;
     if (selector) {
         html = ViperUtil.getHtml(ViperUtil.$(selector)[index]).replace("\n", '');
     } else {
         html = ViperUtil.getHtml(viper.getViperElement());
+    }
+
+    if (html) {
+        html = html.replace(/<\/?\s*([A-Z\d:]+)/g, function(str) {
+            return str.toLowerCase();
+        });
     }
 
     return html;
