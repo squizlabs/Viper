@@ -47,7 +47,12 @@ ViperReplacementPlugin.prototype = {
             return true;
         }
 
-        return false;
+        if (element.childNodes.length !== 1) {
+            return false;
+        }
+
+        return this.isSpecialElement(element.firstChild);
+
     },
 
     init: function () {
@@ -237,11 +242,19 @@ ViperReplacementPlugin.prototype = {
                         ViperSelection.addRange(range);
                         return;
                     }
-                }
 
-                range.selectNode(startKeyword);
-                ViperSelection.addRange(range);
-                self.viper.fireSelectionChanged(null, true);
+                    if (startKeyword.firstChild.nodeType === ViperUtil.TEXT_NODE
+                        && startKeyword.lastChild.nodeType === ViperUtil.TEXT_NODE
+                    ) {
+                        range.setStart(startKeyword.firstChild, 0);
+                        range.setEnd(startKeyword.lastChild, startKeyword.lastChild.data.length);
+                    } else {
+                        range.selectNode(startKeyword);
+                    }
+
+                    ViperSelection.addRange(range);
+                    self.viper.fireSelectionChanged(null, true);
+                }
             } else if (startKeyword !== false && endKeyword === false) {
                 // Start of selection is inside a keyword. Extend the range.
                 var node = startKeyword.previousSibling;
