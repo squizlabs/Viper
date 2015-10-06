@@ -813,6 +813,18 @@ var ViperUtil = {
 
     },
 
+    getSurroundedChildren: function(element) {
+        var children = [];
+        if (element.childNodes.length !== 1) {
+            return children;
+        }
+
+        children.push(element.firstChild);
+        children = children.concat(this.getSurroundedChildren(element.firstChild));
+        return children;
+
+    },
+
     /**
      * Returns true if the specified element(s) is a child of parent.
      */

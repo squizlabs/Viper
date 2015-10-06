@@ -122,7 +122,6 @@ ViperCoreStylesPlugin.prototype = {
         tools.getItem('bold').setButtonShortcut('CTRL+B');
         tools.getItem('italic').setButtonShortcut('CTRL+I');
 
-        var callbackType = 'Viper:selectionChanged';
         if (toolbarPlugin) {
             toolbarPlugin.addButton(btnGroup);
             toolbarPlugin.addButton(btnGroup2);
@@ -134,9 +133,7 @@ ViperCoreStylesPlugin.prototype = {
 
             toolbarPlugin.addButton(hr);
 
-            callbackType = 'ViperToolbarPlugin:updateToolbar';
-
-            this.viper.registerCallback(callbackType, 'ViperCoreStylesPlugin', function(data) {
+            this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperCoreStylesPlugin', function(data) {
                 var range = data;
                 if (data.range) {
                     range = data.range;
@@ -1211,6 +1208,13 @@ ViperCoreStylesPlugin.prototype = {
                         this.viper.ViperTools.setButtonActive(this._buttons[style]);
                     }
                 }
+
+                // Do not allow sub & sup to be applied at the same time.
+                if (style === 'sup') {
+                    this.viper.ViperTools.disableButton(this._buttons['sub']);
+                } else if (style === 'sub') {
+                    this.viper.ViperTools.disableButton(this._buttons['sup']);
+                }
             }
             return false;
         }
@@ -1484,6 +1488,30 @@ ViperCoreStylesPlugin.prototype = {
             tools.enableButton(this._buttons[buttons.styles[i]]);
             tools.setButtonInactive(this._buttons[buttons.styles[i]]);
             tagNames.push(buttons.styles[i]);
+        }
+
+        // Do not allow sub & sup to be applied at the same time.
+        if (ViperUtil.isTag(range.startContainer, 'sub') === true || ViperUtil.isTag(range.endContainer, 'sub') === true) {
+            tools.disableButton(this._buttons['sup']);
+        } else if (ViperUtil.isTag(range.startContainer, 'sup') === true || ViperUtil.isTag(range.endContainer, 'sup') === true) {
+            tools.disableButton(this._buttons['sub']);
+        } else {
+            // Check parents.
+            var elems = [range.startContainer, range.endContainer];
+            while (elems.length > 0) {
+                var elem        = elems.shift();
+                var subParents  = ViperUtil.getParents(elem, null, this.viper.getViperElement());
+                for (var i = 0; i < subParents.length; i++) {
+                    var tagName = ViperUtil.getTagName(subParents[i]);
+                    if (tagName === 'sub') {
+                        tools.disableButton(this._buttons['sup']);
+                        break;
+                    } else if (tagName === 'sup') {
+                        tools.disableButton(this._buttons['sub']);
+                        break;
+                    }
+                }
+            }
         }
 
         // Active states.
