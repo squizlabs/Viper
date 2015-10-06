@@ -1018,27 +1018,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 }
             }
 
-            if (rangeClone.endContainer.nodeType === ViperUtil.ELEMENT_NODE
-                && rangeClone.endOffset === 0
-                && rangeClone.endContainer.innerHTML === ''
-            ) {
-                if (ViperUtil.isTag(rangeClone.endContainer, 'td') === false
-                    && ViperUtil.isTag(rangeClone.endContainer, 'th') === false
-                ) {
-                    var nextNode = rangeClone.getNextContainer(rangeClone.startContainer, null, true);
-                    if (nextNode && this.viper.isOutOfBounds(nextNode) === false) {
-                        ViperUtil.remove(rangeClone.endContainer);
-                        rangeClone.setEnd(nextNode, 0);
-                        rangeClone.collapse(false);
-                        ViperSelection.addRange(rangeClone);
-                    }
-                }
-
-                // Incase we are in a list.
-                this._handleBackspaceAtStartOfLi(e, range);
-
-                return false;
-            } else if (range.startContainer
+            if (range.startContainer
                 && range.startContainer.nodeType === ViperUtil.TEXT_NODE
                 && range.endContainer
                 && range.endContainer.nodeType === ViperUtil.TEXT_NODE
@@ -1077,10 +1057,11 @@ ViperKeyboardEditorPlugin.prototype = {
                     }//end if
                 }//end if
             }//end if
-        } else if (range.startOffset === 0
+        }
+
+        if (range.startOffset === 0
             && range.collapsed === true
             && startNode.nodeType === ViperUtil.TEXT_NODE
-            && ViperUtil.isBrowser('firefox') === true
         ) {
             var firstBlock = ViperUtil.getFirstBlockParent(startNode);
             if (firstBlock
@@ -1802,7 +1783,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 return false;
             } else if (this._isStartToEndOfMultiContainerSelection(range) === true) {
                 return this._removeContentFromStartToEndOfContainers(range);
-            } else if (ViperUtil.isBrowser('firefox') === true) {
+            } else {
                 var nodeSelection = range.getNodeSelection();
                 if (nodeSelection && ViperUtil.isStubElement(nodeSelection) === false) {
                     // When a block element is selected and removed in Firefox it leaves the content as <p>null char</p>.
@@ -2756,7 +2737,6 @@ ViperKeyboardEditorPlugin.prototype = {
 
         if (range.startOffset === 0
             && range.collapsed === false
-            && ViperUtil.isBrowser('msie') !== true
             && range.startContainer !== range.endContainer
             && range.startContainer.nodeType === ViperUtil.TEXT_NODE
             && range.endContainer.nodeType === ViperUtil.TEXT_NODE
