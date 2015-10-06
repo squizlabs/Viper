@@ -584,6 +584,14 @@ ViperInlineToolbarPlugin.prototype = {
         }
 
         if (parent === viperElement) {
+            if (ViperUtil.isBrowser('msie') === true
+                && range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
+                && range.startOffset >= range.startContainer.childNodes.length
+                && ViperUtil.isTag(range.startContainer.childNodes[range.startOffset - 1], 'a') === true
+            ) {
+                lineage.push(range.startContainer.childNodes[range.startOffset - 1]);
+            }
+            
             return lineage;
         }
 
@@ -612,6 +620,12 @@ ViperInlineToolbarPlugin.prototype = {
             && ViperUtil.isTag(range.startContainer.previousSibling, 'a') === true
         ) {
             lineage.push(range.startContainer.previousSibling);
+        } else if (ViperUtil.isBrowser('msie') === true
+            && range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
+            && range.startOffset >= range.startContainer.childNodes.length
+            && ViperUtil.isTag(range.startContainer.childNodes[range.startOffset - 1], 'a') === true
+        ) {
+            lineage.push(range.startContainer.childNodes[range.startOffset - 1]);
         }
 
         return lineage;

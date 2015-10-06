@@ -373,6 +373,7 @@ ViperLinkPlugin.prototype = {
         range = range || this.viper.getViperRange();
 
         var selectedNode = range.getNodeSelection();
+        var startNode    = range.getStartNode();
         var common       = range.getCommonElement();
         if (!selectedNode && ViperUtil.isBrowser('msie') === true) {
             var startNode = range.getStartNode();
@@ -408,6 +409,11 @@ ViperLinkPlugin.prototype = {
                 && ViperUtil.isTag(range.startContainer.previousSibling, 'a') === true
             ) {
                 return range.startContainer.previousSibling;
+            } else if (range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
+                && range.startOffset >= range.startContainer.childNodes.length
+                && ViperUtil.isTag(range.startContainer.childNodes[range.startOffset - 1], 'a') === true
+            ) {
+                return range.startContainer.childNodes[range.startOffset - 1];
             }
         }
 
@@ -647,6 +653,12 @@ ViperLinkPlugin.prototype = {
                 ) {
                     return true;
                 }
+            } else if (range.collapsed === true
+                && range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
+                && range.startOffset >= range.startContainer.childNodes.length
+                && ViperUtil.isTag(range.startContainer.childNodes[range.startOffset - 1], 'a') === true
+            ) {
+                return true;
             }
 
             return false;
