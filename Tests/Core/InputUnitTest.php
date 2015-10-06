@@ -278,10 +278,17 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->useTest(9);
         $this->clickKeyword(1);
 
-        $this->sikuli->keyDown('Key.CMD + Key.LEFT');
-        $this->type('left');
-        $this->sikuli->keyDown('Key.CMD + Key.RIGHT');
-        $this->type('right');
+        if ($this->sikuli->getOS() === 'windows') {
+            $this->sikuli->keyDown('Key.HOME');
+            $this->type('left');
+            $this->sikuli->keyDown('Key.END');
+            $this->type('right');
+        } else {
+            $this->sikuli->keyDown('Key.CMD + Key.LEFT');
+            $this->type('left');
+            $this->sikuli->keyDown('Key.CMD + Key.RIGHT');
+            $this->type('right');
+        }
 
         $this->assertHTMLMatch('<p>leftLorem ipsum dolor sit XAX amet, consectetur adipiscing elit. Duis ac augue mi. rightNam risus massa, aliquam non porta vel, lacinia a sapien.</p>');
 
@@ -825,6 +832,7 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
     public function testEnteringContentBeforeBrTag()
     {
         $this->useTest(7);
+        $this->clickKeyword(2);
         $this->moveToKeyword(1, 'right');
         sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
