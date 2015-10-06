@@ -153,7 +153,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
     public function testSuperscriptAndSubscript()
     {
         $this->assertTrue(TRUE);
-        /*$this->useTest(1);
+        $this->useTest(1);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('superscript');
         $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'));
