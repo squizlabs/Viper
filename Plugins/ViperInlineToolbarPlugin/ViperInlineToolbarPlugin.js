@@ -605,6 +605,15 @@ ViperInlineToolbarPlugin.prototype = {
 
         lineage = lineage.reverse();
 
+        if (ViperUtil.isBrowser('msie') === true
+            && range.collapsed === true
+            && range.startOffset === 0
+            && range.startContainer.previousSibling
+            && ViperUtil.isTag(range.startContainer.previousSibling, 'a') === true
+        ) {
+            lineage.push(range.startContainer.previousSibling);
+        }
+
         return lineage;
 
     }

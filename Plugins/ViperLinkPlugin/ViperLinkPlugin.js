@@ -387,8 +387,7 @@ ViperLinkPlugin.prototype = {
                 common    = startNode.parentNode;
                 range.selectNode(startNode);
                 ViperSelection.addRange(range);
-            } else if (ViperUtil.isBrowser('msie') === true
-                && startNode
+            } else if (startNode
                 && startNode.nodeType === ViperUtil.TEXT_NODE
                 && !range.getEndNode()
                 && range.endContainer.nodeType === ViperUtil.ELEMENT_NODE
@@ -403,6 +402,12 @@ ViperLinkPlugin.prototype = {
                 ) {
                     return lastChild;
                 }
+            } else if (range.collapsed === true
+                && range.startOffset === 0
+                && range.startContainer.previousSibling
+                && ViperUtil.isTag(range.startContainer.previousSibling, 'a') === true
+            ) {
+                return range.startContainer.previousSibling;
             }
         }
 
@@ -637,7 +642,9 @@ ViperLinkPlugin.prototype = {
         ) {
             if (range.collapsed === true && data.lineage[data.current].nodeType === ViperUtil.TEXT_NODE) {
                 var parents = ViperUtil.getParents(data.lineage[data.current].parentNode, 'a', this.viper.getViperElement());
-                if (parents.length > 0) {
+                if (parents.length > 0
+                    || (range.startOffset === 0 && range.startContainer.previousSibling && ViperUtil.isTag(range.startContainer.previousSibling, 'a') === true)
+                ) {
                     return true;
                 }
             }
