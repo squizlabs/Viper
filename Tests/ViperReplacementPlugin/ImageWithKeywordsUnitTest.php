@@ -123,6 +123,7 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         $this->clickKeyword(1);
         sleep(3);
         $this->clickElement('img', 0);
+        sleep(2);
         $this->clickInlineToolbarButton('image', 'active');
         sleep(3);
         $this->clickField('Image is decorative');
@@ -134,7 +135,9 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
 
         // Changing back
 		$this->clickField('Image is decorative');
+        sleep(2);
 		$this->clickField('Alt', true);
+        sleep(2);
 		$this->type('TITLE');
         sleep(2);
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
@@ -144,6 +147,7 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
 
         // Using top toolbar
         $this->clickElement('img', 0);
+        sleep(2);
         $this->clickTopToolbarButton('image', 'active');
         sleep(1);
         $this->clickField('Image is decorative');
@@ -155,12 +159,15 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
 
         // Changing back
         $this->clickElement('img', 0);
+        sleep(2);
         $this->clickTopToolbarButton('image', 'active');
         sleep(1);
 		$this->clickField('Image is decorative');
         sleep(1);
 		$this->clickField('Alt', true);
+        sleep(2);
 		$this->type('TITLE');
+        sleep(2);
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>test content %1%</p><p>more content<img alt="TITLE" src="((prop:url))" /> even more content</p>');
