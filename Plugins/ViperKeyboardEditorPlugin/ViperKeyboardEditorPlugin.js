@@ -1288,7 +1288,6 @@ ViperKeyboardEditorPlugin.prototype = {
             return false;
         }
 
-        // Firefox specific fixes.
         if (range.collapsed === true) {
             // Range collapsed.
             if (range.startContainer.nodeType === ViperUtil.ELEMENT_NODE) {

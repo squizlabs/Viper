@@ -815,7 +815,7 @@ var ViperUtil = {
 
     getSurroundedChildren: function(element) {
         var children = [];
-        if (element.childNodes.length !== 1) {
+        if (element.childNodes.length !== 1 || element.firstChild.nodeType !== ViperUtil.ELEMENT_NODE) {
             return children;
         }
 
