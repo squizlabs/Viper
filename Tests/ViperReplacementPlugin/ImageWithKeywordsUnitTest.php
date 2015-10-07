@@ -154,6 +154,9 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         $this->assertRawHTMLMatch('<p>test content %1%</p><p>more content<img alt="" data-viper-attribite-keywords="true" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'"> even more content</p>');
 
         // Changing back
+        $this->clickElement('img', 0);
+        $this->clickTopToolbarButton('image', 'active');
+        sleep(1);
 		$this->clickField('Image is decorative');
         sleep(1);
 		$this->clickField('Alt', true);
