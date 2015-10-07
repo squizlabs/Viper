@@ -1158,6 +1158,12 @@ ViperCopyPastePlugin.prototype = {
                         fragment.lastChild.src = fragment.lastChild.src.replace('%7E', '~');
                     }
 
+                    // Check child elements.
+                    var images = ViperUtil.getTag('img', fragment.lastChild);
+                    for (var i = 0; i < images.length; i++) {
+                        images[i].src = images[i].src.replace('%7E', '~');
+                    }
+
                     prevChild = fragment.lastChild;
                     var ctNode = null;
                     if (ViperUtil.isBlockElement(fragment.lastChild) === true && ViperUtil.isStubElement(fragment.lastChild) === false) {
