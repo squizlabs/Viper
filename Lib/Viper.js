@@ -3845,8 +3845,9 @@ Viper.prototype = {
             startBookmark.setAttribute('data-bookmarkid', bookmarkid);
         }
 
-        var viperElement = this.getViperElement();
-        if (range.getNodeSelection() === viperElement) {
+        var viperElement  = this.getViperElement();
+        var nodeSelection = range.getNodeSelection();
+        if (nodeSelection === viperElement) {
             // Whole Viper element is selected.
             if (!viperElement.firstChild) {
                 // There are no contents.
@@ -3933,7 +3934,14 @@ Viper.prototype = {
 
             currRange.setStart(startBookmark.nextSibling, 0);
             currRange.setEnd(endBookmark.previousSibling, (endBookmark.previousSibling.length || 0));
-        }
+
+            // Check if the bookmark is inside a special element.
+            if (nodeSelection && this.isSpecialElement(nodeSelection) === true) {
+                // Move it outside of the special key.
+                ViperUtil.insertBefore(nodeSelection, startBookmark);
+                ViperUtil.insertAfter(nodeSelection, endBookmark);
+            }
+        }//end if
 
         var bookmark = {
             start: startBookmark,
