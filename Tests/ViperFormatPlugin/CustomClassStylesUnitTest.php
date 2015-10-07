@@ -1,93 +1,9 @@
 <?php
 
-require_once 'AbstractViperUnitTest.php';
+require_once 'AbstractViperCustomClassStylesUnitTest.php';
 
-class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractViperUnitTest
+class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractViperCustomClassStylesUnitTest
 {
-
-    /**
-     * Set custom class styles.
-     *
-     * @return array
-     */
-    private function setCustomClassStyles()
-    {
-        $this->setPluginSettings(
-            'ViperFormatPlugin',
-            array(
-             'styles' => array(
-                          'Simple Image Border' => array(
-                                                    'showFor'    => 'img,h1',
-                                                    'hideFor'    => '*',
-                                                    'classNames' => 'simple-image-border',
-                                                   ),
-                          'Article'             => array(
-                                                    'classNames' => 'article',
-                                                    'showFor'    => 'p',
-                                                   ),
-                          'Multi Columns'       => array(
-                                                    'classNames' => 'multi-col',
-                                                    'hideFor'    => 'text-selection,img',
-                                                   ),
-                          'Caption'             => 'simple-image-border image-caption',
-                          'Round Image'         => 'round-image',
-                          'Ordered List'        => 'ordered-list',
-                         ),
-            )
-        );
-
-    }//end setCustomClassStyles()
-
-
-    /**
-     * Returns the selected styles.
-     *
-     * @return array
-     */
-    private function getSelectedStyles()
-    {
-        return $this->sikuli->execJS('viper.ViperTools.getItem(\'ViperFormatPlugin-classList\').getSelectedItems()');
-
-    }//end getSelectedStyles()
-
-
-    /**
-     * Selects the specified styles.
-     *
-     * @param array $styles Array of class names separated by spaces.
-     *
-     * @return void
-     */
-    private function selectStyles(array $styles)
-    {
-        $rect = $this->getBoundingRectangle('.ViperUtil-visible[data-id="test-ViperFormatPlugin-classPopout"]');
-        if (empty($rect) === true) {
-            $this->sikuli->clickVisibleElement('.ViperFormatPlugin-stylePickerButton', 0, true);
-        }
-
-        foreach ($styles as $classNames) {
-            $this->sikuli->clickVisibleElement('li[data-id="'.$classNames.'"]');
-        }
-
-    }//end selectStyles()
-
-
-    /**
-     * Removes the specified styles.
-     *
-     * @param array $styles Array of class names separated by spaces.
-     *
-     * @return void
-     */
-    private function removeStyles(array $styles)
-    {
-        foreach ($styles as $classNames) {
-            $this->sikuli->clickVisibleElement('.Viper-visible .ViperFormatPlugin-styleListItem-remove[data-id="'.$classNames.'"]');
-        }
-
-    }//end removeStyles()
-
-
     /**
      * Test custom style menu doesn't appear in the class pop up when no styles defined
      *
@@ -444,6 +360,7 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         sleep(1);
         $this->clickInlineToolbarButton('cssClass');
         $this->selectStyles(array('ordered-list'));
+        $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->clickField('Class');
         sleep(1);
@@ -458,6 +375,7 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         sleep(1);
         $this->clickInlineToolbarButton('cssClass');
         $this->selectStyles(array('ordered-list'));
+        $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->clickField('Class');
         sleep(1);
@@ -473,6 +391,7 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         $this->clickTopToolbarButton('cssClass');
         sleep(1);
         $this->selectStyles(array('ordered-list'));
+        $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->clickField('Class');
         sleep(1);
@@ -484,10 +403,11 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         // Test applying to a word and pressing apply changes using top toolbar
         $this->useTest(1);
         $this->selectKeyword(1);
-        sleep(1);
+        sleep(2);
         $this->clickTopToolbarButton('cssClass');
         sleep(1);
         $this->selectStyles(array('ordered-list'));
+        $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->clickField('Class');
         sleep(1);
@@ -515,11 +435,13 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         $this->clickInlineToolbarButton('cssClass');
         $this->selectStyles(array('ordered-list'));
         sleep(1);
+        $this->sikuli->keyDown('Key.ENTER');
         $this->clickField('Class');
         sleep(1);
         $this->type('ordered-list-test');
         sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->assertHTMLMatch('<p>This is some content <span class="ordered-list-test ordered-list">%1%</span> in my unit test</p>');
 
         $this->useTest(1);
@@ -528,6 +450,7 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         $this->clickTopToolbarButton('cssClass');
         $this->selectStyles(array('ordered-list'));
         sleep(1);
+        $this->sikuli->keyDown('Key.ENTER');
         $this->clickField('Class');
         sleep(1);
         $this->type('test-ordered-list');
@@ -543,6 +466,7 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         $this->clickInlineToolbarButton('cssClass');
         sleep(1);
         $this->selectStyles(array('article'));
+        $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->clickField('Class');
         sleep(1);
@@ -558,6 +482,7 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         $this->clickTopToolbarButton('cssClass');
         sleep(1);
         $this->selectStyles(array('article'));
+        $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->clickField('Class');
         sleep(1);
@@ -586,11 +511,13 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         $this->clickInlineToolbarButton('cssClass');
         $this->selectStyles(array('article'));
         sleep(1);
+        $this->sikuli->keyDown('Key.ENTER');
         $this->clickField('Class');
         sleep(1);
         $this->type('test');
-        sleep(1);
+        sleep(2);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->assertHTMLMatch('<p class="test article">This is some content %1% in my unit test</p>');
 
         // Test applying to a word and pressing apply changes using inline toolbar
@@ -601,11 +528,13 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         $this->clickInlineToolbarButton('cssClass');
         $this->selectStyles(array('article'));
         sleep(1);
+        $this->sikuli->keyDown('Key.ENTER');
         $this->clickField('Class');
         sleep(1);
         $this->type('test');
         sleep(1);
         $this->clickInlineToolbarButton('Apply Changes', null, true);
+        sleep(1);
         $this->assertHTMLMatch('<p class="test article">This is some content %1% in my unit test</p>');
 
         // Test applying to a paragraph and pressing enter using top toolbar
@@ -616,11 +545,13 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         $this->clickTopToolbarButton('cssClass');
         $this->selectStyles(array('article'));
         sleep(1);
+        $this->sikuli->keyDown('Key.ENTER');
         $this->clickField('Class');
         sleep(1);
         $this->type('test');
         sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->assertHTMLMatch('<p class="test article">This is some content %1% in my unit test</p>');
 
         // Test applying to a word and pressing apply changes using top toolbar
@@ -631,11 +562,13 @@ class Viper_Tests_ViperFormatPlugin_CustomClassStylesUnitTest extends AbstractVi
         $this->clickTopToolbarButton('cssClass');
         $this->selectStyles(array('article'));
         sleep(1);
+        $this->sikuli->keyDown('Key.ENTER');
         $this->clickField('Class');
         sleep(1);
         $this->type('test');
         sleep(1);
         $this->clickTopToolbarButton('Apply Changes', null, true);
+        sleep(1);
         $this->assertHTMLMatch('<p class="test article">This is some content %1% in my unit test</p>');
 
     }//end testApplyingCustomStyleAndClassToParagraph()

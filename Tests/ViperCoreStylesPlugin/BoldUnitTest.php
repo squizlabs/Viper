@@ -210,14 +210,14 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
      */
     public function testDeletingBoldContent()
     {
-        $this->useTest(1);
+        $this->useTest(7);
         
         // Delete bold word and replace with new content
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(1);
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('this is new content');
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> this is new content</p>');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> this is new content</p><p>Extra content under the paragraph</p>');
 
     }//end testDeletingBoldContent()
 

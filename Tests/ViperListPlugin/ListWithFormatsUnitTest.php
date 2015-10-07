@@ -435,18 +435,22 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
 
         // Test two P's inside a div
         $this->sikuli->click($this->findKeyword(2));
+        sleep(2);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectKeyword(2);
+        sleep(2);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectInlineToolbarLineageItem(1);
+        sleep(2);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectInlineToolbarLineageItem(0);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->moveToKeyword(2, 'right');
+        sleep(2);
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
@@ -454,6 +458,7 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectKeyword(3);
+        sleep(2);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectInlineToolbarLineageItem(1);

@@ -346,6 +346,8 @@ ViperSourceViewPlugin.prototype = {
                 self._editor = editor;
                 editor.$blockScrolling = Infinity;
 
+                editor.$blockScrolling = Infinity;
+
                 self.applyEditorSettings(editor);
 
                 // Init editor events.

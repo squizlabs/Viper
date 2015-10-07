@@ -1,52 +1,6 @@
 .Viper-subSectionRow.Viper-imageUploadRow {
-    padding-right: 7.8em;
+    padding-right: 8em;
 }
-
-
-.Viper-buttonIcon.Viper-ees-target {
-    background-position: 0 -1215px;
-}
-
-.Viper-button:active .Viper-buttonIcon.Viper-ees-target, .Viper-button.Viper-active .Viper-buttonIcon.Viper-ees-target, .Viper-button.Viper-selected .Viper-buttonIcon.Viper-ees-target {
-  background-position: -33px -1215px;
-}
-.Viper-button.Viper-ees-target {
-  position: absolute;
-  right: 0;
-  top: 0;
-  line-height: 2.1em;
-}
-
-
-.Viper-buttonIcon.Viper-assetSelector-button {
-    background-position: 0 -1215px;
-}
-
-.Viper-button:active .Viper-buttonIcon.Viper-assetSelector-button, .Viper-button.Viper-active .Viper-buttonIcon.Viper-assetSelector-button, .Viper-button.Viper-selected .Viper-buttonIcon.Viper-assetSelector-button {
-  background-position: -33px -1215px;
-}
-.Viper-button.Viper-assetSelector-button {
-  position: absolute;
-  right: 2.7em;
-  top: 0;
-  line-height: 2.1em;
-}
-
-.Viper-buttonIcon.Viper-uploadImage-button {
-  background-image: url(../../Images/matrixButtonIcons.png);  
-  background-position: 0 -54px;
-}
-.Viper-button:active .Viper-buttonIcon.Viper-uploadImage-button, .Viper-button.Viper-active .Viper-buttonIcon.Viper-uploadImage-button, .Viper-button.Viper-selected .Viper-buttonIcon.Viper-uploadImage-button {
-    background-image: url(../../Images/matrixButtonIcons.png);  
-  background-position: -33px -54px;
-}
-.Viper-button.Viper-uploadImage-button {
-  position: absolute;
-  right: 0;
-  top: 0;
-  line-height: 2.1em;
-}
-
 
 .uploadImage-progressIndicator .uploadImage-progress-status {
     color: #ddd;
@@ -102,15 +56,12 @@
 	font-size: 1.49em;
 }
 
-
 .Viper-imageUploadFileRow {
     display: none;
     min-width:300px;
 }
 
-
-
-/* Image Treatments for Droppepd Image */
+/* Image Treatments for Dropped Image */
 
 [data-imagepaste="true"] {
     /* Styles */
@@ -137,22 +88,21 @@
 .VipperDroppedImage-msgBox {
     margin: 0.4em 0 0.6em;
     border-radius: 0.4em;
-    border: 1px solid #747379;
-    color: #cacad1;
+    border: 1px solid #D0C79F;
+    color: #7e7759;
     padding: 0.3em 0.3em 0.3em 50px;
     text-shadow: none;
     font-size: 1.1em;
     font-weight: bold;
     text-align: left;
-    background-image: url(../../Images/icon-bubble-warning.png);
+    background-image: url(../../Images/warningIcon.svg);
     background-repeat: no-repeat;
     background-position: 4% 50%;
+    background-color: #fdf2c2;
 }
 
-
-
-
 /* drag and drop image preview styles */
+
 @keyframes border-pulsate {
 to {
 border-color: #FFF;

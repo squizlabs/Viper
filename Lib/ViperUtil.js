@@ -12,13 +12,13 @@ var ViperUtil = {
     DOCUMENT_TYPE_NODE: 10,
     DOCUMENT_FRAGMENT_NODE: 11,
     NOTATION_NODE: 12,
-    DOM_VK_DELETE: 8,
+    DOM_VK_DELETE: 46,
     DOM_VK_LEFT: 37,
     DOM_VK_UP: 38,
     DOM_VK_RIGHT: 39,
     DOM_VK_DOWN: 40,
     DOM_VK_ENTER: 13,
-    DOM_VK_BACKSPACE: 46,
+    DOM_VK_BACKSPACE: 8,
     _browserType: null,
     _browserVersion: null,
 
@@ -341,6 +341,34 @@ var ViperUtil = {
 
     },
 
+    isEmptyElement: function (element) {
+        if (!element.firstChild) {
+            return true;
+        }
+
+        var brCount = 0;
+        for (var i = 0; i < element.childNodes.length; i++) {
+            var el = element.childNodes[i];
+            if (el.nodeType === ViperUtil.TEXT_NODE) {
+                if (ViperUtil.trim(el.data).length !== 0) {
+                    return false;
+                } else {
+                    // Ignore empty text nodes.
+                    continue;
+                }
+            } else if (ViperUtil.isTag(el, 'br') === false) {
+                return false;
+            } else if (brCount !== 0) {
+                return false;
+            } else {
+                brCount++;
+            }
+        }
+
+        return true;
+
+    },
+
     /**
      * returns a left trimmed string.
      *
@@ -389,6 +417,16 @@ var ViperUtil = {
     ucFirst: function(str)
     {
         return str.substr(0,1).toUpperCase() + str.substr(1, str.length);
+
+    },
+
+    replaceAll: function(search, replace, subject)
+    {
+        // Escape search.
+        search = search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+        var r = new RegExp(search, 'g');
+        return subject.replace(r, replace);
 
     },
 
@@ -715,21 +753,25 @@ var ViperUtil = {
 
             if (!tagName) {
                 var isOfType = false;
-                switch (elementType) {
-                    case 'block':
-                        isOfType = ViperUtil.isBlockElement(parent);
-                    break;
+                if (elementType) {
+                    switch (elementType) {
+                        case 'block':
+                            isOfType = ViperUtil.isBlockElement(parent);
+                        break;
 
-                    case 'stub':
-                        isOfType = ViperUtil.isStubElement(parent);
-                    break;
+                        case 'stub':
+                            isOfType = ViperUtil.isStubElement(parent);
+                        break;
 
-                    default:
-                        if (parent.nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isBlockElement(parent) === false) {
-                            // Inline
-                            isOfType = true;
-                        }
-                    break;
+                        default:
+                            if (parent.nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isBlockElement(parent) === false) {
+                                // Inline
+                                isOfType = true;
+                            }
+                        break;
+                    }
+                } else {
+                    isOfType = true;
                 }
 
                 if (isOfType) {
@@ -744,6 +786,15 @@ var ViperUtil = {
         }
 
         return parents;
+
+    },
+
+    getTopSurroundingParent: function(node, tagName, elementType, stopElem)
+    {
+        var parents = this.getSurroundingParents(node, tagName, elementType, stopElem);
+        if (parents.length > 0) {
+            return parents.pop();
+        }
 
     },
 
@@ -1317,6 +1368,24 @@ var ViperUtil = {
 
     },
 
+    getElementScrollCoords: function(element)
+    {
+        var scrollX = 0;
+        var scrollY = 0;
+
+        if (ViperUtil.isset(element.scrollLeft) === true) {
+            scrollX = element.scrollLeft;
+            scrollY = element.scrollTop;
+        }
+
+        var coords = {
+            x: scrollX,
+            y: scrollY
+        };
+        return coords;
+
+    },
+
     /**
      * Returns the width of the scrollbar programmatically.
      *
@@ -1394,6 +1463,17 @@ var ViperUtil = {
 
     },
 
+    getElementFrameElement: function(element)
+    {
+        if (element.ownerDocument.defaultView) {
+            return element.ownerDocument.defaultView.frameElement;
+        } else {
+            return element.ownerDocument.frames.frameElement;
+        }
+
+        return null;
+
+    },
 
     /**
      * Determines the position of the bubble given a target element.
@@ -1438,7 +1518,7 @@ var ViperUtil = {
         }
 
         // Get target elements position.
-        var relPos     = ViperUtil.getRelativeWindowPosition(targetElement, element.ownerDocument.defaultView.frameElement);
+        var relPos     = ViperUtil.getRelativeWindowPosition(targetElement, this.getElementFrameElement(element));
         var targetRect = {};
         targetRect.x1  = relPos.x;
         targetRect.y1  = relPos.y;
@@ -1617,8 +1697,8 @@ var ViperUtil = {
     isElementCutOff: function(element)
     {
         // Get the actual view size.
-        var win          = element.ownerDocument.defaultView;
-        var scrollCoords = ViperUtil.getScrollCoords(element.ownerDocument.defaultView);
+        var win          = element.ownerDocument.defaultView || window;
+        var scrollCoords = ViperUtil.getScrollCoords(win);
         var winHeight    = ViperUtil.$(win).height();
         var winWidth     = ViperUtil.$(win).width();
         var relPos       = ViperUtil.getRelativeWindowPosition(element);
@@ -1703,7 +1783,7 @@ var ViperUtil = {
     getRelativeWindowPosition: function(elem, topFrame)
     {
         var offset       = null;
-        var frameElement = elem.ownerDocument.defaultView.frameElement;
+        var frameElement = this.getElementFrameElement(elem);
         if (frameElement) {
             offset = ViperUtil.getElementCoords(elem);
             if (frameElement !== topFrame) {
@@ -2578,18 +2658,25 @@ var ViperUtil = {
     {
         var nodes = [];
 
-        if (parent && parent.childNodes) {
-            var ln = parent.childNodes.length;
-            for (var i = 0; i < ln; i++) {
-                var child = parent.childNodes[i];
-                if (child.nodeType === ViperUtil.TEXT_NODE) {
-                    if (removeEmpty === true && /^\s*$/.test(child.data) === true) {
-                        ViperUtil.remove(child);
-                    } else {
-                        nodes.push(child);
+        if (ViperUtil.isBrowser('msie') === false) {
+            var walk  = document.createTreeWalker(parent, NodeFilter.SHOW_TEXT)
+            while (node = walk.nextNode()) {
+                nodes.push(node);
+            }
+        } else {
+            if (parent && parent.childNodes) {
+                var ln = parent.childNodes.length;
+                for (var i = 0; i < ln; i++) {
+                    var child = parent.childNodes[i];
+                    if (child.nodeType === ViperUtil.TEXT_NODE) {
+                        if (removeEmpty === true && /^\s*$/.test(child.data) === true) {
+                            ViperUtil.remove(child);
+                        } else {
+                            nodes.push(child);
+                        }
+                    } else if (child.childNodes && child.childNodes.length > 0) {
+                        nodes = nodes.concat(ViperUtil.getTextNodes(child));
                     }
-                } else if (child.childNodes && child.childNodes.length > 0) {
-                    nodes = nodes.concat(ViperUtil.getTextNodes(child));
                 }
             }
         }

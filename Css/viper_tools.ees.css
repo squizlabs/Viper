@@ -1,27 +1,140 @@
-.Viper-buttonIcon.Viper-ees-link {
-  background-position: 0 -675px;
+.plus .ViperTP-bar {
+  border-bottom-width: 0;
+  background-color: transparent;
+  z-index: auto;
+  box-shadow: none;
 }
-.Viper-button:active .Viper-buttonIcon.Viper-ees-link, .Viper-button.Viper-active .Viper-buttonIcon.Viper-ees-link, .Viper-button.Viper-selected .Viper-buttonIcon.Viper-ees-link {
-  background-position: -33px -675px;
-}
-.Viper-buttonIcon.Viper-ees-image {
-  background-position: 0 -756px;
-}
-.Viper-button:active .Viper-buttonIcon.Viper-ees-image, .Viper-button.Viper-active .Viper-buttonIcon.Viper-ees-image, .Viper-button.Viper-selected .Viper-buttonIcon.Viper-ees-image {
-  background-position: -33px -756px;
+.fixedScroll .ViperTP-bar {
+  position: fixed !important;
+  top: 48px !important;
+  z-index: 98;
+  background-color: #EDEDED;
+  border-bottom-width: 1px;
+  box-shadow: 0 3px 2px rgba(0, 0, 0, 0.05);
 }
 .Viper-buttonIcon.Viper-ees-target {
   background-position: 0 -1215px;
 }
-.Viper-button:active .Viper-buttonIcon.Viper-ees-target, .Viper-button.Viper-active .Viper-buttonIcon.Viper-ees-target, .Viper-button.Viper-selected .Viper-buttonIcon.Viper-ees-target {
-  background-position: -33px -1215px;
+.Viper-button:active .Viper-buttonIcon.Viper-ees-target,
+.Viper-button.Viper-active .Viper-buttonIcon.Viper-ees-target,
+.Viper-button.Viper-selected .Viper-buttonIcon.Viper-ees-target {
+  background-position: -34px -1215px;
+}
+.Viper-buttonIcon.Viper-comments {
+  background-position: 0 -81px;
+  background-image: url("../Images/matrixButtonIcons.svg");
+}
+.Viper-button:active .Viper-buttonIcon.Viper-comments,
+.Viper-button.Viper-active .Viper-buttonIcon.Viper-comments,
+.Viper-button.Viper-selected .Viper-buttonIcon.Viper-comments {
+  background-position: -34px -81px;
+}
+.Viper-browserVer-msie8 .Viper-buttonIcon.Viper-comments {
+  background-image: url("../Images/matrixButtonIcons.png");
+}
+.Viper-comment-highlighted .Viper-buttonIcon.Viper-comments,
+.Viper-comment-highlighted.Viper-selected .Viper-buttonIcon.Viper-comments {
+  background-position: 0 -108px;
+}
+.Viper-button:active .Viper-comment-highlighted .Viper-buttonIcon.Viper-comments,
+.Viper-button:active .Viper-comment-highlighted.Viper-selected .Viper-buttonIcon.Viper-comments,
+.Viper-button.Viper-active .Viper-comment-highlighted .Viper-buttonIcon.Viper-comments,
+.Viper-button.Viper-active .Viper-comment-highlighted.Viper-selected .Viper-buttonIcon.Viper-comments,
+.Viper-button.Viper-selected .Viper-comment-highlighted .Viper-buttonIcon.Viper-comments,
+.Viper-button.Viper-selected .Viper-comment-highlighted.Viper-selected .Viper-buttonIcon.Viper-comments {
+  background-position: -34px -108px;
+}
+.Viper-buttonIcon.Viper-add-comments {
+  background-position: 0 -135px;
+  background-image: url("../Images/matrixButtonIcons.svg");
+}
+.Viper-button:active .Viper-buttonIcon.Viper-add-comments,
+.Viper-button.Viper-active .Viper-buttonIcon.Viper-add-comments,
+.Viper-button.Viper-selected .Viper-buttonIcon.Viper-add-comments {
+  background-position: -34px -135px;
+}
+.Viper-browserVer-msie8 .Viper-buttonIcon.Viper-add-comments {
+  background-image: url("../Images/matrixButtonIcons.png");
+}
+.Viper-buttonIcon.Viper-assetSelector-button {
+  background-position: 0 -1215px;
+}
+.Viper-button:active .Viper-buttonIcon.Viper-assetSelector-button,
+.Viper-button.Viper-active .Viper-buttonIcon.Viper-assetSelector-button,
+.Viper-button.Viper-selected .Viper-buttonIcon.Viper-assetSelector-button {
+  background-position: -34px -1215px;
+}
+.Viper-buttonIcon.Viper-keywords {
+  background-position: 0 0px;
+  background-image: url("../Images/matrixButtonIcons.svg");
+}
+.Viper-button:active .Viper-buttonIcon.Viper-keywords,
+.Viper-button.Viper-active .Viper-buttonIcon.Viper-keywords,
+.Viper-button.Viper-selected .Viper-buttonIcon.Viper-keywords {
+  background-position: -34px 0px;
+}
+.Viper-browserVer-msie8 .Viper-buttonIcon.Viper-keywords {
+  background-image: url("../Images/matrixButtonIcons.png");
+}
+.Viper-buttonIcon.Viper-snippet {
+  background-position: 0 -27px;
+  background-image: url("../Images/matrixButtonIcons.svg");
+}
+.Viper-button:active .Viper-buttonIcon.Viper-snippet,
+.Viper-button.Viper-active .Viper-buttonIcon.Viper-snippet,
+.Viper-button.Viper-selected .Viper-buttonIcon.Viper-snippet {
+  background-position: -34px -27px;
+}
+.Viper-browserVer-msie8 .Viper-buttonIcon.Viper-snippet {
+  background-image: url("../Images/matrixButtonIcons.png");
+}
+.Viper-buttonIcon.Viper-uploadImage-button {
+  background-position: 0 -54px;
+  background-image: url("../Images/matrixButtonIcons.svg");
+}
+.Viper-button:active .Viper-buttonIcon.Viper-uploadImage-button,
+.Viper-button.Viper-active .Viper-buttonIcon.Viper-uploadImage-button,
+.Viper-button.Viper-selected .Viper-buttonIcon.Viper-uploadImage-button {
+  background-position: -34px -54px;
+}
+.Viper-browserVer-msie8 .Viper-buttonIcon.Viper-uploadImage-button {
+  background-image: url("../Images/matrixButtonIcons.png");
+}
+.Viper-buttonIcon.MatrixComment-ViewNextCommentButton-icon-previous {
+  background-position: 0 -891px;
+}
+.Viper-button:active .Viper-buttonIcon.MatrixComment-ViewNextCommentButton-icon-previous,
+.Viper-button.Viper-active .Viper-buttonIcon.MatrixComment-ViewNextCommentButton-icon-previous,
+.Viper-button.Viper-selected .Viper-buttonIcon.MatrixComment-ViewNextCommentButton-icon-previous {
+  background-position: -34px -891px;
+}
+.Viper-buttonIcon.MatrixComment-ViewNextCommentButton-icon-next {
+  background-position: 0 -864px;
+}
+.Viper-button:active .Viper-buttonIcon.MatrixComment-ViewNextCommentButton-icon-next,
+.Viper-button.Viper-active .Viper-buttonIcon.MatrixComment-ViewNextCommentButton-icon-next,
+.Viper-button.Viper-selected .Viper-buttonIcon.MatrixComment-ViewNextCommentButton-icon-next {
+  background-position: -34px -864px;
 }
 .Viper-button.Viper-ees-target {
   position: absolute;
-  right: 0;
   top: 0;
-  line-height: 2.1em;
+  right: 0;
+  line-height: 26px;
+}
+.Viper-button.Viper-assetSelector-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  line-height: 26px;
+  right: 2.7em;
+}
+.Viper-button.Viper-uploadImage-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  line-height: 26px;
 }
 .Viper-subSectionRow.Viper-urlRow {
-  padding-right: 3.8em;
+  padding-right: 4.1em;
 }

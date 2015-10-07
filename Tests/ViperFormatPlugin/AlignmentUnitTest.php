@@ -1,4 +1,4 @@
-<?php
+`<?php
 
 require_once 'AbstractViperUnitTest.php';
 
@@ -215,50 +215,36 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
 
         //Remove left justification
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('justifyLeft', 'active');
         $this->clickTopToolbarButton('justifyLeft', 'active');
         $this->assertHTMLMatch('<p>test content <strong>%1%</strong> more test content</p>');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Active left justify icon should not appear in the top toolbar');
 
         // Apply centre justification
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyCenter');
         $this->assertHTMLMatch('<p style="text-align: center;">test content <strong>%1%</strong> more test content</p>');
         $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Active centre justify icon does not appear in the top toolbar');
 
         //Remove center justification
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('justifyCenter', 'active');
         $this->clickTopToolbarButton('justifyCenter', 'active');
         $this->assertHTMLMatch('<p>test content <strong>%1%</strong> more test content</p>');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Active center justify icon should not appear in the top toolbar');
 
         // Apply right justification
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyRight');
         $this->assertHTMLMatch('<p style="text-align: right;">test content <strong>%1%</strong> more test content</p>');
         $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Active right justify icon does not appear in the top toolbar');
 
         //Remove center justification
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('justifyRight', 'active');
         $this->clickTopToolbarButton('justifyRight', 'active');
         $this->assertHTMLMatch('<p>test content <strong>%1%</strong> more test content</p>');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Active right justify icon should not appear in the top toolbar');
 
         // Apply block justification
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyBlock');
         $this->assertHTMLMatch('<p style="text-align: justify;">test content <strong>%1%</strong> more test content</p>');
         $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Active block justify icon does not appear in the top toolbar');
 
         //Remove block justification
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('justifyBlock', 'active');
         $this->clickTopToolbarButton('justifyBlock', 'active');
         $this->assertHTMLMatch('<p>test content <strong>%1%</strong> more test content</p>');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Active block justify icon should not appear in the top toolbar');
@@ -283,50 +269,36 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
 
         //Remove left justification
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('justifyLeft', 'active');
         $this->clickTopToolbarButton('justifyLeft', 'active');
         $this->assertHTMLMatch('<p>test content <em>%1%</em> more test content</p>');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Active left justify icon should not appear in the top toolbar');
 
         // Apply centre justification
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyCenter');
         $this->assertHTMLMatch('<p style="text-align: center;">test content <em>%1%</em> more test content</p>');
         $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Active centre justify icon does not appear in the top toolbar');
 
         //Remove center justification
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('justifyCenter', 'active');
         $this->clickTopToolbarButton('justifyCenter', 'active');
         $this->assertHTMLMatch('<p>test content <em>%1%</em> more test content</p>');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Active center justify icon should not appear in the top toolbar');
 
         // Apply right justification
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyRight');
         $this->assertHTMLMatch('<p style="text-align: right;">test content <em>%1%</em> more test content</p>');
         $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Active right justify icon does not appear in the top toolbar');
 
         //Remove center justification
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('justifyRight', 'active');
         $this->clickTopToolbarButton('justifyRight', 'active');
         $this->assertHTMLMatch('<p>test content <em>%1%</em> more test content</p>');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Active right justify icon should not appear in the top toolbar');
 
         // Apply block justification
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyBlock');
         $this->assertHTMLMatch('<p style="text-align: justify;">test content <em>%1%</em> more test content</p>');
         $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Active block justify icon does not appear in the top toolbar');
 
         //Remove block justification
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('justifyBlock', 'active');
         $this->clickTopToolbarButton('justifyBlock', 'active');
         $this->assertHTMLMatch('<p>test content <em>%1%</em> more test content</p>');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Active block justify icon should not appear in the top toolbar');

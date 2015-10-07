@@ -47,6 +47,9 @@ ViperImagePlugin.prototype = {
                 var range = self.viper.getViperRange();
                 range.selectNode(target);
                 ViperSelection.addRange(range);
+                if (ViperUtil.isBrowser('msie') === true) {
+                    self.viper.fireSelectionChanged(range, true);
+                }
 
                 if (ViperUtil.isBrowser('msie', '<11') === true && ViperUtil.isTag(target, 'img') === true) {
                     self._ieImageResize = target;
@@ -142,7 +145,7 @@ ViperImagePlugin.prototype = {
         });
 
         this.viper.registerCallback(
-            ['ViperHistoryManager:beforeUndo', 'Viper:clickedOutside', 'ViperTools:popup:open', 'ViperCoreStylesPlugin:beforeImageUpdate', 'Viper:cut'],
+            ['ViperHistoryManager:beforeUndo', 'Viper:clickedOutside', 'ViperTools:popup:open', 'ViperCoreStylesPlugin:beforeImageUpdate', 'Viper:cut', 'Viper:disabled'],
             'ViperImagePlugin',
             function() {
                 self.hideImageResizeHandles();
@@ -226,7 +229,7 @@ ViperImagePlugin.prototype = {
             return;
         }
 
-        return this._rangeToImage(range, image);
+        return this._rangeToImage(range, image, null, null, null, true);
     },
 
     rangeToImage: function(range, url, alt, title)
@@ -239,7 +242,7 @@ ViperImagePlugin.prototype = {
 
     },
 
-    _rangeToImage: function(range, img, url, alt, title)
+    _rangeToImage: function(range, img, url, alt, title, isMoveAction)
     {
         this._resizeImage = null;
 
@@ -266,18 +269,39 @@ ViperImagePlugin.prototype = {
 
         if (!img) {
             img = document.createElement('img');
-            img.setAttribute('src', url);
+
+            this.viper.setAttribute(img, 'src', url);
 
             if (alt !== null) {
-                img.setAttribute('alt', alt);
+                this.viper.setAttribute(img, 'alt', alt, true);
             }
 
             if (title !== null && ViperUtil.trim(title).length !== 0) {
-                img.setAttribute('title', title);
+                this.viper.setAttribute(img, 'title', title);
             }
         }
 
-        ViperUtil.insertBefore(bookmark.start, img);
+        if (isMoveAction === true) {
+            // Image is being moved, make sure its surrounding parents also move with it.
+            var surroundingParents = ViperUtil.getSurroundingParents(img, null, null, this.viper.getViperElement());
+            if (surroundingParents.length > 0) {
+                var parent = null
+                while (parent = surroundingParents.pop()) {
+                    if (ViperUtil.isBlockElement(parent) === false) {
+                        ViperUtil.insertBefore(bookmark.start, parent);
+                        break;
+                    }
+                }
+
+                if (!parent) {
+                    ViperUtil.insertBefore(bookmark.start, img);
+                }
+            } else {
+                ViperUtil.insertBefore(bookmark.start, img);
+            }
+        } else {
+            ViperUtil.insertBefore(bookmark.start, img);
+        }
 
         this.viper.removeBookmark(bookmark);
 
@@ -354,13 +378,13 @@ ViperImagePlugin.prototype = {
         return false;
     },
 
-    setImageAlt: function(image, alt)
+    setImageAlt: function(image, alt, keepEmptyAttribute)
     {
         if (!image) {
             return;
         }
 
-        image.setAttribute('alt', alt);
+        this.viper.setAttribute(image, 'alt', alt, keepEmptyAttribute);
 
     },
 
@@ -370,7 +394,7 @@ ViperImagePlugin.prototype = {
             return;
         }
 
-        image.setAttribute('src', url);
+        this.viper.setAttribute(image, 'src', url);
 
     },
 
@@ -381,7 +405,7 @@ ViperImagePlugin.prototype = {
         } else if (title === null) {
             image.removeAttribute('title');
         } else {
-            image.setAttribute('title', title);
+            this.viper.setAttribute(image, 'title', title);
         }
 
     },
@@ -498,7 +522,7 @@ ViperImagePlugin.prototype = {
             image = this.rangeToImage(this.viper.getViperRange(), this.getImageUrl(url), alt, title);
         } else {
             this.setImageURL(image, this.getImageUrl(url));
-            this.setImageAlt(image, alt);
+            this.setImageAlt(image, alt, pres);
             this.setImageTitle(image, title);
 
             this.viper.fireNodesChanged([image]);
@@ -537,9 +561,10 @@ ViperImagePlugin.prototype = {
         if (image && ViperUtil.isTag(image, 'img') === true) {
             tools.setButtonActive('image');
 
-            this.setUrlFieldValue(image.getAttribute('src'));
-            tools.getItem(toolbarPrefix + ':altInput').setValue(image.getAttribute('alt') || '');
-            tools.getItem(toolbarPrefix + ':titleInput').setValue(image.getAttribute('title') || '');
+            var src = this.viper.getAttribute(image, 'src');
+            this.setUrlFieldValue(src);
+            tools.getItem(toolbarPrefix + ':altInput').setValue(this.viper.getAttribute(image, 'alt') || '');
+            tools.getItem(toolbarPrefix + ':titleInput').setValue(this.viper.getAttribute(image, 'title') || '');
 
             if (!image.getAttribute('alt')) {
                 tools.getItem(toolbarPrefix + ':isDecorative').setValue(true);
@@ -549,7 +574,7 @@ ViperImagePlugin.prototype = {
 
             // Update preview pane.
             ViperUtil.empty(this._previewBox);
-            this.updateImagePreview(image.getAttribute('src'));
+            this.updateImagePreview(src);
         } else {
             tools.enableButton('image');
             tools.setButtonInactive('image');
@@ -592,7 +617,7 @@ ViperImagePlugin.prototype = {
         this._inlineToolbar = toolbar;
 
         // Create a tooltip that will be shown when the image move icon is clicked.
-        tools.createToolTip('ViperImageToolbar-tooltip', _('The selected image will be moved to the next location you click. To cancel press the move icon again or ESC'), 'mouse');
+        tools.createToolTip('ViperImageToolbar-tooltip', _('The selected image will be moved to the next location you click. To cancel, press the move icon again, or ESC'), 'mouse');
 
         // Image Details.
         var subContent = this._getToolbarContents(idPrefix);
@@ -736,7 +761,20 @@ ViperImagePlugin.prototype = {
             callback.call(this, false);
         };
 
-        img.src = url;
+        var replacementPlugin = this.viper.getPluginManager().getPlugin('ViperReplacementPlugin');
+        if (replacementPlugin) {
+            // Replace the url keyword.
+            var self = this;
+            replacementPlugin.replaceKeywords(
+                url,
+                function(replaced) {
+                    self.viper.setAttribute(img, 'src', replaced);
+                }
+            )
+
+        } else {
+            this.viper.setAttribute(img, 'src', url);
+        }
 
     },
 

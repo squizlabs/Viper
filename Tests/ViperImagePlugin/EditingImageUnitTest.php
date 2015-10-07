@@ -22,7 +22,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->type($this->getTestURL('/ViperImagePlugin/Images/hero-shot.jpg'));
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
-        $this->clickInlineToolbarButton('image', 'selected');
+        $this->clickInlineToolbarButton('image', 'active-selected');
         $this->assertHTMLMatch('<p>Image without alt or title %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt=""/></p><p>LABS is ORSM</p>');
 
         // Change URL for an image that has alt and no title tag
@@ -33,7 +33,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->type($this->getTestURL('/ViperImagePlugin/Images/hero-shot.jpg'));
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
-        $this->clickInlineToolbarButton('image', 'selected');
+        $this->clickInlineToolbarButton('image', 'active-selected');
         $this->assertHTMLMatch('<p>Image with alt no title %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="testalt"/></p><p>LABS is ORSM</p>');
 
         // Change URL for an image that has alt and title tag
@@ -43,7 +43,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->clearFieldValue('URL');
         $this->type($this->getTestURL('/ViperImagePlugin/Images/hero-shot.jpg'));
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->clickInlineToolbarButton('image', 'selected');
+        $this->clickInlineToolbarButton('image', 'active-selected');
         $this->assertHTMLMatch('<p>Image with alt and title %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="testalt" title="testtitle"/></p><p>LABS is ORSM</p>');
 
         // Using the top toolbar
@@ -57,7 +57,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->checkPreviewImageSize();
-        $this->clickTopToolbarButton('image', 'selected');
+        $this->clickTopToolbarButton('image', 'active-selected');
         $this->assertHTMLMatch('<p>Image without alt or title %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt=""/></p><p>LABS is ORSM</p>');
 
         // Change URL for an image that has alt and no title tag
@@ -69,7 +69,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->checkPreviewImageSize();
-        $this->clickTopToolbarButton('image', 'selected');
+        $this->clickTopToolbarButton('image', 'active-selected');
         $this->assertHTMLMatch('<p>Image with alt no title %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="testalt"/></p><p>LABS is ORSM</p>');
 
         // Change URL for an image that has alt and title tag
@@ -80,7 +80,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->type($this->getTestURL('/ViperImagePlugin/Images/hero-shot.jpg'));
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->checkPreviewImageSize();
-        $this->clickTopToolbarButton('image', 'selected');
+        $this->clickTopToolbarButton('image', 'active-selected');
         $this->assertHTMLMatch('<p>Image with alt and title %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="testalt" title="testtitle"/></p><p>LABS is ORSM</p>');
 
     }//end testEditingTheURLForAnImage()
@@ -101,7 +101,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->clickField('Image is decorative');
         // Check Apply Changes button is disabled
         $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE));
-        $this->clickField('Alt');
+        $this->clickField('Alt', true);
         $this->type('Alt tag');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>Image without alt or title %1%</p><p><img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag"/></p><p>LABS is ORSM</p>');
@@ -118,7 +118,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->clickField('Image is decorative');
         // Check Apply Changes button is disabled
         $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE));
-        $this->clickField('Alt');
+        $this->clickField('Alt', true);
         $this->type('Alt tag');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->checkPreviewImageSize();
@@ -349,7 +349,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->clickField('Image is decorative');
         // Check Apply Changes button is disabled
         $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE));
-        $this->clickField('Alt');
+        $this->clickField('Alt', TRUE);
         $this->type('Alt tag');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p>Image with title no alt %1%</p><p><img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" title="testtitle"/></p><p>LABS is ORSM</p>');
@@ -361,7 +361,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->clickField('Image is decorative');
         // Check Apply Changes button is disabled
         $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE));
-        $this->clickField('Alt');
+        $this->clickField('Alt', TRUE);
         $this->type('Alt tag');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->checkPreviewImageSize();
@@ -459,6 +459,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
 
         // Check value of alt field in inline toolbar
         $this->clickElement('img', 0);
+        sleep(1);
         $this->clickInlineToolbarButton('image', 'active');
         $this->sikuli->keyDown('Key.TAB');
         $altField = $this->sikuli->execJS('document.activeElement.value');

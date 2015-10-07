@@ -72,6 +72,27 @@ ViperMozRange.prototype = {
      */
     setStart: function(node, offset)
     {
+        // TODO: Quick fix for selection issues with non editable elmeents in Viper element. Should be done in another way.
+        // When the range is set inside a contenteditable=false element, find the element with this attribute and move the
+        // range before the element.
+        var tmp = node;
+        while (tmp) {
+            if (tmp.nodeType === ViperUtil.ELEMENT_NODE) {
+                var editable = tmp.getAttribute('contenteditable');
+                if (editable === 'false') {
+                    var t = document.createTextNode('');
+                    ViperUtil.insertBefore(tmp, t);
+                    node = t;
+                    offset = 0;
+                    break;
+                } else if (editable === 'true') {
+                    break;
+                }
+            }
+
+            tmp = tmp.parentNode;
+        }
+
         this.rangeObj.setStart(node, offset);
 
         this.startContainer = node;
@@ -98,6 +119,27 @@ ViperMozRange.prototype = {
      */
     setEnd: function(node, offset)
     {
+        // TODO: Quick fix for selection issues with non editable elmeents in Viper element. Should be done in another way.
+        // When the range is set inside a contenteditable=false element, find the element with this attribute and move the
+        // range after the element.
+        var tmp = node;
+        while (tmp) {
+            if (tmp.nodeType === ViperUtil.ELEMENT_NODE) {
+                var editable = tmp.getAttribute('contenteditable');
+                if (editable === 'false') {
+                    var t = document.createTextNode('');
+                    ViperUtil.insertAfter(tmp, t);
+                    node = t;
+                    offset = 0;
+                    break;
+                } else if (editable === 'true') {
+                    break;
+                }
+            }
+
+            tmp = tmp.parentNode;
+        }
+
         this.rangeObj.setEnd(node, offset);
         this.endContainer = node;
         this.endOffset    = offset;

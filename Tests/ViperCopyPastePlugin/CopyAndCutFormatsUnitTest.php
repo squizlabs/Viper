@@ -111,7 +111,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutFormatsUnitTest extends Abstrac
      */
     public function testCopyAndPasteFormats()
     {
-        // Test copyd and paste a pre
+        // Test copy and paste a pre
         $this->useTest(1);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
@@ -122,6 +122,10 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutFormatsUnitTest extends Abstrac
         sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
         $this->assertHTMLMatch('<p>First paragraph</p><pre>Lorum this is more content %1% to test %2%</pre><pre>Lorum this is more content %1% to test %2%</pre>');
+        $this->assertTrue($this->topToolbarButtonExists('formats-pre', 'active'));
+        $this->sikuli->keyDown('Key.UP');
+        sleep(1);
+        $this->assertTrue($this->topToolbarButtonExists('formats-pre', 'active'));
 
         // Test copy and paste a div section
         $this->useTest(2);
@@ -133,6 +137,10 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutFormatsUnitTest extends Abstrac
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
         $this->assertHTMLMatch('<div>Lorum this is more content %1% to test %2%</div><div>Lorum this is more content %1% to test %2%</div>');
+        $this->assertTrue($this->topToolbarButtonExists('formats-div', 'active'));
+        $this->sikuli->keyDown('Key.UP');
+        sleep(1);
+        $this->assertTrue($this->topToolbarButtonExists('formats-div', 'active'));
 
         // Test copy and paste a quote section
         $this->useTest(3);
@@ -145,6 +153,10 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutFormatsUnitTest extends Abstrac
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
         $this->assertHTMLMatch('<p>First paragraph</p><blockquote><p>Lorum this is more content %1% to test %2%</p></blockquote><blockquote><p>Lorum this is more content %1% to test %2%</p></blockquote>');
+        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'));
+        $this->sikuli->keyDown('Key.UP');
+        sleep(1);
+        $this->assertTrue($this->topToolbarButtonExists('formats-blockquote', 'active'));
 
         // Test copy and paste a paragraph section
         $this->useTest(4);
@@ -156,6 +168,10 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutFormatsUnitTest extends Abstrac
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
         $this->assertHTMLMatch('<p>Lorum this is more content %1% to test %2%</p><p>Lorum this is more content %1% to test %2%</p>');
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'));
+        $this->sikuli->keyDown('Key.UP');
+        sleep(1);
+        $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'));
 
     }//end testCopyAndPasteASectionOfAFormats()
 
@@ -231,11 +247,19 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutFormatsUnitTest extends Abstrac
         $this->type(' ');
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
-        $this->assertHTMLMatch('<p>First paragraph<strong>%1% bold content %2%</strong></p><pre>&lt;strong&gt;%1% bold content %2%&lt;/strong&gt;<strong>%1% bold content %2% &lt;strong&gt;%1% bold content %2%&lt;/strong&gt;</strong></pre><pre>Lorum this is more content %3% to test</pre>');
-        $this->clickTopToolbarButton('PRE', 'active', TRUE);
-        sleep(1);
-        $this->assertHTMLMatch('<p>First paragraph<strong>%1% bold content %2%</strong></p><p>&lt;strong&gt;%1% bold content %2%&lt;/strong&gt;<strong>%1% bold content %2% &lt;strong&gt;%1% bold content %2%&lt;/strong&gt;</strong></p><pre>Lorum this is more content %3% to test</pre>');
-        
+
+        if ($this->sikuli->getBrowserid() === 'safari') {
+            $this->assertHTMLMatch('<p>First paragraph<strong>XAX bold content XBX</strong></p><pre>&lt;strong&gt;XAX bold content XBX&lt;/strong&gt;<strong>XAX bold content XBX &lt;strong&gt;XAX bold content XBX&lt;/strong&gt;</strong></pre><pre>Lorum this is more content XCX to test</pre>');
+            $this->clickTopToolbarButton('PRE', 'active', TRUE);
+            sleep(1);
+            $this->assertHTMLMatch('<p>First paragraph<strong>XAX bold content XBX</strong></p><p>&lt;strong&gt;XAX bold content XBX&lt;/strong&gt;<strong>XAX bold content XBX &lt;strong&gt;XAX bold content XBX&lt;/strong&gt;</strong></p><pre>Lorum this is more content XCX to test</pre>');
+        } else {
+            $this->assertHTMLMatch('<p>First paragraph<strong>XAX bold content XBX</strong></p><pre>&lt;strong&gt;XAX bold content XBX&lt;/strong&gt;<strong>XAX bold content XBX</strong> &lt;strong&gt;XAX bold content XBX&lt;/strong&gt;</pre><pre>Lorum this is more content XCX to test</pre>');
+            $this->clickTopToolbarButton('PRE', 'active', TRUE);
+            sleep(1);
+            $this->assertHTMLMatch('<p>First paragraph<strong>XAX bold content XBX</strong></p><p>&lt;strong&gt;XAX bold content XBX&lt;/strong&gt;<strong>XAX bold content XBX</strong> &lt;strong&gt;XAX bold content XBX&lt;/strong&gt;</p><pre>Lorum this is more content XCX to test</pre>');
+        }
+
     }//end testPastingHtmlIntoPre()
 
 

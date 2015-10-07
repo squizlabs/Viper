@@ -308,17 +308,18 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         // Apply and remove the P
         $this->useTest(2);
         $this->selectKeyword(1);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
         $this->assertTrue($this->topToolbarButtonExists('formats-div'), 'DIV format icon should appear in the top toolbar');
         $this->clickTopToolbarButton('formats-div');
-        $this->clickTopToolbarButton('P', NULL, TRUE);
+        $this->clickTopToolbarButton('P', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<p>First paragraph</p><div><p>%1%</p> xtn dolor</div>');
-        $this->assertTrue($this->topToolbarButtonExists('P', 'active'), 'P format icon should be active in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('P', 'active', TRUE), 'P format icon should be active in the top toolbar');
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-p', 'active');
-        $this->clickTopToolbarButton('P', 'active', TRUE);
+        $this->clickTopToolbarButton('P', 'active', TRUE, TRUE);
         $this->assertHTMLMatch('<p>First paragraph</p><div>%1% xtn dolor</div>');
         $this->checkStatusOfFormatIconsInTheTopToolbar();
 
@@ -327,14 +328,14 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->selectKeyword(1);
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
         $this->clickTopToolbarButton('formats-div');
-        $this->clickTopToolbarButton('P', NULL, TRUE);
+        $this->clickTopToolbarButton('P', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<div>Div section with a strong word <p><strong>%1%</strong></p></div>');
-        $this->assertTrue($this->topToolbarButtonExists('P', 'active'), 'P format icon should be active in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('P', 'active', TRUE), 'P format icon should be active in the top toolbar');
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-p', 'active');
-        $this->clickTopToolbarButton('P', 'active', TRUE);
+        $this->clickTopToolbarButton('P', 'active', TRUE, TRUE);
         $this->assertHTMLMatch('<div>Div section with a strong word <strong>%1%</strong></div>');
         $this->checkStatusOfFormatIconsInTheTopToolbar();
 
@@ -343,14 +344,14 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->selectKeyword(1);
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
         $this->clickTopToolbarButton('formats-div');
-        $this->clickTopToolbarButton('P', NULL, TRUE);
+        $this->clickTopToolbarButton('P', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<div>Div section with an italic word <p><em>%1%</em></p></div>');
-        $this->assertTrue($this->topToolbarButtonExists('P', 'active'), 'P format icon should be active in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('P', 'active', TRUE), 'P format icon should be active in the top toolbar');
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-p', 'active');
-        $this->clickTopToolbarButton('P', 'active', TRUE);
+        $this->clickTopToolbarButton('P', 'active', TRUE, TRUE);
         $this->assertHTMLMatch('<div>Div section with an italic word <em>%1%</em></div>');
         $this->checkStatusOfFormatIconsInTheTopToolbar();
 
@@ -368,49 +369,55 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         // APply and remove the Pre
         $this->useTest(2);
         $this->selectKeyword(1);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
         $this->assertTrue($this->topToolbarButtonExists('formats-div'), 'DIV format icon should appear in the top toolbar');
         $this->clickTopToolbarButton('formats-div');
-        $this->clickTopToolbarButton('PRE', NULL, TRUE);
+        $this->clickTopToolbarButton('PRE', NULL, TRUE, TRUE);
+        sleep(1);
         $this->assertHTMLMatch('<p>First paragraph</p><div><pre>%1%</pre> xtn dolor</div>');
-        $this->assertTrue($this->topToolbarButtonExists('PRE', 'active'), 'Pre format icon should be active in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('PRE', 'active', TRUE, TRUE), 'Pre format icon should be active in the top toolbar');
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-pre', 'active');
-        $this->clickTopToolbarButton('PRE', 'active', TRUE);
+        $this->clickTopToolbarButton('PRE', 'active', TRUE, TRUE);
         $this->assertHTMLMatch('<p>First paragraph</p><div>%1% xtn dolor</div>');
         $this->checkStatusOfFormatIconsInTheTopToolbar();
 
         // Do the same to a bold keyword
         $this->useTest(4);
         $this->selectKeyword(1);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
         $this->clickTopToolbarButton('formats-div');
-        $this->clickTopToolbarButton('PRE', NULL, TRUE);
+        $this->clickTopToolbarButton('PRE', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<div>Div section with a strong word <pre><strong>%1%</strong></pre></div>');
-        $this->assertTrue($this->topToolbarButtonExists('PRE', 'active'), 'Pre format icon should be active in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('PRE', 'active', TRUE), 'Pre format icon should be active in the top toolbar');
 
         $this->selectKeyword(1);
+        sleep(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-pre', 'active');
-        $this->clickTopToolbarButton('PRE', 'active', TRUE);
+        $this->clickTopToolbarButton('PRE', 'active', TRUE, TRUE);
         $this->assertHTMLMatch('<div>Div section with a strong word <strong>%1%</strong></div>');
         $this->checkStatusOfFormatIconsInTheTopToolbar();
 
         // Do the same to an italic keyword
         $this->useTest(5);
         $this->selectKeyword(1);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
         $this->clickTopToolbarButton('formats-div');
-        $this->clickTopToolbarButton('PRE', NULL, TRUE);
+        $this->clickTopToolbarButton('PRE', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<div>Div section with an italic word <pre><em>%1%</em></pre></div>');
-        $this->assertTrue($this->topToolbarButtonExists('PRE', 'active'), 'Pre format icon should be active in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('PRE', 'active', TRUE), 'Pre format icon should be active in the top toolbar');
 
         $this->selectKeyword(1);
+        sleep(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-pre', 'active');
-        $this->clickTopToolbarButton('PRE', 'active', TRUE);
+        $this->clickTopToolbarButton('PRE', 'active', TRUE, TRUE);
         $this->assertHTMLMatch('<div>Div section with an italic word <em>%1%</em></div>');
         $this->checkStatusOfFormatIconsInTheTopToolbar();
 
@@ -428,18 +435,19 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         // Apply and remove quote section
         $this->useTest(2);
         $this->selectKeyword(1);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
         $this->assertTrue($this->topToolbarButtonExists('formats-div'), 'DIV format icon should appear in the top toolbar');
         $this->clickTopToolbarButton('formats-div');
-        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->clickTopToolbarButton('Quote', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<p>First paragraph</p><div><blockquote><p>%1%</p></blockquote> xtn dolor</div>');
-        $this->assertTrue($this->topToolbarButtonExists('Quote', 'active'), 'Blockquote format icon should be active in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('Quote', 'active', TRUE), 'Blockquote format icon should be active in the top toolbar');
 
         // Remove Quote
         $this->selectKeyword(1);
         sleep(2);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
-        $this->clickTopToolbarButton('Quote', 'active', TRUE);
+        $this->clickTopToolbarButton('Quote', 'active', TRUE, TRUE);
         sleep(1);
         $this->assertHTMLMatch('<p>First paragraph</p><div>%1% xtn dolor</div>');
         $this->checkStatusOfFormatIconsInTheTopToolbar();
@@ -447,32 +455,36 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         // Do the same to a bold keyword
         $this->useTest(4);
         $this->selectKeyword(1);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
         $this->clickTopToolbarButton('formats-div');
-        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->clickTopToolbarButton('Quote', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<div>Div section with a strong word <blockquote><p><strong>%1%</strong></p></blockquote></div>');
-        $this->assertTrue($this->topToolbarButtonExists('Quote', 'active'), 'Blockquote format icon should be active in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('Quote', 'active', TRUE), 'Blockquote format icon should be active in the top toolbar');
 
         $this->selectKeyword(1);
+        sleep(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
-        $this->clickTopToolbarButton('Quote', 'active', TRUE);
+        $this->clickTopToolbarButton('Quote', 'active', TRUE, TRUE);
         $this->assertHTMLMatch('<div>Div section with a strong word <strong>%1%</strong></div>');
         $this->checkStatusOfFormatIconsInTheTopToolbar();
 
         // Do the same to an italic keyword
         $this->useTest(5);
         $this->selectKeyword(1);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
         $this->clickTopToolbarButton('formats-div');
-        $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        $this->clickTopToolbarButton('Quote', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<div>Div section with an italic word <blockquote><p><em>%1%</em></p></blockquote></div>');
-        $this->assertTrue($this->topToolbarButtonExists('Quote', 'active'), 'Blockquote format icon should be active in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('Quote', 'active', TRUE), 'Blockquote format icon should be active in the top toolbar');
 
         $this->selectKeyword(1);
+        sleep(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
-        $this->clickTopToolbarButton('Quote', 'active', TRUE);
+        $this->clickTopToolbarButton('Quote', 'active', TRUE, TRUE);
         $this->assertHTMLMatch('<div>Div section with an italic word <em>%1%</em></div>');
         $this->checkStatusOfFormatIconsInTheTopToolbar();
 
@@ -490,17 +502,18 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         // Apply and remove the div
         $this->useTest(2);
         $this->selectKeyword(1);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
         $this->assertTrue($this->topToolbarButtonExists('formats-div'), 'DIV format icon should appear in the top toolbar');
         $this->clickTopToolbarButton('formats-div');
-        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->clickTopToolbarButton('DIV', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<p>First paragraph</p><div><div>%1%</div> xtn dolor</div>');
         $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, 'active', NULL, NULL);
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-div', 'active');
-        $this->clickTopToolbarButton('DIV', 'active', TRUE);
+        $this->clickTopToolbarButton('DIV', 'active', TRUE, TRUE);
         $this->assertHTMLMatch('<p>First paragraph</p><div>%1% xtn dolor</div>');
         $this->checkStatusOfFormatIconsInTheTopToolbar();
 
@@ -509,14 +522,14 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->selectKeyword(1);
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
         $this->clickTopToolbarButton('formats-div');
-        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->clickTopToolbarButton('DIV', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<div>Div section with a strong word <div><strong>%1%</strong></div></div>');
         $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, 'active', NULL, NULL);
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-div', 'active');
-        $this->clickTopToolbarButton('DIV', 'active', TRUE);
+        $this->clickTopToolbarButton('DIV', 'active', TRUE, TRUE);
         $this->assertHTMLMatch('<div>Div section with a strong word <strong>%1%</strong></div>');
         $this->checkStatusOfFormatIconsInTheTopToolbar();
 
@@ -525,7 +538,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->selectKeyword(1);
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats icon should not appear in the inline toolbar');
         $this->clickTopToolbarButton('formats-div');
-        $this->clickTopToolbarButton('DIV', NULL, TRUE);
+        $this->clickTopToolbarButton('DIV', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<div>Div section with an italic word <div><em>%1%</em></div></div>');
         $this->checkStatusOfFormatIconsInTheInlineToolbar(NULL, 'active', NULL, NULL);
 
@@ -533,7 +546,7 @@ class Viper_Tests_ViperFormatPlugin_DivUnitTest extends AbstractFormatsUnitTest
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('formats-div', 'active');
-        $this->clickTopToolbarButton('DIV', 'active', TRUE);
+        $this->clickTopToolbarButton('DIV', 'active', TRUE, TRUE);
         $this->assertHTMLMatch('<div>Div section with an italic word <em>%1%</em></div>');
         $this->checkStatusOfFormatIconsInTheTopToolbar();
 

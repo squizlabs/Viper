@@ -133,7 +133,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
 
         $this->showTools(0, 'cell');
         $this->clickMergeSplitIcon('mergeRight');
-        $this->clickMergeSplitIcon('mergeDown');
+        $this->clickMergeSplitIcon('mergeDown', FALSE);
 
         $this->showTools(1, 'cell');
         $this->clickMergeSplitIcon('mergeDown');

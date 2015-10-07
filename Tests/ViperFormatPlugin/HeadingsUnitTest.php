@@ -20,45 +20,45 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->assertFalse($this->inlineToolbarButtonExists('headings', 'active'));
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('headings', 'active');
-        $this->clickInlineToolbarButton('H2', NULL, TRUE);
+        $this->clickInlineToolbarButton('H2', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h2>Heading %1%</h2>');
-        $this->clickInlineToolbarButton('H3', NULL, TRUE);
+        $this->clickInlineToolbarButton('H3', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h3>Heading %1%</h3>');
-        $this->clickInlineToolbarButton('H4', NULL, TRUE);
+        $this->clickInlineToolbarButton('H4', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h4>Heading %1%</h4>');
-        $this->clickInlineToolbarButton('H5', NULL, TRUE);
+        $this->clickInlineToolbarButton('H5', NULL, TRUE, TRUE, TRUE);
         $this->assertHTMLMatch('<h5>Heading %1%</h5>');
-        $this->clickInlineToolbarButton('H1', NULL, TRUE);
+        $this->clickInlineToolbarButton('H1', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h1>Heading %1%</h1>');
 
         // Using the top toolbar and clicking in the heading
         $this->useTest(1);
         $this->moveToKeyword(1);
         $this->clickTopToolbarButton('headings', 'active');
-        $this->clickTopToolbarButton('H2', NULL, TRUE);
+        $this->clickTopToolbarButton('H2', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h2>Heading %1%</h2>');
-        $this->clickTopToolbarButton('H3', NULL, TRUE);
+        $this->clickTopToolbarButton('H3', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h3>Heading %1%</h3>');
-        $this->clickTopToolbarButton('H4', NULL, TRUE);
+        $this->clickTopToolbarButton('H4', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h4>Heading %1%</h4>');
-        $this->clickTopToolbarButton('H5', NULL, TRUE);
+        $this->clickTopToolbarButton('H5', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h5>Heading %1%</h5>');
-        $this->clickTopToolbarButton('H1', NULL, TRUE);
+        $this->clickTopToolbarButton('H1', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h1>Heading %1%</h1>');
 
         // Using the top toolbar and selecting a word
         $this->useTest(1);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('headings', 'active');
-        $this->clickTopToolbarButton('H2', NULL, TRUE);
+        $this->clickTopToolbarButton('H2', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h2>Heading %1%</h2>');
-        $this->clickTopToolbarButton('H3', NULL, TRUE);
+        $this->clickTopToolbarButton('H3', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h3>Heading %1%</h3>');
-        $this->clickTopToolbarButton('H4', NULL, TRUE);
+        $this->clickTopToolbarButton('H4', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h4>Heading %1%</h4>');
-        $this->clickTopToolbarButton('H5', NULL, TRUE);
+        $this->clickTopToolbarButton('H5', NULL, TRUE, TRUE, TRUE);
         $this->assertHTMLMatch('<h5>Heading %1%</h5>');
-        $this->clickTopToolbarButton('H1', NULL, TRUE);
+        $this->clickTopToolbarButton('H1', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h1>Heading %1%</h1>');
 
         // Using the top toolbar and selecting the heading
@@ -66,15 +66,15 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('headings', 'active');
-        $this->clickTopToolbarButton('H2', NULL, TRUE);
+        $this->clickTopToolbarButton('H2', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h2>Heading %1%</h2>');
-        $this->clickTopToolbarButton('H3', NULL, TRUE);
+        $this->clickTopToolbarButton('H3', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h3>Heading %1%</h3>');
-        $this->clickTopToolbarButton('H4', NULL, TRUE);
+        $this->clickTopToolbarButton('H4', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h4>Heading %1%</h4>');
-        $this->clickTopToolbarButton('H5', NULL, TRUE);
+        $this->clickTopToolbarButton('H5', NULL, TRUE, TRUE, TRUE);
         $this->assertHTMLMatch('<h5>Heading %1%</h5>');
-        $this->clickTopToolbarButton('H1', NULL, TRUE);
+        $this->clickTopToolbarButton('H1', NULL, TRUE, TRUE);
         $this->assertHTMLMatch('<h1>Heading %1%</h1>');
 
     }//end testEditingAHeading()
@@ -208,7 +208,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->useTest(2);
 
         // Check single line paragraph
-        $this->selectKeyword(1); 
+        $this->selectKeyword(1);
         $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->inlineToolbarButtonExists('headings'));
@@ -494,7 +494,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         // Check the the heading icon is disabled in the toolbar when you click the P
         $this->selectInlineToolbarLineageItem(1);
         $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'));
-        
+
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('headings');
         $this->clickTopToolbarButton('H1', NULL, TRUE);
@@ -731,20 +731,26 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should be not appear in the inline toolbar');
 
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should be enabled in the top toolbar');
         $this->assertFalse($this->inlineToolbarButtonExists('headings'), 'Heading icon should not appear in the inline toolbar');
 
         // Apply heading to the P section
         $this->clickTopToolbarButton('headings');
+        sleep(1);
         $this->clickTopToolbarButton('H1', NULL, TRUE);
+        sleep(1);
         $this->assertHTMLMatch('<div><h1>Long paragraph for testing that the heading icon does not appear in the inline toolbar %1%.</h1></div>');
 
         // Test changing the div to a heading
         $this->useTest(6);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->clickTopToolbarButton('headings');
+        sleep(1);
         $this->clickTopToolbarButton('H1', NULL, TRUE);
+        sleep(1);
         $this->assertHTMLMatch('<h1>Long paragraph for testing that the heading icon does not appear in the inline toolbar %1%.</h1>');
 
     }//end testApplyingHeadginsWithOnePInsideADiv()
@@ -833,7 +839,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         // Apply a heading to the Div section
         $this->clickTopToolbarButton('headings');
         $this->clickTopToolbarButton('H1', NULL, TRUE);
-        $this->assertHTMLMatch('<div><h1>Long paragraph for testing that the heading icon does not appear in the inline toolbar %1%.</h1></div>');
+        $this->assertHTMLMatch('<div><h1>Long paragraph %1% for testing that the heading icon does not appear in the inline toolbar.</h1></div>');
 
         // Undo the changes so we can test chagning the Div section
         $this->clickTopToolbarButton('historyUndo');
@@ -1127,7 +1133,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
 
         $this->clickTopToolbarButton('headings');
         $this->clickTopToolbarButton('H1', NULL, TRUE);
-        $this->assertHTMLMatch('<h1>Long paragraph for testing that the heading icon does not appear in the inline toolbar %1%.</h1>');
+        $this->assertHTMLMatch('<h1>Long paragraph %1% for testing that the heading icon does not appear in the inline toolbar.</h1>');
 
         // Test Pre inside a Div
         $this->useTest(12);
@@ -1176,11 +1182,15 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the top toolbar.');
 
+        sleep(1);
         $this->sikuli->keyDown('Key.RIGHT');
+        sleep(2);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(2);
         $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the top toolbar.');
 
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(2);
         $this->type('New parra');
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should appear in the top toolbar.');
 
@@ -1198,11 +1208,15 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the top toolbar.');
 
         $this->sikuli->keyDown('Key.RIGHT');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should not appear in the top toolbar.');
 
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->type('New parra');
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should appear in the top toolbar.');
 
     }//end testHeadingIconNotAvailableForList()

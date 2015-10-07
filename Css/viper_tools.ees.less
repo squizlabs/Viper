@@ -1,31 +1,102 @@
+// out: viper_tools.ees.css
+
+// Viper toolbar tweaks for Edit Plus
+
+    // Inline embedded
+        .plus .ViperTP-bar {
+            border-bottom-width: 0;
+            background-color: transparent;
+            z-index: auto;
+            box-shadow: none;
+        }
+
+    // Attached to top toolbar
+        .fixedScroll .ViperTP-bar {
+            position: fixed !important;
+            top: 48px !important;
+            z-index: 98;
+            background-color: #EDEDED;
+            border-bottom-width: 1px;
+            box-shadow: 0 3px 2px rgba(0, 0, 0, 0.05);
+        }
+
+// Define all Matrix Plugin icons
+
 // Button Vars
 
-@fieldIconSpriteLocation: 1;
-@iconWidth: 25px;
-@iconHeight: 20px;
-@iconHeightOffset: 27px;
-@bgY: 0;
-@bgY-activeOffset: 33px;
-@bgX: -(@fieldIconSpriteLocation - 1) * @iconHeightOffset;
+    @fieldIconSpriteLocation: 1;
+    @iconHeightOffset: 27px;
+    @bgY: 0;
+    @bgY-activeOffset: 34px;
+    @bgX: -(@fieldIconSpriteLocation - 1) * @iconHeightOffset;
+
+    // function to use for matrix only icons, which loads a different sprite
+
+        .matrix-sprite () {
+            background-image: url("../Images/matrixButtonIcons.svg");
+
+            .Viper-browserVer-msie8 & {
+                background-image: url("../Images/matrixButtonIcons.png");
+            }
+        }
 
 .Viper-buttonIcon {
 
 // Icon definitions
 
-    // EES Link
-    &.Viper-ees-link {
-        .icon (26);
-    }
-
-    // EES Image
-    &.Viper-ees-image {
-        .icon (29);
-    }
-
     // EES Link Target
-    &.Viper-ees-target {
-        .icon (46);
-    }
+        &.Viper-ees-target {
+            .icon (46);
+        }
+
+    // Inline Comments
+        &.Viper-comments {
+            .icon (4);
+            .matrix-sprite;
+
+            .Viper-comment-highlighted &,
+            .Viper-comment-highlighted.Viper-selected & {
+                .icon (5);
+            }
+        }
+
+        &.Viper-add-comments {
+            .icon (6);
+            .matrix-sprite;
+        }
+
+    // Asset Selector
+        &.Viper-assetSelector-button {
+            .icon (46);
+        }
+
+    // Matrix Keywords
+        &.Viper-keywords {
+            .icon(1);
+            .matrix-sprite;
+        }
+
+    // Matrix Snippet
+        &.Viper-snippet {
+            .icon(2);
+            .matrix-sprite;
+        }
+
+    // Image Upload
+        &.Viper-uploadImage-button {
+            .icon(3);
+            .matrix-sprite;
+        }
+
+    // Previous Comment
+        &.MatrixComment-ViewNextCommentButton-icon-previous {
+            .icon(34);
+        }
+
+    // Next Comment
+        &.MatrixComment-ViewNextCommentButton-icon-next {
+            .icon(33);
+        }
 
 } // End .buttonIcon
 
@@ -41,12 +112,35 @@
     }
 }
 
-.Viper-button.Viper-ees-target {
-    position: absolute;
-    right: 0;
-    top: 0;
-    line-height: 2.1em;
-}
+// Custom button positioning, usually to appear adjacent to inputs
+
+    .position-absolute () {
+        position: absolute;
+        top: 0;
+        right: 0;
+        line-height: 26px;
+    }
+
+    .Viper-button {
+
+        // EES Link Target
+            &.Viper-ees-target {
+                .position-absolute;
+            }
+
+        // Asset Selector (target icon)
+            &.Viper-assetSelector-button {
+                .position-absolute;
+                right: 2.7em;
+            }
+
+        // Image Upload
+            &.Viper-uploadImage-button {
+              .position-absolute;
+            }
+
+    }
+
 .Viper-subSectionRow.Viper-urlRow {
-    padding-right: 3.8em;
+    padding-right: 4.1em;
 }

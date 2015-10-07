@@ -162,20 +162,20 @@ ViperLinkPlugin.prototype = {
             // IE for whatever reason, changed the content of the link to be the href
             // when its a mailto link.....
             var linkContent = ViperUtil.getHtml(link);
-            link.setAttribute('href', url);
+            this.viper.setAttribute(link, 'href', url);
             ViperUtil.setHtml(link, linkContent);
         } else {
-            link.setAttribute('href', url);
+            this.viper.setAttribute(link, 'href', url);
         }
 
         if (title) {
-            link.setAttribute('title', title);
+            this.viper.setAttribute(link, 'title', title);
         } else {
             link.removeAttribute('title');
         }
 
         if (newWindow === true) {
-            link.setAttribute('target', '_blank');
+            this.viper.setAttribute(link, 'target', '_blank');
         } else {
             link.removeAttribute('target');
         }
@@ -200,6 +200,7 @@ ViperLinkPlugin.prototype = {
 
         range.selectNode(node);
         ViperSelection.addRange(range);
+
         this.viper.fireSelectionChanged(range, true);
         this.viper.fireNodesChanged([node]);
 
@@ -235,6 +236,9 @@ ViperLinkPlugin.prototype = {
                 || ViperUtil.isTag(node, 'ul') === true
                 || ViperUtil.isTag(node, 'ol') === true
             ) {
+                ViperUtil.insertBefore(node, a);
+                a.appendChild(node);
+            } else if (this.viper.isSpecialElement(node) === true) {
                 ViperUtil.insertBefore(node, a);
                 a.appendChild(node);
             } else {
@@ -760,8 +764,8 @@ ViperLinkPlugin.prototype = {
         var isEmailLink = false;
 
         if (link) {
-            href  = link.getAttribute('href');
-            title = link.getAttribute('title');
+            href  = this.viper.getAttribute(link, 'href');
+            title = this.viper.getAttribute(link, 'title');
 
             if (link.getAttribute('target') === '_blank') {
                 newWindow = true;
@@ -806,8 +810,8 @@ ViperLinkPlugin.prototype = {
         var isEmailLink = false;
 
         if (link) {
-            href  = link.getAttribute('href');
-            title = link.getAttribute('title');
+            href  = this.viper.getAttribute(link, 'href');
+            title = this.viper.getAttribute(link, 'title');
 
             if (link.getAttribute('target') === '_blank') {
                 newWindow = true;

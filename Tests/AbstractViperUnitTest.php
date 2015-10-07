@@ -247,6 +247,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $contents = str_replace('__TEST_TITLE__', $testTitle, $contents);
         $contents = str_replace('__TEST_JS_INCLUDE__', $jsInclude, $contents);
         $contents = str_replace('__TEST_VIPER_VERSION__', self::$_viperVersion, $contents);
+        $contents = str_replace('__TEST_URL__', $this->_getBaseUrl(), $contents);
 
         $dest = $baseDir.'/tmp/test_tmp.html';
         file_put_contents($dest, $contents);
@@ -624,10 +625,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $browserClass = '';
         $buttonNames  = array_values(array_unique($matches[1]));
         $statuses     = array(
-                         ''          => ' Viper-dummyClass',
-                         '_selected' => ' Viper-selected',
-                         '_active'   => ' Viper-active',
-                         '_disabled' => ' Viper-disabled',
+                         ''             => ' Viper-dummyClass',
+                         '_selected'    => ' Viper-selected',
+                         '_active'      => ' Viper-active',
+                         '_disabled'    => ' Viper-disabled',
+                         '_active-selected' => 'Viper-selected Viper-active',
                         );
 
         if ($this->sikuli->getBrowserid() === 'ie8') {
@@ -718,6 +720,8 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 unset($buttonNames[$btnIndex]);
             }
         }
+
+        unset($statuses['_active-selected']);
 
         for ($similarity = 0.92; $similarity < 0.97; $similarity += 0.01) {
             // Find each of the icons, if any fails it will throw an exception.
@@ -991,42 +995,55 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function assertHTMLMatch($html, $msg=null, $removeTableHeaders=false)
     {
-        $html = $this->replaceKeywords($html);
-
-        $pageHtml = $this->getHtml(null, 0, $removeTableHeaders, true);
-
-        $pageHtml = preg_replace("/<([a-z0-9]+)\n([a-z0-9]*)/i", '<$1$2', $pageHtml);
-        $pageHtml = str_replace("<\n", '<', $pageHtml);
-        $pageHtml = str_replace("\n", ' ', $pageHtml);
-        $pageHtml = str_replace('\n', ' ', $pageHtml);
-        $html     = str_replace("\n", ' ', $html);
-
-        // Chrome requires &nbsp; inside block elements unlike Firefox, remove all
-        // single &nbsp; from tags and just before a start tag.
-        $pageHtml = str_replace('>&nbsp;<', '><', $pageHtml);
-        $pageHtml = str_replace('&nbsp;<', '<', $pageHtml);
-        $pageHtml = str_replace('&nbsp;<', '<', $pageHtml);
-        $pageHtml = str_replace('>&nbsp;', '> ', $pageHtml);
-        $html     = str_replace('>&nbsp;<', '><', $html);
-        $html     = str_replace('&nbsp;<', '<', $html);
-        $html     = str_replace('&nbsp;<', '<', $html);
-        $html     = str_replace('>&nbsp;', '> ', $html);
-        $pageHtml = str_replace('> <', '><', $pageHtml);
-        $pageHtml = str_replace(' <', '<', $pageHtml);
-        $html     = str_replace('> <', '><', $html);
-        $html     = str_replace(' <', '<', $html);
-
-        // Remove the Viper version from the end of URLs.
-        $pageHtml = preg_replace('#\?v=[\d\w]+"#', '"', $pageHtml);
-
-        if ($html !== $pageHtml) {
-            $pageHtml = $this->_orderTagAttributes($pageHtml);
-            $html     = $this->_orderTagAttributes($html);
-        }
+        $html     = $this->_normaliseHTML($this->replaceKeywords($html));
+        $pageHtml = $this->_normaliseHTML($this->getHtml(null, 0, $removeTableHeaders, true));
 
         $this->assertEquals($html, $pageHtml, $msg);
 
     }//end assertHTMLMatch()
+
+
+    /**
+     * Assert that given HTML string matches the tests page's HTML.
+     *
+     * @param string $html The HTML string to compare.
+     * @param string $msg  The error message to print.
+     *
+     */
+    protected function assertRawHTMLMatch($html, $msg=null)
+    {
+        $html     = $this->_normaliseHTML($this->replaceKeywords($html));
+        $pageHTML = $this->_normaliseHTML($this->getRawHtml());
+
+        $this->assertEquals($html, $pageHTML, $msg);
+
+    }//end assertRawHTMLMatch()
+
+
+    private function _normaliseHTML($html)
+    {
+        $html = preg_replace("/<([a-z0-9]+)\n([a-z0-9]*)/i", '<$1$2', $html);
+        $html = str_replace("<\n", '<', $html);
+        $html = str_replace("\n", ' ', $html);
+        $html = str_replace('\n', ' ', $html);
+
+        // Chrome requires &nbsp; inside block elements unlike Firefox, remove all
+        // single &nbsp; from tags and just before a start tag.
+        $html     = str_replace('>&nbsp;<', '><', $html);
+        $html     = str_replace('&nbsp;<', '<', $html);
+        $html     = str_replace('&nbsp;<', '<', $html);
+        $html     = str_replace('>&nbsp;', '> ', $html);
+        $html     = str_replace('> <', '><', $html);
+        $html     = str_replace(' <', '<', $html);
+
+        // Remove the Viper version from the end of URLs.
+        $html = preg_replace('#\?v=[\d\w]+"#', '"', $html);
+
+        $html = $this->_orderTagAttributes($html);
+
+        return $html;
+
+    }//end _normaliseHTML()
 
 
     /**
@@ -1127,7 +1144,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     private function _orderTagAttributes($html)
     {
-        $attrRegex = '(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"))?)+)?(?:(?:\s+\w+(?:\s*=\s*(?:"(?:[^"]+)?"))?)+)?\s*\/?';
+        $attrRegex = '(?:(?:\s+[\w-]+(?:\s*=\s*(?:"(?:[^"]+)?"))?)+)?(?:(?:\s+[\w-]+(?:\s*=\s*(?:"(?:[^"]+)?"))?)+)?\s*\/?';
         $matches   = preg_split(
             '/(<\w+'.$attrRegex.'>)/i',
             $html,
@@ -1146,7 +1163,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                     // This tag has attributes, which need to be ordered
                     // alphabetically as the browser changes the order sometimes.
                     $attrs = array();
-                    preg_match_all('/\s+(\w+)\s*=\s*(?:"([^"]+)?")/i', $match, $attrs);
+                    preg_match_all('/\s+([\w-]+)\s*=\s*(?:"([^"]+)?")/i', $match, $attrs);
                     asort($attrs[1]);
                     $match = $tagMatches[1];
                     foreach ($attrs[1] as $attrIndex => $attrName) {
@@ -1394,13 +1411,15 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      * @param string  $buttonIcon The name of the button.
      * @param string  $state      The name of the button state (active, selected).
      * @param boolean $isText     If TRUE then the button is a text button (i.e. no icon).
+     * @param boolean $forceJSPos If isText option is set to TRUE and this is set to TRUE then
+     *                            image will not be used.
      *
      * @return void
      * @throws Exception If the specified icon file not found.
      */
-    protected function clickInlineToolbarButton($buttonIcon, $state=null, $isText=false)
+    protected function clickInlineToolbarButton($buttonIcon, $state=null, $isText=false, $forceJSPos=false)
     {
-        $this->_clickButton($buttonIcon, $state, $isText, 'inlineToolbar');
+        $this->_clickButton($buttonIcon, $state, $isText, 'inlineToolbar', $forceJSPos);
 
     }//end clickInlineToolbarButton()
 
@@ -1943,9 +1962,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    protected function clickField($label)
+    protected function clickField($label, $required=FALSE)
     {
-        $this->sikuli->click($this->sikuli->find($this->_getLabel($label), null, 0.7));
+        $this->sikuli->click($this->sikuli->find($this->_getLabel($label, false, $required), null, 0.7));
 
     }//end clickField()
 
@@ -2025,14 +2044,20 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     /**
      * Returns the label image for the specified label element.
      *
-     * @param string  $label The label of a field.
-     * @param boolean $force Force update the label screenshot.
+     * @param string  $label    The label of a field.
+     * @param boolean $force    Force update the label screenshot.
+     * @param boolean $required If true then required label image is used.
      *
      * @return string
      */
-    private function _getLabel($label, $force=false)
+    private function _getLabel($label, $force=false, $required=false)
     {
         $labelImg  = preg_replace('#\W#', '_', $label);
+
+        if ($required === true) {
+            $labelImg .= '_required';
+        }
+
         $imagePath = $this->getBrowserImagePath().'/label_'.$labelImg.'.png';
 
         if (file_exists($imagePath) === false || $force === true) {
@@ -2064,6 +2089,34 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         return $result;
 
     }//end type()
+
+
+    /**
+     * Returns the raw HTML of the test page.
+     *
+     * @param string  $selector The jQuery selector to use for finding the element.
+     * @param integer $index    The element index of the resulting array.
+     *
+     * @return string
+     */
+    protected function getRawHtml($selector=null, $index=0)
+    {
+        if ($selector === null) {
+            $text = $this->sikuli->execJS('getRawHTML()');
+        } else {
+            $text = $this->sikuli->execJS('getRawHTML("'.$selector.'", '.$index.')');
+        }
+
+        $text = str_replace("\n", '', $text);
+        $text = str_replace('\n', '', $text);
+
+        // Google Chrome always adds an extra space at the end of a style attribute
+        // remove it here...
+        $text = preg_replace('#style="(.+)\s"#', 'style="$1"', $text);
+
+        return $text;
+
+    }//end getRawHtml()
 
 
     /**

@@ -13,6 +13,7 @@ class Viper_Tests_ViperCursorAssistPlugin_CursorAssistForTablesUnitTest extends 
      */
     public function testCursorAssistAboveTable()
     {
+        $this->useTest(1);
         $this->clickKeyword(3);
 
         $this->moveMouseToElement('table', 'top');
@@ -36,11 +37,12 @@ class Viper_Tests_ViperCursorAssistPlugin_CursorAssistForTablesUnitTest extends 
      */
     public function testCursorAssistBelowTable()
     {
-        $this->clickKeyword(3);
+        $this->useTest(2);
+        $this->clickKeyword(1);
 
         sleep(2);
         $this->moveMouseToElement('table', 'bottom');
-        sleep(2);
+        sleep(4);
 
         // Check to see if the cursor assit line appears above the table
         $this->assertTrue($this->isCursorAssistLineVisible('table', 'bottom'));
@@ -49,7 +51,7 @@ class Viper_Tests_ViperCursorAssistPlugin_CursorAssistForTablesUnitTest extends 
         $this->clickCursorAssistLine();
         $this->type('New content below table');
 
-        $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus<strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table><p>New content below table</p>');
+        $this->assertHTMLMatchNoHeaders('<p>content above %1%</p><table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %2%</caption><thead><tr><th>Col1 Header</th><th>Col2 %3%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %4%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %5%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table><p>New content below table</p>');
 
     }//end testCursorAssistBelowTable()
 
@@ -61,6 +63,7 @@ class Viper_Tests_ViperCursorAssistPlugin_CursorAssistForTablesUnitTest extends 
      */
     public function testCursorAssistWhenUsingTableTools()
     {
+        $this->useTest(1);
         // Show tools for the last row
         $this->showTools(3, 'row');
 

@@ -87,7 +87,7 @@ ViperReadyCallback = null;
     jsFiles     = jsFiles.split('|');
 
     _loadScripts(path + 'Lib/', jsFiles, function() {
-        var plugins    = 'ViperCopyPastePlugin|ViperToolbarPlugin|ViperInlineToolbarPlugin|ViperCoreStylesPlugin|ViperFormatPlugin|ViperKeyboardEditorPlugin|ViperListPlugin|ViperHistoryPlugin|ViperTableEditorPlugin|ViperTrackChangesPlugin|ViperLinkPlugin|ViperAccessibilityPlugin|ViperSourceViewPlugin|ViperImagePlugin|ViperSearchReplacePlugin|ViperLangToolsPlugin|ViperCharMapPlugin|ViperCursorAssistPlugin';
+        var plugins    = 'ViperCopyPastePlugin|ViperToolbarPlugin|ViperInlineToolbarPlugin|ViperCoreStylesPlugin|ViperFormatPlugin|ViperKeyboardEditorPlugin|ViperListPlugin|ViperHistoryPlugin|ViperTableEditorPlugin|ViperTrackChangesPlugin|ViperLinkPlugin|ViperAccessibilityPlugin|ViperSourceViewPlugin|ViperImagePlugin|ViperSearchReplacePlugin|ViperLangToolsPlugin|ViperCharMapPlugin|ViperCursorAssistPlugin|ViperReplacementPlugin';
         plugins        = plugins.split('|');
 
         _loadScripts(path + 'Plugins/', plugins.concat([]), function() {
