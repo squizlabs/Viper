@@ -18,8 +18,6 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         // Add hr
         $this->moveToKeyword(3, 'right');
         $this->clickTopToolbarButton('insertHr');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('%4% new line of content');
         $this->assertHTMLMatch('<p>%1% %2% dolor sit <em>amet</em> <strong>%3%</strong></p><hr /><p>%4% new line of content</p>');
 
@@ -104,8 +102,6 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
 
         $this->clickTopToolbarButton('insertHr');
 
-        //$this->sikuli->keyDown('Key.RIGHT');
-        //$this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('%3% Content');
 
         $this->assertHTMLMatch('<h1>Heading %1%</h1><hr /><p>%3% ContentParagraph after heading %2%</p><p>Another paragraph</p>');
