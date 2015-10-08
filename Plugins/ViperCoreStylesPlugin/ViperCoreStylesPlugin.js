@@ -1102,17 +1102,13 @@ ViperCoreStylesPlugin.prototype = {
             return;
         }
 
-        // TODO: Fix here: <p><em>text*text</em></p>. Press CMD+I, CMD+B and type p will produce extra p character.
-        // E.g. <p><em>text</em>pp<em>text</em></p>.
         var origData = node.data;
         var style    = null;
-        var removeStyle = false;
         while (style = this._onChangeAddStyle.shift()) {
             var nodes = this.viper.splitNodeAtRange(style, range, true);
 
-            if (removeStyle === true || ViperUtil.isTag(nodes.prevNode, style) === true || ViperUtil.isTag(nodes.nextNode, style) === true) {
+            if (ViperUtil.isTag(nodes.prevNode, style) === true || ViperUtil.isTag(nodes.nextNode, style) === true) {
                 if (this._onChangeAddStyle.length > 0) {
-                    removeStyle = true;
                     node.data = '';
                 } else {
                     node.data = origData;
@@ -1181,9 +1177,17 @@ ViperCoreStylesPlugin.prototype = {
                     this.viper.insertBefore(nodes.nextNode, styleTag);
                 }
 
+                var offset = 1;
+                if (this._onChangeAddStyle.length > 0) {
+                    node.data = '';
+                    offset = 0;
+                } else {
+                    node.data = origData;
+                }
+
                 styleTag.appendChild(node);
 
-                range.setStart(node, 1);
+                range.setStart(node, offset);
                 range.collapse(true);
                 ViperSelection.addRange(range);
             }//end if
