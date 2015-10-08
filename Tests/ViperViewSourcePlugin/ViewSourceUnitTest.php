@@ -198,8 +198,6 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViper
         $this->sikuli->keyDown('Key.DOWN');
         $this->sikuli->keyDown('Key.DOWN');
         $this->sikuli->keyDown('Key.DOWN');
-        $this->sikuli->keyDown('Key.DOWN');
-        $this->sikuli->keyDown('Key.SHIFT + Key.DOWN');
         $this->sikuli->keyDown('Key.SHIFT + Key.DOWN');
         $this->sikuli->keyDown('Key.SHIFT + Key.DOWN');
         $this->sikuli->keyDown('Key.SHIFT + Key.DOWN');
