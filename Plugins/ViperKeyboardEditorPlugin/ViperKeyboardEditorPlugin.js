@@ -2087,7 +2087,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 && ViperUtil.isStubElement(currentParent.previousElementSibling) === true
             ) {
                 // Previous element is a stub element, remove it.
-                ViperUtil.remove(currentParent.previousSibling);
+                ViperUtil.remove(currentParent.previousElementSibling);
                 return false;
             } else if (currentParent !== prevParent && this.viper.isOutOfBounds(prevSelectable) === false) {
                 // Check if there are any other elements in between.
