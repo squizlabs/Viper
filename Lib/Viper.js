@@ -4077,7 +4077,8 @@ Viper.prototype = {
             if (this.elementIsEmpty(tmp) === false) {
                 while (tmp.lastChild) {
                     nextNode = tmp.lastChild;
-                    ViperUtil.insertAfter(selEnd, tmp.lastChild);
+                    ViperUtil.remove(tmp.lastChild);
+                    ViperUtil.insertAfter(selEnd, nextNode);
                 }
             }
 
