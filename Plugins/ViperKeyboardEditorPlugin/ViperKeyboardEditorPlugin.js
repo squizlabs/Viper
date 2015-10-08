@@ -2354,11 +2354,13 @@ ViperKeyboardEditorPlugin.prototype = {
                         // At the end of a text node.
                         if (startCont.nextSibling && this.viper.isSpecialElement(startCont.nextSibling) === true) {
                             ViperUtil.remove(startCont.nextSibling);
+                            return false;
                         } else if (!startCont.nextSibling) {
                             // Check if the next container is a special element.
                             var nextSelectable = range.getNextContainer(startCont, null, true, true, true);
                             if (nextSelectable && this.viper.isSpecialElement(nextSelectable.parentNode) === true) {
                                 ViperUtil.remove(nextSelectable.parentNode);
+                                return false;
                             }
                         }
                     }
