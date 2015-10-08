@@ -1635,10 +1635,10 @@ ViperCopyPastePlugin.prototype = {
         if (this._aggressiveMode === false) {
             // Aggressive mode is turned off, allow these styles.
             allowedStyles = allowedStyles.concat(['padding', 'text-align', 'text-indent', 'border-collapse', 'border', 'border-top', 'border-bottom', 'border-right', 'border-left']);
+        }
 
-            if (contentType === 'google_docs') {
-                allowedStyles = allowedStyles.concat(['font-weight', 'font-style', 'vertical-align', 'text-decoration']);
-            }
+        if (contentType === 'google_docs') {
+            allowedStyles = allowedStyles.concat(['font-weight', 'font-style', 'vertical-align', 'text-decoration']);
         }
 
         if (ViperUtil.inArray(styleName[0], allowedStyles) === true) {
