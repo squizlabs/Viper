@@ -438,6 +438,81 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
 
 
     /**
+     * Test that you can apply different alignments to a paragraph that has an image.
+     *
+     * @return void
+     */
+    public function testAligningAParagraphWithImage()
+    {
+        // Test with image and content in paragraph
+
+        $this->useTest(6);
+
+        $this->clickElement('img', 0);
+        $this->selectInlineToolbarLineageItem(0);
+
+        $this->clickTopToolbarButton('justifyLeft');
+
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Left justify icon does not appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyRight'), 'Right justify icon does not appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyCenter'), 'Center justify icon does not appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyBlock'), 'Block justify icon does not appear in the top toolbar');
+
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p style="text-align: left;"><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="354" height="160" />%2% ttt uuu pp %3%</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
+
+        $this->clickTopToolbarButton('justifyCenter');
+        $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p style="text-align: center;"><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="354" height="160" />%2% ttt uuu pp %3%</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Active center justify icon does not appear in the top toolbar');
+
+        $this->clickTopToolbarButton('justifyRight');
+        $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p style="text-align: right;"><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="354" height="160" />%2% ttt uuu pp %3%</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Active right justify icon does not appear in the top toolbar');
+
+        $this->clickTopToolbarButton('justifyBlock');
+        $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p style="text-align: justify;"><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="354" height="160" />%2% ttt uuu pp %3%</p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Active block justify icon does not appear in the top toolbar');
+
+        $this->clickTopToolbarButton('justifyRight', 'active');
+        $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="354" height="160" />%2% ttt uuu pp %3%</p>');
+
+        // Test with image only in paragraph
+        $this->useTest(7);
+
+        $this->clickElement('img', 0);
+        $this->selectInlineToolbarLineageItem(0);
+
+        $this->clickTopToolbarButton('justifyLeft');
+
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft'), 'Left justify icon does not appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyRight'), 'Right justify icon does not appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyCenter'), 'Center justify icon does not appear in the top toolbar');
+        $this->assertTrue($this->topToolbarButtonExists('justifyBlock'), 'Block justify icon does not appear in the top toolbar');
+
+        $this->clickTopToolbarButton('justifyLeft');
+        $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p style="text-align: left;"><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="354" height="160" /></p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
+
+        $this->clickTopToolbarButton('justifyCenter');
+        $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p style="text-align: center;"><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="354" height="160" /></p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Active center justify icon does not appear in the top toolbar');
+
+        $this->clickTopToolbarButton('justifyRight');
+        $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p style="text-align: right;"><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="354" height="160" /></p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Active right justify icon does not appear in the top toolbar');
+
+        $this->clickTopToolbarButton('justifyBlock');
+        $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p style="text-align: justify;"><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="354" height="160" /></p>');
+        $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Active block justify icon does not appear in the top toolbar');
+
+        $this->clickTopToolbarButton('justifyRight', 'active');
+        $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="354" height="160" /></p>');
+
+    }//end testAligningAParagraphWithImage()
+
+
+    /**
      * Test undo and redo icons.
      *
      * @return void
