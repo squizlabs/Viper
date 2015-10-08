@@ -891,6 +891,13 @@ ViperCoreStylesPlugin.prototype = {
         range.collapse(true);
         ViperSelection.addRange(range);
 
+        if (nextSibling.previousSibling
+            && nextSibling.previousSibling.nodeType === ViperUtil.TEXT_NODE
+            && ViperUtil.trim(nextSibling.previousSibling.data) === ''
+        ) {
+            ViperUtil.remove(nextSibling.previousSibling);
+        }
+
         this.viper.fireNodesChanged('ViperCoreStylesPlugin:hr');
         this.viper.ViperHistoryManager.end();
 
