@@ -214,7 +214,13 @@ ViperReplacementPlugin.prototype = {
             }
         });
 
+        var ignoreSelectionChange = false;
         this.viper.registerCallback('Viper:selectionChanged', 'ViperReplacementPlugin', function(range) {
+            if (ignoreSelectionChange === true) {
+                ignoreSelectionChange = false;
+                return;
+            }
+
             var start        = range.getStartNode();
             var end          = range.getEndNode();
             var startKeyword = self._getKeywordElement(start);
@@ -254,6 +260,10 @@ ViperReplacementPlugin.prototype = {
                 }
 
                 ViperSelection.addRange(range);
+
+                // Need to ignore the next call to selectionChanged handler to prevent recursion.
+                ignoreSelectionChange = true;
+                self.viper.fireSelectionChanged(null, true);
             } else if (startKeyword !== false && endKeyword === false) {
                 // Start of selection is inside a keyword. Extend the range.
                 var node = startKeyword.previousSibling;
