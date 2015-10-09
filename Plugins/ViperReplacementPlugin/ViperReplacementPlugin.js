@@ -367,6 +367,8 @@ ViperReplacementPlugin.prototype = {
                     callback.call(this, string);
                 }
             );
+        } else {
+            callback.call(this, string);
         }
 
     },

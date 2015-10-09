@@ -2350,6 +2350,8 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 $this->sikuli->keyDown('Key.ENTER');
             }//end if
 
+            sleep(1);
+
         }//end if
 
     }//end paste()
