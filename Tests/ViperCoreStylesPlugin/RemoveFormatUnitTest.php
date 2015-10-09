@@ -144,30 +144,68 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
     {
         $this->useTest(6);
         
-        // Apply italic, subscript and superscript to the word
+        // Apply italic and subscript to the word
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('italic');
         $this->clickTopToolbarButton('subscript');
-        $this->clickTopToolbarButton('superscript');
-        $this->assertHTMLMatch('<p>Test content with <sup><sub><em>%1%</em></sub></sup> no styles applied</p>');
+        $this->assertHTMLMatch('<p>Test content with <sub><em>%1%</em></sub> no styles applied</p>');
 
         // Remove format for the content
         $this->clickTopToolbarButton('removeFormat');
         $this->assertHTMLMatch('<p>Test content with %1% no styles applied</p>');
 
-        // Try removing content from the content again to make sure it is not deleted
+        // Try removing format from the content again to make sure it is not deleted
         $this->selectKeyword(1);
         sleep(1);
         $this->clickTopToolbarButton('removeFormat');
         $this->assertHTMLMatch('<p>Test content with %1% no styles applied</p>');
 
-        // Apply bold, italic, subscript and superscript to the word
+        // Apply italic and superscript to the word
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('italic');
+        $this->clickTopToolbarButton('superscript');
+        $this->assertHTMLMatch('<p>Test content with <sup><em>%1%</em></sup> no styles applied</p>');
+
+        // Remove format for the content
+        $this->clickTopToolbarButton('removeFormat');
+        $this->assertHTMLMatch('<p>Test content with %1% no styles applied</p>');
+
+        // Try removing format from the content again to make sure it is not deleted
+        $this->selectKeyword(1);
+        sleep(1);
+        $this->clickTopToolbarButton('removeFormat');
+        $this->assertHTMLMatch('<p>Test content with %1% no styles applied</p>');
+
+        // Apply bold, italic and subscript to the word
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('bold');
         $this->clickTopToolbarButton('italic');
         $this->clickTopToolbarButton('subscript');
+        $this->assertHTMLMatch('<p>Test content with <sub><em><strong>%1%</strong></em></sub> no styles applied</p>');
+
+        // Remove format for the content
+        $this->clickTopToolbarButton('removeFormat');
+        sleep(1);
+        $this->assertHTMLMatch('<p>Test content with %1% no styles applied</p>');
+
+        // Select content again and make sure icons are not active
+        $this->selectKeyword(1);
+        sleep(1);
+        $this->assertTrue($this->topToolbarButtonExists('italic'));
+        $this->assertTrue($this->inlineToolbarButtonExists('italic'));
+        $this->assertTrue($this->topToolbarButtonExists('subscript'));
+        $this->assertTrue($this->topToolbarButtonExists('superscript'));
+
+        // Click remove format again to make sure content is not broken
+        $this->clickTopToolbarButton('removeFormat');
+        $this->assertHTMLMatch('<p>Test content with %1% no styles applied</p>');
+
+        // Apply bold, italic and superscript to the word
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('bold');
+        $this->clickTopToolbarButton('italic');
         $this->clickTopToolbarButton('superscript');
-        $this->assertHTMLMatch('<p>Test content with <sup><sub><em><strong>%1%</strong></em></sub></sup> no styles applied</p>');
+        $this->assertHTMLMatch('<p>Test content with <sup><em><strong>%1%</strong></em></sup> no styles applied</p>');
 
         // Remove format for the content
         $this->clickTopToolbarButton('removeFormat');
