@@ -2318,7 +2318,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $js .= ' false)';
         }
 
-        $this->sikuli->execJS($js, true);
+        $this->sikuli->execJS($js);
 
     }//end removeTableHeaders()
 

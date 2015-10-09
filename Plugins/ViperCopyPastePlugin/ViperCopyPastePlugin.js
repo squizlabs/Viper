@@ -1155,13 +1155,17 @@ ViperCopyPastePlugin.prototype = {
                     }
 
                     if (ViperUtil.isTag(fragment.lastChild, 'img') === true) {
-                        fragment.lastChild.src = fragment.lastChild.src.replace('%7E', '~');
+                        if (fragment.lastChild.src.match('%7E') !== null) {
+                            fragment.lastChild.src = fragment.lastChild.src.replace('%7E', '~');
+                        }
                     }
 
                     // Check child elements.
                     var images = ViperUtil.getTag('img', fragment.lastChild);
                     for (var i = 0; i < images.length; i++) {
-                        images[i].src = images[i].src.replace('%7E', '~');
+                        if (images[i].src.match('%7E') !== null) {
+                            images[i].src = images[i].src.replace('%7E', '~');
+                        }
                     }
 
                     prevChild = fragment.lastChild;
