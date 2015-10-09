@@ -192,7 +192,7 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->useTest(3);
 
         // Test ul list
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
 
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
@@ -219,7 +219,7 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->assertTrue($this->topToolbarButtonExists('insertHr'), 'HR icon should appear in the top toolbar.');
 
         // Test ol list
-        $this->sikuli->click($this->findKeyword(3));
+        $this->clickKeyword(3);
         $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should not appear in the top toolbar.');
 
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
@@ -258,7 +258,7 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->useTest(4);
 
         // Test icon in a caption
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should be disabled');
 
         $this->selectKeyword(1);
@@ -271,7 +271,7 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should be disabled');
 
         // Test icon in a header cells
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should be disabled');
 
         $this->selectKeyword(2);
@@ -290,7 +290,7 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should be disabled');
 
         // Test icon in a footer cells
-        $this->sikuli->click($this->findKeyword(3));
+        $this->clickKeyword(3);
         $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should be disabled');
 
         $this->selectKeyword(3);
@@ -309,7 +309,7 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should be disabled');
 
         // Test icon in a body cells
-        $this->sikuli->click($this->findKeyword(4));
+        $this->clickKeyword(4);
         $this->assertTrue($this->topToolbarButtonExists('insertHr', 'disabled'), 'HR icon should be disabled');
 
         $this->selectKeyword(4);

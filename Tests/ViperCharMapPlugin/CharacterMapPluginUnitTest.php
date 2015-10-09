@@ -63,7 +63,7 @@ class Viper_Tests_ViperCharMapPlugin_CharacterMapPluginUnitTest extends Abstract
      */
     public function testInsertingASymbolAndClickingUndo()
     {
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
         $this->clickTopToolbarButton('charMap');
 
         // Insert char.

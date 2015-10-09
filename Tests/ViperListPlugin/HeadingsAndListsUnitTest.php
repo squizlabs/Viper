@@ -15,7 +15,7 @@ class Viper_Tests_ViperListPlugin_HeadingsAndListsUnitTest extends AbstractViper
     {
         $this->useTest(1);
 
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectKeyword(1);

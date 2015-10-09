@@ -40,7 +40,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->useTest(7);
 
         // Check an unordered list
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not appear in the top toolbar.');
 
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
@@ -50,7 +50,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->sikuli->keyDown('Key.TAB');
         $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not active in the top toolbar.');
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not appear in the top toolbar.');
 
@@ -69,7 +69,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->assertTrue($this->topToolbarButtonExists('table'), 'Table icon should appear in the top toolbar.');
 
         // Check an ordered list
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->assertTrue($this->topToolbarButtonExists('table', 'disabled'), 'Table icon should not appear in the top toolbar.');
 
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');

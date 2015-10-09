@@ -94,7 +94,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text <span id="test">%1%</span></caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('anchorID', 'active');
         $this->clearFieldValue('ID');
@@ -144,7 +144,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption id="test"><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('anchorID', 'active');
@@ -373,7 +373,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<table id="test" border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th id="testr1c1">Col1 Header</th><th id="testr1c2">Col2 %2%</th><th id="testr1c3">Col3 Header</th></tr></thead><tfoot><tr><td headers="testr1c1 testr1c2 testr1c3" colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody id="test"><tr><td headers="testr1c1">nec porta ante</td><td headers="testr1c2">sapien vel %4%</td><td headers="testr1c3"><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td headers="testr1c1">nec porta ante</td><td headers="testr1c2 testr1c3" colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         sleep(1);
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(1);
@@ -451,7 +451,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInTablesUnitTest extends AbstractViper
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<table id="test" border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th id="testr1c1">Col1 Header</th><th id="testr1c2">Col2 %2%</th><th id="testr1c3">Col3 Header</th></tr></thead><tfoot><tr><td headers="testr1c1 testr1c2 testr1c3" colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody id="test"><tr><td headers="testr1c1">nec porta ante</td><td headers="testr1c2">sapien vel %4%</td><td headers="testr1c3"><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td headers="testr1c1">nec porta ante</td><td headers="testr1c2 testr1c3" colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         sleep(1);
         $this->selectKeyword(4);
         sleep(1);

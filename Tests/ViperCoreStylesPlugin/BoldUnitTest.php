@@ -387,7 +387,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->clickTopToolbarButton('bold');
         $this->assertHTMLMatch('<p><strong>%1% %2% %3%</strong><!-- hello world! --></p><p>sit %4% %5%</p><p>Another p</p>');
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
 
         $this->selectKeyword(5);
         sleep(1);

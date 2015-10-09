@@ -22,7 +22,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesInTableUnitTest extends Abstra
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'));
 
-        $this->sikuli->click($this->findKeyword(3));
+        $this->clickKeyword(3);
         $this->selectKeyword(4);
         $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'));

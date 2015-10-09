@@ -15,7 +15,7 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
     {
         $this->useTest(1);
 
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('accessAudit'), 'Accessibility auditor icon should be active.');
 
         $this->clickTopToolbarButton('accessAudit');
@@ -54,7 +54,7 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
     {
         $this->useTest(1);
 
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
         $this->clickTopToolbarButton('accessAudit');
 
         sleep(2);
@@ -93,7 +93,7 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
     {
         $this->useTest(2);
 
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
         $this->clickTopToolbarButton('accessAudit');
 
         sleep(4);
@@ -140,7 +140,7 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
     public function testTableIdErrorCountInHTMLCS()
     {
         $this->useTest(1);
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
 
         // Open and copy the text file
         $this->openFile($this->getTestURL('/ViperAccessibilityPlugin/TableIdErrorCountExampleContent.txt'), $this->sikuli->getBrowserName());
