@@ -13,14 +13,13 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
      */
     public function testImageIconIsAvailable()
     {
-        $text = 1;
-        $this->selectKeyword($text);
+        $this->selectKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('image'), 'Image icon should be active.');
 
         $this->selectInlineToolbarLineageItem(3);
         $this->assertTrue($this->topToolbarButtonExists('image'), 'Image icon should be active.');
 
-        $this->sikuli->click($this->findKeyword($text));
+        $this->clickKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('image'), 'Image icon should be active.');
 
         $this->moveToKeyword(2, 'right');
