@@ -2018,7 +2018,7 @@ ViperFormatPlugin.prototype = {
             if (ViperUtil.isBlockElement(startNode) === true) {
                 selectedNode = startNode;
             } else {
-                selectedNode = ViperUtil.getFirstBlockParent(range.startContainer);
+                selectedNode = ViperUtil.getFirstBlockParent(range.startContainer, null, true);
             }
         } else if (selectedNode && ViperUtil.isBlockElement(selectedNode) === false) {
             // Get surrounding parent.
