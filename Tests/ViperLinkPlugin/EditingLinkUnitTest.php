@@ -134,7 +134,6 @@ class Viper_Tests_ViperLinkPlugin_EditingLinkUnitTest extends AbstractViperUnitT
 
     }//end testEditingTheTitleAndNewWindowOfLink()
 
-
 }//end class
 
 ?>
