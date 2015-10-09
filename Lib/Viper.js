@@ -833,6 +833,7 @@ Viper.prototype = {
 
         this.setEnabled(false);
         this.element = elem;
+        ViperUtil.setViperElement(elem);
 
         if (ViperUtil.inArray(elem, this._registeredElements) === false) {
             this.registerEditableElement(elem);

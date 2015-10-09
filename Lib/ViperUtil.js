@@ -21,6 +21,7 @@ var ViperUtil = {
     DOM_VK_BACKSPACE: 8,
     _browserType: null,
     _browserVersion: null,
+    _viperElement: null,
 
     isTag: function(node, tag)
     {
@@ -686,6 +687,8 @@ var ViperUtil = {
             return elem;
         }
 
+        stopEl = stopEl || this._viperElement;
+
         while (elem.parentNode) {
             elem = elem.parentNode;
             if (stopEl && elem === stopEl) {
@@ -703,6 +706,7 @@ var ViperUtil = {
 
     getParents: function(elements, filter, stopEl, blockElementsOnly)
     {
+        stopEl  = stopEl || this._viperElement;
         var res = ViperUtil.$(elements).parents(filter);
         var ln  = res.length;
         var ar  = [];
@@ -737,7 +741,8 @@ var ViperUtil = {
             return parents;
         }
 
-        var parent  = node.parentNode;
+        stopElem   = stopElem || this._viperElement;
+        var parent = node.parentNode;
         while (parent) {
             if (stopElem && parent === stopElem) {
                 break;
@@ -831,6 +836,8 @@ var ViperUtil = {
     isChildOf: function(el, parent, stopElem)
     {
         try {
+            stopElem = stopElem || this._viperElement;
+
             if (parent instanceof Array) {
                 var c = parent.length;
                 while (el && el !== stopElem && el.parentNode) {
@@ -3072,6 +3079,12 @@ var ViperUtil = {
         }
 
         console.info(ViperUtil._dcall);
+    },
+
+    setViperElement: function(element)
+    {
+        this._viperElement = element;
+
     }
 
 };
