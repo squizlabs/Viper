@@ -400,6 +400,9 @@ function useTest(id)
 
     ViperSelection.removeAllRanges();
 
+    viper.setEditableElement(contentElement);
+    viper.setEnabled(false);
+
 }
 
 function pasteFromURL(url)
