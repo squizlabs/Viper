@@ -985,10 +985,10 @@ ViperKeyboardEditorPlugin.prototype = {
 
             if (ViperUtil.isBrowser('msie', '>=11') === true) {
                 // Check if the previous sibling of a parent is HR element and then remove it if found.
-                var startNode = range.getStartNode();
+                var startElem = startNode;
                 var foundSib  = false;
-                while (startNode) {
-                    for (var node = startNode.previousSibling; node; node = node.previousSibling) {
+                while (startElem) {
+                    for (var node = startElem.previousSibling; node; node = node.previousSibling) {
                         if (node.nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isTag(node, 'hr') === true) {
                             // Found the HR element, remove it.
                             ViperUtil.remove(node);
@@ -1006,7 +1006,7 @@ ViperKeyboardEditorPlugin.prototype = {
                         break;
                     }
 
-                    startNode = startNode.parentNode;
+                    startElem = startElem.parentNode;
                 }
             } else {
                 // Remove HR elements in <IE11..
