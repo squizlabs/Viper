@@ -747,6 +747,7 @@ ViperCopyPastePlugin.prototype = {
             this.rangeObj  = null;
             this.viper.highlightSelection();
             this._bookmark = this.viper.createBookmarkFromHighlight();
+            ViperUtil.insertBefore(this._bookmark.start, this._tmpNode);
         } else {
             try {
                 this.viper.insertNodeAtCaret(this._tmpNode);
