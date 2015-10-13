@@ -3,19 +3,17 @@
 }
 
 .uploadImage-progressIndicator .uploadImage-progress-status {
-    color: #ddd;
     font-size: 1.3em;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
     white-space: nowrap;
     margin: 5px 0;
     text-align: center;
+    font-weight: bold;
 }
 
 .uploadImage-progressIndicator .uploadImage-progress-message {
-    color: #c44e4e;
+    color: #E33030;
     font-size: 1.3em;
     font-weight: bold;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
     white-space: nowrap;
     margin: 0 0 5px;
     text-align: center;

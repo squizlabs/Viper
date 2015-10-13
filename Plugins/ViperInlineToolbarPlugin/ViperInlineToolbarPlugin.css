@@ -101,6 +101,10 @@
             left: 0;
             margin-left: 3px;
         }
+        .ViperITP.Viper-orientationLeft:after {
+            left: 0;
+            margin-left: 5px;
+        }
 
         .ViperITP.Viper-orientationRight:before {
             left: 100%;
