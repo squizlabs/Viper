@@ -125,6 +125,13 @@ sub, sup {
     line-height: 0;
     position: relative;
     vertical-align: baseline;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-weight: inherit;
+    font-style: inherit;
+    font-family: inherit;
 }
 
 caption {
