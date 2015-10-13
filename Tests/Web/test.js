@@ -311,14 +311,38 @@ function gStringLoc(str)
 {
     var range = viper.getCurrentRange();
     var loc   = null;
-    if (window.find(str, true, false, true, true, true) === true) {
-        loc = viper.getCurrentRange().rangeObj.getBoundingClientRect();
+    if (ViperUtil.isBrowser('msie') === true) {
+        // Range search.
+        var viperRange = null;
+        if (ViperUtil.isBrowser('msie', '>=11') === true) {
+            var textRange = new ViperIERange(document.body.createTextRange());
+            var selectable = range._getFirstSelectableChild(document.getElementById('content'));
+            textRange.setStart(selectable, 0);
+            textRange.setEnd(selectable, 0);
+            viperRange = textRange;
+        } else {
+            viperRange.collapse(false);
+        }
+
+        var found = viperRange.rangeObj.findText(str);
+        loc = viperRange.rangeObj.getBoundingClientRect();
         loc = {
-            x1: loc.left,
-            x2: loc.right,
-            y1: loc.top,
-            y2: loc.bottom
-        };
+                x1: loc.left,
+                x2: loc.right,
+                y1: loc.top,
+                y2: loc.bottom
+            };
+
+    } else {
+        if (window.find(str, true, false, true, true, true) === true) {
+            loc = viper.getCurrentRange().rangeObj.getBoundingClientRect();
+            loc = {
+                x1: loc.left,
+                x2: loc.right,
+                y1: loc.top,
+                y2: loc.bottom
+            };
+        }
     }
 
     // Reset selection.
