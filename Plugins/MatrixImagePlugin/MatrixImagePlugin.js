@@ -375,8 +375,9 @@ MatrixImagePlugin.prototype = {
           beforeSend: function() {
               $('.uploadImage-progress-status').show();
               $('.uploadImage-progressIndicator').show();
-              if(ViperUtil.isBrowser('msie', '<10') !== true) {
+              if(ViperUtil.isBrowser('msie', '<10') !== true && self._inlineUploadForm.find('input[name=base64]').val() == '') {
                 // old IE can't support upload progress
+                // and if we are uploading drag dropped image (base64), the progress bar is not accurate, so no showing it
                 $('.uploadImage-progress').show();
                 $('.uploadImage-progress-bar-inner').show();
               }
