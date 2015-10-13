@@ -225,7 +225,6 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         // every 100 tests.
         if (ViperTestListener::getErrorStreak() >= self::$_maxErrorStreak || ($testsRun % 100) === 0) {
             $this->resetConnection();
-            $this->sikuli->restartBrowser();
             ViperTestListener::resetErrorStreak();
         }
 
@@ -315,7 +314,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function resetConnection()
     {
-        $this->sikuli->execJS('clean()');
+        $this->sikuli->execJS('clean()', TRUE);
 
         self::$_topToolbar = null;
         self::$_testRun    = false;
@@ -345,7 +344,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function reloadPage()
     {
-        $this->sikuli->execJS('clean()');
+        $this->sikuli->execJS('clean()', TRUE);
         $this->sikuli->reloadPage();
 
     }//end reloadPage()
@@ -978,7 +977,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function useTest($id)
     {
-        $this->sikuli->execJS('useTest("test-'.$id.'")');
+        $this->sikuli->execJS('useTest("test-'.$id.'")', TRUE);
 
     }//end useTest()
 
