@@ -119,6 +119,14 @@ sub, sup {
     font-family: monospace;
 }
 
+.ie11 sub,
+.ie11 sup {
+    font-size: 121%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
 caption {
     text-align: center;
 }
@@ -235,4 +243,3 @@ h1,h2,h3,h4,h5,h6 {
 .ViperCursorAssistPlugin.insertBefore {
     margin-top: -20px !important;
 }
-
