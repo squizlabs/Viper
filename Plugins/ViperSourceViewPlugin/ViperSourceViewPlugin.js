@@ -290,7 +290,23 @@ ViperSourceViewPlugin.prototype = {
             null,
             function(closer) {
                 // Close callback.
-                if (closer !== 'discardChanges' && closer !== 'applyChanges') {
+                // added for classic WYSIWYG editor #squizmap 5334                
+                var form = document.main_form;
+                var submit_btn = form.elements.namedItem('sq_commit_button');
+                if (submit_btn !== null) {
+                    if (closer === 'discardChanges' || closer === 'applyChanges') {
+                        submit_btn.disabled = false;
+                        return true;
+                    }
+                    if (self.isSourceChanged() === true){
+                        if (self._sourceView.getAttribute('aria-disabled') === 'false') {
+                            submit_btn.disabled = true;
+                        }
+                        self.showCloseConfirm();
+                        return false;
+                    }
+                }
+                else if (closer !== 'discardChanges' && closer !== 'applyChanges') {
                     // If there are changes prevent popup from closing.
                     if (self.isSourceChanged() === true) {
                         self.showCloseConfirm();
