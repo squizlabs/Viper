@@ -15,6 +15,9 @@ function MatrixCommentsPlugin(viper)
 {
     this.viper       = viper;
 
+    // if we are in read only mode
+    this._readOnly = false;
+
     // stores all comments data
     this._comments = {};
     // stores comments position data
@@ -231,6 +234,20 @@ MatrixCommentsPlugin.prototype = {
 
     },
 
+
+
+    setSettings: function(settings)
+    {
+        if (!settings) {
+            return;
+        }
+
+        if (settings.readOnly) {
+            this._readOnly = settings.readOnly;
+        }
+
+    },
+
     initToolbar: function()
     {
 		var toolbar = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
@@ -270,7 +287,7 @@ MatrixCommentsPlugin.prototype = {
 
     updateInlineToolbar: function(data)
     {
-        if(this._allowCommentSystem) {
+        if(this._allowCommentSystem && !this._readOnly) {
             data.toolbar.showButton('vitpMatrixComments');
             var range = this.viper.getViperRange();
             var node  = range.getNodeSelection();
@@ -853,8 +870,9 @@ MatrixCommentsPlugin.prototype = {
 
                 // only show the comment action button if current user is the one who created it
                 // and not a system comment and if it's the first comment thread, it's not marked for deletion
+                // not in read only mode
                 $replyCommentsAction = null;
-                if(self._currentUserId == comments[i]['userid'] && !isSystemComment && (i == 0 || !isMarkForDeletion) && (i == 0 || !isResolved)) {
+                if(self._currentUserId == comments[i]['userid'] && !isSystemComment && (i == 0 || !isMarkForDeletion) && (i == 0 || !isResolved) && !self._readOnly) {
                     $replyCommentsAction = jQuery('<div class="Matrix-Viper-commentdialog-reply-comment-action" data-comment-id="' + id + '" data-comment-index="' + i + '"></div>');
                     $comment_div.append($replyCommentsAction);
                 }
@@ -1142,7 +1160,7 @@ MatrixCommentsPlugin.prototype = {
             $commentDialogReplyComment.append($replyCommentButtonArea);
 
             // if current thread is resolved, no need to show reply buttons
-            if(status == 'resolved') {
+            if(status == 'resolved' || self._readOnly) {
                 $replyCommentMainArea.hide();
                 $replyCommentButtonArea.hide();
             }
@@ -1192,7 +1210,7 @@ MatrixCommentsPlugin.prototype = {
             // click resolve button
             $resolve_switch.click(function() {
                 
-                if(isMarkForDeletion) return;
+                if(isMarkForDeletion || self._readOnly) return;
 
                 var $commentDialog = $(this).closest('.Matrix-Viper-commentdialog');
                 var containerId = $commentDialog.data('comment-container-id');
