@@ -1754,27 +1754,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function clickKeyword($keyword)
     {
-        $keywordImage = $this->_getKeywordImage($keyword);
-
-        try {
-            $pos = $this->sikuli->find($keywordImage, null, $this->getData('textSimmilarity'));
-        } catch (FindFailedException $e) {
-            // Sometimes the caret is causing Sikuli not to find the keyword, Click on another keyword
-            // and then try to find this keyword again.
-            try {
-                if ($keyword === 1) {
-                    $this->sikuli->click($this->findKeyword($keyword + 1));
-                } else {
-                    $this->sikuli->click($this->findKeyword(1));
-                }
-
-                $pos = $this->sikuli->find($keywordImage, null, $this->getData('textSimmilarity'));
-            } catch (FindFailedException $e) {
-                throw new FindFailedException('Failed to find keyword '.$this->getKeyword($keyword));
-            }
-        }
-
-        $this->sikuli->click($pos);
+        $this->sikuli->click($this->findKeyword($keyword));
 
     }//end clickKeyword()
 
