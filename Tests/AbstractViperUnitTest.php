@@ -2365,7 +2365,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function pasteFromURL($url)
     {
-        $this->sikuli->execJS('pasteFromURL("'.$url.'")', true, true);
+        $this->sikuli->execJS('pasteFromURL("'.$url.'")', false, true);
 
     }//end pasteFromURL()
 
