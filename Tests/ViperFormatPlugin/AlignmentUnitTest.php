@@ -474,7 +474,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p style="text-align: justify;"><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="354" height="160" />%2% ttt uuu pp %3%</p>');
         $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Active block justify icon does not appear in the top toolbar');
 
-        $this->clickTopToolbarButton('justifyRight', 'active');
+        $this->clickTopToolbarButton('justifyBlock', 'active');
         $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="354" height="160" />%2% ttt uuu pp %3%</p>');
 
         // Test with image only in paragraph
@@ -506,7 +506,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
         $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p style="text-align: justify;"><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="354" height="160" /></p>');
         $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Active block justify icon does not appear in the top toolbar');
 
-        $this->clickTopToolbarButton('justifyRight', 'active');
+        $this->clickTopToolbarButton('justifyBlock', 'active');
         $this->assertHTMLMatch('<p>%1% aaa xx cccc</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="354" height="160" /></p>');
 
     }//end testAligningAParagraphWithImage()

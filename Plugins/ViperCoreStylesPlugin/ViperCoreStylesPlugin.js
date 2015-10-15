@@ -139,7 +139,12 @@ ViperCoreStylesPlugin.prototype = {
                     range = data.range;
                 }
 
-                self._updateToolbarButtonStates(toolbarButtons, range);
+                setTimeout(
+                    function() {
+                        self._updateToolbarButtonStates(toolbarButtons, range);
+                    },
+                    10
+                )
 
                 if (self._onChangeAddStyle.length > 0) {
                     var style = null;
@@ -1385,6 +1390,7 @@ ViperCoreStylesPlugin.prototype = {
             this._selectedImage = null;
             return;
         } else if (ViperUtil.isTag(data.lineage[data.current], 'img') === true) {
+            this.viper.ViperTools.disableButton('ViperCoreStylesPlugin:vtp:block');
             this._selectedImage = data.lineage[data.current];
             return;
         }
@@ -1477,10 +1483,10 @@ ViperCoreStylesPlugin.prototype = {
 
                 var types = ['left', 'center', 'right', 'block'];
                 var c     = types.length;
-                this.viper.ViperTools.getItem('justify').setIconClass('Viper-justifyLeft');
-                this.viper.ViperTools.setButtonInactive('justify');
+                tools.getItem('justify').setIconClass('Viper-justifyLeft');
+                tools.setButtonInactive('justify');
                 for (var i = 0; i < c; i++) {
-                    this.viper.ViperTools.setButtonInactive('ViperCoreStylesPlugin:vtp:' + types[i]);
+                    tools.setButtonInactive('ViperCoreStylesPlugin:vtp:' + types[i]);
                 }
 
                 if (type) {
