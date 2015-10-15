@@ -424,8 +424,10 @@ function useTest(id)
 
     ViperSelection.removeAllRanges();
 
-    viper.setEditableElement(contentElement);
-    viper.setEnabled(false);
+    if (ViperUtil.isBrowser('msie') === true) {
+        viper.setEditableElement(contentElement);
+        viper.setEnabled(false);
+    }
 
 }
 
