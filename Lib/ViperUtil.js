@@ -818,13 +818,19 @@ var ViperUtil = {
 
     },
 
-    getSurroundedChildren: function(element) {
+    getSurroundedChildren: function(element, asTagNames)
+    {
         var children = [];
         if (element.childNodes.length !== 1 || element.firstChild.nodeType !== ViperUtil.ELEMENT_NODE) {
             return children;
         }
 
-        children.push(element.firstChild);
+        if (asTagNames === true) {
+            children.push(ViperUtil.getTagName(element.firstChild));
+        } else {
+            children.push(element.firstChild);
+        }
+
         children = children.concat(this.getSurroundedChildren(element.firstChild));
         return children;
 
