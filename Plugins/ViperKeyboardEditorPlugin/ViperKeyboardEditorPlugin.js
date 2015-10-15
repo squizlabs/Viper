@@ -1389,6 +1389,10 @@ ViperKeyboardEditorPlugin.prototype = {
                             ViperUtil.remove(parent);
                             return false;
                         }
+                    } else if (this.viper.isSpecialElement(range.startContainer.previousSibling) === true) {
+                        ViperUtil.remove(range.startContainer.previousSibling);
+                        this.viper.fireNodesChanged();
+                        return false;
                     } else {
                         var previousContainer = range.getPreviousContainer(range.startContainer);
                         if (previousContainer) {

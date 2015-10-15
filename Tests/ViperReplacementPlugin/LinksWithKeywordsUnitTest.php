@@ -80,7 +80,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com.au');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->clickKeyword(3);
+        $this->clickKeyword(2);
 
         $this->assertHTMLMatch('<p>%1% <a href="http://www.squizlabs.com.au">((prop:productName))</a> %2%</p><p>((prop:productName)) %3%</p><p>%4% ((prop:productName))</p><p>Test content.</p>');
         $this->assertRawHTMLMatch('<p>%1% <a href="http://www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a> %2%</p><p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %3%</p><p>%4% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>Test content.</p>');
