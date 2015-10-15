@@ -982,11 +982,6 @@ ViperDOMRange.prototype = {
         ) {
             this._nodeSel.node = startNode;
             return startNode;
-        } else if (ViperUtil.isStubElement(startNode) === true
-            && endNode.nodeType === ViperUtil.TEXT_NODE
-            && endNode.data.length === range.endOffset
-        ) {
-            return startNode;
         } else if (startNode.nodeType === ViperUtil.TEXT_NODE
             && endNode.nodeType === ViperUtil.TEXT_NODE
             && range.startOffset === 0
