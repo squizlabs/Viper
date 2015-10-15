@@ -564,6 +564,29 @@ ViperInlineToolbarPlugin.prototype = {
                         // tag is selected IE thinks this is not inside the tag but in common parent.
                         // Add the parent of startNode to lineage here.
                         lineage.push(range.endContainer.childNodes[(range.endContainer.childNodes.length - 1)]);
+                    } else if (ViperUtil.isBrowser('msie') === true
+                        && range.startOffset === 0
+                        && range.collapsed === true
+                        && startNode.nodeType === ViperUtil.TEXT_NODE
+                        && startNode.previousSibling
+                        && startNode.previousSibling.nodeType === ViperUtil.ELEMENT_NODE
+                        && ViperUtil.isStubElement(startNode.previousSibling) === false
+                    ) {
+                        // Handle case: <strong><a>text</a></strong>*more text.
+                        // Lineage should be showing P > strong > a.
+                        // Remove the previous text node.
+                        lineage.pop();
+
+                        // Get the last selectable child of the previous element.
+                        var lastSelectable = range._getLastSelectableChild(startNode.previousSibling);
+                        var parents        = ViperUtil.getParents(lastSelectable);
+                        lineage.push(lastSelectable);
+                        for (var i = 0; i < parents.length; i++) {
+                            lineage.push(parents[i])
+                        }
+
+                        lineage = lineage.reverse();
+                        return lineage;
                     }
                 }
             }
@@ -591,7 +614,7 @@ ViperInlineToolbarPlugin.prototype = {
             ) {
                 lineage.push(range.startContainer.childNodes[range.startOffset - 1]);
             }
-            
+
             return lineage;
         }
 

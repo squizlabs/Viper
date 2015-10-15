@@ -406,7 +406,8 @@ ViperLinkPlugin.prototype = {
             } else if (range.collapsed === true
                 && range.startOffset === 0
                 && range.startContainer.previousSibling
-                && ViperUtil.isTag(range.startContainer.previousSibling, 'a') === true
+                && (ViperUtil.isTag(range.startContainer.previousSibling, 'a') === true
+                || ViperUtil.inArray('a', ViperUtil.getSurroundedChildren(range.startContainer.previousSibling, true)) === true)
             ) {
                 return range.startContainer.previousSibling;
             } else if (range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
@@ -652,6 +653,15 @@ ViperLinkPlugin.prototype = {
                     || (range.startOffset === 0 && range.startContainer.previousSibling && ViperUtil.isTag(range.startContainer.previousSibling, 'a') === true)
                 ) {
                     return true;
+                } else if (range.collapsed === true
+                    && range.startOffset === 0
+                    && range.startContainer.previousSibling
+                    && (ViperUtil.isTag(range.startContainer.previousSibling, 'a') === true
+                    || ViperUtil.inArray('a', ViperUtil.getSurroundedChildren(range.startContainer.previousSibling, true)) === true)
+                ) {
+                    return true;
+                } else {
+                    debugger;
                 }
             } else if (range.collapsed === true
                 && range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
