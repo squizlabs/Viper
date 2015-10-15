@@ -687,7 +687,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         copy($vitpImage, $imgPath.'/vitp_arrowRight.png');
 
         // Remove all Viper elements.
-        $this->sikuli->execJS('viper.destroy()');
+        $this->sikuli->execJS('viper.destroy()', TRUE);
 
         // Create image for the text field actions.
         $textFieldActionRevertRegion = $this->sikuli->getRegionOnPage($this->sikuli->execJS('ViperUtil.getBoundingRectangle(ViperUtil.getid("textboxActionRevert"))'));
@@ -977,7 +977,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function useTest($id)
     {
-        $this->sikuli->execJS('useTest("test-'.$id.'")', TRUE);
+        $this->sikuli->execJS('useTest("test-'.$id.'")', FALSE);
 
     }//end useTest()
 
@@ -2196,7 +2196,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     protected function setPluginSettings($pluginName, array $settings)
     {
         $settings = json_encode($settings);
-        $this->sikuli->execJS('viper.getPluginManager().setPluginSettings(\''.$pluginName.'\', '.$settings.')');
+        $this->sikuli->execJS('viper.getPluginManager().setPluginSettings(\''.$pluginName.'\', '.$settings.')', TRUE);
 
     }//end setPluginSettings()
 
@@ -2217,7 +2217,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     {
         if ($appName === $this->sikuli->getBrowserName()) {
             // Open a new tab in this browser. Popup blocker must be disabled.
-            $this->sikuli->execJS('window.open("'.$filePath.'", "_blank")');
+            $this->sikuli->execJS('window.open("'.$filePath.'", "_blank")', TRUE);
             return true;
         }
 
