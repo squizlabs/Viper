@@ -660,8 +660,6 @@ ViperLinkPlugin.prototype = {
                     || ViperUtil.inArray('a', ViperUtil.getSurroundedChildren(range.startContainer.previousSibling, true)) === true)
                 ) {
                     return true;
-                } else {
-                    debugger;
                 }
             } else if (range.collapsed === true
                 && range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
