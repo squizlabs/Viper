@@ -1780,25 +1780,8 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $endKeyword = $startKeyword;
         }
 
-        try {
-            $start = $this->sikuli->find($startKeywordImage, null, $this->getData('textSimmilarity'));
-        } catch (FindFailedException $e) {
-            // Sometimes the caret is causing Sikuli not to find the keyword, Click on another keyword
-            // and then try to find this keyword again.
-            try {
-                if ($startKeyword === 1) {
-                    $this->sikuli->click($this->findKeyword($startKeyword + 1));
-                } else {
-                    $this->sikuli->click($this->findKeyword(1));
-                }
-
-                $start = $this->findKeyword($startKeyword);
-            } catch (FindFailedException $e) {
-                throw new FindFailedException('Failed to find keyword '.$this->getKeyword($startKeyword));
-            }
-        }
-
-        $end = $start;
+        $start = $this->findKeyword($startKeyword);
+        $end   = $start;
         if ($startKeyword !== $endKeyword) {
             $end = $this->findKeyword($endKeyword);
         }
@@ -1824,7 +1807,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             ($this->sikuli->getY($endRight) + 2)
         );
 
-        if (strpos($this->sikuli->getBrowserid(), 'ie') === 0) {
+        if ($this->sikuli->getBrowserid() !== 'ie11' && strpos($this->sikuli->getBrowserid(), 'ie') === 0) {
             // Of course, even a simple thing like selecting words is a problem in
             // IE. When you select words it also selects the space after it, causing
             // tests to fail where style is applied to the selection or modification
