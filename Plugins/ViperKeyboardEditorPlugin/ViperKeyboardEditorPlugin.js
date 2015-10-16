@@ -1840,6 +1840,40 @@ ViperKeyboardEditorPlugin.prototype = {
                     range.collapse(true);
                     ViperSelection.addRange(range);
                     return false;
+                } else if (
+                    !nodeSelection
+                    && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                    && range.endContainer.nodeType === ViperUtil.TEXT_NODE
+                    && range.endOffset === range.endContainer.data.length
+                ) {
+                    // Handle Firefox case: <p>text [text <strong>more text]</strong> more text</p> was resulting in
+                    // <p>text <strong>*</strong> more text</p> it should be <p>text * more text</p>.
+                    var self = this;
+                    setTimeout(function() {
+                        var range     = self.viper.getViperRange();
+                        var node      = range.startContainer;
+                        var rangeNode = node.previousSibling;
+
+                        if (node.nodeType !== ViperUtil.ELEMENT_NODE) {
+                            if (node.nextSibling && node.nextSibling.nodeType === ViperUtil.ELEMENT_NODE) {
+                                rangeNode = node;
+                                node = node.nextSibling;
+                            } else {
+                                node = null;
+                            }
+                        }
+
+                        if (node
+                            && node
+                            && node.nodeType === ViperUtil.ELEMENT_NODE
+                            && !range._getFirstSelectableChild(node)
+                        ) {
+                            ViperUtil.remove(node);
+                            range.setStart(rangeNode, range.startOffset);
+                            range.collapse(true);
+                            ViperSelection.addRange(range);
+                        }
+                    }, 10);
                 }
             }
 
