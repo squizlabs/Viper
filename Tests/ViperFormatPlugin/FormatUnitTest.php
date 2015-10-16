@@ -1135,6 +1135,61 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
     }//end testApplyingFormatsToAnImage()
 
 
+    /**
+     * Test that underline can't be added with keyboard shortcuts
+     *
+     * @return void
+     */
+    public function testUnderlineFormat()
+    {
+
+        // Test not applying underline at the start of a paragraph
+        $this->useTest(14);
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + u');
+        $this->assertHTMLMatch('<p>%1%Test %2% content %3%</p><p><u>%4%Test %5% content %6%</u></p>');
+
+        // Test not applying underline in the middle of a paragraph
+        $this->selectKeyword(2);
+        $this->sikuli->keyDown('Key.CMD + u');
+        $this->assertHTMLMatch('<p>%1%Test %2% content %3%</p><p><u>%4%Test %5% content %6%</u></p>');
+
+        // Test not applying underline at the end of a paragraph
+        $this->selectKeyword(3);
+        $this->sikuli->keyDown('Key.CMD + u');
+        $this->assertHTMLMatch('<p>%1%Test %2% content %3%</p><p><u>%4%Test %5% content %6%</u></p>');
+
+        // Test not applying underline to a paragraph
+        $this->selectKeyword(1,3);
+        $this->sikuli->keyDown('Key.CMD + u');
+        $this->assertHTMLMatch('<p>%1%Test %2% content %3%</p><p><u>%4%Test %5% content %6%</u></p>');
+
+        // Test removing underline with remove format at the start of a paragraph
+        $this->useTest(14);
+        $this->selectKeyword(4);
+        $this->clickTopToolbarButton('removeFormat', NULL);
+        $this->assertHTMLMatch('<p>%1%Test %2% content %3%</p><p>%4%<u>Test %5% content %6%</u></p>');
+
+        // Test removing underline with remove format in the middle of a paragraph
+        $this->useTest(14);
+        $this->selectKeyword(5);
+        $this->clickTopToolbarButton('removeFormat', NULL);
+        $this->assertHTMLMatch('<p>%1%Test %2% content %3%</p><p><u>%4%Test </u>%5%<u> content %6%</u></p>');
+
+        // Test removing underline with remove format at the end of a paragraph
+        $this->useTest(14);
+        $this->selectKeyword(6);
+        $this->clickTopToolbarButton('removeFormat', NULL);
+        $this->assertHTMLMatch('<p>%1%Test %2% content %3%</p><p><u>%4%Test %5% content </u>%6%</p>');
+
+        // Test removing underline with remove format for a paragraph
+        $this->useTest(14);
+        $this->selectKeyword(4,6);
+        $this->clickTopToolbarButton('removeFormat', NULL);
+        $this->assertHTMLMatch('<p>%1%Test %2% content %3%</p><p>%4%Test %5% content %6%</p>');
+
+    }//end testUnderlineFormat()
+
 }//end class
 
 ?>
