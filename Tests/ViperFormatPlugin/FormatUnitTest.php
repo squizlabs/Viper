@@ -1182,7 +1182,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('removeFormat', NULL);
         $this->assertHTMLMatch('<p>%1%Test %2% content %3%</p><p><u>%4%Test %5% content </u>%6%</p>');
 
-        // Test removing underline with remove format for a paragraph
+        // Test removing underline with remove format for an entire paragraph
         $this->useTest(14);
         $this->selectKeyword(4,6);
         $this->clickTopToolbarButton('removeFormat', NULL);
