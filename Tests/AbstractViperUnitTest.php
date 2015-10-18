@@ -1876,6 +1876,8 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 throw new FindFailedException('Failed to find keyword: '.$this->getKeyword($keyword));
             }
 
+            // Need to hide toolbars incase the keyword is under the toolbar.
+            $this->sikuli->execJS('hideToolbarsAtLocation('.json_encode($loc).')');
             $loc = $this->sikuli->getRegionOnPage($loc);
         }
 
@@ -2485,18 +2487,18 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    protected function moveMouseToElement($selector, $position='bottom', $index=0)
+    protected function moveMouseToElement($selector, $position='bottom', $index=0, $yOffset=0)
     {
         $elemRect = $this->getBoundingRectangle($selector, $index);
         $x        = ($elemRect['x1'] + ($elemRect['x2'] - $elemRect['x1']) / 2);
 
         switch ($position) {
             case 'bottom':
-                $y = ($elemRect['y2']);
+                $y = ($elemRect['y2'] + $yOffset);
             break;
 
             case 'top':
-                $y = ($elemRect['y1']);
+                $y = ($elemRect['y1'] + $yOffset);
             break;
         }
 
