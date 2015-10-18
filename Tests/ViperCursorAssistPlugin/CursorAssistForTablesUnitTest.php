@@ -45,7 +45,7 @@ class Viper_Tests_ViperCursorAssistPlugin_CursorAssistForTablesUnitTest extends 
         sleep(4);
 
         // Check to see if the cursor assit line appears above the table
-        $this->assertTrue($this->isCursorAssistLineVisible('table', 'bottom'));
+        $this->assertTrue($this->isCursorAssistLineVisible('table', 'bottom', 0, -25));
 
         // Click the cursor assit line and add new content above table
         $this->clickCursorAssistLine();
