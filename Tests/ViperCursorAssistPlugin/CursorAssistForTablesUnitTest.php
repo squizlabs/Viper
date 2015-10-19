@@ -41,11 +41,11 @@ class Viper_Tests_ViperCursorAssistPlugin_CursorAssistForTablesUnitTest extends 
         $this->clickKeyword(1);
 
         sleep(2);
-        $this->moveMouseToElement('table', 'bottom');
+        $this->moveMouseToElement('table', 'bottom', 0, -25);
         sleep(4);
 
         // Check to see if the cursor assit line appears above the table
-        $this->assertTrue($this->isCursorAssistLineVisible('table', 'bottom', 0, -25));
+        $this->assertTrue($this->isCursorAssistLineVisible('table', 'bottom'));
 
         // Click the cursor assit line and add new content above table
         $this->clickCursorAssistLine();
