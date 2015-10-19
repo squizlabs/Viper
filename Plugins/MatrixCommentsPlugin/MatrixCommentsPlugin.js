@@ -873,7 +873,7 @@ MatrixCommentsPlugin.prototype = {
                 // not in read only mode
                 $replyCommentsAction = null;
                 if(self._currentUserId == comments[i]['userid'] && !isSystemComment && (i == 0 || !isMarkForDeletion) && (i == 0 || !isResolved) && !self._readOnly) {
-                    $replyCommentsAction = jQuery('<div class="Matrix-Viper-commentdialog-reply-comment-action" data-comment-id="' + id + '" data-comment-index="' + i + '"></div>');
+                    $replyCommentsAction = jQuery('<div class="Matrix-Viper-commentdialog-reply-comment-action" data-comment-id="' + id + '" data-comment-index="' + i + '"><div class="Matrix-Viper-commentdialog-reply-comment-action-icon"></div></div>');
                     $comment_div.append($replyCommentsAction);
                 }
 
@@ -993,8 +993,8 @@ MatrixCommentsPlugin.prototype = {
                         $commentActionDiv.append($commentActionDivDelete);
                         document.body.appendChild($commentActionDiv.get(0));
                         $commentActionDiv.css({
-                            left: ($(this).offset().left - $commentActionDiv.width() + $(this).width() + 5) + "px",
-                            top: ($(this).offset().top + $(this).height() + 10) + "px"
+                            left: ($(this).offset().left - $commentActionDiv.width() + $(this).width() + 10) + "px",
+                            top: ($(this).offset().top + $(this).height() + 15) + "px"
                         });
 
                         // click on delete comment
@@ -1130,7 +1130,7 @@ MatrixCommentsPlugin.prototype = {
                         if(self._comments[containerId][i]['id'] == commentId) {
                             for (var y = 0; y < self._comments[containerId][i]['comments'].length; y++) {
                                 if(y == commentIndex) {
-                                    originalContent = self._comments[containerId][i]['comments'][y]['content'];
+                                    originalContent = JSON.parse(self._comments[containerId][i]['comments'][y]['content']);
                                 }
                             }
                         }
@@ -1139,6 +1139,34 @@ MatrixCommentsPlugin.prototype = {
                     $commentEditTextArea.val(originalContent).hide();
                     $commentDiv.find('.Matrix-Viper-commentdialog-editButtonArea').hide();
                 });
+
+
+                // double click on the main comment area would just edit it
+                if(!isMarkForDeletion && !isResolved) {
+                    $comment_div.dblclick(function (e) {
+                        ViperUtil.preventDefault(e);
+                            var commentIndex = jQuery(this).data('comment-index');
+                            var commentId = jQuery(this).data('comment-id');
+                            var $commentDiv = jQuery(this);
+                            if($commentDiv.find('.Matrix-Viper-commentdialog-reply-comment-action').length > 0) {
+                                for(var y = 0; y < self._comments[containerId].length; y++) {
+                                    if(self._comments[containerId][y]['id'] == commentId) {
+                                        var userComment = self._comments[containerId][y]['comments'][commentIndex];
+                                        if(typeof userComment !== 'undefined') {
+                                            // edit this comment
+                                            $commentDiv.find('.Matrix-Viper-commentdialog-reply-comment-content').hide();
+                                            $commentDiv.find('.Matrix-Viper-commentdialog-editCommentTextArea').show().focus();
+                                            $commentDiv.find('.Matrix-Viper-commentdialog-editButtonArea').show();
+                                        }
+                                    }
+                                }
+                                // enable edit+ save button
+                                if(typeof EasyEditComponentsToolbar != 'undefined') {
+                                    EasyEditComponentsToolbar.enableSaveButton();
+                                }
+                            }
+                    });
+                }
             } // end of list comments
 
             // append the scroll div

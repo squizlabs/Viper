@@ -119,7 +119,8 @@
   width: 250px;
   margin: 5px 0px 65px;
   border-radius: 4px;
-  font: 11px/16px Arial,sans-serif;
+  font: 11px/14px Arial,sans-serif;
+  color: #454545;
   border: solid 1px #ccc;
   font-family: arial,sans-serif;
   background-color: white;
@@ -232,15 +233,14 @@
   width: 100%;
   box-sizing: border-box;
   height: 80px;
-  padding: 5px 10px;
+  padding: 5px;
 }
 
 /* comment dialog new comment */
 
 /* comment dialog new comment text */
 .Matrix-Viper-commentdialog-newCommentText {
-  height: 20px;
-  line-height: 26px;
+  height: 18px;
   margin-left: 8px;
   font-size: 11px;
   color: #8A898F;
@@ -388,12 +388,17 @@
 .Matrix-Viper-commentdialog-reply-comment-timestamp {
   font-size: 11px;
   color: #8A898F;
+  margin: 3px 0;
 }
 
 .Matrix-Viper-commentdialog-reply-comment-action {
-    cursor: pointer;
-    float: right;
-    margin-top: -12px;
+  cursor: pointer;
+  float: right;
+  margin-top: -15px;
+  padding: 5px;
+}
+
+.Matrix-Viper-commentdialog-reply-comment-action-icon {
     width: 17px;
     height: 5px;
     background: transparent url(Images/viperCommentsIcons.png) 0 0 no-repeat;
@@ -439,10 +444,13 @@
 }
 
 .Matrix-Viper-commentdialog-buttonArea.Matrix-Viper-commentdialog-editButtonArea .Matrix-Viper-commentdialog-button-blue{
-  width: 48px;
+  width: 29%;
+  margin: 0px;
 }
 .Matrix-Viper-commentdialog-buttonArea.Matrix-Viper-commentdialog-editButtonArea .Matrix-Viper-commentdialog-button-grey {
-  width: 48px;
+  width: 29%;
+  margin-left: 0px;
+  margin-right: 8px;
 }
 
 /* comment actions */
