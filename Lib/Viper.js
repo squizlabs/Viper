@@ -923,7 +923,7 @@ Viper.prototype = {
             return;
         }
 
-        if (ViperUtil.isBrowser('msie') === true) {
+        if (ViperUtil.isBrowser('msie', '<11') === true) {
             // Find iframe elements for youtube.com videos to add wmode=opaque to query
             // string so that the video does not sit on top of the editor window in IE.
             var iframeTags = ViperUtil.getTag('iframe', elem);

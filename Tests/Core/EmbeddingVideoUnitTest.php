@@ -41,7 +41,7 @@ class Viper_Tests_Core_EmbeddingVideoUnitTest extends AbstractViperUnitTest
         $this->sikuli->execJS('document.getElementById("test-tabTextfield").focus()');
 
         // The HTML from IE is slightly different to other browsers
-        if ($this->sikuli->getBrowserid() === 'ie11' || $this->sikuli->getBrowserid() === 'ie10' || $this->sikuli->getBrowserid() === 'ie9' || $this->sikuli->getBrowserid() === 'ie8') {
+        if ($this->sikuli->getBrowserid() === 'ie10' || $this->sikuli->getBrowserid() === 'ie9' || $this->sikuli->getBrowserid() === 'ie8') {
             $this->assertHTMLMatch('<iframe title="Roadmap" src="http://www.youtube.com/embed/PYm4Atlxe4M?wmode=opaque" allowfullscreen="" frameborder="0" height="315" width="420"></iframe><p>This is a new paragraph after the video</p>');
         } else {
             $this->assertHTMLMatch('<iframe title="Roadmap" src="http://www.youtube.com/embed/PYm4Atlxe4M" allowfullscreen="" frameborder="0" height="315" width="420"></iframe><p>This is a new paragraph after the video</p>');
@@ -74,7 +74,7 @@ class Viper_Tests_Core_EmbeddingVideoUnitTest extends AbstractViperUnitTest
         $this->sikuli->execJS('document.getElementById("test-tabTextfield").focus()');
 
         // The HTML from IE is slightly different to other browsers
-        if ($this->sikuli->getBrowserid() === 'ie11' || $this->sikuli->getBrowserid() === 'ie10' || $this->sikuli->getBrowserid() === 'ie9' || $this->sikuli->getBrowserid() === 'ie8') {
+        if ($this->sikuli->getBrowserid() === 'ie10' || $this->sikuli->getBrowserid() === 'ie9' || $this->sikuli->getBrowserid() === 'ie8') {
             $this->assertHTMLMatch('<iframe src="//player.vimeo.com/video/92198436?wmode=opaque" width="500" height="281" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe><p>This is a new paragraph after the video</p>');
         } else {
             $this->assertHTMLMatch('<iframe src="//player.vimeo.com/video/92198436" width="500" height="281" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe><p>This is a new paragraph after the video</p>');
