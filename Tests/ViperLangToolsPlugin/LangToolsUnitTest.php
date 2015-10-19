@@ -425,7 +425,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsUnitTest extends AbstractViperUn
         $this->useTest(4);
         $this->selectKeyword(3);
         $this->clickTopToolbarButton('langTools', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Language button should be active');
+        $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Language button should be active');
 
         $this->clickTopToolbarButton('Acronym', NULL, TRUE);
         $this->clickField('Acronym');
