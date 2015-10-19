@@ -2134,7 +2134,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             return $text;
         }
 
-        $text = preg_replace('/\\\n\s+/', '', $text);
+        $text = preg_replace('/\s*\\\n\s+/', '', $text);
         return $text;
 
     }//end getSelectedText()
