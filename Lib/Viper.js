@@ -6084,6 +6084,8 @@ Viper.prototype = {
                     ViperUtil.remove(node);
                 } else if (ViperUtil.trim(node.data) === '' && node.data.indexOf("\n") === 0) {
                     ViperUtil.remove(node);
+                } else if (node.data.match(/\n\s+\S+\n\s+/) !== null && !node.previousSibling && !node.nextSibling) {
+                    node.data = ViperUtil.trim(node.data);
                 } else {
                     var nbsp = String.fromCharCode(160);
 

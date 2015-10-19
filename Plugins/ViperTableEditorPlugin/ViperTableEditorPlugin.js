@@ -3914,7 +3914,7 @@ ViperTableEditorPlugin.prototype = {
     {
         if (ViperUtil.isBrowser('msie') === true) {
             if (ViperUtil.trim(ViperUtil.getHtml(cell)) === '') {
-                ViperUtil.setHtml(cell, '&nbsp;');
+                ViperUtil.setHtml(cell, '<br />');
             }
         } else {
             ViperUtil.setHtml(cell, '<br />');
