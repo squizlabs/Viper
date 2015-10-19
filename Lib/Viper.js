@@ -1593,10 +1593,12 @@ Viper.prototype = {
             }
         } else if (doc.body.createTextRange) {
             // IE.
-            range = doc.body.createTextRange();
+            var range = doc.body.createTextRange();
             try {
                 range.moveToPoint(x, y);
             } catch (e) {
+                // Thrown usualy when the point is on an element like img.
+                return document.elementFromPoint(x, y);
             }
 
             elem = range.parentElement();
