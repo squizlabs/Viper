@@ -310,6 +310,7 @@ function gActBubble()
 function gStringLoc(str)
 {
     var range          = viper.getCurrentRange();
+    var clone          = range.cloneRange();
     var loc            = null;
     var contentElement = document.getElementById('content');
     if (ViperUtil.isBrowser('msie') === true) {
@@ -338,7 +339,7 @@ function gStringLoc(str)
         range.setStart(range._getFirstSelectableChild(contentElement), 0);
         range.collapse(true);
         ViperSelection.addRange(range);
-        if (window.find(str, true, false, true, true) === true) {
+        if (window.find(str, true, false, true, true, true) === true) {
             loc = viper.getCurrentRange().rangeObj.getBoundingClientRect();
             loc = {
                 x1: loc.left,
@@ -350,7 +351,7 @@ function gStringLoc(str)
     }
 
     // Reset selection.
-    ViperSelection.addRange(range);
+    ViperSelection.addRange(clone);
 
     return loc;
 
