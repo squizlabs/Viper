@@ -20,7 +20,7 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
         sleep(1);
 
         $this->sikuli->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<div><h1>%1% First Heading</h1><p>Lorem XuT dolor sit amet test</p><h2>Second Heading</h2><p>This is SOME information for <a href="http://www.google.com" title="Google">testing</a></p><ul><li>purus oNo luctus</li></ul><div></div><hr /><p>This is a sub script. This is a super script</p><table border="1" cellpadding="2" cellspacing="3"><caption>Table 1.2: The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU TiuT XabcX Mnu</td><td>WoW sapien vel aliquet</td><td><ul><li>vel molestie arcu</li><li>purus neque luctus</li></ul></td></tr><tr><td><h3>Squiz Labs</h3></td><td colspan="2">purus neque luctus <a href="http://www.google.com">ligula</a>, vel molestie arcu</td></tr><tr><td>nec porta ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr></tbody></table></div>');
+        $this->assertHTMLMatch('<div><h1>%1% First Heading</h1><p>Lorem XuT dolor sit amet test</p><h2>Second Heading</h2><p>This is SOME information for <a href="http://www.google.com" title="Google">testing</a></p><ul><li>purus oNo luctus</li></ul><hr /><p>This is a sub script. This is a super script</p><table border="1" cellpadding="2" cellspacing="3"><caption>Table 1.2: The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU TiuT XabcX Mnu</td><td>WoW sapien vel aliquet</td><td><ul><li>vel molestie arcu</li><li>purus neque luctus</li></ul></td></tr><tr><td><h3>Squiz Labs</h3></td><td colspan="2">purus neque luctus <a href="http://www.google.com">ligula</a>, vel molestie arcu</td></tr><tr><td>nec porta ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr></tbody></table></div>');
 
     }//end testRemoveFormatIcon()
 
@@ -115,7 +115,7 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
     public function testRemoveFormatForANestedStyleElement()
     {
         $this->useTest(5);
-        
+
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('removeFormat');
 
@@ -143,7 +143,7 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
     public function testRemoveFormatOnContentWithMultipleFormats()
     {
         $this->useTest(6);
-        
+
         // Apply italic and subscript to the word
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('italic');
@@ -235,7 +235,7 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
     public function testRemoveFormatForLink()
     {
         $this->useTest(7);
-        
+
         // Test the remove format doesn't remove the link
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('removeFormat');

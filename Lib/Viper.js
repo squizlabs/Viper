@@ -6072,7 +6072,7 @@ Viper.prototype = {
                     if ((ViperUtil.isStubElement(node) === false
                         && !node.firstChild)
                         || cont === '&nbsp;'
-                        || (cont === '' && ViperUtil.isTag(node, 'p'))
+                        || (cont === '' && ViperUtil.isTag(node, ['p', 'div']))
                     ) {
                         ViperUtil.remove(node);
                     }
