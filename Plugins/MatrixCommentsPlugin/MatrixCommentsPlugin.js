@@ -1041,6 +1041,8 @@ MatrixCommentsPlugin.prototype = {
                                         if(typeof userComment !== 'undefined') {
                                             // remove this comment
                                             self._comments[containerId][y]['comments'].splice(commentIndex, 1);
+                                            // set comment mark counter
+                                            $(commentMark).find('div').html(self._comments[containerId][y]['comments'].length);
                                         }
                                         $(commentMark).mousedown();
                                     }
