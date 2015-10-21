@@ -446,11 +446,13 @@
 .Matrix-Viper-commentdialog-buttonArea.Matrix-Viper-commentdialog-editButtonArea .Matrix-Viper-commentdialog-button-blue{
   width: 29%;
   margin: 0px;
+  width: 28%\0/ !important;
 }
 .Matrix-Viper-commentdialog-buttonArea.Matrix-Viper-commentdialog-editButtonArea .Matrix-Viper-commentdialog-button-grey {
   width: 29%;
   margin-left: 0px;
   margin-right: 8px;
+  width: 28%\0/ !important;
 }
 
 /* comment actions */
