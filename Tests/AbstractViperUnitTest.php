@@ -1187,6 +1187,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
                             $match  = rtrim($match);
                             $match .= '"';
+                        } else if ($attrName === 'href') {
+                            // Remove trailing slash at the end of URLs.
+                            $match .= ' '.$attrs[1][$attrIndex].'="'.rtrim($attrs[2][$attrIndex], '/').'"';
                         } else {
                             $match .= $attrs[0][$attrIndex];
                         }//end if
