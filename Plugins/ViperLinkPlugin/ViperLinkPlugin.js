@@ -377,6 +377,7 @@ ViperLinkPlugin.prototype = {
         var common       = range.getCommonElement();
         if (!selectedNode && ViperUtil.isBrowser('msie') === true) {
             var startNode = range.getStartNode();
+            var endNode   = range.getEndNode();
             if (range.startContainer === range.endContainer
                 && range.startOffset === 0
                 && range.endOffset === 0
@@ -415,8 +416,14 @@ ViperLinkPlugin.prototype = {
                 && ViperUtil.isTag(range.startContainer.childNodes[range.startOffset - 1], 'a') === true
             ) {
                 return range.startContainer.childNodes[range.startOffset - 1];
+            } else if (startNode
+                && endNode
+                && startNode.parentNode === endNode.parentNode
+                && ViperUtil.isTag(startNode.parentNode, 'a') === true
+            ) {
+                return startNode.parentNode;
             }
-        }
+         }
 
         if (selectedNode && ViperUtil.isTag(selectedNode, 'a') === true) {
             return selectedNode;
@@ -466,6 +473,12 @@ ViperLinkPlugin.prototype = {
                 ) {
                     // When the A tag is the last element in a P tag and only last few characters of the link is selected
                     // IE thinks this is not inside the link tag.
+                    return false;
+                } else if (startNode
+                    && endNode
+                    && startNode.parentNode === endNode.parentNode
+                    && ViperUtil.isTag(startNode.parentNode, 'a') === true
+                ) {
                     return false;
                 }
             }
