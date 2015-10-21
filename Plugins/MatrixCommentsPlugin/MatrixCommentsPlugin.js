@@ -1215,7 +1215,7 @@ MatrixCommentsPlugin.prototype = {
 
             // reply comment text area
             var $replyCommentMainArea = $('<div class="Matrix-Viper-commentdialog-mainArea Matrix-Viper-commentdialog-mainArea-replycomment"></div>');
-            var $replyCommentTextArea = jQuery('<textarea class="Matrix-Viper-commentdialog-replyCommentTextArea Matrix-Viper-commentdialog-replyCommentTextArea-replyComment" placeholder="' + _('Add a reply...') + '">');
+            var $replyCommentTextArea = jQuery('<textarea class="Matrix-Viper-commentdialog-replyCommentTextArea Matrix-Viper-commentdialog-replyCommentTextArea-replyComment" placeholder="' + _('Add a reply...') + '" />');
             $replyCommentMainArea.append($replyCommentTextArea);
             $commentDialogReplyComment.append($replyCommentMainArea);
 
