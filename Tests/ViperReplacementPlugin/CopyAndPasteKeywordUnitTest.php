@@ -49,18 +49,19 @@ class Viper_Tests_ViperReplacementPlugin_CopyAndPasteKeywordUnitTest extends Abs
      *
      * @return void
      */
-   /* public function testCopyAndPasteKeywordUsingRightClickMenu()
+    /*public function testCopyAndPasteKeywordUsingRightClickMenu()
     {
-        $this->useTest(4);
+        $this->useTest(1);
         sleep(1);
         $this->clickKeyword(1);
 
         // Beginning of paragraph using right click
-        $this->selectKeyword(5);
+        $this->clickKeyword(5);
         sleep(1);
         $this->copy(true);
         sleep(1);
-        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->click($this->findKeyword(3));
+        //$this->sikuli->keyDown('Key.RIGHT');
         //$this->moveToKeyword(2, 'left');
         //$this->sikuli->keyDown('Key.LEFT');
         sleep(1);
@@ -84,7 +85,7 @@ class Viper_Tests_ViperReplacementPlugin_CopyAndPasteKeywordUnitTest extends Abs
         $this->assertHTMLMatch('<p>((prop:productName)) %1% ((prop:productName))</p><p>%2%((prop:productName)) %3%((prop:productName))</p><p>((prop:productName))%4% ((prop:productName))</p><p>%5%((prop:productName)) %6%((prop:productName))</p>');
         $this->assertRawHTMLMatch('<p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %1%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%2%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %3%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span>%4% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%5%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %6%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p>');
 
-    }*///end testCopyAndPasteKeyword()
+    }//end testCopyAndPasteKeyword()*/
 
 
     /**
