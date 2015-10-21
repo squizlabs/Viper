@@ -179,6 +179,11 @@ MatrixCommentsPlugin.prototype = {
             }
             self._allowCommentSystem = true;
 
+            // if user are editing comment, we should let user finish
+            if(self.isUserEditingComment()) {
+                return;
+            }
+
 
             // if we are creating a new comment and then click away, we should clean up the comment attribute properly
             if(typeof $('#Matrix-Viper-commentdialog-newCommentButton-cancel').get(0) !== 'undefined') {
@@ -309,6 +314,9 @@ MatrixCommentsPlugin.prototype = {
             if(currentMark.id == $commentMarks[i].id && $commentMarks[i + 1]) {
                 return $commentMarks[i + 1];
             }
+            else if(currentMark.id == $commentMarks[i].id && !$commentMarks[i + 1] && $commentMarks[0]) {
+                return $commentMarks[0];
+            }
         }
         return null;
     },
@@ -321,6 +329,9 @@ MatrixCommentsPlugin.prototype = {
         for(var i = 0; i < $commentMarks.length; i++) {
             if(currentMark.id == $commentMarks[i].id && $commentMarks[i - 1]) {
                 return $commentMarks[i - 1];
+            }
+            else if(currentMark.id == $commentMarks[i].id && !$commentMarks[i - 1] && $commentMarks[$commentMarks.length - 1]) {
+                return $commentMarks[$commentMarks.length - 1];
             }
         }
         return null;
@@ -359,6 +370,13 @@ MatrixCommentsPlugin.prototype = {
             }
         }
         $commentCounter.html(currentCounter + '/' + totalCounter);
+
+        // do not show navigation if there is only 1 comment
+        if(totalCounter < 2) {
+            $prevCommentButton.hide();
+            $nextCommentButton.hide();
+            $commentCounter.hide();
+        }
 
     },
 
@@ -659,6 +677,12 @@ MatrixCommentsPlugin.prototype = {
         var $commentDialog = jQuery(document.createElement('div'));
         var $commentDialogNewComment = jQuery(document.createElement('div'));
         var $commentDialogReplyComment = jQuery(document.createElement('div'));
+
+
+        // if user are editing comment, we should let user finish
+        if(self.isUserEditingComment()) {
+            return;
+        }
 
         // remove all other dialogs
         $('.Matrix-Viper-commentdialog').remove();
@@ -1072,6 +1096,9 @@ MatrixCommentsPlugin.prototype = {
                                         $commentDiv.find('.Matrix-Viper-commentdialog-reply-comment-content').hide();
                                         $commentDiv.find('.Matrix-Viper-commentdialog-editCommentTextArea').show().focus();
                                         $commentDiv.find('.Matrix-Viper-commentdialog-editButtonArea').show();
+
+                                        $('.Matrix-Viper-commentdialog-mainArea-replycomment').hide();
+                                        $('.Matrix-Viper-commentdialog-buttonArea-replycomment').hide();
                                     }
                                 }
                             }
@@ -1115,6 +1142,11 @@ MatrixCommentsPlugin.prototype = {
                     $commentContent.html(self._htmlEncode($commentEditTextArea.val())).show();
                     $commentEditTextArea.hide();
                     $commentDiv.find('.Matrix-Viper-commentdialog-editButtonArea').hide();
+                    // show the reply area
+                    if($('.Matrix-Viper-commentdialog-editCommentTextArea:visible').length == 0) {
+                        $('.Matrix-Viper-commentdialog-mainArea-replycomment').show();
+                        $('.Matrix-Viper-commentdialog-buttonArea-replycomment').show();
+                    }
                     ViperUtil.preventDefault(e);
 
                 });
@@ -1140,16 +1172,21 @@ MatrixCommentsPlugin.prototype = {
                     $commentContent.show();
                     $commentEditTextArea.val(originalContent).hide();
                     $commentDiv.find('.Matrix-Viper-commentdialog-editButtonArea').hide();
+                    // show the reply area
+                    if($('.Matrix-Viper-commentdialog-editCommentTextArea:visible').length == 0) {
+                        $('.Matrix-Viper-commentdialog-mainArea-replycomment').show();
+                        $('.Matrix-Viper-commentdialog-buttonArea-replycomment').show();
+                    }
                 });
 
 
                 // double click on the main comment area would just edit it
                 if(!isMarkForDeletion && !isResolved) {
-                    $comment_div.dblclick(function (e) {
+                    $mainContentDiv.dblclick(function (e) {
                         ViperUtil.preventDefault(e);
-                            var commentIndex = jQuery(this).data('comment-index');
-                            var commentId = jQuery(this).data('comment-id');
-                            var $commentDiv = jQuery(this);
+                            var $commentDiv = jQuery(this).closest('.Matrix-Viper-commentdialog-reply-comment');
+                            var commentIndex = $commentDiv.data('comment-index');
+                            var commentId = $commentDiv.data('comment-id');
                             if($commentDiv.find('.Matrix-Viper-commentdialog-reply-comment-action').length > 0) {
                                 for(var y = 0; y < self._comments[containerId].length; y++) {
                                     if(self._comments[containerId][y]['id'] == commentId) {
@@ -1159,6 +1196,8 @@ MatrixCommentsPlugin.prototype = {
                                             $commentDiv.find('.Matrix-Viper-commentdialog-reply-comment-content').hide();
                                             $commentDiv.find('.Matrix-Viper-commentdialog-editCommentTextArea').show().focus();
                                             $commentDiv.find('.Matrix-Viper-commentdialog-editButtonArea').show();
+                                            $('.Matrix-Viper-commentdialog-mainArea-replycomment').hide();
+                                            $('.Matrix-Viper-commentdialog-buttonArea-replycomment').hide();
                                         }
                                     }
                                 }
@@ -1175,13 +1214,13 @@ MatrixCommentsPlugin.prototype = {
             $commentDialogReplyComment.append($scrollDiv);
 
             // reply comment text area
-            var $replyCommentMainArea = $('<div class="Matrix-Viper-commentdialog-mainArea"></div>');
-            var $replyCommentTextArea = jQuery('<textarea class="Matrix-Viper-commentdialog-replyCommentTextArea" placeholder="' + _('Add a reply...') + '">');
+            var $replyCommentMainArea = $('<div class="Matrix-Viper-commentdialog-mainArea Matrix-Viper-commentdialog-mainArea-replycomment"></div>');
+            var $replyCommentTextArea = jQuery('<textarea class="Matrix-Viper-commentdialog-replyCommentTextArea Matrix-Viper-commentdialog-replyCommentTextArea-replyComment" placeholder="' + _('Add a reply...') + '">');
             $replyCommentMainArea.append($replyCommentTextArea);
             $commentDialogReplyComment.append($replyCommentMainArea);
 
             // reply comment button area
-            var $replyCommentButtonArea = $('<div class="Matrix-Viper-commentdialog-buttonArea"></div>');
+            var $replyCommentButtonArea = $('<div class="Matrix-Viper-commentdialog-buttonArea Matrix-Viper-commentdialog-buttonArea-replycomment"></div>');
             var $replyCommentButtonCancelButton = $('<a href="#" id="Matrix-Viper-commentdialog-replyCommentButton-cancel" class="Matrix-Viper-commentdialog-button-grey">' + _('Cancel') + '</a>');
             var $replyCommentButtonCommentButton = $('<a href="#" id="Matrix-Viper-commentdialog-replyCommentButton-comment" class="Matrix-Viper-commentdialog-button-blue">' + _('Reply') + '</a>');
 
@@ -1208,7 +1247,7 @@ MatrixCommentsPlugin.prototype = {
 
 
             // click reply comment button
-            $replyCommentButtonCommentButton.click(function (e) {
+            $replyCommentButtonCommentButton.mousedown(function (e) {
                 ViperUtil.preventDefault(e);
                 var commentContent = $replyCommentTextArea.val();
                 // do not accept empty comment
@@ -1241,6 +1280,12 @@ MatrixCommentsPlugin.prototype = {
             $resolve_switch.click(function() {
                 
                 if(isMarkForDeletion || self._readOnly) return;
+
+
+                // if user are editing comment, we should let user finish
+                if(self.isUserEditingComment()) {
+                    return;
+                }
 
                 var $commentDialog = $(this).closest('.Matrix-Viper-commentdialog');
                 var containerId = $commentDialog.data('comment-container-id');
@@ -1326,6 +1371,11 @@ MatrixCommentsPlugin.prototype = {
         var tools = this.viper.ViperTools;
         var inlineToolbar = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
 
+        // if there is opening editing textarea, we need to save them
+        if(self.isUserEditingComment()) {
+            $('.Matrix-Viper-commentdialog-button-blue:visible').mousedown();
+            $('#Matrix-Viper-commentdialog-replyCommentButton-comment:visible').mousedown();
+        }
 
         // remove comment action dialog
         $('.Matrix-Viper-commentdialog-comment-action').remove();
@@ -1581,6 +1631,23 @@ MatrixCommentsPlugin.prototype = {
             }
         })
 
+    },
+
+
+    isUserEditingComment: function ()
+    {
+        var self = this;
+        // if editing comment textarea is open
+        if($('.Matrix-Viper-commentdialog-editCommentTextArea:visible').length > 0) return true;
+
+        // if user have unfinished reply comment textarea
+        if($('.Matrix-Viper-commentdialog-replyCommentTextArea-replyComment').length > 0 && $('.Matrix-Viper-commentdialog-replyCommentTextArea-replyComment').val() !== '') return true;
+
+        // if user have new comment textarea open
+        if($('.Matrix-Viper-commentdialog-newCommentTextArea').length > 0 && $('.Matrix-Viper-commentdialog-newCommentTextArea').val() !== '') return true;
+
+
+        return false;
     },
 
 
