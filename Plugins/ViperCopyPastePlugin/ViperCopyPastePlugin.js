@@ -1357,6 +1357,21 @@ ViperCopyPastePlugin.prototype = {
     {
         content = content.replace(/<(font)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>\s*/ig, '');
         content = content.replace(/\s*<\/(font)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, '');
+
+        if (ViperUtil.isBrowser('msie') === true) {
+            var tmp = document.createElement('div');
+            ViperUtil.setHtml(tmp, content);
+
+            // Remove all u tags inside links.
+            var uTags = ViperUtil.find(tmp, 'a > u');
+            for (var i = 0; i < uTags.length; i++) {
+                this._moveChildren(uTags[i]);
+                ViperUtil.remove(uTags[i]);
+            }
+
+            content = ViperUtil.getHtml(tmp);
+        }
+        
         return content;
 
     },
