@@ -467,11 +467,6 @@ ViperSourceViewPlugin.prototype = {
                     return;
                 }
 
-                var form = document.main_form;
-                var submit_btn = form.elements.namedItem('sq_commit_button');
-                if (submit_btn !== null && submit_btn.disabled === true) {
-                    submit_btn.disabled = false;
-                }
                 if (keyString === 'esc') {
                     self.viper.ViperTools.closePopup('VSVP:popup');
                 } else if (e.metaKey !== true
@@ -489,6 +484,12 @@ ViperSourceViewPlugin.prototype = {
                 self.toolbarPlugin.disable();
             }
 
+            //added for classic Wysiwig editor 
+            var form = document.main_form;
+            var submit_btn = form.elements.namedItem('sq_commit_button');
+            if (submit_btn !== null && submit_btn.disabled === true) {
+                submit_btn.disabled = false;
+            }
             onFocus.call(editor);
             setTimeout(function() {
                 popup.hideTop();
