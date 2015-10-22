@@ -2576,6 +2576,10 @@ ViperKeyboardEditorPlugin.prototype = {
             felem.appendChild(docFrag);
             ViperUtil.insertBefore(elem, felem);
 
+            if (!elem.firstChild) {
+                elem.appendChild(document.createTextNode(''));
+            }
+
             range.setStart(elem.firstChild, 0);
             range.collapse(true);
             return;

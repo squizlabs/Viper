@@ -1101,8 +1101,20 @@ ViperCopyPastePlugin.prototype = {
             var range = this.viper.getViperRange();
             range.setEnd(this._tmpNode, 0);
             range.collapse(false);
+            var viperElem = this.viper.getViperElement();
+            var prevBlock = null;
+            if (viperElem.firstChild === viperElem.lastChild
+                && (viperElem.firstChild === null || ViperUtil.isTag(viperElem.firstChild, 'br') === true)
+            ) {
+                if (viperElem.firstChild === null) {
+                    viperElem.appendChild(this._tmpNode);
+                } else {
+                    ViperUtil.insertBefore(this._tmpNode, viperElem.firstChild);
+                }
+            } else {
+                prevBlock = keyboardEditor.splitAtRange(true, range);
+            }
 
-            var prevBlock = keyboardEditor.splitAtRange(true, range);
             if (!prevBlock) {
                 prevBlock = this._tmpNode;
             } else {
@@ -1280,7 +1292,7 @@ ViperCopyPastePlugin.prototype = {
                         defaultTag.appendChild(this._tmpNode);
                     }
                 }
-                
+
                 while (fragment.firstChild) {
                     ViperUtil.insertBefore(this._tmpNode, fragment.firstChild);
                 }
