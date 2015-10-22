@@ -338,17 +338,19 @@ ViperCopyPastePlugin.prototype = {
 
                         // Give paste div the focus.
                         pasteDiv.focus();
-                        var max = 10;
+                        var max = 0;
                         var t   = setInterval(function () {
                             if (pasteDiv.innerHTML !== '') {
                                 pasteDiv.onpaste();
+                                self._pasteProcess = 0;
                                 clearInterval(t);
                             } else if (max > 10) {
+                                self._pasteProcess = 0;
                                 clearInterval(t);
                             }
 
                             max++;
-                        }, 50);
+                        }, 20);
                     }
 
                     self._pasteProcess++;
