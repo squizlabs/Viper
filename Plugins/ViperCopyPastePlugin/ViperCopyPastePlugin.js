@@ -1272,20 +1272,18 @@ ViperCopyPastePlugin.prototype = {
                 ViperChangeTracker.addNodeToChange(changeid, ctNode);
                 ViperUtil.insertBefore(this._tmpNode, ctNode);
             } else {
-                var changeid = ViperChangeTracker.startBatchChange('textAdded');
-                var ctNode   = null;
-                while (fragment.firstChild) {
-                    if (fragment.firstChild === ctNode) {
-                        console.error('Failed to move nodes');
-                        break;
+                if (this._tmpNode.parentNode === this.viper.getViperElement()) {
+                    var defaultTag = this.viper.getDefaultBlockTag();
+                    if (defaultTag) {
+                        defaultTag = document.createElement(defaultTag);
+                        ViperUtil.insertBefore(this._tmpNode, defaultTag);
+                        defaultTag.appendChild(this._tmpNode);
                     }
-
-                    var child = fragment.firstChild;
-                    ctNode = ViperChangeTracker.createCTNode('ins', 'textAdd', child);
-                    ViperChangeTracker.addNodeToChange(changeid, ctNode);
-                    ViperUtil.insertBefore(this._tmpNode, ctNode);
                 }
-                ViperChangeTracker.endBatchChange(changeid);
+                
+                while (fragment.firstChild) {
+                    ViperUtil.insertBefore(this._tmpNode, fragment.firstChild);
+                }
             }
         }//end if
 
