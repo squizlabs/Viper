@@ -745,9 +745,14 @@ ViperCopyPastePlugin.prototype = {
 
         if (this._isMSIE === true) {
             this.rangeObj  = null;
-            this.viper.highlightSelection();
-            this._bookmark = this.viper.createBookmarkFromHighlight();
-            ViperUtil.insertBefore(this._bookmark.start, this._tmpNode);
+            if (range.collapsed === true) {
+                this._bookmark = this.viper.createBookmark();
+                ViperUtil.insertBefore(this._bookmark.start, this._tmpNode);
+            } else {
+                this.viper.highlightSelection();
+                this._bookmark = this.viper.createBookmarkFromHighlight();
+                ViperUtil.insertBefore(this._bookmark.start, this._tmpNode);
+            }
         } else {
             try {
                 this.viper.insertNodeAtCaret(this._tmpNode);
@@ -1371,7 +1376,7 @@ ViperCopyPastePlugin.prototype = {
 
             content = ViperUtil.getHtml(tmp);
         }
-        
+
         return content;
 
     },
