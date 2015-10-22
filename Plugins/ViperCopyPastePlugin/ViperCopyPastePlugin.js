@@ -1367,11 +1367,12 @@ ViperCopyPastePlugin.prototype = {
             var tmp = document.createElement('div');
             ViperUtil.setHtml(tmp, content);
 
-            // Remove all u tags inside links.
-            var uTags = ViperUtil.find(tmp, 'a > u');
-            for (var i = 0; i < uTags.length; i++) {
-                this._moveChildren(uTags[i]);
-                ViperUtil.remove(uTags[i]);
+            // Remove all child tags inside links.
+            var aTags = ViperUtil.find(tmp, 'a');
+            for (var i = 0; i < aTags.length; i++) {
+                var surrChildren = ViperUtil.getSurroundedChildren(aTags[i]);
+                this._moveChildren(surrChildren[surrChildren.length - 1], surrChildren[0]);
+                ViperUtil.remove(surrChildren);
             }
 
             content = ViperUtil.getHtml(tmp);
@@ -2564,11 +2565,13 @@ ViperCopyPastePlugin.prototype = {
 
     },
 
-    _moveChildren: function(cont)
+    _moveChildren: function(cont, beforeElem)
     {
+        beforeElem = beforeElem || cont;
+
         // Moves the child nodes of cont before the cont.
         while (ViperUtil.isset(cont.firstChild) === true) {
-            ViperUtil.insertBefore(cont, cont.firstChild);
+            ViperUtil.insertBefore(beforeElem, cont.firstChild);
         }
 
     },
