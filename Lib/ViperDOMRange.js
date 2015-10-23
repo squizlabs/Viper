@@ -764,7 +764,7 @@ ViperDOMRange.prototype = {
             var ln = this.endContainer.childNodes.length;
             if (ln > this.endOffset) {
                 return this.endContainer.childNodes[this.endOffset];
-            } else if (ln === this.endOffset) {
+            } else if (ln === this.endOffset && ln !== 0) {
                 var lastChild = this.endContainer.childNodes[this.endOffset - 1];
                 if (ViperUtil.isStubElement(lastChild) === true) {
                     // When the last child is a stub element (e.g. img) and range is set after it the offset becomes greater
