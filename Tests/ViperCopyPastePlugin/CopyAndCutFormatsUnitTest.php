@@ -525,6 +525,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutFormatsUnitTest extends Abstrac
         sleep(1);
         $this->type('Second paste ');
         $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
         $this->assertHTMLMatch('<p>First paragraph</p><p>First paste </p><pre>Lorum this is more content %1% to test %2% Second paste &lt;pre&gt;Lorum this is more content %1% to test %2%&lt;/pre&gt; </pre>');
 
         // Paste again in a new pre section
@@ -532,6 +533,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutFormatsUnitTest extends Abstrac
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
         $this->assertHTMLMatch('<p>First paragraph</p><p>First paste </p><pre>Lorum this is more content %1% to test %2% Second paste &lt;pre&gt;Lorum this is more content %1% to test %2%&lt;/pre&gt;</pre><pre>Lorum this is more content %1% to test %2%</pre>');
 
     }//end testCutAndPastePreFormat()

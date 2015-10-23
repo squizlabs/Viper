@@ -1187,6 +1187,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
                             $match  = rtrim($match);
                             $match .= '"';
+                        } else if ($attrName === 'href') {
+                            // Remove trailing slash at the end of URLs.
+                            $match .= ' '.$attrs[1][$attrIndex].'="'.rtrim($attrs[2][$attrIndex], '/').'"';
                         } else {
                             $match .= $attrs[0][$attrIndex];
                         }//end if
@@ -1803,7 +1806,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         $this->sikuli->setLocation(
             $endRight,
-            ($this->sikuli->getX($endRight) + 2),
+            ($this->sikuli->getX($endRight) + 1),
             ($this->sikuli->getY($endRight) + 2)
         );
 
@@ -1876,6 +1879,8 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 throw new FindFailedException('Failed to find keyword: '.$this->getKeyword($keyword));
             }
 
+            // Need to hide toolbars incase the keyword is under the toolbar.
+            $this->sikuli->execJS('hideToolbarsAtLocation('.json_encode($loc).')');
             $loc = $this->sikuli->getRegionOnPage($loc);
         }
 
@@ -2132,7 +2137,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             return $text;
         }
 
-        $text = preg_replace('/\\\n\s+/', '', $text);
+        $text = preg_replace('/\s*\\\n\s+/', '', $text);
         return $text;
 
     }//end getSelectedText()
@@ -2485,18 +2490,18 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    protected function moveMouseToElement($selector, $position='bottom', $index=0)
+    protected function moveMouseToElement($selector, $position='bottom', $index=0, $yOffset=0)
     {
         $elemRect = $this->getBoundingRectangle($selector, $index);
         $x        = ($elemRect['x1'] + ($elemRect['x2'] - $elemRect['x1']) / 2);
 
         switch ($position) {
             case 'bottom':
-                $y = ($elemRect['y2']);
+                $y = ($elemRect['y2'] + $yOffset);
             break;
 
             case 'top':
-                $y = ($elemRect['y1']);
+                $y = ($elemRect['y1'] + $yOffset);
             break;
         }
 

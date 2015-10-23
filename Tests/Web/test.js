@@ -309,14 +309,16 @@ function gActBubble()
 
 function gStringLoc(str)
 {
-    var range = viper.getCurrentRange();
-    var loc   = null;
+    var range          = viper.getCurrentRange();
+    var clone          = range.cloneRange();
+    var loc            = null;
+    var contentElement = document.getElementById('content');
     if (ViperUtil.isBrowser('msie') === true) {
         // Range search.
         var viperRange = null;
         if (ViperUtil.isBrowser('msie', '>=11') === true) {
             var textRange = new ViperIERange(document.body.createTextRange());
-            var selectable = range._getFirstSelectableChild(document.getElementById('content'));
+            var selectable = range._getFirstSelectableChild(contentElement);
             textRange.setStart(selectable, 0);
             textRange.setEnd(selectable, 0);
             viperRange = textRange;
@@ -334,6 +336,9 @@ function gStringLoc(str)
             };
 
     } else {
+        range.setStart(range._getFirstSelectableChild(contentElement), 0);
+        range.collapse(true);
+        ViperSelection.addRange(range);
         if (window.find(str, true, false, true, true, true) === true) {
             loc = viper.getCurrentRange().rangeObj.getBoundingClientRect();
             loc = {
@@ -346,9 +351,21 @@ function gStringLoc(str)
     }
 
     // Reset selection.
-    ViperSelection.addRange(range);
+    ViperSelection.addRange(clone);
 
     return loc;
+
+}
+
+function hideToolbarsAtLocation(loc)
+{
+    var toolbars = ViperUtil.find(document.body, '.ViperITP.Viper-visible');
+    for (var i = 0; i < toolbars.length; i++) {
+        var toolbarLoc = ViperUtil.getBoundingRectangle(toolbars[i]);
+        if (ViperUtil.isIntersectingRect(loc, toolbarLoc) === true) {
+            ViperUtil.removeClass(toolbars[i], 'Viper-visible');
+        }
+    }
 
 }
 

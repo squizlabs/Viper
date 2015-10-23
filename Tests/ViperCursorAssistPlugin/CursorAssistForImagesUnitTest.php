@@ -41,7 +41,7 @@ class Viper_Tests_ViperCursorAssistPlugin_CursorAssistForImagesUnitTest extends 
 
         $this->clickKeyword(1);
 
-        $this->moveMouseToElement('img', 'bottom');
+        $this->moveMouseToElement('img', 'bottom', 0, -25);
 
         // Check to see if the cursor assit line appears above the list
         $this->assertTrue($this->isCursorAssistLineVisible('img', 'bottom'));

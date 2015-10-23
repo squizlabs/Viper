@@ -77,6 +77,7 @@ ViperSearchReplacePlugin.prototype = {
             self.replace(tools.getItem('ViperSearchPlugin:replaceInput').getValue());
             self._updateButtonStates();
             self.viper.fireNodesChanged();
+            return false;
         };
 
         var replace = tools.createTextbox('ViperSearchPlugin:replaceInput', _('Replace'), '', function(value) {
@@ -159,7 +160,7 @@ ViperSearchReplacePlugin.prototype = {
 
         tools.getItem('ViperSearchPlugin:bubble').setSubSectionAction('ViperSearchPlugin:bubbleSubSection', function() {
             return _findNext();
-        }, ['ViperSearchPlugin:searchInput'], 'ViperSearchPlugin:findNext');
+        }, ['ViperSearchPlugin:searchInput'], 'ViperSearchPlugin:findNext', true);
 
         // Update the buttons when the toolbar updates it self.
         this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperSearchReplacePlugin', null);
@@ -254,10 +255,14 @@ ViperSearchReplacePlugin.prototype = {
         }
 
         if (ViperUtil.isBrowser('msie') === true) {
+            if (this.viper.rangeInViperBounds(this.viper.getCurrentRange()) === false) {
+                viperRange.setStart(viperRange._getFirstSelectableChild(element), 0);
+                viperRange.collapse(true);
+            }
+
             // Range search.
             if (ViperUtil.isBrowser('msie', '>=11') === true) {
                 if (fromStart !== true) {
-                    viperRange = this.viper.getViperRange();
                     viperRange.collapse(false);
                 }
 
@@ -283,7 +288,7 @@ ViperSearchReplacePlugin.prototype = {
                 }
 
                 ViperSelection.addRange(this.viper.getCurrentRange());
-                this.viper.fireSelectionChanged();
+                this.viper.fireSelectionChanged(null, true);
                 setTimeout(function() {
                     this._finding = false;
                 }, 300);
@@ -319,6 +324,7 @@ ViperSearchReplacePlugin.prototype = {
     {
         var range = null;
         if (ViperUtil.isBrowser('msie') === true) {
+            this.viper.highlightToSelection();
             range = this.viper.getViperRange();
         } else {
             range = this.viper.getCurrentRange();
@@ -327,11 +333,13 @@ ViperSearchReplacePlugin.prototype = {
             }
         }
 
-        range.deleteContents();
+        var bookmark = this.viper.createBookmark(range);
+        var newNode  = document.createTextNode(replacement);
+        ViperUtil.insertBefore(bookmark.start, newNode);
+        this.viper.removeBookmark(bookmark);
 
-        var newNode = document.createTextNode(replacement);
-        range.insertNode(newNode);
-        range.selectNode(newNode);
+        range.setStart(newNode, 0);
+        range.setEnd(newNode, newNode.data.length);
         ViperSelection.addRange(range);
 
         this._matchCount--;

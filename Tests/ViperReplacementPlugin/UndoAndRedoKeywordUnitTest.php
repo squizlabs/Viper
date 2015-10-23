@@ -27,6 +27,7 @@ class Viper_Tests_ViperReplacementPlugin_UndoAndRedoKeywordUnitTest extends Abst
         $this->assertRawHTMLMatch('<p>%1%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %2%</p><p>%3% %4%</p>');
 
         // Test for redo
+        $this->clickKeyword(1);
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
 
         $this->assertHTMLMatch('<p>%1%&nbsp;&nbsp;%2%</p><p>%3% %4%</p>');

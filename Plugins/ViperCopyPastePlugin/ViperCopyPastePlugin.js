@@ -338,17 +338,19 @@ ViperCopyPastePlugin.prototype = {
 
                         // Give paste div the focus.
                         pasteDiv.focus();
-                        var max = 10;
+                        var max = 0;
                         var t   = setInterval(function () {
                             if (pasteDiv.innerHTML !== '') {
                                 pasteDiv.onpaste();
+                                self._pasteProcess = 0;
                                 clearInterval(t);
                             } else if (max > 10) {
+                                self._pasteProcess = 0;
                                 clearInterval(t);
                             }
 
                             max++;
-                        }, 50);
+                        }, 20);
                     }
 
                     self._pasteProcess++;
@@ -745,9 +747,14 @@ ViperCopyPastePlugin.prototype = {
 
         if (this._isMSIE === true) {
             this.rangeObj  = null;
-            this.viper.highlightSelection();
-            this._bookmark = this.viper.createBookmarkFromHighlight();
-            ViperUtil.insertBefore(this._bookmark.start, this._tmpNode);
+            if (range.collapsed === true) {
+                this._bookmark = this.viper.createBookmark();
+                ViperUtil.insertBefore(this._bookmark.start, this._tmpNode);
+            } else {
+                this.viper.highlightSelection();
+                this._bookmark = this.viper.createBookmarkFromHighlight();
+                ViperUtil.insertBefore(this._bookmark.start, this._tmpNode);
+            }
         } else {
             try {
                 this.viper.insertNodeAtCaret(this._tmpNode);
@@ -1357,6 +1364,22 @@ ViperCopyPastePlugin.prototype = {
     {
         content = content.replace(/<(font)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>\s*/ig, '');
         content = content.replace(/\s*<\/(font)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, '');
+
+        if (ViperUtil.isBrowser('msie') === true) {
+            var tmp = document.createElement('div');
+            ViperUtil.setHtml(tmp, content);
+
+            // Remove all child tags inside links.
+            var aTags = ViperUtil.find(tmp, 'a');
+            for (var i = 0; i < aTags.length; i++) {
+                var surrChildren = ViperUtil.getSurroundedChildren(aTags[i]);
+                this._moveChildren(surrChildren[surrChildren.length - 1], surrChildren[0]);
+                ViperUtil.remove(surrChildren);
+            }
+
+            content = ViperUtil.getHtml(tmp);
+        }
+
         return content;
 
     },
@@ -2544,11 +2567,13 @@ ViperCopyPastePlugin.prototype = {
 
     },
 
-    _moveChildren: function(cont)
+    _moveChildren: function(cont, beforeElem)
     {
+        beforeElem = beforeElem || cont;
+
         // Moves the child nodes of cont before the cont.
         while (ViperUtil.isset(cont.firstChild) === true) {
-            ViperUtil.insertBefore(cont, cont.firstChild);
+            ViperUtil.insertBefore(beforeElem, cont.firstChild);
         }
 
     },

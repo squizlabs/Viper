@@ -598,6 +598,11 @@ ViperInlineToolbarPlugin.prototype = {
             var endNode = range.getEndNode();
             if (startNode && startNode === endNode) {
                 parent = startNode.parentNode;
+            } else if (range.endContainer === endNode
+                && endNode.childNodes.length === range.endOffset
+                && startNode.parentNode === endNode.childNodes[endNode.childNodes.length - 1]
+            ) {
+                parent = startNode.parentNode;
             } else {
                 parent = range.getCommonElement();
                 if (this.viper.isOutOfBounds(parent) === true) {

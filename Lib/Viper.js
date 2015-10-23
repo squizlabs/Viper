@@ -923,7 +923,7 @@ Viper.prototype = {
             return;
         }
 
-        if (ViperUtil.isBrowser('msie') === true) {
+        if (ViperUtil.isBrowser('msie', '<11') === true) {
             // Find iframe elements for youtube.com videos to add wmode=opaque to query
             // string so that the video does not sit on top of the editor window in IE.
             var iframeTags = ViperUtil.getTag('iframe', elem);
@@ -1593,10 +1593,12 @@ Viper.prototype = {
             }
         } else if (doc.body.createTextRange) {
             // IE.
-            range = doc.body.createTextRange();
+            var range = doc.body.createTextRange();
             try {
                 range.moveToPoint(x, y);
             } catch (e) {
+                // Thrown usualy when the point is on an element like img.
+                return document.elementFromPoint(x, y);
             }
 
             elem = range.parentElement();
@@ -6070,7 +6072,7 @@ Viper.prototype = {
                     if ((ViperUtil.isStubElement(node) === false
                         && !node.firstChild)
                         || cont === '&nbsp;'
-                        || (cont === '' && ViperUtil.isTag(node, 'p'))
+                        || (cont === '' && ViperUtil.isTag(node, ['p', 'div']))
                     ) {
                         ViperUtil.remove(node);
                     }
@@ -6082,6 +6084,8 @@ Viper.prototype = {
                     ViperUtil.remove(node);
                 } else if (ViperUtil.trim(node.data) === '' && node.data.indexOf("\n") === 0) {
                     ViperUtil.remove(node);
+                } else if (node.data.match(/\n\s+\S+\n\s+/) !== null && !node.previousSibling && !node.nextSibling) {
+                    node.data = ViperUtil.trim(node.data);
                 } else {
                     var nbsp = String.fromCharCode(160);
 
