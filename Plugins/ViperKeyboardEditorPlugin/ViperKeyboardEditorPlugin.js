@@ -955,7 +955,7 @@ ViperKeyboardEditorPlugin.prototype = {
                     }
 
                     if (((startNode.nodeType === ViperUtil.TEXT_NODE
-                        && startNode.data.length === 0)
+                        && ViperUtil.trim(startNode.data).length === 0)
                         || ViperUtil.isTag(startNode, 'br') === true)
                         && ViperUtil.isTag(startNode.parentNode, 'li') === true
                         && ViperUtil.getTag('li', startNode.parentNode.parentNode).length === 1
@@ -2575,6 +2575,10 @@ ViperKeyboardEditorPlugin.prototype = {
             docFrag   = range.extractContents('p');
             felem.appendChild(docFrag);
             ViperUtil.insertBefore(elem, felem);
+
+            if (!elem.firstChild) {
+                elem.appendChild(document.createTextNode(''));
+            }
 
             range.setStart(elem.firstChild, 0);
             range.collapse(true);

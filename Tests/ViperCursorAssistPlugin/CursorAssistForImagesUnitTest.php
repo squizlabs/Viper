@@ -7,7 +7,7 @@ class Viper_Tests_ViperCursorAssistPlugin_CursorAssistForImagesUnitTest extends 
 
 
     /**
-     * Test that the cursor assit line appears above an image and that you can click it.
+     * Test that the cursor assit line appears above an image and you can click it.
      *
      * @return void
      */

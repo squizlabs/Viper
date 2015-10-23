@@ -1633,7 +1633,7 @@ ViperCoreStylesPlugin.prototype = {
 
             var startParent = null;
             if (!selectedNode || selectedNode === viperElement || ViperUtil.isBlockElement(selectedNode) === false) {
-                startParent = ViperUtil.getFirstBlockParent(startNode);
+                startParent = ViperUtil.getFirstBlockParent(startNode, null, true);
             } else {
                 startParent = selectedNode;
             }
@@ -1641,7 +1641,7 @@ ViperCoreStylesPlugin.prototype = {
             if (startNode !== endNode) {
                 var endParent = endNode;
                 if (endNode !== viperElement) {
-                    endParent = ViperUtil.getFirstBlockParent(endNode);
+                    endParent = ViperUtil.getFirstBlockParent(endNode, null, true);
                 }
 
                 var elems     = ViperUtil.getElementsBetween(startParent, endParent);

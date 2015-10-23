@@ -1101,8 +1101,20 @@ ViperCopyPastePlugin.prototype = {
             var range = this.viper.getViperRange();
             range.setEnd(this._tmpNode, 0);
             range.collapse(false);
+            var viperElem = this.viper.getViperElement();
+            var prevBlock = null;
+            if (viperElem.firstChild === viperElem.lastChild
+                && (viperElem.firstChild === null || ViperUtil.isTag(viperElem.firstChild, 'br') === true)
+            ) {
+                if (viperElem.firstChild === null) {
+                    viperElem.appendChild(this._tmpNode);
+                } else {
+                    ViperUtil.insertBefore(this._tmpNode, viperElem.firstChild);
+                }
+            } else {
+                prevBlock = keyboardEditor.splitAtRange(true, range);
+            }
 
-            var prevBlock = keyboardEditor.splitAtRange(true, range);
             if (!prevBlock) {
                 prevBlock = this._tmpNode;
             } else {
@@ -1272,20 +1284,18 @@ ViperCopyPastePlugin.prototype = {
                 ViperChangeTracker.addNodeToChange(changeid, ctNode);
                 ViperUtil.insertBefore(this._tmpNode, ctNode);
             } else {
-                var changeid = ViperChangeTracker.startBatchChange('textAdded');
-                var ctNode   = null;
-                while (fragment.firstChild) {
-                    if (fragment.firstChild === ctNode) {
-                        console.error('Failed to move nodes');
-                        break;
+                if (this._tmpNode.parentNode === this.viper.getViperElement()) {
+                    var defaultTag = this.viper.getDefaultBlockTag();
+                    if (defaultTag) {
+                        defaultTag = document.createElement(defaultTag);
+                        ViperUtil.insertBefore(this._tmpNode, defaultTag);
+                        defaultTag.appendChild(this._tmpNode);
                     }
-
-                    var child = fragment.firstChild;
-                    ctNode = ViperChangeTracker.createCTNode('ins', 'textAdd', child);
-                    ViperChangeTracker.addNodeToChange(changeid, ctNode);
-                    ViperUtil.insertBefore(this._tmpNode, ctNode);
                 }
-                ViperChangeTracker.endBatchChange(changeid);
+
+                while (fragment.firstChild) {
+                    ViperUtil.insertBefore(this._tmpNode, fragment.firstChild);
+                }
             }
         }//end if
 
