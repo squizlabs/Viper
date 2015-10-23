@@ -2701,11 +2701,6 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
     }//end testSuperscriptWithThreeAdditionalFormats()
 
 
-
-
-
-
-
     /**
      * Test combinations of formats beginning with strikethrough
      *
