@@ -484,7 +484,6 @@ ViperSourceViewPlugin.prototype = {
                 self.toolbarPlugin.disable();
             }
 
-            //added for classic Wysiwig editor 
             var form = document.main_form;
             var submit_btn = form.elements.namedItem('sq_commit_button');
             if (submit_btn !== null && submit_btn.disabled === true) {
