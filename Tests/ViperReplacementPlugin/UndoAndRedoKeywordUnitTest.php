@@ -116,6 +116,7 @@ class Viper_Tests_ViperReplacementPlugin_UndoAndRedoKeywordUnitTest extends Abst
         $this->assertRawHTMLMatch('<p>%1% test content<span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span></p><p>more content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'"> even more content</p>');
 
         // Test for redo
+        $this->clickKeyword(1);
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         sleep(2);
         $this->assertHTMLMatch('<p>%1% test content<img alt="TITLE" src="((prop:url))" /></p><p>more content&nbsp;&nbsp;even more content</p>');
@@ -165,6 +166,7 @@ class Viper_Tests_ViperReplacementPlugin_UndoAndRedoKeywordUnitTest extends Abst
         $this->assertRawHTMLMatch('<p>%1% test content<span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span></p><p>more content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'"> even more content</p>');
 
         // Test for redo
+        $this->clickKeyword(1);
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
 
         $this->assertHTMLMatch('<p>%1% test content ((prop:viperKeyword))</p><p>more content <img src="((prop:url))" alt="TITLE" height="170" width="200" /> even more content</p>');
@@ -210,8 +212,8 @@ class Viper_Tests_ViperReplacementPlugin_UndoAndRedoKeywordUnitTest extends Abst
         $this->assertRawHTMLMatch('<p>%1%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a> %2%</p><p>%3% %4%</p>');
 
         // Test for redo
+        $this->clickKeyword(1);
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-
         $this->assertHTMLMatch('<p>%1% ((prop:productName)) %2%</p><p>%3% %4%</p>');
         $this->assertRawHTMLMatch('<p>%1%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %2%</p><p>%3% %4%</p>');
 
