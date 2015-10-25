@@ -1365,6 +1365,8 @@ ViperKeyboardEditorPlugin.prototype = {
                         textNode.parentNode.appendChild(br);
                     }
 
+                    ViperSelection.addRange(range);
+
                     this.viper.fireNodesChanged();
                     this.viper.fireSelectionChanged(null, true);
 
