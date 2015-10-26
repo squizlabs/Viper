@@ -108,7 +108,7 @@ class Viper_Tests_Core_EmbeddingVideoUnitTest extends AbstractViperUnitTest
         sleep(5);
 
         // Check that you can enter content after new video.
-        $this->moveMouseToElement('object');
+        $this->moveMouseToElement('object', 'bottom', 0, -25);
         $this->clickCursorAssistLine();
         $this->type('This is a new paragraph after the video');
 
