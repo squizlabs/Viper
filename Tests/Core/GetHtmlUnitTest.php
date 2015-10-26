@@ -30,7 +30,7 @@ class Viper_Tests_Core_GetHtmlUnitTest extends AbstractViperUnitTest
         $this->useTest(2);
 
         $this->moveToKeyword(1);
-        $this->assertHTMLMatch('<h1>%1% Heading</h1><p style="text-align: center;">Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><h2>Second Heading</h2><p style="text-align: right;">This is <del>SOME</del> <span class="myclass">information</span> for <a href="http://www.google.com" title="Google">testing</a></p><p>Another paragraph</p><ul style="text-align: center;"><li>Test removing bullet points</li><li style="text-align: right;">purus <u>oNo</u> luctus</li><li>vel molestie arcu</li></ul><div>&nbsp;</div><hr /><p>This is a <sub>sub</sub> script. This is a <sup>super</sup> script</p>');
+        $this->assertHTMLMatch('<h1>%1% Heading</h1><p style="text-align: center;">Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><h2>Second Heading</h2><p style="text-align: right;">This is <del>SOME</del> <span class="myclass">information</span> for <a href="http://www.google.com" title="Google">testing</a></p><p>Another paragraph</p><ul style="text-align: center;"><li>Test removing bullet points</li><li style="text-align: right;">purus <u>oNo</u> luctus</li><li>vel molestie arcu</li></ul><hr /><p>This is a <sub>sub</sub> script. This is a <sup>super</sup> script</p>');
 
     }//end testGetHtmlForParagraphs()
 
@@ -120,7 +120,7 @@ class Viper_Tests_Core_GetHtmlUnitTest extends AbstractViperUnitTest
         $this->useTest(8);
 
         $this->moveToKeyword(1);
-        $this->assertHTMLMatch('<h1>%1% Heading</h1><a href="#test">Test</a><p style="text-align: center;">Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><h2><a name="test"></a>Second Heading</h2><p style="text-align: right;">This is <del>SOME</del> <span class="myclass">information</span> for <a href="http://www.google.com" title="Google">testing</a></p>');
+        $this->assertHTMLMatch('<h1>%1% Heading</h1><p><a href="#test">Test</a></p><p style="text-align: center;">Lorem XuT dolor sit <em>amet</em> <strong>WoW</strong></p><h2><a name="test"></a>Second Heading</h2><p style="text-align: right;">This is <del>SOME</del> <span class="myclass">information</span> for <a href="http://www.google.com" title="Google">testing</a></p>');
 
     }//end testGetHtmlDoesNotRemoveAnchorTags()
 
