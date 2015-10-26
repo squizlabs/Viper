@@ -772,6 +772,7 @@ ViperDOMRange.prototype = {
                     return this.endContainer.childNodes[this.endOffset - 1];
                 } else if (lastChild.nodeType === ViperUtil.ELEMENT_NODE
                     && lastChild.lastChild.nodeType === ViperUtil.TEXT_NODE
+                    && this.startContainer.nodeType === ViperUtil.TEXT_NODE
                 ) {
                     return lastChild.lastChild;
                 }
