@@ -4589,9 +4589,9 @@ Viper.prototype = {
     keyDown: function(e)
     {
         this._viperRange = null;
+        var range        = this.getCurrentRange();
 
         if (this._keyDownRangeCollapsed === true) {
-            var range = this.getCurrentRange();
             this._keyDownRangeCollapsed = range.collapsed;
         }
 
@@ -4656,7 +4656,20 @@ Viper.prototype = {
                     range.setStart(range.startContainer, 0);
                     range.collapse(true);
                     ViperSelection.addRange(range);
-                }//end if
+                }/* else if (range.collapsed === false
+                    && e.which === 37
+                    && e.shiftKey === true
+                    && range.startOffset === 1
+                    && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                    && range.startContainer.data.charAt(0) === ' '
+                    && ViperUtil.isBrowser('msie') === true
+                ) {
+                    range.setStart(range.startContainer, 0);
+                    ViperSelection.addRange(range);
+                    this.fireSelectionChanged();
+
+                    return false;
+                }//end if*/
 
                 var self = this;
                 setTimeout(function() {
