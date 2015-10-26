@@ -1941,8 +1941,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 range.setStart(startNode, 0);
             } else if (range.startOffset === 0
                 && ViperUtil.isBrowser('msie') === true
-                && range.startOffset + 1 === range.startContainer.data.length - 1
-                && range.startContainer.data.charAt(range.startOffset + 1) === ' '
+                && range.startContainer.data.charAt(1) === ' '
             ) {
                 range.startContainer.data = range.startContainer.data.substr(1);
                 range.setStart(range.startContainer, 0);
