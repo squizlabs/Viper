@@ -5828,7 +5828,7 @@ Viper.prototype = {
         content = this.replaceEntities(content);
 
         // Regex to get list of HTML tags.
-        var subRegex = '\\s+([:\\w]+)(?:\\s*=\\s*("(?:[^"]+)?"|\'(?:[^\']+)?\'|[^\'">\\s]+))?';
+        var subRegex = '\\s+([_\\-:\\w]+)(?:\\s*=\\s*("(?:[^"]+)?"|\'(?:[^\']+)?\'|[^\'">\\s]+))?';
 
         // Regex to get list of attributes in an HTML tag.
         var tagRegex  = new RegExp('(<[\\w:]+)(?:' + subRegex + ')+\\s*(\/?>)', 'g');

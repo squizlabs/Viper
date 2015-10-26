@@ -70,6 +70,8 @@ function getRawHTML(selector, index)
         });
     }
 
+    html = viper.cleanHTML(html);
+
     return html;
 
 }
