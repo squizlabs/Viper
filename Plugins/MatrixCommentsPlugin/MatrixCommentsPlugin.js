@@ -57,10 +57,10 @@ MatrixCommentsPlugin.prototype = {
         // get current user id
         if (typeof EasyEditAssetManager == 'undefined') {
             self._inEditPlus = false;
-            self._currentUserId =  parseInt($('#userid').val());
-            self._currentUserFirstName =  $('#userFirstName').val();
-            self._currentUserLastName =  $('#userLastName').val();
-            self._currentUserUsername = $('#username').val();
+            self._currentUserId =  parseInt(ViperUtil.$('#userid').val());
+            self._currentUserFirstName =  ViperUtil.$('#userFirstName').val();
+            self._currentUserLastName =  ViperUtil.$('#userLastName').val();
+            self._currentUserUsername = ViperUtil.$('#username').val();
         }
         else {
            if (EasyEditAssetManager && EasyEditAssetManager.hasOwnProperty('_currentUserAsset') && EasyEditAssetManager._currentUserAsset !== null) {
@@ -83,8 +83,8 @@ MatrixCommentsPlugin.prototype = {
 
 
         // init comment array
-        $('div[data-container-id]').each(function() {
-            var $container = $(this);
+        ViperUtil.$('div[data-container-id]').each(function() {
+            var $container = ViperUtil.$(this);
             var currentContainerId = $container.data('container-id');
 
             // init array index for current container
@@ -103,7 +103,7 @@ MatrixCommentsPlugin.prototype = {
         // when click outside of viper
         this.viper.registerCallback('Viper:clickedOutside', 'MatrixCommentsPlugin', function(e) {
             // remove comment action dialog
-            $('.Matrix-Viper-commentdialog-comment-action').remove();
+            ViperUtil.$('.Matrix-Viper-commentdialog-comment-action').remove();
 
         });
 
@@ -114,8 +114,8 @@ MatrixCommentsPlugin.prototype = {
         var loadAllComments = function () {
             self._commentsPositions = [];
             self._removeAllCommentMarks();
-            $('div[data-container-id]').each(function() {
-                var $container = $(this);
+            ViperUtil.$('div[data-container-id]').each(function() {
+                var $container = ViperUtil.$(this);
                 self._containerId = $container.data('container-id');
                 self._bodycopyId = $container.data('bodycopy-id');
                 self._bodycopyContainer = $container;
@@ -128,7 +128,7 @@ MatrixCommentsPlugin.prototype = {
         }
         else {
             // in admin, when page is ready
-            $(document).ready( function() {
+            ViperUtil.$(document).ready( function() {
                 setTimeout(function(){
                     loadAllComments.call();
                 }, 500);
@@ -142,8 +142,8 @@ MatrixCommentsPlugin.prototype = {
                 self._commentColor = 0;
                 var foundUsedColor = false;
                 var lastUsedColor = -1;
-                jQuery.each(self._comments, function(containerid, data) {
-                    jQuery.each(data, function(key, value) {
+                ViperUtil.$.each(self._comments, function(containerid, data) {
+                    ViperUtil.$.each(data, function(key, value) {
                         if(value['userId'] == self._currentUserId) {
                             self._commentColor = value['color'];
                             foundUsedColor = true;
@@ -169,9 +169,9 @@ MatrixCommentsPlugin.prototype = {
 
             // set current bodycopy id and container id
             var editableElement = self.viper.getEditableElement();
-            self._containerId = $(editableElement).data('container-id');
-            self._bodycopyId = $(editableElement).data('bodycopy-id');
-            self._bodycopyContainer = $(editableElement);
+            self._containerId = ViperUtil.$(editableElement).data('container-id');
+            self._bodycopyId = ViperUtil.$(editableElement).data('bodycopy-id');
+            self._bodycopyContainer = ViperUtil.$(editableElement);
 
             if(!self._containerId || !self._bodycopyId) {
                 self._allowCommentSystem = false;
@@ -186,24 +186,24 @@ MatrixCommentsPlugin.prototype = {
 
 
             // if we are creating a new comment and then click away, we should clean up the comment attribute properly
-            if(typeof $('#Matrix-Viper-commentdialog-newCommentButton-cancel').get(0) !== 'undefined') {
+            if(typeof ViperUtil.$('#Matrix-Viper-commentdialog-newCommentButton-cancel').get(0) !== 'undefined') {
                 // click the cancel button will do it
-                $('#Matrix-Viper-commentdialog-newCommentButton-cancel').click();
+                ViperUtil.$('#Matrix-Viper-commentdialog-newCommentButton-cancel').click();
             }
 
 
             // remove comment action dialog
-            $('.Matrix-Viper-commentdialog-comment-action').remove();
+            ViperUtil.$('.Matrix-Viper-commentdialog-comment-action').remove();
             // remove comment dialogs
-            $('.Matrix-Viper-commentdialog').remove();
+            ViperUtil.$('.Matrix-Viper-commentdialog').remove();
             // remove selected comment class
-            $('.Matrix-Viper-comment-highlighted').removeClass('Matrix-Viper-comment-highlighted');
+            ViperUtil.$('.Matrix-Viper-comment-highlighted').removeClass('Matrix-Viper-comment-highlighted');
             // cancel opacity to commenr marks
-            $('.Matrix-Viper-commentmark').css('opacity', 'none');
+            ViperUtil.$('.Matrix-Viper-commentmark').css('opacity', 'none');
 
             // reset id counter
             self._commentId = 0;
-            jQuery.each(self._comments[self._containerId], function(key, value) {
+            ViperUtil.$.each(self._comments[self._containerId], function(key, value) {
                 if(value['id'] > self._commentId) {
                     self._commentId = value['id'];
                 }
@@ -226,11 +226,11 @@ MatrixCommentsPlugin.prototype = {
 
         // when resize window, we have to re-position our comment makrs as well
         var resizeTimeout;
-        $( window ).resize(function() {
+        ViperUtil.$( window ).resize(function() {
              clearTimeout(resizeTimeout);
              resizeTimeout = setTimeout(function() {
                 // just close those comment action dialogs, no need to re-position them
-                jQuery('.Matrix-Viper-commentdialog-comment-action').remove();
+                ViperUtil.$('.Matrix-Viper-commentdialog-comment-action').remove();
                 self.updateExistingComments();
              }, 100);
         });
@@ -386,15 +386,15 @@ MatrixCommentsPlugin.prototype = {
     getSortedCommentMarks: function (containerId)
     {
         if(typeof containerId != 'undefined') {
-            $commentMarks = $('.Matrix-Viper-commentmark[data-comment-container-id=' + containerId + ']');
+            $commentMarks = ViperUtil.$('.Matrix-Viper-commentmark[data-comment-container-id=' + containerId + ']');
         }
         else {
-            $commentMarks = $('.Matrix-Viper-commentmark');
+            $commentMarks = ViperUtil.$('.Matrix-Viper-commentmark');
         }
 
         return $commentMarks.sort(function (a, b) {
-          var topA =parseInt( $(a).offset().top);
-          var topB =parseInt( $(b).offset().top);
+          var topA =parseInt( ViperUtil.$(a).offset().top);
+          var topB =parseInt( ViperUtil.$(b).offset().top);
           return topA > topB;
         });
     },
@@ -406,12 +406,12 @@ MatrixCommentsPlugin.prototype = {
     {
         var self = this;
         // remove all comments mark
-        $('div[id ^=Matrix-Viper-commentmark-]').remove();
+        ViperUtil.$('div[id ^=Matrix-Viper-commentmark-]').remove();
         // then remove each mark in the comments array
-        jQuery.each(self._comments, function(containerid, value) {
-            jQuery.each(value, function(index, comment){
+        ViperUtil.$.each(self._comments, function(containerid, value) {
+            ViperUtil.$.each(value, function(index, comment){
                 if(typeof comment['commentMark'] != 'undefined') {
-                    $(comment['commentMark']).remove();
+                    ViperUtil.$(comment['commentMark']).remove();
                     self._comments[containerid][index]['commentMark'] = null;
                 }
             });
@@ -425,14 +425,14 @@ MatrixCommentsPlugin.prototype = {
     {
         var self = this;
         if(!self._comments[self._containerId]) return;
-        jQuery.each(self._comments[self._containerId], function(key, value) {
+        ViperUtil.$.each(self._comments[self._containerId], function(key, value) {
             // do not display unattached comments
             if(typeof value['status'] != 'undefined' && value['unattached'] == true) return;
 
-            var targetElement = $('[data-comment-id=' + value['id'] + '][data-comment-container-id=' + self._containerId + ']').get(0);
+            var targetElement = ViperUtil.$('[data-comment-id=' + value['id'] + '][data-comment-container-id=' + self._containerId + ']').get(0);
             if(typeof value['commentMark'] == 'undefined' || value['commentMark'] == null) {
-                if($('#Matrix-Viper-commentmark-' + self._containerId + '-' + value['id']).length) {
-                    self._comments[self._containerId][key]['commentMark'] = $('#Matrix-Viper-commentmark-' + self._containerId + '-' + value['id']).get(0);
+                if(ViperUtil.$('#Matrix-Viper-commentmark-' + self._containerId + '-' + value['id']).length) {
+                    self._comments[self._containerId][key]['commentMark'] = ViperUtil.$('#Matrix-Viper-commentmark-' + self._containerId + '-' + value['id']).get(0);
                 }
                 else {    
                     if(targetElement) {
@@ -444,13 +444,13 @@ MatrixCommentsPlugin.prototype = {
                 }
             }
             else {
-                $(value['commentMark']).show();
+                ViperUtil.$(value['commentMark']).show();
             }
             // position the comment mark
             if(targetElement && self._comments[self._containerId][key]['commentMark']) {
                 self._positionCommentMark(targetElement, self._comments[self._containerId][key]['commentMark']);
-                if($('#Matrix-Viper-commentdialog-' + value['containerid'] + '-' + value['id']).length) {
-                    self._positionCommentDialog(value['commentMark'], $('#Matrix-Viper-commentdialog-' + value['containerid'] + '-' + value['id']).get(0));
+                if(ViperUtil.$('#Matrix-Viper-commentdialog-' + value['containerid'] + '-' + value['id']).length) {
+                    self._positionCommentDialog(value['commentMark'], ViperUtil.$('#Matrix-Viper-commentdialog-' + value['containerid'] + '-' + value['id']).get(0));
                 }
             }
         });
@@ -466,7 +466,7 @@ MatrixCommentsPlugin.prototype = {
         var node  = range.getNodeSelection();
 
         // set the current editing bodycopy container
-        self._bodycopyContainer = $(range.startContainer).closest('div[data-container-id]');
+        self._bodycopyContainer = ViperUtil.$(range.startContainer).closest('div[data-container-id]');
 
         if ((ViperUtil.isTag(node, 'span') === true || ViperUtil.isTag(node, 'div') === true) && ViperUtil.hasAttribute(node, 'data-comment-id')) {
         	this.actionOnCommentTarget([node]);
@@ -563,11 +563,11 @@ MatrixCommentsPlugin.prototype = {
 
     removeComment: function(element)
     {
-       $element = jQuery(element);
+       $element = ViperUtil.$(element);
        $element.removeClass('Matrix-Viper-comment-highlighted');
        if($element.prop('tagName') == 'SPAN' || $element.prop('tagName') == 'DIV') {
         $element.replaceWith(function () {
-            return $(this).html();
+            return ViperUtil.$(this).html();
         });
        }
        else {
@@ -612,9 +612,9 @@ MatrixCommentsPlugin.prototype = {
     	}
         else {
             // open the comment mark's dialog
-            var commentId = $(elements[0]).data('comment-id');
-            var containerId = $(elements[0]).data('comment-container-id');
-            $('[data-comment-container-id=' + containerId + '][data-comment-id=' + commentId + '].Matrix-Viper-commentmark').mousedown();
+            var commentId = ViperUtil.$(elements[0]).data('comment-id');
+            var containerId = ViperUtil.$(elements[0]).data('comment-container-id');
+            ViperUtil.$('[data-comment-container-id=' + containerId + '][data-comment-id=' + commentId + '].Matrix-Viper-commentmark').mousedown();
         }
     },
 
@@ -627,11 +627,11 @@ MatrixCommentsPlugin.prototype = {
     	var commentMark = document.createElement('div');
 
 
-        $(commentMark).attr('id', 'Matrix-Viper-commentmark-' + containerId + '-' + id);
-        $(commentMark).attr('data-comment-id', id);
-        $(commentMark).attr('data-comment-container-id', containerId);
-        $(commentMark).addClass('Matrix-Viper-commentmark');
-        $(commentMark).addClass('Matrix-Viper-commentmark-color-' + color);
+        ViperUtil.$(commentMark).attr('id', 'Matrix-Viper-commentmark-' + containerId + '-' + id);
+        ViperUtil.$(commentMark).attr('data-comment-id', id);
+        ViperUtil.$(commentMark).attr('data-comment-container-id', containerId);
+        ViperUtil.$(commentMark).addClass('Matrix-Viper-commentmark');
+        ViperUtil.$(commentMark).addClass('Matrix-Viper-commentmark-color-' + color);
 
         // set the mark content with the number of comments in it
         var existingComment = false;
@@ -640,22 +640,22 @@ MatrixCommentsPlugin.prototype = {
                 existingComment = true;
                 if(typeof self._comments[containerId][i]['status'] == 'undefined' || self._comments[containerId][i]['status'] === 'open') {
                     // if it's open issue, add number
-                    $(commentMark).append('<div class="Matrix-Viper-commentmark-number-count">' + self._comments[containerId][i]['comments'].length + '</div>');
+                    ViperUtil.$(commentMark).append('<div class="Matrix-Viper-commentmark-number-count">' + self._comments[containerId][i]['comments'].length + '</div>');
                 }
                 else {
                     // resolved issue just add this class
-                    $(commentMark).append('<div class="Matrix-Viper-commentmark-number-count"></div>');
-                    $(commentMark).addClass('Matrix-Viper-commentmark-resolved');
+                    ViperUtil.$(commentMark).append('<div class="Matrix-Viper-commentmark-number-count"></div>');
+                    ViperUtil.$(commentMark).addClass('Matrix-Viper-commentmark-resolved');
                 }
             }
         }
         // if it's a new comment, we don't have it stored in array, also it can't be resolved
         if(!existingComment) {
-            $(commentMark).append('<div class="Matrix-Viper-commentmark-number-count"></div>');
+            ViperUtil.$(commentMark).append('<div class="Matrix-Viper-commentmark-number-count"></div>');
         }
 
 
-        $(commentMark).mousedown(function(e) {
+        ViperUtil.$(commentMark).mousedown(function(e) {
             // open a new dialog
             self.createCommentDialog(id, containerId, this);
         });
@@ -674,9 +674,9 @@ MatrixCommentsPlugin.prototype = {
     {
 
         var self = this;
-        var $commentDialog = jQuery(document.createElement('div'));
-        var $commentDialogNewComment = jQuery(document.createElement('div'));
-        var $commentDialogReplyComment = jQuery(document.createElement('div'));
+        var $commentDialog = ViperUtil.$(document.createElement('div'));
+        var $commentDialogNewComment = ViperUtil.$(document.createElement('div'));
+        var $commentDialogReplyComment = ViperUtil.$(document.createElement('div'));
 
 
         // if user are editing comment, we should let user finish
@@ -685,11 +685,11 @@ MatrixCommentsPlugin.prototype = {
         }
 
         // remove all other dialogs
-        $('.Matrix-Viper-commentdialog').remove();
+        ViperUtil.$('.Matrix-Viper-commentdialog').remove();
 
         // add opacity to other commenr marks
-        $('.Matrix-Viper-commentmark').css('opacity', 0.5);
-        $(commentMark).css('opacity', 'none');
+        ViperUtil.$('.Matrix-Viper-commentmark').css('opacity', 0.5);
+        ViperUtil.$(commentMark).css('opacity', 'none');
 
         // set current comment mark
         self._currentViewingCommentMark = commentMark;
@@ -725,14 +725,14 @@ MatrixCommentsPlugin.prototype = {
             $commentDialogNewComment.append('<div class="Matrix-Viper-commentdialog-currentUserName">'+ this._currentUserFirstName + ' ' + this._currentUserLastName + '</div>');
             $commentDialogNewComment.append('<div class="Matrix-Viper-commentdialog-newCommentText">'+ _('New Comment') + '</div>');
 
-            var $replyCommentMainArea = $('<div class="Matrix-Viper-commentdialog-mainArea"></div>');
-            var $newCommentTextArea = $('<textarea class="Matrix-Viper-commentdialog-newCommentTextArea"/>');
+            var $replyCommentMainArea = ViperUtil.$('<div class="Matrix-Viper-commentdialog-mainArea"></div>');
+            var $newCommentTextArea = ViperUtil.$('<textarea class="Matrix-Viper-commentdialog-newCommentTextArea"/>');
             $replyCommentMainArea.append($newCommentTextArea);
             $commentDialogNewComment.append($replyCommentMainArea);
 
-            var $newCommentButtonArea = $('<div class="Matrix-Viper-commentdialog-buttonArea"></div>');
-            var $newCommentButtonCancelButton = $('<a href="#" id="Matrix-Viper-commentdialog-newCommentButton-cancel" class="Matrix-Viper-commentdialog-button-grey">' + _('Cancel') + '</a>');
-            var $newCommentButtonCommentButton = $('<a href="#" id="Matrix-Viper-commentdialog-newCommentButton-comment" class="Matrix-Viper-commentdialog-button-blue">' + _('Comment') + '</a>');
+            var $newCommentButtonArea = ViperUtil.$('<div class="Matrix-Viper-commentdialog-buttonArea"></div>');
+            var $newCommentButtonCancelButton = ViperUtil.$('<a href="#" id="Matrix-Viper-commentdialog-newCommentButton-cancel" class="Matrix-Viper-commentdialog-button-grey">' + _('Cancel') + '</a>');
+            var $newCommentButtonCommentButton = ViperUtil.$('<a href="#" id="Matrix-Viper-commentdialog-newCommentButton-comment" class="Matrix-Viper-commentdialog-button-blue">' + _('Comment') + '</a>');
             $newCommentButtonArea.append($newCommentButtonCancelButton);
             $newCommentButtonArea.append($newCommentButtonCommentButton);
             $commentDialogNewComment.append($newCommentButtonArea);
@@ -743,18 +743,18 @@ MatrixCommentsPlugin.prototype = {
 
                 // remove selected comment class
                 // remove the actual target element's comment attribute
-                var commentId = $(commentMark).data('comment-id');
-                var commentContainerId = $(commentMark).data('comment-container-id');
+                var commentId = ViperUtil.$(commentMark).data('comment-id');
+                var commentContainerId = ViperUtil.$(commentMark).data('comment-container-id');
                 var $targetElement = self._bodycopyContainer.find('[data-comment-id=' + commentId + '][data-comment-container-id=' + commentContainerId + ']');
                 $targetElement.removeClass('Matrix-Viper-comment-highlighted');
-                $.each($targetElement, function( key, value ) {
+                ViperUtil.$.each($targetElement, function( key, value ) {
                   self.removeComment(value);
                 });
 
-                $('.Matrix-Viper-comment-highlighted').removeClass('Matrix-Viper-comment-highlighted');
+                ViperUtil.$('.Matrix-Viper-comment-highlighted').removeClass('Matrix-Viper-comment-highlighted');
 
                 $commentDialog.remove();
-                $(commentMark).remove();
+                ViperUtil.$(commentMark).remove();
 
                 // remove the comment from stored array and reset the id counter
                 for(var i = 0; i < self._comments[containerId].length; i++) {
@@ -768,7 +768,7 @@ MatrixCommentsPlugin.prototype = {
                 }
 
                 // cancel opacity to commenr marks
-                $('.Matrix-Viper-commentmark').css('opacity', 'none');
+                ViperUtil.$('.Matrix-Viper-commentmark').css('opacity', 'none');
 
                 self.updateExistingComments();
                 ViperUtil.preventDefault(e);
@@ -782,13 +782,13 @@ MatrixCommentsPlugin.prototype = {
                 // do not accept empty comment
                 if(commentContent == '') return;
 
-                var commentData = {'userid' : self._currentUserId, 'userFirstName' : self._currentUserFirstName, 'userLastName' : self._currentUserLastName, 'timestamp' : jQuery.now(), 'content' : JSON.stringify(commentContent), 'color' : self._commentColor};
+                var commentData = {'userid' : self._currentUserId, 'userFirstName' : self._currentUserFirstName, 'userLastName' : self._currentUserLastName, 'timestamp' : ViperUtil.$.now(), 'content' : JSON.stringify(commentContent), 'color' : self._commentColor};
                 for(var i = 0; i < self._comments[containerId].length; i++) {
                     if(self._comments[containerId][i]['id'] == id) {
                         // add new comment
                         self._comments[containerId][i]['comments'].push(commentData);
                         // set comment mark counter
-                        $(commentMark).find('.Matrix-Viper-commentmark-number-count').html(self._comments[containerId][i]['comments'].length);
+                        ViperUtil.$(commentMark).find('.Matrix-Viper-commentmark-number-count').html(self._comments[containerId][i]['comments'].length);
                     }
                 }
 
@@ -800,7 +800,7 @@ MatrixCommentsPlugin.prototype = {
                 // re-open the dialog to show the reply interface
                 $commentDialog.remove();
                 ViperUtil.preventDefault(e);
-                $(commentMark).mousedown();
+                ViperUtil.$(commentMark).mousedown();
             });
 
 
@@ -810,7 +810,7 @@ MatrixCommentsPlugin.prototype = {
             // reply comment dialog, displayed when there are comments under this thread
             $commentDialog.append($commentDialogReplyComment);
 
-            var isMarkForDeletion = $(commentMark).hasClass('Matrix-Viper-commentmark-color-red');
+            var isMarkForDeletion = ViperUtil.$(commentMark).hasClass('Matrix-Viper-commentmark-color-red');
             var isResolved = (status == 'resolved');
 
             // if it's a comment for deletion, add the css class
@@ -819,15 +819,15 @@ MatrixCommentsPlugin.prototype = {
             }
 
 
-            $header_div = $('<div class="Matrix-Viper-commentdialog-reply-header"></div>');
-            $scrollDiv = $('<div class="Matrix-Viper-commentdialog-scroll-comments"></div>');
-            $prev_arrow = $('<div class="Matrix-Viper-commentdialog-reply-header-prev" title="' + _('Go to previous comment thread') + '"></div>');
-            $next_arrow = $('<div class="Matrix-Viper-commentdialog-reply-header-next" title="' + _('Go to next comment thread') + '"></div>');
-            $commentCounter = $('<div class="Matrix-Viper-commentdialog-reply-header-counter"></div>');
+            $header_div = ViperUtil.$('<div class="Matrix-Viper-commentdialog-reply-header"></div>');
+            $scrollDiv = ViperUtil.$('<div class="Matrix-Viper-commentdialog-scroll-comments"></div>');
+            $prev_arrow = ViperUtil.$('<div class="Matrix-Viper-commentdialog-reply-header-prev" title="' + _('Go to previous comment thread') + '"></div>');
+            $next_arrow = ViperUtil.$('<div class="Matrix-Viper-commentdialog-reply-header-next" title="' + _('Go to next comment thread') + '"></div>');
+            $commentCounter = ViperUtil.$('<div class="Matrix-Viper-commentdialog-reply-header-counter"></div>');
 
-            $resolve_switch = jQuery('<div class="Matrix-Viper-commentdialog-reply-header-resolve GUI-switch"></div>');
-            $resolve_switch_label = jQuery('<span class="Matrix-Viper-commentdialog-reply-header-resolve-label">' + _('Mark as resolved')+ '</span>');
-            $resolve_switch_button = jQuery('<span class="GUI-switch-button" title="' + _('Mark this comment thread as resolved') + '"><span class="GUI-switch-slider"></span></span>');
+            $resolve_switch = ViperUtil.$('<div class="Matrix-Viper-commentdialog-reply-header-resolve GUI-switch"></div>');
+            $resolve_switch_label = ViperUtil.$('<span class="Matrix-Viper-commentdialog-reply-header-resolve-label">' + _('Mark as resolved')+ '</span>');
+            $resolve_switch_button = ViperUtil.$('<span class="GUI-switch-button" title="' + _('Mark this comment thread as resolved') + '"><span class="GUI-switch-slider"></span></span>');
             $resolve_switch.append($resolve_switch_label);
             $resolve_switch.append($resolve_switch_button);
             if(status == 'resolved') {
@@ -850,11 +850,11 @@ MatrixCommentsPlugin.prototype = {
                 var nextCommentMark = self._findNextViewableComment();
                 if(nextCommentMark != null) {
                     var commentMark = nextCommentMark
-                    var commentId = $(nextCommentMark).data('comment-id');
-                    var containerId = $(nextCommentMark).data('comment-container-id');
+                    var commentId = ViperUtil.$(nextCommentMark).data('comment-id');
+                    var containerId = ViperUtil.$(nextCommentMark).data('comment-container-id');
                     self.createCommentDialog(commentId, containerId, commentMark);
-                    $('html, body').animate({
-                        scrollTop: $(commentMark).offset().top - 200
+                    ViperUtil.$('html, body').animate({
+                        scrollTop: ViperUtil.$(commentMark).offset().top - 200
                     }, 400);        
 
                 }
@@ -866,18 +866,18 @@ MatrixCommentsPlugin.prototype = {
                 var prevCommentMakr = self._findPrevViewableComment();
                 if(prevCommentMakr != null) {
                     var commentMark = prevCommentMakr
-                    var commentId = $(prevCommentMakr).data('comment-id');
-                    var containerId = $(prevCommentMakr).data('comment-container-id');
+                    var commentId = ViperUtil.$(prevCommentMakr).data('comment-id');
+                    var containerId = ViperUtil.$(prevCommentMakr).data('comment-container-id');
                     self.createCommentDialog(commentId, containerId, commentMark);
-                    $('html, body').animate({
-                        scrollTop: $(commentMark).offset().top - 200
+                    ViperUtil.$('html, body').animate({
+                        scrollTop: ViperUtil.$(commentMark).offset().top - 200
                     }, 400);
                 }
             });
 
             //  list comments
             for(var i = 0; i < comments.length; i++) {
-                $comment_div = jQuery('<div class="Matrix-Viper-commentdialog-reply-comment" data-comment-id="' + id + '" data-comment-index="' + i + '" data-comment-userid="' + comments[i]['userid'] + '" ></div>');
+                $comment_div = ViperUtil.$('<div class="Matrix-Viper-commentdialog-reply-comment" data-comment-id="' + id + '" data-comment-index="' + i + '" data-comment-userid="' + comments[i]['userid'] + '" ></div>');
 
                 // if it's system comment, give it a special class
                 var isSystemComment = false;
@@ -888,7 +888,7 @@ MatrixCommentsPlugin.prototype = {
                     $comment_div.addClass('Matrix-Viper-commentdialog-reply-comment-system-comment');
                 }
 
-                $replyCommentUserName = jQuery('<div class="Matrix-Viper-commentdialog-reply-comment-userName">'+ comments[i]['userFirstName'] + ' ' + comments[i]['userLastName'] + '</div>');
+                $replyCommentUserName = ViperUtil.$('<div class="Matrix-Viper-commentdialog-reply-comment-userName">'+ comments[i]['userFirstName'] + ' ' + comments[i]['userLastName'] + '</div>');
 
                 $comment_div.append($replyCommentUserName);
 
@@ -897,24 +897,24 @@ MatrixCommentsPlugin.prototype = {
                 // not in read only mode
                 $replyCommentsAction = null;
                 if(self._currentUserId == comments[i]['userid'] && !isSystemComment && (i == 0 || !isMarkForDeletion) && (i == 0 || !isResolved) && !self._readOnly) {
-                    $replyCommentsAction = jQuery('<div class="Matrix-Viper-commentdialog-reply-comment-action" data-comment-id="' + id + '" data-comment-index="' + i + '"><div class="Matrix-Viper-commentdialog-reply-comment-action-icon"></div></div>');
+                    $replyCommentsAction = ViperUtil.$('<div class="Matrix-Viper-commentdialog-reply-comment-action" data-comment-id="' + id + '" data-comment-index="' + i + '"><div class="Matrix-Viper-commentdialog-reply-comment-action-icon"></div></div>');
                     $comment_div.append($replyCommentsAction);
                 }
 
-                var now = jQuery.now();
-                $timestampDiv = $('<div class="Matrix-Viper-commentdialog-reply-comment-timestamp"></div>');
-                $createdTimestamp = $('<span class="readableAge" data-timestamp="'+ comments[i]['timestamp'] + '" title="' + self._formattedDate(comments[i]['timestamp']) + '">'+ self._readableAge(comments[i]['timestamp'], now) + '</span>');
+                var now = ViperUtil.$.now();
+                $timestampDiv = ViperUtil.$('<div class="Matrix-Viper-commentdialog-reply-comment-timestamp"></div>');
+                $createdTimestamp = ViperUtil.$('<span class="readableAge" data-timestamp="'+ comments[i]['timestamp'] + '" title="' + self._formattedDate(comments[i]['timestamp']) + '">'+ self._readableAge(comments[i]['timestamp'], now) + '</span>');
                 $timestampDiv.append($createdTimestamp);
 
                 if(typeof comments[i]['editTimestamp'] !== 'undefined') {
-                    $editTimestamp = $('<span class="Matrix-Viper-commentdialog-reply-comment-edit-timestamp" title="' + self._formattedDate(comments[i]['editTimestamp']) + '"> - ' + _('Edited') + ' <span class="readableAge" data-timestamp="'+ comments[i]['editTimestamp'] + '">'+ self._readableAge(comments[i]['editTimestamp'], now) + '</span></span>');
+                    $editTimestamp = ViperUtil.$('<span class="Matrix-Viper-commentdialog-reply-comment-edit-timestamp" title="' + self._formattedDate(comments[i]['editTimestamp']) + '"> - ' + _('Edited') + ' <span class="readableAge" data-timestamp="'+ comments[i]['editTimestamp'] + '">'+ self._readableAge(comments[i]['editTimestamp'], now) + '</span></span>');
                     $timestampDiv.append($editTimestamp);
                 }
                 $comment_div.append($timestampDiv);
                
                 // main comment div
                 var showMoreLink = false;
-                var $mainContentDiv = $('<div class="Matrix-Viper-commentdialog-reply-comment-content"></div>');
+                var $mainContentDiv = ViperUtil.$('<div class="Matrix-Viper-commentdialog-reply-comment-content"></div>');
                 var mainContent = JSON.parse(comments[i]['content']);
                 var contentLength = mainContent.length;
                 // new line worth 40 characters
@@ -945,12 +945,12 @@ MatrixCommentsPlugin.prototype = {
                 $mainContentDiv.append(self._htmlEncode(mainContent));
 
                 if(showMoreLink) {
-                    $showMoreLinkDiv = $('<div class="Matrix-Viper-commentdialog-reply-comment-showMore"><a href="#" >' + _('Show more') + '<span></span></a></div>');
+                    $showMoreLinkDiv = ViperUtil.$('<div class="Matrix-Viper-commentdialog-reply-comment-showMore"><a href="#" >' + _('Show more') + '<span></span></a></div>');
                     $mainContentDiv.append($showMoreLinkDiv);
                     $showMoreLinkDiv.click(function (e) {
                         ViperUtil.preventDefault(e);
-                        var parentContentDiv = $(this).closest('.Matrix-Viper-commentdialog-reply-comment-content');
-                        var parentCommentDiv = $(this).closest('.Matrix-Viper-commentdialog-reply-comment');
+                        var parentContentDiv = ViperUtil.$(this).closest('.Matrix-Viper-commentdialog-reply-comment-content');
+                        var parentCommentDiv = ViperUtil.$(this).closest('.Matrix-Viper-commentdialog-reply-comment');
                         var fullContent = comments[parentCommentDiv.data('comment-index')];
                         parentContentDiv.html(self._htmlEncode(JSON.parse(fullContent['content'])));
                     })
@@ -959,13 +959,13 @@ MatrixCommentsPlugin.prototype = {
                 $comment_div.append($mainContentDiv);
 
                 // edit comment text area
-                var $editCommentTextArea = jQuery('<textarea class="Matrix-Viper-commentdialog-replyCommentTextArea Matrix-Viper-commentdialog-editCommentTextArea">'+ JSON.parse(comments[i]['content']) + '</textarea>');
+                var $editCommentTextArea = ViperUtil.$('<textarea class="Matrix-Viper-commentdialog-replyCommentTextArea Matrix-Viper-commentdialog-editCommentTextArea">'+ JSON.parse(comments[i]['content']) + '</textarea>');
                 $comment_div.append($editCommentTextArea);
 
                  // edit comment buttons
-                var $editCommentButtonCancelButtonArea = jQuery('<div class="Matrix-Viper-commentdialog-buttonArea Matrix-Viper-commentdialog-editButtonArea"></div>');
-                var $editCommentButtonCancelButton = jQuery('<a href="#" id="Matrix-Viper-commentdialog-editCommentButton-cancel" class="Matrix-Viper-commentdialog-button-grey">' + _('Cancel') + '</a>');
-                var $editCommentButtonSaveButton = jQuery('<a href="#" id="Matrix-Viper-commentdialog-editCommentButton-save" class="Matrix-Viper-commentdialog-button-blue">' + _('Save') + '</a>');
+                var $editCommentButtonCancelButtonArea = ViperUtil.$('<div class="Matrix-Viper-commentdialog-buttonArea Matrix-Viper-commentdialog-editButtonArea"></div>');
+                var $editCommentButtonCancelButton = ViperUtil.$('<a href="#" id="Matrix-Viper-commentdialog-editCommentButton-cancel" class="Matrix-Viper-commentdialog-button-grey">' + _('Cancel') + '</a>');
+                var $editCommentButtonSaveButton = ViperUtil.$('<a href="#" id="Matrix-Viper-commentdialog-editCommentButton-save" class="Matrix-Viper-commentdialog-button-blue">' + _('Save') + '</a>');
                 $editCommentButtonCancelButtonArea.append($editCommentButtonCancelButton);
                 $editCommentButtonCancelButtonArea.append($editCommentButtonSaveButton);
                 $comment_div.append($editCommentButtonCancelButtonArea);
@@ -978,7 +978,7 @@ MatrixCommentsPlugin.prototype = {
 
                 // if it's top comment, we wrap it in a div, rest of comments in a scrollable div
                 if(i == 0) {
-                    $topCommentDiv = $('<div class="Matrix-Viper-commentdialog-top-comment"></div>');
+                    $topCommentDiv = ViperUtil.$('<div class="Matrix-Viper-commentdialog-top-comment"></div>');
                     $topCommentDiv.append($comment_div);
                     $commentDialogReplyComment.append($topCommentDiv);
                 }
@@ -991,12 +991,12 @@ MatrixCommentsPlugin.prototype = {
                     $replyCommentsAction.click(function () {
 
                         // close all action dialog if clicked on the main dialog
-                        $('.Matrix-Viper-commentdialog').mousedown(function(){
-                            $('.Matrix-Viper-commentdialog-comment-action').remove();
+                        ViperUtil.$('.Matrix-Viper-commentdialog').mousedown(function(){
+                            ViperUtil.$('.Matrix-Viper-commentdialog-comment-action').remove();
                         });
 
-                        var id = jQuery(this).data('comment-id');
-                        var index = jQuery(this).data('comment-index');
+                        var id = ViperUtil.$(this).data('comment-id');
+                        var index = ViperUtil.$(this).data('comment-index');
                         var deleteText = _('Delete Comment');
 
                         if(index == 0 ) {
@@ -1007,9 +1007,9 @@ MatrixCommentsPlugin.prototype = {
                                 deleteText = _('Mark For Deletion');
                             }
                         }
-                        var $commentActionDiv = jQuery('<div class="Matrix-Viper-commentdialog-comment-action"></div>');
-                        var $commentActionDivEdit = jQuery('<div class="Matrix-Viper-commentdialog-comment-action-edit" data-comment-id="' + id + '" data-comment-index="' + index + '" >' + _('Edit Comment') + '</div>');
-                        var $commentActionDivDelete = jQuery('<div class="Matrix-Viper-commentdialog-comment-action-edit" data-comment-id="' + id + '" data-comment-index="' + index + '" >' + deleteText + '</div>');
+                        var $commentActionDiv = ViperUtil.$('<div class="Matrix-Viper-commentdialog-comment-action"></div>');
+                        var $commentActionDivEdit = ViperUtil.$('<div class="Matrix-Viper-commentdialog-comment-action-edit" data-comment-id="' + id + '" data-comment-index="' + index + '" >' + _('Edit Comment') + '</div>');
+                        var $commentActionDivDelete = ViperUtil.$('<div class="Matrix-Viper-commentdialog-comment-action-edit" data-comment-id="' + id + '" data-comment-index="' + index + '" >' + deleteText + '</div>');
                         // mark for deletion dialog don't need edit button
                         if(!isMarkForDeletion && !isResolved) {
                             $commentActionDiv.append($commentActionDivEdit);
@@ -1017,22 +1017,22 @@ MatrixCommentsPlugin.prototype = {
                         $commentActionDiv.append($commentActionDivDelete);
                         document.body.appendChild($commentActionDiv.get(0));
                         $commentActionDiv.css({
-                            left: ($(this).offset().left - $commentActionDiv.width() + $(this).width() + 10) + "px",
-                            top: ($(this).offset().top + $(this).height() + 15) + "px"
+                            left: (ViperUtil.$(this).offset().left - $commentActionDiv.width() + ViperUtil.$(this).width() + 10) + "px",
+                            top: (ViperUtil.$(this).offset().top + ViperUtil.$(this).height() + 15) + "px"
                         });
 
                         // click on delete comment
                         $commentActionDivDelete.mousedown(function (e) {
 
-                            $('.Matrix-Viper-commentdialog-comment-action').remove();
+                            ViperUtil.$('.Matrix-Viper-commentdialog-comment-action').remove();
 
-                            var commentIndex = jQuery(this).data('comment-index');
-                            var commentId = jQuery(this).data('comment-id');
+                            var commentIndex = ViperUtil.$(this).data('comment-index');
+                            var commentId = ViperUtil.$(this).data('comment-id');
 
                             for(var y = 0; y < self._comments[containerId].length; y++) {
                                 if(self._comments[containerId][y]['id'] == commentId) {
                                     if(commentIndex == 0) {
-                                        $commentMark = $('#Matrix-Viper-commentmark-' + containerId + '-' + self._comments[containerId][y]['id']);
+                                        $commentMark = ViperUtil.$('#Matrix-Viper-commentmark-' + containerId + '-' + self._comments[containerId][y]['id']);
                                         if(self._comments[containerId][y]['deletion']) {
                                             // unmark for deletion
                                             self._comments[containerId][y]['deletion'] = false;
@@ -1055,8 +1055,8 @@ MatrixCommentsPlugin.prototype = {
                                             // clear out the number
                                             $commentMark.find('.Matrix-Viper-commentmark-number-count').html('');
                                         }
-                                        jQuery('#Matrix-Viper-commentdialog-' + containerId + '-' + commentId).remove();
-                                        $('.Matrix-Viper-commentdialog-comment-action').remove();
+                                        ViperUtil.$('#Matrix-Viper-commentdialog-' + containerId + '-' + commentId).remove();
+                                        ViperUtil.$('.Matrix-Viper-commentdialog-comment-action').remove();
                                         ViperUtil.preventDefault(e);
 
                                     }
@@ -1066,9 +1066,9 @@ MatrixCommentsPlugin.prototype = {
                                             // remove this comment
                                             self._comments[containerId][y]['comments'].splice(commentIndex, 1);
                                             // set comment mark counter
-                                            $(commentMark).find('div').html(self._comments[containerId][y]['comments'].length);
+                                            ViperUtil.$(commentMark).find('div').html(self._comments[containerId][y]['comments'].length);
                                         }
-                                        $(commentMark).mousedown();
+                                        ViperUtil.$(commentMark).mousedown();
                                     }
                                 }
                             }
@@ -1082,11 +1082,11 @@ MatrixCommentsPlugin.prototype = {
                         // click on edit comment
                         $commentActionDivEdit.mousedown(function (e) {
 
-                            $('.Matrix-Viper-commentdialog-comment-action').remove();
+                            ViperUtil.$('.Matrix-Viper-commentdialog-comment-action').remove();
 
-                            var commentIndex = jQuery(this).data('comment-index');
-                            var commentId = jQuery(this).data('comment-id');
-                            var $commentDiv = jQuery('.Matrix-Viper-commentdialog-reply-comment[data-comment-id=' + commentId + '][data-comment-index=' + commentIndex + ']');
+                            var commentIndex = ViperUtil.$(this).data('comment-index');
+                            var commentId = ViperUtil.$(this).data('comment-id');
+                            var $commentDiv = ViperUtil.$('.Matrix-Viper-commentdialog-reply-comment[data-comment-id=' + commentId + '][data-comment-index=' + commentIndex + ']');
 
                             for(var y = 0; y < self._comments[containerId].length; y++) {
                                 if(self._comments[containerId][y]['id'] == commentId) {
@@ -1097,12 +1097,12 @@ MatrixCommentsPlugin.prototype = {
                                         $commentDiv.find('.Matrix-Viper-commentdialog-editCommentTextArea').show().focus();
                                         $commentDiv.find('.Matrix-Viper-commentdialog-editButtonArea').show();
 
-                                        $('.Matrix-Viper-commentdialog-mainArea-replycomment').hide();
-                                        $('.Matrix-Viper-commentdialog-buttonArea-replycomment').hide();
+                                        ViperUtil.$('.Matrix-Viper-commentdialog-mainArea-replycomment').hide();
+                                        ViperUtil.$('.Matrix-Viper-commentdialog-buttonArea-replycomment').hide();
                                     }
                                 }
                             }
-                            $('.Matrix-Viper-commentdialog-comment-action').remove();
+                            ViperUtil.$('.Matrix-Viper-commentdialog-comment-action').remove();
                             // enable edit+ save button
                             if(typeof EasyEditComponentsToolbar != 'undefined') {
                                 EasyEditComponentsToolbar.enableSaveButton();
@@ -1116,7 +1116,7 @@ MatrixCommentsPlugin.prototype = {
                 // click edit save comment button
                 $editCommentButtonSaveButton.mousedown(function (e) {
                     ViperUtil.preventDefault(e);
-                    var $commentDiv = jQuery(this).closest('.Matrix-Viper-commentdialog-reply-comment');
+                    var $commentDiv = ViperUtil.$(this).closest('.Matrix-Viper-commentdialog-reply-comment');
                     var commentId = $commentDiv.data('comment-id');
                     var commentIndex = $commentDiv.data('comment-index');
                     var $commentContent = $commentDiv.find('.Matrix-Viper-commentdialog-reply-comment-content');
@@ -1128,12 +1128,12 @@ MatrixCommentsPlugin.prototype = {
                             for (var y = 0; y < self._comments[containerId][i]['comments'].length; y++) {
                                 if(y == commentIndex) {
                                     self._comments[containerId][i]['comments'][y]['content'] = JSON.stringify(content);
-                                    self._comments[containerId][i]['comments'][y]['editTimestamp'] = jQuery.now();
+                                    self._comments[containerId][i]['comments'][y]['editTimestamp'] = ViperUtil.$.now();
                                     if($commentTimestampArea.find('.Matrix-Viper-commentdialog-reply-comment-edit-timestamp').length > 0) {
                                         $commentTimestampArea.find('.Matrix-Viper-commentdialog-reply-comment-edit-timestamp').remove();
                                     }
-                                    var now = jQuery.now();
-                                    $editTimestamp = $('<span class="Matrix-Viper-commentdialog-reply-comment-edit-timestamp" title="' + self._formattedDate(now) + '"> - ' + _('Edited') + ' <span class="readableAge" data-timestamp="'+ now + '">'+ self._readableAge(now, now) + '</span></span>');
+                                    var now = ViperUtil.$.now();
+                                    $editTimestamp = ViperUtil.$('<span class="Matrix-Viper-commentdialog-reply-comment-edit-timestamp" title="' + self._formattedDate(now) + '"> - ' + _('Edited') + ' <span class="readableAge" data-timestamp="'+ now + '">'+ self._readableAge(now, now) + '</span></span>');
                                     $commentTimestampArea.append($editTimestamp);
                                 }
                             }
@@ -1143,9 +1143,9 @@ MatrixCommentsPlugin.prototype = {
                     $commentEditTextArea.hide();
                     $commentDiv.find('.Matrix-Viper-commentdialog-editButtonArea').hide();
                     // show the reply area
-                    if($('.Matrix-Viper-commentdialog-editCommentTextArea:visible').length == 0) {
-                        $('.Matrix-Viper-commentdialog-mainArea-replycomment').show();
-                        $('.Matrix-Viper-commentdialog-buttonArea-replycomment').show();
+                    if(ViperUtil.$('.Matrix-Viper-commentdialog-editCommentTextArea:visible').length == 0) {
+                        ViperUtil.$('.Matrix-Viper-commentdialog-mainArea-replycomment').show();
+                        ViperUtil.$('.Matrix-Viper-commentdialog-buttonArea-replycomment').show();
                     }
                     ViperUtil.preventDefault(e);
 
@@ -1154,7 +1154,7 @@ MatrixCommentsPlugin.prototype = {
                 // click cancel save comment button
                 $editCommentButtonCancelButton.mousedown(function (e) {
                     ViperUtil.preventDefault(e);
-                    var $commentDiv = jQuery(this).closest('.Matrix-Viper-commentdialog-reply-comment');
+                    var $commentDiv = ViperUtil.$(this).closest('.Matrix-Viper-commentdialog-reply-comment');
                     var commentId = $commentDiv.data('comment-id');
                     var commentIndex = $commentDiv.data('comment-index');
                     var $commentContent = $commentDiv.find('.Matrix-Viper-commentdialog-reply-comment-content');
@@ -1173,9 +1173,9 @@ MatrixCommentsPlugin.prototype = {
                     $commentEditTextArea.val(originalContent).hide();
                     $commentDiv.find('.Matrix-Viper-commentdialog-editButtonArea').hide();
                     // show the reply area
-                    if($('.Matrix-Viper-commentdialog-editCommentTextArea:visible').length == 0) {
-                        $('.Matrix-Viper-commentdialog-mainArea-replycomment').show();
-                        $('.Matrix-Viper-commentdialog-buttonArea-replycomment').show();
+                    if(ViperUtil.$('.Matrix-Viper-commentdialog-editCommentTextArea:visible').length == 0) {
+                        ViperUtil.$('.Matrix-Viper-commentdialog-mainArea-replycomment').show();
+                        ViperUtil.$('.Matrix-Viper-commentdialog-buttonArea-replycomment').show();
                     }
                 });
 
@@ -1184,7 +1184,7 @@ MatrixCommentsPlugin.prototype = {
                 if(!isMarkForDeletion && !isResolved) {
                     $mainContentDiv.dblclick(function (e) {
                         ViperUtil.preventDefault(e);
-                            var $commentDiv = jQuery(this).closest('.Matrix-Viper-commentdialog-reply-comment');
+                            var $commentDiv = ViperUtil.$(this).closest('.Matrix-Viper-commentdialog-reply-comment');
                             var commentIndex = $commentDiv.data('comment-index');
                             var commentId = $commentDiv.data('comment-id');
                             if($commentDiv.find('.Matrix-Viper-commentdialog-reply-comment-action').length > 0) {
@@ -1196,8 +1196,8 @@ MatrixCommentsPlugin.prototype = {
                                             $commentDiv.find('.Matrix-Viper-commentdialog-reply-comment-content').hide();
                                             $commentDiv.find('.Matrix-Viper-commentdialog-editCommentTextArea').show().focus();
                                             $commentDiv.find('.Matrix-Viper-commentdialog-editButtonArea').show();
-                                            $('.Matrix-Viper-commentdialog-mainArea-replycomment').hide();
-                                            $('.Matrix-Viper-commentdialog-buttonArea-replycomment').hide();
+                                            ViperUtil.$('.Matrix-Viper-commentdialog-mainArea-replycomment').hide();
+                                            ViperUtil.$('.Matrix-Viper-commentdialog-buttonArea-replycomment').hide();
                                         }
                                     }
                                 }
@@ -1214,15 +1214,15 @@ MatrixCommentsPlugin.prototype = {
             $commentDialogReplyComment.append($scrollDiv);
 
             // reply comment text area
-            var $replyCommentMainArea = $('<div class="Matrix-Viper-commentdialog-mainArea Matrix-Viper-commentdialog-mainArea-replycomment"></div>');
-            var $replyCommentTextArea = jQuery('<textarea class="Matrix-Viper-commentdialog-replyCommentTextArea Matrix-Viper-commentdialog-replyCommentTextArea-replyComment" placeholder="' + _('Add a reply...') + '" />');
+            var $replyCommentMainArea = ViperUtil.$('<div class="Matrix-Viper-commentdialog-mainArea Matrix-Viper-commentdialog-mainArea-replycomment"></div>');
+            var $replyCommentTextArea = ViperUtil.$('<textarea class="Matrix-Viper-commentdialog-replyCommentTextArea Matrix-Viper-commentdialog-replyCommentTextArea-replyComment" placeholder="' + _('Add a reply...') + '" />');
             $replyCommentMainArea.append($replyCommentTextArea);
             $commentDialogReplyComment.append($replyCommentMainArea);
 
             // reply comment button area
-            var $replyCommentButtonArea = $('<div class="Matrix-Viper-commentdialog-buttonArea Matrix-Viper-commentdialog-buttonArea-replycomment"></div>');
-            var $replyCommentButtonCancelButton = $('<a href="#" id="Matrix-Viper-commentdialog-replyCommentButton-cancel" class="Matrix-Viper-commentdialog-button-grey">' + _('Cancel') + '</a>');
-            var $replyCommentButtonCommentButton = $('<a href="#" id="Matrix-Viper-commentdialog-replyCommentButton-comment" class="Matrix-Viper-commentdialog-button-blue">' + _('Reply') + '</a>');
+            var $replyCommentButtonArea = ViperUtil.$('<div class="Matrix-Viper-commentdialog-buttonArea Matrix-Viper-commentdialog-buttonArea-replycomment"></div>');
+            var $replyCommentButtonCancelButton = ViperUtil.$('<a href="#" id="Matrix-Viper-commentdialog-replyCommentButton-cancel" class="Matrix-Viper-commentdialog-button-grey">' + _('Cancel') + '</a>');
+            var $replyCommentButtonCommentButton = ViperUtil.$('<a href="#" id="Matrix-Viper-commentdialog-replyCommentButton-comment" class="Matrix-Viper-commentdialog-button-blue">' + _('Reply') + '</a>');
 
             $replyCommentButtonArea.append($replyCommentButtonCancelButton);
             $replyCommentButtonArea.append($replyCommentButtonCommentButton);
@@ -1239,9 +1239,9 @@ MatrixCommentsPlugin.prototype = {
                 ViperUtil.preventDefault(e);
                 $commentDialog.remove();
                 // remove selected comment class
-                $('.Matrix-Viper-comment-highlighted').removeClass('Matrix-Viper-comment-highlighted');
+                ViperUtil.$('.Matrix-Viper-comment-highlighted').removeClass('Matrix-Viper-comment-highlighted');
                 // cancel opacity to commenr marks
-                $('.Matrix-Viper-commentmark').css('opacity', 'none');
+                ViperUtil.$('.Matrix-Viper-commentmark').css('opacity', 'none');
                 ViperUtil.preventDefault(e);
             })
 
@@ -1252,13 +1252,13 @@ MatrixCommentsPlugin.prototype = {
                 var commentContent = $replyCommentTextArea.val();
                 // do not accept empty comment
                 if(commentContent == '') return;
-                var commentData = {'userid' : self._currentUserId, 'userFirstName' : self._currentUserFirstName, 'userLastName' : self._currentUserLastName, 'timestamp' : jQuery.now(), 'content' : JSON.stringify(commentContent), 'color' : self._commentColor};
+                var commentData = {'userid' : self._currentUserId, 'userFirstName' : self._currentUserFirstName, 'userLastName' : self._currentUserLastName, 'timestamp' : ViperUtil.$.now(), 'content' : JSON.stringify(commentContent), 'color' : self._commentColor};
                 for(var i = 0; i < self._comments[containerId].length; i++) {
                     if(self._comments[containerId][i]['id'] == id) {
                         // add the new comment
                         self._comments[containerId][i]['comments'].push(commentData);
                         // set comment mark counter
-                        $(commentMark).find('div').html(self._comments[containerId][i]['comments'].length);
+                        ViperUtil.$(commentMark).find('div').html(self._comments[containerId][i]['comments'].length);
                     }
                 }
 
@@ -1272,7 +1272,7 @@ MatrixCommentsPlugin.prototype = {
                 $commentDialog.remove();
                 ViperUtil.preventDefault(e);
 
-                $(commentMark).mousedown();
+                ViperUtil.$(commentMark).mousedown();
             });
 
 
@@ -1287,10 +1287,10 @@ MatrixCommentsPlugin.prototype = {
                     return;
                 }
 
-                var $commentDialog = $(this).closest('.Matrix-Viper-commentdialog');
+                var $commentDialog = ViperUtil.$(this).closest('.Matrix-Viper-commentdialog');
                 var containerId = $commentDialog.data('comment-container-id');
                 var commentId = $commentDialog.data('comment-id');
-                var $commentMark = $('[data-comment-id=' + commentId + '][data-comment-container-id=' + containerId + '].Matrix-Viper-commentmark');
+                var $commentMark = ViperUtil.$('[data-comment-id=' + commentId + '][data-comment-container-id=' + containerId + '].Matrix-Viper-commentmark');
                 $commentMark.toggleClass('Matrix-Viper-commentmark-resolved');
                 $resolve_switch.toggleClass('GUI-active');
 
@@ -1322,7 +1322,7 @@ MatrixCommentsPlugin.prototype = {
                     if(self._comments[containerId][i]['id'] == commentId) {
                         self._comments[containerId][i]['status'] = status;
                         // insert the system comment  
-                        var commentData = {'userid' : self._currentUserId, 'userFirstName' : self._currentUserFirstName, 'userLastName' : self._currentUserLastName, 'timestamp' : jQuery.now(), 'content' : JSON.stringify(commentContent), 'color' : self._commentColor, 'systemComment' : true};
+                        var commentData = {'userid' : self._currentUserId, 'userFirstName' : self._currentUserFirstName, 'userLastName' : self._currentUserLastName, 'timestamp' : ViperUtil.$.now(), 'content' : JSON.stringify(commentContent), 'color' : self._commentColor, 'systemComment' : true};
                         self._comments[containerId][i]['comments'].push(commentData);
                     }
                 }
@@ -1334,7 +1334,7 @@ MatrixCommentsPlugin.prototype = {
 
                 // re-open the dialog to show the reply interface
                 $commentDialog.remove();
-                $(commentMark).mousedown();
+                ViperUtil.$(commentMark).mousedown();
 
             })
         }
@@ -1348,14 +1348,14 @@ MatrixCommentsPlugin.prototype = {
         }
 
         // scroll to bottom of div
-        if($('.Matrix-Viper-commentdialog-scroll-comments').length) {
-            $('.Matrix-Viper-commentdialog-scroll-comments').scrollTop($('.Matrix-Viper-commentdialog-scroll-comments')[0].scrollHeight);
+        if(ViperUtil.$('.Matrix-Viper-commentdialog-scroll-comments').length) {
+            ViperUtil.$('.Matrix-Viper-commentdialog-scroll-comments').scrollTop(ViperUtil.$('.Matrix-Viper-commentdialog-scroll-comments')[0].scrollHeight);
         }
 
         // remove highlighted comment class
-        $('.Matrix-Viper-comment-highlighted').removeClass('Matrix-Viper-comment-highlighted');
+        ViperUtil.$('.Matrix-Viper-comment-highlighted').removeClass('Matrix-Viper-comment-highlighted');
         // highlight the target element
-        $('[data-comment-container-id=' + containerId + '][data-comment-id=' + id + '][data-comment=1]').addClass('Matrix-Viper-comment-highlighted');
+        ViperUtil.$('[data-comment-container-id=' + containerId + '][data-comment-id=' + id + '][data-comment=1]').addClass('Matrix-Viper-comment-highlighted');
 
 
 
@@ -1373,24 +1373,24 @@ MatrixCommentsPlugin.prototype = {
 
         // if there is opening editing textarea, we need to save them
         if(self.isUserEditingComment()) {
-            $('.Matrix-Viper-commentdialog-button-blue:visible').mousedown();
-            $('#Matrix-Viper-commentdialog-replyCommentButton-comment:visible').mousedown();
+            ViperUtil.$('.Matrix-Viper-commentdialog-button-blue:visible').mousedown();
+            ViperUtil.$('#Matrix-Viper-commentdialog-replyCommentButton-comment:visible').mousedown();
         }
 
         // remove comment action dialog
-        $('.Matrix-Viper-commentdialog-comment-action').remove();
+        ViperUtil.$('.Matrix-Viper-commentdialog-comment-action').remove();
         // remove comment dialogs
-        $('.Matrix-Viper-commentdialog').remove();
+        ViperUtil.$('.Matrix-Viper-commentdialog').remove();
         // remove selected comment class
-        $('.Matrix-Viper-comment-highlighted').removeClass('Matrix-Viper-comment-highlighted');
+        ViperUtil.$('.Matrix-Viper-comment-highlighted').removeClass('Matrix-Viper-comment-highlighted');
         // cancel opacity to commenr marks
-        $('.Matrix-Viper-commentmark').css('opacity', 'none');
+        ViperUtil.$('.Matrix-Viper-commentmark').css('opacity', 'none');
 
 
 
         // find and delete those comments / comment target element that don't match
-        $('div[data-container-id]').each(function() {
-            var $container = $(this);
+        ViperUtil.$('div[data-container-id]').each(function() {
+            var $container = ViperUtil.$(this);
             var containerid = $container.data('container-id');
 
 
@@ -1414,8 +1414,8 @@ MatrixCommentsPlugin.prototype = {
 
              // delete comment data attribute on the target elements that doesn't exist in stored comments
             $container.find('[data-comment-id][data-comment-container-id]').each(function() {
-                var commentId = jQuery(this).data('comment-id');
-                var containerid = jQuery(this).data('comment-container-id');
+                var commentId = ViperUtil.$(this).data('comment-id');
+                var containerid = ViperUtil.$(this).data('comment-container-id');
 
                 if(containerid !== $container.data('container-id')) {
                     // a comment in wrong container, probably from copy and paste
@@ -1427,7 +1427,7 @@ MatrixCommentsPlugin.prototype = {
                 }
                 else {
                     var found = false;
-                    jQuery.each(self._comments[containerid], function(containerid, value) {
+                    ViperUtil.$.each(self._comments[containerid], function(containerid, value) {
                         if(value['id'] == commentId) {
                             found = true;
                         }
@@ -1439,7 +1439,7 @@ MatrixCommentsPlugin.prototype = {
             });
 
 
-            // delete stored comment mark object, for some reason JSON.stringify will convert it to jQuery object
+            // delete stored comment mark object, for some reason JSON.stringify will convert it to ViperUtil.$ object
             for (var i = 0; i < self._comments[containerid].length; i++) {
                 self._comments[containerid][i]['commentMark'] = null;
             };
@@ -1448,8 +1448,8 @@ MatrixCommentsPlugin.prototype = {
 
 
         var commentsToSave = self._comments;
-        $('div[data-container-id]').each(function() {
-            var $container = $(this);
+        ViperUtil.$('div[data-container-id]').each(function() {
+            var $container = ViperUtil.$(this);
             var containerid = $container.data('container-id');
             for (var i = 0; i < commentsToSave[containerid].length; i++) {
                 commentsToSave[containerid][i]['commentMark'] = null;
@@ -1462,8 +1462,8 @@ MatrixCommentsPlugin.prototype = {
             callback.call(this, commentsToSave);
         }
         else {
-            jQuery.each(commentsToSave, function(containerid, value) {
-                    jQuery('#container_comments_' + containerid).val(encodeURIComponent(JSON.stringify(value)));
+            ViperUtil.$.each(commentsToSave, function(containerid, value) {
+                    ViperUtil.$('#container_comments_' + containerid).val(encodeURIComponent(JSON.stringify(value)));
             });
         }
 
@@ -1483,10 +1483,10 @@ MatrixCommentsPlugin.prototype = {
         var editableElement = this._bodycopyContainer.get(0);
         if(typeof editableElement == 'undefined' || !editableElement) return;
 
-        var editableOffset = $(editableElement).offset();
-        var currentElementOffset = $(element).offset();
-        var commentMarkTop = currentElementOffset.top + $(element).height()/2 + commentMarkOffetTop;
-        var commentMarkLeft = editableOffset.left + $(editableElement).outerWidth() + commentMarkOffetLeft;
+        var editableOffset = ViperUtil.$(editableElement).offset();
+        var currentElementOffset = ViperUtil.$(element).offset();
+        var commentMarkTop = currentElementOffset.top + ViperUtil.$(element).height()/2 + commentMarkOffetTop;
+        var commentMarkLeft = editableOffset.left + ViperUtil.$(editableElement).outerWidth() + commentMarkOffetLeft;
         var elementLeft = currentElementOffset.left;
         var elementTop = currentElementOffset.top;
 
@@ -1498,8 +1498,8 @@ MatrixCommentsPlugin.prototype = {
     _moveCommentMarkRecursive: function(commentMark, commentMarkTop, commentMarkLeft, elementTop, elementLeft)
     {
         var self = this;
-        var commentId = $(commentMark).data('comment-id');
-        var containerId = $(commentMark).data('comment-container-id');
+        var commentId = ViperUtil.$(commentMark).data('comment-id');
+        var containerId = ViperUtil.$(commentMark).data('comment-container-id');
         var overlappingFound = false;
 
         if(typeof this._commentsPositions[containerId] == 'undefined') {
@@ -1507,7 +1507,7 @@ MatrixCommentsPlugin.prototype = {
         }
 
         // loop through existing comments positions
-        jQuery.each(this._commentsPositions[containerId], function(key, value) {
+        ViperUtil.$.each(this._commentsPositions[containerId], function(key, value) {
             // we found an overlapping mark
             if(value['id'] != commentId && (commentMarkTop < value['commentMarkTop'] + self._commentMarkVerticalSpace) && (value['commentMarkTop'] < commentMarkTop + self._commentMarkVerticalSpace)) {
                 overlappingFound = true;
@@ -1562,12 +1562,12 @@ MatrixCommentsPlugin.prototype = {
 
         if (!overlappingFound) {
             // move the mark to position
-            $(commentMark).css({top: commentMarkTop, left: commentMarkLeft});
+            ViperUtil.$(commentMark).css({top: commentMarkTop, left: commentMarkLeft});
 
             // store the positions
             var newPosition = {'id' : commentId, 'commentMarkTop' : commentMarkTop, 'commentMarkLeft' : commentMarkLeft, 'elementTop' : elementTop, 'elementLeft' : elementLeft, 'commentMark' : commentMark};
             var found = false;
-            jQuery.each(self._commentsPositions[containerId], function(key, value) {
+            ViperUtil.$.each(self._commentsPositions[containerId], function(key, value) {
                 if(value['id'] == commentId) {
                     self._commentsPositions[containerId][key] = newPosition;
                     found = true;
@@ -1582,22 +1582,22 @@ MatrixCommentsPlugin.prototype = {
 
     _positionCommentDialog: function(commentMark, commentDialog)
     {
-        var pos = $(commentMark).position();
-        var width = $(commentMark).outerWidth();
+        var pos = ViperUtil.$(commentMark).position();
+        var width = ViperUtil.$(commentMark).outerWidth();
 
         // the dialog position is different in admin interface
-        if(!this._inEditPlus || $(window).width() < 1345) {
+        if(!this._inEditPlus || ViperUtil.$(window).width() < 1345) {
             var widthoffset = -242;
             var heightoffset = 41;
-            $(commentDialog).addClass('Matrix-Viper-commentdialog-inAdmin');
+            ViperUtil.$(commentDialog).addClass('Matrix-Viper-commentdialog-inAdmin');
         }
         else {
             var widthoffset = 20;
             var heightoffset = -50;
-            $(commentDialog).removeClass('Matrix-Viper-commentdialog-inAdmin');
+            ViperUtil.$(commentDialog).removeClass('Matrix-Viper-commentdialog-inAdmin');
         }
 
-        $(commentDialog).css({
+        ViperUtil.$(commentDialog).css({
             position: "absolute",
             top: pos.top + heightoffset + "px",
             left: (pos.left + width + widthoffset) + "px"
@@ -1611,8 +1611,8 @@ MatrixCommentsPlugin.prototype = {
         self._commentsPositions = [];
         if(typeof this._comments[self._containerId] == 'undefined') return;
 
-        $('div[data-container-id]').each(function () {
-            var $container = $(this);
+        ViperUtil.$('div[data-container-id]').each(function () {
+            var $container = ViperUtil.$(this);
             self._bodycopyContainer = $container;
             var currentContainerId = $container.data('container-id');
             for(var i = 0; i< self._comments[currentContainerId].length; i++) {
@@ -1620,13 +1620,13 @@ MatrixCommentsPlugin.prototype = {
                     var targetElement = $container.find('[data-comment-id=' + value['id'] + '][data-comment-container-id=' + currentContainerId + ']').get(0);
                     if(targetElement) {
                         self._positionCommentMark(targetElement, value['commentMark']);
-                        if($('#Matrix-Viper-commentdialog-' + value['containerid'] + '-' + value['id']).length) {
-                            self._positionCommentDialog(value['commentMark'], $('#Matrix-Viper-commentdialog-' + value['containerid'] + '-' + value['id']).get(0));
+                        if(ViperUtil.$('#Matrix-Viper-commentdialog-' + value['containerid'] + '-' + value['id']).length) {
+                            self._positionCommentDialog(value['commentMark'], ViperUtil.$('#Matrix-Viper-commentdialog-' + value['containerid'] + '-' + value['id']).get(0));
                         }
-                        $(value['commentMark']).show();
+                        ViperUtil.$(value['commentMark']).show();
                     }
                     else {
-                        $(value['commentMark']).hide();
+                        ViperUtil.$(value['commentMark']).hide();
                     }
             }
         })
@@ -1638,13 +1638,13 @@ MatrixCommentsPlugin.prototype = {
     {
         var self = this;
         // if editing comment textarea is open
-        if($('.Matrix-Viper-commentdialog-editCommentTextArea:visible').length > 0) return true;
+        if(ViperUtil.$('.Matrix-Viper-commentdialog-editCommentTextArea:visible').length > 0) return true;
 
         // if user have unfinished reply comment textarea
-        if($('.Matrix-Viper-commentdialog-replyCommentTextArea-replyComment').length > 0 && $('.Matrix-Viper-commentdialog-replyCommentTextArea-replyComment').val() !== '') return true;
+        if(ViperUtil.$('.Matrix-Viper-commentdialog-replyCommentTextArea-replyComment').length > 0 && ViperUtil.$('.Matrix-Viper-commentdialog-replyCommentTextArea-replyComment').val() !== '') return true;
 
         // if user have new comment textarea open
-        if($('.Matrix-Viper-commentdialog-newCommentTextArea').length > 0 && $('.Matrix-Viper-commentdialog-newCommentTextArea').val() !== '') return true;
+        if(ViperUtil.$('.Matrix-Viper-commentdialog-newCommentTextArea').length > 0 && ViperUtil.$('.Matrix-Viper-commentdialog-newCommentTextArea').val() !== '') return true;
 
 
         return false;
@@ -1665,19 +1665,19 @@ MatrixCommentsPlugin.prototype = {
         var self = this;
         // A 1 minute interval for counting up.
         setInterval(function() {
-            var dates = jQuery(startElement).find('.readableAge');
-            jQuery.each(dates, function(id) {
+            var dates = ViperUtil.$(startElement).find('.readableAge');
+            ViperUtil.$.each(dates, function(id) {
                 var elem      = dates[id];
-                var timestamp = parseInt(jQuery.attr(elem, 'data-timestamp'), 10);
-                var now       = jQuery.now();
+                var timestamp = parseInt(ViperUtil.$.attr(elem, 'data-timestamp'), 10);
+                var now       = ViperUtil.$.now();
 
                 var secs = Math.abs((now / 1000 - timestamp / 1000));
                 // If 30+ days no longer needs updating.
                 // Give extra 60 sec to allow tick over.
                 if (secs > (2592000 + 60)) {
-                    jQuery(elem).removeClass('readableAge');
+                    ViperUtil.$(elem).removeClass('readableAge');
                 } else {
-                    jQuery(elem).html(self._readableAge(timestamp, now));
+                    ViperUtil.$(elem).html(self._readableAge(timestamp, now));
                 }
             });
         }, 60000);
@@ -1789,9 +1789,9 @@ MatrixCommentsPlugin.prototype = {
     *   encode the comment content for security
     */
     _htmlEncode : function (value){
-        //create a in-memory div, set it's inner text(which jQuery automatically encodes)
+        //create a in-memory div, set it's inner text(which ViperUtil.$ automatically encodes)
         //then grab the encoded contents back out.  The div never exists on the page.
-        var newValue = $('<div/>').text(value).html();
+        var newValue = ViperUtil.$('<div/>').text(value).html();
         // replace new line with <br/>
         newValue = String(newValue).replace(/(?:\r\n|\r|\n)/g, '<br />');
 
