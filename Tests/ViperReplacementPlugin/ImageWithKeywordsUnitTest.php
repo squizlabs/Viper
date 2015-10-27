@@ -261,7 +261,7 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         $this->resizeImage(200);
 
         $this->assertHTMLMatch('<p>test content %1% ((prop:viperKeyword))</p><p>more content <img src="((prop:url))" alt="TITLE" height="170" width="200" /> even more content</p>');
-        $this->assertRawHTMLMatch('<p>test content %1% <span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span></p><p>more content<img alt="TITLE" data-viper-src="((prop:url))" height="170" src="'.$this->getTestURL('/Web/testImage.png').'" width="200"> even more content</p>');
+        $this->assertRawHTMLMatch('<p>test content %1% <span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span></p><p>more content<img alt="TITLE" data-viper-src="((prop:url))" height="170" src="'.$this->getTestURL('/Web/testImage.png').'" width="200" /> even more content</p>');
 
     }//end testResizingImageKeyword()
 
