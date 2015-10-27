@@ -62,13 +62,21 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
         $this->assertHTMLMatch('<p>%1% <sup>%2% %3%</sup></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         // Remove superscript from one keyword
-        $this->selectKeyword(3);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickTopToolbarButton('superscript', 'active');
         $this->assertTrue($this->topToolbarButtonExists('superscript'), 'Superscript icon in the top toolbar is still active');
-        $this->assertHTMLMatch('<p>%1% <sup>%2% </sup>%3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2%<sup> %3%</sup></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         // Remove superscript from the other keyword
-        $this->selectKeyword(2);
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickTopToolbarButton('superscript', 'active');
         $this->assertTrue($this->topToolbarButtonExists('superscript'), 'Superscript icon in the top toolbar is still active');
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
