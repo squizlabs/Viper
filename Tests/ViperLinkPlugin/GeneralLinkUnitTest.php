@@ -308,46 +308,41 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperUnitT
         $this->useTest(5);
         $this->selectKeyword(2);
         $this->sikuli->keyDown('Key.DELETE');
-
-        $this->assertHTMLMatch('<p>Test content %1% and <a href="https://squizlabs.com.au">more </a> test content.</p>');
+        $this->assertHTMLMatch('<p>%1%Test content and <a href="https://squizlabs.com.au">more %3%</a> test content.%4%</p>');
 
         // Test using backspace key with mouse selection
         $this->useTest(5);
         $this->selectKeyword(2);
         $this->sikuli->keyDown('Key.BACKSPACE');
-
-        $this->assertHTMLMatch('<p>Test content %1% and <a href="https://squizlabs.com.au">more </a> test content.</p>');
+        $this->assertHTMLMatch('<p>%1%Test content and <a href="https://squizlabs.com.au">more %3%</a> test content.%4%</p>');
 
         // Test using delete key with arrow selection
         $this->useTest(5);
-        $this->moveToKeyword(2, 'left');
-        $this->sikuli->keyDown('Key.LEFT');
+        $this->moveToKeyword(2, 'right');
         for ($i = 0; $i < 4; $i++) {
             $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         }
         $this->sikuli->keyDown('Key.DELETE');
-
-        $this->assertHTMLMatch('<p>Test content %1% and <a href="https://squizlabs.com.au"> %2%</a> test content.</p>');
+        $this->assertHTMLMatch('<p>%1%Test content and <a href="https://squizlabs.com.au">more %3%</a> test content.%4%</p>');
 
         // Test using backspace key with arrow selection
         $this->useTest(5);
-        $this->moveToKeyword(2, 'left');
-        $this->sikuli->keyDown('Key.LEFT');
+        $this->moveToKeyword(2, 'right');
         for ($i = 0; $i < 4; $i++) {
             $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         }
         $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1%Test content and <a href="https://squizlabs.com.au">more %3%</a> test content.%4%</p>');
 
-        $this->assertHTMLMatch('<p>Test content %1% and <a href="https://squizlabs.com.au"> %2%</a> test content.</p>');
     }//end testDeletingLinks()
 
 
     /**
-     * Test that you can delete links along with other content
+     * Test that you can partial delete content from the link and add it back again
      *
      * @return void
      */
-    public function testDeletingLinkWithAdditionalContent()
+    public function testPartialDeletingLinksAndAddingContentBackToLink()
     {
         // Test deleting partial content and partial link using delete key
         $this->useTest(5);
@@ -359,22 +354,22 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperUnitT
         }
         $this->sikuli->keyDown('Key.DELETE');
 
-        $this->assertHTMLMatch('<p>%1%Test content %2% a<a href="https://squizlabs.com.au">re %3%</a> test content.%4%</p>');
+        $this->assertHTMLMatch('<p>%1%Test content <a href="https://squizlabs.com.au">%2%</a> a<a href="https://squizlabs.com.au">re %3%</a> test content.%4%</p>');
 
-        // Test adding text before deleted content
+        // Test adding text before deleted content in link
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->type('nd ');
-        $this->assertHTMLMatch('<p>%1%Test content %2% and <a href="https://squizlabs.com.au">re %3%</a> test content.%4%</p>');
+        $this->assertHTMLMatch('<p>%1%Test content <a href="https://squizlabs.com.au">%2%</a> and <a href="https://squizlabs.com.au">re %3%</a> test content.%4%</p>');
 
-        // Test adding text after deleted content
+        // Test adding text back to link
         $this->moveToKeyword(3, 'left');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('mo');
-        $this->assertHTMLMatch('<p>%1%Test content %2% and mo<a href="https://squizlabs.com.au">re %3%</a> test content.%4%</p>');
+        $this->assertHTMLMatch('<p>%1%Test content <a href="https://squizlabs.com.au">%2%</a> and <a href="https://squizlabs.com.au">more %3%</a> test content.%4%</p>');
 
         // Test deleting partial content and partial link using backspace key
         $this->useTest(5);
@@ -386,29 +381,28 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperUnitT
         }
         $this->sikuli->keyDown('Key.BACKSPACE');
 
-        $this->assertHTMLMatch('<p>%1%Test content %2% a<a href="https://squizlabs.com.au">re %3%</a> test content.%4%</p>');
+        $this->assertHTMLMatch('<p>%1%Test content <a href="https://squizlabs.com.au">%2%</a> a<a href="https://squizlabs.com.au">re %3%</a> test content.%4%</p>');
 
-        // Test adding text before deleted content
+        // Test adding text before deleted content in link
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->type('nd ');
-        $this->assertHTMLMatch('<p>%1%Test content %2% and <a href="https://squizlabs.com.au">re %3%</a> test content.%4%</p>');
+        $this->assertHTMLMatch('<p>%1%Test content <a href="https://squizlabs.com.au">%2%</a> and <a href="https://squizlabs.com.au">re %3%</a> test content.%4%</p>');
 
-        // Test adding text after deleted content
+        // Test adding text back to link
         $this->moveToKeyword(3, 'left');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('mo');
-        $this->assertHTMLMatch('<p>%1%Test content %2% and mo<a href="https://squizlabs.com.au">re %3%</a> test content.%4%</p>');
+        $this->assertHTMLMatch('<p>%1%Test content <a href="https://squizlabs.com.au">%2%</a> and <a href="https://squizlabs.com.au">more %3%</a> test content.%4%</p>');
 
         // Test deleting additional content and link using delete key
         $this->useTest(5);
-        $this->selectKeyword(2,3);
+        $this->selectKeyword(2, 3);
         $this->sikuli->keyDown('Key.DELETE');
-
-        $this->assertHTMLMatch('<p>%1%Test content&nbsp;&nbsp;test content.%4%</p>');
+        $this->assertHTMLMatch('<p>%1%Test content test content.%4%</p>');
 
         // Test adding text before deleted content
         $this->moveToKeyword(1, 'right');
@@ -430,10 +424,9 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperUnitT
 
         // Test deleting additional content and link using backspace key
         $this->useTest(5);
-        $this->selectKeyword(2,3);
+        $this->selectKeyword(2, 3);
         $this->sikuli->keyDown('Key.BACKSPACE');
-
-        $this->assertHTMLMatch('<p>%1%Test content&nbsp;&nbsp;test content.%4%</p>');
+        $this->assertHTMLMatch('<p>%1%Test content test content.%4%</p>');
 
         // Test adding text before deleted content
         $this->moveToKeyword(1, 'right');
@@ -453,7 +446,7 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperUnitT
 
         $this->assertHTMLMatch('<p>%1%Test content and more test content.%4%</p>');
 
-    }//end testDeletingLinkWithAdditionalContent()
+    }//end testPartialDeletingLinksAndAddingContentBackToLink()
 
 
     /**
