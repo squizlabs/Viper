@@ -1720,8 +1720,8 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
     public function testItalicWithTwoAdditionalFormats()
     {
         // Test applying italic and subscript then bold
-        $this->selectKeyword(1);
         $this->useTest(15);
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('italic', NULL);
         $this->clickTopToolbarButton('subscript', NULL);
         $this->clickTopToolbarButton('bold', NULL);
@@ -2776,8 +2776,8 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
     public function testStrikethroughWithTwoAdditionalFormats()
     {
         // Test applying strikethrough and subscript then bold
-        $this->selectKeyword(1);
         $this->useTest(15);
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->clickTopToolbarButton('subscript', NULL);
         $this->clickTopToolbarButton('bold', NULL);
