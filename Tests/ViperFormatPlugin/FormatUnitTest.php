@@ -1254,7 +1254,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('bold', NULL);
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->assertHTMLMatch('<p><em><strong>%1%</strong></em></p><p><del><strong>%2%</strong></del></p><p><sup><strong>%3%</strong></sup></p><p><del><strong>%4%</strong></del></p>');
-    
+
     }//end testBoldWithOneAdditionalFormat()
 
 
@@ -1266,8 +1266,8 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
     public function testBoldWithTwoAdditionalFormats()
     {
         // Test applying bold and subscript then italic
-        $this->selectKeyword(1);
         $this->useTest(15);
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('bold', NULL);
         $this->clickTopToolbarButton('subscript', NULL);
         $this->clickTopToolbarButton('italic', NULL);
@@ -1299,7 +1299,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('subscript', NULL);
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->assertHTMLMatch('<p><em><sub><strong>%1%</strong></sub></em></p><p><del><sub><strong>%2%</strong></sub></del></p><p>%3%</p><p>%4%</p>');
-   
+
         // Test applying bold and superscript then italic
         $this->useTest(15);
         $this->selectKeyword(1);
@@ -1397,7 +1397,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
      */
     public function testBoldWithThreeAdditionalFormats()
     {
-        
+
         // Test applying bold and italic and subscript then strikethough
         $this->useTest(15);
         $this->selectKeyword(1);
@@ -1568,7 +1568,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->clickTopToolbarButton('italic', NULL);
         $this->clickTopToolbarButton('subscript', NULL);
-        
+
         // Test removing bold and strikethough and italic then subscript
         $this->clickTopToolbarButton('bold', 'active');
         $this->clickTopToolbarButton('strikethrough', 'active');
@@ -1588,7 +1588,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->clickTopToolbarButton('italic', NULL);
         $this->clickTopToolbarButton('superscript', NULL);
-        
+
         // Test removing bold and strikethough and italic then subscript
         $this->clickTopToolbarButton('bold', 'active');
         $this->clickTopToolbarButton('strikethrough', 'active');
@@ -1608,12 +1608,12 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->clickTopToolbarButton('subscript', NULL);
         $this->clickTopToolbarButton('italic', NULL);
-        
+
         // Test removing bold and strikethough and subscript then italic
         $this->clickTopToolbarButton('bold', 'active');
         $this->clickTopToolbarButton('strikethrough', 'active');
         $this->clickTopToolbarButton('subscript', 'active');
-        $this->clickTopToolbarButton('italic', 'active');     
+        $this->clickTopToolbarButton('italic', 'active');
 
         // Test re-applying bold and strikethough and subscript then italic
         $this->clickTopToolbarButton('bold', NULL);
@@ -1628,12 +1628,12 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->clickTopToolbarButton('superscript', NULL);
         $this->clickTopToolbarButton('italic', NULL);
-        
+
         // Test removing bold and strikethough and superscript then italic
         $this->clickTopToolbarButton('bold', 'active');
         $this->clickTopToolbarButton('strikethrough', 'active');
         $this->clickTopToolbarButton('superscript', 'active');
-        $this->clickTopToolbarButton('italic', 'active');     
+        $this->clickTopToolbarButton('italic', 'active');
 
         // Test re-applying bold and strikethough and superscript then italic
         $this->clickTopToolbarButton('bold', NULL);
@@ -1708,7 +1708,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('italic', NULL);
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->assertHTMLMatch('<p><strong><em>%1%</em></strong></p><p><del><em>%2%</em></del></p><p><sup><em>%3%</em></sup></p><p><del><em>%4%</em></del></p>');
-    
+
     }//end testItalicWithOneAdditionalFormat()
 
 
@@ -1753,7 +1753,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('subscript', NULL);
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->assertHTMLMatch('<p><strong><sub><em>%1%</em></sub></strong></p><p><del><sub><em>%2%</em></sub></del></p><p>%3%</p><p>%4%</p>');
-   
+
         // Test applying italic and superscript then bold
         $this->useTest(15);
         $this->selectKeyword(1);
@@ -1851,7 +1851,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
      */
     public function testItalicWithThreeAdditionalFormats()
     {
-        
+
         // Test applying italic and bold and subscript then strikethough
         $this->useTest(15);
         $this->selectKeyword(1);
@@ -2022,7 +2022,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->clickTopToolbarButton('bold', NULL);
         $this->clickTopToolbarButton('subscript', NULL);
-        
+
         // Test removing italic and strikethough and bold then subscript
         $this->clickTopToolbarButton('italic', 'active');
         $this->clickTopToolbarButton('strikethrough', 'active');
@@ -2042,7 +2042,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->clickTopToolbarButton('bold', NULL);
         $this->clickTopToolbarButton('superscript', NULL);
-        
+
         // Test removing italic and strikethough and bold then subscript
         $this->clickTopToolbarButton('italic', 'active');
         $this->clickTopToolbarButton('strikethrough', 'active');
@@ -2062,12 +2062,12 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->clickTopToolbarButton('subscript', NULL);
         $this->clickTopToolbarButton('bold', NULL);
-        
+
         // Test removing italic and strikethough and subscript then bold
         $this->clickTopToolbarButton('italic', 'active');
         $this->clickTopToolbarButton('strikethrough', 'active');
         $this->clickTopToolbarButton('subscript', 'active');
-        $this->clickTopToolbarButton('bold', 'active');     
+        $this->clickTopToolbarButton('bold', 'active');
 
         // Test re-applying italic and strikethough and subscript then bold
         $this->clickTopToolbarButton('italic', NULL);
@@ -2082,12 +2082,12 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->clickTopToolbarButton('superscript', NULL);
         $this->clickTopToolbarButton('bold', NULL);
-        
+
         // Test removing italic and strikethough and superscript then bold
         $this->clickTopToolbarButton('italic', 'active');
         $this->clickTopToolbarButton('strikethrough', 'active');
         $this->clickTopToolbarButton('superscript', 'active');
-        $this->clickTopToolbarButton('bold', 'active');     
+        $this->clickTopToolbarButton('bold', 'active');
 
         // Test re-applying italic and strikethough and superscript then bold
         $this->clickTopToolbarButton('italic', NULL);
@@ -2148,7 +2148,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('subscript', NULL);
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->assertHTMLMatch('<p><strong><sub>%1%</sub></strong></p><p><em><sub>%2%</sub></em></p><p>%3%</p><p><del><sub>%4%</sub></del></p>');
-    
+
     }//end testSubscriptWithOneAdditionalFormat()
 
 
@@ -2193,7 +2193,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('bold', NULL);
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->assertHTMLMatch('<p><em><strong><sub>%1%</sub></strong></em></p><p><del><strong><sub>%2%</sub></strong></del></p><p>%3%</p><p>%4%</p>');
-   
+
         // Test applying subscript and superscript then italic
         $this->useTest(15);
         $this->selectKeyword(1);
@@ -2274,7 +2274,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
      */
     public function testSubscriptWithThreeAdditionalFormats()
     {
-        
+
         // Test applying subscript and bold and italic then strikethough
         $this->useTest(15);
         $this->selectKeyword(1);
@@ -2449,7 +2449,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('superscript', NULL);
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->assertHTMLMatch('<p><strong><sup>%1%</sup></strong></p><p><em><sup>%2%</sup></em></p><p>%3%</p><p><del><sup>%4%</sup></del></p>');
-    
+
     }//end testSuperscriptWithOneAdditionalFormat()
 
 
@@ -2494,7 +2494,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('bold', NULL);
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->assertHTMLMatch('<p><em><strong><sup>%1%</sup></strong></em></p><p><del><strong><sup>%2%</sup></strong></del></p><p>%3%</p><p>%4%</p>');
-   
+
         // Test applying superscript and superscript then italic
         $this->useTest(15);
         $this->selectKeyword(1);
@@ -2575,7 +2575,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
      */
     public function testSuperscriptWithThreeAdditionalFormats()
     {
-        
+
         // Test applying superscript and bold and italic then strikethough
         $this->useTest(15);
         $this->selectKeyword(1);
@@ -2764,7 +2764,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->clickTopToolbarButton('italic', NULL);
         $this->assertHTMLMatch('<p><strong><del>%1%</del></strong></p><p><em><del>%2%</del></em></p><p><sup><del>%3%</del></sup></p><p><em><del>%4%</del></em></p>');
-    
+
     }//end testStrikethroughWithOneAdditionalFormat()
 
 
@@ -2809,7 +2809,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('subscript', NULL);
         $this->clickTopToolbarButton('italic', NULL);
         $this->assertHTMLMatch('<p><strong><sub><del>%1%</del></sub></strong></p><p><em><sub><del>%2%</del></sub></em></p><p>%3%</p><p>%4%</p>');
-   
+
         // Test applying strikethrough and superscript then bold
         $this->useTest(15);
         $this->selectKeyword(1);
@@ -2907,7 +2907,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
      */
     public function testStrikethroughWithThreeAdditionalFormats()
     {
-        
+
         // Test applying strikethrough and bold and subscript then strikethough
         $this->useTest(15);
         $this->selectKeyword(1);
@@ -3078,7 +3078,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('italic', NULL);
         $this->clickTopToolbarButton('bold', NULL);
         $this->clickTopToolbarButton('subscript', NULL);
-        
+
         // Test removing strikethrough and strikethough and bold then subscript
         $this->clickTopToolbarButton('strikethrough', 'active');
         $this->clickTopToolbarButton('italic', 'active');
@@ -3098,7 +3098,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('italic', NULL);
         $this->clickTopToolbarButton('bold', NULL);
         $this->clickTopToolbarButton('superscript', NULL);
-        
+
         // Test removing strikethrough and strikethough and bold then subscript
         $this->clickTopToolbarButton('strikethrough', 'active');
         $this->clickTopToolbarButton('italic', 'active');
@@ -3118,12 +3118,12 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('italic', NULL);
         $this->clickTopToolbarButton('subscript', NULL);
         $this->clickTopToolbarButton('bold', NULL);
-        
+
         // Test removing strikethrough and strikethough and subscript then bold
         $this->clickTopToolbarButton('strikethrough', 'active');
         $this->clickTopToolbarButton('italic', 'active');
         $this->clickTopToolbarButton('subscript', 'active');
-        $this->clickTopToolbarButton('bold', 'active');     
+        $this->clickTopToolbarButton('bold', 'active');
 
         // Test re-applying strikethrough and strikethough and subscript then bold
         $this->clickTopToolbarButton('strikethrough', NULL);
@@ -3138,12 +3138,12 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('italic', NULL);
         $this->clickTopToolbarButton('superscript', NULL);
         $this->clickTopToolbarButton('bold', NULL);
-        
+
         // Test removing strikethrough and strikethough and superscript then bold
         $this->clickTopToolbarButton('strikethrough', 'active');
         $this->clickTopToolbarButton('italic', 'active');
         $this->clickTopToolbarButton('superscript', 'active');
-        $this->clickTopToolbarButton('bold', 'active');     
+        $this->clickTopToolbarButton('bold', 'active');
 
         // Test re-applying strikethrough and strikethough and superscript then bold
         $this->clickTopToolbarButton('strikethrough', NULL);
