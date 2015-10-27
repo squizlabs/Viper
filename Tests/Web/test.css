@@ -246,6 +246,10 @@ h1,h2,h3,h4,h5,h6 {
     -webkit-transition-duration: 0s !important;
 }
 
+.ViperITP.Viper-visible.Viper-forTopbar {
+    margin-top: 8px;
+}
+
 .ViperCursorAssistPlugin.insertBefore {
     margin-top: -20px !important;
 }
