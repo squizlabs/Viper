@@ -2605,7 +2605,7 @@ Viper.prototype = {
 
         var startContainer = range.getStartNode();
         var endContainer   = range.getEndNode();
-        var nodeSelection  = range.getNodeSelection();
+        var nodeSelection  = range.getNodeSelection(null, true);
 
         // Selected contents from same node.
         if (nodeSelection) {
