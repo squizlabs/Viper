@@ -410,6 +410,10 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        // Clear the toptoolbar location cache here so that if there is another test then the waitForViper method will
+        // work after the test page is reloaded.
+        self::$_topToolbar = null;
+
         if ($this->sikuli !== null) {
             // Check if there were any JS errors.
             $jsErrors = $this->sikuli->getJSErrors();
@@ -457,9 +461,10 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      * @return void
      * @throws Exception If Viper fails to load on the page.
      */
-    private function _waitForViper($retries=3)
+    private function _waitForViper($retries=2)
     {
         if ($retries === 0) {
+            $this->resetConnection();
             throw new Exception('Failed to load Viper test page.');
         }
 
@@ -467,9 +472,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             // This will make sure that the browser has loaded the Viper page.
             $this->getTopToolbar();
         } catch (Exception $e) {
+            $this->resetConnection();
+            $this->fail('Browser is not functioning properly');
+            return FALSE;
             // Its not working.. Try to start browser again.
             $this->sikuli->restartBrowser();
-            sleep(2);
             $this->sikuli->resize();
             $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
             sleep(2);
