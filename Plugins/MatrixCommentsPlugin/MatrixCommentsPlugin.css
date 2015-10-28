@@ -441,18 +441,19 @@
   display: none;
   padding: 0;
   margin-top: 5px;
+  position: relative;
 }
 
 .Matrix-Viper-commentdialog-buttonArea.Matrix-Viper-commentdialog-editButtonArea .Matrix-Viper-commentdialog-button-blue{
-  width: 29%;
+  width: 47%;
   margin: 0px;
-  width: 28%\0/ !important;
+  padding: 0;
 }
 .Matrix-Viper-commentdialog-buttonArea.Matrix-Viper-commentdialog-editButtonArea .Matrix-Viper-commentdialog-button-grey {
-  width: 29%;
+  width: 47%;
   margin-left: 0px;
-  margin-right: 8px;
-  width: 28%\0/ !important;
+  margin-right: 4%;
+  padding: 0;
 }
 
 /* comment actions */
