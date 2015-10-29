@@ -73,11 +73,17 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
 
         // Remove superscript from the other keyword
         $this->sikuli->keyDown('Key.RIGHT');
+        sleep(1);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        sleep(1);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        sleep(1);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        sleep(1);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        sleep(1);
         $this->clickTopToolbarButton('superscript', 'active');
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('superscript'), 'Superscript icon in the top toolbar is still active');
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
