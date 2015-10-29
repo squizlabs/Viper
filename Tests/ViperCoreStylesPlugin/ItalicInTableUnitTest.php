@@ -67,25 +67,33 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicInTableUnitTest extends AbstractVi
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU <em>%3% %4%</em> Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td><ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <em><a href="http://www.google.com">%6%</a></em>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
         $this->selectKeyword(4);
+        sleep(1);
         $this->selectInlineToolbarLineageItem(4);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'));
 
         $this->selectKeyword(3);
+        sleep(1);
         $this->selectInlineToolbarLineageItem(4);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'));
 
         // Remove italics from one word
         $this->selectKeyword(3);
+        sleep(1);
         $this->clickInlineToolbarButton('italic', 'active');
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('italic'));
         $this->assertTrue($this->topToolbarButtonExists('italic'));
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %3%<em> %4%</em> Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td><ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <em><a href="http://www.google.com">%6%</a></em>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
 
         // Remove italics from other word
         $this->selectKeyword(4);
+        sleep(1);
         $this->clickInlineToolbarButton('italic', 'active');
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('italic'));
         $this->assertTrue($this->topToolbarButtonExists('italic'));
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> %1% The table %2% text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %3% %4% Mnu</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td><ul><li>vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td><h3>%5%</h3></td><td colspan="2">purus neque luctus <em><a href="http://www.google.com">%6%</a></em>, vel molestie arcu</td></tr><tr><td>nec <strong>porta</strong> ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr><tr><td colspan="2">sapien vel aliquet</td></tr></tbody></table>');
