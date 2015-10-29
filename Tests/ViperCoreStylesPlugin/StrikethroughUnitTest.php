@@ -64,6 +64,7 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
         $this->assertHTMLMatch('<p>%1% <del>%2% %3%</del></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         // Remove from one keyword
+        $this->clickKeyword(1);
         $this->selectKeyword(3);
         $this->clickTopToolbarButton('strikethrough', 'active');
         $this->assertTrue($this->topToolbarButtonExists('strikethrough'), 'Strikethrough icon in the top toolbar is still active');
