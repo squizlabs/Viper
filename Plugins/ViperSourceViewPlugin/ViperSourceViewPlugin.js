@@ -305,23 +305,7 @@ ViperSourceViewPlugin.prototype = {
             null,
             function(closer) {
                 // Close callback.
-                // added for classic WYSIWYG editor #squizmap 5334                
-                var form = document.main_form;
-                var submit_btn = form.elements.namedItem('sq_commit_button');
-                if (submit_btn !== null) {
-                    if (closer === 'discardChanges' || closer === 'applyChanges') {
-                        submit_btn.disabled = false;
-                        return true;
-                    }
-                    if (self.isSourceChanged() === true){
-                        if (self._sourceView.getAttribute('aria-disabled') === 'false') {
-                            submit_btn.disabled = true;
-                        }
-                        self.showCloseConfirm();
-                        return false;
-                    }
-                }
-                else if (closer !== 'discardChanges' && closer !== 'applyChanges') {
+                if (closer !== 'discardChanges' && closer !== 'applyChanges') {
                     // If there are changes prevent popup from closing.
                     if (self.isSourceChanged() === true) {
                         self.showCloseConfirm();
@@ -483,13 +467,6 @@ ViperSourceViewPlugin.prototype = {
             if (self._inNewWindow !== true) {
                 self.toolbarPlugin.disable();
             }
-
-            var form = document.main_form;
-            var submit_btn = form.elements.namedItem('sq_commit_button');
-            if (submit_btn !== null && submit_btn.disabled === true) {
-                submit_btn.disabled = false;
-            }
-
 
             onFocus.call(editor);
             setTimeout(function() {
