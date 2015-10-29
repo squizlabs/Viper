@@ -556,11 +556,11 @@ MatrixCommentsPlugin.prototype = {
 
         // Add partially selected nodes at the start of the range
         node = range.startContainer;
-        while (node && node != range.commonAncestorContainer) {
+        while (node && node != range.getCommonElement()) {
             rangeNodes.unshift(node);
             node = node.parentNode;
         }
-
+        
         return rangeNodes;
     },
 
