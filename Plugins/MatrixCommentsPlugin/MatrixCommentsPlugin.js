@@ -496,7 +496,11 @@ MatrixCommentsPlugin.prototype = {
         for (var i = 0; i < nodes.length; i++) {
             // img is not really a block element, just tagret on others
             if(ViperUtil.isBlockElement(nodes[i]) && !ViperUtil.isTag(nodes[i], 'img')) {
-                nodesToMark.push(nodes[i]);
+                // if it's a block element but it's the last one, it means there is no children in this block element that has been actually selected
+                // if children of this block elements are selected, those elements should appear in the nodes list as well.
+                if(i != nodes.length - 1) {
+                    nodesToMark.push(nodes[i]);
+                }
             }
         }
         if(nodesToMark.length > 0) {
