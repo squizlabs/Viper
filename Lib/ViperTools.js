@@ -1207,7 +1207,6 @@ ViperTools.prototype = {
             }
         }
 
-        popup.hideTop();
         ViperUtil.$(popup.element).draggable('disable');
 
         if (popup.element.parentNode) {
