@@ -5058,9 +5058,7 @@ Viper.prototype = {
             // Ask plugins if its one of their element.
             var pluginName = this.getPluginForElement(target);
             if (!pluginName && this.isChildOfElems(target, [this._viperElementHolder]) !== true) {
-                this.enabled = true;
                 this.setEnabled(false);
-                e = this.element;
                 return this.fireCallbacks('Viper:clickedOutside', e);
             } else {
                 return true;
