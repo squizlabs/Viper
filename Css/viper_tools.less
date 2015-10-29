@@ -1084,7 +1084,12 @@
 
         // Colours
             background-color: #FFF;
-            box-shadow: 0 0 8px rgba(0, 0, 0, 0.3), 0 0 1px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 0, 0, 0.14);
+
+            // Give IE8 a border since it doesnt support box-shadow borders
+                .Viper-browserVer-msie8 & {
+                    border: 1px solid #BBB;
+                }
 
         animation-duration: 90ms;
         animation-timing-function: ease-out;
@@ -1093,26 +1098,6 @@
         -webkit-animation-duration: 90ms;
         -webkit-animation-timing-function: ease-out;
         -webkit-animation-fill-mode: forwards;
-
-        &:before,
-        &:after {
-            right: 100%;
-            top: 50%;
-            border: 10px solid transparent;
-            content: "";
-            height: 0;
-            width: 0;
-            position: absolute;
-            pointer-events: none;
-            border-right-color: #C1C1C1;
-            margin-top: -10px;
-        }
-
-        &:after {
-            border-width: 8px;
-            border-right-color: #FFF;
-            margin-top: -8px;
-        }
 
         &.ViperUtil-visible {
             display: block;
@@ -1146,7 +1131,7 @@
             padding-left: 0;
 
             & li {
-                padding: 6px 60px 6px 8px;
+                padding: 6px 40px 6px 8px;
                 border-bottom: 1px solid #D7D7D7;
                 box-shadow: 0 1px 0 rgba(255,255,255,0.1);
                 cursor: pointer;
@@ -1209,61 +1194,136 @@
 
     // Arrows
 
-        .Viper-popoutPanel.ViperUtil-arrowleft {
-            margin-left: 10px;
-        }
+    .Viper-popoutPanel {
 
-        .Viper-popoutPanel.ViperUtil-arrowleft.ViperUtil-aligntop:before {
-            top: 0;
-        }
+        // Defaults
 
-        .Viper-popoutPanel.ViperUtil-arrowleft.ViperUtil-alignbottom:before {
-            top: 100%;
-            margin-top: -25px;
-        }
+            &:before,
+            &:after {
+                right: 100%;
+                top: 50%;
+                border: 10px solid transparent;
+                content: "";
+                height: 0;
+                width: 0;
+                position: absolute;
+                pointer-events: none;
+            }
 
-        .Viper-popoutPanel.ViperUtil-alignbottom {
+            &:after {
+                border-width: 8px;
+            }
+
+        &.ViperUtil-alignbottom {
             margin-top: -15px;
         }
 
-        .Viper-popoutPanel.ViperUtil-arrowbottom {
-            margin-top: -12px;
-        }
+        // Left
 
-        .Viper-popoutPanel.ViperUtil-arrowtop {
-            margin-top: 12px;
-        }
+            &.ViperUtil-arrowleft {
+                margin-left: 5px;
 
-        .Viper-popoutPanel.ViperUtil-arrowtop:before {
-            top: -12px;
-            left: 50%;
-            border-color: rgba(43, 43, 43, 0);
-            border-bottom-color: #2b2b2b;
-            margin-left: -12px;
-        }
+                &:before {
+                    border-right-color: #C1C1C1;
+                }
 
-        .Viper-popoutPanel.ViperUtil-arrowright:before {
-            left: 100%;
-            top: 50%;
-            border-color: rgba(43, 43, 43, 0);
-            border-left-color: #2b2b2b;
-            border-width: 12px;
-            margin-top: -12px;
-        }
+                &:after {
+                    border-right-color: #FFF;
+                }
 
-        .Viper-popoutPanel.ViperUtil-arrowright.ViperUtil-aligntop {
-            margin-top: 15px;
-        }
+                &.ViperUtil-alignmiddle {
 
-        .Viper-popoutPanel.ViperUtil-arrowright.ViperUtil-aligntop:before {
-            top: 14px;
-        }
+                    &:before {
+                        margin-top: -10px;
+                    }
 
-        .Viper-popoutPanel.ViperUtil-arrowbottom {
-            top: 100%;
-            left: 50%;
-            border-color: rgba(43, 43, 43, 0);
-            border-top-color: #2b2b2b;
-            border-width: 12px;
-            margin-left: -12px;
-        }
+                    &:after {
+                        margin-top: -8px;
+                    }
+                }
+
+                &.ViperUtil-aligntop {
+
+                    &:before {
+                        top: 0;
+                    }
+
+                    &:after {
+                        top: 2px;
+                    }
+
+                }
+
+            }
+
+        // Right
+
+            &.ViperUtil-arrowright {
+                margin-left: 15px;
+
+                &:before {
+                    left: 100%;
+                    border-left-color: #C1C1C1;
+                }
+
+                &:after {
+                    left: 100%;
+                    border-left-color: #FFF;
+                }
+
+                &.ViperUtil-alignmiddle {
+
+                    &:before {
+                        margin-top: -10px;
+                    }
+
+                    &:after {
+                        margin-top: -8px;
+                    }
+                }
+
+                &.ViperUtil-aligntop {
+                    margin-top: 15px;
+
+                    &:before {
+                        top: 14px;
+                    }
+
+                    &:after {
+                        top: 16px;
+                    }
+
+                }
+
+            }
+
+        // Top
+
+            &.ViperUtil-arrowtop {
+                margin-top: 12px;
+
+                &:before {
+                    top: -12px;
+                    left: 50%;
+                    border-color: rgba(43, 43, 43, 0);
+                    border-bottom-color: #2b2b2b;
+                    margin-left: -12px;
+                }
+
+            }
+
+        // Bottom
+
+            &.ViperUtil-arrowbottom {
+                top: 100%;
+                left: 50%;
+                border-color: rgba(43, 43, 43, 0);
+                border-top-color: #2b2b2b;
+                border-width: 12px;
+                margin-left: -12px;
+                margin-top: -12px;
+            }
+
+
+
+    }
