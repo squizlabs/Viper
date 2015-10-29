@@ -745,7 +745,7 @@ MatrixCommentsPlugin.prototype = {
                 // remove the actual target element's comment attribute
                 var commentId = ViperUtil.$(commentMark).data('comment-id');
                 var commentContainerId = ViperUtil.$(commentMark).data('comment-container-id');
-                var $targetElement = self._bodycopyContainer.find('[data-comment-id=' + commentId + '][data-comment-container-id=' + commentContainerId + ']');
+                var $targetElement = ViperUtil.$(document).find('[data-comment=1][data-comment-id=' + commentId + '][data-comment-container-id=' + commentContainerId + ']');
                 $targetElement.removeClass('Matrix-Viper-comment-highlighted');
                 ViperUtil.$.each($targetElement, function( key, value ) {
                   self.removeComment(value);
@@ -1234,6 +1234,7 @@ MatrixCommentsPlugin.prototype = {
                 $replyCommentButtonArea.hide();
             }
 
+
             // click cancel button
             $replyCommentButtonCancelButton.click(function (e) {
                 ViperUtil.preventDefault(e);
@@ -1344,7 +1345,8 @@ MatrixCommentsPlugin.prototype = {
 
         // focus on the textarea
         if($newCommentTextArea) {
-            $newCommentTextArea.mousedown().focus();
+            $newCommentTextArea.mousedown();
+            $newCommentTextArea.focus();
         }
 
         // scroll to bottom of div
@@ -1376,6 +1378,16 @@ MatrixCommentsPlugin.prototype = {
             ViperUtil.$('.Matrix-Viper-commentdialog-button-blue:visible').mousedown();
             ViperUtil.$('#Matrix-Viper-commentdialog-replyCommentButton-comment:visible').mousedown();
         }
+        // if new comment dialog is open, we need to close it or commit it
+        if(ViperUtil.$('.Matrix-Viper-commentdialog-newCommentTextArea:visible').length > 0) {
+            if(ViperUtil.$('.Matrix-Viper-commentdialog-newCommentTextArea:visible').val() != '') {
+                ViperUtil.$('#Matrix-Viper-commentdialog-newCommentButton-comment').click();
+            }
+            else {
+                ViperUtil.$('#Matrix-Viper-commentdialog-newCommentButton-cancel').click();
+            }
+        }
+
 
         // remove comment action dialog
         ViperUtil.$('.Matrix-Viper-commentdialog-comment-action').remove();
