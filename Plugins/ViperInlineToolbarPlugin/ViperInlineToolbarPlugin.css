@@ -23,8 +23,16 @@
             background-color: #FFF;
             color: #2b2b2b;
 
-        box-shadow: 0 0 8px rgba(0, 0, 0, 0.3), 0 0 1px rgba(0, 0, 0, 0.6);
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 0, 0, 0.14);
     }
+
+    /* IE 8 needs a border to handle no box-shadow support */
+
+    .Viper-browserVer-msie8 .ViperITP {
+        border: 1px solid #BBB;
+    }
+
+    /* Positional tweaks for when the inline toolbar needs to point to the topbar */
 
     .ViperITP.Viper-forTopbar {
         z-index: 1000;
@@ -83,6 +91,7 @@
         }
 
         .Viper-browserVer-msie8 .ViperITP.Viper-forTopbar:before {
+
             /* Colours */
                 border-top-color: #919097;
         }
@@ -94,7 +103,7 @@
         }
 
         .ViperITP.Viper-orientationRight {
-            margin-left: 12px;
+            margin-left: 15px;
         }
 
         .ViperITP.Viper-orientationLeft:before {
@@ -102,7 +111,17 @@
             margin-left: 3px;
         }
 
+        .ViperITP.Viper-orientationLeft:after {
+            left: 0;
+            margin-left: 5px;
+        }
+
         .ViperITP.Viper-orientationRight:before {
+            left: 100%;
+            margin-left: -27px;
+        }
+
+        .ViperITP.Viper-orientationRight:after {
             left: 100%;
             margin-left: -25px;
         }
@@ -198,7 +217,7 @@
             padding-right: 0.4em;
         }
 
-        .ViperITP-lineage .ViperITP-lineageItem:last-child::after {
+        .ViperITP-lineage .ViperITP-lineageItem:last-child:after {
             display: none;
         }
 
@@ -269,7 +288,7 @@
     position: relative;
 }
 
- .ViperITP-lineage .ViperITP-lineageItem::after {
+ .ViperITP-lineage .ViperITP-lineageItem:after {
     content: "";
     position: absolute;
     right: 0;
@@ -283,7 +302,7 @@
 
 /* PNG fallback for older trowsers */
 
-    .Viper-browserVer-msie8  .ViperITP-lineage .ViperITP-lineageItem::after {
+    .Viper-browserVer-msie8  .ViperITP-lineage .ViperITP-lineageItem:after {
         background-image: url("../../Images/viperTools.png");
     }
 
