@@ -144,18 +144,23 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
 
         // Remove bold from one word
         $this->clickKeyword(1);
+        sleep(1);
         $this->selectKeyword(3);
+        sleep(1);
         $this->clickInlineToolbarButton('bold', 'active');
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon in the inline toolbar is still active');
         $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is still active');
         $this->assertHTMLMatch('<p>%1% <strong>%2% </strong>%3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         // Remove bold from the other word
         $this->clickKeyword(1);
+        sleep(1);
         $this->selectKeyword(2);
         $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
         $this->clickInlineToolbarButton('bold', 'active');
+        sleep(1);
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testRemoveBoldFromPartOfContent()
