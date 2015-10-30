@@ -14,7 +14,8 @@ class Viper_Tests_ViperReplacementPlugin_CopyAndPasteKeywordUnitTest extends Abs
     {
         // Beginning of paragraph using keyboard shortcuts
         $this->useTest(1);
-        sleep(1);
+        $this->clickKeyword(1);
+        sleep(2);
         $this->moveToKeyword(1 , 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');

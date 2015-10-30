@@ -294,6 +294,7 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
         $this->assertEquals($this->replaceKeywords('Viper %2%'), $this->getSelectedText(), 'Keyword and content should be selected');
 
     }//end testSelectingKeywords()
+    
 
 }//end class
 

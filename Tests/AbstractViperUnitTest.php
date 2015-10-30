@@ -2797,6 +2797,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                             case NULL:
                                 $this->sikuli->keyDown('Key.CMD + c');
                             break;
+                            case '':
+                                $this->sikuli->keyDown('Key.CMD + c');
+                            break;
                         } // End Copy
                         break;
                     case 'Cut':
