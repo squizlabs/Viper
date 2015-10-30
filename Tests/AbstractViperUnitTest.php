@@ -98,6 +98,19 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     private static $_viperVersion = '';
 
+    /**
+     * Name of string that holds alternatives for different OS.
+     *
+     * @var string
+     */
+    private static $_Command = null;
+
+    /**
+     * Name of string that directs $Command.
+     *
+     * @var string
+     */
+    private static $_CommandDirection = null;
 
     /**
      * Returns the path of a test file.
@@ -2607,6 +2620,256 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         return $coords;
 
     }//end getScrollCoords()
+
+
+    /**
+     * Automatically provides OS alternative shortcuts
+     *
+     * @param string   $_Command             The selector for the command to execute 
+     * @param string   $_CommandDirection    The selector for commands that require direction
+     * 
+     * @return void
+     */
+    public function getOSAltShortcut($_Command=NULL, $_CommandDirection=NULL)
+    {
+        if ($_Command !== NULL) {
+            if ($this->sikuli->getOS() === 'windows') {
+                switch ($_Command) {
+                    case 'WholeWordSelect':
+                        switch ($_CommandDirection) {
+                            case 'right':
+                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.RIGHT');
+                            break;
+                            case 'left':
+                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.LEFT');
+                            break;
+                            case 'up':
+                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.UP');
+                            break;
+                            case 'down':
+                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.DOWN');
+                            break;
+                        } // End WholeWordSelect
+                        break;
+                    case 'Copy':
+                        switch ($_CommandDirection) {
+                            case 'right':
+                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.RIGHT');
+                                $this->sikuli->keyDown('Key.CTRL + c');
+                            break;
+                            case 'left':
+                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.LEFT');
+                                $this->sikuli->keyDown('Key.CTRL + c');
+                            break;
+                            case 'up':
+                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.UP');
+                                $this->sikuli->keyDown('Key.CTRL + c');
+                            break;
+                            case 'down':
+                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.DOWN');
+                                $this->sikuli->keyDown('Key.CTRL + c');
+                            break;
+                            case NULL:
+                                $this->sikuli->keyDown('Key.CTRL + c');
+                            break;
+                        } // End Copy
+                        break;
+                    case 'Cut':
+                        switch ($_CommandDirection) {
+                            case 'right':
+                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.RIGHT');
+                                $this->sikuli->keyDown('Key.CTRL + x');
+                            break;
+                            case 'left':
+                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.LEFT');
+                                $this->sikuli->keyDown('Key.CTRL + x');
+                            break;
+                            case 'up':
+                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.UP');
+                                $this->sikuli->keyDown('Key.CTRL + x');
+                            break;
+                            case 'down':
+                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.DOWN');
+                                $this->sikuli->keyDown('Key.CTRL + x');
+                            break;
+                            case NULL:
+                                $this->sikuli->keyDown('Key.CTRL + x');
+                            break;
+                        } // End Cut
+                        break;
+                    case 'Paste':
+                        switch ($_CommandDirection) {
+                            case 'right':
+                                $this->sikuli->keyDown('Key.RIGHT');
+                                $this->sikuli->keyDown('Key.CTRL + v');
+                            break;
+                            case 'left':
+                                $this->sikuli->keyDown('Key.LEFT');
+                                $this->sikuli->keyDown('Key.CTRL + v');
+                            break;
+                            case 'up':
+                                $this->sikuli->keyDown('Key.UP');
+                                $this->sikuli->keyDown('Key.CTRL + v');
+                            break;
+                            case 'down':
+                                $this->sikuli->keyDown('Key.DOWN');
+                                $this->sikuli->keyDown('Key.CTRL + v');
+                            break;
+                            case NULL:
+                                $this->sikuli->keyDown('Key.CTRL + v');
+                            break;
+                        } // End Paste
+                        break;
+                    case 'Undo':
+                        $this->sikuli->keyDown('Key.CTRL + z');
+                    break;
+                    case 'Redo':
+                        $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + z');
+                    break;
+                    case 'Bold':
+                        $this->sikuli->keyDown('Key.CTRL + b');
+                    break;
+                    case 'Italic':
+                        $this->sikuli->keyDown('Key.CTRL + i');
+                    break;
+                    case 'Underline':
+                        $this->sikuli->keyDown('Key.CTRL + u');
+                    break;
+                    case 'SelectAll':
+                        $this->sikuli->keyDown('Key.CTRL + a');
+                    break;
+                    case 'DeselectAll':
+                        $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + a');
+                    break;
+                } // End $_Command for windows
+            } else {
+                switch ($_Command) {
+                    case 'WholeWordSelect':
+                        switch ($_CommandDirection) {
+                            case 'right':
+                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.RIGHT');
+                            break;
+                            case 'left':
+                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.LEFT');
+                            break;
+                            case 'up':
+                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.UP');
+                            break;
+                            case 'down':
+                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.DOWN');
+                            break;
+                        } // End WholeWordSelect
+                        break;
+                    case 'ToEndOfLineSelect':
+                        switch ($_CommandDirection) {
+                            case 'right':
+                                $this->sikuli->keyDown('Key.CMD + Key.SHIFT + Key.RIGHT');
+                            break;
+                            case 'left':
+                                $this->sikuli->keyDown('Key.CMD + Key.SHIFT + Key.LEFT');
+                            break;
+                            case 'up':
+                                $this->sikuli->keyDown('Key.CMD + Key.SHIFT + Key.UP');
+                            break;
+                            case 'down':
+                                $this->sikuli->keyDown('Key.CMD + Key.SHIFT + Key.DOWN');
+                            break;
+                        } // End ToEndOfLineSelect
+                        break;
+                    case 'Copy':
+                        switch ($_CommandDirection) {
+                            case 'right':
+                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.RIGHT');
+                                $this->sikuli->keyDown('Key.CMD + c');
+                            break;
+                            case 'left':
+                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.LEFT');
+                                $this->sikuli->keyDown('Key.CMD + c');
+                            break;
+                            case 'up':
+                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.UP');
+                                $this->sikuli->keyDown('Key.CMD + c');
+                            break;
+                            case 'down':
+                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.DOWN');
+                                $this->sikuli->keyDown('Key.CMD + c');
+                            break;
+                            case NULL:
+                                $this->sikuli->keyDown('Key.CMD + c');
+                            break;
+                        } // End Copy
+                        break;
+                    case 'Cut':
+                        switch ($_CommandDirection) {
+                            case 'right':
+                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.RIGHT');
+                                $this->sikuli->keyDown('Key.CMD + x');
+                            break;
+                            case 'left':
+                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.LEFT');
+                                $this->sikuli->keyDown('Key.CMD + x');
+                            break;
+                            case 'up':
+                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.UP');
+                                $this->sikuli->keyDown('Key.CMD + x');
+                            break;
+                            case 'down':
+                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.DOWN');
+                                $this->sikuli->keyDown('Key.CMD + x');
+                            break;
+                            case NULL:
+                                $this->sikuli->keyDown('Key.CMD + x');
+                            break;
+                        } // End Cut
+                        break;
+                    case 'Paste':
+                        switch ($_CommandDirection) {
+                            case 'right':
+                                $this->sikuli->keyDown('Key.RIGHT');
+                                $this->sikuli->keyDown('Key.CMD + v');
+                            break;
+                            case 'left':
+                                $this->sikuli->keyDown('Key.LEFT');
+                                $this->sikuli->keyDown('Key.CMD + v');
+                            break;
+                            case 'up':
+                                $this->sikuli->keyDown('Key.UP');
+                                $this->sikuli->keyDown('Key.CMD + v');
+                            break;
+                            case 'down':
+                                $this->sikuli->keyDown('Key.DOWN');
+                                $this->sikuli->keyDown('Key.CMD + v');
+                            break;
+                            case NULL:
+                                $this->sikuli->keyDown('Key.CMD + v');
+                            break;
+                        } // End Paste
+                        break;
+                    case 'Undo':
+                        $this->sikuli->keyDown('Key.CMD + z');
+                    break;
+                    case 'Redo':
+                        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+                    break;
+                    case 'Bold':
+                        $this->sikuli->keyDown('Key.CMD + b');
+                    break;
+                    case 'Italic':
+                        $this->sikuli->keyDown('Key.CMD + i');
+                    break;
+                    case 'Underline':
+                        $this->sikuli->keyDown('Key.CMD + u');
+                    break;
+                    case 'SelectAll':
+                        $this->sikuli->keyDown('Key.CMD + a');
+                    break;
+                    case 'DeselectAll':
+                        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + a');
+                    break;
+                } // End $_Command for osx
+            } // End GetOS()
+        } // End $_Command switch
+    }//end getOSAltShortcut()
 
 
 }//end class
