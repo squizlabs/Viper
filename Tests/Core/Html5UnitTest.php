@@ -23,71 +23,43 @@ class Viper_Tests_Core_Html5UnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test embedding videos in Chrome
-     *
-     * @return void
-     */
-    public function testHtml5VideoEmbeddingInChrome()
-    {
-        $this->runTestFor(NULL, 'chrome');
-
-        $this->selectKeyword(1);
-        $this->pasteFromURL($this->getTestURL('/Core/Html5TestFiles/Html5VideoEmbedding.txt'));
-        sleep(1);
-        $this->assertHTMLMatch('<audio controls=""><source src="http://upload.wikimedia.org/wikipedia/en/0/04/Rayman_2_music_sample.ogg" type="audio/ogg"><source src="http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3" type="audio/mpeg">Your browser does not support the audio tag.</audio><video controls="" height="240" width="320"><source src="http://techslides.com/demos/sample-videos/small.mp4" type="video/mp4"><source src="http://techslides.com/demos/sample-videos/small.ogv" type="video/ogg">Your browser does not support the video tag.</video><audio controls=""><source src="http://upload.wikimedia.org/wikipedia/en/0/04/Rayman_2_music_sample.ogg" type="audio/ogg"><source src="http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3" type="audio/mpeg">Your browser does not support the audio element.</audio><video controls="" height="240" width="320"><source src="fhttp://techslides.com/demos/sample-videos/small.mp4" type="video/mp4"><source src="http://techslides.com/demos/sample-videos/small.ogv" type="video/ogg"><track kind="subtitles" label="English" src="../Core/Html5TestFiles/subtitles_en.vtt" srclang="en"></track><track kind="subtitles" label="Norwegian" src="../Core/Html5TestFiles/subtitles_no.vtt" srclang="no"></track></video>');
-
-    }//end testHtml5VideoEmbeddingInChrome()
-
-
-    /**
      * Test embedding videos in Firefox
      *
      * @return void
      */
-    public function testHtml5VideoEmbeddingInFirefox()
+    public function testHtml5VideoEmbedding()
     {
-        $this->runTestFor(NULL, 'firefox');
-
         $this->selectKeyword(1);
         $this->pasteFromURL($this->getTestURL('/Core/Html5TestFiles/Html5VideoEmbedding.txt'));
         sleep(1);
-        $this->assertHTMLMatch('<audio controls=""><source src="http://upload.wikimedia.org/wikipedia/en/0/04/Rayman_2_music_sample.ogg" type="audio/ogg"><source src="http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3" type="audio/mpeg">Your browser does not support the audio tag.</audio><video controls="" height="240" width="320"><source src="http://techslides.com/demos/sample-videos/small.mp4" type="video/mp4"><source src="http://techslides.com/demos/sample-videos/small.ogv" type="video/ogg">Your browser does not support the video tag.</video><audio controls=""><source src="http://upload.wikimedia.org/wikipedia/en/0/04/Rayman_2_music_sample.ogg" type="audio/ogg"><source src="http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3" type="audio/mpeg">Your browser does not support the audio element.</audio><video controls="" height="240" width="320"><source src="fhttp://techslides.com/demos/sample-videos/small.mp4" type="video/mp4"><source src="http://techslides.com/demos/sample-videos/small.ogv" type="video/ogg"><track kind="subtitles" label="English" src="../Core/Html5TestFiles/subtitles_en.vtt" srclang="en"><track kind="subtitles" label="Norwegian" src="../Core/Html5TestFiles/subtitles_no.vtt" srclang="no"></video>');
 
-    }//end testHtml5VideoEmbeddingInFirefox()
+        switch ($this->sikuli->getBrowserid()) {
+            case 'firefox':
+                $this->assertHTMLMatch('<audio controls=""><source src="http://upload.wikimedia.org/wikipedia/en/0/04/Rayman_2_music_sample.ogg" type="audio/ogg"><source src="http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3" type="audio/mpeg">Your browser does not support the audio tag.</audio><video controls="" height="240" width="320"><source src="http://techslides.com/demos/sample-videos/small.mp4" type="video/mp4"><source src="http://techslides.com/demos/sample-videos/small.ogv" type="video/ogg">Your browser does not support the video tag.</video><audio controls=""><source src="http://upload.wikimedia.org/wikipedia/en/0/04/Rayman_2_music_sample.ogg" type="audio/ogg"><source src="http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3" type="audio/mpeg">Your browser does not support the audio element.</audio><video controls="" height="240" width="320"><source src="fhttp://techslides.com/demos/sample-videos/small.mp4" type="video/mp4"><source src="http://techslides.com/demos/sample-videos/small.ogv" type="video/ogg"><track kind="subtitles" label="English" src="../Core/Html5TestFiles/subtitles_en.vtt" srclang="en"><track kind="subtitles" label="Norwegian" src="../Core/Html5TestFiles/subtitles_no.vtt" srclang="no"></video>');
+                break;
+            case 'chrome':
+                $this->assertHTMLMatch('<audio controls=""><source src="http://upload.wikimedia.org/wikipedia/en/0/04/Rayman_2_music_sample.ogg" type="audio/ogg"><source src="http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3" type="audio/mpeg">Your browser does not support the audio tag.</audio><video controls="" height="240" width="320"><source src="http://techslides.com/demos/sample-videos/small.mp4" type="video/mp4"><source src="http://techslides.com/demos/sample-videos/small.ogv" type="video/ogg">Your browser does not support the video tag.</video><audio controls=""><source src="http://upload.wikimedia.org/wikipedia/en/0/04/Rayman_2_music_sample.ogg" type="audio/ogg"><source src="http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3" type="audio/mpeg">Your browser does not support the audio element.</audio><video controls="" height="240" width="320"><source src="fhttp://techslides.com/demos/sample-videos/small.mp4" type="video/mp4"><source src="http://techslides.com/demos/sample-videos/small.ogv" type="video/ogg"><track kind="subtitles" label="English" src="../Core/Html5TestFiles/subtitles_en.vtt" srclang="en"></track><track kind="subtitles" label="Norwegian" src="../Core/Html5TestFiles/subtitles_no.vtt" srclang="no"></track></video>');
+                break;
+            case 'ie8':
+                $this->assertHTMLMatch('<audio controls=""><source src="http://upload.wikimedia.org/wikipedia/en/0/04/Rayman_2_music_sample.ogg" type="audio/ogg"><source src="http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3" type="audio/mpeg">Your browser does not support the audio tag.</audio><video controls="" height="240" width="320"><source src="http://techslides.com/demos/sample-videos/small.mp4" type="video/mp4"><source src="http://techslides.com/demos/sample-videos/small.ogv" type="video/ogg">Your browser does not support the video tag.</video><audio controls=""><source src="http://upload.wikimedia.org/wikipedia/en/0/04/Rayman_2_music_sample.ogg" type="audio/ogg"><source src="http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3" type="audio/mpeg">Your browser does not support the audio element.</audio><video controls="" height="240" width="320"><source src="fhttp://techslides.com/demos/sample-videos/small.mp4" type="video/mp4"><source src="http://techslides.com/demos/sample-videos/small.ogv" type="video/ogg"><track kind="subtitles" label="English" src="../Core/Html5TestFiles/subtitles_en.vtt" srclang="en"></track><track kind="subtitles" label="Norwegian" src="../Core/Html5TestFiles/subtitles_no.vtt" srclang="no"></track></video>');
+                break;
+            case 'ie9':
+                $this->assertHTMLMatch('<audio controls=""><source src="http://upload.wikimedia.org/wikipedia/en/0/04/Rayman_2_music_sample.ogg" type="audio/ogg"><source src="http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3" type="audio/mpeg">Your browser does not support the audio tag.</audio><video controls="" height="240" width="320"><source src="http://techslides.com/demos/sample-videos/small.mp4" type="video/mp4"><source src="http://techslides.com/demos/sample-videos/small.ogv" type="video/ogg">Your browser does not support the video tag.</video><audio controls=""><source src="http://upload.wikimedia.org/wikipedia/en/0/04/Rayman_2_music_sample.ogg" type="audio/ogg"><source src="http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3" type="audio/mpeg">Your browser does not support the audio element.</audio><video controls="" height="240" width="320"><source src="fhttp://techslides.com/demos/sample-videos/small.mp4" type="video/mp4"><source src="http://techslides.com/demos/sample-videos/small.ogv" type="video/ogg"><track kind="subtitles" label="English" src="../Core/Html5TestFiles/subtitles_en.vtt" srclang="en"></track><track kind="subtitles" label="Norwegian" src="../Core/Html5TestFiles/subtitles_no.vtt" srclang="no"></track></video>');
+                break;
+            case 'ie10':
+                $this->assertHTMLMatch('<audio controls=""><source src="http://upload.wikimedia.org/wikipedia/en/0/04/Rayman_2_music_sample.ogg" type="audio/ogg"><source src="http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3" type="audio/mpeg">Your browser does not support the audio tag.</audio><video controls="" height="240" width="320"><source src="http://techslides.com/demos/sample-videos/small.mp4" type="video/mp4"><source src="http://techslides.com/demos/sample-videos/small.ogv" type="video/ogg">Your browser does not support the video tag.</video><audio controls=""><source src="http://upload.wikimedia.org/wikipedia/en/0/04/Rayman_2_music_sample.ogg" type="audio/ogg"><source src="http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3" type="audio/mpeg">Your browser does not support the audio element.</audio><video controls="" height="240" width="320"><source src="fhttp://techslides.com/demos/sample-videos/small.mp4" type="video/mp4"><source src="http://techslides.com/demos/sample-videos/small.ogv" type="video/ogg"><track kind="subtitles" label="English" src="../Core/Html5TestFiles/subtitles_en.vtt" srclang="en"></track><track kind="subtitles" label="Norwegian" src="../Core/Html5TestFiles/subtitles_no.vtt" srclang="no"></track></video>');
+                break;
+            case 'ie11':
+                $this->assertHTMLMatch('<audio controls=""><source src="http://upload.wikimedia.org/wikipedia/en/0/04/Rayman_2_music_sample.ogg" type="audio/ogg"><source src="http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3" type="audio/mpeg">Your browser does not support the audio tag.</audio><video controls="" height="240" width="320"><source src="http://techslides.com/demos/sample-videos/small.mp4" type="video/mp4"><source src="http://techslides.com/demos/sample-videos/small.ogv" type="video/ogg">Your browser does not support the video tag.</video><audio controls=""><source src="http://upload.wikimedia.org/wikipedia/en/0/04/Rayman_2_music_sample.ogg" type="audio/ogg"><source src="http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3" type="audio/mpeg">Your browser does not support the audio element.</audio><video controls="" height="240" width="320"><source src="fhttp://techslides.com/demos/sample-videos/small.mp4" type="video/mp4"><source src="http://techslides.com/demos/sample-videos/small.ogv" type="video/ogg"><track kind="subtitles" label="English" src="../Core/Html5TestFiles/subtitles_en.vtt" srclang="en"></track><track kind="subtitles" label="Norwegian" src="../Core/Html5TestFiles/subtitles_no.vtt" srclang="no"></track></video>');
+                break;
+            case 'safari':
+                $this->assertHTMLMatch('<audio controls=""><source src="http://upload.wikimedia.org/wikipedia/en/0/04/Rayman_2_music_sample.ogg" type="audio/ogg"><source src="http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3" type="audio/mpeg">Your browser does not support the audio tag.</audio><video controls="" height="240" width="320"><source src="http://techslides.com/demos/sample-videos/small.mp4" type="video/mp4"><source src="http://techslides.com/demos/sample-videos/small.ogv" type="video/ogg">Your browser does not support the video tag.</video><audio controls=""><source src="http://upload.wikimedia.org/wikipedia/en/0/04/Rayman_2_music_sample.ogg" type="audio/ogg"><source src="http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3" type="audio/mpeg">Your browser does not support the audio element.</audio><video controls="" height="240" width="320"><source src="fhttp://techslides.com/demos/sample-videos/small.mp4" type="video/mp4"><source src="http://techslides.com/demos/sample-videos/small.ogv" type="video/ogg"><track kind="subtitles" label="English" src="../Core/Html5TestFiles/subtitles_en.vtt" srclang="en"></track><track kind="subtitles" label="Norwegian" src="../Core/Html5TestFiles/subtitles_no.vtt" srclang="no"></track></video>');
+                break;
+            default:
+                throw new Exception('Browser is not supported');
+        }//end switch
 
-
-    /**
-     * Test embedding videos in Safari
-     *
-     * @return void
-     */
-    public function testHtml5VideoEmbeddingInSafari()
-    {
-        $this->runTestFor(NULL, 'safari');
-
-        $this->selectKeyword(1);
-        $this->pasteFromURL($this->getTestURL('/Core/Html5TestFiles/Html5VideoEmbedding.txt'));
-        sleep(6);
-        $this->assertHTMLMatch('<audio controls=""><source src="http://upload.wikimedia.org/wikipedia/en/0/04/Rayman_2_music_sample.ogg" type="audio/ogg"><source src="http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3" type="audio/mpeg">Your browser does not support the audio tag.</audio><video controls="" height="240" width="320"><source src="http://techslides.com/demos/sample-videos/small.mp4" type="video/mp4"><source src="http://techslides.com/demos/sample-videos/small.ogv" type="video/ogg">Your browser does not support the video tag.</video><audio controls=""><source src="http://upload.wikimedia.org/wikipedia/en/0/04/Rayman_2_music_sample.ogg" type="audio/ogg"><source src="http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3" type="audio/mpeg">Your browser does not support the audio element.</audio><video controls="" height="240" width="320"><source src="fhttp://techslides.com/demos/sample-videos/small.mp4" type="video/mp4"><source src="http://techslides.com/demos/sample-videos/small.ogv" type="video/ogg"><track kind="subtitles" label="English" src="../Core/Html5TestFiles/subtitles_en.vtt" srclang="en"></track><track kind="subtitles" label="Norwegian" src="../Core/Html5TestFiles/subtitles_no.vtt" srclang="no"></track></video>');
-
-    }//end testHtml5VideoEmbeddingInSafari()
-
-
-    /**
-     * Test embedding videos in IE
-     *
-     * @return void
-     */
-    public function testHtml5VideoEmbeddingInIE()
-    {
-        $this->runTestFor(NULL, 'ie');
-
-        $this->selectKeyword(1);
-        $this->pasteFromURL($this->getTestURL('/Core/Html5TestFiles/Html5VideoEmbedding.txt'));
-        sleep(3);
-        $this->assertHTMLMatch('<audio controls=""><source src="http://upload.wikimedia.org/wikipedia/en/0/04/Rayman_2_music_sample.ogg" type="audio/ogg"><source src="http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3" type="audio/mpeg">Your browser does not support the audio tag.</audio><video controls="" height="240" width="320"><source src="http://techslides.com/demos/sample-videos/small.mp4" type="video/mp4"><source src="http://techslides.com/demos/sample-videos/small.ogv" type="video/ogg">Your browser does not support the video tag.</video><audio controls=""><source src="http://upload.wikimedia.org/wikipedia/en/0/04/Rayman_2_music_sample.ogg" type="audio/ogg"><source src="http://www.stephaniequinn.com/Music/Allegro%20from%20Duet%20in%20C%20Major.mp3" type="audio/mpeg">Your browser does not support the audio element.</audio><video controls="" height="240" width="320"><source src="fhttp://techslides.com/demos/sample-videos/small.mp4" type="video/mp4"><source src="http://techslides.com/demos/sample-videos/small.ogv" type="video/ogg"><track kind="subtitles" label="English" src="../Core/Html5TestFiles/subtitles_en.vtt" srclang="en"></track><track kind="subtitles" label="Norwegian" src="../Core/Html5TestFiles/subtitles_no.vtt" srclang="no"></track></video>');
-
-    }//end testHtml5VideoEmbeddingInIE()
+    }//end testHtml5VideoEmbedding()
 
 
     /**
