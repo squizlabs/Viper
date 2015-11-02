@@ -2625,9 +2625,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     /**
      * Automatically provides OS alternative shortcuts
      *
-     * @param string   $_Command             The selector for the command to execute 
+     * @param string   $_Command             The selector for the command to execute
      * @param string   $_CommandDirection    The selector for commands that require direction
-     * 
+     *
      * @return void
      */
     public function getOSAltShortcut($_Command=NULL, $_CommandDirection=NULL)
