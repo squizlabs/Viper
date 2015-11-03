@@ -435,7 +435,7 @@ ViperDOMRange.prototype = {
      * @return The text container that range can extend to.
      * @type   {TextNode}
      */
-    getPreviousContainer: function(container, skippedBlockElem, skipEmptyNodes, brIsSelectable, stopAtBlockElement)
+    getPreviousContainer: function(container, skippedBlockElem, skipEmptyNodes, stubElementIsSelectable, stopAtBlockElement)
     {
         if (!container) {
             return null;
@@ -447,7 +447,7 @@ ViperDOMRange.prototype = {
                 if (ViperUtil.isStubElement(container) === true) {
                     return container;
                 } else {
-                    var child = this._getLastSelectableChild(container, skipEmptyNodes, brIsSelectable);
+                    var child = this._getLastSelectableChild(container, skipEmptyNodes, stubElementIsSelectable);
                     if (child !== null) {
                         return child;
                     }
@@ -478,13 +478,13 @@ ViperDOMRange.prototype = {
         }
 
         if (container && container.nodeType !== ViperUtil.TEXT_NODE) {
-            var selChild = this._getLastSelectableChild(container, skipEmptyNodes, brIsSelectable);
+            var selChild = this._getLastSelectableChild(container, skipEmptyNodes, stubElementIsSelectable);
             if (selChild !== null) {
                 return selChild;
             }
         }
 
-        return this.getPreviousContainer(container, skippedBlockElem, skipEmptyNodes, brIsSelectable);
+        return this.getPreviousContainer(container, skippedBlockElem, skipEmptyNodes, stubElementIsSelectable);
 
     },
 
@@ -513,7 +513,7 @@ ViperDOMRange.prototype = {
      * @return The text container that range can extend to.
      * @type   {TextNode}
      */
-    getNextContainer: function(container, skippedBlockElem, skipSpaceTextNodes, brIsSelectable, stopAtBlockElement)
+    getNextContainer: function(container, skippedBlockElem, skipSpaceTextNodes, stubElementIsSelectable, stopAtBlockElement)
     {
         if (!container) {
             return null;
@@ -522,7 +522,7 @@ ViperDOMRange.prototype = {
         while (container.nextSibling) {
             container = container.nextSibling;
             if (container.nodeType !== ViperUtil.TEXT_NODE) {
-                var child = this._getFirstSelectableChild(container, brIsSelectable);
+                var child = this._getFirstSelectableChild(container, stubElementIsSelectable);
                 if (child !== null) {
                     return child;
                 }
@@ -551,19 +551,19 @@ ViperDOMRange.prototype = {
             skippedBlockElem.push(container);
         }
 
-        var selChild = this._getFirstSelectableChild(container, brIsSelectable);
+        var selChild = this._getFirstSelectableChild(container, stubElementIsSelectable);
         if (selChild !== null
-            && ((brIsSelectable === true && ViperUtil.isTag(selChild, 'br') === true)
+            && ((stubElementIsSelectable === true && ViperUtil.isTag(selChild, 'br') === true)
             || (skipSpaceTextNodes !== true || ViperUtil.trim(selChild.data) !== ''))
         ) {
             return selChild;
         }
 
-        return this.getNextContainer(container, skippedBlockElem, skipSpaceTextNodes, brIsSelectable);
+        return this.getNextContainer(container, skippedBlockElem, skipSpaceTextNodes, stubElementIsSelectable);
 
     },
 
-    _getFirstSelectableChild: function(element, brIsSelectable)
+    _getFirstSelectableChild: function(element, stubElementIsSelectable)
     {
         if (element) {
             if (element.nodeType !== ViperUtil.TEXT_NODE) {
@@ -574,11 +574,11 @@ ViperDOMRange.prototype = {
                         var newNode = document.createTextNode('');
                         ViperUtil.insertBefore(child, newNode);
                         return newNode;
-                    } else if (this._isSelectable(child) === true || (brIsSelectable === true && ViperUtil.isTag(child, 'br') === true)) {
+                    } else if (this._isSelectable(child) === true || (stubElementIsSelectable === true && ViperUtil.isStubElement(child) === true)) {
                         return child;
                     } else if (child.firstChild) {
                         // This node does have child nodes.
-                        var res = this._getFirstSelectableChild(child, brIsSelectable);
+                        var res = this._getFirstSelectableChild(child, stubElementIsSelectable);
                         if (res !== null) {
                             return res;
                         } else {
@@ -598,7 +598,7 @@ ViperDOMRange.prototype = {
 
     },
 
-    _getLastSelectableChild: function(element, skipEmptyNodes, brIsSelectable)
+    _getLastSelectableChild: function(element, skipEmptyNodes, stubElementIsSelectable)
     {
         if (element) {
             if (element.nodeType !== ViperUtil.TEXT_NODE) {
@@ -609,11 +609,11 @@ ViperDOMRange.prototype = {
                         var newNode = document.createTextNode('');
                         ViperUtil.insertAfter(child, newNode);
                         return newNode;
-                    } else if (this._isSelectable(child) === true || (brIsSelectable === true && ViperUtil.isTag(child, 'br') === true)) {
+                    } else if (this._isSelectable(child) === true || (stubElementIsSelectable === true && ViperUtil.isStubElement(child) === true)) {
                         return child;
                     } else if (child.lastChild) {
                         // This node does have child nodes.
-                        var res = this._getLastSelectableChild(child, brIsSelectable);
+                        var res = this._getLastSelectableChild(child, stubElementIsSelectable);
                         if (res !== null) {
                             return res;
                         } else {
@@ -764,10 +764,18 @@ ViperDOMRange.prototype = {
             var ln = this.endContainer.childNodes.length;
             if (ln > this.endOffset) {
                 return this.endContainer.childNodes[this.endOffset];
-            } else if (ln === this.endOffset && ViperUtil.isStubElement(this.endContainer.childNodes[this.endOffset - 1]) === true) {
-                // When the last child is a stub element (e.g. img) and range is set after it the offset becomes greater
-                // than the number of children.
-                return this.endContainer.childNodes[this.endOffset - 1];
+            } else if (ln === this.endOffset && ln !== 0) {
+                var lastChild = this.endContainer.childNodes[this.endOffset - 1];
+                if (ViperUtil.isStubElement(lastChild) === true) {
+                    // When the last child is a stub element (e.g. img) and range is set after it the offset becomes greater
+                    // than the number of children.
+                    return this.endContainer.childNodes[this.endOffset - 1];
+                } else if (lastChild.nodeType === ViperUtil.ELEMENT_NODE
+                    && lastChild.lastChild.nodeType === ViperUtil.TEXT_NODE
+                    && this.startContainer.nodeType === ViperUtil.TEXT_NODE
+                ) {
+                    return lastChild.lastChild;
+                }
             }
         }
 
@@ -982,11 +990,6 @@ ViperDOMRange.prototype = {
         ) {
             this._nodeSel.node = startNode;
             return startNode;
-        } else if (ViperUtil.isStubElement(startNode) === true
-            && endNode.nodeType === ViperUtil.TEXT_NODE
-            && endNode.data.length === range.endOffset
-        ) {
-            return startNode;
         } else if (startNode.nodeType === ViperUtil.TEXT_NODE
             && endNode.nodeType === ViperUtil.TEXT_NODE
             && range.startOffset === 0
@@ -1036,6 +1039,30 @@ ViperDOMRange.prototype = {
         ) {
             // <div>[<p><em>text</em></p><p><em>text</em></p>]</div>.
             this._nodeSel.node = common;
+            return this._nodeSel.node;
+        } else if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
+            && range.startOffset === range.startContainer.data.length
+            && range.endContainer.nodeType === ViperUtil.ELEMENT_NODE
+            && range.endOffset === 1
+            && ViperUtil.isBlockElement(range.endContainer) === false
+        ) {
+            // (IE) Handling drag selection of EM tag in this case:
+            // <p>test [<em><a href="..">test</a></em>] text</p>.
+            // Need to select the most inner child.
+            var surroundedChildren = ViperUtil.getSurroundedChildren(range.endContainer);
+            var selNode            = range.endContainer;
+            if (surroundedChildren.length > 0) {
+                selNode = surroundedChildren.pop();
+            }
+
+            this._nodeSel.node = selNode;
+            return this._nodeSel.node;
+        } else if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
+            && range.startOffset === range.startContainer.data.length
+            && range.endContainer.nodeType === ViperUtil.ELEMENT_NODE
+            && range.endOffset === range.endContainer.childNodes.length
+        ) {
+            this._nodeSel.node = range.endContainer.childNodes[range.endContainer.childNodes.length - 1];
             return this._nodeSel.node;
         }
 
@@ -1126,7 +1153,7 @@ ViperDOMRange.prototype = {
             return startNode.parentNode;
         }
 
-        var endParent = endNode;
+        /*var endParent = endNode;
         while (endParent && endParent.parentNode !== common) {
             endParent = endParent.parentNode;
         }
@@ -1139,9 +1166,9 @@ ViperDOMRange.prototype = {
         }
 
         if (nextSibling === endParent) {
-            this._nodeSel.node = startParent;
+            this._nodeSel.node = null;
             return startParent;
-        }
+        }*/
 
         this._nodeSel.node = null;
         return null;

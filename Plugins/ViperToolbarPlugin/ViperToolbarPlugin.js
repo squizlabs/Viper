@@ -348,7 +348,7 @@ ViperToolbarPlugin.prototype = {
 
                 this._subSectionButtons[sectionid] = button;
             },
-            setSubSectionAction: function(subSectionid, action, widgetids, customButtonid) {
+            setSubSectionAction: function(subSectionid, action, widgetids, customButtonid, noFocus) {
                 widgetids      = widgetids || [];
                 var tools      = self.viper.ViperTools;
                 var subSection = tools.getItem(subSectionid);
@@ -376,7 +376,9 @@ ViperToolbarPlugin.prototype = {
                         return false;
                     }
 
-                    self.viper.focus();
+                    if (noFocus !== true) {
+                        self.viper.focus();
+                    }
 
                     if (!customButtonid) {
                         tools.disableButton(subSectionid + '-applyButton');

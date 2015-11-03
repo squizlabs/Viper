@@ -57,8 +57,8 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViper
 
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + i');
-        $this->sikuli->click($this->findKeyword(1));
-        $this->sikuli->click($this->findKeyword(3));
+        $this->clickKeyword(1);
+        $this->clickKeyword(3);
         $this->assertHTMLMatch('<p>Lorem dolor <em>%1%</em></p><p><strong>%2%</strong> sit amet</p><p>%3% test <em>XuT</em></p>');
 
     }//end testEditingAfterClosingSourceEditor()
@@ -198,8 +198,6 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViper
         $this->sikuli->keyDown('Key.DOWN');
         $this->sikuli->keyDown('Key.DOWN');
         $this->sikuli->keyDown('Key.DOWN');
-        $this->sikuli->keyDown('Key.DOWN');
-        $this->sikuli->keyDown('Key.SHIFT + Key.DOWN');
         $this->sikuli->keyDown('Key.SHIFT + Key.DOWN');
         $this->sikuli->keyDown('Key.SHIFT + Key.DOWN');
         $this->sikuli->keyDown('Key.SHIFT + Key.DOWN');

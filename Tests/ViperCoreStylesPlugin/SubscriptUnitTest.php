@@ -62,13 +62,21 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
         $this->assertHTMLMatch('<p>%1% <sub>%2% %3%</sub></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         // Remove it from one keyword
-        $this->selectKeyword(3);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickTopToolbarButton('subscript', 'active');
         $this->assertTrue($this->topToolbarButtonExists('subscript'), 'Subscript icon in the top toolbar is still active');
-        $this->assertHTMLMatch('<p>%1% <sub>%2% </sub>%3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
+        $this->assertHTMLMatch('<p>%1% %2%<sub> %3%</sub></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         // Remove it from the other keyword
-        $this->selectKeyword(2);
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickTopToolbarButton('subscript', 'active');
         $this->assertTrue($this->topToolbarButtonExists('subscript'), 'Subscript icon in the top toolbar is still active');
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
@@ -152,12 +160,12 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
     public function testSubscriptAndSuperscript()
     {
         $this->assertTrue(TRUE);
-       /* $this->useTest(1);
+        $this->useTest(1);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('subscript');
         $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'));
         $this->assertTrue($this->topToolbarButtonExists('superscript', 'disabled'));
-        $this->assertHTMLMatch('<p><sub>%1%</sub> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');*/
+        $this->assertHTMLMatch('<p><sub>%1%</sub> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
     }//end testSubscriptAndSuperscript()
 

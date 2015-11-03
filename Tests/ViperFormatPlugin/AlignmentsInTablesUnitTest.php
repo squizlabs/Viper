@@ -112,7 +112,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentsInTablesUnitTest extends AbstractV
     public function testAlignmentInTableCaption()
     {
         // Test clicking in word
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
         $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left align icon should be active');
@@ -131,7 +131,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentsInTablesUnitTest extends AbstractV
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption style="text-align: justify;"><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test select a word
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('justifyBlock', 'active');
         $this->clickTopToolbarButton('justifyLeft');
@@ -181,7 +181,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentsInTablesUnitTest extends AbstractV
     public function testAlignmentInTableHeaderRow()
     {
         // Test clicking in word
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left align icon should be active');
@@ -200,7 +200,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentsInTablesUnitTest extends AbstractV
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th style="text-align: justify;">Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test select a word
-        $this->sikuli->click($this->findKeyword(3));
+        $this->clickKeyword(3);
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('justifyBlock', 'active');
         $this->clickTopToolbarButton('justifyLeft');
@@ -296,7 +296,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentsInTablesUnitTest extends AbstractV
     public function testAlignmentInTableBody()
     {
         // Test clicking in word
-        $this->sikuli->click($this->findKeyword(4));
+        $this->clickKeyword(4);
         $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left align icon should be active');
@@ -315,7 +315,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentsInTablesUnitTest extends AbstractV
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td style="text-align: justify;">sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test select a word
-        $this->sikuli->click($this->findKeyword(3));
+        $this->clickKeyword(3);
         $this->selectKeyword(4);
         $this->clickTopToolbarButton('justifyBlock', 'active');
         $this->clickTopToolbarButton('justifyLeft');
@@ -335,7 +335,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentsInTablesUnitTest extends AbstractV
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td style="text-align: justify;">sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test selecting the cell.
-        $this->sikuli->click($this->findKeyword(3));
+        $this->clickKeyword(3);
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('justifyBlock', 'active');
@@ -359,7 +359,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentsInTablesUnitTest extends AbstractV
         $this->clickTopToolbarButton('justifyBlock', 'active');
 
         // Test selecting the Row.
-        $this->sikuli->click($this->findKeyword(3));
+        $this->clickKeyword(3);
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(2);
         $this->clickTopToolbarButton('justifyLeft');
@@ -383,7 +383,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentsInTablesUnitTest extends AbstractV
         $this->clickTopToolbarButton('justifyBlock', 'active');
 
         // Test selecting the Tbody.
-        $this->sikuli->click($this->findKeyword(3));
+        $this->clickKeyword(3);
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('justifyLeft');
@@ -414,7 +414,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentsInTablesUnitTest extends AbstractV
     public function testAlignmentInTableFooter()
     {
         // Test clicking in word
-        $this->sikuli->click($this->findKeyword(3));
+        $this->clickKeyword(3);
         $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Left align icon should be active');
@@ -433,7 +433,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentsInTablesUnitTest extends AbstractV
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td style="text-align: justify;" colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test select a word
-        $this->sikuli->click($this->findKeyword(4));
+        $this->clickKeyword(4);
         $this->selectKeyword(3);
         $this->clickTopToolbarButton('justifyBlock', 'active');
         $this->clickTopToolbarButton('justifyLeft');
@@ -453,7 +453,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentsInTablesUnitTest extends AbstractV
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td style="text-align: justify;" colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test selecting the cell.
-        $this->sikuli->click($this->findKeyword(4));
+        $this->clickKeyword(4);
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('justifyBlock', 'active');
@@ -477,7 +477,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentsInTablesUnitTest extends AbstractV
         $this->clickTopToolbarButton('justifyBlock', 'active');
 
         // Test selecting the Row.
-        $this->sikuli->click($this->findKeyword(4));
+        $this->clickKeyword(4);
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(2);
         $this->clickTopToolbarButton('justifyLeft');
@@ -501,7 +501,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentsInTablesUnitTest extends AbstractV
         $this->clickTopToolbarButton('justifyBlock', 'active');
 
         // Test selecting the Tfoot.
-        $this->sikuli->click($this->findKeyword(4));
+        $this->clickKeyword(4);
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('justifyLeft');

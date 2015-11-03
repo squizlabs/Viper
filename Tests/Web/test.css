@@ -119,6 +119,20 @@ sub, sup {
     font-family: monospace;
 }
 
+.ie11 sub,
+.ie11 sup {
+    font-size: 121%;
+    line-height: 0;
+    vertical-align: baseline;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-weight: inherit;
+    font-style: inherit;
+    font-family: inherit;
+}
+
 caption {
     text-align: center;
 }
@@ -232,7 +246,10 @@ h1,h2,h3,h4,h5,h6 {
     -webkit-transition-duration: 0s !important;
 }
 
+.ViperITP.Viper-visible.Viper-forTopbar {
+    margin-top: 8px;
+}
+
 .ViperCursorAssistPlugin.insertBefore {
     margin-top: -20px !important;
 }
-

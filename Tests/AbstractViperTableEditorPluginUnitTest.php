@@ -75,6 +75,10 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
         $cellRect = $this->getBoundingRectangle('td,th', $cellNum);
         $region   = $this->sikuli->getRegionOnPage($cellRect);
 
+        // Move mouse off the centre of the cell.
+        $this->sikuli->mouseMove($region);
+        $this->sikuli->mouseMoveOffset(50, 50);
+
         // Click inside the cell.
         $this->sikuli->click($region);
 

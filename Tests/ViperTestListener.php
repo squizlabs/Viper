@@ -71,6 +71,13 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
     private static $_startTime = NULL;
 
     /**
+     * Test start time.
+     *
+     * @var integer
+     */
+    private static $_testStartTime = NULL;
+
+    /**
      * Path to the log directory.
      *
      * @var string
@@ -169,6 +176,8 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
             mkdir($path, 0755, TRUE);
         }
 
+        self::_updateProgress();
+
     }//end setLogPath()
 
 
@@ -223,11 +232,12 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
         $path .= '/results.inc';
 
         $result = array(
-                   'testClass' => get_class($test),
-                   'testName'  => $test->getName(),
-                   'status'    => $status,
-                   'message'   => $msg,
-                   'time'      => 0,
+                   'testClass'      => get_class($test),
+                   'testName'       => $test->getName(),
+                   'status'         => $status,
+                   'message'        => $msg,
+                   'runTime'        => (time() - self::$_testStartTime),
+                   'timeSinceStart' => (time() - self::$_startTime),
                   );
 
         $resultCont  = '<'.'?php $results[] = ';
@@ -290,6 +300,7 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
     {
         $this->_test = $test;
         self::$_testsRun++;
+        self::$_testStartTime = time();
 
     }//end startTest()
 
@@ -398,8 +409,24 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
             self::$_errorStreak = 0;
         }
 
+        self::_updateProgress();
+
+        if ($test->getStatus() === 0) {
+            $this->_addResult($test, 'pass');
+        }
+
+    }//end endTest()
+
+
+    /**
+     * Updates the progress file.
+     *
+     * @return void
+     */
+    private static function _updateProgress()
+    {
         // Report progress.
-        $path = $this->getLogPath();
+        $path = self::$_logPath;
         if (empty($path) === FALSE) {
             $progress = array(
                          'tests'       => self::$_numTests,
@@ -416,13 +443,9 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
             }
 
             file_put_contents($path.'/progress.json', json_encode($progress));
-
-            if ($test->getStatus() === 0) {
-                $this->_addResult($test, 'pass');
-            }
         }//end if
 
-    }//end endTest()
+    }//end _updateProgress()
 
 
     /**

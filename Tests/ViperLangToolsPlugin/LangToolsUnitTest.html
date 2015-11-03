@@ -1,4 +1,48 @@
-<p>This is some %1% content</p>
-<p>Squiz <span lang="en">%2%</span> is orsm</p>
-<p>Squiz <abbr title="abc">%3%</abbr> is orsm</p>
-<p>Squiz <acronym title="abc">%4%</acronym> is orsm</p>
+<div id="test-1">
+	<p>This is some %1% content</p>
+	<p>Squiz <span lang="en">%2%</span> is orsm</p>
+	<p>Squiz <abbr title="abc">%3%</abbr> is orsm</p>
+	<p>Squiz <acronym title="abc">%4%</acronym> is orsm</p>
+</div>
+
+<div id="test-2">
+	<p>This is some %1% content</p>
+	<p>Squiz <acronym lang="en" title="abc">%2%</acronym> is orsm</p>
+	<p>Squiz <acronym title="abc"><span lang="en">%3%</span></acronym> is orsm</p>
+</div>
+
+<div id="test-3">
+	<p>This is some %1% content</p>
+	<p>Squiz <acronym title="abc"><abbr title="abc">%2%</abbr></acronym> is orsm</p>
+	<p>Squiz <abbr title="abc"><acronym title="abc">%3%</acronym></abbr> is orsm</p>
+</div>
+
+<div id="test-4">
+	<p>This is some %1% content</p>
+	<p>Squiz <abbr title="abc"><span lang="en">%2%</span></acronym> is orsm</p>
+	<p>Squiz <abbr lang="en" title="abc">%3%</acronym> is orsm</p>
+</div>
+
+<div id="test-5">
+	<p>Test content <span lang="langtest">%1%</span> more test content.</p>
+	<p>Test content <acronym title="acronymtest">%2%</acronym> more test content.</p>
+	<p>Test content <abbr title="abbrtest">%3%</abbr> more test content.</p>	
+</div>
+
+<div id="test-6">
+	<p>Test content <acronym lang="langtest" title="acronymtest">%1%</acronym> more test content.</p>
+	<p>Test content <abbr lang="langtest" title="abbrtest">%2%</abbr> more test content.</p>
+	<p>Test content <abbr title="abbrtest"><span lang="langtest">%3%</span></abbr> more test content.</p>
+	<p>Test content <abbr title="abbrtest"><acronym title="acronymtest">%4%</acronym></abbr> more test content.</p>
+	<p>Test content <acronym title="acronymtest"><span lang="langtest">%5%</span></acronym> more test content.</p>
+	<p>Test content <acronym title="acronymtest"><abbr title="abbrtest">%6%</abbr></acronym> more test content.</p>	
+</div>
+
+<div id="test-7">
+	<p>Test content <acronym lang="langtest" title="acronymtest"><abbr title="abbrtest">%1%</abbr></acronym> more test content.</p>
+	<p>Test content <abbr lang="langtest" title="abbrtest"><acronym title="acronymtest">%2%</acronym></abbr> more test content.</p>
+	<p>Test content <abbr title="abbrtest"><acronym lang="langtest" title="acronymtest">%3%</acronym></abbr> more test content.</p>
+	<p>Test content <abbr title="abbrtest"><acronym title="acronymtest"><span lang="langtest">%4%</span></acronym></abbr> more test content.</p>
+	<p>Test content <acronym title="acronymtest"><abbr lang="langtest" title="abbrtest">%5%</abbr></acronym> more test content.</p>
+	<p>Test content <acronym title="acronymtest"><abbr title="abbrtest"><span lang="langtest">%6%</span></abbr></acronym> more test content.</p>
+</div>

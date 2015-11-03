@@ -165,7 +165,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
     public function testDeletingItalicContent()
     {
         $this->useTest(7);
-        
+
         // Delete italic word and replace with new content
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(1);
@@ -498,7 +498,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
     public function testUndoAndRedoForItalic()
     {
         $this->useTest(1);
-        
+
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('italic');
 
@@ -523,16 +523,16 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
     public function testAddAndRemoveItalicForLink()
     {
         $this->useTest(4);
-        
+
         // Using inline toolbar
-        $this->moveToKeyword(1);
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickInlineToolbarButton('italic');
         $this->assertHTMLMatch('<p>Test content <em><a href="http://www.squizlabs.com">%1%</a></em> end of test content.</p>');
         $this->assertTrue($this->inLineToolbarButtonExists('italic', 'active'), 'italic icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'italic icon should be active');
 
-        $this->moveToKeyword(1);
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(2);
         // Check to see if italic icon is in the inline toolbar
         $this->assertTrue($this->inLineToolbarButtonExists('italic', 'active'), 'italic icon should be active');
@@ -543,14 +543,14 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->assertTrue($this->topToolbarButtonExists('italic'), 'italic icon should not be active');
 
         // Using top toolbar
-        $this->moveToKeyword(1);
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('italic');
         $this->assertHTMLMatch('<p>Test content <em><a href="http://www.squizlabs.com">%1%</a></em> end of test content.</p>');
         $this->assertTrue($this->inLineToolbarButtonExists('italic', 'active'), 'italic icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'italic icon should be active');
 
-        $this->moveToKeyword(1);
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(2);
         // Check to see if italic icon is in the inline toolbar
         $this->assertTrue($this->inLineToolbarButtonExists('italic', 'active'), 'italic icon should be active');
@@ -561,14 +561,14 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->assertTrue($this->topToolbarButtonExists('italic'), 'italic icon should not be active');
 
         // Using keyboard shortcuts
-        $this->moveToKeyword(1);
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->sikuli->keyDown('Key.CMD + i');
         $this->assertHTMLMatch('<p>Test content <em><a href="http://www.squizlabs.com">%1%</a></em> end of test content.</p>');
         $this->assertTrue($this->inLineToolbarButtonExists('italic', 'active'), 'italic icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'italic icon should be active');
 
-        $this->moveToKeyword(1);
+        $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(2);
         // Check to see if italic icon is in the inline toolbar
         $this->assertTrue($this->inLineToolbarButtonExists('italic', 'active'), 'italic icon should be active');
@@ -633,7 +633,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
     public function testItalicIconForHeadingInInlineToolbar()
     {
         $this->useTest(5);
-        
+
         // Test H1
         $this->selectKeyword(1);
         $this->assertFalse($this->inlineToolbarButtonExists('italic'));

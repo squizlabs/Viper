@@ -108,6 +108,73 @@ class Viper_Tests_ViperImagePlugin_GeneralImageUnitTest extends AbstractViperIma
 
     }//end testSelectingImageTwice()
 
+
+     /**
+     * Test required fields when adding an image.
+     *
+     * @return void
+     */
+    public function testRequiredFieldsWhenAddingAnImage()
+    { 
+        // Test fields in top toolbar
+        $this->moveToKeyword(1, 'left');
+        $this->clicktopToolbarButton('image', NULL);
+        $this->clickField('URL', true);
+        $this->type('%url%/ViperImagePlugin/Images/hero-shot.jpg');
+        sleep(1);
+        $this->clickField('Alt', true);
+        $this->type('test');
+        sleep(1);
+        $this->clicktopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="test" />%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" /></p><p>LABS is ORSM %2%</p>');
+
+    }//end testRequiredFieldsWhenModifiyingAnImage()
+
+
+    /**
+     * Test required fields when modifying an image.
+     *
+     * @return void
+     */
+    public function testRequiredFieldsWhenModifiyingAnImage()
+    {
+        // Test URL field in inline toolbar
+        $this->clickElement('img', 0);
+        $this->clickinlineToolbarButton('image', 'active');
+        $this->clearFieldValue('URL');
+        sleep(1);
+        $this->clickField('URL', true);
+        $this->type('%url%/ViperImagePlugin/Images/hero-shot.jpg');
+        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167"/></p><p>LABS is ORSM %2%</p>');
+
+        // Test URL field in top toolbar
+        $this->clicktopToolbarButton('image', 'active');
+        $this->clearFieldValue('URL');
+        sleep(1);
+        $this->clickField('URL', true);
+        $this->type('%url%/ViperImagePlugin/Images/hero-shot.jpg');
+        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167"/></p><p>LABS is ORSM %2%</p>');
+
+        // Test Alt field in inline toolbar
+        $this->clickElement('img', 0);
+        $this->clickinlineToolbarButton('image', 'active');
+        $this->clickField('Image is decorative');
+        $this->clickField('Alt', true);
+        $this->type('test');
+        $this->clickButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="test" width="369" height="167"/></p><p>LABS is ORSM %2%</p>');
+
+        // Test Alt field in top toolbar
+        $this->clickElement('img', 0);
+        $this->clicktopToolbarButton('image', 'active');
+        $this->clearFieldValue('Alt');
+        $this->clickField('Alt', true);
+        $this->type('TEST');
+        $this->clickButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="TEST" width="369" height="167"/></p><p>LABS is ORSM %2%</p>');
+
+    }//end testRequiredFieldsWhenModifiyingAnImage()
+
 }//end class
 
 ?>

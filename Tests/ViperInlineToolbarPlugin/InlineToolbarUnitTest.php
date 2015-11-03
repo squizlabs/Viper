@@ -62,7 +62,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
     {
         $toolbarX = $this->sikuli->getX($this->_getToolbarArrowLocation($orientation));
         $diff     = abs($targetX - $toolbarX);
-        $this->assertTrue(($diff <= 4), 'X Position of toolbar arrow is incorrect. Difference was '.$diff.' pixels');
+        $this->assertTrue(($diff <= 15), 'X Position of toolbar arrow is incorrect. Difference was '.$diff.' pixels');
 
         $toolbarY = $this->sikuli->getY($this->sikuli->getTopLeft($this->_getToolbarArrow($orientation)));
         $diff     = abs($targetY - $toolbarY);
@@ -157,19 +157,27 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      *
      * @return void
      */
-    public function testMultiParagraphSelectionPosition()
-    {
-        $start = $this->findKeyword(1);
-        $end   = $this->findKeyword(4);
-        $this->selectKeyword(1, 4);
+     public function testMultiParagraphSelectionPosition()
+     {
+         $start = $this->findKeyword(1);
+         $mid   = $this->findKeyword(3);
+         $end   = $this->findKeyword(4);
+         $this->selectKeyword(1, 4);
 
-        $leftX  = ($this->sikuli->getX($this->sikuli->getTopLeft($start)));
-        $width  = ($this->sikuli->execJS('ViperUtil.getElementWidth(ViperUtil.getid("content"))') / 2);
-        $center = ($leftX + $width);
-        $wordY  = $this->sikuli->getY($this->sikuli->getBottomLeft($end));
-        $this->_assertPosition($center, $wordY);
+         if ($this->sikuli->getOS() === 'osx') {
+             $leftX  = ($this->sikuli->getX($this->sikuli->getTopLeft($start)));
+             $width  = ($this->sikuli->execJS('ViperUtil.getElementWidth(ViperUtil.getid("content"))') / 2);
+             $center = ($leftX + $width);
+         } else {
+             $leftX  = $this->sikuli->getX($this->sikuli->getTopLeft($start));
+             $rightX = $this->sikuli->getX($this->sikuli->getTopRight($mid));
+             $center = ($leftX + (($rightX - $leftX) / 2));
+         }
 
-    }//end testMultiParagraphSelectionPosition()
+         $wordY  = $this->sikuli->getY($this->sikuli->getBottomLeft($end));
+         $this->_assertPosition($center, $wordY);
+
+     }//end testMultiParagraphSelectionPosition()
 
 
     /**

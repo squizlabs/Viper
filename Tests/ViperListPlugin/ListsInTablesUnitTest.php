@@ -532,7 +532,7 @@ class Viper_Tests_ViperListPlugin_ListsInTablesUnitTest extends AbstractViperLis
         $this->useTest(3);
 
         // Test in a caption
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectKeyword(1);
@@ -545,7 +545,7 @@ class Viper_Tests_ViperListPlugin_ListsInTablesUnitTest extends AbstractViperLis
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         // Test in a header section
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->selectKeyword(2);
@@ -564,7 +564,7 @@ class Viper_Tests_ViperListPlugin_ListsInTablesUnitTest extends AbstractViperLis
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         // Test in the footer section
-        $this->sikuli->click($this->findKeyword(3));
+        $this->clickKeyword(3);
         $this->assertIconStatusesCorrect(TRUE, TRUE, NULL, NULL);
 
         $this->selectKeyword(3);
@@ -583,10 +583,10 @@ class Viper_Tests_ViperListPlugin_ListsInTablesUnitTest extends AbstractViperLis
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         // Test in the body section
-        $this->sikuli->click($this->findKeyword(4));
+        $this->clickKeyword(4);
         $this->assertIconStatusesCorrect(TRUE, TRUE, NULL, NULL);
 
-        $this->sikuli->click($this->findKeyword(3));
+        $this->clickKeyword(3);
         sleep(1);
         $this->selectKeyword(4);
         $this->assertIconStatusesCorrect(TRUE, TRUE, NULL, NULL);

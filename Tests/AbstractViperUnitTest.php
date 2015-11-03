@@ -98,6 +98,19 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     private static $_viperVersion = '';
 
+    /**
+     * Name of string that holds alternatives for different OS.
+     *
+     * @var string
+     */
+    private static $_Command = null;
+
+    /**
+     * Name of string that directs $Command.
+     *
+     * @var string
+     */
+    private static $_CommandDirection = null;
 
     /**
      * Returns the path of a test file.
@@ -225,7 +238,6 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         // every 100 tests.
         if (ViperTestListener::getErrorStreak() >= self::$_maxErrorStreak || ($testsRun % 100) === 0) {
             $this->resetConnection();
-            $this->sikuli->restartBrowser();
             ViperTestListener::resetErrorStreak();
         }
 
@@ -315,7 +327,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function resetConnection()
     {
-        $this->sikuli->execJS('clean()');
+        $this->sikuli->execJS('clean()', TRUE);
 
         self::$_topToolbar = null;
         self::$_testRun    = false;
@@ -345,7 +357,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function reloadPage()
     {
-        $this->sikuli->execJS('clean()');
+        $this->sikuli->execJS('clean()', TRUE);
         $this->sikuli->reloadPage();
 
     }//end reloadPage()
@@ -411,6 +423,10 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        // Clear the toptoolbar location cache here so that if there is another test then the waitForViper method will
+        // work after the test page is reloaded.
+        self::$_topToolbar = null;
+
         if ($this->sikuli !== null) {
             // Check if there were any JS errors.
             $jsErrors = $this->sikuli->getJSErrors();
@@ -458,9 +474,10 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      * @return void
      * @throws Exception If Viper fails to load on the page.
      */
-    private function _waitForViper($retries=3)
+    private function _waitForViper($retries=2)
     {
         if ($retries === 0) {
+            $this->resetConnection();
             throw new Exception('Failed to load Viper test page.');
         }
 
@@ -468,9 +485,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             // This will make sure that the browser has loaded the Viper page.
             $this->getTopToolbar();
         } catch (Exception $e) {
+            $this->resetConnection();
+            $this->fail('Browser is not functioning properly');
+            return FALSE;
             // Its not working.. Try to start browser again.
             $this->sikuli->restartBrowser();
-            sleep(2);
             $this->sikuli->resize();
             $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
             sleep(2);
@@ -688,7 +707,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         copy($vitpImage, $imgPath.'/vitp_arrowRight.png');
 
         // Remove all Viper elements.
-        $this->sikuli->execJS('viper.destroy()');
+        $this->sikuli->execJS('viper.destroy()', TRUE);
 
         // Create image for the text field actions.
         $textFieldActionRevertRegion = $this->sikuli->getRegionOnPage($this->sikuli->execJS('ViperUtil.getBoundingRectangle(ViperUtil.getid("textboxActionRevert"))'));
@@ -978,7 +997,8 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function useTest($id)
     {
-        $this->sikuli->execJS('useTest("test-'.$id.'")');
+        $this->sikuli->execJS('useTest("test-'.$id.'")', FALSE);
+        sleep(1);
 
     }//end useTest()
 
@@ -1187,6 +1207,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
                             $match  = rtrim($match);
                             $match .= '"';
+                        } else if ($attrName === 'href') {
+                            // Remove trailing slash at the end of URLs.
+                            $match .= ' '.$attrs[1][$attrIndex].'="'.rtrim($attrs[2][$attrIndex], '/').'"';
                         } else {
                             $match .= $attrs[0][$attrIndex];
                         }//end if
@@ -1755,27 +1778,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function clickKeyword($keyword)
     {
-        $keywordImage = $this->_getKeywordImage($keyword);
-
-        try {
-            $pos = $this->sikuli->find($keywordImage, null, $this->getData('textSimmilarity'));
-        } catch (FindFailedException $e) {
-            // Sometimes the caret is causing Sikuli not to find the keyword, Click on another keyword
-            // and then try to find this keyword again.
-            try {
-                if ($keyword === 1) {
-                    $this->sikuli->click($this->findKeyword($keyword + 1));
-                } else {
-                    $this->sikuli->click($this->findKeyword(1));
-                }
-
-                $pos = $this->sikuli->find($keywordImage, null, $this->getData('textSimmilarity'));
-            } catch (FindFailedException $e) {
-                throw new FindFailedException('Failed to find keyword '.$this->getKeyword($keyword));
-            }
-        }
-
-        $this->sikuli->click($pos);
+        $this->sikuli->click($this->findKeyword($keyword));
 
     }//end clickKeyword()
 
@@ -1800,25 +1803,8 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $endKeyword = $startKeyword;
         }
 
-        try {
-            $start = $this->sikuli->find($startKeywordImage, null, $this->getData('textSimmilarity'));
-        } catch (FindFailedException $e) {
-            // Sometimes the caret is causing Sikuli not to find the keyword, Click on another keyword
-            // and then try to find this keyword again.
-            try {
-                if ($startKeyword === 1) {
-                    $this->sikuli->click($this->findKeyword($startKeyword + 1));
-                } else {
-                    $this->sikuli->click($this->findKeyword(1));
-                }
-
-                $start = $this->findKeyword($startKeyword);
-            } catch (FindFailedException $e) {
-                throw new FindFailedException('Failed to find keyword '.$this->getKeyword($startKeyword));
-            }
-        }
-
-        $end = $start;
+        $start = $this->findKeyword($startKeyword);
+        $end   = $start;
         if ($startKeyword !== $endKeyword) {
             $end = $this->findKeyword($endKeyword);
         }
@@ -1840,11 +1826,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         $this->sikuli->setLocation(
             $endRight,
-            ($this->sikuli->getX($endRight) + 2),
+            ($this->sikuli->getX($endRight) + 1),
             ($this->sikuli->getY($endRight) + 2)
         );
 
-        if ($endKeyword !== $startKeyword && strpos($this->sikuli->getBrowserid(), 'ie') === 0) {
+        if (($this->sikuli->getBrowserid() !== 'ie11' || $startKeyword !== $endKeyword) && strpos($this->sikuli->getBrowserid(), 'ie') === 0) {
             // Of course, even a simple thing like selecting words is a problem in
             // IE. When you select words it also selects the space after it, causing
             // tests to fail where style is applied to the selection or modification
@@ -1854,8 +1840,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $this->sikuli->drag($startLeft);
             $this->sikuli->mouseMove($endRight);
             $this->sikuli->mouseMoveOffset(-10, 0);
-            $this->sikuli->dropAt($endRight);
-            sleep(1);
+            $this->sikuli->mouseMoveOffset(6, 0);
+            $this->sikuli->mouseUp();
+            usleep(500000);
         } else {
             $this->sikuli->dragDrop($startLeft, $endRight);
             usleep(50000);
@@ -1912,6 +1899,8 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 throw new FindFailedException('Failed to find keyword: '.$this->getKeyword($keyword));
             }
 
+            // Need to hide toolbars incase the keyword is under the toolbar.
+            $this->sikuli->execJS('hideToolbarsAtLocation('.json_encode($loc).')');
             $loc = $this->sikuli->getRegionOnPage($loc);
         }
 
@@ -2168,7 +2157,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             return $text;
         }
 
-        $text = preg_replace('/\\\n\s+/', '', $text);
+        $text = preg_replace('/\s*\\\n\s+/', '', $text);
         return $text;
 
     }//end getSelectedText()
@@ -2216,7 +2205,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     protected function setPluginSettings($pluginName, array $settings)
     {
         $settings = json_encode($settings);
-        $this->sikuli->execJS('viper.getPluginManager().setPluginSettings(\''.$pluginName.'\', '.$settings.')');
+        $this->sikuli->execJS('viper.getPluginManager().setPluginSettings(\''.$pluginName.'\', '.$settings.')', TRUE);
 
     }//end setPluginSettings()
 
@@ -2237,7 +2226,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     {
         if ($appName === $this->sikuli->getBrowserName()) {
             // Open a new tab in this browser. Popup blocker must be disabled.
-            $this->sikuli->execJS('window.open("'.$filePath.'", "_blank")');
+            $this->sikuli->execJS('window.open("'.$filePath.'", "_blank")', TRUE);
             return true;
         }
 
@@ -2317,7 +2306,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $js .= ' false)';
         }
 
-        $this->sikuli->execJS($js, true);
+        $this->sikuli->execJS($js);
 
     }//end removeTableHeaders()
 
@@ -2349,6 +2338,8 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 $this->sikuli->keyDown('Key.ENTER');
             }//end if
 
+            sleep(1);
+
         }//end if
 
     }//end paste()
@@ -2363,7 +2354,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function pasteFromURL($url)
     {
-        $this->sikuli->execJS('pasteFromURL("'.$url.'")', true, true);
+        $this->sikuli->execJS('pasteFromURL("'.$url.'")', false, true);
 
     }//end pasteFromURL()
 
@@ -2519,18 +2510,18 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    protected function moveMouseToElement($selector, $position='bottom', $index=0)
+    protected function moveMouseToElement($selector, $position='bottom', $index=0, $yOffset=0)
     {
         $elemRect = $this->getBoundingRectangle($selector, $index);
         $x        = ($elemRect['x1'] + ($elemRect['x2'] - $elemRect['x1']) / 2);
 
         switch ($position) {
             case 'bottom':
-                $y = ($elemRect['y2']);
+                $y = ($elemRect['y2'] + $yOffset);
             break;
 
             case 'top':
-                $y = ($elemRect['y1']);
+                $y = ($elemRect['y1'] + $yOffset);
             break;
         }
 
@@ -2629,6 +2620,259 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         return $coords;
 
     }//end getScrollCoords()
+
+
+    /**
+     * Automatically provides OS alternative shortcuts
+     *
+     * @param string   $_Command             The selector for the command to execute
+     * @param string   $_CommandDirection    The selector for commands that require direction
+     *
+     * @return void
+     */
+    public function getOSAltShortcut($_Command=NULL, $_CommandDirection=NULL)
+    {
+        if ($_Command !== NULL) {
+            if ($this->sikuli->getOS() === 'windows') {
+                switch ($_Command) {
+                    case 'WholeWordSelect':
+                        switch ($_CommandDirection) {
+                            case 'right':
+                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.RIGHT');
+                            break;
+                            case 'left':
+                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.LEFT');
+                            break;
+                            case 'up':
+                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.UP');
+                            break;
+                            case 'down':
+                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.DOWN');
+                            break;
+                        } // End WholeWordSelect
+                        break;
+                    case 'Copy':
+                        switch ($_CommandDirection) {
+                            case 'right':
+                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.RIGHT');
+                                $this->sikuli->keyDown('Key.CTRL + c');
+                            break;
+                            case 'left':
+                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.LEFT');
+                                $this->sikuli->keyDown('Key.CTRL + c');
+                            break;
+                            case 'up':
+                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.UP');
+                                $this->sikuli->keyDown('Key.CTRL + c');
+                            break;
+                            case 'down':
+                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.DOWN');
+                                $this->sikuli->keyDown('Key.CTRL + c');
+                            break;
+                            case NULL:
+                                $this->sikuli->keyDown('Key.CTRL + c');
+                            break;
+                        } // End Copy
+                        break;
+                    case 'Cut':
+                        switch ($_CommandDirection) {
+                            case 'right':
+                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.RIGHT');
+                                $this->sikuli->keyDown('Key.CTRL + x');
+                            break;
+                            case 'left':
+                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.LEFT');
+                                $this->sikuli->keyDown('Key.CTRL + x');
+                            break;
+                            case 'up':
+                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.UP');
+                                $this->sikuli->keyDown('Key.CTRL + x');
+                            break;
+                            case 'down':
+                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.DOWN');
+                                $this->sikuli->keyDown('Key.CTRL + x');
+                            break;
+                            case NULL:
+                                $this->sikuli->keyDown('Key.CTRL + x');
+                            break;
+                        } // End Cut
+                        break;
+                    case 'Paste':
+                        switch ($_CommandDirection) {
+                            case 'right':
+                                $this->sikuli->keyDown('Key.RIGHT');
+                                $this->sikuli->keyDown('Key.CTRL + v');
+                            break;
+                            case 'left':
+                                $this->sikuli->keyDown('Key.LEFT');
+                                $this->sikuli->keyDown('Key.CTRL + v');
+                            break;
+                            case 'up':
+                                $this->sikuli->keyDown('Key.UP');
+                                $this->sikuli->keyDown('Key.CTRL + v');
+                            break;
+                            case 'down':
+                                $this->sikuli->keyDown('Key.DOWN');
+                                $this->sikuli->keyDown('Key.CTRL + v');
+                            break;
+                            case NULL:
+                                $this->sikuli->keyDown('Key.CTRL + v');
+                            break;
+                        } // End Paste
+                        break;
+                    case 'Undo':
+                        $this->sikuli->keyDown('Key.CTRL + z');
+                    break;
+                    case 'Redo':
+                        $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + z');
+                    break;
+                    case 'Bold':
+                        $this->sikuli->keyDown('Key.CTRL + b');
+                    break;
+                    case 'Italic':
+                        $this->sikuli->keyDown('Key.CTRL + i');
+                    break;
+                    case 'Underline':
+                        $this->sikuli->keyDown('Key.CTRL + u');
+                    break;
+                    case 'SelectAll':
+                        $this->sikuli->keyDown('Key.CTRL + a');
+                    break;
+                    case 'DeselectAll':
+                        $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + a');
+                    break;
+                } // End $_Command for windows
+            } else {
+                switch ($_Command) {
+                    case 'WholeWordSelect':
+                        switch ($_CommandDirection) {
+                            case 'right':
+                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.RIGHT');
+                            break;
+                            case 'left':
+                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.LEFT');
+                            break;
+                            case 'up':
+                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.UP');
+                            break;
+                            case 'down':
+                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.DOWN');
+                            break;
+                        } // End WholeWordSelect
+                        break;
+                    case 'ToEndOfLineSelect':
+                        switch ($_CommandDirection) {
+                            case 'right':
+                                $this->sikuli->keyDown('Key.CMD + Key.SHIFT + Key.RIGHT');
+                            break;
+                            case 'left':
+                                $this->sikuli->keyDown('Key.CMD + Key.SHIFT + Key.LEFT');
+                            break;
+                            case 'up':
+                                $this->sikuli->keyDown('Key.CMD + Key.SHIFT + Key.UP');
+                            break;
+                            case 'down':
+                                $this->sikuli->keyDown('Key.CMD + Key.SHIFT + Key.DOWN');
+                            break;
+                        } // End ToEndOfLineSelect
+                        break;
+                    case 'Copy':
+                        switch ($_CommandDirection) {
+                            case 'right':
+                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.RIGHT');
+                                $this->sikuli->keyDown('Key.CMD + c');
+                            break;
+                            case 'left':
+                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.LEFT');
+                                $this->sikuli->keyDown('Key.CMD + c');
+                            break;
+                            case 'up':
+                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.UP');
+                                $this->sikuli->keyDown('Key.CMD + c');
+                            break;
+                            case 'down':
+                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.DOWN');
+                                $this->sikuli->keyDown('Key.CMD + c');
+                            break;
+                            case NULL:
+                                $this->sikuli->keyDown('Key.CMD + c');
+                            break;
+                            case '':
+                                $this->sikuli->keyDown('Key.CMD + c');
+                            break;
+                        } // End Copy
+                        break;
+                    case 'Cut':
+                        switch ($_CommandDirection) {
+                            case 'right':
+                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.RIGHT');
+                                $this->sikuli->keyDown('Key.CMD + x');
+                            break;
+                            case 'left':
+                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.LEFT');
+                                $this->sikuli->keyDown('Key.CMD + x');
+                            break;
+                            case 'up':
+                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.UP');
+                                $this->sikuli->keyDown('Key.CMD + x');
+                            break;
+                            case 'down':
+                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.DOWN');
+                                $this->sikuli->keyDown('Key.CMD + x');
+                            break;
+                            case NULL:
+                                $this->sikuli->keyDown('Key.CMD + x');
+                            break;
+                        } // End Cut
+                        break;
+                    case 'Paste':
+                        switch ($_CommandDirection) {
+                            case 'right':
+                                $this->sikuli->keyDown('Key.RIGHT');
+                                $this->sikuli->keyDown('Key.CMD + v');
+                            break;
+                            case 'left':
+                                $this->sikuli->keyDown('Key.LEFT');
+                                $this->sikuli->keyDown('Key.CMD + v');
+                            break;
+                            case 'up':
+                                $this->sikuli->keyDown('Key.UP');
+                                $this->sikuli->keyDown('Key.CMD + v');
+                            break;
+                            case 'down':
+                                $this->sikuli->keyDown('Key.DOWN');
+                                $this->sikuli->keyDown('Key.CMD + v');
+                            break;
+                            case NULL:
+                                $this->sikuli->keyDown('Key.CMD + v');
+                            break;
+                        } // End Paste
+                        break;
+                    case 'Undo':
+                        $this->sikuli->keyDown('Key.CMD + z');
+                    break;
+                    case 'Redo':
+                        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+                    break;
+                    case 'Bold':
+                        $this->sikuli->keyDown('Key.CMD + b');
+                    break;
+                    case 'Italic':
+                        $this->sikuli->keyDown('Key.CMD + i');
+                    break;
+                    case 'Underline':
+                        $this->sikuli->keyDown('Key.CMD + u');
+                    break;
+                    case 'SelectAll':
+                        $this->sikuli->keyDown('Key.CMD + a');
+                    break;
+                    case 'DeselectAll':
+                        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + a');
+                    break;
+                } // End $_Command for osx
+            } // End GetOS()
+        } // End $_Command switch
+    }//end getOSAltShortcut()
 
 
 }//end class

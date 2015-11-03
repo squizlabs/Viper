@@ -54,7 +54,7 @@ class Viper_Tests_ViperCursorAssistPlugin_CursorAssistForListsUnitTest extends A
         // Check cursor assist line below an unordered list
         $this->useTest(1);
         $this->clickKeyword(1);
-        $this->moveMouseToElement('ul', 'bottom');
+        $this->moveMouseToElement('ul', 'bottom', 0, -25);
 
         // Check to see if the cursor assit line appears below the list
         $this->assertTrue($this->isCursorAssistLineVisible('ul', 'bottom'));
@@ -67,7 +67,7 @@ class Viper_Tests_ViperCursorAssistPlugin_CursorAssistForListsUnitTest extends A
         // Check cursor assist line below an ordered list
         $this->useTest(2);
         $this->clickKeyword(1);
-        $this->moveMouseToElement('ol', 'bottom');
+        $this->moveMouseToElement('ol', 'bottom', 0, -25);
 
         // Check to see if the cursor assit line appears below the list
         $this->assertTrue($this->isCursorAssistLineVisible('ol', 'bottom'));
@@ -90,7 +90,7 @@ class Viper_Tests_ViperCursorAssistPlugin_CursorAssistForListsUnitTest extends A
         // Check cursor assist line below the list
         $this->useTest(3);
         $this->clickKeyword(3);
-        $this->moveMouseToElement('ul', 'bottom');
+        $this->moveMouseToElement('ul', 'bottom', 0, -25);
 
         // Check to see if the cursor assit line appears below the list
         $this->assertTrue($this->isCursorAssistLineVisible('ul', 'bottom'));

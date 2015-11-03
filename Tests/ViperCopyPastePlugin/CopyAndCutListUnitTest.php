@@ -13,7 +13,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutListUnitTest extends AbstractVi
      */
     public function testCopyAndPastePartOfList()
     {
-        //Test unordered list
+        // Test unordered list
         $this->useTest(1);
 
         $this->selectKeyword(2, 3);
@@ -25,7 +25,18 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutListUnitTest extends AbstractVi
 
         $this->assertHTMLMatch('<p>Unordered list %1%</p><ul><li>%2% 1</li><li>item 2</li><li>item 3 %3%</li></ul><ul><li>item %2% 1</li><li>item 2</li><li>item 3 %3%</li></ul>');
 
-        //Test ordered list
+        // Test unordered list into the same list
+        $this->useTest(1);
+
+        $this->selectKeyword(2, 3);
+        $this->sikuli->keyDown('Key.CMD + c');
+
+        $this->moveToKeyword(3, 'right');
+        $this->sikuli->keyDown('Key.CMD + v');
+
+        $this->assertHTMLMatch('<p>Unordered list %1%</p><ul><li>item %2% 1</li><li>item 2</li><li>item 3 %3%</li><li>%2% 1</li><li>item 2</li><li>item 3 %3%</li></ul>');
+
+        // Test ordered list
         $this->useTest(2);
         $this->selectKeyword(2, 3);
         $this->sikuli->keyDown('Key.CMD + c');
@@ -35,6 +46,17 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutListUnitTest extends AbstractVi
         $this->sikuli->keyDown('Key.CMD + v');
 
         $this->assertHTMLMatch('<p>Ordered list %1%</p><ol><li>%2% 1</li><li>item 2</li><li>item 3 %3%</li></ol><ol><li>item %2% 1</li><li>item 2</li><li>item 3 %3%</li></ol>');
+
+        // Test ordered list into the same list
+        $this->useTest(2);
+
+        $this->selectKeyword(2, 3);
+        $this->sikuli->keyDown('Key.CMD + c');
+
+        $this->moveToKeyword(3, 'right');
+        $this->sikuli->keyDown('Key.CMD + v');
+
+        $this->assertHTMLMatch('<p>Ordered list %1%</p><ol><li>item %2% 1</li><li>item 2</li><li>item 3 %3%</li><li>%2% 1</li><li>item 2</li><li>item 3 %3%</li></ol>');
 
     }//end testCopyAndPastePartOfList()
 
@@ -79,7 +101,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutListUnitTest extends AbstractVi
      */
     public function testCopyAndPasteWholeList()
     {
-        //Test unordered list
+        // Test unordered list
         $this->useTest(1);
 
         $this->selectKeyword(2);
@@ -93,7 +115,19 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutListUnitTest extends AbstractVi
 
         $this->assertHTMLMatch('<p>Unordered list %1%</p><ul><li>item %2% 1</li><li>item 2</li><li>item 3 %3%</li></ul><ul><li>item %2% 1</li><li>item 2</li><li>item 3 %3%</li></ul>');
 
-        //Test ordered list
+        // Test unordered list into the same list
+        $this->useTest(1);
+
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->sikuli->keyDown('Key.CMD + c');
+
+        $this->moveToKeyword(3, 'right');
+        $this->sikuli->keyDown('Key.CMD + v');
+
+        $this->assertHTMLMatch('<p>Unordered list %1%</p><ul><li>item %2% 1</li><li>item 2</li><li>item 3 %3%</li><li>item %2% 1</li><li>item 2</li><li>item 3 %3%</li></ul>');
+
+        // Test ordered list
         $this->useTest(2);
 
         $this->selectKeyword(2);
@@ -106,6 +140,20 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutListUnitTest extends AbstractVi
 
         $this->assertHTMLMatch('<p>Ordered list %1%</p><ol><li>item %2% 1</li><li>item 2</li><li>item 3 %3%</li></ol><ol><li>item %2% 1</li><li>item 2</li><li>item 3 %3%</li></ol>');
 
+        // Test unordered list into the same list
+        $this->useTest(2);
+
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->sikuli->keyDown('Key.CMD + c');
+        sleep(1);
+
+        $this->moveToKeyword(3, 'right');
+        $this->sikuli->keyDown('Key.CMD + v');
+
+        $this->assertHTMLMatch('<p>Ordered list %1%</p><ol><li>item %2% 1</li><li>item 2</li><li>item 3 %3%</li><li>item %2% 1</li><li>item 2</li><li>item 3 %3%</li></ol>');
+
+
     }//end testCopyAndPasteWholeList()
 
 
@@ -116,7 +164,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutListUnitTest extends AbstractVi
      */
     public function testCutAndPasteWholeOfList()
     {
-        //Test unordered list
+        // Test unordered list
         $this->useTest(6);
 
         $this->selectKeyword(1);
@@ -129,7 +177,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutListUnitTest extends AbstractVi
 
         $this->assertHTMLMatch('<p>Unordered list</p><p>This is a paragraph %3%</p><ul><li>%1% item 1</li><li>item %2% 2</li><li>item 3</li></ul>');
 
-        //Test ordered list
+        // Test ordered list
         $this->useTest(7);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);

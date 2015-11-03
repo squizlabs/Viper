@@ -20,7 +20,7 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
         sleep(1);
 
         $this->sikuli->execJS('rmTableHeaders(0,true)');
-        $this->assertHTMLMatch('<div><h1>%1% First Heading</h1><p>Lorem XuT dolor sit amet test</p><h2>Second Heading</h2><p>This is SOME information for <a href="http://www.google.com" title="Google">testing</a></p><ul><li>purus oNo luctus</li></ul><div></div><hr /><p>This is a sub script. This is a super script</p><table border="1" cellpadding="2" cellspacing="3"><caption>Table 1.2: The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU TiuT XabcX Mnu</td><td>WoW sapien vel aliquet</td><td><ul><li>vel molestie arcu</li><li>purus neque luctus</li></ul></td></tr><tr><td><h3>Squiz Labs</h3></td><td colspan="2">purus neque luctus <a href="http://www.google.com">ligula</a>, vel molestie arcu</td></tr><tr><td>nec porta ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr></tbody></table></div>');
+        $this->assertHTMLMatch('<div><h1>%1% First Heading</h1><p>Lorem XuT dolor sit amet test</p><h2>Second Heading</h2><p>This is SOME information for <a href="http://www.google.com" title="Google">testing</a></p><ul><li>purus oNo luctus</li></ul><hr /><p>This is a sub script. This is a super script</p><table border="1" cellpadding="2" cellspacing="3"><caption>Table 1.2: The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU TiuT XabcX Mnu</td><td>WoW sapien vel aliquet</td><td><ul><li>vel molestie arcu</li><li>purus neque luctus</li></ul></td></tr><tr><td><h3>Squiz Labs</h3></td><td colspan="2">purus neque luctus <a href="http://www.google.com">ligula</a>, vel molestie arcu</td></tr><tr><td>nec porta ante</td><td>sapien vel aliquet</td><td rowspan="2">purus neque luctus ligula, vel molestie arcu</td></tr></tbody></table></div>');
 
     }//end testRemoveFormatIcon()
 
@@ -115,7 +115,7 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
     public function testRemoveFormatForANestedStyleElement()
     {
         $this->useTest(5);
-        
+
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('removeFormat');
 
@@ -143,31 +143,69 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
     public function testRemoveFormatOnContentWithMultipleFormats()
     {
         $this->useTest(6);
-        
-        // Apply italic, subscript and superscript to the word
+
+        // Apply italic and subscript to the word
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('italic');
         $this->clickTopToolbarButton('subscript');
-        $this->clickTopToolbarButton('superscript');
-        $this->assertHTMLMatch('<p>Test content with <sup><sub><em>%1%</em></sub></sup> no styles applied</p>');
+        $this->assertHTMLMatch('<p>Test content with <sub><em>%1%</em></sub> no styles applied</p>');
 
         // Remove format for the content
         $this->clickTopToolbarButton('removeFormat');
         $this->assertHTMLMatch('<p>Test content with %1% no styles applied</p>');
 
-        // Try removing content from the content again to make sure it is not deleted
+        // Try removing format from the content again to make sure it is not deleted
         $this->selectKeyword(1);
         sleep(1);
         $this->clickTopToolbarButton('removeFormat');
         $this->assertHTMLMatch('<p>Test content with %1% no styles applied</p>');
 
-        // Apply bold, italic, subscript and superscript to the word
+        // Apply italic and superscript to the word
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('italic');
+        $this->clickTopToolbarButton('superscript');
+        $this->assertHTMLMatch('<p>Test content with <sup><em>%1%</em></sup> no styles applied</p>');
+
+        // Remove format for the content
+        $this->clickTopToolbarButton('removeFormat');
+        $this->assertHTMLMatch('<p>Test content with %1% no styles applied</p>');
+
+        // Try removing format from the content again to make sure it is not deleted
+        $this->selectKeyword(1);
+        sleep(1);
+        $this->clickTopToolbarButton('removeFormat');
+        $this->assertHTMLMatch('<p>Test content with %1% no styles applied</p>');
+
+        // Apply bold, italic and subscript to the word
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('bold');
         $this->clickTopToolbarButton('italic');
         $this->clickTopToolbarButton('subscript');
+        $this->assertHTMLMatch('<p>Test content with <sub><em><strong>%1%</strong></em></sub> no styles applied</p>');
+
+        // Remove format for the content
+        $this->clickTopToolbarButton('removeFormat');
+        sleep(1);
+        $this->assertHTMLMatch('<p>Test content with %1% no styles applied</p>');
+
+        // Select content again and make sure icons are not active
+        $this->selectKeyword(1);
+        sleep(1);
+        $this->assertTrue($this->topToolbarButtonExists('italic'));
+        $this->assertTrue($this->inlineToolbarButtonExists('italic'));
+        $this->assertTrue($this->topToolbarButtonExists('subscript'));
+        $this->assertTrue($this->topToolbarButtonExists('superscript'));
+
+        // Click remove format again to make sure content is not broken
+        $this->clickTopToolbarButton('removeFormat');
+        $this->assertHTMLMatch('<p>Test content with %1% no styles applied</p>');
+
+        // Apply bold, italic and superscript to the word
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('bold');
+        $this->clickTopToolbarButton('italic');
         $this->clickTopToolbarButton('superscript');
-        $this->assertHTMLMatch('<p>Test content with <sup><sub><em><strong>%1%</strong></em></sub></sup> no styles applied</p>');
+        $this->assertHTMLMatch('<p>Test content with <sup><em><strong>%1%</strong></em></sup> no styles applied</p>');
 
         // Remove format for the content
         $this->clickTopToolbarButton('removeFormat');
@@ -197,7 +235,7 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
     public function testRemoveFormatForLink()
     {
         $this->useTest(7);
-        
+
         // Test the remove format doesn't remove the link
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('removeFormat');

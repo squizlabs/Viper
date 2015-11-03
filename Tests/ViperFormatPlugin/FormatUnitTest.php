@@ -599,7 +599,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->assertHTMLMatch('<h1>Heading One</h1><div>%1% xtn dolor</div><blockquote><p>sit %2% <strong>%3%</strong></p></blockquote>');
 
         // Check the status of the format icons.
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
         $this->selectKeyword(1, 3);
         $this->clickInlineToolbarButton('formats');
         $this->checkStatusOfFormatIconsInTheInlineToolbar('disabled', NULL, 'disabled', 'disabled');
@@ -1028,10 +1028,10 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->useTest(12);
 
         // Test ul list
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
         $this->assertFalse($this->inlineToolbarButtonExists('formats'), 'Formats button should not be available');
@@ -1053,10 +1053,10 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->assertTrue($this->topToolbarButtonExists('formats-p', 'active'), 'Formats icon should appear in the top toolbar.');
 
         // Test ol list
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'), 'Formats icon should not appear in the top toolbar.');
 
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
         sleep(1);
 
         $this->selectKeyword(2);
@@ -1134,6 +1134,2025 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
 
     }//end testApplyingFormatsToAnImage()
 
+
+    /**
+     * Test that underline can't be added with keyboard shortcuts
+     *
+     * @return void
+     */
+    public function testUnderlineFormat()
+    {
+
+        // Test not applying underline at the start of a paragraph
+        $this->useTest(14);
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + u');
+        $this->assertHTMLMatch('<p>%1%Test %2% content %3%</p><p><u>%4%Test %5% content %6%</u></p>');
+
+        // Test not applying underline in the middle of a paragraph
+        $this->selectKeyword(2);
+        $this->sikuli->keyDown('Key.CMD + u');
+        $this->assertHTMLMatch('<p>%1%Test %2% content %3%</p><p><u>%4%Test %5% content %6%</u></p>');
+
+        // Test not applying underline at the end of a paragraph
+        $this->selectKeyword(3);
+        $this->sikuli->keyDown('Key.CMD + u');
+        $this->assertHTMLMatch('<p>%1%Test %2% content %3%</p><p><u>%4%Test %5% content %6%</u></p>');
+
+        // Test not applying underline to a paragraph
+        $this->selectKeyword(1,3);
+        $this->sikuli->keyDown('Key.CMD + u');
+        $this->assertHTMLMatch('<p>%1%Test %2% content %3%</p><p><u>%4%Test %5% content %6%</u></p>');
+
+        // Test removing underline with remove format at the start of a paragraph
+        $this->useTest(14);
+        $this->selectKeyword(4);
+        $this->clickTopToolbarButton('removeFormat', NULL);
+        $this->assertHTMLMatch('<p>%1%Test %2% content %3%</p><p>%4%<u>Test %5% content %6%</u></p>');
+
+        // Test removing underline with remove format in the middle of a paragraph
+        $this->useTest(14);
+        $this->selectKeyword(5);
+        $this->clickTopToolbarButton('removeFormat', NULL);
+        $this->assertHTMLMatch('<p>%1%Test %2% content %3%</p><p><u>%4%Test </u>%5%<u> content %6%</u></p>');
+
+        // Test removing underline with remove format at the end of a paragraph
+        $this->useTest(14);
+        $this->selectKeyword(6);
+        $this->clickTopToolbarButton('removeFormat', NULL);
+        $this->assertHTMLMatch('<p>%1%Test %2% content %3%</p><p><u>%4%Test %5% content </u>%6%</p>');
+
+        // Test removing underline with remove format for an entire paragraph
+        $this->useTest(14);
+        $this->selectKeyword(4,6);
+        $this->clickTopToolbarButton('removeFormat', NULL);
+        $this->assertHTMLMatch('<p>%1%Test %2% content %3%</p><p>%4%Test %5% content %6%</p>');
+
+    }//end testUnderlineFormat()
+
+
+    /**
+     * Test combinations of formats beginning with bold
+     *
+     * @return void
+     */
+    public function testBoldWithOneAdditionalFormat()
+    {
+        // Test applying bold and italics
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+
+        // Test removing bold and italics
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying bold and italics
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<p><em><strong>%1%</strong></em></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying bold and subscript
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+
+        // Test removing bold and subscript
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+
+        // Test re-applying bold and subscript
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->assertHTMLMatch('<p><em><strong>%1%</strong></em></p><p><sub><strong>%2%</strong></sub></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying bold and superscript
+        $this->selectKeyword(3);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+
+        // Test removing bold and superscript
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+
+        // Test re-applying bold and superscript
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->assertHTMLMatch('<p><em><strong>%1%</strong></em></p><p><del><strong>%2%</strong></del></p><p><sup><strong>%3%</strong></sup></p><p>%4%</p>');
+
+        // Test applying bold and strikethrough
+        $this->selectKeyword(4);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+
+        // Test removing bold and strikethrough
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+
+        // Test re-applying bold and strikethrough
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->assertHTMLMatch('<p><em><strong>%1%</strong></em></p><p><del><strong>%2%</strong></del></p><p><sup><strong>%3%</strong></sup></p><p><del><strong>%4%</strong></del></p>');
+
+    }//end testBoldWithOneAdditionalFormat()
+
+
+    /**
+     * Test combinations of formats beginning with bold
+     *
+     * @return void
+     */
+    public function testBoldWithTwoAdditionalFormats()
+    {
+        // Test applying bold and subscript then italic
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+
+        // Test removing bold and subscript then italic
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying bold and subscript then italic
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<p><em><sub><strong>%1%</strong></sub></em></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying bold and subscript then strikethrough
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+
+        // Test removing bold and subscript then strikethrough
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+
+        // Test re-applying bold and subscript then strikethrough
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->assertHTMLMatch('<p><em><sub><strong>%1%</strong></sub></em></p><p><del><sub><strong>%2%</strong></sub></del></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying bold and superscript then italic
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+
+        // Test removing bold and superscript then italic
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying bold and superscript then italic
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<p><em><sup><strong>%1%</strong></sup></em></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying bold and superscript then strikethrough
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+
+        // Test removing bold and superscript then strikethrough
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+
+        // Test re-applying bold and superscript then strikethrough
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->assertHTMLMatch('<p><em><sup><strong>%1%</strong></sup></em></p><p><del><sup><strong>%2%</strong></sup></del></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying bold and strikethrough then italic
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+
+        // Test removing bold and strikethrough then italic
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying bold and strikethrough then italic
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<p><em><del><strong>%1%</strong></del></em></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying bold and strikethrough then subscript
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+
+        // Test removing bold and strikethrough then subscript
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+
+        // Test re-applying bold and strikethrough then subscript
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->assertHTMLMatch('<p><em><del><strong>%1%</strong></del></em></p><p><sub><del><strong>%2%</strong></del></sub></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying bold and strikethrough then superscript
+        $this->selectKeyword(3);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+
+        // Test removing bold and strikethrough then superscript
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+
+        // Test re-applying bold and strikethrough then superscript
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->assertHTMLMatch('<p><em><del><strong>%1%</strong></del></em></p><p><sub><del><strong>%2%</strong></del></sub></p><p><sup><del><strong>%3%</strong></del></sup></p><p>%4%</p>');
+
+    }//end testBoldWithTwoAdditionalFormats()
+
+
+    /**
+     * Test combinations of formats beginning with bold
+     *
+     * @return void
+     */
+    public function testBoldWithThreeAdditionalFormats()
+    {
+
+        // Test applying bold and italic and subscript then strikethough
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+
+        // Test removing bold and italic and subscript then strikethough
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+
+        // Test re-applying bold and italic and subscript then strikethough
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->assertHTMLMatch('<p><del><sub><em><strong>%1%</strong></em></sub></del></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying bold and italic and superscript then strikethough
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+
+        // Test removing bold and italic and superscript then strikethough
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+
+        // Test re-applying bold and italic and superscript then strikethough
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->assertHTMLMatch('<p><del><sub><em><strong>%1%</strong></em></sub></del></p><p><del><sup><em><strong>%2%</strong></em></sup></del></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying bold and italic and strikethough then subscript
+        $this->selectKeyword(3);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+
+        // Test removing bold and italic and strikethough then subscript
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+
+        // Test re-applying bold and italic and strikethough then subscript
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->assertHTMLMatch('<p><del><sub><em><strong>%1%</strong></em></sub></del></p><p><del><sup><em><strong>%2%</strong></em></sup></del></p><p><sub><del><em><strong>%3%</strong></em></del></sub></p><p>%4%</p>');
+
+        // Test applying bold and italic and strikethough then superscript
+        $this->selectKeyword(4);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+
+        // Test removing bold and italic and strikethough then superscript
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+
+        // Test re-applying bold and italic and strikethough then superscript
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->assertHTMLMatch('<p><del><sub><em><strong>%1%</strong></em></sub></del></p><p><del><sup><em><strong>%2%</strong></em></sup></del></p><p><sub><del><em><strong>%3%</strong></em></del></sub></p><p><sup><del><em><strong>%4%</strong></em></del></sup></p>');
+
+        // Test applying bold and subscript and italic then strikethough
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+
+        // Test removing bold and subscript and italic then strikethough
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+
+        // Test re-applying bold and subscript and italic then strikethough
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->assertHTMLMatch('<p><del><em><sub><strong>%1%</strong></sub></em></del></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying bold and subscript and strikethough then italic
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+
+        // Test removing bold and subscript and strikethough then italic
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying bold and subscript and strikethough then italic
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<p><del><em><sub><strong>%1%</strong></sub></em></del></p><p><em><del><sub><strong>%2%</strong></sub></del></em></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying bold and superscript and italic then strikethough
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+
+        // Test removing bold and superscript and italic then strikethough
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+
+        // Test re-applying bold and superscript and italic then strikethough
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->assertHTMLMatch('<p><del><em><sup><strong>%1%</strong></sup></em></del></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying bold and superscript and strikethough then italic
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+
+        // Test removing bold and superscript and strikethough then italic
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying bold and superscript and strikethough then italic
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<p><del><em><sup><strong>%1%</strong></sup></em></del></p><p><em><del><sup><strong>%2%</strong></sup></del></em></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying bold and strikethough and italic then subscript
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+
+        // Test removing bold and strikethough and italic then subscript
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+
+        // Test re-applying bold and strikethough and italic then subscript
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->assertHTMLMatch('<p><sub><em><del><strong>%1%</strong></del></em></sub></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying bold and strikethough and italic then subscript
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+
+        // Test removing bold and strikethough and italic then subscript
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+
+        // Test re-applying bold and strikethough and italic then subscript
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->assertHTMLMatch('<p><sub><em><del><strong>%1%</strong></del></em></sub></p><p><sup><em><del><strong>%2%</strong></del></em></sup></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying bold and strikethough and subscript then italic
+        $this->selectKeyword(3);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+
+        // Test removing bold and strikethough and subscript then italic
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying bold and strikethough and subscript then italic
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);;
+        $this->assertHTMLMatch('<p><sub><em><del><strong>%1%</strong></del></em></sub></p><p><sup><em><del><strong>%2%</strong></del></em></sup></p><p><em><sub><del><strong>%3%</strong></del></sub></em></p><p>%4%</p>');
+
+        // Test applying bold and strikethough and superscript then italic
+        $this->selectKeyword(4);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+
+        // Test removing bold and strikethough and superscript then italic
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying bold and strikethough and superscript then italic
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);;
+        $this->assertHTMLMatch('<p><sub><em><del><strong>%1%</strong></del></em></sub></p><p><sup><em><del><strong>%2%</strong></del></em></sup></p><p><em><sub><del><strong>%3%</strong></del></sub></em></p><p><em><sup><del><strong>%4%</strong></del></sup></em></p>');
+
+    }//end testBoldWithThreeAdditionalFormats()
+
+
+    /**
+     * Test combinations of formats beginning with italic
+     *
+     * @return void
+     */
+    public function testItalicWithOneAdditionalFormat()
+    {
+        // Test applying italic and bold
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+
+        // Test removing italic and bold
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+
+        // Test re-applying italic and bold
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->assertHTMLMatch('<p><strong><em>%1%</em></strong></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying italic and subscript
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+
+        // Test removing italic and subscript
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+
+        // Test re-applying italic and subscript
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->assertHTMLMatch('<p><strong><em>%1%</em></strong></p><p><sub><em>%2%</em></sub></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying italic and superscript
+        $this->selectKeyword(3);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+
+        // Test removing italic and superscript
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+
+        // Test re-applying italic and superscript
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->assertHTMLMatch('<p><strong><em>%1%</em></strong></p><p><del><em>%2%</em></del></p><p><sup><em>%3%</em></sup></p><p>%4%</p>');
+
+        // Test applying italic and strikethrough
+        $this->selectKeyword(4);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+
+        // Test removing italic and strikethrough
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+
+        // Test re-applying italic and strikethrough
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->assertHTMLMatch('<p><strong><em>%1%</em></strong></p><p><del><em>%2%</em></del></p><p><sup><em>%3%</em></sup></p><p><del><em>%4%</em></del></p>');
+
+    }//end testItalicWithOneAdditionalFormat()
+
+
+    /**
+     * Test combinations of formats beginning with italic
+     *
+     * @return void
+     */
+    public function testItalicWithTwoAdditionalFormats()
+    {
+        // Test applying italic and subscript then bold
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+
+        // Test removing italic and subscript then bold
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+
+        // Test re-applying italic and subscript then bold
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->assertHTMLMatch('<p><strong><sub><em>%1%</em></sub></strong></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying italic and subscript then strikethrough
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+
+        // Test removing italic and subscript then strikethrough
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+
+        // Test re-applying italic and subscript then strikethrough
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->assertHTMLMatch('<p><strong><sub><em>%1%</em></sub></strong></p><p><del><sub><em>%2%</em></sub></del></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying italic and superscript then bold
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+
+        // Test removing italic and superscript then bold
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+
+        // Test re-applying italic and superscript then bold
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->assertHTMLMatch('<p><strong><sup><em>%1%</em></sup></strong></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying italic and superscript then strikethrough
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+
+        // Test removing italic and superscript then strikethrough
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+
+        // Test re-applying italic and superscript then strikethrough
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->assertHTMLMatch('<p><strong><sup><em>%1%</em></sup></strong></p><p><del><sup><em>%2%</em></sup></del></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying italic and strikethrough then bold
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+
+        // Test removing italic and strikethrough then bold
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+
+        // Test re-applying italic and strikethrough then bold
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->assertHTMLMatch('<p><strong><del><em>%1%</em></del></strong></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying italic and strikethrough then subscript
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+
+        // Test removing italic and strikethrough then subscript
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+
+        // Test re-applying italic and strikethrough then subscript
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->assertHTMLMatch('<p><strong><del><em>%1%</em></del></strong></p><p><sub><del><em>%2%</em></del></sub></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying italic and strikethrough then superscript
+        $this->selectKeyword(3);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+
+        // Test removing italic and strikethrough then superscript
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+
+        // Test re-applying italic and strikethrough then superscript
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->assertHTMLMatch('<p><strong><del><em>%1%</em></del></strong></p><p><sub><del><em>%2%</em></del></sub></p><p><sup><del><em>%3%</em></del></sup></p><p>%4%</p>');
+
+    }//end testItalicWithTwoAdditionalFormats()
+
+
+    /**
+     * Test combinations of formats beginning with italic
+     *
+     * @return void
+     */
+    public function testItalicWithThreeAdditionalFormats()
+    {
+
+        // Test applying italic and bold and subscript then strikethough
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+
+        // Test removing italic and bold and subscript then strikethough
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+
+        // Test re-applying italic and bold and subscript then strikethough
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->assertHTMLMatch('<p><del><sub><strong><em>%1%</em></strong></sub></del></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying italic and bold and superscript then strikethough
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+
+        // Test removing italic and bold and superscript then strikethough
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+
+        // Test re-applying italic and bold and superscript then strikethough
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->assertHTMLMatch('<p><del><sub><strong><em>%1%</em></strong></sub></del></p><p><del><sup><strong><em>%2%</em></strong></sup></del></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying italic and bold and strikethough then subscript
+        $this->selectKeyword(3);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+
+        // Test removing italic and bold and strikethough then subscript
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+
+        // Test re-applying italic and bold and strikethough then subscript
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->assertHTMLMatch('<p><del><sub><strong><em>%1%</em></strong></sub></del></p><p><del><sup><strong><em>%2%</em></strong></sup></del></p><p><sub><del><strong><em>%3%</em></strong></del></sub></p><p>%4%</p>');
+
+        // Test applying italic and bold and strikethough then superscript
+        $this->selectKeyword(4);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+
+        // Test removing italic and bold and strikethough then superscript
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+
+        // Test re-applying italic and bold and strikethough then superscript
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->assertHTMLMatch('<p><del><sub><strong><em>%1%</em></strong></sub></del></p><p><del><sup><strong><em>%2%</em></strong></sup></del></p><p><sub><del><strong><em>%3%</em></strong></del></sub></p><p><sup><del><strong><em>%4%</em></strong></del></sup></p>');
+
+        // Test applying italic and subscript and bold then strikethough
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+
+        // Test removing italic and subscript and bold then strikethough
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+
+        // Test re-applying italic and subscript and bold then strikethough
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->assertHTMLMatch('<p><del><strong><sub><em>%1%</em></sub></strong></del></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying italic and subscript and strikethough then bold
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+
+        // Test removing italic and subscript and strikethough then bold
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+
+        // Test re-applying italic and subscript and strikethough then bold
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->assertHTMLMatch('<p><del><strong><sub><em>%1%</em></sub></strong></del></p><p><strong><del><sub><em>%2%</em></sub></del></strong></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying italic and superscript and bold then strikethough
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+
+        // Test removing italic and superscript and bold then strikethough
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+
+        // Test re-applying italic and superscript and bold then strikethough
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->assertHTMLMatch('<p><del><strong><sup><em>%1%</em></sup></strong></del></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying italic and superscript and strikethough then bold
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+
+        // Test removing italic and superscript and strikethough then bold
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+
+        // Test re-applying italic and superscript and strikethough then bold
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->assertHTMLMatch('<p><del><strong><sup><em>%1%</em></sup></strong></del></p><p><strong><del><sup><em>%2%</em></sup></del></strong></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying italic and strikethough and bold then subscript
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+
+        // Test removing italic and strikethough and bold then subscript
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+
+        // Test re-applying italic and strikethough and bold then subscript
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->assertHTMLMatch('<p><sub><strong><del><em>%1%</em></del></strong></sub></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying italic and strikethough and bold then subscript
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+
+        // Test removing italic and strikethough and bold then subscript
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+
+        // Test re-applying italic and strikethough and bold then subscript
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->assertHTMLMatch('<p><sub><strong><del><em>%1%</em></del></strong></sub></p><p><sup><strong><del><em>%2%</em></del></strong></sup></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying italic and strikethough and subscript then bold
+        $this->selectKeyword(3);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+
+        // Test removing italic and strikethough and subscript then bold
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+
+        // Test re-applying italic and strikethough and subscript then bold
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);;
+        $this->assertHTMLMatch('<p><sub><strong><del><em>%1%</em></del></strong></sub></p><p><sup><strong><del><em>%2%</em></del></strong></sup></p><p><strong><sub><del><em>%3%</em></del></sub></strong></p><p>%4%</p>');
+
+        // Test applying italic and strikethough and superscript then bold
+        $this->selectKeyword(4);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+
+        // Test removing italic and strikethough and superscript then bold
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+
+        // Test re-applying italic and strikethough and superscript then bold
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);;
+        $this->assertHTMLMatch('<p><sub><strong><del><em>%1%</em></del></strong></sub></p><p><sup><strong><del><em>%2%</em></del></strong></sup></p><p><strong><sub><del><em>%3%</em></del></sub></strong></p><p><strong><sup><del><em>%4%</em></del></sup></strong></p>');
+
+    }//end testItalicWithThreeAdditionalFormats()
+
+
+    /**
+     * Test combinations of formats beginning with subscript
+     *
+     * @return void
+     */
+    public function testSubscriptWithOneAdditionalFormat()
+    {
+        // Test applying subscript and bold
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+
+        // Test removing subscript and bold
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+
+        // Test re-applying subscript and bold
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->assertHTMLMatch('<p><strong><sub>%1%</sub></strong></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying subscript and italic
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+
+        // Test removing subscript and italic
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying subscript and italic
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<p><strong><sub>%1%</sub></strong></p><p><em><sub>%2%</sub></em></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying subscript and strikethrough
+        $this->selectKeyword(4);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+
+        // Test removing subscript and strikethrough
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+
+        // Test re-applying subscript and strikethrough
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->assertHTMLMatch('<p><strong><sub>%1%</sub></strong></p><p><em><sub>%2%</sub></em></p><p>%3%</p><p><del><sub>%4%</sub></del></p>');
+
+    }//end testSubscriptWithOneAdditionalFormat()
+
+
+    /**
+     * Test combinations of formats beginning with subscript
+     *
+     * @return void
+     */
+    public function testSubscriptWithTwoAdditionalFormats()
+    {
+        // Test applying subscript and bold then italic
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+
+        // Test removing subscript and bold then italic
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying subscript and bold then italic
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<p><em><strong><sub>%1%</sub></strong></em></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying subscript and bold then strikethrough
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+
+        // Test removing subscript and bold then strikethrough
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+
+        // Test re-applying subscript and bold then strikethrough
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->assertHTMLMatch('<p><em><strong><sub>%1%</sub></strong></em></p><p><del><strong><sub>%2%</sub></strong></del></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying subscript and superscript then italic
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+
+        // Test removing subscript and superscript then italic
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying subscript and superscript then italic
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<p><strong><em><sub>%1%</sub></em></strong></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying subscript and superscript then strikethrough
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+
+        // Test removing subscript and superscript then strikethrough
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+
+        // Test re-applying subscript and superscript then strikethrough
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->assertHTMLMatch('<p><strong><em><sub>%1%</sub></em></strong></p><p><del><em><sub>%2%</sub></em></del></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying subscript and strikethrough then italic
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+
+        // Test removing subscript and strikethrough then italic
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying subscript and strikethrough then italic
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<p><em><del><sub>%1%</sub></del></em></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying subscript and strikethrough then bold
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+
+        // Test removing subscript and strikethrough then bold
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+
+        // Test re-applying subscript and strikethrough then bold
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->assertHTMLMatch('<p><em><del><sub>%1%</sub></del></em></p><p><strong><del><sub>%2%</sub></del></strong></p><p>%3%</p><p>%4%</p>');
+
+    }//end testSubscriptWithTwoAdditionalFormats()
+
+
+    /**
+     * Test combinations of formats beginning with subscript
+     *
+     * @return void
+     */
+    public function testSubscriptWithThreeAdditionalFormats()
+    {
+
+        // Test applying subscript and bold and italic then strikethough
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+
+        // Test removing subscript and bold and italic then strikethough
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+
+        // Test re-applying subscript and bold and italic then strikethough
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->assertHTMLMatch('<p><del><em><strong><sub>%1%</sub></strong></em></del></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying subscript and bold and strikethough then italic
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+
+        // Test removing subscript and bold and strikethough then italic
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying subscript and bold and strikethough then italic
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<p><del><em><strong><sub>%1%</sub></strong></em></del></p><p><em><del><strong><sub>%2%</sub></strong></del></em></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying subscript and italic and strikethough then bold
+        $this->selectKeyword(3);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+
+        // Test removing subscript and italic and bold then strikethrough
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+
+        // Test re-applying subscript and italic and bold then strikethrough
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->assertHTMLMatch('<p><del><em><strong><sub>%1%</sub></strong></em></del></p><p><em><del><strong><sub>%2%</sub></strong></del></em></p><p><del><strong><em><sub>%3%</sub></em></strong></del></p><p>%4%</p>');
+
+        // Test applying subscript and italic and bold then strikethrough
+        $this->selectKeyword(4);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+
+        // Test removing subscript and italic and strikethough then bold
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+
+        // Test re-applying subscript and italic and strikethough then bold
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->assertHTMLMatch('<p><del><em><strong><sub>%1%</sub></strong></em></del></p><p><em><del><strong><sub>%2%</sub></strong></del></em></p><p><del><strong><em><sub>%3%</sub></em></strong></del></p><p><strong><del><em><sub>%4%</sub></em></del></strong></p>');
+
+        // Test applying subscript and strikethough and bold then italic
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+
+        // Test removing subscript and strikethough and bold then italic
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying subscript and strikethough and bold then italic
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<p><em><strong><del><sub>%1%</sub></del></strong></em></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying subscript and strikethough and italic then bold
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+
+        // Test removing subscript and strikethough and italic then bold
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+
+        // Test re-applying subscript and strikethough and italic then bold
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->assertHTMLMatch('<p><em><strong><del><sub>%1%</sub></del></strong></em></p><p><strong><em><del><sub>%2%</sub></del></em></strong></p><p>%3%</p><p>%4%</p>');
+
+    }//end testSubscriptWithThreeAdditionalFormats()
+
+
+    /**
+     * Test combinations of formats beginning with superscript
+     *
+     * @return void
+     */
+    public function testSuperscriptWithOneAdditionalFormat()
+    {
+        // Test applying superscript and bold
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+
+        // Test removing superscript and bold
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+
+        // Test re-applying superscript and bold
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->assertHTMLMatch('<p><strong><sup>%1%</sup></strong></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying superscript and italic
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+
+        // Test removing superscript and italic
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying superscript and italic
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<p><strong><sup>%1%</sup></strong></p><p><em><sup>%2%</sup></em></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying superscript and strikethrough
+        $this->selectKeyword(4);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+
+        // Test removing superscript and strikethrough
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+
+        // Test re-applying superscript and strikethrough
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->assertHTMLMatch('<p><strong><sup>%1%</sup></strong></p><p><em><sup>%2%</sup></em></p><p>%3%</p><p><del><sup>%4%</sup></del></p>');
+
+    }//end testSuperscriptWithOneAdditionalFormat()
+
+
+    /**
+     * Test combinations of formats beginning with superscript
+     *
+     * @return void
+     */
+    public function testSuperscriptWithTwoAdditionalFormats()
+    {
+        // Test applying superscript and bold then italic
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+
+        // Test removing superscript and bold then italic
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying superscript and bold then italic
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<p><em><strong><sup>%1%</sup></strong></em></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying superscript and bold then strikethrough
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+
+        // Test removing superscript and bold then strikethrough
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+
+        // Test re-applying superscript and bold then strikethrough
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->assertHTMLMatch('<p><em><strong><sup>%1%</sup></strong></em></p><p><del><strong><sup>%2%</sup></strong></del></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying superscript and superscript then italic
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+
+        // Test removing superscript and superscript then italic
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying superscript and superscript then italic
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<p><strong><em><sup>%1%</sup></em></strong></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying superscript and superscript then strikethrough
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+
+        // Test removing superscript and superscript then strikethrough
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+
+        // Test re-applying superscript and superscript then strikethrough
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->assertHTMLMatch('<p><strong><em><sup>%1%</sup></em></strong></p><p><del><em><sup>%2%</sup></em></del></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying superscript and strikethrough then italic
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+
+        // Test removing superscript and strikethrough then italic
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying superscript and strikethrough then italic
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<p><em><del><sup>%1%</sup></del></em></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying superscript and strikethrough then bold
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+
+        // Test removing superscript and strikethrough then bold
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+
+        // Test re-applying superscript and strikethrough then bold
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->assertHTMLMatch('<p><em><del><sup>%1%</sup></del></em></p><p><strong><del><sup>%2%</sup></del></strong></p><p>%3%</p><p>%4%</p>');
+
+    }//end testSuperscriptWithTwoAdditionalFormats()
+
+
+    /**
+     * Test combinations of formats beginning with superscript
+     *
+     * @return void
+     */
+    public function testSuperscriptWithThreeAdditionalFormats()
+    {
+
+        // Test applying superscript and bold and italic then strikethough
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+
+        // Test removing superscript and bold and italic then strikethough
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+
+        // Test re-applying superscript and bold and italic then strikethough
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->assertHTMLMatch('<p><del><em><strong><sup>%1%</sup></strong></em></del></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying superscript and bold and strikethough then italic
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+
+        // Test removing superscript and bold and strikethough then italic
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying superscript and bold and strikethough then italic
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<p><del><em><strong><sup>%1%</sup></strong></em></del></p><p><em><del><strong><sup>%2%</sup></strong></del></em></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying superscript and italic and strikethough then bold
+        $this->selectKeyword(3);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+
+        // Test removing superscript and italic and bold then strikethrough
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+
+        // Test re-applying superscript and italic and bold then strikethrough
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->assertHTMLMatch('<p><del><em><strong><sup>%1%</sup></strong></em></del></p><p><em><del><strong><sup>%2%</sup></strong></del></em></p><p><del><strong><em><sup>%3%</sup></em></strong></del></p><p>%4%</p>');
+
+        // Test applying superscript and italic and bold then strikethrough
+        $this->selectKeyword(4);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+
+        // Test removing superscript and italic and strikethough then bold
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+
+        // Test re-applying superscript and italic and strikethough then bold
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->assertHTMLMatch('<p><del><em><strong><sup>%1%</sup></strong></em></del></p><p><em><del><strong><sup>%2%</sup></strong></del></em></p><p><del><strong><em><sup>%3%</sup></em></strong></del></p><p><strong><del><em><sup>%4%</sup></em></del></strong></p>');
+
+        // Test applying superscript and strikethough and bold then italic
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+
+        // Test removing superscript and strikethough and bold then italic
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying superscript and strikethough and bold then italic
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<p><em><strong><del><sup>%1%</sup></del></strong></em></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying superscript and strikethough and italic then bold
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+
+        // Test removing superscript and strikethough and italic then bold
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+
+        // Test re-applying superscript and strikethough and italic then bold
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->assertHTMLMatch('<p><em><strong><del><sup>%1%</sup></del></strong></em></p><p><strong><em><del><sup>%2%</sup></del></em></strong></p><p>%3%</p><p>%4%</p>');
+
+    }//end testSuperscriptWithThreeAdditionalFormats()
+
+
+    /**
+     * Test combinations of formats beginning with strikethrough
+     *
+     * @return void
+     */
+    public function testStrikethroughWithOneAdditionalFormat()
+    {
+        // Test applying strikethrough and bold
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+
+        // Test removing strikethrough and bold
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+
+        // Test re-applying strikethrough and bold
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->assertHTMLMatch('<p><strong><del>%1%</del></strong></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying strikethrough and subscript
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+
+        // Test removing strikethrough and subscript
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+
+        // Test re-applying strikethrough and subscript
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->assertHTMLMatch('<p><strong><del>%1%</del></strong></p><p><sub><del>%2%</del></sub></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying strikethrough and superscript
+        $this->selectKeyword(3);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+
+        // Test removing strikethrough and superscript
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+
+        // Test re-applying strikethrough and superscript
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->assertHTMLMatch('<p><strong><del>%1%</del></strong></p><p><em><del>%2%</del></em></p><p><sup><del>%3%</del></sup></p><p>%4%</p>');
+
+        // Test applying strikethrough and italic
+        $this->selectKeyword(4);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+
+        // Test removing strikethrough and italic
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying strikethrough and italic
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<p><strong><del>%1%</del></strong></p><p><em><del>%2%</del></em></p><p><sup><del>%3%</del></sup></p><p><em><del>%4%</del></em></p>');
+
+    }//end testStrikethroughWithOneAdditionalFormat()
+
+
+    /**
+     * Test combinations of formats beginning with strikethrough
+     *
+     * @return void
+     */
+    public function testStrikethroughWithTwoAdditionalFormats()
+    {
+        // Test applying strikethrough and subscript then bold
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+
+        // Test removing strikethrough and subscript then bold
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+
+        // Test re-applying strikethrough and subscript then bold
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->assertHTMLMatch('<p><strong><sub><del>%1%</del></sub></strong></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying strikethrough and subscript then italic
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+
+        // Test removing strikethrough and subscript then italic
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying strikethrough and subscript then italic
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<p><strong><sub><del>%1%</del></sub></strong></p><p><em><sub><del>%2%</del></sub></em></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying strikethrough and superscript then bold
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+
+        // Test removing strikethrough and superscript then bold
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+
+        // Test re-applying strikethrough and superscript then bold
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->assertHTMLMatch('<p><strong><sup><del>%1%</del></sup></strong></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying strikethrough and superscript then italic
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+
+        // Test removing strikethrough and superscript then italic
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying strikethrough and superscript then italic
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<p><strong><sup><del>%1%</del></sup></strong></p><p><em><sup><del>%2%</del></sup></em></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying strikethrough and italic then bold
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+
+        // Test removing strikethrough and italic then bold
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+
+        // Test re-applying strikethrough and italic then bold
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->assertHTMLMatch('<p><strong><em><del>%1%</del></em></strong></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying strikethrough and italic then subscript
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+
+        // Test removing strikethrough and italic then subscript
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+
+        // Test re-applying strikethrough and italic then subscript
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->assertHTMLMatch('<p><strong><em><del>%1%</del></em></strong></p><p><sub><em><del>%2%</del></em></sub></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying strikethrough and italic then superscript
+        $this->selectKeyword(3);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+
+        // Test removing strikethrough and italic then superscript
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+
+        // Test re-applying strikethrough and italic then superscript
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->assertHTMLMatch('<p><strong><em><del>%1%</del></em></strong></p><p><sub><em><del>%2%</del></em></sub></p><p><sup><em><del>%3%</del></em></sup></p><p>%4%</p>');
+
+    }//end testStrikethroughWithTwoAdditionalFormats()
+
+
+    /**
+     * Test combinations of formats beginning with strikethrough
+     *
+     * @return void
+     */
+    public function testStrikethroughWithThreeAdditionalFormats()
+    {
+
+        // Test applying strikethrough and bold and subscript then strikethough
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+
+        // Test removing strikethrough and bold and subscript then strikethough
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying strikethrough and bold and subscript then strikethough
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<p><em><sub><strong><del>%1%</del></strong></sub></em></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying strikethrough and bold and superscript then strikethough
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+
+        // Test removing strikethrough and bold and superscript then strikethough
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying strikethrough and bold and superscript then strikethough
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<p><em><sub><strong><del>%1%</del></strong></sub></em></p><p><em><sup><strong><del>%2%</del></strong></sup></em></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying strikethrough and bold and strikethough then subscript
+        $this->selectKeyword(3);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+
+        // Test removing strikethrough and bold and strikethough then subscript
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+
+        // Test re-applying strikethrough and bold and strikethough then subscript
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->assertHTMLMatch('<p><em><sub><strong><del>%1%</del></strong></sub></em></p><p><em><sup><strong><del>%2%</del></strong></sup></em></p><p><sub><em><strong><del>%3%</del></strong></em></sub></p><p>%4%</p>');
+
+        // Test applying strikethrough and bold and strikethough then superscript
+        $this->selectKeyword(4);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+
+        // Test removing strikethrough and bold and strikethough then superscript
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+
+        // Test re-applying strikethrough and bold and strikethough then superscript
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->assertHTMLMatch('<p><em><sub><strong><del>%1%</del></strong></sub></em></p><p><em><sup><strong><del>%2%</del></strong></sup></em></p><p><sub><em><strong><del>%3%</del></strong></em></sub></p><p><sup><em><strong><del>%4%</del></strong></em></sup></p>');
+
+        // Test applying strikethrough and subscript and bold then strikethough
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+
+        // Test removing strikethrough and subscript and bold then strikethough
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying strikethrough and subscript and bold then strikethough
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<p><em><strong><sub><del>%1%</del></sub></strong></em></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying strikethrough and subscript and strikethough then bold
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+
+        // Test removing strikethrough and subscript and strikethough then bold
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+
+        // Test re-applying strikethrough and subscript and strikethough then bold
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->assertHTMLMatch('<p><em><strong><sub><del>%1%</del></sub></strong></em></p><p><strong><em><sub><del>%2%</del></sub></em></strong></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying strikethrough and superscript and bold then strikethough
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+
+        // Test removing strikethrough and superscript and bold then strikethough
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Test re-applying strikethrough and superscript and bold then strikethough
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<p><em><strong><sup><del>%1%</del></sup></strong></em></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying strikethrough and superscript and strikethough then bold
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+
+        // Test removing strikethrough and superscript and strikethough then bold
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+
+        // Test re-applying strikethrough and superscript and strikethough then bold
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->assertHTMLMatch('<p><em><strong><sup><del>%1%</del></sup></strong></em></p><p><strong><em><sup><del>%2%</del></sup></em></strong></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying strikethrough and strikethough and bold then subscript
+        $this->useTest(15);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+
+        // Test removing strikethrough and strikethough and bold then subscript
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+
+        // Test re-applying strikethrough and strikethough and bold then subscript
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->assertHTMLMatch('<p><sub><strong><em><del>%1%</del></em></strong></sub></p><p>%2%</p><p>%3%</p><p>%4%</p>');
+
+        // Test applying strikethrough and strikethough and bold then subscript
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+
+        // Test removing strikethrough and strikethough and bold then subscript
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+
+        // Test re-applying strikethrough and strikethough and bold then subscript
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->assertHTMLMatch('<p><sub><strong><em><del>%1%</del></em></strong></sub></p><p><sup><strong><em><del>%2%</del></em></strong></sup></p><p>%3%</p><p>%4%</p>');
+
+        // Test applying strikethrough and strikethough and subscript then bold
+        $this->selectKeyword(3);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+
+        // Test removing strikethrough and strikethough and subscript then bold
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+
+        // Test re-applying strikethrough and strikethough and subscript then bold
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);;
+        $this->assertHTMLMatch('<p><sub><strong><em><del>%1%</del></em></strong></sub></p><p><sup><strong><em><del>%2%</del></em></strong></sup></p><p><strong><sub><em><del>%3%</del></em></sub></strong></p><p>%4%</p>');
+
+        // Test applying strikethrough and strikethough and superscript then bold
+        $this->selectKeyword(4);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);
+
+        // Test removing strikethrough and strikethough and superscript then bold
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
+
+        // Test re-applying strikethrough and strikethough and superscript then bold
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('bold', NULL);;
+        $this->assertHTMLMatch('<p><sub><strong><em><del>%1%</del></em></strong></sub></p><p><sup><strong><em><del>%2%</del></em></strong></sup></p><p><strong><sub><em><del>%3%</del></em></sub></strong></p><p><strong><sup><em><del>%4%</del></em></sup></strong></p>');
+
+    }//end testStrikethroughWithThreeAdditionalFormats()
 
 }//end class
 
