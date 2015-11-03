@@ -13,6 +13,7 @@ class Viper_Tests_Core_Html5UnitTest extends AbstractViperUnitTest
     public function testInsertingComplexHtml5Code()
     {
         $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.DELETE');
         sleep(1);
         $this->pasteFromURL($this->getTestURL('/Core/Html5TestFiles/Html5ComplexExample.txt'));
         sleep(1);
