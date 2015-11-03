@@ -440,6 +440,11 @@ ViperSourceViewPlugin.prototype = {
                 self.toolbarPlugin.disable();
             }
 
+            if (self.viper.isEnabled() === false) {
+                // Viper might have been disabled, enable it again.
+                self.viper.setEnabled(true);
+            }
+
             onFocus.call(editor);
             setTimeout(function() {
                 popup.hideTop();
@@ -447,7 +452,7 @@ ViperSourceViewPlugin.prototype = {
         }
 
         editor.onBlur = function() {
-            if (self._inNewWindow !== true) {
+            if (self._inNewWindow !== true && self.viper.isEnabled() === true) {
                 self.toolbarPlugin.enable();
             }
         };

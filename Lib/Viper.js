@@ -758,9 +758,14 @@ Viper.prototype = {
             ViperUtil.setStyle(this.element, 'outline', 'invert');
             this._removeEvents();
             this.enabled = false;
-            this.fireCallbacks('Viper:disabled');
+
+            // Fire disabled with previous state set to enabled.
+            this.fireCallbacks('Viper:disabled', true);
             ViperChangeTracker.disableChangeTracking();
             ViperChangeTracker.cleanUp();
+        } else if (enabled === false) {
+            // Fire disabled with previous state set to disabled.
+            this.fireCallbacks('Viper:disabled', false);
         }//end if
 
     },
