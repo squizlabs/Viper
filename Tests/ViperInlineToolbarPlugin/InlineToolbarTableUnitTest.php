@@ -283,7 +283,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
      */
     public function testLineageInALinkInTable()
     {
-        $this->sikuli->click($this->findKeyword(6));
+        $this->clickKeyword(6);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
 
@@ -292,7 +292,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem Viper-selected">Link</li>', $lineage);
 
-        $this->sikuli->click($this->findKeyword(6));
+        $this->clickKeyword(6);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
 
@@ -301,7 +301,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem Viper-selected">Cell</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
 
-        $this->sikuli->click($this->findKeyword(6));
+        $this->clickKeyword(6);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
 
@@ -310,7 +310,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem Viper-selected">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
 
-        $this->sikuli->click($this->findKeyword(6));
+        $this->clickKeyword(6);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
 
@@ -319,7 +319,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarTABLEUnitTest extends Ab
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem Viper-selected">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
 
-        $this->sikuli->click($this->findKeyword(6));
+        $this->clickKeyword(6);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">TABLE</li><li class="ViperITP-lineageItem">TBODY</li><li class="ViperITP-lineageItem">Row</li><li class="ViperITP-lineageItem">Cell</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
 

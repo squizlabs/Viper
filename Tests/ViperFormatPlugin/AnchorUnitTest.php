@@ -177,7 +177,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<h1>Viper Image Plugin Unit Tests</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" id="test" /></p><p>LABS is ORSM</p>');
 
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
         $this->clickElement('img', 0);
         $this->assertTrue($this->inlineToolbarButtonExists('anchorID', 'active'), 'Anchor icon in VITP should not be active.');
 

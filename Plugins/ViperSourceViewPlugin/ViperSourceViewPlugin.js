@@ -105,7 +105,7 @@ ViperSourceViewPlugin.prototype = {
                 }
 
                 self._originalSource = content;
-                self.showSourceView(content, callback);
+                self.showSourceView(null, callback);
             });
         } else {
             if (!content) {
@@ -346,8 +346,6 @@ ViperSourceViewPlugin.prototype = {
                 self._editor = editor;
                 editor.$blockScrolling = Infinity;
 
-                editor.$blockScrolling = Infinity;
-
                 self.applyEditorSettings(editor);
 
                 // Init editor events.
@@ -468,6 +466,11 @@ ViperSourceViewPlugin.prototype = {
                 self.toolbarPlugin.disable();
             }
 
+            if (self.viper.isEnabled() === false) {
+                // Viper might have been disabled, enable it again.
+                self.viper.setEnabled(true);
+            }
+
             onFocus.call(editor);
             setTimeout(function() {
                 popup.hideTop();
@@ -475,7 +478,7 @@ ViperSourceViewPlugin.prototype = {
         }
 
         editor.onBlur = function() {
-            if (self._inNewWindow !== true) {
+            if (self._inNewWindow !== true && self.viper.isEnabled() === true) {
                 self.toolbarPlugin.enable();
             }
         };
@@ -645,7 +648,6 @@ ViperSourceViewPlugin.prototype = {
         }
 
         var html = this.viper.getHtml(null, {emptyTableCellContent:''});
-
         if (window.StyleHTML) {
             html = StyleHTML(html);
         }

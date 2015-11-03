@@ -59,7 +59,7 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
     {
         $this->useTest(1);
 
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'), 'Link icon should not be active.');
 
         $this->selectKeyword(1);
@@ -93,7 +93,7 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text <a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%1%</a></caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test editing the link
-        $this->sikuli->click($this->findKeyword(3));
+        $this->clickKeyword(3);
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('link', 'active');
         $this->clearFieldValue('URL');
@@ -102,7 +102,7 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text <a href="http://www.google.com" title="Squiz Labs" target="_blank">%1%</a></caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test deleting the link
-        $this->sikuli->click($this->findKeyword(3));
+        $this->clickKeyword(3);
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('linkRemove');
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
@@ -138,7 +138,7 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text <a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%1%</a></caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test editing the link
-        $this->sikuli->click($this->findKeyword(3));
+        $this->clickKeyword(3);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('link', 'active');
         $this->clearFieldValue('URL');
@@ -147,13 +147,13 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text <a href="http://www.google.com" title="Squiz Labs" target="_blank">%1%</a></caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test deleting the link
-        $this->sikuli->click($this->findKeyword(3));
+        $this->clickKeyword(3);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('linkRemove');
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying link to the full caption
-        $this->sikuli->click($this->findKeyword(3));
+        $this->clickKeyword(3);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('link');
@@ -184,7 +184,7 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
     {
         $this->useTest(1);
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'), 'Link icon should not be active.');
 
         $this->selectKeyword(2);
@@ -224,8 +224,8 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 <a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%2%</a></th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test editing the link
-        $this->sikuli->click($this->findKeyword(1));
-        $this->sikuli->click($this->findKeyword(3));
+        $this->clickKeyword(1);
+        $this->clickKeyword(3);
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('link', 'active');
         $this->clearFieldValue('URL');
@@ -234,8 +234,8 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 <a href="http://www.google.com" title="Squiz Labs" target="_blank">%2%</a></th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test deleting the link.
-        $this->sikuli->click($this->findKeyword(1));
-        $this->sikuli->click($this->findKeyword(3));
+        $this->clickKeyword(1);
+        $this->clickKeyword(3);
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('linkRemove');
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
@@ -271,7 +271,7 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 <a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%2%</a></th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test editing the link
-        $this->sikuli->click($this->findKeyword(3));
+        $this->clickKeyword(3);
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('link', 'active');
         $this->clearFieldValue('URL');
@@ -280,13 +280,13 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 <a href="http://www.google.com" title="Squiz Labs" target="_blank">%2%</a></th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test deleting the link
-        $this->sikuli->click($this->findKeyword(3));
+        $this->clickKeyword(3);
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('linkRemove');
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying link to the full header
-        $this->sikuli->click($this->findKeyword(3));
+        $this->clickKeyword(3);
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('link');
@@ -317,7 +317,7 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
     {
         $this->useTest(1);
 
-        $this->sikuli->click($this->findKeyword(3));
+        $this->clickKeyword(3);
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'), 'Link icon should not be active.');
 
         $this->selectKeyword(3);
@@ -357,7 +357,7 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer <a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%3%</a></td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test editing the link
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(3);
         $this->clickInlineToolbarButton('link', 'active');
         $this->clearFieldValue('URL');
@@ -366,7 +366,7 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer <a href="http://www.google.com" title="Squiz Labs" target="_blank">%3%</a></td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test deleting the link
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(3);
         $this->clickInlineToolbarButton('linkRemove');
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
@@ -402,7 +402,7 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer <a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%3%</a></td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test editing the link
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(3);
         $this->clickTopToolbarButton('link', 'active');
         $this->clearFieldValue('URL');
@@ -411,13 +411,13 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer <a href="http://www.google.com" title="Squiz Labs" target="_blank">%3%</a></td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test deleting the link
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(3);
         $this->clickTopToolbarButton('linkRemove');
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying link to the full cell
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('link');
@@ -448,7 +448,7 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
     {
         $this->useTest(1);
 
-        $this->sikuli->click($this->findKeyword(4));
+        $this->clickKeyword(4);
         $this->assertTrue($this->topToolbarButtonExists('link', 'disabled'), 'Link icon should not be active.');
 
         $this->selectKeyword(4);
@@ -488,7 +488,7 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel <a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%4%</a></td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test editing the link
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(4);
         $this->clickInlineToolbarButton('link', 'active');
         $this->clearFieldValue('URL');
@@ -497,7 +497,7 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel <a href="http://www.google.com" title="Squiz Labs" target="_blank">%4%</a></td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test deleting the link
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(4);
         $this->clickInlineToolbarButton('linkRemove');
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
@@ -533,7 +533,7 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel <a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%4%</a></td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test editing the link
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(4);
         $this->clickTopToolbarButton('link', 'active');
         $this->clearFieldValue('URL');
@@ -542,13 +542,13 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel <a href="http://www.google.com" title="Squiz Labs" target="_blank">%4%</a></td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test deleting the link
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(4);
         $this->clickTopToolbarButton('linkRemove');
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying link to the full cell
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('link');

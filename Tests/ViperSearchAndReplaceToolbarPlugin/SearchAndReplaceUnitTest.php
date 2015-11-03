@@ -13,7 +13,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
      */
     public function testIconStates()
     {
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
 
         $this->assertTrue($this->topToolbarButtonExists('searchReplace'), 'Toolbar button icon is not correct');
 
@@ -46,7 +46,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
      */
     public function testReplaceButtonsNotActive()
     {
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
 
 
         $this->clickTopToolbarButton('searchReplace');
@@ -66,7 +66,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
      */
     public function testSearchForContentAndEditingSearch()
     {
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('government');
@@ -98,7 +98,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
      */
     public function testSearchForFindInContent()
     {
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('FIND');
@@ -123,7 +123,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
      */
     public function testSearchAndReplace()
     {
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('FIND');
@@ -149,7 +149,7 @@ class Viper_Tests_ViperSearchAndReplaceToolbarPlugin_SearchAndReplaceUnitTest ex
      */
     public function testFindAndThenReplace()
     {
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
 
         $this->clickTopToolbarButton('searchReplace');
         $this->type('FIND');

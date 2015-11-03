@@ -1,4 +1,4 @@
-    <?php
+<?php
 
 require_once 'AbstractViperImagePluginUnitTest.php';
 
@@ -22,34 +22,29 @@ class Viper_Tests_ViperReplacementPlugin_UndoAndRedoKeywordUnitTest extends Abst
         sleep(3);
         $this->sikuli->keyDown('Key.CMD + z');
         sleep(5);
-        
+
         $this->assertHTMLMatch('<p>%1% ((prop:productName)) %2%</p><p>%3% %4%</p>');
         $this->assertRawHTMLMatch('<p>%1%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %2%</p><p>%3% %4%</p>');
-        
+
         // Test for redo
+        $this->clickKeyword(1);
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        
+
         $this->assertHTMLMatch('<p>%1%&nbsp;&nbsp;%2%</p><p>%3% %4%</p>');
         $this->assertRawHTMLMatch('<p>%1%  %2%</p><p>%3% %4%</p>');
-        
+
         // Using top toolbar
-        $this->sikuli->keyDown('Key.CMD + z');
-        $this->moveToKeyword(1 , 'right');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        sleep(1);
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.CMD + z');
-        
+        $this->clickTopToolbarButton('historyUndo', NULL);
+
         $this->assertHTMLMatch('<p>%1% ((prop:productName)) %2%</p><p>%3% %4%</p>');
         $this->assertRawHTMLMatch('<p>%1%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %2%</p><p>%3% %4%</p>');
-        
+
         // Test for redo
-        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        
+        $this->clickTopToolbarButton('historyRedo', NULL);
+
         $this->assertHTMLMatch('<p>%1%&nbsp;&nbsp;%2%</p><p>%3% %4%</p>');
         $this->assertRawHTMLMatch('<p>%1%  %2%</p><p>%3% %4%</p>');
-        
+
     }//end testUndoAndRedoDeletingKeywords()
 
 
@@ -67,63 +62,102 @@ class Viper_Tests_ViperReplacementPlugin_UndoAndRedoKeywordUnitTest extends Abst
         $this->clickElement('img', 0);
         $this->sikuli->keyDown('Key.DELETE');
         $this->sikuli->keyDown('Key.CMD + z');
-        
-        $this->assertHTMLMatch('<p>%1% test content ((prop:viperKeyword)) </p><p>more content <img alt="TITLE" src="((prop:url))" /> even more content</p>');
-        $this->assertRawHTMLMatch('<p>%1% test content<span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span></p><p>more content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'"> even more content</p>');
-        
+
+        $this->assertHTMLMatch('<p>%1% test content ((prop:viperKeyword)) </p><p>more content <img alt="TITLE" src="((prop:url))" /> even more %2% content</p>');
+        $this->assertRawHTMLMatch('<p>%1% test content<span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span></p><p>more content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /> even more %2% content</p>');
+
         // Test for redo
+        $this->clickKeyword(1);
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        
-        $this->assertHTMLMatch('<p>%1% test content ((prop:viperKeyword))</p><p>more content&nbsp;&nbsp;even more content</p>');
-        $this->assertRawHTMLMatch('<p>%1% test content<span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span></p><p>more content  even more content</p>');
-        
+
+        $this->assertHTMLMatch('<p>%1% test content ((prop:viperKeyword))</p><p>more content&nbsp;&nbsp;even more %2% content</p>');
+        $this->assertRawHTMLMatch('<p>%1% test content<span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span></p><p>more content  even more %2% content</p>');
+
+        // Using top toolbar
+        $this->clickTopToolbarButton('historyUndo', NULL);
+
+        $this->assertHTMLMatch('<p>%1% test content ((prop:viperKeyword)) </p><p>more content <img alt="TITLE" src="((prop:url))" /> even more %2% content</p>');
+        $this->assertRawHTMLMatch('<p>%1% test content<span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span></p><p>more content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /> even more %2% content</p>');
+
+
+        // Test for redo
+        $this->clickTopToolbarButton('historyRedo', NULL);
+
+        $this->assertHTMLMatch('<p>%1% test content ((prop:viperKeyword))</p><p>more content&nbsp;&nbsp;even more %2% content</p>');
+        $this->assertRawHTMLMatch('<p>%1% test content<span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span></p><p>more content  even more %2% content</p>');
+
+
     }//end testUndoAndRedoDeletingImageKeywords()
 
 
     /**
-     * Test that images that use keywords that have been moved can be undone and redone.
+     * Test that images that use keywords that have been moved can be undone and redone using keyboard shortcuts.
      *
      * @return void
      */
-    public function testUndoAndRedoMovingImageKeywords()
-    {   
+    public function testUndoAndRedoMovingImageKeywordsUsingKeyboardShortcuts()
+    {
         // Using keyboard shortcuts
         $this->useTest(2);
         sleep(1);
-        $this->clickKeyword(1);
+        $this->clickKeyword(2);
         sleep(3);
         $this->clickElement('img', 0);
         $this->clickInlineToolbarButton('move');
-        $this->clickKeyword(5);
+        $loc = $this->findKeyword(5);
+        $this->sikuli->mouseMove($loc);
+        $this->sikuli->mouseDown('Button.LEFT');
+        usleep(300000);
+        $this->sikuli->mouseUp('Button.LEFT');
         sleep(1);
         $this->sikuli->keyDown('Key.CMD + z');
 
-        $this->assertHTMLMatch('<p>%1% test content ((prop:viperKeyword))</p><p>more content<img alt="TITLE" src="((prop:url))" /> even more content</p>');
-        $this->assertRawHTMLMatch('<p>%1% test content<span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span></p><p>more content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'"> even more content</p>');
-        
+        $this->assertHTMLMatch('<p>%1% test content ((prop:viperKeyword))</p><p>more content<img alt="TITLE" src="((prop:url))" /> even more %2% content</p>');
+        $this->assertRawHTMLMatch('<p>%1% test content<span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span></p><p>more content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /> even more %2% content</p>');
+
         // Test for redo
+        $this->clickKeyword(1);
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         sleep(2);
-        $this->assertHTMLMatch('<p>%1% test content<img alt="TITLE" src="((prop:url))" /></p><p>more content&nbsp;&nbsp;even more content</p>');
-        $this->assertRawHTMLMatch('<p>%1% test content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'"></p><p>more content  even more content</p>');
+        $this->assertHTMLMatch('<p>%1% test content<img alt="TITLE" src="((prop:url))" /></p><p>more content&nbsp;&nbsp;even more %2% content</p>');
+        $this->assertRawHTMLMatch('<p>%1% test content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /></p><p>more content  even more %2% content</p>');
+
+    }//end testUndoAndRedoMovingImageKeywordsUsingKeyboardShortcuts()
+
+
+    /**
+     * Test that images that use keywords that have been moved can be undone and redone using toolbar icons.
+     *
+     * @return void
+     */
+    public function testUndoAndRedoMovingImageKeywordsUsingToolbarIcons()
+    {
 
         // Using top toolbar
-        $this->clickTopToolbarButton('historyUndo', NULL);
+        $this->useTest(2);
+        sleep(1);
+        $this->clickKeyword(2);
         $this->clickElement('img', 0);
         $this->clickInlineToolbarButton('move');
-        $this->clickKeyword(5);
+        $loc = $this->findKeyword(5);
+        $this->sikuli->mouseMove($loc);
+        $this->sikuli->mouseDown('Button.LEFT');
+        usleep(300000);
+        $this->sikuli->mouseUp('Button.LEFT');
         $this->clickTopToolbarButton('historyUndo');
-        
-        $this->assertHTMLMatch('<p>%1% test content ((prop:viperKeyword))</p><p>more content<img alt="TITLE" src="((prop:url))" /> even more content</p>');
-        $this->assertRawHTMLMatch('<p>%1% test content<span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span></p><p>more content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'"> even more content</p>');
-        
+
+        $this->assertHTMLMatch('<p>%1% test content ((prop:viperKeyword))</p><p>more content<img alt="TITLE" src="((prop:url))" /> even more %2% content</p>');
+        $this->assertRawHTMLMatch('<p>%1% test content<span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span></p><p>more content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /> even more %2% content</p>');
+
         // Test for redo
-        $this->clickTopToolbarButton('historyRedo');
+        $this->clickKeyword(1);
+        $this->clickTopToolbarButton('historyRedo', NULL);
         sleep(1);
-        $this->assertHTMLMatch('<p>%1% test content<img alt="TITLE" src="((prop:url))" /></p><p>more content&nbsp;&nbsp;even more content</p>');
-        $this->assertRawHTMLMatch('<p>%1% test content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'"></p><p>more content  even more content</p>');
-        
-    }//end testUndoAndRedoMovingImageKeywords()
+        $this->assertHTMLMatch('<p>%1% test content<img alt="TITLE" src="((prop:url))" /></p><p>more content&nbsp;&nbsp;even more %2% content</p>');
+        $this->assertRawHTMLMatch('<p>%1% test content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /></p><p>more content  even more %2% content</p>');
+
+    }//end testUndoAndRedoMovingImageKeywordsUsingToolbarIcons()
 
 
     /**
@@ -132,8 +166,8 @@ class Viper_Tests_ViperReplacementPlugin_UndoAndRedoKeywordUnitTest extends Abst
      * @return void
      */
     public function testUndoAndRedoResizingImageKeywords()
-    {   
-        // Using inline toolbar
+    {
+        // Using keyboard shortcuts
         $this->useTest(2);
         $this->clickKeyword(1);
         sleep(1);
@@ -142,33 +176,34 @@ class Viper_Tests_ViperReplacementPlugin_UndoAndRedoKeywordUnitTest extends Abst
         $this->resizeImage(200);
         sleep(1);
         $this->sikuli->keyDown('Key.CMD + z');
-        
-        $this->assertHTMLMatch('<p>%1% test content ((prop:viperKeyword))</p><p>more content <img src="((prop:url))" alt="TITLE" /> even more content</p>');
-        $this->assertRawHTMLMatch('<p>%1% test content<span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span></p><p>more content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'"> even more content</p>');
-        
+
+        $this->assertHTMLMatch('<p>%1% test content ((prop:viperKeyword))</p><p>more content <img src="((prop:url))" alt="TITLE" /> even more %2% content</p>');
+        $this->assertRawHTMLMatch('<p>%1% test content<span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span></p><p>more content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /> even more %2% content</p>');
+
         // Test for redo
+        $this->clickKeyword(1);
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        
-        $this->assertHTMLMatch('<p>%1% test content ((prop:viperKeyword))</p><p>more content <img src="((prop:url))" alt="TITLE" height="170" width="200" /> even more content</p>');
-        $this->assertRawHTMLMatch('<p>%1% test content<span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span></p><p>more content<img alt="TITLE" data-viper-src="((prop:url))" height="170" src="'.$this->getTestURL('/Web/testImage.png').'" width="200"> even more content</p>');
-        
+
+        $this->assertHTMLMatch('<p>%1% test content ((prop:viperKeyword))</p><p>more content <img src="((prop:url))" alt="TITLE" height="170" width="200" /> even more %2% content</p>');
+        $this->assertRawHTMLMatch('<p>%1% test content<span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span></p><p>more content<img alt="TITLE" data-viper-src="((prop:url))" height="170" src="'.$this->getTestURL('/Web/testImage.png').'" width="200" /> even more %2% content</p>');
+
         // Using top toolbar
         sleep(1);
         $this->clickTopToolbarButton('historyUndo');
         $this->clickElement('img', 0);
         $this->resizeImage(200);
         sleep(1);
-        $this->clickTopToolbarButton('historyUndo');
-        
-        $this->assertHTMLMatch('<p>%1% test content ((prop:viperKeyword))</p><p>more content<img alt="TITLE" src="((prop:url))" /> even more content</p>');
-        $this->assertRawHTMLMatch('<p>%1% test content<span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span></p><p>more content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'"> even more content</p>');
-        
+        $this->clickTopToolbarButton('historyUndo', NULL);
+
+        $this->assertHTMLMatch('<p>%1% test content ((prop:viperKeyword))</p><p>more content<img alt="TITLE" src="((prop:url))" /> even more %2% content</p>');
+        $this->assertRawHTMLMatch('<p>%1% test content<span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span></p><p>more content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /> even more %2% content</p>');
+
         // Test for redo
-        $this->clickTopToolbarButton('historyRedo');
-        
-        $this->assertHTMLMatch('<p>%1% test content ((prop:viperKeyword))</p><p>more content <img src="((prop:url))" alt="TITLE" height="170" width="200" /> even more content</p>');
-        $this->assertRawHTMLMatch('<p>%1% test content<span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span></p><p>more content<img alt="TITLE" data-viper-src="((prop:url))" height="170" src="'.$this->getTestURL('/Web/testImage.png').'" width="200"> even more content</p>');
-        
+        $this->clickTopToolbarButton('historyRedo', NULL);
+
+        $this->assertHTMLMatch('<p>%1% test content ((prop:viperKeyword))</p><p>more content <img src="((prop:url))" alt="TITLE" height="170" width="200" /> even more %2% content</p>');
+        $this->assertRawHTMLMatch('<p>%1% test content<span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span></p><p>more content<img alt="TITLE" data-viper-src="((prop:url))" height="170" src="'.$this->getTestURL('/Web/testImage.png').'" width="200" /> even more %2% content</p>');
+
     }//end testUndoAndRedoResizingImageKeywords()
 
 
@@ -178,23 +213,36 @@ class Viper_Tests_ViperReplacementPlugin_UndoAndRedoKeywordUnitTest extends Abst
      * @return void
      */
     public function testUndoAndRedoOnLinkedKeywords()
-    {   
+    {
+        // Test using keyboard shortcuts
         $this->useTest(3);
         $this->moveToKeyword(1 , 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         sleep(1);
         $this->clickTopToolbarButton('linkremove', NULL);
-        $this->clickTopToolbarButton('historyUndo');
-        
+        $this->sikuli->keyDown('Key.CMD + z');
+
         $this->assertHTMLMatch('<p>%1% <a href="www.squizlabs.com.au">((prop:productName))</a> %2%</p><p>%3% %4%</p>');
         $this->assertRawHTMLMatch('<p>%1%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a> %2%</p><p>%3% %4%</p>');
-        
+
         // Test for redo
-        $this->clickTopToolbarButton('historyRedo');
-        
+        $this->clickKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         $this->assertHTMLMatch('<p>%1% ((prop:productName)) %2%</p><p>%3% %4%</p>');
         $this->assertRawHTMLMatch('<p>%1%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %2%</p><p>%3% %4%</p>');
-        
-    }//end testUndoAndRedoOnLinkedKeywords()    
+
+        // Test using top toolbar
+        $this->clickTopToolbarButton('historyUndo', NULL);
+
+        $this->assertHTMLMatch('<p>%1% <a href="www.squizlabs.com.au">((prop:productName))</a> %2%</p><p>%3% %4%</p>');
+        $this->assertRawHTMLMatch('<p>%1%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a> %2%</p><p>%3% %4%</p>');
+
+        // Test for redo
+        $this->clickTopToolbarButton('historyRedo', NULL);
+
+        $this->assertHTMLMatch('<p>%1% ((prop:productName)) %2%</p><p>%3% %4%</p>');
+        $this->assertRawHTMLMatch('<p>%1%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %2%</p><p>%3% %4%</p>');
+
+    }//end testUndoAndRedoOnLinkedKeywords()
 }

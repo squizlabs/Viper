@@ -377,7 +377,6 @@ a img {border: none;}
     text-shadow: 0 0 5px #F9F8B1;
     padding: 1em;
     margin: 2em 0;
-    overflow: auto;
     border-radius: 4px;
     box-shadow: 0 0 4px rgba(0,0,0,0.2) inset;
     -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.2) inset;

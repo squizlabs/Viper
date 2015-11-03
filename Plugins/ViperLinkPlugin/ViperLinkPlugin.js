@@ -373,9 +373,11 @@ ViperLinkPlugin.prototype = {
         range = range || this.viper.getViperRange();
 
         var selectedNode = range.getNodeSelection();
+        var startNode    = range.getStartNode();
         var common       = range.getCommonElement();
         if (!selectedNode && ViperUtil.isBrowser('msie') === true) {
             var startNode = range.getStartNode();
+            var endNode   = range.getEndNode();
             if (range.startContainer === range.endContainer
                 && range.startOffset === 0
                 && range.endOffset === 0
@@ -387,8 +389,7 @@ ViperLinkPlugin.prototype = {
                 common    = startNode.parentNode;
                 range.selectNode(startNode);
                 ViperSelection.addRange(range);
-            } else if (ViperUtil.isBrowser('msie') === true
-                && startNode
+            } else if (startNode
                 && startNode.nodeType === ViperUtil.TEXT_NODE
                 && !range.getEndNode()
                 && range.endContainer.nodeType === ViperUtil.ELEMENT_NODE
@@ -403,8 +404,26 @@ ViperLinkPlugin.prototype = {
                 ) {
                     return lastChild;
                 }
+            } else if (range.collapsed === true
+                && range.startOffset === 0
+                && range.startContainer.previousSibling
+                && (ViperUtil.isTag(range.startContainer.previousSibling, 'a') === true
+                || ViperUtil.inArray('a', ViperUtil.getSurroundedChildren(range.startContainer.previousSibling, true)) === true)
+            ) {
+                return range.startContainer.previousSibling;
+            } else if (range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
+                && range.startOffset >= range.startContainer.childNodes.length
+                && ViperUtil.isTag(range.startContainer.childNodes[range.startOffset - 1], 'a') === true
+            ) {
+                return range.startContainer.childNodes[range.startOffset - 1];
+            } else if (startNode
+                && endNode
+                && startNode.parentNode === endNode.parentNode
+                && ViperUtil.isTag(startNode.parentNode, 'a') === true
+            ) {
+                return startNode.parentNode;
             }
-        }
+         }
 
         if (selectedNode && ViperUtil.isTag(selectedNode, 'a') === true) {
             return selectedNode;
@@ -454,6 +473,12 @@ ViperLinkPlugin.prototype = {
                 ) {
                     // When the A tag is the last element in a P tag and only last few characters of the link is selected
                     // IE thinks this is not inside the link tag.
+                    return false;
+                } else if (startNode
+                    && endNode
+                    && startNode.parentNode === endNode.parentNode
+                    && ViperUtil.isTag(startNode.parentNode, 'a') === true
+                ) {
                     return false;
                 }
             }
@@ -637,9 +662,24 @@ ViperLinkPlugin.prototype = {
         ) {
             if (range.collapsed === true && data.lineage[data.current].nodeType === ViperUtil.TEXT_NODE) {
                 var parents = ViperUtil.getParents(data.lineage[data.current].parentNode, 'a', this.viper.getViperElement());
-                if (parents.length > 0) {
+                if (parents.length > 0
+                    || (range.startOffset === 0 && range.startContainer.previousSibling && ViperUtil.isTag(range.startContainer.previousSibling, 'a') === true)
+                ) {
+                    return true;
+                } else if (range.collapsed === true
+                    && range.startOffset === 0
+                    && range.startContainer.previousSibling
+                    && (ViperUtil.isTag(range.startContainer.previousSibling, 'a') === true
+                    || ViperUtil.inArray('a', ViperUtil.getSurroundedChildren(range.startContainer.previousSibling, true)) === true)
+                ) {
                     return true;
                 }
+            } else if (range.collapsed === true
+                && range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
+                && range.startOffset >= range.startContainer.childNodes.length
+                && ViperUtil.isTag(range.startContainer.childNodes[range.startOffset - 1], 'a') === true
+            ) {
+                return true;
             }
 
             return false;

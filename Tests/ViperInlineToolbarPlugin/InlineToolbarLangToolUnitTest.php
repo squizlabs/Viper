@@ -23,7 +23,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->type('en');
         $this->sikuli->keyDown('Key.ENTER');
 
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
         $this->selectKeyword(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li>', $lineage);
@@ -56,7 +56,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->type('en');
         $this->sikuli->keyDown('Key.ENTER');
 
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
         $this->selectKeyword(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li>', $lineage);
@@ -89,7 +89,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->type('en');
         $this->sikuli->keyDown('Key.ENTER');
 
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
         $this->selectKeyword(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li>', $lineage);
@@ -122,12 +122,12 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->type('en');
         $this->sikuli->keyDown('Key.ENTER');
 
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
         $this->selectKeyword(6);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li>', $lineage);
 
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
         $this->selectKeyword(6);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Language', 'active', TRUE);
@@ -156,12 +156,12 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->type('en');
         $this->sikuli->keyDown('Key.ENTER');
 
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
         $this->selectKeyword(6);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li>', $lineage);
 
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
         $this->selectKeyword(6);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Abbreviation', 'active', TRUE);
@@ -191,7 +191,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->type('en');
         $this->sikuli->keyDown('Key.ENTER');
 
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
         $this->selectKeyword(6);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li>', $lineage);
@@ -201,7 +201,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->clearFieldValue('Acronym');
         $this->sikuli->keyDown('Key.ENTER');
 
-        $this->sikuli->click($this->findKeyword(1));
+        $this->clickKeyword(1);
         $this->selectKeyword(6);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
@@ -328,7 +328,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->type('en');
         $this->sikuli->keyDown('Key.ENTER');
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
@@ -338,7 +338,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->clearFieldValue('Language');
         $this->sikuli->keyDown('Key.ENTER');
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
@@ -362,7 +362,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->type('en');
         $this->sikuli->keyDown('Key.ENTER');
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
@@ -373,7 +373,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->clearFieldValue('Acronym');
         $this->sikuli->keyDown('Key.ENTER');
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
@@ -397,7 +397,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->type('en');
         $this->sikuli->keyDown('Key.ENTER');
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
@@ -408,7 +408,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->clearFieldValue('Abbreviation');
         $this->sikuli->keyDown('Key.ENTER');
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
@@ -432,7 +432,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->type('en');
         $this->sikuli->keyDown('Key.ENTER');
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
@@ -442,7 +442,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->clearFieldValue('Language');
         $this->sikuli->keyDown('Key.ENTER');
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
@@ -467,7 +467,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->type('en');
         $this->sikuli->keyDown('Key.ENTER');
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
@@ -478,7 +478,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->clearFieldValue('Acronym');
         $this->sikuli->keyDown('Key.ENTER');
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
@@ -503,7 +503,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->type('en');
         $this->sikuli->keyDown('Key.ENTER');
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
@@ -514,7 +514,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarLangToolUnitTest extends
         $this->clearFieldValue('Abbreviation');
         $this->sikuli->keyDown('Key.ENTER');
 
-        $this->sikuli->click($this->findKeyword(2));
+        $this->clickKeyword(2);
         $this->selectKeyword(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);

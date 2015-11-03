@@ -226,6 +226,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->useTest(1);
 
         $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.DELETE');
         $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/CopyPasteFiles/LibreOfficeDoc.txt'));
         $this->assertHTMLMatch('<h1>Heading 1</h1><p>This is a document that has been created using LibreOffice</p><h2>Heading 2</h2><p>More text under heading two.</p><p>Numbered list:</p><ol><li>One</li><li>Two</li><li>Three</li></ol><p>Ordered List:</p><ul><li>One</li><li>Two</li><li>Three</li></ul>');
 

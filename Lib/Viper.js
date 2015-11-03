@@ -765,9 +765,14 @@ Viper.prototype = {
             ViperUtil.setStyle(this.element, 'outline', 'invert');
             this._removeEvents();
             this.enabled = false;
-            this.fireCallbacks('Viper:disabled');
+
+            // Fire disabled with previous state set to enabled.
+            this.fireCallbacks('Viper:disabled', true);
             ViperChangeTracker.disableChangeTracking();
             ViperChangeTracker.cleanUp();
+        } else if (enabled === false) {
+            // Fire disabled with previous state set to disabled.
+            this.fireCallbacks('Viper:disabled', false);
         }//end if
 
     },
@@ -833,6 +838,7 @@ Viper.prototype = {
 
         this.setEnabled(false);
         this.element = elem;
+        ViperUtil.setViperElement(elem);
 
         if (ViperUtil.inArray(elem, this._registeredElements) === false) {
             this.registerEditableElement(elem);
@@ -922,7 +928,7 @@ Viper.prototype = {
             return;
         }
 
-        if (ViperUtil.isBrowser('msie') === true) {
+        if (ViperUtil.isBrowser('msie', '<11') === true) {
             // Find iframe elements for youtube.com videos to add wmode=opaque to query
             // string so that the video does not sit on top of the editor window in IE.
             var iframeTags = ViperUtil.getTag('iframe', elem);
@@ -949,6 +955,7 @@ Viper.prototype = {
 
         var tmp     = Viper.document.createElement('div');
         var content = this.getContents(elem);
+        content     = this._closeStubTags(content);
         ViperUtil.setHtml(tmp, content);
 
         if ((ViperUtil.trim(ViperUtil.getNodeTextContent(tmp)).length === 0 || ViperUtil.getHtml(tmp) === '&nbsp;')
@@ -1591,10 +1598,12 @@ Viper.prototype = {
             }
         } else if (doc.body.createTextRange) {
             // IE.
-            range = doc.body.createTextRange();
+            var range = doc.body.createTextRange();
             try {
                 range.moveToPoint(x, y);
             } catch (e) {
+                // Thrown usualy when the point is on an element like img.
+                return document.elementFromPoint(x, y);
             }
 
             elem = range.parentElement();
@@ -2601,7 +2610,7 @@ Viper.prototype = {
 
         var startContainer = range.getStartNode();
         var endContainer   = range.getEndNode();
-        var nodeSelection  = range.getNodeSelection();
+        var nodeSelection  = range.getNodeSelection(null, true);
 
         // Selected contents from same node.
         if (nodeSelection) {
@@ -3845,8 +3854,9 @@ Viper.prototype = {
             startBookmark.setAttribute('data-bookmarkid', bookmarkid);
         }
 
-        var viperElement = this.getViperElement();
-        if (range.getNodeSelection() === viperElement) {
+        var viperElement  = this.getViperElement();
+        var nodeSelection = range.getNodeSelection();
+        if (nodeSelection === viperElement) {
             // Whole Viper element is selected.
             if (!viperElement.firstChild) {
                 // There are no contents.
@@ -3933,7 +3943,14 @@ Viper.prototype = {
 
             currRange.setStart(startBookmark.nextSibling, 0);
             currRange.setEnd(endBookmark.previousSibling, (endBookmark.previousSibling.length || 0));
-        }
+
+            // Check if the bookmark is inside a special element.
+            if (nodeSelection && this.isSpecialElement(nodeSelection) === true) {
+                // Move it outside of the special key.
+                ViperUtil.insertBefore(nodeSelection, startBookmark);
+                ViperUtil.insertAfter(nodeSelection, endBookmark);
+            }
+        }//end if
 
         var bookmark = {
             start: startBookmark,
@@ -4069,7 +4086,8 @@ Viper.prototype = {
             if (this.elementIsEmpty(tmp) === false) {
                 while (tmp.lastChild) {
                     nextNode = tmp.lastChild;
-                    ViperUtil.insertAfter(selEnd, tmp.lastChild);
+                    ViperUtil.remove(tmp.lastChild);
+                    ViperUtil.insertAfter(selEnd, nextNode);
                 }
             }
 
@@ -4576,9 +4594,9 @@ Viper.prototype = {
     keyDown: function(e)
     {
         this._viperRange = null;
+        var range        = this.getCurrentRange();
 
         if (this._keyDownRangeCollapsed === true) {
-            var range = this.getCurrentRange();
             this._keyDownRangeCollapsed = range.collapsed;
         }
 
@@ -4643,7 +4661,20 @@ Viper.prototype = {
                     range.setStart(range.startContainer, 0);
                     range.collapse(true);
                     ViperSelection.addRange(range);
-                }//end if
+                }/* else if (range.collapsed === false
+                    && e.which === 37
+                    && e.shiftKey === true
+                    && range.startOffset === 1
+                    && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                    && range.startContainer.data.charAt(0) === ' '
+                    && ViperUtil.isBrowser('msie') === true
+                ) {
+                    range.setStart(range.startContainer, 0);
+                    ViperSelection.addRange(range);
+                    this.fireSelectionChanged();
+
+                    return false;
+                }//end if*/
 
                 var self = this;
                 setTimeout(function() {
@@ -4714,7 +4745,12 @@ Viper.prototype = {
         } else {
             var startNode = range.getStartNode();
             var endNode   = range.getEndNode();
-            if (startNode && startNode === endNode && startNode.nodeType === ViperUtil.ELEMENT_NODE) {
+            if (startNode
+                && startNode === endNode
+                && startNode.nodeType === ViperUtil.ELEMENT_NODE
+                && startNode.parentNode === this.element
+                && range.startOffset === 0
+            ) {
                 var firstChild = range._getFirstSelectableChild(startNode);
                 if (firstChild) {
                     range.setStart(firstChild, 0);
@@ -5131,7 +5167,7 @@ Viper.prototype = {
                 // event.
                 setTimeout(function() {
                     self.fireSelectionChanged(self.adjustRange(), true);
-                }, 300);
+                }, 200);
             } else {
                 self.fireSelectionChanged(range, true);
             }
@@ -5789,13 +5825,20 @@ Viper.prototype = {
 
     },
 
+    _closeStubTags: function (content)
+    {
+        content = content.replace(/<(area|base|basefont|br|hr|input|img|link|meta|embed|viper:param|param)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "<$1$2 />");
+        return content;
+
+    },
+
     cleanHTML: function(content, attrBlacklist)
     {
         attrBlacklist = attrBlacklist || ['sizset'];
 
         content = content.replace(/<(p|div|h1|h2|h3|h4|h5|h6|li)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>\s*/ig, "<$1$2>");
         content = content.replace(/\s*<\/(p|div|h1|h2|h3|h4|h5|h6|li)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "</$1$2>");
-        content = content.replace(/<(area|base|basefont|br|hr|input|img|link|meta|embed|viper:param|param)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "<$1$2 />");
+        content = this._closeStubTags(content);
         content = content.replace(/<\/?\s*([A-Z\d:]+)/g, function(str) {
             return str.toLowerCase();
         });
@@ -5803,7 +5846,7 @@ Viper.prototype = {
         content = this.replaceEntities(content);
 
         // Regex to get list of HTML tags.
-        var subRegex = '\\s+([:\\w]+)(?:\\s*=\\s*("(?:[^"]+)?"|\'(?:[^\']+)?\'|[^\'">\\s]+))?';
+        var subRegex = '\\s+([_\\-:\\w]+)(?:\\s*=\\s*("(?:[^"]+)?"|\'(?:[^\']+)?\'|[^\'">\\s]+))?';
 
         // Regex to get list of attributes in an HTML tag.
         var tagRegex  = new RegExp('(<[\\w:]+)(?:' + subRegex + ')+\\s*(\/?>)', 'g');
@@ -6047,7 +6090,7 @@ Viper.prototype = {
                     if ((ViperUtil.isStubElement(node) === false
                         && !node.firstChild)
                         || cont === '&nbsp;'
-                        || (cont === '' && ViperUtil.isTag(node, 'p'))
+                        || (cont === '' && ViperUtil.isTag(node, ['p', 'div']))
                     ) {
                         ViperUtil.remove(node);
                     }
@@ -6059,6 +6102,8 @@ Viper.prototype = {
                     ViperUtil.remove(node);
                 } else if (ViperUtil.trim(node.data) === '' && node.data.indexOf("\n") === 0) {
                     ViperUtil.remove(node);
+                } else if (node.data.match(/\n\s+\S+\n\s+/) !== null && !node.previousSibling && !node.nextSibling) {
+                    node.data = ViperUtil.trim(node.data);
                 } else {
                     var nbsp = String.fromCharCode(160);
 

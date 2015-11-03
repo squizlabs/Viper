@@ -122,7 +122,6 @@ ViperCoreStylesPlugin.prototype = {
         tools.getItem('bold').setButtonShortcut('CTRL+B');
         tools.getItem('italic').setButtonShortcut('CTRL+I');
 
-        var callbackType = 'Viper:selectionChanged';
         if (toolbarPlugin) {
             toolbarPlugin.addButton(btnGroup);
             toolbarPlugin.addButton(btnGroup2);
@@ -134,15 +133,18 @@ ViperCoreStylesPlugin.prototype = {
 
             toolbarPlugin.addButton(hr);
 
-            callbackType = 'ViperToolbarPlugin:updateToolbar';
-
-            this.viper.registerCallback(callbackType, 'ViperCoreStylesPlugin', function(data) {
+            this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperCoreStylesPlugin', function(data) {
                 var range = data;
                 if (data.range) {
                     range = data.range;
                 }
 
-                self._updateToolbarButtonStates(toolbarButtons, range);
+                setTimeout(
+                    function() {
+                        self._updateToolbarButtonStates(toolbarButtons, range);
+                    },
+                    10
+                )
 
                 if (self._onChangeAddStyle.length > 0) {
                     var style = null;
@@ -894,6 +896,13 @@ ViperCoreStylesPlugin.prototype = {
         range.collapse(true);
         ViperSelection.addRange(range);
 
+        if (nextSibling.previousSibling
+            && nextSibling.previousSibling.nodeType === ViperUtil.TEXT_NODE
+            && ViperUtil.trim(nextSibling.previousSibling.data) === ''
+        ) {
+            ViperUtil.remove(nextSibling.previousSibling);
+        }
+
         this.viper.fireNodesChanged('ViperCoreStylesPlugin:hr');
         this.viper.ViperHistoryManager.end();
 
@@ -1098,17 +1107,13 @@ ViperCoreStylesPlugin.prototype = {
             return;
         }
 
-        // TODO: Fix here: <p><em>text*text</em></p>. Press CMD+I, CMD+B and type p will produce extra p character.
-        // E.g. <p><em>text</em>pp<em>text</em></p>.
         var origData = node.data;
         var style    = null;
-        var removeStyle = false;
         while (style = this._onChangeAddStyle.shift()) {
             var nodes = this.viper.splitNodeAtRange(style, range, true);
 
-            if (removeStyle === true || ViperUtil.isTag(nodes.prevNode, style) === true || ViperUtil.isTag(nodes.nextNode, style) === true) {
+            if (ViperUtil.isTag(nodes.prevNode, style) === true || ViperUtil.isTag(nodes.nextNode, style) === true) {
                 if (this._onChangeAddStyle.length > 0) {
-                    removeStyle = true;
                     node.data = '';
                 } else {
                     node.data = origData;
@@ -1177,9 +1182,17 @@ ViperCoreStylesPlugin.prototype = {
                     this.viper.insertBefore(nodes.nextNode, styleTag);
                 }
 
+                var offset = 1;
+                if (this._onChangeAddStyle.length > 0) {
+                    node.data = '';
+                    offset = 0;
+                } else {
+                    node.data = origData;
+                }
+
                 styleTag.appendChild(node);
 
-                range.setStart(node, 1);
+                range.setStart(node, offset);
                 range.collapse(true);
                 ViperSelection.addRange(range);
             }//end if
@@ -1210,6 +1223,13 @@ ViperCoreStylesPlugin.prototype = {
                     } else {
                         this.viper.ViperTools.setButtonActive(this._buttons[style]);
                     }
+                }
+
+                // Do not allow sub & sup to be applied at the same time.
+                if (style === 'sup') {
+                    this.viper.ViperTools.disableButton(this._buttons['sub']);
+                } else if (style === 'sub') {
+                    this.viper.ViperTools.disableButton(this._buttons['sup']);
                 }
             }
             return false;
@@ -1367,8 +1387,11 @@ ViperCoreStylesPlugin.prototype = {
         }
 
         if (this._canStyleNode(data.lineage[data.current]) !== true) {
+            this._selectedImage = null;
             return;
         } else if (ViperUtil.isTag(data.lineage[data.current], 'img') === true) {
+            this.viper.ViperTools.disableButton('ViperCoreStylesPlugin:vtp:block');
+            this._selectedImage = data.lineage[data.current];
             return;
         }
 
@@ -1460,10 +1483,10 @@ ViperCoreStylesPlugin.prototype = {
 
                 var types = ['left', 'center', 'right', 'block'];
                 var c     = types.length;
-                this.viper.ViperTools.getItem('justify').setIconClass('Viper-justifyLeft');
-                this.viper.ViperTools.setButtonInactive('justify');
+                tools.getItem('justify').setIconClass('Viper-justifyLeft');
+                tools.setButtonInactive('justify');
                 for (var i = 0; i < c; i++) {
-                    this.viper.ViperTools.setButtonInactive('ViperCoreStylesPlugin:vtp:' + types[i]);
+                    tools.setButtonInactive('ViperCoreStylesPlugin:vtp:' + types[i]);
                 }
 
                 if (type) {
@@ -1482,6 +1505,30 @@ ViperCoreStylesPlugin.prototype = {
             tools.enableButton(this._buttons[buttons.styles[i]]);
             tools.setButtonInactive(this._buttons[buttons.styles[i]]);
             tagNames.push(buttons.styles[i]);
+        }
+
+        // Do not allow sub & sup to be applied at the same time.
+        if (ViperUtil.isTag(range.startContainer, 'sub') === true || ViperUtil.isTag(range.endContainer, 'sub') === true) {
+            tools.disableButton(this._buttons['sup']);
+        } else if (ViperUtil.isTag(range.startContainer, 'sup') === true || ViperUtil.isTag(range.endContainer, 'sup') === true) {
+            tools.disableButton(this._buttons['sub']);
+        } else {
+            // Check parents.
+            var elems = [range.startContainer, range.endContainer];
+            while (elems.length > 0) {
+                var elem        = elems.shift();
+                var subParents  = ViperUtil.getParents(elem, null, this.viper.getViperElement());
+                for (var i = 0; i < subParents.length; i++) {
+                    var tagName = ViperUtil.getTagName(subParents[i]);
+                    if (tagName === 'sub') {
+                        tools.disableButton(this._buttons['sup']);
+                        break;
+                    } else if (tagName === 'sup') {
+                        tools.disableButton(this._buttons['sub']);
+                        break;
+                    }
+                }
+            }
         }
 
         // Active states.
@@ -1586,7 +1633,7 @@ ViperCoreStylesPlugin.prototype = {
 
             var startParent = null;
             if (!selectedNode || selectedNode === viperElement || ViperUtil.isBlockElement(selectedNode) === false) {
-                startParent = ViperUtil.getFirstBlockParent(startNode);
+                startParent = ViperUtil.getFirstBlockParent(startNode, null, true);
             } else {
                 startParent = selectedNode;
             }
@@ -1594,7 +1641,7 @@ ViperCoreStylesPlugin.prototype = {
             if (startNode !== endNode) {
                 var endParent = endNode;
                 if (endNode !== viperElement) {
-                    endParent = ViperUtil.getFirstBlockParent(endNode);
+                    endParent = ViperUtil.getFirstBlockParent(endNode, null, true);
                 }
 
                 var elems     = ViperUtil.getElementsBetween(startParent, endParent);

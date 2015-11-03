@@ -57,12 +57,20 @@ function gHtml(selector, index, removeTableHeaders)
 function getRawHTML(selector, index)
 {
     var html = '';
-    index = index || 0;
+    index    = index || 0;
     if (selector) {
         html = ViperUtil.getHtml(ViperUtil.$(selector)[index]).replace("\n", '');
     } else {
         html = ViperUtil.getHtml(viper.getViperElement());
     }
+
+    if (html) {
+        html = html.replace(/<\/?\s*([A-Z\d:]+)/g, function(str) {
+            return str.toLowerCase();
+        });
+    }
+
+    html = viper.cleanHTML(html);
 
     return html;
 
@@ -303,22 +311,63 @@ function gActBubble()
 
 function gStringLoc(str)
 {
-    var range = viper.getCurrentRange();
-    var loc   = null;
-    if (window.find(str, true, false, true, true, true) === true) {
-        loc = viper.getCurrentRange().rangeObj.getBoundingClientRect();
+    var range          = viper.getCurrentRange();
+    var clone          = range.cloneRange();
+    var loc            = null;
+    var contentElement = document.getElementById('content');
+    if (ViperUtil.isBrowser('msie') === true) {
+        // Range search.
+        var viperRange = null;
+        if (ViperUtil.isBrowser('msie', '>=11') === true) {
+            var textRange = new ViperIERange(document.body.createTextRange());
+            var selectable = range._getFirstSelectableChild(contentElement);
+            textRange.setStart(selectable, 0);
+            textRange.setEnd(selectable, 0);
+            viperRange = textRange;
+        } else {
+            viperRange.collapse(false);
+        }
+
+        var found = viperRange.rangeObj.findText(str);
+        loc = viperRange.rangeObj.getBoundingClientRect();
         loc = {
-            x1: loc.left,
-            x2: loc.right,
-            y1: loc.top,
-            y2: loc.bottom
-        };
+                x1: loc.left,
+                x2: loc.right,
+                y1: loc.top,
+                y2: loc.bottom
+            };
+
+    } else {
+        range.setStart(range._getFirstSelectableChild(contentElement), 0);
+        range.collapse(true);
+        ViperSelection.addRange(range);
+        if (window.find(str, true, false, true, true, true) === true) {
+            loc = viper.getCurrentRange().rangeObj.getBoundingClientRect();
+            loc = {
+                x1: loc.left,
+                x2: loc.right,
+                y1: loc.top,
+                y2: loc.bottom
+            };
+        }
     }
 
     // Reset selection.
-    ViperSelection.addRange(range);
+    ViperSelection.addRange(clone);
 
     return loc;
+
+}
+
+function hideToolbarsAtLocation(loc)
+{
+    var toolbars = ViperUtil.find(document.body, '.ViperITP.Viper-visible');
+    for (var i = 0; i < toolbars.length; i++) {
+        var toolbarLoc = ViperUtil.getBoundingRectangle(toolbars[i]);
+        if (ViperUtil.isIntersectingRect(loc, toolbarLoc) === true) {
+            ViperUtil.removeClass(toolbars[i], 'Viper-visible');
+        }
+    }
 
 }
 
@@ -393,6 +442,13 @@ function useTest(id)
     viper.getHistoryManager().add();
 
     ViperSelection.removeAllRanges();
+
+    if (ViperUtil.isBrowser('msie') === true) {
+        viper.setEditableElement(contentElement);
+        viper.setEnabled(false);
+    } else {
+        viper.initEditableElement(contentElement);
+    }
 
 }
 

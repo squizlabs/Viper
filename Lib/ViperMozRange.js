@@ -412,6 +412,7 @@ ViperMozRange.prototype = {
             while (parent) {
                 if (parent === viperElem) {
                     intree = true;
+                    break;
                 }
 
                 parent = parent.parentNode;

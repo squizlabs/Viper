@@ -1589,7 +1589,7 @@ ViperTableEditorPlugin.prototype = {
         range.setStart(selectNode, 0);
         range.collapse(true);
         ViperSelection.addRange(range);
-        this.viper.fireSelectionChanged();
+        this.viper.fireSelectionChanged(null, true);
 
         this.removeHighlights();
         this.hideCellToolsIcon();
@@ -3885,8 +3885,12 @@ ViperTableEditorPlugin.prototype = {
         while (fromCell.firstChild) {
             if (ViperUtil.isTag(fromCell.firstChild, 'br') === true) {
                 ViperUtil.remove(fromCell.firstChild);
-            } else {
+            } else if (fromCell.firstChild.nodeType !== ViperUtil.TEXT_NODE
+                || ViperUtil.trim(fromCell.firstChild.data) !== ''
+            ) {
                 toCell.appendChild(fromCell.firstChild);
+            } else {
+                ViperUtil.remove(fromCell.firstChild);
             }
         }
 
@@ -3910,7 +3914,7 @@ ViperTableEditorPlugin.prototype = {
     {
         if (ViperUtil.isBrowser('msie') === true) {
             if (ViperUtil.trim(ViperUtil.getHtml(cell)) === '') {
-                ViperUtil.setHtml(cell, '&nbsp;');
+                ViperUtil.setHtml(cell, '<br />');
             }
         } else {
             ViperUtil.setHtml(cell, '<br />');
