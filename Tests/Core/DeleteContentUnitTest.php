@@ -20,7 +20,9 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.DELETE');
         sleep(1);
         $this->type('This is a line of content to delete the last three %1% words %2%');
+        $this->sikuli->keyDown('Key.ENTER');
         sleep(2);
+        $this->assertHTMLMatch('<p>This is a line of content to delete the last three %1% words %2%</p>');
 
         // Select the last 3 words and delete them
         $this->selectKeyword(1, 2);
@@ -50,7 +52,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
         }
 
         $this->type('test');
-        $this->assertHTMLMatch('<p>testMOZ %2%</p>');
+        $this->assertHTMLMatch('<p>Content testMOZ %2%</p>');
 
         // Test backspace
         $this->useTest(1);
@@ -62,7 +64,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
         }
 
         $this->type('test');
-        $this->assertHTMLMatch('<p>%1%</p><p>EIBtest</p>');
+        $this->assertHTMLMatch('<p>Content %1%</p><p>EIBtest</p>');
 
     }//end testDeleteAndBackspace()
 
