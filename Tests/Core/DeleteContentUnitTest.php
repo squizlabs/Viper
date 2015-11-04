@@ -19,17 +19,19 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.CMD + a');
         $this->sikuli->keyDown('Key.DELETE');
         sleep(1);
+        $this->type('Content');
+        $this->sikuli->keyDown('Key.ENTER');
         $this->type('This is a line of content to delete the last three %1% words %2%');
         $this->sikuli->keyDown('Key.ENTER');
         sleep(2);
-        $this->assertHTMLMatch('<p>This is a line of content to delete the last three %1% words %2%</p>');
+        $this->assertHTMLMatch('<p>Content</p><p>This is a line of content to delete the last three %1% words %2%</p>');
 
         // Select the last 3 words and delete them
         $this->selectKeyword(1, 2);
         sleep(1);
         $this->sikuli->keyDown('Key.DELETE');
         sleep(1);
-        $this->assertHTMLMatch('<p>This is a line of content to delete the last three</p>');
+        $this->assertHTMLMatch('<p>Content</p><p>This is a line of content to delete the last three</p>');
 
     }//end testDeletingNewContent()
 
