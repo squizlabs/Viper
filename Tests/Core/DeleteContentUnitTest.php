@@ -20,7 +20,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.DELETE');
         sleep(1);
         $this->type('This is a line of content to delete the last three %1% words %2%');
-        sleep(1);
+        sleep(2);
 
         // Select the last 3 words and delete them
         $this->selectKeyword(1, 2);
