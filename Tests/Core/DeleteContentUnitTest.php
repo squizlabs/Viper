@@ -85,7 +85,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.DELETE');
         sleep(2);
         $this->type('New content in paragraph');
-        $this->assertHTMLMatch('<p>New content in paragraphThis is the first line of content.<br />This is the second line of content.</p><p>Another paragraph</p>');
+        $this->assertHTMLMatch('<p>Some content here</p><p>New content in paragraphThis is the first line of content.<br />This is the second line of content.</p><p>Another paragraph</p>');
 
         // Delete the content before the BR using the delete key
         $this->useTest(2);
@@ -95,7 +95,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.DELETE');
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('New content in paragraph');
-        $this->assertHTMLMatch('<p>New content in paragraphThis is the first line of content.<br />This is the second line of content.</p><p>Another paragraph</p>');
+        $this->assertHTMLMatch('<p>Some content here</p><p>New content in paragraphThis is the first line of content.<br />This is the second line of content.</p><p>Another paragraph</p>');
 
     }//end testDeletingContentBeforeBRTag()
 
