@@ -15,7 +15,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
         $this->useTest(1);
 
         // Select all content, delete it and replace with new content
-        $this->selectKeyword(1);
+        $this->clickKeyword(1);
         $this->sikuli->keyDown('Key.CMD + a');
         $this->sikuli->keyDown('Key.DELETE');
         sleep(1);
