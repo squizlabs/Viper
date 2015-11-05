@@ -115,7 +115,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
 
-        for ($i = 0; $i < 13; $i++) {
+        for ($i = 0; $i < 12; $i++) {
             $this->sikuli->keyDown('Key.BACKSPACE');
         }
 
@@ -129,7 +129,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
         $this->useTest(3);
         $this->moveToKeyword(1, 'left');
 
-        for ($i = 0; $i < 13; $i++) {
+        for ($i = 0; $i < 12; $i++) {
             $this->sikuli->keyDown('Key.DELETE');
         }
 
