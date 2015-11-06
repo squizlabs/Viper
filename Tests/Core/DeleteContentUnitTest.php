@@ -300,7 +300,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
         // Add content to check the position of the cursor
         $this->type('content');
 
-        if ($this->sikuli->getBrowserid() === 'safari') {
+        if ($this->sikuli->getBrowserid() === 'safari' || $this->sikuli->getBrowserid() === 'ie9') {
             // It seems to be not possible to set the range after the strong tag when its the last element.
             $this->assertHTMLMatch('<p>%1% <del>testcontent</del></p>');
         } else {
@@ -369,7 +369,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
         // Add content to check the position of the cursor
         $this->type('content');
 
-        if ($this->sikuli->getBrowserid() === 'safari') {
+        if ($this->sikuli->getBrowserid() === 'safari' || $this->sikuli->getBrowserid() === 'ie9') {
             // It seems to be not possible to set the range after the strong tag when its the last element.
             $this->assertHTMLMatch('<p>%1% <sup>testcontent</sup></p>');
         } else {
@@ -438,7 +438,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
         // Add content to check the position of the cursor
         $this->type('content');
 
-        if ($this->sikuli->getBrowserid() === 'safari') {
+        if ($this->sikuli->getBrowserid() === 'safari' || $this->sikuli->getBrowserid() === 'ie9') {
             // It seems to be not possible to set the range after the strong tag when its the last element.
             $this->assertHTMLMatch('<p>%1% <sub>testcontent</sub></p>');
         } else {
