@@ -56,7 +56,7 @@ ViperCursorAssistPlugin.prototype = {
                     }
 
                     var hoverElem = self.viper.getElementAtCoords(e.clientX, e.clientY);
-                    if (hoverElem && (hover === true || hoverElem === line || hoverElem.parentNode.parentNode === line)) {
+                    if (hoverElem && (hover === true || hoverElem === line || (hoverElem.parentNode && hoverElem.parentNode.parentNode === line))) {
                         return;
                     }
 
