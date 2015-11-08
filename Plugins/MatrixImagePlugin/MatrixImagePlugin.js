@@ -49,7 +49,7 @@ MatrixImagePlugin.prototype = {
             }
             else {
                 // use js to trigger file chooser
-                $('#'+ prefix + 'uploadImageButton').click();
+                ViperUtil.$('#'+ prefix + 'uploadImageButton').click();
             }
         });
 
@@ -78,7 +78,7 @@ MatrixImagePlugin.prototype = {
         ViperUtil.insertAfter(urlRow, fileRow);
 
         // if the plugin bubble is shown
-        ViperUtil.addEvent($('#' + this.viper.getId() + '-image').get(0), 'mousedown', function(e) {
+        ViperUtil.addEvent(ViperUtil.$('#' + this.viper.getId() + '-image').get(0), 'mousedown', function(e) {
             // reset upload forms   
             self._uploadForm.get(0).reset();
             self._inlineUploadForm.get(0).reset();
@@ -86,8 +86,8 @@ MatrixImagePlugin.prototype = {
             self._inlineUploadForm.css('display', 'none');
 
             // hide choose location fields
-            $('.' + prefix + '-chooseLocationFields').css('display', 'none');     
-            $('.uploadImage-progressIndicator').hide();
+            ViperUtil.$('.' + prefix + '-chooseLocationFields').css('display', 'none');     
+            ViperUtil.$('.uploadImage-progressIndicator').hide();
 
             // disable the location selector
             self.viper.ViperTools.getItem(prefix + ':parentRootNode').enable();
@@ -100,7 +100,7 @@ MatrixImagePlugin.prototype = {
             self._prepareDropppedImageUpload(prefix);
 
             // focus back on the input field (we lost focus from above interface mods)
-            $('.Viper-imageUploadFileRow input').focus();
+            ViperUtil.$('.Viper-imageUploadFileRow input').focus();
 
         });
 
@@ -112,7 +112,7 @@ MatrixImagePlugin.prototype = {
             if (ViperUtil.isTag(target, 'img') === true) {
                 if(target.dataset.imagepaste && target.dataset.imagepaste == 'true') {
                     setTimeout(function(){ 
-                        $('#' + self.viper.getId() + '-vitpImage').mousedown(); 
+                        ViperUtil.$('#' + self.viper.getId() + '-vitpImage').mousedown(); 
                     }, 250);
                     
                 }
@@ -153,7 +153,7 @@ MatrixImagePlugin.prototype = {
                 }
             }
             else {
-                $('#'+ prefix + 'uploadImageButton').click();
+                ViperUtil.$('#'+ prefix + 'uploadImageButton').click();
             }
         });
 
@@ -189,7 +189,7 @@ MatrixImagePlugin.prototype = {
 
 
         // reset progress bar and upload form when the plugin is displayed
-        ViperUtil.addEvent($('#' + this.viper.getId() + '-vitpImage').get(0), 'mousedown', function(e) {
+        ViperUtil.addEvent(ViperUtil.$('#' + this.viper.getId() + '-vitpImage').get(0), 'mousedown', function(e) {
             // reset upload forms   
             self._uploadForm.get(0).reset();
             self._inlineUploadForm.get(0).reset();
@@ -197,8 +197,8 @@ MatrixImagePlugin.prototype = {
             self._inlineUploadForm.css('display', 'none');
 
             // hide choose location fields
-            $('.' + prefix + '-chooseLocationFields').css('display', 'none');     
-            $('.uploadImage-progressIndicator').hide();
+            ViperUtil.$('.' + prefix + '-chooseLocationFields').css('display', 'none');     
+            ViperUtil.$('.uploadImage-progressIndicator').hide();
             
             // disable the location selector
             self.viper.ViperTools.getItem(prefix + ':parentRootNode').enable();
@@ -212,7 +212,7 @@ MatrixImagePlugin.prototype = {
 
 
             // focus back on the input field (we lost focus from above interface mods)
-            $('.Viper-imageUploadFileRow input').focus();
+            ViperUtil.$('.Viper-imageUploadFileRow input').focus();
 
         });
 
@@ -224,7 +224,7 @@ MatrixImagePlugin.prototype = {
         var self = this;
         var fileRow = this.viper.ViperTools.createRow(prefix + ':fileRow', 'Viper-imageUploadFileRow');
         var fileInput = this.viper.ViperTools.createTextbox(prefix + ':fileInput', _('File'), '', null, true);
-        $(fileInput).on('input', function() {
+        ViperUtil.$(fileInput).on('input', function() {
             // enable submit button
             self.viper.ViperTools.enableButton('ViperImagePlugin:bubbleSubSection-applyButton');
             self.viper.ViperTools.enableButton('vitpImagePlugin-infoSubsection-applyButton');
@@ -242,7 +242,7 @@ MatrixImagePlugin.prototype = {
         // the hidden file upload form
         var currentUrl = ViperUtil.baseUrl(window.location.href);
         var actionURL = currentUrl + '?SQ_ACTION=image_upload';
-        var $form = $('<form id="'+ prefix + 'uploadImage" action="' + actionURL + '" style="display:none;" method="post" class="uploadImageForm" ></form>');
+        var $form = ViperUtil.$('<form id="'+ prefix + 'uploadImage" action="' + actionURL + '" style="display:none;" method="post" class="uploadImageForm" ></form>');
         if(prefix.indexOf('vitp') > -1) {
             this._inlineUploadForm = $form;
         }
@@ -307,17 +307,17 @@ MatrixImagePlugin.prototype = {
                 }
 
                 // show choose location fields
-                $('.' + prefix + '-chooseLocationFields').css('display', 'block');       
+                ViperUtil.$('.' + prefix + '-chooseLocationFields').css('display', 'block');       
 
                 // if the editable area does not belong to an asset, disable the choose current location option
                 var editableElement = self.viper.getEditableElement();
                 var idString = ViperUtil.$(editableElement).attr('id');
                 var matches = idString.match(/_([0-9]+)/);
                 if(matches == null) {
-                     $('.' + prefix + '-chooseLocationFields').find('.Viper-checkbox').css('display', 'none'); 
+                     ViperUtil.$('.' + prefix + '-chooseLocationFields').find('.Viper-checkbox').css('display', 'none'); 
                 }
                 else {
-                     $('.' + prefix + '-chooseLocationFields').find('.Viper-checkbox').css('display', 'block'); 
+                     ViperUtil.$('.' + prefix + '-chooseLocationFields').find('.Viper-checkbox').css('display', 'block'); 
                 }
 
                 // enable the location selector
@@ -331,11 +331,11 @@ MatrixImagePlugin.prototype = {
                 var button1 = self.viper.ViperTools.getItem('ViperImagePlugin:bubbleSubSection-applyButton');
                 var button2 = self.viper.ViperTools.getItem('vitpImagePlugin-infoSubsection-applyButton');
                 if(button1) {
-                    $(button1.element).html(_('Upload Image'));
+                    ViperUtil.$(button1.element).html(_('Upload Image'));
                     self.viper.ViperTools.enableButton('ViperImagePlugin:bubbleSubSection-applyButton');
                 }
                 if(button2) {
-                    $(button2.element).html(_('Upload Image'));
+                    ViperUtil.$(button2.element).html(_('Upload Image'));
                     self.viper.ViperTools.enableButton('vitpImagePlugin-infoSubsection-applyButton');
                 }
             }
@@ -349,7 +349,7 @@ MatrixImagePlugin.prototype = {
     {
 
         // Preview box to display image info and preview.
-        $progressIndicator = $('<div id="' + prefix + '-progressIndicator" class="uploadImage-progressIndicator"></div>');
+        $progressIndicator = ViperUtil.$('<div id="' + prefix + '-progressIndicator" class="uploadImage-progressIndicator"></div>');
         $progressIndicator.append('<div class="uploadImage-progress-status"></div>');
         $progressIndicator.append('<div class="uploadImage-progress"><div class="uploadImage-progress-bar"><span class="uploadImage-progress-bar-inner" style="width: 0%;"></span></div></div>');
         $progressIndicator.append('<div class="uploadImage-progress-message"></div>');
@@ -373,25 +373,26 @@ MatrixImagePlugin.prototype = {
 
         uploadForm.ajaxForm({
           beforeSend: function() {
-              $('.uploadImage-progress-status').show();
-              $('.uploadImage-progressIndicator').show();
-              if(ViperUtil.isBrowser('msie', '<10') !== true) {
+              ViperUtil.$('.uploadImage-progress-status').show();
+              ViperUtil.$('.uploadImage-progressIndicator').show();
+              if(ViperUtil.isBrowser('msie', '<10') !== true && self._inlineUploadForm.find('input[name=base64]').val() == '') {
                 // old IE can't support upload progress
-                $('.uploadImage-progress').show();
-                $('.uploadImage-progress-bar-inner').show();
+                // and if we are uploading drag dropped image (base64), the progress bar is not accurate, so no showing it
+                ViperUtil.$('.uploadImage-progress').show();
+                ViperUtil.$('.uploadImage-progress-bar-inner').show();
               }
               else {
-                $('.uploadImage-progress').hide();
-                $('.uploadImage-progress-bar-inner').hide();
+                ViperUtil.$('.uploadImage-progress').hide();
+                ViperUtil.$('.uploadImage-progress-bar-inner').hide();
               }
-              $('.uploadImage-progress-status').html(_('Uploading image...'));
-              $('.uploadImage-progress-message').hide();
+              ViperUtil.$('.uploadImage-progress-status').html(_('Uploading image...'));
+              ViperUtil.$('.uploadImage-progress-message').hide();
               var percentVal = '2%';
-              $('.uploadImage-progress-bar-inner').width(percentVal);
+              ViperUtil.$('.uploadImage-progress-bar-inner').width(percentVal);
           },
           uploadProgress: function(event, position, total, percentComplete) {
               var percentVal = percentComplete + '%';
-              $('.uploadImage-progress-bar-inner').width(percentVal);
+              ViperUtil.$('.uploadImage-progress-bar-inner').width(percentVal);
           },
           complete: function(xhr) {
                 var response = JSON.parse(xhr.responseText);
@@ -403,10 +404,10 @@ MatrixImagePlugin.prototype = {
                 }
 
                 if(response.error) {
-                    $('.uploadImage-progress-status').hide();
-                    $('.uploadImage-progress').hide();
-                    $('.uploadImage-progress-bar-inner').width('0%');
-                    $('.uploadImage-progress-message').html(response.error).show();
+                    ViperUtil.$('.uploadImage-progress-status').hide();
+                    ViperUtil.$('.uploadImage-progress').hide();
+                    ViperUtil.$('.uploadImage-progress-bar-inner').width('0%');
+                    ViperUtil.$('.uploadImage-progress-message').html(response.error).show();
 
                     //reset the upload form
                     uploadForm.get(0).reset();
@@ -427,12 +428,12 @@ MatrixImagePlugin.prototype = {
                     // set the returned asset id
                     if(response.assetid) {
 
-                        $('.uploadImage-progressIndicator').hide();
-                        $('.uploadImage-progress-bar-inner').width('0%');
+                        ViperUtil.$('.uploadImage-progressIndicator').hide();
+                        ViperUtil.$('.uploadImage-progress-bar-inner').width('0%');
 
 
                         // hide choose location fields
-                        $('.' + prefix + '-chooseLocationFields').css('display', 'none');     
+                        ViperUtil.$('.' + prefix + '-chooseLocationFields').css('display', 'none');     
 
                         //reset the upload form
                         uploadForm.get(0).reset();
@@ -445,7 +446,7 @@ MatrixImagePlugin.prototype = {
                             }
                             // remove the low resolution warning, only if we are viewing the current completed image
                             if(image && image.dataset.id && image.dataset.id == response.image_preview_id) {
-                                $('.VipperDroppedImage-msgBox').remove();
+                                ViperUtil.$('.VipperDroppedImage-msgBox').remove();
                             }
                             self._replacePreviewWithOriginal(response.image_preview_id, response.assetid, response.alt, response.title, response.upload_id);
                         }
@@ -698,7 +699,7 @@ MatrixImagePlugin.prototype = {
                 });
             }
             else {
-                    var token = $('#token').val();
+                    var token = ViperUtil.$('#token').val();
                     if (token) {
                         uploadForm.find('input[name=token]').val(token);
                         this._uploading = true;
@@ -953,7 +954,7 @@ MatrixImagePlugin.prototype = {
             image = this._ieImageResize;
         }
         // remove any dropped image warning message, we will insert later
-        $('.VipperDroppedImage-msgBox').remove();
+        ViperUtil.$('.VipperDroppedImage-msgBox').remove();
         if(image && image.dataset.imagepaste && image.dataset.imagepaste == 'true' && image.dataset.id) {
             var id = image.dataset.id;
             if(this.loadDroppedImageToUpload(id)) {
@@ -971,12 +972,12 @@ MatrixImagePlugin.prototype = {
                 this.viper.ViperTools.getItem('ViperImagePlugin:urlInput').setValue('filepath://' + image.dataset.filename);
             
                 // show choose upload location fields
-                $('.' + prefix + '-chooseLocationFields').css('display', 'block');
+                ViperUtil.$('.' + prefix + '-chooseLocationFields').css('display', 'block');
                 // chaneg the apply button text to 'upload image'
                 var applyButton1 = this.viper.ViperTools.getItem('ViperImagePlugin:bubbleSubSection-applyButton');
                 var applyButton2 = this.viper.ViperTools.getItem('vitpImagePlugin-infoSubsection-applyButton');
-                $(applyButton1.element).html(_('Upload Image'));
-                $(applyButton2.element).html(_('Upload Image'));
+                ViperUtil.$(applyButton1.element).html(_('Upload Image'));
+                ViperUtil.$(applyButton2.element).html(_('Upload Image'));
 
 
                 // enable the apply button (only if we are not in uploading status)
@@ -988,20 +989,20 @@ MatrixImagePlugin.prototype = {
                 // display previous upload error message
                 var errorMessage = image.dataset.error;
                 if(errorMessage) {
-                    $('.uploadImage-progressIndicator').show();
-                    $('.uploadImage-progress-status').hide();
-                    $('.uploadImage-progress').hide();
-                    $('.uploadImage-progress-message').html(errorMessage).show();
+                    ViperUtil.$('.uploadImage-progressIndicator').show();
+                    ViperUtil.$('.uploadImage-progress-status').hide();
+                    ViperUtil.$('.uploadImage-progress').hide();
+                    ViperUtil.$('.uploadImage-progress-message').html(errorMessage).show();
                 }
 
                 // display the warning message to ask user to create asset
-                $('<div />', {
+                ViperUtil.$('<div />', {
                     "class": 'VipperDroppedImage-msgBox'
                     }).html(_('Low resolution preview.') + '<br/>' + _('Upload the image to use it in the content.')).insertBefore('.Viper-imageUploadRow');              
 
                 // hide the URL row and display the file row
-                $('.Viper-imageUploadRow').hide();
-                $('.Viper-imageUploadFileRow').show();
+                ViperUtil.$('.Viper-imageUploadRow').hide();
+                ViperUtil.$('.Viper-imageUploadFileRow').show();
                 
 
                 // prefill the file name field
@@ -1031,31 +1032,31 @@ MatrixImagePlugin.prototype = {
                 // chaneg the apply button text  back to 'Apply Changes'
                 var applyButton1 = this.viper.ViperTools.getItem('ViperImagePlugin:bubbleSubSection-applyButton');
                 var applyButton2 = this.viper.ViperTools.getItem('vitpImagePlugin-infoSubsection-applyButton');
-                $(applyButton1.element).html(_('Apply Changes'));
-                $(applyButton2.element).html(_('Apply Changes'));
+                ViperUtil.$(applyButton1.element).html(_('Apply Changes'));
+                ViperUtil.$(applyButton2.element).html(_('Apply Changes'));
                 // hide the warning message
-                $('.VipperDroppedImage-msgBox').hide();
+                ViperUtil.$('.VipperDroppedImage-msgBox').hide();
                 // remove the base64 image from upload form
                 this._inlineUploadForm.find('input[name=base64]').val('');
                 this._uploadForm.find('input[name=base64]').val('');
 
                 // hide the file row and display the url row
-                $('.Viper-imageUploadRow').show();
-                $('.Viper-imageUploadFileRow').hide();
+                ViperUtil.$('.Viper-imageUploadRow').show();
+                ViperUtil.$('.Viper-imageUploadFileRow').hide();
     },
 
     _replacePreviewWithOriginal: function(previewId, assetId, alt, title, uploadId) {
         // is this a dropped in image preview?
-        var image = $('[data-imagepaste="true"][data-upload-id="' + uploadId +'"][data-id="' + previewId +'"]').get(0);
+        var image = ViperUtil.$('[data-imagepaste="true"][data-upload-id="' + uploadId +'"][data-id="' + previewId +'"]').get(0);
         if(image) {
             this.setImageURL(image, './?a=' + assetId);
             this.setImageAlt(image, alt);
             this.setImageTitle(image, title);
-            $(image).removeAttr('data-imagepaste');
-            $(image).removeAttr('data-imagepaste-status');
-            $(image).removeAttr('id');
-            $(image).removeAttr('data-filename');
-            $(image).removeAttr('data-id');
+            ViperUtil.$(image).removeAttr('data-imagepaste');
+            ViperUtil.$(image).removeAttr('data-imagepaste-status');
+            ViperUtil.$(image).removeAttr('id');
+            ViperUtil.$(image).removeAttr('data-filename');
+            ViperUtil.$(image).removeAttr('data-id');
         }
     },
 
@@ -1067,8 +1068,8 @@ MatrixImagePlugin.prototype = {
             image = this._ieImageResize;
         }
         if(image && image.dataset.imagepaste && image.dataset.imagepaste == 'true') {
-                $(image).attr('data-imagepaste-status', 'loading');
-                $(image).attr('data-upload-id', this._uploadId);
+                ViperUtil.$(image).attr('data-imagepaste-status', 'loading');
+                ViperUtil.$(image).attr('data-upload-id', this._uploadId);
         }
     },
 
@@ -1076,10 +1077,10 @@ MatrixImagePlugin.prototype = {
 
     _setDroppedImageErrorStatus: function(previewId, errorMessage, uploadId) {
          // is this a dropped in image preview?
-        var image = $('[data-imagepaste="true"][data-upload-id="' + uploadId +'"][data-id="' + previewId +'"]').get(0);
+        var image = ViperUtil.$('[data-imagepaste="true"][data-upload-id="' + uploadId +'"][data-id="' + previewId +'"]').get(0);
         if(image) {
-            $(image).attr('data-imagepaste-status', 'error')
-            $(image).attr('data-error', errorMessage)
+            ViperUtil.$(image).attr('data-imagepaste-status', 'error')
+            ViperUtil.$(image).attr('data-error', errorMessage)
         }
     },
 
@@ -1090,9 +1091,9 @@ MatrixImagePlugin.prototype = {
             image = this._ieImageResize;
         }
         if(image && image.dataset.imagepaste && image.dataset.imagepaste == 'true') {
-                $(image).removeAttr('data-imagepaste');
-                $(image).removeAttr('data-imagepaste-status');
-                $(image).removeAttr('data-upload-id');
+                ViperUtil.$(image).removeAttr('data-imagepaste');
+                ViperUtil.$(image).removeAttr('data-imagepaste-status');
+                ViperUtil.$(image).removeAttr('data-upload-id');
         }
     }
 
