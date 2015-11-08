@@ -1957,12 +1957,22 @@ ViperKeyboardEditorPlugin.prototype = {
                 range.setStart(startNode, 0);
             } else if (range.startOffset === 0
                 && ViperUtil.isBrowser('msie') === true
-             //   && range.startContainer.data.charAt(1) === ' '
             ) {
-                range.startContainer.data = range.startContainer.data.substr(1);
-                range.setStart(range.startContainer, 0);
-                range.collapse(true);
-                ViperSelection.addRange(range);
+                if (range.startContainer.data.length > 1) {
+                    range.startContainer.data = range.startContainer.data.substr(1);
+                    range.setStart(range.startContainer, 0);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                } else {
+                    this.viper.moveCaretAway(range.startContainer);
+                    var surroundingParents = ViperUtil.getSurroundingParents(range.startContainer);
+                    if (surroundingParents.length > 0) {
+                        ViperUtil.remove(surroundingParents.pop());
+                    } else {
+                        ViperUtil.remove(range.startContainer);
+                    }
+                }
+                
                 return false;
             }//end if
         } else {
