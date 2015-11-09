@@ -193,10 +193,8 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
         $this->assertHTMLMatch('<p>Test content <sup><a href="http://www.squizlabs.com">%1%</a></sup> more test content.</p>');
         $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'superscript icon should be active');
 
-        $this->moveToKeyword(1);
-        sleep(1);
+        $this->clickKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
-        sleep(1);
         $this->clickTopToolbarButton('superscript', 'active');
         $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com">%1%</a> more test content.</p>');
         $this->assertTrue($this->topToolbarButtonExists('superscript'), 'superscript icon should not be active');
