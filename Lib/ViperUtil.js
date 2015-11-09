@@ -734,7 +734,7 @@ var ViperUtil = {
      *
      * @return {array} Parent elements.
      */
-    getSurroundingParents: function(node, tagName, elementType, stopElem)
+    getSurroundingParents: function(node, tagName, elementType, stopElem, includeEmptyParents)
     {
         var parents = [];
         if (!node) {
@@ -755,7 +755,7 @@ var ViperUtil = {
                     if (child !== node) {
                         return parents;
                     }
-                } else if (ViperUtil.isBlank(ViperUtil.trim(child.data)) !== true) {
+                } else if (includeEmptyParents !== true && ViperUtil.isBlank(ViperUtil.trim(child.data)) !== true) {
                     return parents;
                 }
             }

@@ -908,6 +908,11 @@ ViperKeyboardEditorPlugin.prototype = {
                         var span = document.createElement('span');
                         ViperUtil.insertBefore(range.startContainer, span);
                         span.appendChild(range.startContainer);
+                    } else if (!range.startContainer.previousSibling
+                        && !range.startContainer.nextSibling
+                        && ViperUtil.isBlockElement(range.startContainer.parentNode)
+                    ) {
+                        range.startContainer.parentNode.appendChild(document.createElement('br'));
                     }
                 } else {
                     range.startContainer.splitText(range.startOffset);
@@ -1128,11 +1133,11 @@ ViperKeyboardEditorPlugin.prototype = {
                         }
 
                         if (prevSelectable.nodeType === ViperUtil.TEXT_NODE) {
-                            range.setStart(prevSelectable, prevSelectable.data.length);
+                            range.setEnd(prevSelectable, prevSelectable.data.length);
                         } else if (prevSelectable.parentNode === null || ViperUtil.isStubElement(prevSelectable) === true) {
                             // Prev selectable was most likely a BR tag that got removed.
                             if (firstChild.nodeType === ViperUtil.TEXT_NODE) {
-                                range.setStart(firstChild, 0);
+                                range.setEnd(firstChild, 0);
                             } else {
                                 range.selectNode(firstChild);
                             }
@@ -1140,7 +1145,7 @@ ViperKeyboardEditorPlugin.prototype = {
                             range.selectNode(prevSelectable);
                         }
 
-                        range.collapse(true);
+                        range.collapse(false);
                         ViperSelection.addRange(range);
                     }
 
@@ -1960,18 +1965,29 @@ ViperKeyboardEditorPlugin.prototype = {
             ) {
                 if (range.startContainer.data.length > 1) {
                     range.startContainer.data = range.startContainer.data.substr(1);
+                    if (range.startContainer.data[0] === ' ') {
+                        range.startContainer.data = String.fromCharCode(160) + range.startContainer.data.substr(1);
+                    }
                     range.setStart(range.startContainer, 0);
                     range.collapse(true);
                     ViperSelection.addRange(range);
                 } else {
-                    this.viper.moveCaretAway(range.startContainer);
-                    var surroundingParents = ViperUtil.getSurroundingParents(range.startContainer);
+                    var surroundingParents = ViperUtil.getSurroundingParents(range.startContainer, null, null, null, true);
                     if (surroundingParents.length > 0) {
-                        ViperUtil.remove(surroundingParents.pop());
+                        var parent = surroundingParents.pop();
+                        if (ViperUtil.isBlockElement(parent) === false) {
+                            this.viper.moveCaretAway(range.startContainer);
+                            ViperUtil.remove(parent);
+                        } else {
+                            range.startContainer.data = '';
+                        }
                     } else {
+                        this.viper.moveCaretAway(range.startContainer);
                         ViperUtil.remove(range.startContainer);
                     }
                 }
+
+                this.viper.fireNodesChanged();
                 
                 return false;
             }//end if

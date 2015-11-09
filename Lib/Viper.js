@@ -4648,7 +4648,7 @@ Viper.prototype = {
                         range.collapse(true);
                         ViperSelection.addRange(range);
                     }
-                } else if (ViperUtil.isBrowser('msie') === true
+                }/* else if (ViperUtil.isBrowser('msie') === true
                     && range.collapsed === true
                     && range.startContainer.nodeType === ViperUtil.TEXT_NODE
                     && range.startOffset === 0
@@ -4661,6 +4661,9 @@ Viper.prototype = {
                     range.setStart(range.startContainer, 0);
                     range.collapse(true);
                     ViperSelection.addRange(range);
+                    this.fireSelectionChanged(null, true);
+                    return true;
+
                 }/* else if (range.collapsed === false
                     && e.which === 37
                     && e.shiftKey === true
