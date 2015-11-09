@@ -139,7 +139,7 @@
   font-weight: bold;
 }
 .Viper-subSection .Viper-button {
-  border-color: #B1B1B1;
+  border-color: #BFBFBF;
 }
 .Viper-button.Viper-active {
   background-color: #2b7ce0;
@@ -654,6 +654,12 @@
 }
 .Viper-browserVer-msie8 .Viper-textbox.Viper-disabled {
   filter: alpha(opacity = 40);
+}
+.Viper-subSectionRow > .Viper-textbox {
+  margin-bottom: 0;
+}
+.Viper-subSectionRow > .Viper-textbox + .Viper-textbox {
+  margin-bottom: 0.56em;
 }
 .Viper-textbox-label {
   display: block;
