@@ -2072,6 +2072,16 @@ ViperKeyboardEditorPlugin.prototype = {
                     }
                 }
             }
+        } else if (ViperUtil.isBrowser('msie', '<11') === true) {
+            if (range.startOffset === range.startContainer.data.length
+                && range.startContainer.data.charCodeAt(range.startContainer.data.length - 1) === 160
+                && range.startContainer.nextSibling
+                && range.startContainer.nextSibling.nodeType === ViperUtil.TEXT_NODE
+                && range.startContainer.nextSibling.data[0] === ' '
+            ) {
+                // Handle: <p>test * test</p> -> <p>test *test</p>.
+                range.startContainer.data = range.startContainer.data.substr(0, range.startContainer.data.length - 1) + ' ';
+            }
         }
 
     },
