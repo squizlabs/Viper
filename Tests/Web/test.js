@@ -318,16 +318,12 @@ function gStringLoc(str)
     if (ViperUtil.isBrowser('msie') === true) {
         // Range search.
         var viperRange = null;
-        if (ViperUtil.isBrowser('msie', '>=11') === true) {
-            var textRange = new ViperIERange(document.body.createTextRange());
-            var selectable = range._getFirstSelectableChild(contentElement);
-            textRange.setStart(selectable, 0);
-            textRange.setEnd(selectable, 0);
-            viperRange = textRange;
-        } else {
-            viperRange.collapse(false);
-        }
-
+        var textRange  = new ViperIERange(document.body.createTextRange());
+        var selectable = range._getFirstSelectableChild(contentElement);
+        textRange.setStart(selectable, 0);
+        textRange.setEnd(selectable, 0);
+        viperRange = textRange;
+        
         var found = viperRange.rangeObj.findText(str);
         loc = viperRange.rangeObj.getBoundingClientRect();
         loc = {

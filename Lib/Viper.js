@@ -4678,7 +4678,7 @@ Viper.prototype = {
 
                 var self = this;
                 setTimeout(function() {
-                    self.fireSelectionChanged();
+                    self.fireSelectionChanged(null, true);
                 }, 10);
 
                 return true;
@@ -5034,6 +5034,35 @@ Viper.prototype = {
                         ViperSelection.addRange(range);
                         this.fireNodesChanged([range.getStartNode()]);
                         return false;
+                    }
+                } else if (ViperUtil.isBrowser('msie', '<11') === true
+                    && range.collapsed === true
+                    && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                    && range.startOffset === range.startContainer.data.length
+                    && !range.startContainer.nextSibling
+                ) {
+                    // Handle: <p><strong>text</strong>*</p> -> <p><strong>text</strong>new text</p>.
+                    var node = range.startContainer.parentNode;
+                    while (node) {
+                        if (node.nextSibling) {
+                            var nextSib = node.nextSibling;
+                            if (ViperUtil.isTag(nextSib, 'span') === true
+                                && nextSib.firstChild === nextSib.lastChild
+                                && nextSib.firstChild.nodeType === ViperUtil.TEXT_NODE
+                                && nextSib.firstChild.data.length === 0
+                            ) {
+                                ViperUtil.insertBefore(nextSib, nextSib.firstChild);
+                                nextSib.previousSibling.data = String.fromCharCode(e.which);
+                                range.setEnd(nextSib.previousSibling, 1);
+                                range.collapse(false);
+                                ViperSelection.addRange(range);
+                                ViperUtil.remove(nextSib);
+                                return false;
+                            }
+
+                            break;
+                        }
+                        node = node.parentNode;
                     }
                 }
             }//end if

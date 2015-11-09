@@ -900,18 +900,34 @@ ViperKeyboardEditorPlugin.prototype = {
             if (range.collapsed === true && ViperUtil.isBrowser('msie', '<11')) {
                 // Delete 1 char in IE.... This resolves the issue where <a href="" />T* backspace here sets the
                 // range to incorrect position..
-                range.startContainer.splitText(range.startOffset);
-                range.startContainer.data = range.startContainer.data.substring(0, range.startOffset - 1);
-                range.startContainer.data += range.startContainer.nextSibling.data;
-                ViperUtil.remove(range.startContainer.nextSibling);
+                if (range.startOffset === 1) {
+                    range.startContainer.data = '';
+                    if (range.startContainer.previousSibling
+                        && range.startContainer.previousSibling.nodeType !== ViperUtil.TEXT_NODE
+                    ) {
+                        var span = document.createElement('span');
+                        ViperUtil.insertBefore(range.startContainer, span);
+                        span.appendChild(range.startContainer);
+                    }
+                } else {
+                    range.startContainer.splitText(range.startOffset);
+                    range.startContainer.data = range.startContainer.data.substring(0, range.startOffset - 1);
+                    if (range.startContainer.nextSibling 
+                        && range.startContainer.nextSibling.nodeType === ViperUtil.TEXT_NODE
+                    ) {
+                        // If the range was at the end of the text node then splitText does not
+                        // create a new text node.
+                        range.startContainer.data += range.startContainer.nextSibling.data;
+                        ViperUtil.remove(range.startContainer.nextSibling);
+                    }
+                }
+
                 range.setStart(range.startContainer, range.startOffset - 1)
                 range.collapse(true);
                 ViperSelection.addRange(range);
+                this.viper.fireNodesChanged();
                 return false;
             }
-
-            // No need to handle any case where caret is not at the start of a node.
-            //return;
         }
 
         var defaultTagName  = this.viper.getDefaultBlockTag();
@@ -1941,12 +1957,22 @@ ViperKeyboardEditorPlugin.prototype = {
                 range.setStart(startNode, 0);
             } else if (range.startOffset === 0
                 && ViperUtil.isBrowser('msie') === true
-                && range.startContainer.data.charAt(1) === ' '
             ) {
-                range.startContainer.data = range.startContainer.data.substr(1);
-                range.setStart(range.startContainer, 0);
-                range.collapse(true);
-                ViperSelection.addRange(range);
+                if (range.startContainer.data.length > 1) {
+                    range.startContainer.data = range.startContainer.data.substr(1);
+                    range.setStart(range.startContainer, 0);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                } else {
+                    this.viper.moveCaretAway(range.startContainer);
+                    var surroundingParents = ViperUtil.getSurroundingParents(range.startContainer);
+                    if (surroundingParents.length > 0) {
+                        ViperUtil.remove(surroundingParents.pop());
+                    } else {
+                        ViperUtil.remove(range.startContainer);
+                    }
+                }
+                
                 return false;
             }//end if
         } else {
