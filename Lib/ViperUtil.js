@@ -1204,6 +1204,27 @@ var ViperUtil = {
 
     },
 
+    getFirstElementChild: function (node)
+    {
+        if (node) {
+            if (node.firstElementChild) {
+                return node.firstElementChild();
+            } else {
+                var child = node.firstChild
+                while (child) {
+                    if (child.nodeType === ViperUtil.ELEMENT_NODE) {
+                        return child;
+                    }
+
+                    child = child.nextSibling;
+                }
+            }
+        }
+
+        return null;
+
+    },
+
     getLastChildTextNode: function(node)
     {
         if (node.lastChild) {

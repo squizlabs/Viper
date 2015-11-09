@@ -1148,7 +1148,7 @@ ViperDOMRange.prototype = {
         }
 
         var nextSibling = startParent.nextSibling;
-        if (!nextSibling && startParent.nodeType !== ViperUtil.TEXT_NODE && startParent.parentNode.firstElementChild === startParent) {
+        if (!nextSibling && startParent.nodeType !== ViperUtil.TEXT_NODE && ViperUtil.getFirstElementChild(startParent.parentNode) === startParent) {
             this._nodeSel.node = startNode.parentNode;
             return startNode.parentNode;
         }
