@@ -2072,7 +2072,7 @@ ViperKeyboardEditorPlugin.prototype = {
                     }
                 }
             }
-        } else if (ViperUtil.isBrowser('msie', '<11') === true) {
+        } else if (ViperUtil.isBrowser('msie') === true) {
             if (range.startOffset === range.startContainer.data.length
                 && range.startContainer.data.charCodeAt(range.startContainer.data.length - 1) === 160
                 && range.startContainer.nextSibling
