@@ -1239,7 +1239,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         // Test re-applying bold and superscript
         $this->clickTopToolbarButton('bold', NULL);
         $this->clickTopToolbarButton('superscript', NULL);
-        $this->assertHTMLMatch('<p><em><strong>%1%</strong></em></p><p><del><strong>%2%</strong></del></p><p><sup><strong>%3%</strong></sup></p><p>%4%</p>');
+        $this->assertHTMLMatch('<p><em><strong>%1%</strong></em></p><p><sub><strong>%2%</strong></sub></p><p><sup><strong>%3%</strong></sup></p><p>%4%</p>');
 
         // Test applying bold and strikethrough
         $this->selectKeyword(4);
@@ -1253,7 +1253,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         // Test re-applying bold and strikethrough
         $this->clickTopToolbarButton('bold', NULL);
         $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->assertHTMLMatch('<p><em><strong>%1%</strong></em></p><p><del><strong>%2%</strong></del></p><p><sup><strong>%3%</strong></sup></p><p><del><strong>%4%</strong></del></p>');
+        $this->assertHTMLMatch('<p><em><strong>%1%</strong></em></p><p><sub><strong>%2%</strong></sub></p><p><sup><strong>%3%</strong></sup></p><p><del><strong>%4%</strong></del></p>');
 
     }//end testBoldWithOneAdditionalFormat()
 
