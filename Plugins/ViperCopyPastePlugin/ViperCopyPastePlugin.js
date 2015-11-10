@@ -267,7 +267,7 @@ ViperCopyPastePlugin.prototype = {
                             }
 
                             // Since this is a paste remove the selected contents.
-                            self.viper.removeBookmark(bookmark);
+                            self.viper.removeBookmark(bookmark, true);
 
                             setTimeout(function() {
                                 // Remove the temp div.
