@@ -1108,6 +1108,12 @@ ViperDOMRange.prototype = {
             ) {
                 if (startMoved) {
                     this.setStart(startMoved.startContainer, startMoved.startOffset);
+                } else if (ViperUtil.isBrowser('msie', '<11') === true) {
+                    if (startNode.parentNode === endNode && range.startOffset + 1 === range.endOffset) {
+                        // Handle <div><p>text</p>*<blockquote><p>text</p></blockquote>*</div>.
+                        this._nodeSel.node = startNode;
+                        return startNode;
+                    }
                 }
 
                 this._nodeSel.node = null;
