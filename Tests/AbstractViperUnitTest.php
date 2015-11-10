@@ -991,14 +991,19 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     /**
      * Sets the content of the test page to the specified test case.
      *
-     * @param string $id The ID of the test case.
+     * @param string  $id           The ID of the test case.
+     * @param integer $clickKeyword Keyword to click after the content is set. Set to null for no click.
      *
      * @return void
      */
-    protected function useTest($id)
+    protected function useTest($id, $clickKeyword=1)
     {
         $this->sikuli->execJS('useTest("test-'.$id.'")', FALSE);
         sleep(1);
+
+        if ($clickKeyword !== null) {
+            $this->clickKeyword($clickKeyword);
+        }
 
     }//end useTest()
 
