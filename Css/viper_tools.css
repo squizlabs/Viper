@@ -659,7 +659,7 @@
   margin-bottom: 0;
 }
 .Viper-subSectionRow > .Viper-textbox + .Viper-textbox {
-  margin-bottom: 0.56em;
+  margin-top: 0.56em;
 }
 .Viper-textbox-label {
   display: block;
