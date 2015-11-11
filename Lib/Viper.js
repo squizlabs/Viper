@@ -5220,6 +5220,25 @@ Viper.prototype = {
     {
         range = range || this.getViperRange();
         if (range.collapsed !== false) {
+            if (ViperUtil.isBrowser('msie', '9') === true) {
+                if (range.startContainer === range.endContainer) {
+                    if (range.startContainer.nodeType === ViperUtil.ELEMENT_NODE) {
+                        if (range.startOffset === range.startContainer.childNodes.length) {
+                            var child = range.startContainer.childNodes[range.startContainer.childNodes.length - 1];
+                            if (ViperUtil.isStubElement(child) === false && child.nodeType === ViperUtil.ELEMENT_NODE) {
+                                var sel = range._getLastSelectableChild(child);
+                                if (sel && sel.nodeType === ViperUtil.TEXT_NODE) {
+                                    range.setEnd(sel, sel.data.length);
+                                    range.collapse(false);
+                                    ViperSelection.addRange(range);
+                                    console.info(111)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             return range;
         }
 

@@ -628,7 +628,7 @@ ViperLinkPlugin.prototype = {
         var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
 
         var self          = this;
-        var range         = data.range;
+        var range         = this.viper.getCurrentRange();
         var currentIsLink = false;
         var startNode     = null;
         var endNode       = null;
@@ -638,8 +638,8 @@ ViperLinkPlugin.prototype = {
             startNode = nodeSelection;
             endNode   = startNode;
         } else {
-            startNode = data.range.getStartNode();
-            endNode   = data.range.getEndNode();
+            startNode = range.getStartNode();
+            endNode   = range.getEndNode();
         }
 
         if (startNode
