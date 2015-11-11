@@ -110,7 +110,7 @@ MatrixImagePlugin.prototype = {
             self._ieImageResize = null;
 
             if (ViperUtil.isTag(target, 'img') === true) {
-                if(target.dataset.imagepaste && target.dataset.imagepaste == 'true') {
+                if(target && target.dataset && target.dataset.imagepaste && target.dataset.imagepaste == 'true') {
                     setTimeout(function(){ 
                         ViperUtil.$('#' + self.viper.getId() + '-vitpImage').mousedown(); 
                     }, 250);
@@ -955,7 +955,7 @@ MatrixImagePlugin.prototype = {
         }
         // remove any dropped image warning message, we will insert later
         ViperUtil.$('.VipperDroppedImage-msgBox').remove();
-        if(image && image.dataset.imagepaste && image.dataset.imagepaste == 'true' && image.dataset.id) {
+        if(image && image.dataset && image.dataset.imagepaste && image.dataset.imagepaste == 'true' && image.dataset.id) {
             var id = image.dataset.id;
             if(this.loadDroppedImageToUpload(id)) {
                 // set base64 of original image
@@ -1067,7 +1067,7 @@ MatrixImagePlugin.prototype = {
         if (ViperUtil.isBrowser('msie', '<11') === true) {
             image = this._ieImageResize;
         }
-        if(image && image.dataset.imagepaste && image.dataset.imagepaste == 'true') {
+        if(image && image.dataset && image.dataset.imagepaste && image.dataset.imagepaste == 'true') {
                 ViperUtil.$(image).attr('data-imagepaste-status', 'loading');
                 ViperUtil.$(image).attr('data-upload-id', this._uploadId);
         }
@@ -1090,7 +1090,7 @@ MatrixImagePlugin.prototype = {
         if (ViperUtil.isBrowser('msie', '<11') === true) {
             image = this._ieImageResize;
         }
-        if(image && image.dataset.imagepaste && image.dataset.imagepaste == 'true') {
+        if(image && image.dataset && image.dataset.imagepaste && image.dataset.imagepaste == 'true') {
                 ViperUtil.$(image).removeAttr('data-imagepaste');
                 ViperUtil.$(image).removeAttr('data-imagepaste-status');
                 ViperUtil.$(image).removeAttr('data-upload-id');
