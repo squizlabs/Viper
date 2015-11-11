@@ -157,7 +157,7 @@
         // Buttons inside inline toolbar sections
 
             .Viper-subSection & {
-                border-color: #B1B1B1;
+                border-color: #BFBFBF;
             }
 
         &.Viper-active {
@@ -556,6 +556,14 @@
             .Viper-browserVer-msie8 & {
                 filter: ~"alpha(opacity = 40)";
             }
+        }
+
+        .Viper-subSectionRow > & {
+            margin-bottom: 0;
+        }
+
+        .Viper-subSectionRow > & + .Viper-textbox {
+            margin-top: 0.56em;
         }
     }
 
