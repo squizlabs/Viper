@@ -271,14 +271,15 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $this->sikuli->setClickDelay(250);
         }
 
-        // Reset zoom.
-        $this->sikuli->keyDown('Key.CMD + 0');
-
         // Change browser and then change the URL.
         if (self::$_testRun === true) {
             // URL is already changed to the test runner, so just reload.
             $this->sikuli->setSetting('MinSimilarity', self::$_similarity);
             $this->reloadPage();
+
+            // Reset zoom.
+            $this->sikuli->keyDown('Key.CMD + 0');
+
             $this->sikuli->setAutoWaitTimeout(1);
             $this->_waitForViper();
         } else {
@@ -298,6 +299,10 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             }
 
             $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
+
+            // Reset zoom.
+            $this->sikuli->keyDown('Key.CMD + 0');
+
             $this->sikuli->setAutoWaitTimeout(1);
             $this->_waitForViper();
 
@@ -991,14 +996,19 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     /**
      * Sets the content of the test page to the specified test case.
      *
-     * @param string $id The ID of the test case.
+     * @param string  $id           The ID of the test case.
+     * @param integer $clickKeyword Keyword to click after the content is set. Set to null for no click.
      *
      * @return void
      */
-    protected function useTest($id)
+    protected function useTest($id, $clickKeyword=1)
     {
         $this->sikuli->execJS('useTest("test-'.$id.'")', FALSE);
         sleep(1);
+
+        if ($clickKeyword !== null) {
+            $this->clickKeyword($clickKeyword);
+        }
 
     }//end useTest()
 

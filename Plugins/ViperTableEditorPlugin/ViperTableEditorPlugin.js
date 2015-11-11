@@ -1352,8 +1352,11 @@ ViperTableEditorPlugin.prototype = {
             var table = self.getCellTable(cell);
             self._buttonClicked = true;
             self.removeCol(cell);
-            self.hideToolbar();
             self.removeHighlights();
+            setTimeout(function() {
+                self.hideToolbar();
+            }, 50);
+            
 
             self._setCaretToStart(table);
         });
@@ -1431,8 +1434,10 @@ ViperTableEditorPlugin.prototype = {
             var table = self.getCellTable(cell);
             self._buttonClicked = true;
             self.removeRow(cell);
-            self.hideToolbar();
             self.removeHighlights();
+            setTimeout(function() {
+                self.hideToolbar();
+            }, 50);
 
             self._setCaretToStart(table);
         });
@@ -1488,8 +1493,10 @@ ViperTableEditorPlugin.prototype = {
             var table = self.getCellTable(self.getActiveCell());
             self._buttonClicked = true;
             self.removeTable(table);
-            self.hideToolbar();
             self.removeHighlights();
+            setTimeout(function() {
+                self.hideToolbar();
+            }, 50);
         });
         this._toolbarWidget.addButton(remove);
 

@@ -323,6 +323,9 @@ ViperImagePlugin.prototype = {
             range.setStart(selectable, 1);
             range.collapse(true);
             ViperSelection.addRange(range);
+        } else if (ViperUtil.isBrowser('msie', '<11') === true) {
+            ViperUtil.removeAttr(img, 'width');
+            ViperUtil.removeAttr(img, 'height');
         }
 
         this.viper.fireSelectionChanged();

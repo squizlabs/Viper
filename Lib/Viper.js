@@ -3758,7 +3758,7 @@ Viper.prototype = {
     /**
      * Removes the specified bookmark and the contents in it.
      */
-    removeBookmark: function(bookmark)
+    removeBookmark: function(bookmark, keepParent)
     {
         if (!bookmark.start || !bookmark.end) {
             return false;
@@ -3772,14 +3772,16 @@ Viper.prototype = {
         // Remove elements between the bookmarks.
         ViperUtil.remove(elems);
 
-        // Remove any parent element that is now empty.
-        for (var i = 0; i < parents.length; i++) {
-            if (parents[i] === viperElement) {
-                break;
-            }
+        if (keepParent !== true) {
+            // Remove any parent element that is now empty.
+            for (var i = 0; i < parents.length; i++) {
+                if (parents[i] === viperElement) {
+                    break;
+                }
 
-            if (this.elementIsEmpty(parents[i]) === true) {
-                ViperUtil.remove(parents[i]);
+                if (this.elementIsEmpty(parents[i]) === true) {
+                    ViperUtil.remove(parents[i]);
+                }
             }
         }
 
@@ -4648,7 +4650,7 @@ Viper.prototype = {
                         range.collapse(true);
                         ViperSelection.addRange(range);
                     }
-                } else if (ViperUtil.isBrowser('msie') === true
+                }/* else if (ViperUtil.isBrowser('msie') === true
                     && range.collapsed === true
                     && range.startContainer.nodeType === ViperUtil.TEXT_NODE
                     && range.startOffset === 0
@@ -4661,6 +4663,9 @@ Viper.prototype = {
                     range.setStart(range.startContainer, 0);
                     range.collapse(true);
                     ViperSelection.addRange(range);
+                    this.fireSelectionChanged(null, true);
+                    return true;
+
                 }/* else if (range.collapsed === false
                     && e.which === 37
                     && e.shiftKey === true

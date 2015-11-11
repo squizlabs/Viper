@@ -268,9 +268,6 @@
 
     .ViperITP .Viper-subSection {
         position: relative;
-        -moz-transition-duration: 0.3s;
-        -moz-transition-property: opacity;
-        -moz-transition-timing-function: ease-out;
         display: none;
         opacity: 0;
         text-align: center;
@@ -331,13 +328,14 @@
 
 /* SubSection Rows */
 
-.Viper-subSectionRow {
-    position: relative;
-    margin-top: 0.5em;
-}
-.Viper-subSectionRow:first-child {
-    margin-top: 0;
-}
+    .Viper-subSectionRow {
+        position: relative;
+        margin-top: 0.56em;
+    }
+
+    .Viper-subSectionRow:first-child {
+        margin-top: 0;
+    }
 
 /* SubSection Lists */
 
