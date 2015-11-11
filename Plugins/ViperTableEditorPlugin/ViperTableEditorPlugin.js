@@ -158,7 +158,7 @@ ViperTableEditorPlugin.prototype = {
             var range = self.viper.getViperRange();
             try {
                 if (range.collapsed === true
-                    && ViperUtil.isBrowser('msie') === true
+                    && ViperUtil.isBrowser('msie', '<9') === true
                     && range.startContainer.nodeType === ViperUtil.TEXT_NODE
                     && ViperUtil.inArray(ViperUtil.getTagName(range.startContainer.parentNode), ['td', 'th']) === true
                 ) {

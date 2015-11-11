@@ -1972,13 +1972,14 @@ ViperKeyboardEditorPlugin.prototype = {
             } else if (range.startContainer !== startNode && range.startOffset === 0) {
                 range.setStart(startNode, 0);
             } else if (range.startOffset === 0
-                && ViperUtil.isBrowser('msie') === true
+                && ViperUtil.isBrowser('msie', '<9') === true
             ) {
                 if (range.startContainer.data.length > 1) {
                     range.startContainer.data = range.startContainer.data.substr(1);
                     if (range.startContainer.data[0] === ' ') {
                         range.startContainer.data = String.fromCharCode(160) + range.startContainer.data.substr(1);
                     }
+
                     range.setStart(range.startContainer, 0);
                     range.collapse(true);
                     ViperSelection.addRange(range);
