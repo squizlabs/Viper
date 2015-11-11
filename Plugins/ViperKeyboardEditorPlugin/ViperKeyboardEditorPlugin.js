@@ -298,7 +298,7 @@ ViperKeyboardEditorPlugin.prototype = {
                         }
 
                         var content = '<br />';
-                        if (ViperUtil.isBrowser('msie', '<11') === true) {
+                        if (ViperUtil.isBrowser('msie', '<9') === true) {
                             content = '&nbsp;';
                         }
 
