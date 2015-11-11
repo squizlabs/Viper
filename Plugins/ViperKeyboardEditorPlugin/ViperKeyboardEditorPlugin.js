@@ -983,8 +983,19 @@ ViperKeyboardEditorPlugin.prototype = {
                     ) {
                         // If the list item is the first container in the content and its being removed and its the
                         // only list item then remove the list element.
-                        this.viper.moveCaretAway(startNode.parentNode.parentNode, true);
-                        ViperUtil.remove(startNode.parentNode.parentNode);
+                        if (startNode.parentNode.parentNode.parentNode === this.viper.getViperElement()
+                            && startNode.parentNode.parentNode.nextSibling === null
+                            && startNode.parentNode.parentNode.previousSibling === null
+                        ) {
+                            // This list is the only element in the content, initialise the content 
+                            // after removing the list.
+                            ViperUtil.remove(startNode.parentNode.parentNode);
+                            this.viper.initEditableElement();
+                        } else {
+                            this.viper.moveCaretAway(startNode.parentNode.parentNode, true);
+                            ViperUtil.remove(startNode.parentNode.parentNode);
+                        }
+
                         this.viper.fireNodesChanged();
                         this.viper.fireSelectionChanged(null, true);
                     }
