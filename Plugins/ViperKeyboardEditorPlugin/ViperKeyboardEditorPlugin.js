@@ -787,6 +787,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 range.setStart(range.startContainer, range.startOffset - 1)
                 range.collapse(true);
                 ViperSelection.addRange(range);
+		this.viper.fireNodesChanged();
                 return false;
             }
 
