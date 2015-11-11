@@ -875,6 +875,7 @@ ViperKeyboardEditorPlugin.prototype = {
     handleDelete: function(e)
     {
         var range = this.viper.getViperRange();
+        this.viper.fireCallbacks('ViperKeyboardEditorPlugin:beforeDelete', e);
 
         if (this._isWholeViperElementSelected(range) === true) {
             // The whole Viper element is selected, remove all of its content
@@ -1817,6 +1818,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 ViperUtil.setHtml(this.viper.getViperElement(), '');
                 this.viper.initEditableElement();
                 this.viper.fireNodesChanged();
+                this.viper.fireSelectionChanged();
                 return false;
             } else if (this._isStartToEndOfMultiContainerSelection(range) === true) {
                 return this._removeContentFromStartToEndOfContainers(range);
@@ -1873,6 +1875,8 @@ ViperKeyboardEditorPlugin.prototype = {
                     range.setStart(endContainer, 0);
                     range.collapse(true);
                     ViperSelection.addRange(range);
+                    this.viper.fireNodesChanged();
+                    this.viper.fireSelectionChanged(range);
                     return false;
                 } else if (
                     !nodeSelection
@@ -1934,6 +1938,8 @@ ViperKeyboardEditorPlugin.prototype = {
                 if (startNode.nextSibling && this.viper.isSpecialElement(startNode.nextSibling) === true) {
                     // Remove the whole special element.
                     ViperUtil.remove(startNode.nextSibling);
+                    this.viper.fireNodesChanged();
+                    this.viper.fireSelectionChanged();
                     return false;
                 } else if (!startNode.nextSibling) {
                     // Check if the next container is a special element.
@@ -1952,6 +1958,7 @@ ViperKeyboardEditorPlugin.prototype = {
                             ViperUtil.remove(node);
                             ViperUtil.preventDefault(e);
                             this.viper.fireNodesChanged();
+                            this.viper.fireSelectionChanged();
                             return false;
                         } else if (node.nodeType !== ViperUtil.TEXT_NODE || ViperUtil.trim(node.data).length !== 0) {
                             // Not an empty text node or another node type, no need to continue.
@@ -2000,7 +2007,8 @@ ViperKeyboardEditorPlugin.prototype = {
                 }
 
                 this.viper.fireNodesChanged();
-                
+                this.viper.fireSelectionChanged();
+
                 return false;
             }//end if
         } else {
@@ -2033,6 +2041,8 @@ ViperKeyboardEditorPlugin.prototype = {
                     range.setStart(nextSelectable, 0);
                     range.collapse(true);
                     ViperSelection.addRange(range);
+                    this.viper.fireNodesChanged();
+                    this.viper.fireSelectionChanged();
                     return false;
                 } else if (startNode.parentNode.childNodes.length === 1) {
                     var tmpNode = document.createTextNode('');
@@ -2047,6 +2057,8 @@ ViperKeyboardEditorPlugin.prototype = {
                     range.collapse(true);
                     ViperUtil.remove(startNode);
                     ViperSelection.addRange(range);
+                    this.viper.fireNodesChanged();
+                    this.viper.fireSelectionChanged();
                     return false;
                 }
             }
