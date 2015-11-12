@@ -389,7 +389,7 @@ ViperTableEditorPlugin.prototype = {
                     self._tools.setButtonInactive('insertTable');
                 } else {
                     // Do not allow table insertion inside another table.
-                    var parents = ViperUtil.getParents(node, 'table', self.viper.getViperElement());
+                    var parents = ViperUtil.getParents(node, 'table');
                     if (parents.length > 0 && self._tools) {
                         // Set the table icon as active.
                         if (self.toolbarPlugin.isDisabled() === false) {
