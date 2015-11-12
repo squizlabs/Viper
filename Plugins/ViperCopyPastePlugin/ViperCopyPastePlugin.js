@@ -2602,7 +2602,7 @@ ViperCopyPastePlugin.prototype = {
             }
 
             if (this._bookmark) {
-                this.viper.removeBookmark(this._bookmark);
+                this.viper.removeBookmarks(null, true);
             }
 
             // Remove tmp nodes.

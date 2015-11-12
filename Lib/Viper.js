@@ -3748,9 +3748,24 @@ Viper.prototype = {
 
     },
 
-    removeBookmarks: function(elem)
+    removeBookmarks: function(elem, removeContent)
     {
         elem = elem || this.element;
+
+        if (removeContent === true) {
+            // Also remove the content thats bookmarked.
+            var starts = ViperUtil.find(elem, '.viperBookmark_start');
+            var ends   = ViperUtil.find(elem, '.viperBookmark_end');
+            for (var i = 0; i < starts.length; i++) {
+                var bookmark = {
+                    start: starts[i],
+                    end: ends[i]
+                };
+
+                this.removeBookmark(bookmark);
+            }
+        }
+
         ViperUtil.remove(ViperUtil.getClass('viperBookmark', elem, 'span'));
 
     },

@@ -458,6 +458,8 @@ function pasteFromURL(url)
 
         copyPastePlugin._beforePaste();
 
+        viper.removeBookmarks(null, true);
+
         copyPastePlugin._handleFormattedPasteValue(false, tmp, viper.getViperElement());
         sendResult();
     });
