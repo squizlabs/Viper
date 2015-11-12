@@ -5194,14 +5194,20 @@ Viper.prototype = {
             } catch (e) {
             }
 
-            if (range.collapsed === true && ViperUtil.isBrowser('msie') === true) {
+            if (range.collapsed === true 
+                && range.startContainer
+                && range.startContainer.nodeType === 9
+                && ViperUtil.isBrowser('msie') === true
+            ) {
                 // If clicked inside the previous selection then IE takes a lot
                 // longer to update the caret position so if the range is collapsed
                 // wait nearly half a second to trigger the selection changed
-                // event.
+                // event. The delay is only required when the startContainer is set as the
+                // document node.
                 setTimeout(function() {
+                    var x = self.getCurrentRange();
                     self.fireSelectionChanged(self.adjustRange(), true);
-                }, 200);
+                }, 450);
             } else {
                 self.fireSelectionChanged(range, true);
             }
