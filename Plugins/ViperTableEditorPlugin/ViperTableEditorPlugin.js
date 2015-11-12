@@ -204,13 +204,23 @@ ViperTableEditorPlugin.prototype = {
                             if (cell && !self.getNextRow(cell.parentNode)) {
                                 // End of table.
                                 var table = self.getCellTable(cell);
-                                if (!table.nextSibling || table.nextSibling.data && table.nextSibling.data.match(/^\n\s*$/)) {
-                                    var newNode = document.createElement('p');
-                                    ViperUtil.setHtml(newNode, '&nbsp;');
-                                    ViperUtil.insertAfter(table, newNode);
-                                    range.setStart(newNode.firstChild, 0);
+                                if (!table.nextElementSibling) {
+                                    var caretNode = null;
+                                    if (self.viper.getDefaultBlockTag()) {
+                                        caretNode = document.createElement(self.viper.getDefaultBlockTag());
+                                        ViperUtil.setHtml(caretNode, '<br/>');
+                                        ViperUtil.insertAfter(table, caretNode);
+                                        range.setStart(caretNode.firstChild, 0);
+                                    } else {
+                                        caretNode = document.createTextNode(' ');
+                                        ViperUtil.insertAfter(table, caretNode);
+                                        range.setStart(caretNode, 0);
+                                    }
+
                                     range.collapse(true);
                                     ViperSelection.addRange(range);
+                                } else {
+                                    self.viper.moveCaretAway(table, false);
                                 }
                             }
                         }
