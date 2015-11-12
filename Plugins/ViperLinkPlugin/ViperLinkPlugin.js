@@ -221,6 +221,8 @@ ViperLinkPlugin.prototype = {
         if (!node && ViperUtil.isBrowser('msie') === true) {
             // IE fix for Img selections.
             var prevSibling = range.startContainer.previousSibling;
+            var startNode   = range.getStartNode();
+            var endNode     = range.getEndNode();
             if (prevSibling
                 && ViperUtil.isTag(prevSibling, 'img') === true
                 && range.startOffset === 0
@@ -228,6 +230,16 @@ ViperLinkPlugin.prototype = {
                 && range.startContainer === range.endContainer
             ) {
                 node = prevSibling;
+            } else if (ViperUtil.isTag(startNode, 'img') === true) {
+                node = startNode;
+            } else if (startNode
+                && startNode.nodeType === ViperUtil.TEXT_NODE
+                && endNode
+                && endNode.nodeType === ViperUtil.TEXT_NODE
+                && ViperUtil.isTag(startNode.nextSibling, 'img') === true
+                && startNode.nextSibling === endNode.previousSibling
+            ) {
+                node = startNode.nextSibling;
             }
         }
 
