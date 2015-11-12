@@ -932,7 +932,9 @@ ViperCopyPastePlugin.prototype = {
         var viperCopyElems = ViperUtil.getClass('__viper_copy', pasteElement);
 
         if (viperCopyElems.length === 0 && ViperUtil.isBrowser('msie', '<11') === true) {
-            if (pasteElement.innerHTML.indexOf('<STRONG>&nbsp;</STRONG>') === 0) {
+            if (pasteElement.innerHTML.indexOf('<STRONG>&nbsp;</STRONG>') === 0
+                || pasteElement.innerHTML.indexOf('<strong>&nbsp;</strong>') === 0
+            ) {
                 viperCopyElems = [pasteElement.firstChild];
             }
         }
