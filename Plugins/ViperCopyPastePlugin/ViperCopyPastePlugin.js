@@ -391,7 +391,7 @@ ViperCopyPastePlugin.prototype = {
             selectedContent = '<b class="__viper_copy"> </b>' + selectedContent;
 
             // IE needs space before B tag otherwise it gets stripped out..
-            if (ViperUtil.isBrowser('msie', '<11') === true) {
+            if (ViperUtil.isBrowser('msie', '<9') === true) {
                 selectedContent = '&nbsp;' + selectedContent + '&nbsp;';
             } else if (ViperUtil.isBrowser('msie', '>=11') === true) {
                 selectedContent = '&nbsp;' + selectedContent;
