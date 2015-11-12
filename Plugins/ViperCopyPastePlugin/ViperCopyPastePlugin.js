@@ -456,7 +456,7 @@ ViperCopyPastePlugin.prototype = {
         elem.oncopy = onCopy;
 
         // Handle cut event for Chrome/FF/Safari.
-        if (ViperUtil.isBrowser('msie', '<11') !== true) {
+        if (ViperUtil.isBrowser('msie', '<9') !== true) {
             elem.oncut = function(e) {
                 onCopy(e);
 
