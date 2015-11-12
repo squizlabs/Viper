@@ -556,11 +556,13 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutFormatsUnitTest extends Abstrac
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + x');
-        sleep(2);
+        sleep(1);
         $this->moveToKeyword(5, 'right');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
-        sleep(2);
+        sleep(1);
         $this->assertHTMLMatch('<div>This is a div section %2%</div><pre>This is a pre section %3%</pre><blockquote><p>This is a quote section %4%</p></blockquote><p>Space paragraph</p><p>Another paragraph %5%</p><p>This is a paragraph section %1%</p>');
 
         // Test div
