@@ -1,0 +1,124 @@
+
+
+<h1 style="margin: 24pt 0in 0pt;"><span lang="EN-AU" style="vertical-align: baseline;"><font size="5"><font color="#345a8a"><font face="Calibri">Word Document for
+Aggressive Mode Testing<?xml:namespace prefix = "o" ns = "urn:schemas-microsoft-com:office:office" /><o:p></o:p></font></font></font></span></h1>
+
+<p class="MsoNormal" style="margin: 0in 0in 0pt;"><span lang="EN-AU" style="vertical-align: baseline;"><o:p>&nbsp;</o:p></span></p>
+
+<p class="MsoNormal" style="margin: 0in 0in 0pt;"><span lang="EN-AU" style="vertical-align: baseline;">This is
+some content. <o:p></o:p></span></p>
+
+<p align="center" class="MsoNormal" style="margin: 0in 0in 0pt; text-align: center;"><span lang="EN-AU" style="vertical-align: baseline;">This is some content that has been centre
+aligned.<o:p></o:p></span></p>
+
+<p align="right" class="MsoNormal" style="margin: 0in 0in 0pt; text-align: right;"><span lang="EN-AU" style="vertical-align: baseline;">This is some content that has been right
+aligned.<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 0in 0in 0pt; text-align: justify;"><span lang="EN-AU" style="vertical-align: baseline;">This is some <b style="mso-bidi-font-weight: normal;">content</b> that has been justified.<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 0in 0in 0pt; text-align: justify;"><span lang="EN-AU" style="vertical-align: baseline;"><o:p>&nbsp;</o:p></span></p>
+
+<p class="MsoNormal" style="margin: 12pt 0in 12pt 14.2pt; text-align: justify; text-indent: -14.2pt;"><?xml:namespace prefix = "v" ns = "urn:schemas-microsoft-com:vml" /><v:shapetype id="_x0000_t75" stroked="f" filled="f" path="m@4@5l@4@11@9@11@9@5xe" o:preferrelative="t" o:spt="75" coordsize="21600,21600">
+ <v:stroke joinstyle="miter">
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0">
+  <v:f eqn="sum @0 1 0">
+  <v:f eqn="sum 0 0 @1">
+  <v:f eqn="prod @2 1 2">
+  <v:f eqn="prod @3 21600 pixelWidth">
+  <v:f eqn="prod @3 21600 pixelHeight">
+  <v:f eqn="sum @0 0 1">
+  <v:f eqn="prod @6 1 2">
+  <v:f eqn="prod @7 21600 pixelWidth">
+  <v:f eqn="sum @8 21600 0">
+  <v:f eqn="prod @7 21600 pixelHeight">
+  <v:f eqn="sum @10 21600 0">
+ </v:f></v:f></v:f></v:f></v:f></v:f></v:f></v:f></v:f></v:f></v:f></v:f></v:formulas>
+ <v:path o:connecttype="rect" gradientshapeok="t" o:extrusionok="f">
+ <o:lock aspectratio="t" v:ext="edit">
+</o:lock></v:path></v:stroke></v:shapetype><v:shape id="Picture_x0020_3" style="left: 0px; width: 90.3pt; height: 135pt; text-align: left; margin-top: 17.7pt; margin-left: 5in; visibility: visible; position: absolute; z-index: 1;" type="#_x0000_t75" alt="Macintosh HD:Applications:Microsoft Office 2011:Office:Media:Clipart: Business.localized:AA006219.png" o:spid="_x0000_s1026">
+ <v:imagedata o:title="" src="file:///C:\Users\IEUser\AppData\Local\Temp\msohtml1\01\clip_image001.png">
+ <?xml:namespace prefix = "w" ns = "urn:schemas-microsoft-com:office:word" /><w:wrap type="square">
+</w:wrap></v:imagedata></v:shape><span lang="EN-AU" style="vertical-align: baseline;">Lorem ipsum <s>dolor</s> sit amet, consectetur adipiscing elit. Fusce
+consequat pellentesque aliquam. Phasellus hendrerit laoreet gravida.
+Suspendisse ac lectus sit amet neque luctus blandit quis eget quam. Maecenas
+maximus ullamcorper maximus. Nunc eu tortor turpis. Nulla pharetra tristique
+gravida. Suspendisse imperdiet quam arcu, quis interdum ipsum mattis no<a name="_GoBack"></a>n. Fusce a posuere elit. Pellentesque eget elit lorem. Duis
+gravida velit pulvinar nunc scelerisque, sed commodo mauris laoreet. Integer
+sodales lacus eget posuere dictum. Aenean imperdiet sagittis commodo. Donec
+convallis sem nisi, vel tincidunt risus efficitur eu. Cras id bibendum odio.
+Praesent laoreet malesuada lorem ut congue. Sed dignissim velit orci, vitae
+suscipit turpis rhoncus ac<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 0in 0in 0pt; text-align: justify;"><span lang="EN-AU" style="vertical-align: baseline;">This is a list:<o:p></o:p></span></p>
+
+<p class="ListParagraphCxSpFirst" style="margin: 0in 0in 10pt 0.25in; line-height: 115%; text-indent: -0.25in; mso-add-space: auto; mso-list: l0 level1 lfo1;"><span lang="EN-AU" style="vertical-align: baseline;"><span style="mso-list: Ignore;">1)<span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><span lang="EN-AU" style="vertical-align: baseline;">Asdadsads<o:p></o:p></span></p>
+
+<p class="ListParagraphCxSpMiddle" style="margin: 0in 0in 10pt 0.5in; line-height: 115%; text-indent: -0.25in; mso-add-space: auto; mso-list: l0 level2 lfo1;"><span lang="EN-AU" style="vertical-align: baseline;"><span style="mso-list: Ignore;">a)<span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><span lang="EN-AU" style="vertical-align: baseline;">Dsfsdfsfd<o:p></o:p></span></p>
+
+<p class="ListParagraphCxSpMiddle" style="margin: 0in 0in 10pt 0.5in; line-height: 115%; text-indent: -0.25in; mso-add-space: auto; mso-list: l0 level2 lfo1;"><span lang="EN-AU" style="vertical-align: baseline;"><span style="mso-list: Ignore;">b)<span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><span lang="EN-AU" style="vertical-align: baseline;">Sdfsdfsfd<o:p></o:p></span></p>
+
+<p class="ListParagraphCxSpMiddle" style="margin: 0in 0in 10pt 0.75in; line-height: 115%; text-indent: -0.25in; mso-add-space: auto; mso-list: l0 level3 lfo1;"><span lang="EN-AU" style="vertical-align: baseline;"><span style="mso-list: Ignore;">i)<span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span></span><span lang="EN-AU" style="vertical-align: baseline;">Sfd<o:p></o:p></span></p>
+
+<p class="ListParagraphCxSpMiddle" style="margin: 0in 0in 10pt 0.75in; line-height: 115%; text-indent: -0.25in; mso-add-space: auto; mso-list: l0 level3 lfo1;"><span lang="EN-AU" style="vertical-align: baseline;"><span style="mso-list: Ignore;">ii)<span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><span lang="EN-AU" style="vertical-align: baseline;">Sfdsfd<o:p></o:p></span></p>
+
+<p class="ListParagraphCxSpMiddle" style="margin: 0in 0in 10pt 0.75in; line-height: 115%; text-indent: -0.25in; mso-add-space: auto; mso-list: l0 level3 lfo1;"><span lang="EN-AU" style="vertical-align: baseline;"><span style="mso-list: Ignore;">iii)<span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp; </span></span></span><span lang="EN-AU" style="vertical-align: baseline;">Dsfsdf<o:p></o:p></span></p>
+
+<p class="ListParagraphCxSpMiddle" style="margin: 0in 0in 10pt 0.75in; line-height: 115%; text-indent: -0.25in; mso-add-space: auto; mso-list: l0 level3 lfo1;"><span lang="EN-AU" style="vertical-align: baseline;"><span style="mso-list: Ignore;">iv)<span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp; </span></span></span><span lang="EN-AU" style="vertical-align: baseline;">sdfsdf<o:p></o:p></span></p>
+
+<p class="ListParagraphCxSpMiddle" style="margin: 0in 0in 10pt 0.5in; line-height: 115%; text-indent: -0.25in; mso-add-space: auto; mso-list: l0 level2 lfo1;"><span lang="EN-AU" style="vertical-align: baseline;"><span style="mso-list: Ignore;">c)<span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><span lang="EN-AU" style="vertical-align: baseline;">Sdfsdfsfd<o:p></o:p></span></p>
+
+<p class="ListParagraphCxSpMiddle" style="margin: 0in 0in 10pt 0.5in; line-height: 115%; text-indent: -0.25in; mso-add-space: auto; mso-list: l0 level2 lfo1;"><span lang="EN-AU" style="vertical-align: baseline;"><span style="mso-list: Ignore;">d)<span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><span lang="EN-AU" style="vertical-align: baseline;">sdfsdfsfd<o:p></o:p></span></p>
+
+<p class="ListParagraphCxSpMiddle" style="margin: 0in 0in 10pt 0.25in; line-height: 115%; text-indent: -0.25in; mso-add-space: auto; mso-list: l0 level1 lfo1;"><span lang="EN-AU" style="vertical-align: baseline;"><span style="mso-list: Ignore;">2)<span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><span lang="EN-AU" style="vertical-align: baseline;">Asdadsasd<o:p></o:p></span></p>
+
+<p class="ListParagraphCxSpMiddle" style="margin: 0in 0in 10pt 0.25in; line-height: 115%; text-indent: -0.25in; mso-add-space: auto; mso-list: l0 level1 lfo1;"><span lang="EN-AU" style="vertical-align: baseline;"><span style="mso-list: Ignore;">3)<span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><span lang="EN-AU" style="vertical-align: baseline;">Sfdsfds<o:p></o:p></span></p>
+
+<p class="ListParagraphCxSpMiddle" style="margin: 0in 0in 10pt 0.25in; line-height: 115%; text-indent: -0.25in; mso-add-space: auto; mso-list: l0 level1 lfo1;"><span lang="EN-AU" style="vertical-align: baseline;"><span style="mso-list: Ignore;">4)<span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><span lang="EN-AU" style="vertical-align: baseline;">Asdasdasd<o:p></o:p></span></p>
+
+<p class="ListParagraphCxSpLast" style="margin: 0in 0in 0pt 0.25in; text-align: justify; text-indent: -0.25in; mso-add-space: auto; mso-list: l0 level1 lfo1;"><span lang="EN-AU" style="vertical-align: baseline;"><span style="mso-list: Ignore;">5)<span style='font: 7pt/normal "Times New Roman"; font-size-adjust: none; font-stretch: normal;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span></span><span lang="EN-AU" style="vertical-align: baseline;">Asdasdasd<o:p></o:p></span></p>
+
+<p class="MsoNormal" style="margin: 0in 0in 0pt; text-align: justify;"><span lang="EN-AU" style="vertical-align: baseline;"><o:p>&nbsp;</o:p></span></p>
+
+<table class="MsoNormalTable" style="border: 1pt solid windowtext; mso-cellspacing: 2.8pt; mso-border-alt: solid windowtext .5pt; mso-yfti-tbllook: 160; mso-padding-alt: 14.2pt 14.2pt 14.2pt 14.2pt; mso-border-insideh: .5pt solid windowtext; mso-border-insidev: .5pt solid windowtext;" border="1" cellSpacing="4" cellPadding="0">
+ <tbody><tr style="mso-yfti-irow: 0; mso-yfti-firstrow: yes;">
+  <td width="114" vAlign="top" style="padding: 14.2pt; border: 1pt solid windowtext; width: 85.15pt; background-color: transparent; mso-border-alt: solid windowtext .5pt;">
+  <p class="MsoNormal" style="margin: 0in 0in 0pt;"><span lang="EN-AU" style="vertical-align: baseline;">Cell 1<o:p></o:p></span></p>
+  </td>
+  <td width="114" vAlign="top" style="padding: 14.2pt; border: 1pt solid windowtext; width: 85.15pt; background-color: transparent; mso-border-alt: solid windowtext .5pt;">
+  <p class="MsoNormal" style="margin: 0in 0in 0pt;"><span lang="EN-AU" style="vertical-align: baseline;">Cell 2<o:p></o:p></span></p>
+  </td>
+  <td width="114" vAlign="top" style="padding: 14.2pt; border: 1pt solid windowtext; width: 85.15pt; background-color: transparent; mso-border-alt: solid windowtext .5pt;">
+  <p class="MsoNormal" style="margin: 0in 0in 0pt;"><span lang="EN-AU" style="vertical-align: baseline;">Cell 3<o:p></o:p></span></p>
+  </td>
+  <td width="114" vAlign="top" style="padding: 14.2pt; border: 1pt solid windowtext; width: 85.15pt; background-color: transparent; mso-border-alt: solid windowtext .5pt;">
+  <p class="MsoNormal" style="margin: 0in 0in 0pt;"><span lang="EN-AU" style="vertical-align: baseline;">Cell 4<o:p></o:p></span></p>
+  </td>
+  <td width="114" vAlign="top" style="padding: 14.2pt; border: 1pt solid windowtext; width: 85.2pt; background-color: transparent; mso-border-alt: solid windowtext .5pt;">
+  <p class="MsoNormal" style="margin: 0in 0in 0pt;"><span lang="EN-AU" style="vertical-align: baseline;">Cell 5<o:p></o:p></span></p>
+  </td>
+ </tr>
+ <tr style="mso-yfti-irow: 1; mso-yfti-lastrow: yes;">
+  <td width="114" vAlign="top" style="padding: 14.2pt; border: 1pt solid windowtext; width: 85.15pt; background-color: transparent; mso-border-alt: solid windowtext .5pt;">
+  <p class="MsoNormal" style="margin: 0in 0in 0pt;"><span lang="EN-AU" style="vertical-align: baseline;">Cell 6<o:p></o:p></span></p>
+  </td>
+  <td width="114" vAlign="top" style="padding: 14.2pt; border: 1pt solid windowtext; width: 85.15pt; background-color: transparent; mso-border-alt: solid windowtext .5pt;">
+  <p class="MsoNormal" style="margin: 0in 0in 0pt;"><span lang="EN-AU" style="vertical-align: baseline;">Cell 7<o:p></o:p></span></p>
+  </td>
+  <td width="114" vAlign="top" style="padding: 14.2pt; border: 1pt solid windowtext; width: 85.15pt; background-color: transparent; mso-border-alt: solid windowtext .5pt;">
+  <p class="MsoNormal" style="margin: 0in 0in 0pt;"><span lang="EN-AU" style="vertical-align: baseline;">Cell 8<o:p></o:p></span></p>
+  </td>
+  <td width="114" vAlign="top" style="padding: 14.2pt; border: 1pt solid windowtext; width: 85.15pt; background-color: transparent; mso-border-alt: solid windowtext .5pt;">
+  <p class="MsoNormal" style="margin: 0in 0in 0pt;"><span lang="EN-AU" style="vertical-align: baseline;">Cell 9<o:p></o:p></span></p>
+  </td>
+  <td width="114" vAlign="top" style="padding: 14.2pt; border: 1pt solid windowtext; width: 85.2pt; background-color: transparent; mso-border-alt: solid windowtext .5pt;">
+  <p class="MsoNormal" style="margin: 0in 0in 0pt;"><span lang="EN-AU" style="vertical-align: baseline;">Cell 10<o:p></o:p></span></p>
+  </td>
+ </tr>
+</tbody></table>
+
+<p class="MsoNormal" style="margin: 0in 0in 0pt;"><span lang="EN-AU" style="vertical-align: baseline;"><o:p>&nbsp;</o:p></span></p>
+
+<p class="MsoNormal" style="margin: 0in 0in 0pt;"><span lang="EN-AU" style="vertical-align: baseline;"><o:p>&nbsp;</o:p></span></p>
+
