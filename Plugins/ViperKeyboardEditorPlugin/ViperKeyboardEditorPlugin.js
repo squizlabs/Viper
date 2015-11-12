@@ -907,6 +907,7 @@ ViperKeyboardEditorPlugin.prototype = {
                         && range.startContainer.previousSibling.nodeType !== ViperUtil.TEXT_NODE
                     ) {
                         var span = document.createElement('span');
+                        ViperUtil.attr(span, 'data-viper-span', 'true');
                         ViperUtil.insertBefore(range.startContainer, span);
                         span.appendChild(range.startContainer);
                     } else if (!range.startContainer.previousSibling
