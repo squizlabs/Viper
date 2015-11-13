@@ -388,12 +388,12 @@ ViperCopyPastePlugin.prototype = {
             }
 
             selectedContent = self._fixPartialSelection(selectedContent, range);
-            selectedContent = '<b class="__viper_copy"> </b>' + selectedContent;
+            selectedContent = '<span class="__viper_copy"> </span>' + selectedContent;
 
             // IE needs space before B tag otherwise it gets stripped out..
             if (ViperUtil.isBrowser('msie', '<9') === true) {
                 selectedContent = '&nbsp;' + selectedContent + '&nbsp;';
-            } else if (ViperUtil.isBrowser('msie', '>=11') === true) {
+            } else if (ViperUtil.isBrowser('msie', '>=9') === true) {
                 selectedContent = '&nbsp;' + selectedContent;
             }
 
@@ -923,30 +923,23 @@ ViperCopyPastePlugin.prototype = {
 
     },
 
-    _handleFormattedPasteValue: function(stripTags, pasteElement)
+    _handleFormattedPasteValue: function(stripTags, origPasteElement)
     {
-        pasteElement = pasteElement || this.pasteElement;
+        origPasteElement = origPasteElement || this.pasteElement;
+        var pasteElement = origPasteElement.cloneNode(true);
 
         // Check if the content was copied from Viper element.
         var isViperContent = false;
         var viperCopyElems = ViperUtil.getClass('__viper_copy', pasteElement);
 
-        if (viperCopyElems.length === 0 && ViperUtil.isBrowser('msie', '<11') === true) {
-            if (pasteElement.innerHTML.indexOf('<STRONG>&nbsp;</STRONG>') === 0
-                || pasteElement.innerHTML.indexOf('<strong>&nbsp;</strong>') === 0
-            ) {
-                viperCopyElems = [pasteElement.firstChild];
-            }
-        }
-
         if (viperCopyElems.length === 1) {
             isViperContent = true;
             if (viperCopyElems[0].previousSibling) {
-                // Remove white space before the B tag.
+                // Remove white space before the sperical tag.
                 ViperUtil.remove(viperCopyElems[0].previousSibling);
             }
 
-            // Remove the B tag that was added by Viper during copy/cut.
+            // Remove the special tag that was added by Viper during copy/cut.
             ViperUtil.remove(viperCopyElems[0]);
         }
 
