@@ -18,43 +18,17 @@ aligned.<o:p></o:p></span></p>
 
 <p class="MsoNormal" style="margin: 0in 0in 0pt; text-align: justify;"><span lang="EN-AU" style="vertical-align: baseline;"><o:p>&nbsp;</o:p></span></p>
 
-<p class="MsoNormal" style="margin: 12pt 0in 12pt 14.2pt; text-align: justify; text-indent: -14.2pt;"><!--[if gte vml 1]><v:shapetype
- id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
- path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
- <v:stroke joinstyle="miter"/>
- <v:formulas>
-  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
-  <v:f eqn="sum @0 1 0"/>
-  <v:f eqn="sum 0 0 @1"/>
-  <v:f eqn="prod @2 1 2"/>
-  <v:f eqn="prod @3 21600 pixelWidth"/>
-  <v:f eqn="prod @3 21600 pixelHeight"/>
-  <v:f eqn="sum @0 0 1"/>
-  <v:f eqn="prod @6 1 2"/>
-  <v:f eqn="prod @7 21600 pixelWidth"/>
-  <v:f eqn="sum @8 21600 0"/>
-  <v:f eqn="prod @7 21600 pixelHeight"/>
-  <v:f eqn="sum @10 21600 0"/>
- </v:formulas>
- <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
- <o:lock v:ext="edit" aspectratio="t"/>
-</v:shapetype><v:shape id="Picture_x0020_3" o:spid="_x0000_s1026" type="#_x0000_t75"
- alt="Macintosh HD:Applications:Microsoft Office 2011:Office:Media:Clipart: Business.localized:AA006219.png"
- style='position:absolute;left:0;text-align:left;margin-left:5in;margin-top:17.7pt;
- width:90.3pt;height:135pt;z-index:1;visibility:visible'>
- <v:imagedata src="file:///C:\Users\IEUser\AppData\Local\Temp\msohtml1\01\clip_image001.png"
-  o:title=""/>
- <w:wrap type="square"/>
-</v:shape><![endif]--><!--[if !vml]--><img width="120" height="180" align="left" alt="Macintosh HD:Applications:Microsoft Office 2011:Office:Media:Clipart: Business.localized:AA006219.png" src="file:///C:/Users/IEUser/AppData/Local/Temp/msohtml1/01/clip_image002.gif" hspace="12" v:shapes="Picture_x0020_3"><!--[endif]--><span lang="EN-AU" style="vertical-align: baseline;">Lorem ipsum <s>dolor</s> sit amet, consectetur adipiscing elit. Fusce
-consequat pellentesque aliquam. Phasellus hendrerit laoreet gravida.
-Suspendisse ac lectus sit amet neque luctus blandit quis eget quam. Maecenas
-maximus ullamcorper maximus. Nunc eu tortor turpis. Nulla pharetra tristique
-gravida. Suspendisse imperdiet quam arcu, quis interdum ipsum mattis no<a name="_GoBack"></a>n. Fusce a posuere elit. Pellentesque eget elit lorem. Duis
-gravida velit pulvinar nunc scelerisque, sed commodo mauris laoreet. Integer
-sodales lacus eget posuere dictum. Aenean imperdiet sagittis commodo. Donec
-convallis sem nisi, vel tincidunt risus efficitur eu. Cras id bibendum odio.
-Praesent laoreet malesuada lorem ut congue. Sed dignissim velit orci, vitae
-suscipit turpis rhoncus ac<o:p></o:p></span></p>
+<p class="MsoNormal" style="margin: 12pt 0in 12pt 14.2pt; text-align: justify; text-indent: -14.2pt;"><span lang="EN-AU" style="vertical-align: baseline;">Lorem ipsum <s>dolor</s> sit amet,
+consectetur adipiscing elit. Fusce consequat pellentesque <a name="_GoBack"></a>aliquam.
+Phasellus hendrerit laoreet gravida. Suspendisse ac lectus sit amet neque
+luctus blandit quis eget quam. Maecenas maximus ullamcorper maximus. Nunc eu
+tortor turpis. Nulla pharetra tristique gravida. Suspendisse imperdiet quam
+arcu, quis interdum ipsum mattis non. Fusce a posuere elit. Pellentesque eget elit
+lorem. Duis gravida velit pulvinar nunc scelerisque, sed commodo mauris
+laoreet. Integer sodales lacus eget posuere dictum. Aenean imperdiet sagittis
+commodo. Donec convallis sem nisi, vel tincidunt risus efficitur eu. Cras id
+bibendum odio. Praesent laoreet malesuada lorem ut congue. Sed dignissim velit
+orci, vitae suscipit turpis rhoncus ac<o:p></o:p></span></p>
 
 <p class="MsoNormal" style="margin: 0in 0in 0pt; text-align: justify;"><span lang="EN-AU" style="vertical-align: baseline;">This is a list:<o:p></o:p></span></p>
 
