@@ -1376,6 +1376,15 @@ ViperCopyPastePlugin.prototype = {
             var aTags = ViperUtil.find(tmp, 'a');
             for (var i = 0; i < aTags.length; i++) {
                 var surrChildren = ViperUtil.getSurroundedChildren(aTags[i]);
+                for (var j = 0; j < surrChildren.length; j++) {
+                    if (ViperUtil.isTag(surrChildren[j], ['strong', 'em']) === true) {
+                        // Wrap the A tag with this tag.
+                        var newElem = document.createElement(ViperUtil.getTagName(surrChildren[j]));
+                        ViperUtil.insertBefore(aTags[i], newElem);
+                        newElem.appendChild(aTags[i]);
+                    }
+                }
+
                 this._moveChildren(surrChildren[surrChildren.length - 1], surrChildren[0]);
                 ViperUtil.remove(surrChildren);
             }
