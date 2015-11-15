@@ -388,7 +388,7 @@ ViperCopyPastePlugin.prototype = {
             }
 
             selectedContent = self._fixPartialSelection(selectedContent, range);
-            selectedContent = '<span class="__viper_copy"> </span>' + selectedContent;
+            selectedContent = '<div class="__viper_copy">' + selectedContent + '</div>';
 
             // IE needs space before B tag otherwise it gets stripped out..
             if (ViperUtil.isBrowser('msie', '<9') === true) {
@@ -752,7 +752,7 @@ ViperCopyPastePlugin.prototype = {
                 ViperUtil.insertBefore(this._bookmark.start, this._tmpNode);
             } else {
                 this.viper.highlightSelection();
-                this._bookmark = this.viper.createBookmarkFromHighlight();
+                this._bookmark = this.viper.createBookmarkFromHighlight(true);
                 ViperUtil.insertBefore(this._bookmark.start, this._tmpNode);
             }
         } else {
@@ -925,6 +925,8 @@ ViperCopyPastePlugin.prototype = {
 
     _handleFormattedPasteValue: function(stripTags, origPasteElement)
     {
+        this._pasteProcess = 0;
+
         origPasteElement = origPasteElement || this.pasteElement;
         var pasteElement = origPasteElement.cloneNode(true);
 
@@ -934,13 +936,7 @@ ViperCopyPastePlugin.prototype = {
 
         if (viperCopyElems.length === 1) {
             isViperContent = true;
-            if (viperCopyElems[0].previousSibling) {
-                // Remove white space before the sperical tag.
-                ViperUtil.remove(viperCopyElems[0].previousSibling);
-            }
-
-            // Remove the special tag that was added by Viper during copy/cut.
-            ViperUtil.remove(viperCopyElems[0]);
+            ViperUtil.setHtml(pasteElement, ViperUtil.getHtml(viperCopyElems[0]));
         }
 
         this.viper.removeNotAllowedAttributes(pasteElement);
@@ -1279,7 +1275,9 @@ ViperCopyPastePlugin.prototype = {
                 ViperChangeTracker.addNodeToChange(changeid, ctNode);
                 ViperUtil.insertBefore(this._tmpNode, ctNode);
             } else {
-                if (this._tmpNode.parentNode === this.viper.getViperElement()) {
+                if (this._tmpNode.parentNode === this.viper.getViperElement()
+                    && ViperUtil.isBlockElement(fragment.firstChild) === false
+                ) {
                     var defaultTag = this.viper.getDefaultBlockTag();
                     if (defaultTag) {
                         defaultTag = document.createElement(defaultTag);

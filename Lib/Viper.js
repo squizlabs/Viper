@@ -3983,7 +3983,7 @@ Viper.prototype = {
      *
      * @return object
      */
-    createBookmarkFromHighlight: function()
+    createBookmarkFromHighlight: function(outer)
     {
         var highlights = this.getHighlights();
         if (highlights.length === 0) {
@@ -3995,14 +3995,32 @@ Viper.prototype = {
         ViperUtil.addClass(startBookmark, 'viperBookmark viperBookmark_start');
         ViperUtil.setHtml(startBookmark, '&nbsp;');
         startBookmark.setAttribute('viperBookmark', 'start');
-        ViperUtil.insertBefore(highlights[0], startBookmark);
+
+        var outerParent = null;
+        if (outer === true && highlights.length === 1) {
+            // If the highlight is one element and outer is set to true then 
+            // create the bookmark at most outer surrounding parent.
+            outerParent = ViperUtil.getTopSurroundingParent(highlights[0]);
+            if (outerParent) {
+                ViperUtil.insertBefore(outerParent, startBookmark);
+            }
+        }
+
+        if (!outerParent) {
+            ViperUtil.insertBefore(highlights[0], startBookmark);
+        }
 
         var endBookmark           = Viper.document.createElement('span');
         endBookmark.style.display = 'none';
         ViperUtil.setHtml(endBookmark, '&nbsp;');
         ViperUtil.addClass(endBookmark, 'viperBookmark viperBookmark_end');
         endBookmark.setAttribute('viperBookmark', 'end');
-        ViperUtil.insertAfter(highlights[(highlights.length - 1)], endBookmark);
+
+        if (outerParent) {
+            ViperUtil.insertAfter(outerParent, endBookmark);
+        } else {
+            ViperUtil.insertAfter(highlights[(highlights.length - 1)], endBookmark);
+        }
 
         var bookmark = {
             start: startBookmark,
