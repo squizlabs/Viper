@@ -1094,16 +1094,22 @@ ViperCopyPastePlugin.prototype = {
             range.collapse(false);
             var viperElem = this.viper.getViperElement();
             var prevBlock = null;
-            if (viperElem.firstChild === viperElem.lastChild
-                && (viperElem.firstChild === null || ViperUtil.isTag(viperElem.firstChild, 'br') === true)
-            ) {
-                if (viperElem.firstChild === null) {
-                    viperElem.appendChild(this._tmpNode);
+            var viperElem = this.viper.getViperElement();
+            if (ViperUtil.getHtml(viperElem) !== '') {
+                if (viperElem.firstChild === viperElem.lastChild
+                    && (viperElem.firstChild === null || ViperUtil.isTag(viperElem.firstChild, 'br') === true)
+                ) {
+                    if (viperElem.firstChild === null) {
+                        viperElem.appendChild(this._tmpNode);
+                    } else {
+                        ViperUtil.insertBefore(this._tmpNode, viperElem.firstChild);
+                    }
                 } else {
-                    ViperUtil.insertBefore(this._tmpNode, viperElem.firstChild);
+                    prevBlock = keyboardEditor.splitAtRange(true, range);
                 }
             } else {
-                prevBlock = keyboardEditor.splitAtRange(true, range);
+                // Viper Element is empty make sure tmpNode is added to DOM.
+                viperElem.appendChild(this._tmpNode);
             }
 
             if (!prevBlock) {

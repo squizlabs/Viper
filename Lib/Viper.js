@@ -1682,6 +1682,33 @@ Viper.prototype = {
 
     },
 
+    isWholeViperElementSelected: function(range)
+    {
+        range = range || this.getViperRange();
+        if (range.collapsed === false) {
+            var viperElement    = this.getViperElement();
+            var firstSelectable = range._getFirstSelectableChild(viperElement);
+            if ((firstSelectable === range.startContainer || viperElement === range.startContainer) && range.startOffset === 0) {
+                var lastSelectable  = range._getLastSelectableChild(viperElement);
+                if ((range.endContainer === viperElement && range.endOffset >= viperElement.childNodes.length)
+                    || (range.endContainer === lastSelectable && range.endOffset === lastSelectable.data.length)
+                ) {
+                    return true;
+                } else if (ViperUtil.isBrowser('msie', '8') === true
+                    && range.endContainer === viperElement
+                    && range.startContainer === firstSelectable
+                    && range.startOffset === 0
+                    && range.endOffset === 0
+                ) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+
+    },
+
     /**
      * Inserts a node after the current caret position.
      *
