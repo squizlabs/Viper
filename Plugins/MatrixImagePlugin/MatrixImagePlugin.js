@@ -47,20 +47,23 @@ MatrixImagePlugin.prototype = {
                     self._uploadForm.css('display', 'block');
                 }
             }
-            else {
-                // use js to trigger file chooser
+            else if(ViperUtil.isBrowser('msie', '10') === true) {
                 ViperUtil.$('#'+ prefix + 'uploadImageButton').click();
+            }
+            else {
+                // the label tag should automatically trigger the click event
             }
         });
 
         // append the hidden file upload form
         var form = this.createUploadImageForm(prefix);
 
-
+        var imageUploaderLabel = ViperUtil.$('<label for="'+ prefix + 'uploadImageButton"></label>').get(0);
+        imageUploaderLabel.appendChild(imageUploader);
         ViperUtil.insertAfter(urlField, urlRow);
         urlRow.appendChild(urlField);
         urlRow.appendChild(assetPicker);
-        urlRow.appendChild(imageUploader);
+        urlRow.appendChild(imageUploaderLabel);
         urlRow.appendChild(form);
 
         // append the choose location fields for image upload
@@ -152,11 +155,17 @@ MatrixImagePlugin.prototype = {
                     self._inlineUploadForm.css('display', 'block');
                 }
             }
-            else {
+            else if(ViperUtil.isBrowser('msie', '10') === true) {
                 ViperUtil.$('#'+ prefix + 'uploadImageButton').click();
             }
+            else {
+                // the label tag should automatically trigger the click event
+            }
+
         });
 
+        var imageUploaderLabel = ViperUtil.$('<label for="'+ prefix + 'uploadImageButton"></label>').get(0);
+        imageUploaderLabel.appendChild(imageUploader);
 
         // append the hidden file upload form
         var form = this.createUploadImageForm(prefix);
@@ -164,7 +173,7 @@ MatrixImagePlugin.prototype = {
         ViperUtil.insertAfter(urlField, urlRow);
         urlRow.appendChild(urlField);
         urlRow.appendChild(assetPicker);
-        urlRow.appendChild(imageUploader);
+        urlRow.appendChild(imageUploaderLabel);
 
         urlRow.appendChild(form);
 
