@@ -700,7 +700,10 @@ ViperImagePlugin.prototype = {
         var nodeSelection = data.nodeSelection || data.range.getNodeSelection();
         var self          = this;
 
-        this.hideImageResizeHandles();
+        if (!this._resizeImage) {
+            this.hideImageResizeHandles();
+        }
+
         if (nodeSelection && ViperUtil.isTag(nodeSelection, 'img') === true) {
             this._resizeImage = nodeSelection;
             data.toolbar.showButton('vitpImage');
@@ -713,6 +716,15 @@ ViperImagePlugin.prototype = {
             this.viper.ViperTools.setButtonActive('vitpImage');
             this.showImageResizeHandles(nodeSelection);
             this._updateToolbars(nodeSelection);
+        } else if (this._resizeImage
+            &&  ViperUtil.isBrowser('msie', '<11') === true
+        ) {
+            setTimeout(
+                function() {
+                    self._inlineToolbar.update(null, self._resizeImage);
+                },
+                50
+            );
         }
 
     },

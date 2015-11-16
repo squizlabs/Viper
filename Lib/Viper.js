@@ -5283,7 +5283,8 @@ Viper.prototype = {
             } catch (e) {
             }
 
-            if (range.collapsed === true 
+            if (range
+                && range.collapsed === true 
                 && range.startContainer
                 && range.startContainer.nodeType === 9
                 && ViperUtil.isBrowser('msie') === true
