@@ -92,11 +92,6 @@
   background-position: 0 -54px;
   background-image: url("../Images/matrixButtonIcons.svg");
 }
-.Viper-button:active .Viper-buttonIcon.Viper-uploadImage-button,
-.Viper-button.Viper-active .Viper-buttonIcon.Viper-uploadImage-button,
-.Viper-button.Viper-selected .Viper-buttonIcon.Viper-uploadImage-button {
-  background-position: -34px -54px;
-}
 .Viper-browserVer-msie8 .Viper-buttonIcon.Viper-uploadImage-button {
   background-image: url("../Images/matrixButtonIcons.png");
 }
