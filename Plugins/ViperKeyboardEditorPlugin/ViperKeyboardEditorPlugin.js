@@ -1085,6 +1085,7 @@ ViperKeyboardEditorPlugin.prototype = {
                             ViperSelection.addRange(range);
                         }
 
+                        this.viper.fireSelectionChanged(null, true);
                         this.viper.fireNodesChanged();
 
                         return false;
