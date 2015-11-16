@@ -2194,41 +2194,6 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->assertHTMLMatch('<p><em><strong><sub>%1%</sub></strong></em></p><p><del><strong><sub>%2%</sub></strong></del></p><p>%3%</p><p>%4%</p>');
 
-        // Test applying subscript and superscript then italic
-        $this->useTest(15);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('italic', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-
-        // Test removing subscript and superscript then italic
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->clickTopToolbarButton('italic', 'active');
-
-        // Test re-applying subscript and superscript then italic
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('italic', NULL);
-        $this->assertHTMLMatch('<p><strong><em><sub>%1%</sub></em></strong></p><p>%2%</p><p>%3%</p><p>%4%</p>');
-
-        // Test applying subscript and superscript then strikethrough
-        $this->selectKeyword(2);
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('italic', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        // Test removing subscript and superscript then strikethrough
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        // Test re-applying subscript and superscript then strikethrough
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->assertHTMLMatch('<p><strong><em><sub>%1%</sub></em></strong></p><p><del><em><sub>%2%</sub></em></del></p><p>%3%</p><p>%4%</p>');
-
         // Test applying subscript and strikethrough then italic
         $this->useTest(15);
         $this->selectKeyword(1);
@@ -2494,41 +2459,6 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('bold', NULL);
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->assertHTMLMatch('<p><em><strong><sup>%1%</sup></strong></em></p><p><del><strong><sup>%2%</sup></strong></del></p><p>%3%</p><p>%4%</p>');
-
-        // Test applying superscript and superscript then italic
-        $this->useTest(15);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('italic', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-
-        // Test removing superscript and superscript then italic
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->clickTopToolbarButton('italic', 'active');
-
-        // Test re-applying superscript and superscript then italic
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('italic', NULL);
-        $this->assertHTMLMatch('<p><strong><em><sup>%1%</sup></em></strong></p><p>%2%</p><p>%3%</p><p>%4%</p>');
-
-        // Test applying superscript and superscript then strikethrough
-        $this->selectKeyword(2);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('italic', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        // Test removing superscript and superscript then strikethrough
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        // Test re-applying superscript and superscript then strikethrough
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->assertHTMLMatch('<p><strong><em><sup>%1%</sup></em></strong></p><p><del><em><sup>%2%</sup></em></del></p><p>%3%</p><p>%4%</p>');
 
         // Test applying superscript and strikethrough then italic
         $this->useTest(15);
