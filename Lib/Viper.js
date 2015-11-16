@@ -979,7 +979,7 @@ Viper.prototype = {
                     ViperUtil.setHtml(elem, '');
                 } else {
                     var emptyCont = '<br/>';
-                    if (ViperUtil.isBrowser('msie') === true) {
+                    if (ViperUtil.isBrowser('msie', '<9') === true) {
                         emptyCont = '&nbsp;';
                     }
 
