@@ -160,6 +160,7 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
         sleep(1);
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
+        sleep(1);
         $this->type('-B');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
