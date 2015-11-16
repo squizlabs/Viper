@@ -498,7 +498,7 @@ ViperTools.prototype = {
                     if (moveCaretToEnd === true) {
                         setTimeout(
                             function() {
-                                if (ViperUtil.isBrowser('msie', '>=11') === true) {
+                                if (ViperUtil.isBrowser('msie', '>=9') === true) {
                                     var textRange = input.createTextRange();
                                     textRange.move('character', input.value.length)
                                     textRange.select();
