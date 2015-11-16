@@ -25,10 +25,10 @@ var ViperSelection = {
      */
     _getSelection: function()
     {
-        if (Viper.document.selection) {
-            return Viper.document.selection;
-        } else if (Viper.window.getSelection) {
+        if (Viper.window.getSelection) {
             return Viper.window.getSelection();
+        } else if (Viper.document.selection) {
+            return Viper.document.selection;
         } else if (Viper.document.getSelection) {
             return Viper.document.getSelection();
         } else {
@@ -107,7 +107,7 @@ var ViperSelection = {
     {
         this._selection = ViperSelection._getSelection();
 
-        if (ViperUtil.isBrowser('msie', '<11') === true) {
+        if (ViperUtil.isBrowser('msie', '<9') === true) {
             // IE.
             try {
                 range.rangeObj.select();

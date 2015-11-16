@@ -388,12 +388,12 @@ ViperCopyPastePlugin.prototype = {
             }
 
             selectedContent = self._fixPartialSelection(selectedContent, range);
-            selectedContent = '<b class="__viper_copy"> </b>' + selectedContent;
+            selectedContent = '<div class="__viper_copy">' + selectedContent + '</div>';
 
             // IE needs space before B tag otherwise it gets stripped out..
-            if (ViperUtil.isBrowser('msie', '<11') === true) {
+            if (ViperUtil.isBrowser('msie', '<9') === true) {
                 selectedContent = '&nbsp;' + selectedContent + '&nbsp;';
-            } else if (ViperUtil.isBrowser('msie', '>=11') === true) {
+            } else if (ViperUtil.isBrowser('msie', '>=9') === true) {
                 selectedContent = '&nbsp;' + selectedContent;
             }
 
@@ -430,7 +430,7 @@ ViperCopyPastePlugin.prototype = {
                 // Last child could be an image etc.
                 tmp.appendChild(document.createTextNode(''));
                 range.setEnd(tmp.lastChild, 0);
-            } else if (ViperUtil.isBrowser('msie', '<11') === true) {
+            } else if (ViperUtil.isBrowser('msie', '<9') === true) {
                 range.setEnd(lastChild, lastChild.data.length - 1);
             } else {
                 range.setEnd(lastChild, lastChild.data.length);
@@ -456,7 +456,7 @@ ViperCopyPastePlugin.prototype = {
         elem.oncopy = onCopy;
 
         // Handle cut event for Chrome/FF/Safari.
-        if (ViperUtil.isBrowser('msie', '<11') !== true) {
+        if (ViperUtil.isBrowser('msie', '<9') !== true) {
             elem.oncut = function(e) {
                 onCopy(e);
 
@@ -752,7 +752,7 @@ ViperCopyPastePlugin.prototype = {
                 ViperUtil.insertBefore(this._bookmark.start, this._tmpNode);
             } else {
                 this.viper.highlightSelection();
-                this._bookmark = this.viper.createBookmarkFromHighlight();
+                this._bookmark = this.viper.createBookmarkFromHighlight(true);
                 ViperUtil.insertBefore(this._bookmark.start, this._tmpNode);
             }
         } else {
@@ -923,29 +923,20 @@ ViperCopyPastePlugin.prototype = {
 
     },
 
-    _handleFormattedPasteValue: function(stripTags, pasteElement)
+    _handleFormattedPasteValue: function(stripTags, origPasteElement)
     {
-        pasteElement = pasteElement || this.pasteElement;
+        this._pasteProcess = 0;
+
+        origPasteElement = origPasteElement || this.pasteElement;
+        var pasteElement = origPasteElement.cloneNode(true);
 
         // Check if the content was copied from Viper element.
         var isViperContent = false;
         var viperCopyElems = ViperUtil.getClass('__viper_copy', pasteElement);
 
-        if (viperCopyElems.length === 0 && ViperUtil.isBrowser('msie', '<11') === true) {
-            if (pasteElement.innerHTML.indexOf('<STRONG>&nbsp;</STRONG>') === 0) {
-                viperCopyElems = [pasteElement.firstChild];
-            }
-        }
-
         if (viperCopyElems.length === 1) {
             isViperContent = true;
-            if (viperCopyElems[0].previousSibling) {
-                // Remove white space before the B tag.
-                ViperUtil.remove(viperCopyElems[0].previousSibling);
-            }
-
-            // Remove the B tag that was added by Viper during copy/cut.
-            ViperUtil.remove(viperCopyElems[0]);
+            ViperUtil.setHtml(pasteElement, ViperUtil.getHtml(viperCopyElems[0]));
         }
 
         this.viper.removeNotAllowedAttributes(pasteElement);
@@ -1103,16 +1094,22 @@ ViperCopyPastePlugin.prototype = {
             range.collapse(false);
             var viperElem = this.viper.getViperElement();
             var prevBlock = null;
-            if (viperElem.firstChild === viperElem.lastChild
-                && (viperElem.firstChild === null || ViperUtil.isTag(viperElem.firstChild, 'br') === true)
-            ) {
-                if (viperElem.firstChild === null) {
-                    viperElem.appendChild(this._tmpNode);
+            var viperElem = this.viper.getViperElement();
+            if (ViperUtil.getHtml(viperElem) !== '') {
+                if (viperElem.firstChild === viperElem.lastChild
+                    && (viperElem.firstChild === null || ViperUtil.isTag(viperElem.firstChild, 'br') === true)
+                ) {
+                    if (viperElem.firstChild === null) {
+                        viperElem.appendChild(this._tmpNode);
+                    } else {
+                        ViperUtil.insertBefore(this._tmpNode, viperElem.firstChild);
+                    }
                 } else {
-                    ViperUtil.insertBefore(this._tmpNode, viperElem.firstChild);
+                    prevBlock = keyboardEditor.splitAtRange(true, range);
                 }
             } else {
-                prevBlock = keyboardEditor.splitAtRange(true, range);
+                // Viper Element is empty make sure tmpNode is added to DOM.
+                viperElem.appendChild(this._tmpNode);
             }
 
             if (!prevBlock) {
@@ -1284,7 +1281,9 @@ ViperCopyPastePlugin.prototype = {
                 ViperChangeTracker.addNodeToChange(changeid, ctNode);
                 ViperUtil.insertBefore(this._tmpNode, ctNode);
             } else {
-                if (this._tmpNode.parentNode === this.viper.getViperElement()) {
+                if (this._tmpNode.parentNode === this.viper.getViperElement()
+                    && ViperUtil.isBlockElement(fragment.firstChild) === false
+                ) {
                     var defaultTag = this.viper.getDefaultBlockTag();
                     if (defaultTag) {
                         defaultTag = document.createElement(defaultTag);
@@ -1383,6 +1382,15 @@ ViperCopyPastePlugin.prototype = {
             var aTags = ViperUtil.find(tmp, 'a');
             for (var i = 0; i < aTags.length; i++) {
                 var surrChildren = ViperUtil.getSurroundedChildren(aTags[i]);
+                for (var j = 0; j < surrChildren.length; j++) {
+                    if (ViperUtil.isTag(surrChildren[j], ['strong', 'em']) === true) {
+                        // Wrap the A tag with this tag.
+                        var newElem = document.createElement(ViperUtil.getTagName(surrChildren[j]));
+                        ViperUtil.insertBefore(aTags[i], newElem);
+                        newElem.appendChild(aTags[i]);
+                    }
+                }
+
                 this._moveChildren(surrChildren[surrChildren.length - 1], surrChildren[0]);
                 ViperUtil.remove(surrChildren);
             }
@@ -2600,7 +2608,7 @@ ViperCopyPastePlugin.prototype = {
             }
 
             if (this._bookmark) {
-                this.viper.removeBookmark(this._bookmark);
+                this.viper.removeBookmarks(null, true);
             }
 
             // Remove tmp nodes.

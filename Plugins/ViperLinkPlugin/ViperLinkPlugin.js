@@ -221,6 +221,8 @@ ViperLinkPlugin.prototype = {
         if (!node && ViperUtil.isBrowser('msie') === true) {
             // IE fix for Img selections.
             var prevSibling = range.startContainer.previousSibling;
+            var startNode   = range.getStartNode();
+            var endNode     = range.getEndNode();
             if (prevSibling
                 && ViperUtil.isTag(prevSibling, 'img') === true
                 && range.startOffset === 0
@@ -228,6 +230,16 @@ ViperLinkPlugin.prototype = {
                 && range.startContainer === range.endContainer
             ) {
                 node = prevSibling;
+            } else if (ViperUtil.isTag(startNode, 'img') === true) {
+                node = startNode;
+            } else if (startNode
+                && startNode.nodeType === ViperUtil.TEXT_NODE
+                && endNode
+                && endNode.nodeType === ViperUtil.TEXT_NODE
+                && ViperUtil.isTag(startNode.nextSibling, 'img') === true
+                && startNode.nextSibling === endNode.previousSibling
+            ) {
+                node = startNode.nextSibling;
             }
         }
 
@@ -628,7 +640,7 @@ ViperLinkPlugin.prototype = {
         var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
 
         var self          = this;
-        var range         = data.range;
+        var range         = this.viper.getCurrentRange();
         var currentIsLink = false;
         var startNode     = null;
         var endNode       = null;
@@ -638,8 +650,8 @@ ViperLinkPlugin.prototype = {
             startNode = nodeSelection;
             endNode   = startNode;
         } else {
-            startNode = data.range.getStartNode();
-            endNode   = data.range.getEndNode();
+            startNode = range.getStartNode();
+            endNode   = range.getEndNode();
         }
 
         if (startNode

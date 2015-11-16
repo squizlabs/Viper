@@ -1619,7 +1619,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('bold', NULL);
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('italic', NULL);;
+        $this->clickTopToolbarButton('italic', NULL);
         $this->assertHTMLMatch('<p><sub><em><del><strong>%1%</strong></del></em></sub></p><p><sup><em><del><strong>%2%</strong></del></em></sup></p><p><em><sub><del><strong>%3%</strong></del></sub></em></p><p>%4%</p>');
 
         // Test applying bold and strikethough and superscript then italic
@@ -1639,7 +1639,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('bold', NULL);
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('italic', NULL);;
+        $this->clickTopToolbarButton('italic', NULL);
         $this->assertHTMLMatch('<p><sub><em><del><strong>%1%</strong></del></em></sub></p><p><sup><em><del><strong>%2%</strong></del></em></sup></p><p><em><sub><del><strong>%3%</strong></del></sub></em></p><p><em><sup><del><strong>%4%</strong></del></sup></em></p>');
 
     }//end testBoldWithThreeAdditionalFormats()
@@ -2073,7 +2073,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('italic', NULL);
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('bold', NULL);;
+        $this->clickTopToolbarButton('bold', NULL);
         $this->assertHTMLMatch('<p><sub><strong><del><em>%1%</em></del></strong></sub></p><p><sup><strong><del><em>%2%</em></del></strong></sup></p><p><strong><sub><del><em>%3%</em></del></sub></strong></p><p>%4%</p>');
 
         // Test applying italic and strikethough and superscript then bold
@@ -2093,7 +2093,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('italic', NULL);
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('bold', NULL);;
+        $this->clickTopToolbarButton('bold', NULL);
         $this->assertHTMLMatch('<p><sub><strong><del><em>%1%</em></del></strong></sub></p><p><sup><strong><del><em>%2%</em></del></strong></sup></p><p><strong><sub><del><em>%3%</em></del></sub></strong></p><p><strong><sup><del><em>%4%</em></del></sup></strong></p>');
 
     }//end testItalicWithThreeAdditionalFormats()
@@ -3129,7 +3129,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->clickTopToolbarButton('italic', NULL);
         $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('bold', NULL);;
+        $this->clickTopToolbarButton('bold', NULL);
         $this->assertHTMLMatch('<p><sub><strong><em><del>%1%</del></em></strong></sub></p><p><sup><strong><em><del>%2%</del></em></strong></sup></p><p><strong><sub><em><del>%3%</del></em></sub></strong></p><p>%4%</p>');
 
         // Test applying strikethrough and strikethough and superscript then bold
@@ -3149,9 +3149,60 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->clickTopToolbarButton('italic', NULL);
         $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('bold', NULL);;
+        $this->clickTopToolbarButton('bold', NULL);
         $this->assertHTMLMatch('<p><sub><strong><em><del>%1%</del></em></strong></sub></p><p><sup><strong><em><del>%2%</del></em></strong></sup></p><p><strong><sub><em><del>%3%</del></em></sub></strong></p><p><strong><sup><em><del>%4%</del></em></sup></strong></p>');
 
+    }//end testStrikethroughWithThreeAdditionalFormats()
+
+
+    /**
+     * Test combinations of formats beginning with strikethrough
+     *
+     * @return void
+     */
+    public function testRemovingFormatsOnDifferentElements()
+    {
+        // Test bold using top toolbar
+        $this->useTest(16);
+        $this->selectKeyword(1,2);
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->assertHTMLMatch('<p>Text <strong>more </strong>%1%text text and more%2%<strong> text</strong></p>');
+
+        // Test bold using inline toolbar
+        $this->useTest(16);
+        $this->selectKeyword(1,2);
+        $this->clickInlineToolbarButton('bold', 'active');
+        $this->assertHTMLMatch('<p>Text <strong>more </strong>%1%text text and more%2%<strong> text</strong></p>');
+
+        // Test italic using top toolbar
+        $this->useTest(17);
+        $this->selectKeyword(1,2);
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->assertHTMLMatch('<p>Text <em>more </em>%1%text text and more%2%<em> text</em></p>');
+
+        // Test itlaic using inline toolbar
+        $this->useTest(17);
+        $this->selectKeyword(1,2);
+        $this->clickInlineToolbarButton('italic', 'active');
+        $this->assertHTMLMatch('<p>Text <em>more </em>%1%text text and more%2%<em> text</em></p>');
+
+        // Test strikethrough using top toolbar
+        $this->useTest(18);
+        $this->selectKeyword(1,2);
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->assertHTMLMatch('<p>Text <del>more </del>%1%text text and more%2%<del> text</del></p>');
+
+        // Test subscript using top toolbar
+        $this->useTest(19);
+        $this->selectKeyword(1,2);
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->assertHTMLMatch('<p>Text <sub>more </sub>%1%text text and more%2%<sub> text</sub></p>');
+
+        // Test superscript using top toolbar
+        $this->useTest(20);
+        $this->selectKeyword(1,2);
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->assertHTMLMatch('<p>Text <sup>more </sup>%1%text text and more%2%<sup> text</sup></p>');
     }//end testStrikethroughWithThreeAdditionalFormats()
 
 }//end class

@@ -648,7 +648,7 @@ ViperInlineToolbarPlugin.prototype = {
             && ViperUtil.isTag(range.startContainer.previousSibling, 'a') === true
         ) {
             lineage.push(range.startContainer.previousSibling);
-        } else if (ViperUtil.isBrowser('msie') === true
+        } else if (ViperUtil.isBrowser('msie', '<9') === true
             && range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
             && range.startOffset >= range.startContainer.childNodes.length
             && ViperUtil.isTag(range.startContainer.childNodes[range.startOffset - 1], 'a') === true
