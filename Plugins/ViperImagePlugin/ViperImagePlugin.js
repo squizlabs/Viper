@@ -88,7 +88,7 @@ ViperImagePlugin.prototype = {
             }
         });
 
-        this.viper.registerCallback('Viper:keyDown', 'ViperImagePlugin', function(e) {
+        this.viper.registerCallback(['Viper:keyDown', 'ViperKeyboardEditorPlugin:beforeDelete'], 'ViperImagePlugin', function(e) {
             if (e.which === 8 || e.which === 46) {
                 if (self._resizeImage) {
                     if (self.removeImage(self._resizeImage) === true) {

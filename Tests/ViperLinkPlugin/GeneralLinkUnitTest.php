@@ -308,13 +308,13 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperUnitT
         $this->useTest(5);
         $this->selectKeyword(2);
         $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>%1%Test content and <a href="https://squizlabs.com.au">more %3%</a> test content.%4%</p>');
+        $this->assertHTMLMatch('<p>%1%Test content&nbsp;&nbsp;and <a href="https://squizlabs.com.au">more %3%</a> test content.%4%</p>');
 
         // Test using backspace key with mouse selection
         $this->useTest(5);
         $this->selectKeyword(2);
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>%1%Test content and <a href="https://squizlabs.com.au">more %3%</a> test content.%4%</p>');
+        $this->assertHTMLMatch('<p>%1%Test content&nbsp;&nbsp;and <a href="https://squizlabs.com.au">more %3%</a> test content.%4%</p>');
 
         // Test using delete key with arrow selection
         $this->useTest(5);
@@ -323,7 +323,7 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperUnitT
             $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         }
         $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>%1%Test content and <a href="https://squizlabs.com.au">more %3%</a> test content.%4%</p>');
+        $this->assertHTMLMatch('<p>%1%Test content&nbsp;&nbsp;and <a href="https://squizlabs.com.au">more %3%</a> test content.%4%</p>');
 
         // Test using backspace key with arrow selection
         $this->useTest(5);
@@ -332,7 +332,7 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperUnitT
             $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         }
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>%1%Test content and <a href="https://squizlabs.com.au">more %3%</a> test content.%4%</p>');
+        $this->assertHTMLMatch('<p>%1%Test content&nbsp;&nbsp;and <a href="https://squizlabs.com.au">more %3%</a> test content.%4%</p>');
 
     }//end testDeletingLinks()
 

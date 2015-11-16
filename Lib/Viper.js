@@ -979,7 +979,7 @@ Viper.prototype = {
                     ViperUtil.setHtml(elem, '');
                 } else {
                     var emptyCont = '<br/>';
-                    if (ViperUtil.isBrowser('msie') === true) {
+                    if (ViperUtil.isBrowser('msie', '<9') === true) {
                         emptyCont = '&nbsp;';
                     }
 
@@ -1679,6 +1679,33 @@ Viper.prototype = {
         }
 
         return true;
+
+    },
+
+    isWholeViperElementSelected: function(range)
+    {
+        range = range || this.getViperRange();
+        if (range.collapsed === false) {
+            var viperElement    = this.getViperElement();
+            var firstSelectable = range._getFirstSelectableChild(viperElement);
+            if ((firstSelectable === range.startContainer || viperElement === range.startContainer) && range.startOffset === 0) {
+                var lastSelectable  = range._getLastSelectableChild(viperElement);
+                if ((range.endContainer === viperElement && range.endOffset >= viperElement.childNodes.length)
+                    || (range.endContainer === lastSelectable && range.endOffset === lastSelectable.data.length)
+                ) {
+                    return true;
+                } else if (ViperUtil.isBrowser('msie', '8') === true
+                    && range.endContainer === viperElement
+                    && range.startContainer === firstSelectable
+                    && range.startOffset === 0
+                    && range.endOffset === 0
+                ) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
 
     },
 
@@ -3748,9 +3775,24 @@ Viper.prototype = {
 
     },
 
-    removeBookmarks: function(elem)
+    removeBookmarks: function(elem, removeContent)
     {
         elem = elem || this.element;
+
+        if (removeContent === true) {
+            // Also remove the content thats bookmarked.
+            var starts = ViperUtil.find(elem, '.viperBookmark_start');
+            var ends   = ViperUtil.find(elem, '.viperBookmark_end');
+            for (var i = 0; i < starts.length; i++) {
+                var bookmark = {
+                    start: starts[i],
+                    end: ends[i]
+                };
+
+                this.removeBookmark(bookmark);
+            }
+        }
+
         ViperUtil.remove(ViperUtil.getClass('viperBookmark', elem, 'span'));
 
     },
@@ -3968,7 +4010,7 @@ Viper.prototype = {
      *
      * @return object
      */
-    createBookmarkFromHighlight: function()
+    createBookmarkFromHighlight: function(outer)
     {
         var highlights = this.getHighlights();
         if (highlights.length === 0) {
@@ -3980,14 +4022,32 @@ Viper.prototype = {
         ViperUtil.addClass(startBookmark, 'viperBookmark viperBookmark_start');
         ViperUtil.setHtml(startBookmark, '&nbsp;');
         startBookmark.setAttribute('viperBookmark', 'start');
-        ViperUtil.insertBefore(highlights[0], startBookmark);
+
+        var outerParent = null;
+        if (outer === true && highlights.length === 1) {
+            // If the highlight is one element and outer is set to true then 
+            // create the bookmark at most outer surrounding parent.
+            outerParent = ViperUtil.getTopSurroundingParent(highlights[0]);
+            if (outerParent) {
+                ViperUtil.insertBefore(outerParent, startBookmark);
+            }
+        }
+
+        if (!outerParent) {
+            ViperUtil.insertBefore(highlights[0], startBookmark);
+        }
 
         var endBookmark           = Viper.document.createElement('span');
         endBookmark.style.display = 'none';
         ViperUtil.setHtml(endBookmark, '&nbsp;');
         ViperUtil.addClass(endBookmark, 'viperBookmark viperBookmark_end');
         endBookmark.setAttribute('viperBookmark', 'end');
-        ViperUtil.insertAfter(highlights[(highlights.length - 1)], endBookmark);
+
+        if (outerParent) {
+            ViperUtil.insertAfter(outerParent, endBookmark);
+        } else {
+            ViperUtil.insertAfter(highlights[(highlights.length - 1)], endBookmark);
+        }
 
         var bookmark = {
             start: startBookmark,
@@ -4999,6 +5059,47 @@ Viper.prototype = {
                     }
                 }
 
+                if (ViperUtil.isBrowser('msie', '<11') === true
+                    && range.collapsed === true
+                    && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                    && range.startOffset === range.startContainer.data.length
+                    && !range.startContainer.nextSibling
+                ) {
+                    // Handle: <p><strong>text</strong>*</p> -> <p><strong>text</strong>new text</p>.
+                    // See: KeyboardEditorPlugin.
+                    var node      = range.startContainer.parentNode;
+                    var foundNode = null;
+                    if (ViperUtil.isTag(node, 'span') === true && ViperUtil.hasAttribute(node, 'data-viper-span') === true) {
+                        foundNode = node;
+                    } else {
+                        while (node) {
+                            if (node.nextSibling) {
+                                var nextSib = node.nextSibling;
+                                if (ViperUtil.isTag(nextSib, 'span') === true
+                                    && nextSib.firstChild === nextSib.lastChild
+                                    && nextSib.firstChild.nodeType === ViperUtil.TEXT_NODE
+                                    && nextSib.firstChild.data.length === 0
+                                ) {
+                                    foundNode = nextSibling;
+                                }
+
+                                break;
+                            }
+                            node = node.parentNode;
+                        }
+                    }//end if
+
+                    if (foundNode !== null) {console.info(1)
+                        ViperUtil.insertBefore(foundNode, foundNode.firstChild);
+                        foundNode.previousSibling.data = String.fromCharCode(e.which);
+                        range.setEnd(foundNode.previousSibling, 1);
+                        range.collapse(false);
+                        ViperSelection.addRange(range);
+                        ViperUtil.remove(foundNode);
+                        return false;
+                    }
+                }
+
                 if (e.which !== 0
                     && range.startContainer === range.endContainer
                     && range.collapsed === true
@@ -5039,35 +5140,6 @@ Viper.prototype = {
                         ViperSelection.addRange(range);
                         this.fireNodesChanged([range.getStartNode()]);
                         return false;
-                    }
-                } else if (ViperUtil.isBrowser('msie', '<11') === true
-                    && range.collapsed === true
-                    && range.startContainer.nodeType === ViperUtil.TEXT_NODE
-                    && range.startOffset === range.startContainer.data.length
-                    && !range.startContainer.nextSibling
-                ) {
-                    // Handle: <p><strong>text</strong>*</p> -> <p><strong>text</strong>new text</p>.
-                    var node = range.startContainer.parentNode;
-                    while (node) {
-                        if (node.nextSibling) {
-                            var nextSib = node.nextSibling;
-                            if (ViperUtil.isTag(nextSib, 'span') === true
-                                && nextSib.firstChild === nextSib.lastChild
-                                && nextSib.firstChild.nodeType === ViperUtil.TEXT_NODE
-                                && nextSib.firstChild.data.length === 0
-                            ) {
-                                ViperUtil.insertBefore(nextSib, nextSib.firstChild);
-                                nextSib.previousSibling.data = String.fromCharCode(e.which);
-                                range.setEnd(nextSib.previousSibling, 1);
-                                range.collapse(false);
-                                ViperSelection.addRange(range);
-                                ViperUtil.remove(nextSib);
-                                return false;
-                            }
-
-                            break;
-                        }
-                        node = node.parentNode;
                     }
                 }
             }//end if
@@ -5194,14 +5266,20 @@ Viper.prototype = {
             } catch (e) {
             }
 
-            if (range.collapsed === true && ViperUtil.isBrowser('msie') === true) {
+            if (range.collapsed === true 
+                && range.startContainer
+                && range.startContainer.nodeType === 9
+                && ViperUtil.isBrowser('msie') === true
+            ) {
                 // If clicked inside the previous selection then IE takes a lot
                 // longer to update the caret position so if the range is collapsed
                 // wait nearly half a second to trigger the selection changed
-                // event.
+                // event. The delay is only required when the startContainer is set as the
+                // document node.
                 setTimeout(function() {
+                    var x = self.getCurrentRange();
                     self.fireSelectionChanged(self.adjustRange(), true);
-                }, 200);
+                }, 450);
             } else {
                 self.fireSelectionChanged(range, true);
             }
@@ -5220,6 +5298,25 @@ Viper.prototype = {
     {
         range = range || this.getViperRange();
         if (range.collapsed !== false) {
+            if (ViperUtil.isBrowser('msie', '9') === true) {
+                if (range.startContainer === range.endContainer) {
+                    if (range.startContainer.nodeType === ViperUtil.ELEMENT_NODE) {
+                        if (range.startOffset === range.startContainer.childNodes.length) {
+                            var child = range.startContainer.childNodes[range.startContainer.childNodes.length - 1];
+                            if (ViperUtil.isStubElement(child) === false && child.nodeType === ViperUtil.ELEMENT_NODE) {
+                                var sel = range._getLastSelectableChild(child);
+                                if (sel && sel.nodeType === ViperUtil.TEXT_NODE) {
+                                    range.setEnd(sel, sel.data.length);
+                                    range.collapse(false);
+                                    ViperSelection.addRange(range);
+                                    console.info(111)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             return range;
         }
 

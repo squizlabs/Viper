@@ -747,6 +747,8 @@ ViperDOMRange.prototype = {
                 // When the last child is a stub element (e.g. img) and range is set after it the offset becomes greater
                 // than the number of children.
                 return this.startContainer.childNodes[this.startOffset - 1];
+            } else if (ln > 0 && ln === this.startOffset && this.startContainer.childNodes[this.startOffset - 1].nodeType !== ViperUtil.TEXT_NODE && this.collapsed === true) {
+                return this._getLastSelectableChild(this.startContainer.childNodes[this.startOffset - 1]);
             }
         }
 
@@ -775,6 +777,8 @@ ViperDOMRange.prototype = {
                     && this.startContainer.nodeType === ViperUtil.TEXT_NODE
                 ) {
                     return lastChild.lastChild;
+                } else if (ln > 0 && ln === this.endOffset && this.endContainer.childNodes[this.endOffset - 1].nodeType !== ViperUtil.TEXT_NODE && this.collapsed === true) {
+                    return this._getLastSelectableChild(this.endContainer.childNodes[this.endOffset - 1]);
                 }
             }
         }

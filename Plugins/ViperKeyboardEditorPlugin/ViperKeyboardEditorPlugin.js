@@ -875,6 +875,7 @@ ViperKeyboardEditorPlugin.prototype = {
     handleDelete: function(e)
     {
         var range = this.viper.getViperRange();
+        this.viper.fireCallbacks('ViperKeyboardEditorPlugin:beforeDelete', e);
 
         if (this._isWholeViperElementSelected(range) === true) {
             // The whole Viper element is selected, remove all of its content
@@ -906,6 +907,7 @@ ViperKeyboardEditorPlugin.prototype = {
                         && range.startContainer.previousSibling.nodeType !== ViperUtil.TEXT_NODE
                     ) {
                         var span = document.createElement('span');
+                        ViperUtil.attr(span, 'data-viper-span', 'true');
                         ViperUtil.insertBefore(range.startContainer, span);
                         span.appendChild(range.startContainer);
                     } else if (!range.startContainer.previousSibling
@@ -983,8 +985,19 @@ ViperKeyboardEditorPlugin.prototype = {
                     ) {
                         // If the list item is the first container in the content and its being removed and its the
                         // only list item then remove the list element.
-                        this.viper.moveCaretAway(startNode.parentNode.parentNode, true);
-                        ViperUtil.remove(startNode.parentNode.parentNode);
+                        if (startNode.parentNode.parentNode.parentNode === this.viper.getViperElement()
+                            && startNode.parentNode.parentNode.nextSibling === null
+                            && startNode.parentNode.parentNode.previousSibling === null
+                        ) {
+                            // This list is the only element in the content, initialise the content 
+                            // after removing the list.
+                            ViperUtil.remove(startNode.parentNode.parentNode);
+                            this.viper.initEditableElement();
+                        } else {
+                            this.viper.moveCaretAway(startNode.parentNode.parentNode, true);
+                            ViperUtil.remove(startNode.parentNode.parentNode);
+                        }
+
                         this.viper.fireNodesChanged();
                         this.viper.fireSelectionChanged(null, true);
                     }
@@ -1806,6 +1819,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 ViperUtil.setHtml(this.viper.getViperElement(), '');
                 this.viper.initEditableElement();
                 this.viper.fireNodesChanged();
+                this.viper.fireSelectionChanged();
                 return false;
             } else if (this._isStartToEndOfMultiContainerSelection(range) === true) {
                 return this._removeContentFromStartToEndOfContainers(range);
@@ -1862,6 +1876,8 @@ ViperKeyboardEditorPlugin.prototype = {
                     range.setStart(endContainer, 0);
                     range.collapse(true);
                     ViperSelection.addRange(range);
+                    this.viper.fireNodesChanged();
+                    this.viper.fireSelectionChanged(range);
                     return false;
                 } else if (
                     !nodeSelection
@@ -1923,6 +1939,8 @@ ViperKeyboardEditorPlugin.prototype = {
                 if (startNode.nextSibling && this.viper.isSpecialElement(startNode.nextSibling) === true) {
                     // Remove the whole special element.
                     ViperUtil.remove(startNode.nextSibling);
+                    this.viper.fireNodesChanged();
+                    this.viper.fireSelectionChanged();
                     return false;
                 } else if (!startNode.nextSibling) {
                     // Check if the next container is a special element.
@@ -1941,6 +1959,7 @@ ViperKeyboardEditorPlugin.prototype = {
                             ViperUtil.remove(node);
                             ViperUtil.preventDefault(e);
                             this.viper.fireNodesChanged();
+                            this.viper.fireSelectionChanged();
                             return false;
                         } else if (node.nodeType !== ViperUtil.TEXT_NODE || ViperUtil.trim(node.data).length !== 0) {
                             // Not an empty text node or another node type, no need to continue.
@@ -1961,13 +1980,14 @@ ViperKeyboardEditorPlugin.prototype = {
             } else if (range.startContainer !== startNode && range.startOffset === 0) {
                 range.setStart(startNode, 0);
             } else if (range.startOffset === 0
-                && ViperUtil.isBrowser('msie') === true
+                && ViperUtil.isBrowser('msie', '<9') === true
             ) {
                 if (range.startContainer.data.length > 1) {
                     range.startContainer.data = range.startContainer.data.substr(1);
                     if (range.startContainer.data[0] === ' ') {
                         range.startContainer.data = String.fromCharCode(160) + range.startContainer.data.substr(1);
                     }
+
                     range.setStart(range.startContainer, 0);
                     range.collapse(true);
                     ViperSelection.addRange(range);
@@ -1988,7 +2008,8 @@ ViperKeyboardEditorPlugin.prototype = {
                 }
 
                 this.viper.fireNodesChanged();
-                
+                this.viper.fireSelectionChanged();
+
                 return false;
             }//end if
         } else {
@@ -2021,6 +2042,8 @@ ViperKeyboardEditorPlugin.prototype = {
                     range.setStart(nextSelectable, 0);
                     range.collapse(true);
                     ViperSelection.addRange(range);
+                    this.viper.fireNodesChanged();
+                    this.viper.fireSelectionChanged();
                     return false;
                 } else if (startNode.parentNode.childNodes.length === 1) {
                     var tmpNode = document.createTextNode('');
@@ -2035,6 +2058,8 @@ ViperKeyboardEditorPlugin.prototype = {
                     range.collapse(true);
                     ViperUtil.remove(startNode);
                     ViperSelection.addRange(range);
+                    this.viper.fireNodesChanged();
+                    this.viper.fireSelectionChanged();
                     return false;
                 }
             }
@@ -2800,27 +2825,7 @@ ViperKeyboardEditorPlugin.prototype = {
 
     _isWholeViperElementSelected: function(range)
     {
-        if (range.collapsed === false) {
-            var viperElement    = this.viper.getViperElement();
-            var firstSelectable = range._getFirstSelectableChild(viperElement);
-            if ((firstSelectable === range.startContainer || viperElement === range.startContainer) && range.startOffset === 0) {
-                var lastSelectable  = range._getLastSelectableChild(viperElement);
-                if ((range.endContainer === viperElement && range.endOffset >= viperElement.childNodes.length)
-                    || (range.endContainer === lastSelectable && range.endOffset === lastSelectable.data.length)
-                ) {
-                    return true;
-                } else if (ViperUtil.isBrowser('msie', '8') === true
-                    && range.endContainer === viperElement
-                    && range.startContainer === firstSelectable
-                    && range.startOffset === 0
-                    && range.endOffset === 0
-                ) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return this.viper.isWholeViperElementSelected(range);
 
     },
 

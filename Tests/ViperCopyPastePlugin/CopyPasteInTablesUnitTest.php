@@ -22,6 +22,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteInTablesUnitTest extends Abstrac
 
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(2);
 

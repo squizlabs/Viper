@@ -711,7 +711,7 @@ var ViperUtil = {
         var ln  = res.length;
         var ar  = [];
         for (var i = 0; i < ln; i++) {
-            if (stopEl && (res[i] === stopEl)) {
+            if (stopEl && (res[i] === stopEl || ViperUtil.isChildOf(res[i], stopEl) === false)) {
                 break;
             }
 

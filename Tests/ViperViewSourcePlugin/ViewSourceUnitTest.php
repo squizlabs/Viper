@@ -13,6 +13,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViper
      */
     public function testOpenAndCloseSourceEditor()
     {
+        $this->useTest(1);
         $this->moveToKeyword(2);
         $this->clickTopToolbarButton('sourceView');
 
@@ -49,6 +50,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViper
      */
     public function testEditingAfterClosingSourceEditor()
     {
+        $this->useTest(1);
         $this->moveToKeyword(1);
         $this->clickTopToolbarButton('sourceView');
 
@@ -71,6 +73,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViper
      */
     public function testEditingTheSourceCode()
     {
+        $this->useTest(1);
         $this->moveToKeyword(2);
         $this->clickTopToolbarButton('sourceView');
         sleep(2);
@@ -86,12 +89,72 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViper
 
 
     /**
+     * Test that cursor automatically corrects itself to be in current position.
+     *
+     * @return void
+     */
+    public function testCursorPositionInSourceCode()
+    {
+        $this->useTest(2);
+        $this->moveToKeyword(2);
+        $this->clickTopToolbarButton('sourceView');
+        sleep(2);
+        $this->type('Needs more content...');
+
+        $this->clickButton('Apply Changes', NULL, TRUE);
+
+        $this->assertHTMLMatch('<p>%1% Test content.</p><p>Needs more content... More test content then more test content and then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then still more test content then even more test content then even more test content then %2% then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content some might say that theres too much content...</p><p>But theyre wrong because theres still more test content and then theres more test content and then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then %3% then even more test content then even more test content and then the content stops.</p>');
+
+        $this->moveToKeyword(3);
+        $this->clickTopToolbarButton('sourceView');
+        sleep(2);
+        $this->type('Still not enough content...');
+
+        $this->clickButton('Apply Changes', NULL, TRUE);
+
+        $this->assertHTMLMatch('<p>%1% Test content.</p><p>Needs more content... More test content then more test content and then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then still more test content then even more test content then even more test content then %2% then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content some might say that theres too much content...</p><p>Still not enough content... But theyre wrong because theres still more test content and then theres more test content and then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then even more test content then %3% then even more test content then even more test content and then the content stops.</p>');
+
+    }//end testCursorPositionInSourceCode()
+
+
+    /**
+     * Test that commenting with the source code retains source.
+     *
+     * @return void
+     */
+    public function testCommentingInSourceCode()
+    {
+        // Test entire HTML
+        $this->useTest(3);
+        $this->clickTopToolbarButton('sourceView');
+        sleep(2);
+        $this->moveToKeyword(2, 'left');
+
+        for ($i = 0; $i < 13; $i++) {
+            $this->sikuli->keyDown('Key.LEFT');
+        }
+        $this->type('<!---');
+        $this->moveToKeyword(3, 'right');
+
+        for ($i = 0; $i < 5; $i++) {
+            $this->sikuli->keyDown('Key.RIGHT');
+        }
+        $this->type('--->');
+
+        $this->clickButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<!---<p>%1%Test%2% content.</p><p>More test content.</p><p>Even more test content.%3%</p>--->');
+
+    }//end testCommentingInSourceCode()
+
+
+    /**
      * Test that you can edit the source code, click close but apply the changes.
      *
      * @return void
      */
     public function testEditingClosingTheWindowWithApplyingChanges()
     {
+        $this->useTest(1);
         $this->moveToKeyword(2);
         $this->clickTopToolbarButton('sourceView');
         sleep(2);
@@ -118,6 +181,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViper
      */
     public function testEditingAndDiscardingChanges()
     {
+        $this->useTest(1);
         $this->moveToKeyword(2);
         $this->clickTopToolbarButton('sourceView');
         sleep(2);
@@ -142,6 +206,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViper
      */
     public function testOpeningSourceViewInNewWindow()
     {
+        $this->useTest(1);
         $this->markTestSkipped('Atm the testing system cannot handle more than one window');
 
         $this->moveToKeyword(2);
@@ -165,6 +230,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViper
      */
     public function testOpeningSourceViewInNewWindowAndEditing()
     {
+        $this->useTest(1);
         $this->markTestSkipped('Atm the testing system cannot handle more than one window');
 
         $this->moveToKeyword(2);
@@ -192,6 +258,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViper
      */
     public function testEditingContentAfterDeletingSourceCode()
     {
+        $this->useTest(1);
         $this->moveToKeyword(1);
         $this->clickTopToolbarButton('sourceView');
         sleep(2);
@@ -224,6 +291,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViper
      */
     public function testOpenSourceEditorAfterEmbeddingVideo()
     {
+        $this->useTest(1);
         $this->moveToKeyword(2);
         $this->clickTopToolbarButton('sourceView');
 
@@ -268,6 +336,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViper
      */
     public function testAddingDifferentTagsInSourceCode()
     {
+        $this->useTest(1);
         // Test that script tags are removed when they are entered in source code
         $this->moveToKeyword(2);
         $this->clickTopToolbarButton('sourceView');
@@ -314,6 +383,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViper
      */
     public function testAddingCodeWithBrTags()
     {
+        $this->useTest(1);
         $this->moveToKeyword(2);
         $this->clickTopToolbarButton('sourceView');
         sleep(2);
