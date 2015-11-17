@@ -5117,6 +5117,8 @@ Viper.prototype = {
                     }
                 }
 
+                var char = String.fromCharCode(e.which);
+
                 if (e.which !== 0
                     && range.startContainer === range.endContainer
                     && range.collapsed === true
@@ -5139,9 +5141,8 @@ Viper.prototype = {
                         // text node.
                         // Also make sure that there is no non breaking space at the start text node followed by a non
                         // space character.
-                        var char = String.fromCharCode(e.which);
                         if (textContainer.data.length > 1
-                            && textContainer.data.charCodeAt(0) === 160
+                            && (textContainer.data.charCodeAt(0) === 160 || textContainer.data.charCodeAt(0) === 32)
                             && textContainer.data[1] !== ' '
                         ) {
                             if (char === ' ') {
@@ -5157,6 +5158,28 @@ Viper.prototype = {
                         ViperSelection.addRange(range);
                         this.fireNodesChanged([range.getStartNode()]);
                         return false;
+                    }
+                } else if (ViperUtil.isBrowser('msie', '<11') === true
+                    && range.collapsed === true
+                    && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                    && range.startOffset > 0
+                    && range.startOffset < range.startContainer.data.length
+                    && char !== ' '
+                ) {
+                    var data = range.startContainer.data;
+                    
+                    // Character being inserted.
+                    if (data.charCodeAt(range.startOffset) === 160
+                        && (data.charCodeAt(range.startOffset + 1) !== 160 && data.charCodeAt(range.startOffset + 1) !== 32)
+                    ) {
+                        // Convert non breaking space to normal space.
+                        // E.g. <p>t | ext.</p>.
+                        var data = range.startContainer.data.substr(0, range.startOffset);
+                        data += ' ' + range.startContainer.data.substr(range.startOffset + 1);
+                        range.startContainer.data = data;
+                        range.setStart(range.startContainer, range.startOffset);
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
                     }
                 }
             }//end if
