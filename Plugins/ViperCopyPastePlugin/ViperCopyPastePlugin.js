@@ -236,15 +236,14 @@ ViperCopyPastePlugin.prototype = {
                                 range.setEnd(lastChild, lastChild.data.length);
                             }
 
-                            // WORKING ON IE8
-                            //if (ViperUtil.isBrowser('msie', '<11') === true) {
-                              //  range.setStart(firstChild, 1);
-                            //} else {
+                            if (!firstChild && cutPasteDiv.firstChild.nodeType === ViperUtil.ELEMENT_NODE) {
+                                // Last child could be an image etc.
+                                ViperUtil.insertBefore(cutPasteDiv.firstChild, document.createTextNode(''));
+                                firstChild = cutPasteDiv.firstChild;
                                 range.setStart(firstChild, 0);
-                            //}
+                            }
 
-                            //range.setEnd(range._getLastSelectableChild(x), range._getLastSelectableChild(x).data.length);
-                            //range.setStart(range._getFirstSelectableChild(x), 0);
+                            range.setStart(firstChild, 0);
                             ViperSelection.addRange(range);
                         }
 

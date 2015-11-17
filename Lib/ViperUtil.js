@@ -1214,7 +1214,7 @@ var ViperUtil = {
             }
         }
 
-        return node;
+        return null;
 
     },
 
@@ -1222,7 +1222,7 @@ var ViperUtil = {
     {
         if (node) {
             if (node.firstElementChild) {
-                return node.firstElementChild();
+                return node.firstElementChild;
             } else {
                 var child = node.firstChild
                 while (child) {
@@ -1249,7 +1249,7 @@ var ViperUtil = {
             }
         }
 
-        return node;
+        return null;
 
     },
 
