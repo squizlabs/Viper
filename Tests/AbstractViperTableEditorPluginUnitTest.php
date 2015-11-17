@@ -72,6 +72,7 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
      */
     protected function clickCell($cellNum)
     {
+        $this->sikuli->mouseMoveOffset(100, 0);
         $cellRect = $this->getBoundingRectangle('td,th', $cellNum);
         $region   = $this->sikuli->getRegionOnPage($cellRect);
 
