@@ -308,7 +308,8 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         // Cut the content from the page
         $this->selectKeyword(1, 2);
         $this->cut(TRUE);
-        $this->sikuli->click($location);
+        $this->sikuli->mouseMove($location);
+        $this->sikuli->click($this->sikuli->mouseMoveOffset(-15, 0));
 
         // Insert a new table
         $this->clickTopToolbarButton('table');
