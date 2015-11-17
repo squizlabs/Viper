@@ -442,6 +442,7 @@ function useTest(id)
     if (ViperUtil.isBrowser('msie') === true) {
         viper.setEditableElement(contentElement);
         viper.setEnabled(false);
+        viper.initEditableElement(contentElement);
     } else {
         viper.initEditableElement(contentElement);
     }
