@@ -82,22 +82,6 @@ MatrixCommentsPlugin.prototype = {
         }
 
 
-        // init comment array
-        ViperUtil.$('div[data-container-id]').each(function() {
-            var $container = ViperUtil.$(this);
-            var currentContainerId = $container.data('container-id');
-
-            // init array index for current container
-            if(typeof self._comments[currentContainerId] == 'undefined') {
-                self._comments[currentContainerId] = [];
-            }
-
-            // restore previous stored comments, load them into self._comments array
-            var previousComments = $container.data('comments');
-            if(typeof previousComments != 'undefined' && previousComments != '') {
-                self._comments[currentContainerId] = JSON.parse(decodeURIComponent(previousComments));
-            }
-        });
 
 
         // when click outside of viper
@@ -114,7 +98,40 @@ MatrixCommentsPlugin.prototype = {
         var loadAllComments = function () {
             self._commentsPositions = [];
             self._removeAllCommentMarks();
+
+            // if there is opening editing textarea, we need to save them
+            if(self.isUserEditingComment()) {
+                ViperUtil.$('.Matrix-Viper-commentdialog-button-blue').mousedown();
+                ViperUtil.$('#Matrix-Viper-commentdialog-replyCommentButton-comment').mousedown();
+            }
+            // if new comment dialog is open, we need to close it or commit it
+            if(ViperUtil.$('.Matrix-Viper-commentdialog-newCommentTextArea').length > 0) {
+                if(ViperUtil.$('.Matrix-Viper-commentdialog-newCommentTextArea').val() != '') {
+                    ViperUtil.$('#Matrix-Viper-commentdialog-newCommentButton-comment').click();
+                }
+                else {
+                    ViperUtil.$('#Matrix-Viper-commentdialog-newCommentButton-cancel').click();
+                }
+            }
+
+            // init comment array
             ViperUtil.$('div[data-container-id]').each(function() {
+                var $container = ViperUtil.$(this);
+                var currentContainerId = $container.data('container-id');
+                var previousComments = $container.data('comments');
+
+                // init array index for current container
+                if(typeof self._comments[currentContainerId] == 'undefined') {
+                    self._comments[currentContainerId] = [];
+                    // restore previous stored comments, load them into self._comments array
+                    if(typeof previousComments != 'undefined' && previousComments != '') {
+                        self._comments[currentContainerId] = JSON.parse(decodeURIComponent(previousComments));
+                    }
+                }
+            });
+
+
+            ViperUtil.$('div[data-container-id]:visible').each(function() {
                 var $container = ViperUtil.$(this);
                 self._containerId = $container.data('container-id');
                 self._bodycopyId = $container.data('bodycopy-id');
@@ -125,6 +142,7 @@ MatrixCommentsPlugin.prototype = {
         if(typeof EasyEditEventManager != 'undefined') {
             // in Edit+, insert after containers loaded
             EasyEditEventManager.bind('EasyEditPageStandardLoadComplete', loadAllComments);
+            EasyEditEventManager.bind('EasyEditCustomFormLoadComplete', loadAllComments);
         }
         else {
             // in admin, when page is ready
@@ -424,7 +442,10 @@ MatrixCommentsPlugin.prototype = {
     _reinsertCommentMarks: function ()
     {
         var self = this;
+        // do not insert comment makrs if current page doesn't have the target container shown
         if(!self._comments[self._containerId]) return;
+        if(ViperUtil.$('div[data-container-id=' + self._containerId + ']:visible').length == 0) return;
+
         ViperUtil.$.each(self._comments[self._containerId], function(key, value) {
             // do not display unattached comments
             if(typeof value['status'] != 'undefined' && value['unattached'] == true) return;
@@ -642,14 +663,27 @@ MatrixCommentsPlugin.prototype = {
         for (var i = 0; i < self._comments[containerId].length; i++) {
             if(self._comments[containerId][i]['id'] == id) {
                 existingComment = true;
-                if(typeof self._comments[containerId][i]['status'] == 'undefined' || self._comments[containerId][i]['status'] === 'open') {
-                    // if it's open issue, add number
-                    ViperUtil.$(commentMark).append('<div class="Matrix-Viper-commentmark-number-count">' + self._comments[containerId][i]['comments'].length + '</div>');
+
+                // if it's to be deleted comment, add this class
+                if(typeof self._comments[containerId][i]['deletion'] != 'undefined' && self._comments[containerId][i]['deletion']) {
+                    ViperUtil.$(commentMark).append('<div class="Matrix-Viper-commentmark-number-count"></div>');
+                    ViperUtil.$(commentMark).addClass('Matrix-Viper-commentmark-color-red');
                 }
                 else {
-                    // resolved issue just add this class
-                    ViperUtil.$(commentMark).append('<div class="Matrix-Viper-commentmark-number-count"></div>');
-                    ViperUtil.$(commentMark).addClass('Matrix-Viper-commentmark-resolved');
+
+                    if(typeof self._comments[containerId][i]['status'] == 'undefined' || self._comments[containerId][i]['status'] === 'open') {
+                        // if it's open issue, add number
+                        var number = self._comments[containerId][i]['comments'].length;
+                        // if it's 0 it's probably a new comment still to edit
+                        if(number == 0) number = '';
+                        ViperUtil.$(commentMark).append('<div class="Matrix-Viper-commentmark-number-count">' + number + '</div>');
+                    }
+                    else {
+                        // resolved issue just add this class
+                        ViperUtil.$(commentMark).append('<div class="Matrix-Viper-commentmark-number-count"></div>');
+                        ViperUtil.$(commentMark).addClass('Matrix-Viper-commentmark-resolved');
+                    }
+
                 }
             }
         }
@@ -745,10 +779,13 @@ MatrixCommentsPlugin.prototype = {
             $newCommentButtonCancelButton.click(function (e) {
                 ViperUtil.preventDefault(e);
 
+                $commentDialog = ViperUtil.$(this).closest('div.Matrix-Viper-commentdialog');
+                var commentId = $commentDialog.data('comment-id');
+                var commentContainerId = $commentDialog.data('comment-container-id');
+                $commentMark = ViperUtil.$(document).find('div.Matrix-Viper-commentmark[data-comment-id=' + commentId + '][data-comment-container-id=' + commentContainerId + ']');
+
                 // remove selected comment class
                 // remove the actual target element's comment attribute
-                var commentId = ViperUtil.$(commentMark).data('comment-id');
-                var commentContainerId = ViperUtil.$(commentMark).data('comment-container-id');
                 var $targetElement = ViperUtil.$(document).find('[data-comment=1][data-comment-id=' + commentId + '][data-comment-container-id=' + commentContainerId + ']');
                 $targetElement.removeClass('Matrix-Viper-comment-highlighted');
                 ViperUtil.$.each($targetElement, function( key, value ) {
@@ -758,7 +795,7 @@ MatrixCommentsPlugin.prototype = {
                 ViperUtil.$('.Matrix-Viper-comment-highlighted').removeClass('Matrix-Viper-comment-highlighted');
 
                 $commentDialog.remove();
-                ViperUtil.$(commentMark).remove();
+                $commentMark.remove();
 
                 // remove the comment from stored array and reset the id counter
                 for(var i = 0; i < self._comments[containerId].length; i++) {
@@ -782,6 +819,14 @@ MatrixCommentsPlugin.prototype = {
             // add comment
             $newCommentButtonCommentButton.click(function (e) {
                 ViperUtil.preventDefault(e);
+
+                $commentDialog = ViperUtil.$(this).closest('div.Matrix-Viper-commentdialog');
+                var commentId = $commentDialog.data('comment-id');
+                var commentContainerId = $commentDialog.data('comment-container-id');
+                $commentMark = ViperUtil.$(document).find('div.Matrix-Viper-commentmark[data-comment-id=' + commentId + '][data-comment-container-id=' + commentContainerId + ']');
+
+
+
                 var commentContent = $newCommentTextArea.val();
                 // do not accept empty comment
                 if(commentContent == '') return;
@@ -792,7 +837,7 @@ MatrixCommentsPlugin.prototype = {
                         // add new comment
                         self._comments[containerId][i]['comments'].push(commentData);
                         // set comment mark counter
-                        ViperUtil.$(commentMark).find('.Matrix-Viper-commentmark-number-count').html(self._comments[containerId][i]['comments'].length);
+                        $commentMark.find('.Matrix-Viper-commentmark-number-count').html(self._comments[containerId][i]['comments'].length);
                     }
                 }
 
@@ -804,7 +849,7 @@ MatrixCommentsPlugin.prototype = {
                 // re-open the dialog to show the reply interface
                 $commentDialog.remove();
                 ViperUtil.preventDefault(e);
-                ViperUtil.$(commentMark).mousedown();
+                $commentMark.mousedown();
             });
 
 
@@ -1379,12 +1424,12 @@ MatrixCommentsPlugin.prototype = {
 
         // if there is opening editing textarea, we need to save them
         if(self.isUserEditingComment()) {
-            ViperUtil.$('.Matrix-Viper-commentdialog-button-blue:visible').mousedown();
-            ViperUtil.$('#Matrix-Viper-commentdialog-replyCommentButton-comment:visible').mousedown();
+            ViperUtil.$('.Matrix-Viper-commentdialog-button-blue').mousedown();
+            ViperUtil.$('#Matrix-Viper-commentdialog-replyCommentButton-comment').mousedown();
         }
         // if new comment dialog is open, we need to close it or commit it
-        if(ViperUtil.$('.Matrix-Viper-commentdialog-newCommentTextArea:visible').length > 0) {
-            if(ViperUtil.$('.Matrix-Viper-commentdialog-newCommentTextArea:visible').val() != '') {
+        if(ViperUtil.$('.Matrix-Viper-commentdialog-newCommentTextArea').length > 0) {
+            if(ViperUtil.$('.Matrix-Viper-commentdialog-newCommentTextArea').val() != '') {
                 ViperUtil.$('#Matrix-Viper-commentdialog-newCommentButton-comment').click();
             }
             else {
@@ -1409,6 +1454,7 @@ MatrixCommentsPlugin.prototype = {
             var $container = ViperUtil.$(this);
             var containerid = $container.data('container-id');
 
+            if(!self._comments[containerid]) return;
 
             // delete those marked for deletion
             for (var i = 0; i < self._comments[containerid].length; i++) {
@@ -1467,6 +1513,7 @@ MatrixCommentsPlugin.prototype = {
         ViperUtil.$('div[data-container-id]').each(function() {
             var $container = ViperUtil.$(this);
             var containerid = $container.data('container-id');
+            if(!self._comments[containerid]) return;
             for (var i = 0; i < commentsToSave[containerid].length; i++) {
                 commentsToSave[containerid][i]['commentMark'] = null;
             };
@@ -1631,6 +1678,8 @@ MatrixCommentsPlugin.prototype = {
             var $container = ViperUtil.$(this);
             self._bodycopyContainer = $container;
             var currentContainerId = $container.data('container-id');
+            if(!self._comments[currentContainerId]) return;
+
             for(var i = 0; i< self._comments[currentContainerId].length; i++) {
                 value = self._comments[currentContainerId][i];
                     var targetElement = $container.find('[data-comment-id=' + value['id'] + '][data-comment-container-id=' + currentContainerId + ']').get(0);
