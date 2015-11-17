@@ -5358,7 +5358,6 @@ Viper.prototype = {
                                     range.setEnd(sel, sel.data.length);
                                     range.collapse(false);
                                     ViperSelection.addRange(range);
-                                    console.info(111)
                                 }
                             }
                         }
@@ -5387,35 +5386,7 @@ Viper.prototype = {
             }
         }
 
-        if (startNode && startNode.nodeType === ViperUtil.TEXT_NODE
-            && endNode && endNode.nodeType === ViperUtil.TEXT_NODE
-            && startNode.data.length === range.startOffset
-            && range.endOffset === 0
-            && startNode.nextSibling
-            && startNode.nextSibling === endNode.previousSibling
-            && startNode.nextSibling.nodeType !== ViperUtil.TEXT_NODE
-        ) {
-            // When a word is double clicked and the word is wrapped with a tag
-            // e.g. strong then select the strong tag.
-            var firstSelectable = range._getFirstSelectableChild(startNode.nextSibling);
-            var lastSelectable  = range._getLastSelectableChild(startNode.nextSibling);
-            range.setStart(firstSelectable, 0);
-            range.setEnd(lastSelectable, lastSelectable.data.length);
-            ViperSelection.addRange(range);
-        } else if (endNode && endNode.nodeType === ViperUtil.TEXT_NODE
-            && range.endOffset === 0
-            && endNode !== startNode
-            && endNode.previousSibling
-            && endNode.previousSibling.nodeType !== ViperUtil.TEXT_NODE
-        ) {
-            // When a word at the end of a tag is double clicked then move the
-            // end of the range to the last selectable child of that tag.
-            var textChild = range._getLastSelectableChild(endNode.previousSibling);
-            if (textChild) {
-                range.setEnd(textChild, textChild.data.length);
-                ViperSelection.addRange(range);
-            }
-        } else if (startNode
+        if (startNode
             && endNode
             && startNode.nodeType === ViperUtil.TEXT_NODE
             && endNode.nodeType === ViperUtil.TEXT_NODE
@@ -5443,23 +5414,6 @@ Viper.prototype = {
                 // E.g. <viperEl><div><p>[aaa</p><p>bbb</p></div>    ]</viperEl>
                 // Range should be adjusted to select the common parent.
                 range.selectNode(range.commonAncestorContainer.firstElementChild);
-                ViperSelection.addRange(range);
-            }
-        } else if (startNode && startNode.nodeType === ViperUtil.TEXT_NODE
-            && endNode && endNode.nodeType === ViperUtil.TEXT_NODE
-            && startNode.data.length === range.startOffset
-            && startNode !== endNode
-            && startNode.nextSibling
-            && startNode.nextSibling.nodeType !== ViperUtil.TEXT_NODE
-        ) {
-            // A range starts at the end of a text node and the next sibling
-            // is not a text node so move the range inside the first selectable
-            // child of the next sibling. This usually happens in FF when you
-            // double click a word which is at the start of a strong/em/u tag,
-            // we move the range inside the tag.
-            var firstSelectable = range._getFirstSelectableChild(startNode.nextSibling);
-            if (firstSelectable) {
-                range.setStart(firstSelectable, 0);
                 ViperSelection.addRange(range);
             }
         } else if (endNode && endNode.nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isTag(endNode, 'br') === true) {
