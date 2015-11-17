@@ -267,7 +267,9 @@ ViperImagePlugin.prototype = {
             ViperUtil.remove(elems[i]);
         }
 
+        var newImage = false;
         if (!img) {
+            newImage = true;
             img = document.createElement('img');
 
             this.viper.setAttribute(img, 'src', url);
@@ -323,7 +325,7 @@ ViperImagePlugin.prototype = {
             range.setStart(selectable, 1);
             range.collapse(true);
             ViperSelection.addRange(range);
-        } else if (ViperUtil.isBrowser('msie', '<11') === true) {
+        } else if (newImage === true && ViperUtil.isBrowser('msie', '<11') === true) {
             ViperUtil.removeAttr(img, 'width');
             ViperUtil.removeAttr(img, 'height');
         }
