@@ -517,7 +517,7 @@ ViperImagePlugin.prototype = {
         }
 
         var image = this._resizeImage;
-        if (ViperUtil.isBrowser('msie', '<11') === true) {
+        if (ViperUtil.isBrowser('msie', '<9') === true) {
             image = this._ieImageResize;
         }
 
