@@ -51,7 +51,7 @@ ViperImagePlugin.prototype = {
                     self.viper.fireSelectionChanged(range, true);
                 }
 
-                if (ViperUtil.isBrowser('msie', '<11') === true && ViperUtil.isTag(target, 'img') === true) {
+                if (ViperUtil.isBrowser('msie', '<9') === true && ViperUtil.isTag(target, 'img') === true) {
                     self._ieImageResize = target;
                     self.viper.registerCallback('Viper:mouseUp', 'ViperImagePlugin:ie', function(e) {
                        var range = self.viper.getCurrentRange();
