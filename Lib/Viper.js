@@ -3617,8 +3617,16 @@ Viper.prototype = {
             if (bookmark.start.nextSibling) {
                 // Find the next non empty text node.
                 startPos = ViperUtil.getFirstChildTextNode(bookmark.start.nextSibling);
-                while (startPos && startPos.data.length === 0 && startPos.nextSibling) {
-                    startPos = ViperUtil.getFirstChildTextNode(startPos.nextSibling);
+                if (startPos && startPos.nodeType === ViperUtil.TEXT_NODE) {
+                    while (startPos && startPos.data.length === 0 && startPos.nextSibling) {
+                        startPos = ViperUtil.getFirstChildTextNode(startPos.nextSibling);
+                    }
+                } else {
+                    // Handle situation where there is no first text node.
+                    var tmpTextNode = document.createTextNode('');
+                    ViperUtil.insertBefore(bookmark.start.nextSibling, tmpTextNode);
+                    startPos    = tmpTextNode;
+                    startOffset = 0;
                 }
             } else {
                 if (!bookmark.start.previousSibling) {
@@ -3633,7 +3641,7 @@ Viper.prototype = {
             if (bookmark.end.previousSibling) {
                 // Find the previous non empty text node.
                 endPos = ViperUtil.getLastChildTextNode(bookmark.end.previousSibling);
-                if (endPos.nodeType === ViperUtil.TEXT_NODE) {
+                if (endPos && endPos.nodeType === ViperUtil.TEXT_NODE) {
                     while (endPos && endPos.data.length === 0 && endPos.previousSibling) {
                         endPos = ViperUtil.getLastChildTextNode(endPos.previousSibling);
                     }
@@ -3644,7 +3652,7 @@ Viper.prototype = {
                 } else {
                     // Handle situation where there is no last text node.
                     var tmpTextNode = document.createTextNode('');
-                    ViperUtil.insertBefore(endPos, tmpTextNode);
+                    ViperUtil.insertAfter(bookmark.end.previousSibling, tmpTextNode);
                     endPos    = tmpTextNode;
                     endOffset = 0;
                 }
@@ -3673,7 +3681,7 @@ Viper.prototype = {
                 range.selectNode(endPos);
             } else {
                 // Normalise text nodes and select bookmark.
-                while (startPos.previousSibling && startPos.previousSibling.nodeType === ViperUtil.TEXT_NODE) {
+                while (startPos && startPos.previousSibling && startPos.previousSibling.nodeType === ViperUtil.TEXT_NODE) {
                     startOffset += startPos.previousSibling.data.length;
 
                     if (endPos === startPos) {
@@ -3684,7 +3692,7 @@ Viper.prototype = {
                     ViperUtil.remove(startPos.previousSibling);
                 }
 
-                while (endPos.nextSibling && endPos.nextSibling.nodeType === ViperUtil.TEXT_NODE) {
+                while (endPos && endPos.nextSibling && endPos.nextSibling.nodeType === ViperUtil.TEXT_NODE) {
                     endPos.data += endPos.nextSibling.data;
                     ViperUtil.remove(endPos.nextSibling);
                 }
