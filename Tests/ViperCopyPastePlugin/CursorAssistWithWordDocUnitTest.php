@@ -70,8 +70,6 @@ class Viper_Tests_ViperCopyPastePlugin_CursorAssistWithWordDocUnitTest extends A
         // Click the cursor assist icon
         $this->moveMouseToElement('table', 'bottom');
         $this->clickCursorAssistLine();
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('test');
 
         // Paste the word document again to make sure the attributes are removed
         $this->pasteFromURL($testFile);
@@ -149,8 +147,6 @@ class Viper_Tests_ViperCopyPastePlugin_CursorAssistWithWordDocUnitTest extends A
         $this->moveMouseToElement('table', 'bottom');
         sleep(5);
         $this->clickCursorAssistLine();
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('test');
 
         // Paste the word document again to make sure the attributes are removed
         $this->pasteFromURL($testFile);
@@ -226,8 +222,6 @@ class Viper_Tests_ViperCopyPastePlugin_CursorAssistWithWordDocUnitTest extends A
         $this->moveMouseToElement('table', 'bottom');
         sleep(5);
         $this->clickCursorAssistLine();
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('test');
 
         // Paste the word document again to make sure the attributes are removed
         $this->pasteFromURL($testFile);
