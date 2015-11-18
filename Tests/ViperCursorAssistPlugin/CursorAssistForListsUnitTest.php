@@ -15,7 +15,7 @@ class Viper_Tests_ViperCursorAssistPlugin_CursorAssistForListsUnitTest extends A
     {
         // Check cursor assist line above an unordered list
         $this->useTest(1);
-        $this->clickKeyword(1);
+        $this->sikuli->mouseMoveOffset(0, 50);
         $this->moveMouseToElement('ul', 'top');
         sleep(2);
 
@@ -29,7 +29,8 @@ class Viper_Tests_ViperCursorAssistPlugin_CursorAssistForListsUnitTest extends A
 
         // Check cursor assist line above an ordered list
         $this->useTest(2);
-        $this->clickKeyword(1);
+        $this->sikuli->mouseMoveOffset(0, 50);
+        $this->moveMouseToElement('ul', 'top');
         $this->moveMouseToElement('ol', 'top');
         sleep(2);
 
@@ -53,7 +54,6 @@ class Viper_Tests_ViperCursorAssistPlugin_CursorAssistForListsUnitTest extends A
     {
         // Check cursor assist line below an unordered list
         $this->useTest(1);
-        $this->clickKeyword(1);
         $this->moveMouseToElement('ul', 'bottom', 0, -25);
 
         // Check to see if the cursor assit line appears below the list
