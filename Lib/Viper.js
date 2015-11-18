@@ -5126,7 +5126,7 @@ Viper.prototype = {
                 }
 
                 var char = String.fromCharCode(e.which);
-
+                var startNode = range.getStartNode();
                 if (e.which !== 0
                     && range.startContainer === range.endContainer
                     && range.collapsed === true
@@ -5182,7 +5182,17 @@ Viper.prototype = {
                     ) {
                         // Convert non breaking space to normal space.
                         // E.g. <p>t | ext.</p>.
-                        var data = range.startContainer.data.substr(0, range.startOffset);
+                        var data = range.startContainer.data;
+
+                        if (data.charCodeAt(range.startOffset - 1) === 160
+                            && (data.charCodeAt(range.startOffset - 2) !== 160 && data.charCodeAt(range.startOffset - 2) !== 32)
+                        ) {
+                            // Previous character is nbsp as well, change it.
+                            data = data.substr(0, range.startOffset - 1) + ' ';
+                        } else {
+                            data = data.substr(0, range.startOffset);
+                        }
+
                         data += ' ' + range.startContainer.data.substr(range.startOffset + 1);
                         range.startContainer.data = data;
                         range.setStart(range.startContainer, range.startOffset);
