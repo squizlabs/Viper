@@ -1212,6 +1212,8 @@ var ViperUtil = {
             } else {
                 return node.firstChild;
             }
+        } else if (node && node.nodeType === ViperUtil.TEXT_NODE) {
+            return node;
         }
 
         return null;
@@ -1247,6 +1249,8 @@ var ViperUtil = {
             } else {
                 return node.lastChild;
             }
+        } else if (node && node.nodeType === ViperUtil.TEXT_NODE) {
+            return node;
         }
 
         return null;

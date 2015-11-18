@@ -3605,7 +3605,7 @@ Viper.prototype = {
                 }
             } else if (bookmark.start.previousSibling) {
                 startPos = ViperUtil.getFirstChildTextNode(bookmark.start.previousSibling);
-                if (startPos.nodeType === ViperUtil.TEXT_NODE) {
+                if (startPos && startPos.nodeType === ViperUtil.TEXT_NODE) {
                     startOffset = startPos.length;
                 }
             } else {
