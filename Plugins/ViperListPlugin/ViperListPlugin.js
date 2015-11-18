@@ -93,7 +93,7 @@ ViperListPlugin.prototype = {
                     startNode = range.getStartNode();
                 }
 
-                var firstBlock = ViperUtil.getFirstBlockParent(startNode);
+                var firstBlock = ViperUtil.getFirstBlockParent(startNode, null, true);
                 if (ViperUtil.isTag(firstBlock, 'li') === true) {
                     if (range.collapsed === true
                         && ViperUtil.getParents(startNode, 'td,th', self.viper.getViperElement()).length > 0

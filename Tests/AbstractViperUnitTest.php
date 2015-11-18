@@ -2502,6 +2502,40 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
 
     /**
+     * Skip the test for the specified OS and/or browsers.
+     *
+     * @param string $os       The OS id.
+     * @param array  $browsers List of browsers.
+     *
+     * @return void
+     */
+    protected function skipTestFor($os=null, array $browsers=null)
+    {
+        $skip = false;
+        if ($os !== null) {
+            if ($os === $this->sikuli->getOS()) {
+                // OS matches but if browsers also specified then do not skip here.
+                if (empty($browsers) === true) {
+                    // No browsers, skip test.
+                    $this->markTestSkipped('This test does not run for this OS');
+                }
+            } else {
+                // OS does not match, dont skip test.
+                return;
+            }
+        }
+
+        if (empty($browsers) === false) {
+            if (in_array($this->sikuli->getBrowserid(), $browsers) === true) {
+                $this->markTestSkipped('This test does not run for this browser');
+            }
+        }
+
+
+    }//end skiptestFor()
+
+
+    /**
      * Moves the mouse to the next line from its current position and clicks it.
      *
      * Note that the mouse must already be pointing to a line.

@@ -319,7 +319,7 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperUnitT
         // Test using delete key with arrow selection
         $this->useTest(5);
         $this->moveToKeyword(2, 'right');
-        for ($i = 0; $i < 4; $i++) {
+        for ($i = 0; $i < 3; $i++) {
             $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         }
         $this->sikuli->keyDown('Key.DELETE');
@@ -328,7 +328,7 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperUnitT
         // Test using backspace key with arrow selection
         $this->useTest(5);
         $this->moveToKeyword(2, 'right');
-        for ($i = 0; $i < 4; $i++) {
+        for ($i = 0; $i < 3; $i++) {
             $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         }
         $this->sikuli->keyDown('Key.BACKSPACE');

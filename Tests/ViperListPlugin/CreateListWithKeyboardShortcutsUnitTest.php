@@ -54,6 +54,7 @@ class Viper_Tests_ViperListPlugin_CreateListWithKeyboardShortcutsUnitTest extend
         $this->type('Test 4');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
+        sleep(1);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->type('Test 5');
 

@@ -155,6 +155,13 @@ ViperCoreStylesPlugin.prototype = {
             });
         }//end if
 
+        this.viper.registerCallback('Viper:keyDown', 'ViperCoreStylesPlugin', function(e) {
+            if (e.which === 85 && (e.ctrlKey === true || e.metaKey === true)) {
+                // Disable ctrl/cmd + u.
+                return false;
+            }
+        });
+
         this.viper.registerCallback('Viper:keyPress', 'ViperCoreStylesPlugin', function(e) {
             if (self._onChangeAddStyle.length > 0 && self.viper.isInputKey(e) === true) {
                 var character = String.fromCharCode(e.which);
