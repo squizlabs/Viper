@@ -93,22 +93,31 @@ ViperLangToolsPlugin.prototype = {
         var node    = this.viper.getNodeSelection();
         var element = null;
 
-        if ((node && node.nodeType !== ViperUtil.TEXT_NODE) || range.collapsed === true) {
-            if (!node) {
-                var node = range.getStartNode();
-                if (!node) {
-                    node = range.getEndNode();
-                    if (!node) {
-                        return null;
-                    }
-                }
+        if (node && node.nodeType === ViperUtil.ELEMENT_NODE) {
+            var children = ViperUtil.getSurroundedChildren(node);
+            if (children.length > 0) {
+                // Most inner child.
+                node = children.pop();
+            }
 
-                if (node.nodeType === ViperUtil.TEXT_NODE) {
-                    node = node.parentNode;
-                }
-            }//end if
+            var parents = ViperUtil.getSurroundingParents(node);
+            ViperUtil.removeAttr(parents, 'lang');
 
             node.setAttribute('lang', langAttribute);
+            element = node;
+        } else if (range.collapsed === true) {
+            var node = range.getStartNode();
+            if (!node) {
+                node = range.getEndNode();
+                if (!node) {
+                    return null;
+                }
+            }
+
+            if (node.nodeType === ViperUtil.TEXT_NODE) {
+                node = node.parentNode;
+            }
+
             element = node;
         } else {
             var bookmark = this.viper.createBookmark(range);
@@ -173,25 +182,50 @@ ViperLangToolsPlugin.prototype = {
 
     },
 
+    _getTagFromElement: function(element, tagName)
+    {
+        if (tagName && ViperUtil.isTag(element, tagName) === true) {
+            return element;
+        } else if (tagName === 'lang' && ViperUtil.hasAttribute(element, 'lang') === true) {
+            return element;
+        } else if (!tagName) {
+            if (ViperUtil.isTag(element, 'abbr') === true || ViperUtil.isTag(element, 'acronym') === true) {
+                return element;
+            } else if (ViperUtil.hasAttribute(element, 'lang') === true) {
+                return element;
+            }
+        }
+
+        return null;
+
+    },
+
     getTagFromRange: function(range, tagName)
     {
         var selectedNode = this.viper.getNodeSelection();
         if (selectedNode && selectedNode.nodeType === ViperUtil.ELEMENT_NODE) {
-            if (tagName && ViperUtil.isTag(selectedNode, tagName) === true) {
-                return selectedNode;
-            } else if (tagName === 'lang' && ViperUtil.hasAttribute(selectedNode, 'lang') === true) {
-                return selectedNode;
-            } else if (!tagName) {
-                if (ViperUtil.isTag(selectedNode, 'abbr') === true || ViperUtil.isTag(selectedNode, 'acronym') === true) {
-                    return selectedNode;
-                } else if (ViperUtil.hasAttribute(selectedNode, 'lang') === true) {
-                    return selectedNode;
-                } else {
-                    return null;
-                }
+            var element = this._getTagFromElement(selectedNode, tagName);
+            if (element) {
+                return element;
             } else {
-                return null;
+                var parents = ViperUtil.getSurroundingParents(selectedNode);
+                for (var i = 0; i < parents.length; i++) {
+                    var element = this._getTagFromElement(parents[i], tagName);
+                    if (element) {
+                        return element;
+                    }
+                }
+
+                var children = ViperUtil.getSurroundedChildren(selectedNode);
+                for (var i = 0; i < children.length; i++) {
+                    var element = this._getTagFromElement(children[i], tagName);
+                    if (element) {
+                        return element;
+                    }
+                }
             }
+
+            return null;
         }
 
         var viperElem = this.viper.getViperElement();
@@ -497,7 +531,9 @@ ViperLangToolsPlugin.prototype = {
                         // Acronym.
                         tools.setButtonActive('ViperLangToolsPlugin:acronymButton');
                         self.viper.ViperTools.getItem('VLTP:acronymInput').setValue(element.getAttribute('title'));
-                    } else {
+                    }
+
+                    if (ViperUtil.hasAttribute(element, 'lang') === true) {
                         // Lang.
                         tools.setButtonActive('ViperLangToolsPlugin:langButton');
                         self.viper.ViperTools.getItem('VLTP:langInput').setValue(element.getAttribute('lang'));
