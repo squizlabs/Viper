@@ -51,7 +51,7 @@ ViperImagePlugin.prototype = {
                     self.viper.fireSelectionChanged(range, true);
                 }
 
-                if (ViperUtil.isBrowser('msie', '<11') === true && ViperUtil.isTag(target, 'img') === true) {
+                if (ViperUtil.isBrowser('msie', '<9') === true && ViperUtil.isTag(target, 'img') === true) {
                     self._ieImageResize = target;
                     self.viper.registerCallback('Viper:mouseUp', 'ViperImagePlugin:ie', function(e) {
                        var range = self.viper.getCurrentRange();
@@ -267,7 +267,9 @@ ViperImagePlugin.prototype = {
             ViperUtil.remove(elems[i]);
         }
 
+        var newImage = false;
         if (!img) {
+            newImage = true;
             img = document.createElement('img');
 
             this.viper.setAttribute(img, 'src', url);
@@ -323,7 +325,7 @@ ViperImagePlugin.prototype = {
             range.setStart(selectable, 1);
             range.collapse(true);
             ViperSelection.addRange(range);
-        } else if (ViperUtil.isBrowser('msie', '<11') === true) {
+        } else if (newImage === true && ViperUtil.isBrowser('msie', '<11') === true) {
             ViperUtil.removeAttr(img, 'width');
             ViperUtil.removeAttr(img, 'height');
         }
@@ -517,7 +519,7 @@ ViperImagePlugin.prototype = {
         }
 
         var image = this._resizeImage;
-        if (ViperUtil.isBrowser('msie', '<11') === true) {
+        if (ViperUtil.isBrowser('msie', '<9') === true) {
             image = this._ieImageResize;
         }
 
@@ -700,7 +702,10 @@ ViperImagePlugin.prototype = {
         var nodeSelection = data.nodeSelection || data.range.getNodeSelection();
         var self          = this;
 
-        this.hideImageResizeHandles();
+        if (!this._resizeImage) {
+            this.hideImageResizeHandles();
+        }
+
         if (nodeSelection && ViperUtil.isTag(nodeSelection, 'img') === true) {
             this._resizeImage = nodeSelection;
             data.toolbar.showButton('vitpImage');
@@ -713,6 +718,15 @@ ViperImagePlugin.prototype = {
             this.viper.ViperTools.setButtonActive('vitpImage');
             this.showImageResizeHandles(nodeSelection);
             this._updateToolbars(nodeSelection);
+        } else if (this._resizeImage
+            &&  ViperUtil.isBrowser('msie', '<11') === true
+        ) {
+            setTimeout(
+                function() {
+                    self._inlineToolbar.update(null, self._resizeImage);
+                },
+                50
+            );
         }
 
     },

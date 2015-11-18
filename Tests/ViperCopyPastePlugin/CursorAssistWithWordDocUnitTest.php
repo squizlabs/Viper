@@ -120,6 +120,12 @@ class Viper_Tests_ViperCopyPastePlugin_CursorAssistWithWordDocUnitTest extends A
                     case 'ie11':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsIE11/GoogleDocs/CursorAssistDoc.txt');
                         break;
+                    case 'ie8':
+                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsIE8/GoogleDocs/CursorAssistDoc.txt');
+                        break;
+                    case 'ie9':
+                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsIE9/GoogleDocs/CursorAssistDoc.txt');
+                        break;
                     default:
                         throw new Exception('Browser is not supported on windows');
                 }//end switch
@@ -188,6 +194,12 @@ class Viper_Tests_ViperCopyPastePlugin_CursorAssistWithWordDocUnitTest extends A
                         break;
                     case 'ie11':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsIE11/GoogleDocs/CursorAssistDoc.txt');
+                        break;
+                    case 'ie8':
+                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsIE8/GoogleDocs/CursorAssistDoc.txt');
+                        break;
+                    case 'ie9':
+                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsIE9/GoogleDocs/CursorAssistDoc.txt');
                         break;
                     default:
                         throw new Exception('Browser is not supported on windows');

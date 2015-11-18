@@ -711,7 +711,7 @@ var ViperUtil = {
         var ln  = res.length;
         var ar  = [];
         for (var i = 0; i < ln; i++) {
-            if (stopEl && (res[i] === stopEl || ViperUtil.isChildOf(res[i], stopEl) === false)) {
+            if (stopEl && (res[i] === stopEl || (this.isPartOfDOM(res[i]) === true && ViperUtil.isChildOf(res[i], stopEl) === false))) {
                 break;
             }
 
@@ -1006,6 +1006,20 @@ var ViperUtil = {
     },
 
     /**
+     * Returns true if the specified element is paret of the DOM tree.
+     *
+     * @param {DOMNode} element The element to check.
+     *
+     * @return {boolean}
+     */
+    isPartOfDOM: function (element, parent)
+    {
+        parent = parent || document.body;
+        return parent.contains(element);
+
+    },
+
+    /**
      * Merges an array of any type similiar to PHP.
      *
      * If array1 is a JS array the elements will simply be added to the end of array1.
@@ -1198,9 +1212,11 @@ var ViperUtil = {
             } else {
                 return node.firstChild;
             }
+        } else if (node && node.nodeType === ViperUtil.TEXT_NODE) {
+            return node;
         }
 
-        return node;
+        return null;
 
     },
 
@@ -1208,7 +1224,7 @@ var ViperUtil = {
     {
         if (node) {
             if (node.firstElementChild) {
-                return node.firstElementChild();
+                return node.firstElementChild;
             } else {
                 var child = node.firstChild
                 while (child) {
@@ -1233,9 +1249,11 @@ var ViperUtil = {
             } else {
                 return node.lastChild;
             }
+        } else if (node && node.nodeType === ViperUtil.TEXT_NODE) {
+            return node;
         }
 
-        return node;
+        return null;
 
     },
 

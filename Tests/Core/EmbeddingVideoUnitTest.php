@@ -74,7 +74,7 @@ class Viper_Tests_Core_EmbeddingVideoUnitTest extends AbstractViperUnitTest
         $this->sikuli->execJS('document.getElementById("test-tabTextfield").focus()');
 
         // The HTML from IE is slightly different to other browsers
-        if ($this->sikuli->getBrowserid() === 'ie10' || $this->sikuli->getBrowserid() === 'ie9' || $this->sikuli->getBrowserid() === 'ie8') {
+        if ($this->sikuli->getBrowserid() === 'ie10' || $this->sikuli->getBrowserid() === 'ie8') {
             $this->assertHTMLMatch('<iframe src="//player.vimeo.com/video/92198436?wmode=opaque" width="500" height="281" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe><p>This is a new paragraph after the video</p>');
         } else {
             $this->assertHTMLMatch('<iframe src="//player.vimeo.com/video/92198436" width="500" height="281" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe><p>This is a new paragraph after the video</p>');
@@ -112,7 +112,11 @@ class Viper_Tests_Core_EmbeddingVideoUnitTest extends AbstractViperUnitTest
         $this->clickCursorAssistLine();
         $this->type('This is a new paragraph after the video');
 
-        $this->assertHTMLMatch('<object width="560" height="315"><param name="movie" value="http://www.youtube.com/v/f6ZSZbNfSpk?version=3&amp;hl=en_GB"/><param name="allowFullScreen" value="true"/><param name="allowscriptaccess" value="always"/><embed src="http://www.youtube.com/v/f6ZSZbNfSpk?version=3&amp;hl=en_GB" type="application/x-shockwave-flash" width="560" height="315" allowscriptaccess="always" allowfullscreen="true"/></object><p>This is a new paragraph after the video</p>');
+        if ($this->sikuli->getBrowserid() === 'ie10' || $this->sikuli->getBrowserid() === 'ie9' || $this->sikuli->getBrowserid() === 'ie8') {
+            $this->assertHTMLMatch('<object height="315" width="560"><param name="movie" value="http://www.youtube.com/v/f6ZSZbNfSpk?version=3&amp;hl=en_GB" /><param name="allowFullScreen" value="true" /><param name="allowscriptaccess" value="always" /><param name="wmode" value="transparent" /><embed allowfullscreen="true" allowscriptaccess="always" height="315" src="http://www.youtube.com/v/f6ZSZbNfSpk?version=3&amp;hl=en_GB" type="application/x-shockwave-flash" width="560" wmode="transparent" /><p>This is a new paragraph after the video</p></object>');
+        } else {
+            $this->assertHTMLMatch('<object width="560" height="315"><param name="movie" value="http://www.youtube.com/v/f6ZSZbNfSpk?version=3&amp;hl=en_GB"/><param name="allowFullScreen" value="true"/><param name="allowscriptaccess" value="always"/><embed src="http://www.youtube.com/v/f6ZSZbNfSpk?version=3&amp;hl=en_GB" type="application/x-shockwave-flash" width="560" height="315" allowscriptaccess="always" allowfullscreen="true"/></object><p>This is a new paragraph after the video</p>');
+        }
 
     }//end testEmbeddingVideoWithObjectTags()
 

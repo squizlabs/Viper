@@ -261,7 +261,7 @@ ViperSearchReplacePlugin.prototype = {
             }
 
             // Range search.
-            if (ViperUtil.isBrowser('msie', '>=11') === true) {
+            if (ViperUtil.isBrowser('msie', '>=9') === true) {
                 if (fromStart !== true) {
                     viperRange.collapse(false);
                 }

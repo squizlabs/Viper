@@ -361,7 +361,7 @@ function hideToolbarsAtLocation(loc)
     for (var i = 0; i < toolbars.length; i++) {
         var toolbarLoc = ViperUtil.getBoundingRectangle(toolbars[i]);
         if (ViperUtil.isIntersectingRect(loc, toolbarLoc) === true) {
-            ViperUtil.removeClass(toolbars[i], 'Viper-visible');
+            ViperUtil.setStyle(toolbars[i], 'left', '-1000px');
         }
     }
 
@@ -442,6 +442,7 @@ function useTest(id)
     if (ViperUtil.isBrowser('msie') === true) {
         viper.setEditableElement(contentElement);
         viper.setEnabled(false);
+        viper.initEditableElement(contentElement);
     } else {
         viper.initEditableElement(contentElement);
     }
