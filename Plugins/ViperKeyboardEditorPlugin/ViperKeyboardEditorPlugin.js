@@ -438,7 +438,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 }
 
                 return false;
-            } else if (blockParent === this.viper.getViperElement() && !defaultTagName) {
+            } else if ((blockParent === null || blockParent === this.viper.getViperElement()) && !defaultTagName) {
                 if (startNode.nodeType === ViperUtil.TEXT_NODE
                     && startNode.data.length > (range.startOffset + 1)
                     && startNode.data.charCodeAt(range.startOffset) === 32
@@ -451,6 +451,10 @@ ViperKeyboardEditorPlugin.prototype = {
 
                 var br = document.createElement('br');
                 this.viper.insertNodeAtCaret(br);
+
+                if (!br.nextSibling) {
+                    ViperUtil.insertAfter(br, document.createTextNode(''));
+                }
 
                 range.setStart(br.nextSibling, 0);
                 range.collapse(true);
