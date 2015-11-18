@@ -113,6 +113,10 @@ MatrixCommentsPlugin.prototype = {
                     ViperUtil.$('#Matrix-Viper-commentdialog-newCommentButton-cancel').click();
                 }
             }
+            // remove comment action dialog
+            ViperUtil.$('.Matrix-Viper-commentdialog-comment-action').remove();
+            // remove comment dialogs
+            ViperUtil.$('.Matrix-Viper-commentdialog').remove();
 
             // init comment array
             ViperUtil.$('div[data-container-id]').each(function() {
@@ -138,6 +142,33 @@ MatrixCommentsPlugin.prototype = {
                 self._bodycopyContainer = $container;
                 self._reinsertCommentMarks();
             });
+
+
+            // determine comment color code for current user
+            if (self._currentUserId > 0) {
+                    self._commentColor = 0;
+                    var foundUsedColor = false;
+                    var lastUsedColor = -1;
+                    ViperUtil.$.each(self._comments, function(containerid, data) {
+                        ViperUtil.$.each(data, function(key, value) {
+                            if(value['userId'] == self._currentUserId) {
+                                self._commentColor = value['color'];
+                                foundUsedColor = true;
+                            }
+                            else {
+                                // find the latest and highest used color index
+                                if(value['color'] > lastUsedColor) {
+                                    lastUsedColor = value['color'];
+                                }
+                            }
+                        });
+                    });
+                    // only 5 available colors ['0583db', 'ad41bd', 'f17828', 'e8b01f', 'ea4c8b'];
+                    // pick next color available
+                    if(!foundUsedColor) {
+                        self._commentColor = (lastUsedColor + 1) % 5;
+                    }
+            }
         }
         if(typeof EasyEditEventManager != 'undefined') {
             // in Edit+, insert after containers loaded
@@ -155,31 +186,6 @@ MatrixCommentsPlugin.prototype = {
 
 
 
-        // determine comment color code for current user
-        if (self._currentUserId > 0) {
-                self._commentColor = 0;
-                var foundUsedColor = false;
-                var lastUsedColor = -1;
-                ViperUtil.$.each(self._comments, function(containerid, data) {
-                    ViperUtil.$.each(data, function(key, value) {
-                        if(value['userId'] == self._currentUserId) {
-                            self._commentColor = value['color'];
-                            foundUsedColor = true;
-                        }
-                        else {
-                            // find the latest and highest used color index
-                            if(value['color'] > lastUsedColor) {
-                                lastUsedColor = value['color'];
-                            }
-                        }
-                    });
-                });
-                // only 5 available colors ['0583db', 'ad41bd', 'f17828', 'e8b01f', 'ea4c8b'];
-                // pick next color available
-                if(!foundUsedColor) {
-                    self._commentColor = (lastUsedColor + 1) % 5;
-                }
-        }
 
 
         // when click on editable viper content
@@ -1674,7 +1680,7 @@ MatrixCommentsPlugin.prototype = {
         self._commentsPositions = [];
         if(typeof this._comments[self._containerId] == 'undefined') return;
 
-        ViperUtil.$('div[data-container-id]').each(function () {
+        ViperUtil.$('div[data-container-id]:visible').each(function () {
             var $container = ViperUtil.$(this);
             self._bodycopyContainer = $container;
             var currentContainerId = $container.data('container-id');
