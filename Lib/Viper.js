@@ -5067,7 +5067,10 @@ Viper.prototype = {
                     }
                 }
 
+
+                var char = String.fromCharCode(e.which);
                 if (range.collapsed === true
+                    && char !== ' '
                     && range.startContainer.nodeType === ViperUtil.TEXT_NODE
                     && range.endOffset === range.startContainer.data.length
                     && range.endOffset > 0
@@ -5076,7 +5079,7 @@ Viper.prototype = {
                     // If the last character of a text node is nbsp; and a new character is being inserted then replace the nbsp
                     // with normal space.
                     range.startContainer.data = range.startContainer.data.substr(0, range.startContainer.data.length - 1);
-                    range.startContainer.data += ' ' + String.fromCharCode(e.which);
+                    range.startContainer.data += ' ' + char;
                     range.setStart(range.startContainer, range.startContainer.data.length);
                     range.collapse(true);
                     ViperSelection.addRange(range);
@@ -5125,7 +5128,6 @@ Viper.prototype = {
                     }
                 }
 
-                var char = String.fromCharCode(e.which);
                 var startNode = range.getStartNode();
                 if (e.which !== 0
                     && range.startContainer === range.endContainer
