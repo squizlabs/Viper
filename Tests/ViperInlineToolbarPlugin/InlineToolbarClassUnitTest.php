@@ -22,10 +22,10 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Span</li>', $lineage);
 
         $this->selectKeyword(6);
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Span</li>', $lineage);
 
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
@@ -41,7 +41,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Span</li>', $lineage);
 
         $this->clearFieldValue('Class');
         $this->sikuli->keyDown('Key.ENTER');
@@ -70,7 +70,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
 
         $this->selectKeyword(6);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Span</li>', $lineage);
 
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
@@ -111,7 +111,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
 
 
     /**
-     * Test that when you select the SPAN tag in the lineage both words in the tag are highlighted.
+     * Test that when you select the Span tag in the lineage both words in the tag are highlighted.
      *
      * @return void
      */
@@ -120,12 +120,12 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
         $this->selectKeyword(4);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(1);
         $this->assertEquals($this->replaceKeywords('%4% %5%'), $this->getSelectedText(), 'Span tag is not selected.');
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Span</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(1);
@@ -193,7 +193,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
 
 
     /**
-     * Test that span is shown in lineage when a class to one word out of two words that are bold.
+     * Test that Span is shown in lineage when a class to one word out of two words that are bold.
      *
      * @return void
      */
@@ -208,17 +208,17 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem Viper-selected">Span</li>', $lineage);
 
         $this->selectKeyword(7);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Bold</li><li class="ViperITP-lineageItem Viper-selected">Span</li>', $lineage);
 
     }//end testLineageWhenAddingClassToAOneBoldWord()
 
 
     /**
-     * Test that span is shown in lineage when a class to one word out of two words that are italics.
+     * Test that Span is shown in lineage when a class to one word out of two words that are italics.
      *
      * @return void
      */
@@ -241,11 +241,11 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarClassUnitTest extends Ab
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Italic</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Italic</li><li class="ViperITP-lineageItem Viper-selected">Span</li>', $lineage);
 
         $this->selectKeyword(7);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Italic</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Italic</li><li class="ViperITP-lineageItem Viper-selected">Span</li>', $lineage);
 
     }//end testLineageWhenAddingClassToAOneItalicWord()
 

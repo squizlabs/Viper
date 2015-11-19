@@ -283,6 +283,18 @@ ViperInlineToolbarPlugin.prototype = {
                 tagName = _('Strikethrough');
             break;
 
+            case 'thead':
+                tagName = _('Table Header');
+            break;
+
+            case 'tfoot':
+                tagName = _('Table Footer');
+            break;
+
+            case 'tbody':
+                tagName = _('Table Body');
+            break;
+
             default:
                 tagName = ViperUtil.ucFirst(tagName);
             break;
