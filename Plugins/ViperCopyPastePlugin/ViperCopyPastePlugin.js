@@ -2208,7 +2208,7 @@ ViperCopyPastePlugin.prototype = {
                         node = node.nextSibling;
                         prevBlock.appendChild(currentNode);
                     } else {
-                        if (ViperUtil.trim(ViperUtil.getHtml(node)).match(/^[^\w]$/)) {
+                        if (ViperUtil.trim(ViperUtil.getHtml(node)).match(/^[^\w:-_…]$/)) {
                             // Only a single non-word character in this paragraph, move it
                             // to the previous one in the next loop.
                             var currentNode = node;
