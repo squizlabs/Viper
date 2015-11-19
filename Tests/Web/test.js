@@ -459,6 +459,9 @@ function pasteFromURL(url)
 
         copyPastePlugin._beforePaste();
 
+        var bookmark = copyPastePlugin._bookmark;
+        copyPastePlugin._insertTmpNodeBeforeBookmark(bookmark);
+
         viper.removeBookmarks(null, true);
 
         copyPastePlugin._handleFormattedPasteValue(false, tmp, viper.getViperElement());
