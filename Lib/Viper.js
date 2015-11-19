@@ -5026,7 +5026,13 @@ Viper.prototype = {
                     if (range.startContainer.data.charAt(range.startOffset - 1) === ' ') {
                         // Inserting text at the end of a text node that ends with a space to prevent browser removing the
                         // space.
-                        range.startContainer.data += String.fromCharCode(e.which);
+                        if (e.which === 32) {
+                            range.startContainer.data = range.startContainer.data.substr(0, range.startOffset - 1);
+                            range.startContainer.data += String.fromCharCode(160) + String.fromCharCode(160);
+                        } else {
+                            range.startContainer.data += String.fromCharCode(e.which);
+                        }
+
                         range.setStart(range.startContainer, range.startContainer.data.length);
                         range.collapse(true);
                         ViperSelection.addRange(range);
