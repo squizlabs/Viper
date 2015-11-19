@@ -165,19 +165,19 @@ mso-bidi-font-family:&quot;Times New Roman&quot;">&nbsp;</span></p>
   <p class="MsoListParagraphCxSpFirst" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
   auto;mso-add-space:auto;text-align:justify;text-justify:inter-ideograph;
   text-indent:-18.0pt;mso-list:l1 level1 lfo2"><span style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
-  Symbol;mso-fareast-language:EN-AU"><span style="mso-list:Ignore">·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  Symbol;mso-fareast-language:EN-AU"><span style="mso-list:Ignore">Â·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   </span></span></span><span style="mso-fareast-language:EN-AU">purus
   neque luctus ligula, vel molestie arcu</span></p>
   <p class="MsoListParagraphCxSpMiddle" style="mso-margin-top-alt:auto;
   mso-margin-bottom-alt:auto;mso-add-space:auto;text-align:justify;text-justify:
   inter-ideograph;text-indent:-18.0pt;mso-list:l1 level1 lfo2"><span style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
-  Symbol;mso-fareast-language:EN-AU"><span style="mso-list:Ignore">·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  Symbol;mso-fareast-language:EN-AU"><span style="mso-list:Ignore">Â·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   </span></span></span><span style="mso-fareast-language:EN-AU">purus
   neque luctus</span></p>
   <p class="MsoListParagraphCxSpLast" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
   auto;mso-add-space:auto;text-align:justify;text-justify:inter-ideograph;
   text-indent:-18.0pt;mso-list:l1 level1 lfo2"><span style="font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
-  mso-bidi-font-family:Symbol"><span style="mso-list:Ignore">·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  mso-bidi-font-family:Symbol"><span style="mso-list:Ignore">Â·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   </span></span></span><span style="mso-fareast-language:EN-AU">vel
   molestie arcu</span><span style="font-size:10.0pt;font-family:&quot;Times&quot;,&quot;serif&quot;;
   mso-fareast-font-family:&quot;Times New Roman&quot;;mso-bidi-font-family:&quot;Times New Roman&quot;"></span></p>

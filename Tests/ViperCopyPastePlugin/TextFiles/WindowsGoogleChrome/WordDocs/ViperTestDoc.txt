@@ -900,7 +900,7 @@ table.MsoTableGrid
 
 <p class="MsoToc1" style="tab-stops:right 537.8pt"><!--[if supportFields]><span
 style='mso-element:field-begin'></span><span
-style='mso-spacerun:yes'> </span>TOC \o &quot;1-3&quot; <span style='mso-element:
+style='mso-spacerun:yes'>Â </span>TOC \o &quot;1-3&quot; <span style='mso-element:
 field-separator'></span><![endif]--><span style="mso-no-proof:yes">Lorem Ipsum<span style="mso-tab-count:1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><!--[if supportFields]><span
 style='mso-no-proof:yes'><span style='mso-element:field-begin'></span> PAGEREF
 _Toc185066177 \h <span style='mso-element:field-separator'></span></span><![endif]--><span style="mso-no-proof:yes">1<!--[if gte mso 9]><xml>
@@ -1120,19 +1120,19 @@ mso-bidi-font-family:&quot;Times New Roman&quot;"><o:p>&nbsp;</o:p></span></p>
   <p class="MsoListParagraphCxSpFirst" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
   auto;mso-add-space:auto;text-align:justify;text-justify:inter-ideograph;
   text-indent:-18.0pt;mso-list:l1 level1 lfo2"><!--[if !supportLists]--><span style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
-  Symbol;mso-fareast-language:EN-AU"><span style="mso-list:Ignore">·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  Symbol;mso-fareast-language:EN-AU"><span style="mso-list:Ignore">Â·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   </span></span></span><!--[endif]--><span style="mso-fareast-language:EN-AU">purus
   neque luctus ligula, vel molestie arcu<o:p></o:p></span></p>
   <p class="MsoListParagraphCxSpMiddle" style="mso-margin-top-alt:auto;
   mso-margin-bottom-alt:auto;mso-add-space:auto;text-align:justify;text-justify:
   inter-ideograph;text-indent:-18.0pt;mso-list:l1 level1 lfo2"><!--[if !supportLists]--><span style="font-family:Symbol;mso-fareast-font-family:Symbol;mso-bidi-font-family:
-  Symbol;mso-fareast-language:EN-AU"><span style="mso-list:Ignore">·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  Symbol;mso-fareast-language:EN-AU"><span style="mso-list:Ignore">Â·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   </span></span></span><!--[endif]--><span style="mso-fareast-language:EN-AU">purus
   neque luctus<o:p></o:p></span></p>
   <p class="MsoListParagraphCxSpLast" style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
   auto;mso-add-space:auto;text-align:justify;text-justify:inter-ideograph;
   text-indent:-18.0pt;mso-list:l1 level1 lfo2"><!--[if !supportLists]--><span style="font-size:10.0pt;font-family:Symbol;mso-fareast-font-family:Symbol;
-  mso-bidi-font-family:Symbol"><span style="mso-list:Ignore">·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  mso-bidi-font-family:Symbol"><span style="mso-list:Ignore">Â·<span style="font:7.0pt &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   </span></span></span><!--[endif]--><span style="mso-fareast-language:EN-AU">vel
   molestie arcu</span><span style="font-size:10.0pt;font-family:&quot;Times&quot;,&quot;serif&quot;;
   mso-fareast-font-family:&quot;Times New Roman&quot;;mso-bidi-font-family:&quot;Times New Roman&quot;"><o:p></o:p></span></p>

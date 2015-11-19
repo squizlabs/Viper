@@ -4,9 +4,9 @@
 <P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US><FONT color=#000000 face=Cambria size=3>: </FONT></SPAN></P>
 <P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US><FONT color=#000000 face=Cambria size=3>&lt; &gt; ? </FONT></SPAN></P>
 <P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US><FONT color=#000000 face=Cambria size=3>[ ]</FONT></SPAN></P>
-<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US><FONT color=#000000 face=Cambria size=3>; “a” ‘b’ </FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US><FONT color=#000000 face=Cambria size=3>; â€œaâ€ â€˜bâ€™ </FONT></SPAN></P>
 <P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US><FONT color=#000000 face=Cambria size=3>, . / </FONT></SPAN></P>
-<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US><FONT color=#000000 face=Cambria size=3>… </FONT></SPAN></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US><FONT color=#000000 face=Cambria size=3>â€¦ </FONT></SPAN></P>
 <P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><A name=_GoBack></A><SPAN lang=EN-US><FONT color=#000000 face=Cambria size=3>q w e r t y u i o p </FONT></SPAN></P>
 <P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US><FONT color=#000000 face=Cambria size=3>Q W E R T Y U I O P </FONT></SPAN></P>
 <P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"><SPAN lang=EN-US><FONT color=#000000 face=Cambria size=3>a s d f g h j k l </FONT></SPAN></P>
