@@ -239,9 +239,6 @@ ViperInlineToolbarPlugin.prototype = {
             break;
 
             case 'ul':
-                tagName = _('List');
-            break;
-
             case 'ol':
                 tagName = _('List');
             break;
@@ -270,8 +267,24 @@ ViperInlineToolbarPlugin.prototype = {
                 tagName = _('Image');
             break;
 
+            case 'abbr':
+                tagName = _('Abbreviation');
+            break;
+
+            case 'sub':
+                tagName = _('Subscript');
+            break;
+
+            case 'sup':
+                tagName = _('Superscript');
+            break;
+
+            case 'del':
+                tagName = _('Strikethrough');
+            break;
+
             default:
-                tagName = tagName.toUpperCase();
+                tagName = ViperUtil.ucFirst(tagName);
             break;
         }//end switch
 

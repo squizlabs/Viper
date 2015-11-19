@@ -4033,7 +4033,7 @@ Viper.prototype = {
 
         var outerParent = null;
         if (outer === true && highlights.length === 1) {
-            // If the highlight is one element and outer is set to true then 
+            // If the highlight is one element and outer is set to true then
             // create the bookmark at most outer surrounding parent.
             outerParent = ViperUtil.getTopSurroundingParent(highlights[0]);
             if (outerParent) {
@@ -5067,7 +5067,10 @@ Viper.prototype = {
                     }
                 }
 
+
+                var char = String.fromCharCode(e.which);
                 if (range.collapsed === true
+                    && char !== ' '
                     && range.startContainer.nodeType === ViperUtil.TEXT_NODE
                     && range.endOffset === range.startContainer.data.length
                     && range.endOffset > 0
@@ -5076,7 +5079,7 @@ Viper.prototype = {
                     // If the last character of a text node is nbsp; and a new character is being inserted then replace the nbsp
                     // with normal space.
                     range.startContainer.data = range.startContainer.data.substr(0, range.startContainer.data.length - 1);
-                    range.startContainer.data += ' ' + String.fromCharCode(e.which);
+                    range.startContainer.data += ' ' + char;
                     range.setStart(range.startContainer, range.startContainer.data.length);
                     range.collapse(true);
                     ViperSelection.addRange(range);
@@ -5125,7 +5128,6 @@ Viper.prototype = {
                     }
                 }
 
-                var char = String.fromCharCode(e.which);
                 var startNode = range.getStartNode();
                 if (e.which !== 0
                     && range.startContainer === range.endContainer
@@ -5175,7 +5177,7 @@ Viper.prototype = {
                     && char !== ' '
                 ) {
                     var data = range.startContainer.data;
-                    
+
                     // Character being inserted.
                     if (data.charCodeAt(range.startOffset) === 160
                         && (data.charCodeAt(range.startOffset + 1) !== 160 && data.charCodeAt(range.startOffset + 1) !== 32)
@@ -5325,7 +5327,7 @@ Viper.prototype = {
             }
 
             if (range
-                && range.collapsed === true 
+                && range.collapsed === true
                 && range.startContainer
                 && range.startContainer.nodeType === 9
                 && ViperUtil.isBrowser('msie') === true
@@ -5396,7 +5398,54 @@ Viper.prototype = {
             }
         }
 
-        if (startNode
+        if (ViperUtil.isBrowser('firefox') === true) {
+            if (startNode && startNode.nodeType === ViperUtil.TEXT_NODE
+                && endNode && endNode.nodeType === ViperUtil.TEXT_NODE
+                && startNode.data.length === range.startOffset
+                && range.endOffset === 0
+                && startNode.nextSibling
+                && startNode.nextSibling === endNode.previousSibling
+                && startNode.nextSibling.nodeType !== ViperUtil.TEXT_NODE
+            ) {
+                // When a word is double clicked and the word is wrapped with a tag
+                // e.g. strong then select the strong tag.
+                var firstSelectable = range._getFirstSelectableChild(startNode.nextSibling);
+                var lastSelectable  = range._getLastSelectableChild(startNode.nextSibling);
+                range.setStart(firstSelectable, 0);
+                range.setEnd(lastSelectable, lastSelectable.data.length);
+                ViperSelection.addRange(range);
+            } else if (endNode && endNode.nodeType === ViperUtil.TEXT_NODE
+                && range.endOffset === 0
+                && endNode !== startNode
+                && endNode.previousSibling
+                && endNode.previousSibling.nodeType !== ViperUtil.TEXT_NODE
+            ) {
+                // When a word at the end of a tag is double clicked then move the
+                // end of the range to the last selectable child of that tag.
+                var textChild = range._getLastSelectableChild(endNode.previousSibling);
+                if (textChild) {
+                    range.setEnd(textChild, textChild.data.length);
+                    ViperSelection.addRange(range);
+                }
+            } else if (startNode && startNode.nodeType === ViperUtil.TEXT_NODE
+                && endNode && endNode.nodeType === ViperUtil.TEXT_NODE
+                && startNode.data.length === range.startOffset
+                && startNode !== endNode
+                && startNode.nextSibling
+                && startNode.nextSibling.nodeType !== ViperUtil.TEXT_NODE
+            ) {
+                // A range starts at the end of a text node and the next sibling
+                // is not a text node so move the range inside the first selectable
+                // child of the next sibling. This usually happens in FF when you
+                // double click a word which is at the start of a strong/em/u tag,
+                // we move the range inside the tag.
+                var firstSelectable = range._getFirstSelectableChild(startNode.nextSibling);
+                if (firstSelectable) {
+                    range.setStart(firstSelectable, 0);
+                    ViperSelection.addRange(range);
+                }
+            }
+        } else if (startNode
             && endNode
             && startNode.nodeType === ViperUtil.TEXT_NODE
             && endNode.nodeType === ViperUtil.TEXT_NODE
