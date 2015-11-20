@@ -1068,6 +1068,15 @@ ViperDOMRange.prototype = {
         ) {
             this._nodeSel.node = range.endContainer.childNodes[range.endContainer.childNodes.length - 1];
             return this._nodeSel.node;
+        } else if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
+            && range.endContainer.nodeType === ViperUtil.TEXT_NODE
+            && range.startOffset === range.startContainer.data.length
+            && range.endOffset === 0
+            && range.startContainer.nextSibling === range.endContainer.previousSibling
+            && range.startContainer.nextSibling.nodeType === ViperUtil.ELEMENT_NODE
+        ) {
+            this._nodeSel.node = range.startContainer.nextSibling;
+            return this._nodeSel.node;
         }
 
         // We may need to adjust the "startNode" depending on its offset.
