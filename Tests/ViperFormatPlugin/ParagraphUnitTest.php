@@ -687,6 +687,49 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
 
     }//end testDeletingItalicParagraph()
 
+
+    /**
+     * Tests changing a paragraph to a quote and back again.
+     *
+     * @return void
+     */
+    public function testAddingContentAroundParagraph()
+    {
+        $this->useTest(9);
+
+        // Test adding before paragraph
+        $this->moveToKeyword(1, 'left');
+        $this->type(' test ');
+
+        // Test adding additional content to added content
+        for ($i = 0; $i < 6; $i++) {
+            $this->sikuli->keyDown('Key.LEFT');
+        }
+        
+        $this->type(' ');
+        $this->assertHTMLMatch('<p>test %1%Test content more test content even more %2%test content and even more test content.%3%</p>');
+
+        // Test adding in the middle of paragraph
+        $this->moveToKeyword(2, 'right');
+        $this->type(' test ');
+
+        // Test adding additional content to added content
+        for ($i = 0; $i < 6; $i++) {
+            $this->sikuli->keyDown('Key.LEFT');
+        }
+        $this->type(' ');
+        $this->assertHTMLMatch('<p>test %1%Test content more test content even more %2%&nbsp;&nbsp;test test content and even more test content.%3%</p>');
+
+        // Test adding after of paragraph
+        $this->moveToKeyword(3, 'right');
+        $this->type(' test ');
+
+        // Test adding additional content to added content
+        $this->type(' ');
+        $this->assertHTMLMatch('<p>test %1%Test content more test content even more %2%&nbsp;&nbsp;test test content and even more test content.%3% test</p>');
+
+    }//end testAddingContentAroundParagraph()
+
 }//end class
 
 ?>

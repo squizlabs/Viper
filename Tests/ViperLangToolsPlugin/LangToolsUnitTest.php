@@ -25,7 +25,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsUnitTest extends AbstractViperUn
         $this->assertHTMLMatch('<p>This is some %1% content</p><p>Squiz<abbr title="abc"><span lang="en">%2%</span></abbr> is orsm</p><p>Squiz<abbr title="abc">%3%</abbr> is orsm</p><p>Squiz<acronym title="abc">%4%</acronym> is orsm</p>');
 
         // Check that the language button is still active
-        $this->assertTrue($this->topToolbarButtonExists('Language', NULL, TRUE), 'Language button should still be active');
+        $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should still be active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', NULL, TRUE), 'Acronym button should not be active');
 
@@ -153,7 +153,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsUnitTest extends AbstractViperUn
         $this->assertHTMLMatch('<p>This is some %1% content</p><p>Squiz<acronym title="abc"><span lang="en">%2%</span></acronym> is orsm</p><p>Squiz<abbr title="abc">%3%</abbr> is orsm</p><p>Squiz<acronym title="abc">%4%</acronym> is orsm</p>');
 
         // Check that the language button is no longer active as you are now on the abbr instead of the span
-        $this->assertTrue($this->topToolbarButtonExists('Language', NULL, TRUE), 'Language button should no longer be active');
+        $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should  be active');
 
         $this->selectKeyword(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
@@ -226,7 +226,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsUnitTest extends AbstractViperUn
         $this->assertHTMLMatch('<p>This is some %1% content</p><p>Squiz<abbr title="abc"><acronym lang="en" title="abc">%2%</acronym></abbr> is orsm</p><p>Squiz<acronym title="abc"><span lang="en">%3%</span></acronym> is orsm</p>');
 
         // Check that the language button is no longer active as you are now on the abbr instead of the span
-        $this->assertTrue($this->topToolbarButtonExists('Language', NULL, TRUE), 'Language button should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should not be active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should not be active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'selected', TRUE), 'Abbreviation button should be selected');
 
@@ -266,8 +266,8 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsUnitTest extends AbstractViperUn
         $this->assertHTMLMatch('<p>This is some %1% content</p><p>Squiz<acronym lang="en" title="abc">%2%</acronym> is orsm</p><p>Squiz<acronym title="abc"><abbr title="abc"><span lang="en">%3%</span></abbr></acronym> is orsm</p>');
 
         // Check that the language button is no longer active as you are now on the abbr instead of the span
-        $this->assertTrue($this->topToolbarButtonExists('Language', NULL, TRUE), 'Language button should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('Acronym', NULL, TRUE), 'Acronym button should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should not be active');
 
         $this->selectKeyword(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
@@ -308,7 +308,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsUnitTest extends AbstractViperUn
         $this->assertHTMLMatch('<p>This is some %1% content</p><p>Squiz<acronym title="abc"><abbr lang="abc" title="abc">%2%</abbr></acronym> is orsm</p><p>Squiz<abbr title="abc"><acronym title="abc">%3%</acronym></abbr> is orsm</p>');
 
         // Check that the language button is no longer active as you are now on the abbr instead of the span
-        $this->assertTrue($this->topToolbarButtonExists('Acronym', NULL, TRUE), 'Acronym button should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should not be active');
         $this->assertTrue($this->topToolbarButtonExists('Language', 'selected', TRUE), 'Language button should not be active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should not be active');
 
@@ -348,7 +348,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsUnitTest extends AbstractViperUn
         $this->assertHTMLMatch('<p>This is some %1% content</p><p>Squiz<acronym title="abc"><abbr title="abc">%2%</abbr></acronym> is orsm</p><p>Squiz<abbr title="abc"><acronym lang="abc" title="abc">%3%</acronym></abbr> is orsm</p>');
 
         // Check that the language button is no longer active as you are now on the abbr instead of the span
-        $this->assertTrue($this->topToolbarButtonExists('Abbreviation', NULL, TRUE), 'Abbreviation button should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should not be active');
         $this->assertTrue($this->topToolbarButtonExists('Language', 'selected', TRUE), 'Language button should be selected');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
 
@@ -388,7 +388,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsUnitTest extends AbstractViperUn
         $this->assertHTMLMatch('<p>This is some %1% content</p><p>Squiz<abbr title="abc"><acronym title="abc"><span lang="en">%2%</span></acronym> is orsm</abbr></p><p>Squiz<abbr lang="en" title="abc">%3% is orsm</abbr></p>');
 
         // Check that the language button is no longer active as you are now on the abbr instead of the span
-        $this->assertTrue($this->topToolbarButtonExists('Language', NULL, TRUE), 'Language button should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should not be active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'selected', TRUE), 'Acronym button should be selected');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', NULL, TRUE), 'Abbreviation button should be not active');
 
@@ -527,9 +527,9 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsUnitTest extends AbstractViperUn
         // Test language applied to acronym
         $this->clickKeyword(1);
         $this->clickTopToolbarButton('langTools', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('Language', 'disabled', TRUE), 'Language button should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should be active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
-        $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'disabled', TRUE), 'Abbreviation button should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'disabled', TRUE), 'Abbreviation button should be active');
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
@@ -542,7 +542,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsUnitTest extends AbstractViperUn
         // Test language applied to abbreviation
         $this->clickKeyword(2);
         $this->clickTopToolbarButton('langTools', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('Language', 'disabled', TRUE), 'Language button should be active');
+        $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should be active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'disabled', TRUE), 'Acronym button should not be active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
 
@@ -662,7 +662,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsUnitTest extends AbstractViperUn
         // Test language applied to acronym applied to abbreviation
         $this->clickKeyword(1);
         $this->clickTopToolbarButton('langTools', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('Language', 'disabled', TRUE), 'Language button should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should not be active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
 
@@ -685,7 +685,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsUnitTest extends AbstractViperUn
         // Test language applied to abbreviation applied to acronym
         $this->clickKeyword(2);
         $this->clickTopToolbarButton('langTools', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('Language', 'disabled', TRUE), 'Language button should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should not be active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
 
@@ -708,7 +708,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsUnitTest extends AbstractViperUn
         // Test abbreviation applied to language applied to acronym
         $this->clickKeyword(3);
         $this->clickTopToolbarButton('langTools', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('Language', 'disabled', TRUE), 'Language button should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should not be active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
 
@@ -760,7 +760,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsUnitTest extends AbstractViperUn
         // Test acronym applied to language applied to abbreviation
         $this->clickKeyword(5);
         $this->clickTopToolbarButton('langTools', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('Language', 'disabled', TRUE), 'Language button should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should not be active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
 
@@ -810,8 +810,6 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsUnitTest extends AbstractViperUn
         $this->clickKeyword(6);
 
     }//end testCorrectLanguageIconsTripleTags()
-
-
 
 }//end class
 
