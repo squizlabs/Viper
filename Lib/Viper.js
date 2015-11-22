@@ -5330,7 +5330,7 @@ Viper.prototype = {
         setTimeout(function() {
             var range = null;
             try {
-        //        range = self.adjustRange();
+                range = self.adjustRange();
             } catch (e) {
             }
 
