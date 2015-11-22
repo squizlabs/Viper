@@ -21,6 +21,7 @@ function ViperInlineToolbarPlugin(viper)
     this._margin              = 15;
     this._toolbarWidget       = null;
     this._selectionLineage    = [];
+    this._toolbarElement      = null;
 
     this._subSections             = {};
     this._subSectionButtons       = {};
@@ -48,8 +49,10 @@ ViperInlineToolbarPlugin.prototype = {
 
         });
 
-        this.viper.registerCallback('Viper:rightMouseDown', 'ViperInlineToolbarPlugin', function() {
-            self.hideToolbar();
+        this.viper.registerCallback('Viper:rightMouseDown', 'ViperInlineToolbarPlugin', function(e) {
+            if (ViperUtil.isChildOf(e.target, self._toolbarElement) === false) {
+                self.hideToolbar();
+            }
         });
 
         this.viper.registerCallback('Viper:getNodeSelection', 'ViperInlineToolbarPlugin', function(data) {
@@ -104,6 +107,7 @@ ViperInlineToolbarPlugin.prototype = {
         ViperUtil.addClass(lineage, 'ViperITP-lineage');
         ViperUtil.insertBefore(toolbarElem.firstChild, lineage);
         this._lineage = lineage;
+        this._toolbarElement = toolbarElem;
 
         var toolbar = tools.getItem(toolbarid);
         this.viper.fireCallbacks('ViperInlineToolbarPlugin:initToolbar', toolbar);
