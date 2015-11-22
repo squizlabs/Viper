@@ -34,6 +34,7 @@ function Viper(id, options, callback, editables)
     this._registeredElements = [];
     this._attributeGetModifiers = [];
     this._attributeSetModifiers = [];
+    this._mouseDownEvent        = null;
 
     // This var is used to store the range of Viper before it loses focus. Any plugins
     // that steal focus from Viper element can use getPreviousRange.
@@ -5252,6 +5253,7 @@ Viper.prototype = {
 
     mouseDown: function(e)
     {
+        this._mouseDownEvent = e;
         if (e.which === 3) {
             this.fireCallbacks('Viper:rightMouseDown', e);
             return false;
@@ -5328,7 +5330,7 @@ Viper.prototype = {
         setTimeout(function() {
             var range = null;
             try {
-                range = self.adjustRange();
+        //        range = self.adjustRange();
             } catch (e) {
             }
 

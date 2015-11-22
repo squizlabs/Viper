@@ -55,6 +55,13 @@ ViperInlineToolbarPlugin.prototype = {
             }
         });
 
+        this.viper.registerCallback('Viper:mouseUp', 'ViperInlineToolbarPlugin', function(e) {
+            if (ViperUtil.isChildOf(self.viper._mouseDownEvent.target, self._toolbarElement) === true) {
+                // The mouse down event happened in the Inline Toolbar so do not fire mouse up event.
+                return false;
+            }
+        });
+
         this.viper.registerCallback('Viper:getNodeSelection', 'ViperInlineToolbarPlugin', function(data) {
             var lineage         = self.getLineage();
             var currentLinIndex = self.getCurrentLineageIndex();
@@ -558,7 +565,7 @@ ViperInlineToolbarPlugin.prototype = {
         range             = range || this.viper.getViperRange();
         var lineage       = [];
         var parent        = null;
-      
+
         var nodeSelection = nodeSelection || range.getNodeSelection(range, true);
 
         if (nodeSelection) {
