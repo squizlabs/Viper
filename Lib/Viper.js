@@ -5404,6 +5404,21 @@ Viper.prototype = {
             }
         }
 
+        if (endNode && endNode.nodeType === ViperUtil.TEXT_NODE
+            && range.endOffset === 0
+            && endNode !== startNode
+            && endNode.previousSibling
+            && endNode.previousSibling.nodeType !== ViperUtil.TEXT_NODE
+        ) {
+            // When a word at the end of a tag is double clicked then move the
+            // end of the range to the last selectable child of that tag.
+            var textChild = range._getLastSelectableChild(endNode.previousSibling);
+            if (textChild) {
+                range.setEnd(textChild, textChild.data.length);
+                ViperSelection.addRange(range);
+            }
+        }
+
         if (ViperUtil.isBrowser('firefox') === true) {
             if (startNode && startNode.nodeType === ViperUtil.TEXT_NODE
                 && endNode && endNode.nodeType === ViperUtil.TEXT_NODE
@@ -5420,19 +5435,6 @@ Viper.prototype = {
                 range.setStart(firstSelectable, 0);
                 range.setEnd(lastSelectable, lastSelectable.data.length);
                 ViperSelection.addRange(range);
-            } else if (endNode && endNode.nodeType === ViperUtil.TEXT_NODE
-                && range.endOffset === 0
-                && endNode !== startNode
-                && endNode.previousSibling
-                && endNode.previousSibling.nodeType !== ViperUtil.TEXT_NODE
-            ) {
-                // When a word at the end of a tag is double clicked then move the
-                // end of the range to the last selectable child of that tag.
-                var textChild = range._getLastSelectableChild(endNode.previousSibling);
-                if (textChild) {
-                    range.setEnd(textChild, textChild.data.length);
-                    ViperSelection.addRange(range);
-                }
             } else if (startNode && startNode.nodeType === ViperUtil.TEXT_NODE
                 && endNode && endNode.nodeType === ViperUtil.TEXT_NODE
                 && startNode.data.length === range.startOffset

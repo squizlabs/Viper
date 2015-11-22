@@ -554,6 +554,7 @@ ViperInlineToolbarPlugin.prototype = {
         range             = range || this.viper.getViperRange();
         var lineage       = [];
         var parent        = null;
+      
         var nodeSelection = nodeSelection || range.getNodeSelection(range, true);
 
         if (nodeSelection) {
@@ -612,6 +613,12 @@ ViperInlineToolbarPlugin.prototype = {
 
                         lineage = lineage.reverse();
                         return lineage;
+                    } else if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                        && range.endContainer.nodeType === ViperUtil.TEXT_NODE
+                        && range.endOffset === 0
+                        && range.getPreviousContainer(range.endContainer) === range.startContainer
+                    ) {
+                        lineage.push(range.startContainer.parentNode);
                     }
                 }
             }
