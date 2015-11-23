@@ -923,7 +923,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 } else {
                     range.startContainer.splitText(range.startOffset);
                     range.startContainer.data = range.startContainer.data.substring(0, range.startOffset - 1);
-                    if (range.startContainer.nextSibling 
+                    if (range.startContainer.nextSibling
                         && range.startContainer.nextSibling.nodeType === ViperUtil.TEXT_NODE
                     ) {
                         // If the range was at the end of the text node then splitText does not
@@ -993,7 +993,7 @@ ViperKeyboardEditorPlugin.prototype = {
                             && startNode.parentNode.parentNode.nextSibling === null
                             && startNode.parentNode.parentNode.previousSibling === null
                         ) {
-                            // This list is the only element in the content, initialise the content 
+                            // This list is the only element in the content, initialise the content
                             // after removing the list.
                             ViperUtil.remove(startNode.parentNode.parentNode);
                             this.viper.initEditableElement();
@@ -1738,7 +1738,7 @@ ViperKeyboardEditorPlugin.prototype = {
             ) {
                  // Check if there is a parent element with a selectable.
                 var prevSelectable = range.getPreviousContainer(firstSelectable, null, true, true);
-                if (prevSelectable) {
+                if (prevSelectable && this.viper.isOutOfBounds(prevSelectable) === false) {
                     while (firstBlock.lastChild) {
                         ViperUtil.insertAfter(prevSelectable, firstBlock.lastChild);
                     }
