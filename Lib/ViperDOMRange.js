@@ -1165,39 +1165,6 @@ ViperDOMRange.prototype = {
             }
         }
 
-        var startParent = startNode;
-        while (startParent && startParent.parentNode !== common) {
-            startParent = startParent.parentNode;
-        }
-
-        if (!startParent) {
-            this._nodeSel.node = null;
-            return null;
-        }
-
-        var nextSibling = startParent.nextSibling;
-        if (!nextSibling && startParent.nodeType !== ViperUtil.TEXT_NODE && ViperUtil.getFirstElementChild(startParent.parentNode) === startParent) {
-            this._nodeSel.node = startNode.parentNode;
-            return startNode.parentNode;
-        }
-
-        /*var endParent = endNode;
-        while (endParent && endParent.parentNode !== common) {
-            endParent = endParent.parentNode;
-        }
-
-        while (nextSibling
-            && nextSibling.nodeType === ViperUtil.TEXT_NODE
-            && ViperUtil.isBlank(nextSibling.data) === true
-        ) {
-            nextSibling = nextSibling.nextSibling;
-        }
-
-        if (nextSibling === endParent) {
-            this._nodeSel.node = null;
-            return startParent;
-        }*/
-
         this._nodeSel.node = null;
         return null;
 
