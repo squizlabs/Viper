@@ -2366,7 +2366,7 @@ ViperCopyPastePlugin.prototype = {
                 'I': ['^[IVXLCDM]+[\\.\\)](\\s|&nbsp;)+'],
                 'a': ['^[a-z]+[\\.\\)](\\s|&nbsp;)+'],
                 'A': ['^[A-Z]+[\\.\\)](\\s|&nbsp;)+'],
-                decimal: ['^((?:\\d+|[a-z]+)[\\.\\)]?)+(?:\\s|&nbsp;)+']
+                decimal: ['^((?:\\d+|[a-z][^a-z])[\\.\\)]?)+(?:\\s|&nbsp;)+']
             }
         };
 
