@@ -1097,10 +1097,10 @@ ViperCopyPastePlugin.prototype = {
                 var bookmark = this.viper.createBookmark();
                 this._insertTmpNodeBeforeBookmark(bookmark);
             }
-                
+
             range.setEnd(this._tmpNode, 0);
             range.collapse(false);
-        
+
             if (ViperUtil.getHtml(viperElem) !== '') {
                 if (viperElem.firstChild === viperElem.lastChild
                     && (viperElem.firstChild === null || ViperUtil.isTag(viperElem.firstChild, 'br') === true)
@@ -2397,6 +2397,10 @@ ViperCopyPastePlugin.prototype = {
                 listType = 'ul';
             }
 
+            if (ViperUtil.isTag(pEl.parentNode, 'li') === true) {
+                listType = ViperUtil.getTagName(pEl.parentNode.parentNode);
+            }
+
             if (!level) {
                 level = prevLevel || 1;
             } else {
@@ -2427,7 +2431,14 @@ ViperCopyPastePlugin.prototype = {
                 }
 
                 indentLvl[level] = ul;
-                ViperUtil.insertBefore(pEl, ul);
+                if (ViperUtil.isTag(pEl.parentNode, 'li') === true) {
+                    // IE somtimes have this strucuture: <ul><li><p>..</p><p>..</p>..</li></ul>.
+                    // Move the P before the list element.
+                    ViperUtil.insertBefore(pEl.parentNode.parentNode, ul);
+                    ViperUtil.remove(pEl.parentNode.parentNode);
+                } else {
+                    ViperUtil.insertBefore(pEl, ul);
+                }
             } else {
                 if (level !== prevLevel) {
                     if (ViperUtil.isset(indentLvl[level]) === true) {
