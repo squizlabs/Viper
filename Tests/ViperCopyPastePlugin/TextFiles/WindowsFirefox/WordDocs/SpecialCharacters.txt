@@ -16,11 +16,11 @@
 
 <p class="MsoNormal"><span lang="EN-US">[ ]</span></p>
 
-<p class="MsoNormal"><span lang="EN-US">; ìaî ëbí </span></p>
+<p class="MsoNormal"><span lang="EN-US">; ‚Äúa‚Äù ‚Äòb‚Äô </span></p>
 
 <p class="MsoNormal"><span lang="EN-US">, . / </span></p>
 
-<p class="MsoNormal"><span lang="EN-US">Ö </span></p>
+<p class="MsoNormal"><span lang="EN-US">‚Ä¶ </span></p>
 
 <p class="MsoNormal"><a name="_GoBack"></a><span lang="EN-US">q w e r t y u i o p </span></p>
 

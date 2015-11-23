@@ -63,7 +63,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarCoreStylesUnitTest exten
 
         $this->clickTopToolbarButton('subscript');
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Subscript</li>', $lineage);
 
         $this->clickTopToolbarButton('subscript', 'active');
         $lineage = $this->getHtml('.ViperITP-lineage');
@@ -85,7 +85,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarCoreStylesUnitTest exten
 
         $this->clickTopToolbarButton('superscript');
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Superscript</li>', $lineage);
 
         $this->clickTopToolbarButton('superscript', 'active');
         $lineage = $this->getHtml('.ViperITP-lineage');
@@ -107,7 +107,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarCoreStylesUnitTest exten
 
         $this->clickTopToolbarButton('strikethrough');
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Strikethrough</li>', $lineage);
 
         $this->clickTopToolbarButton('strikethrough', 'active');
         $lineage = $this->getHtml('.ViperITP-lineage');
@@ -177,12 +177,12 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarCoreStylesUnitTest exten
         $this->selectKeyword(7);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">SUB</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Subscript</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(1);
         $this->assertEquals($this->replaceKeywords('%7% %8%'), $this->getSelectedText(), 'Subscript text is not selected.');
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SUB</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Subscript</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
         $this->selectKeyword(8);
         $this->selectInlineToolbarLineageItem(1);
@@ -200,13 +200,13 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarCoreStylesUnitTest exten
     {
         $this->selectKeyword(9);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">SUP</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Superscript</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(1);
 
         $this->assertEquals($this->replaceKeywords('%9% %10%'), $this->getSelectedText(), 'Superscript text is not selected.');
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SUP</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Superscript</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
         $this->selectKeyword(10);
         $this->selectInlineToolbarLineageItem(1);
@@ -224,13 +224,13 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarCoreStylesUnitTest exten
     {
         $this->selectKeyword(11);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">DEL</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Strikethrough</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
 
         $this->selectInlineToolbarLineageItem(1);
 
         $this->assertEquals($this->replaceKeywords('%11% out'), $this->getSelectedText(), 'Strikethrough text is not selected.');
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">DEL</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Strikethrough</li><li class="ViperITP-lineageItem">Selection</li>', $lineage);
 
     }//end testSelectingTheStrikethroughTagInTheLineage()
 

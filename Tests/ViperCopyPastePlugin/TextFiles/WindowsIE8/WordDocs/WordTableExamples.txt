@@ -1,5 +1,5 @@
 <H1 style="MARGIN: 24pt 0cm 0pt"><FONT color=#365f91 face=Cambria size=5>Built in Word 2010 Table Templates Test</FONT></H1>
-<P class=MsoNormal style="MARGIN: 0cm 0cm 10pt"><FONT color=#000000 face=Calibri size=3>These are from Insert &gt; Table &gt; Quick Tables &gt; … </FONT></P>
+<P class=MsoNormal style="MARGIN: 0cm 0cm 10pt"><FONT color=#000000 face=Calibri size=3>These are from Insert &gt; Table &gt; Quick Tables &gt; â€¦ </FONT></P>
 <H2 style="MARGIN: 10pt 0cm 0pt"><FONT color=#4f81bd face=Cambria size=4>Calendar 1 (No Header Row Set)</FONT></H2>
 <TABLE class=Calendar1 style="BORDER-COLLAPSE: collapse; mso-yfti-tbllook: 1184; mso-padding-alt: 0cm 5.4pt 0cm 5.4pt" border=0 cellSpacing=0 cellPadding=0>
 <TBODY>

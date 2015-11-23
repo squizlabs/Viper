@@ -2,7 +2,7 @@
 
 </font><h1 style="margin: 24pt 0cm 0pt;"><font color="#365f91" face="Cambria" size="5">Built in Word 2010 Table Templates Test</font></h1><font color="#000000" face="Times New Roman" size="3">
 
-</font><p class="MsoNormal" style="margin: 0cm 0cm 10pt;"><font color="#000000" face="Calibri" size="3">These are from Insert &gt; Table &gt; Quick Tables &gt; … </font></p><font color="#000000" face="Times New Roman" size="3">
+</font><p class="MsoNormal" style="margin: 0cm 0cm 10pt;"><font color="#000000" face="Calibri" size="3">These are from Insert &gt; Table &gt; Quick Tables &gt; â€¦ </font></p><font color="#000000" face="Times New Roman" size="3">
 
 </font><h2 style="margin: 10pt 0cm 0pt;"><font color="#4f81bd" face="Cambria" size="4">Calendar 1 (No Header Row Set)</font></h2><font color="#000000" face="Times New Roman" size="3">
 
