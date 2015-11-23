@@ -4926,10 +4926,6 @@ Viper.prototype = {
             var nodeSelection = null;
             if (resetContent !== true) {
                 nodeSelection = range.getNodeSelection(range, true);
-                if (nodeSelection) {
-                    nodeSelection = range.getNodeSelection(range, true);
-                }
-
                 if (nodeSelection && nodeSelection === this.element) {
                     resetContent = true;
                 }
@@ -4987,18 +4983,24 @@ Viper.prototype = {
                         break;
 
                         default:
-                            // Set the content of the existing tag.
-                            ViperUtil.setHtml(nodeSelection, '');
-
-                            if (ViperUtil.isTag(nodeSelection, 'blockquote') === true) {
-                                // Blockquote must have at least one P tag.
-                                var quoteP = document.createElement('p');
-                                nodeSelection.appendChild(quoteP);
-                                nodeSelection = quoteP;
-                            }
-
                             var textNode = document.createTextNode(String.fromCharCode(e.which));
-                            nodeSelection.appendChild(textNode);
+
+                            if (ViperUtil.isStubElement(nodeSelection) === true) {
+                                ViperUtil.insertBefore(nodeSelection, textNode);
+                                ViperUtil.remove(nodeSelection);
+                            } else {
+                                // Set the content of the existing tag.
+                                ViperUtil.setHtml(nodeSelection, '');
+
+                                if (ViperUtil.isTag(nodeSelection, 'blockquote') === true) {
+                                    // Blockquote must have at least one P tag.
+                                    var quoteP = document.createElement('p');
+                                    nodeSelection.appendChild(quoteP);
+                                    nodeSelection = quoteP;
+                                }
+
+                                nodeSelection.appendChild(textNode);
+                            }
 
                             range.setStart(textNode, 1);
                             range.collapse(true);
