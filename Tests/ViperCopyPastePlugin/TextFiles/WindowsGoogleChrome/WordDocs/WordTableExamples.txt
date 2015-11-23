@@ -1422,7 +1422,7 @@ table.Calendar4NWCell
 
 <h1>Built in Word 2010 Table Templates Test</h1>
 
-<p class="MsoNormal">These are from Insert &gt; Table &gt; Quick Tables &gt; … </p>
+<p class="MsoNormal">These are from Insert &gt; Table &gt; Quick Tables &gt; â€¦ </p>
 
 <h2>Calendar 1 (No Header Row Set)</h2>
 

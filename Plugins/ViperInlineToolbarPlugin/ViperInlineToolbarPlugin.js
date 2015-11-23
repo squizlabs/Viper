@@ -21,6 +21,7 @@ function ViperInlineToolbarPlugin(viper)
     this._margin              = 15;
     this._toolbarWidget       = null;
     this._selectionLineage    = [];
+    this._toolbarElement      = null;
 
     this._subSections             = {};
     this._subSectionButtons       = {};
@@ -48,8 +49,17 @@ ViperInlineToolbarPlugin.prototype = {
 
         });
 
-        this.viper.registerCallback('Viper:rightMouseDown', 'ViperInlineToolbarPlugin', function() {
-            self.hideToolbar();
+        this.viper.registerCallback('Viper:rightMouseDown', 'ViperInlineToolbarPlugin', function(e) {
+            if (ViperUtil.isChildOf(e.target, self._toolbarElement) === false) {
+                self.hideToolbar();
+            }
+        });
+
+        this.viper.registerCallback('Viper:mouseUp', 'ViperInlineToolbarPlugin', function(e) {
+            if (ViperUtil.isChildOf(self.viper._mouseDownEvent.target, self._toolbarElement) === true) {
+                // The mouse down event happened in the Inline Toolbar so do not fire mouse up event.
+                return false;
+            }
         });
 
         this.viper.registerCallback('Viper:getNodeSelection', 'ViperInlineToolbarPlugin', function(data) {
@@ -104,6 +114,7 @@ ViperInlineToolbarPlugin.prototype = {
         ViperUtil.addClass(lineage, 'ViperITP-lineage');
         ViperUtil.insertBefore(toolbarElem.firstChild, lineage);
         this._lineage = lineage;
+        this._toolbarElement = toolbarElem;
 
         var toolbar = tools.getItem(toolbarid);
         this.viper.fireCallbacks('ViperInlineToolbarPlugin:initToolbar', toolbar);
@@ -281,6 +292,18 @@ ViperInlineToolbarPlugin.prototype = {
 
             case 'del':
                 tagName = _('Strikethrough');
+            break;
+
+            case 'thead':
+                tagName = _('Table Header');
+            break;
+
+            case 'tfoot':
+                tagName = _('Table Footer');
+            break;
+
+            case 'tbody':
+                tagName = _('Table Body');
             break;
 
             default:
@@ -542,6 +565,7 @@ ViperInlineToolbarPlugin.prototype = {
         range             = range || this.viper.getViperRange();
         var lineage       = [];
         var parent        = null;
+
         var nodeSelection = nodeSelection || range.getNodeSelection(range, true);
 
         if (nodeSelection) {
@@ -600,6 +624,12 @@ ViperInlineToolbarPlugin.prototype = {
 
                         lineage = lineage.reverse();
                         return lineage;
+                    } else if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                        && range.endContainer.nodeType === ViperUtil.TEXT_NODE
+                        && range.endOffset === 0
+                        && range.getPreviousContainer(range.endContainer) === range.startContainer
+                    ) {
+                        lineage.push(range.startContainer.parentNode);
                     }
                 }
             }

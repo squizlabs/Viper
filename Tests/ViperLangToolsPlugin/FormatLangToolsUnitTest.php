@@ -3,7 +3,7 @@
 require_once 'AbstractViperUnitTest.php';
 
 class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractViperUnitTest
-{    
+{
 
     /**
      * Test that icons appear when they should depending on language tools applied.
@@ -26,7 +26,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Span</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(1);
@@ -41,7 +41,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(2);
@@ -56,7 +56,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(3);
@@ -85,7 +85,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(1);
@@ -100,7 +100,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(2);
@@ -115,7 +115,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(3);
@@ -123,7 +123,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Span</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(3);
@@ -138,7 +138,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(4);
@@ -146,11 +146,11 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(4);
-   
+
         // Test acronym applied to language
         $this->clickKeyword(5);
         $this->clickTopToolbarButton('langTools', 'active');
@@ -161,7 +161,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('ACronym', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(5);
@@ -169,7 +169,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Span</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(5);
@@ -184,7 +184,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(6);
@@ -192,7 +192,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(6);
@@ -207,7 +207,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
      */
     public function testCorrectLanguageIconsWithBoldFormatTripleTags()
     {
-        
+
         $this->useTest(3);
 
         // Test language applied to acronym applied to abbreviation
@@ -220,7 +220,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(1);
@@ -228,7 +228,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(1);
@@ -243,7 +243,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(2);
@@ -251,7 +251,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(2);
@@ -259,7 +259,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
         $this->clickKeyword(2);
 
         // Test abbreviation applied to language applied to acronym
@@ -272,7 +272,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(3);
@@ -280,7 +280,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(3);
@@ -288,9 +288,9 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
        $this->clickKeyword(3);
- 
+
         // Test abbreviation applied to acronym applied to language
         $this->clickKeyword(4);
         $this->clickTopToolbarButton('langTools', 'active');
@@ -301,7 +301,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(4);
@@ -309,7 +309,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(4);
@@ -317,13 +317,13 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Span</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
        $this->clickKeyword(4);
 
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(4);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
        $this->clickKeyword(4);
 
         // Test acronym applied to language applied to abbreviation
@@ -336,7 +336,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(5);
@@ -344,7 +344,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(5);
@@ -352,7 +352,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
         $this->clickKeyword(5);
 
 
@@ -366,7 +366,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(6);
@@ -374,7 +374,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(6);
@@ -382,13 +382,13 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Span</li><li class="ViperITP-lineageItem">Bold</li>', $lineage);
         $this->clickKeyword(6);
 
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(4);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem Viper-selected">Bold</li>', $lineage);
         $this->clickKeyword(6);
 
     }//end testCorrectLanguageIconsWithBoldFormatTripleTags()
@@ -415,7 +415,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Span</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(1);
@@ -430,7 +430,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(2);
@@ -445,7 +445,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(3);
@@ -474,7 +474,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(1);
@@ -489,7 +489,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(2);
@@ -504,7 +504,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(3);
@@ -512,7 +512,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Span</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(3);
@@ -527,7 +527,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(4);
@@ -535,11 +535,11 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(4);
-   
+
         // Test acronym applied to language
         $this->clickKeyword(5);
         $this->clickTopToolbarButton('langTools', 'active');
@@ -550,7 +550,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('ACronym', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(5);
@@ -558,7 +558,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Span</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(5);
@@ -573,7 +573,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(6);
@@ -581,7 +581,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(6);
@@ -596,7 +596,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
      */
     public function testCorrectLanguageIconsWithItalicFormatTripleTags()
     {
-        
+
         $this->useTest(6);
 
         // Test language applied to acronym applied to abbreviation
@@ -609,7 +609,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(1);
@@ -617,7 +617,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(1);
@@ -632,7 +632,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(2);
@@ -640,7 +640,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(2);
@@ -648,7 +648,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
         $this->clickKeyword(2);
 
         // Test abbreviation applied to language applied to acronym
@@ -661,7 +661,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(3);
@@ -669,7 +669,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(3);
@@ -677,9 +677,9 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
        $this->clickKeyword(3);
- 
+
         // Test abbreviation applied to acronym applied to language
         $this->clickKeyword(4);
         $this->clickTopToolbarButton('langTools', 'active');
@@ -690,7 +690,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(4);
@@ -698,7 +698,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(4);
@@ -706,13 +706,13 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Span</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
        $this->clickKeyword(4);
 
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(4);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
        $this->clickKeyword(4);
 
         // Test acronym applied to language applied to abbreviation
@@ -725,7 +725,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(5);
@@ -733,7 +733,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(5);
@@ -741,7 +741,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
         $this->clickKeyword(5);
 
 
@@ -755,7 +755,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(6);
@@ -763,7 +763,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(6);
@@ -771,13 +771,13 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Span</li><li class="ViperITP-lineageItem">Italic</li>', $lineage);
         $this->clickKeyword(6);
 
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(4);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem Viper-selected">Italic</li>', $lineage);
         $this->clickKeyword(6);
 
     }//end testCorrectLanguageIconsWithItalicFormatTripleTags()
@@ -804,7 +804,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Span</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(1);
@@ -819,7 +819,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(2);
@@ -834,7 +834,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(3);
@@ -863,7 +863,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(1);
@@ -878,7 +878,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(2);
@@ -893,7 +893,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(3);
@@ -901,7 +901,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Span</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(3);
@@ -916,7 +916,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(4);
@@ -924,11 +924,11 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(4);
-   
+
         // Test acronym applied to language
         $this->clickKeyword(5);
         $this->clickTopToolbarButton('langTools', 'active');
@@ -939,7 +939,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('ACronym', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(5);
@@ -947,7 +947,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Span</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(5);
@@ -962,7 +962,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(6);
@@ -970,7 +970,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(6);
@@ -985,7 +985,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
      */
     public function testCorrectLanguageIconsWithStrikethroughFormatTripleTags()
     {
-        
+
         $this->useTest(9);
 
         // Test language applied to acronym applied to abbreviation
@@ -998,7 +998,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(1);
@@ -1006,7 +1006,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(1);
@@ -1021,7 +1021,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(2);
@@ -1029,7 +1029,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(2);
@@ -1037,7 +1037,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Strikethrough</li>', $lineage);
         $this->clickKeyword(2);
 
         // Test abbreviation applied to language applied to acronym
@@ -1050,7 +1050,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(3);
@@ -1058,7 +1058,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(3);
@@ -1066,9 +1066,9 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Strikethrough</li>', $lineage);
        $this->clickKeyword(3);
- 
+
         // Test abbreviation applied to acronym applied to language
         $this->clickKeyword(4);
         $this->clickTopToolbarButton('langTools', 'active');
@@ -1079,7 +1079,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(4);
@@ -1087,7 +1087,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(4);
@@ -1095,13 +1095,13 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Span</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
        $this->clickKeyword(4);
 
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(4);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem Viper-selected">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem Viper-selected">Strikethrough</li>', $lineage);
        $this->clickKeyword(4);
 
         // Test acronym applied to language applied to abbreviation
@@ -1114,7 +1114,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(5);
@@ -1122,7 +1122,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(5);
@@ -1130,7 +1130,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Strikethrough</li>', $lineage);
         $this->clickKeyword(5);
 
 
@@ -1144,7 +1144,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(6);
@@ -1152,7 +1152,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(6);
@@ -1160,13 +1160,13 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Span</li><li class="ViperITP-lineageItem">Strikethrough</li>', $lineage);
         $this->clickKeyword(6);
 
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(4);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem Viper-selected">DEL</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem Viper-selected">Strikethrough</li>', $lineage);
         $this->clickKeyword(6);
 
     }//end testCorrectLanguageIconsWithStrikethroughFormatTripleTags()
@@ -1193,7 +1193,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Span</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(1);
@@ -1208,7 +1208,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(2);
@@ -1223,7 +1223,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(3);
@@ -1252,7 +1252,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(1);
@@ -1267,7 +1267,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(2);
@@ -1282,7 +1282,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(3);
@@ -1290,7 +1290,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Span</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(3);
@@ -1305,7 +1305,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(4);
@@ -1313,11 +1313,11 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(4);
-   
+
         // Test acronym applied to language
         $this->clickKeyword(5);
         $this->clickTopToolbarButton('langTools', 'active');
@@ -1328,7 +1328,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('ACronym', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(5);
@@ -1336,7 +1336,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Span</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(5);
@@ -1351,7 +1351,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(6);
@@ -1359,7 +1359,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(6);
@@ -1374,7 +1374,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
      */
     public function testCorrectLanguageIconsWithSuperscriptFormatTripleTags()
     {
-        
+
         $this->useTest(12);
 
         // Test language applied to acronym applied to abbreviation
@@ -1387,7 +1387,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(1);
@@ -1395,7 +1395,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(1);
@@ -1410,7 +1410,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(2);
@@ -1418,7 +1418,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(2);
@@ -1426,7 +1426,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Superscript</li>', $lineage);
         $this->clickKeyword(2);
 
         // Test abbreviation applied to language applied to acronym
@@ -1439,7 +1439,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(3);
@@ -1447,7 +1447,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(3);
@@ -1455,9 +1455,9 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Superscript</li>', $lineage);
        $this->clickKeyword(3);
- 
+
         // Test abbreviation applied to acronym applied to language
         $this->clickKeyword(4);
         $this->clickTopToolbarButton('langTools', 'active');
@@ -1468,7 +1468,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(4);
@@ -1476,7 +1476,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(4);
@@ -1484,13 +1484,13 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Span</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
        $this->clickKeyword(4);
 
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(4);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem Viper-selected">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem Viper-selected">Superscript</li>', $lineage);
        $this->clickKeyword(4);
 
         // Test acronym applied to language applied to abbreviation
@@ -1503,7 +1503,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(5);
@@ -1511,7 +1511,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(5);
@@ -1519,7 +1519,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Superscript</li>', $lineage);
         $this->clickKeyword(5);
 
 
@@ -1533,7 +1533,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(6);
@@ -1541,7 +1541,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(6);
@@ -1549,13 +1549,13 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Span</li><li class="ViperITP-lineageItem">Superscript</li>', $lineage);
         $this->clickKeyword(6);
 
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(4);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem Viper-selected">SUP</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem Viper-selected">Superscript</li>', $lineage);
         $this->clickKeyword(6);
 
     }//end testCorrectLanguageIconsWithSuperscriptFormatTripleTags()
@@ -1582,7 +1582,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Span</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(1);
@@ -1597,7 +1597,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(2);
@@ -1612,7 +1612,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(3);
@@ -1641,7 +1641,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(1);
@@ -1656,7 +1656,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(2);
@@ -1671,7 +1671,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(3);
@@ -1679,7 +1679,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Span</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(3);
@@ -1694,7 +1694,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(4);
@@ -1702,11 +1702,11 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(4);
-   
+
         // Test acronym applied to language
         $this->clickKeyword(5);
         $this->clickTopToolbarButton('langTools', 'active');
@@ -1717,7 +1717,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('ACronym', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(5);
@@ -1725,7 +1725,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Span</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(5);
@@ -1740,7 +1740,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(6);
@@ -1748,7 +1748,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(6);
@@ -1763,7 +1763,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
      */
     public function testCorrectLanguageIconsWithSubscriptFormatTripleTags()
     {
-        
+
         $this->useTest(15);
 
         // Test language applied to acronym applied to abbreviation
@@ -1776,7 +1776,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(1);
@@ -1784,7 +1784,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(1);
@@ -1799,7 +1799,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(2);
@@ -1807,7 +1807,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(2);
@@ -1815,7 +1815,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Subscript</li>', $lineage);
         $this->clickKeyword(2);
 
         // Test abbreviation applied to language applied to acronym
@@ -1828,7 +1828,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(3);
@@ -1836,7 +1836,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(3);
@@ -1844,9 +1844,9 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(3);
         $this->selectInlineToolbarLineageItem(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Subscript</li>', $lineage);
        $this->clickKeyword(3);
- 
+
         // Test abbreviation applied to acronym applied to language
         $this->clickKeyword(4);
         $this->clickTopToolbarButton('langTools', 'active');
@@ -1857,7 +1857,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(4);
@@ -1865,7 +1865,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(4);
@@ -1873,13 +1873,13 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Span</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
        $this->clickKeyword(4);
 
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(4);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem Viper-selected">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem Viper-selected">Subscript</li>', $lineage);
        $this->clickKeyword(4);
 
         // Test acronym applied to language applied to abbreviation
@@ -1892,7 +1892,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(5);
@@ -1900,7 +1900,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Language button should be active');
         $this->clickKeyword(5);
@@ -1908,7 +1908,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Subscript</li>', $lineage);
         $this->clickKeyword(5);
 
 
@@ -1922,7 +1922,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(1);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->clickKeyword(6);
@@ -1930,7 +1930,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(2);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem Viper-selected">ABBR</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem Viper-selected">Abbreviation</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
         $this->clickKeyword(6);
@@ -1938,13 +1938,13 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(3);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem Viper-selected">SPAN</li><li class="ViperITP-lineageItem">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem Viper-selected">Span</li><li class="ViperITP-lineageItem">Subscript</li>', $lineage);
         $this->clickKeyword(6);
 
         $this->selectKeyword(6);
         $this->selectInlineToolbarLineageItem(4);
         $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">ACRONYM</li><li class="ViperITP-lineageItem">ABBR</li><li class="ViperITP-lineageItem">SPAN</li><li class="ViperITP-lineageItem Viper-selected">SUB</li>', $lineage);
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Acronym</li><li class="ViperITP-lineageItem">Abbreviation</li><li class="ViperITP-lineageItem">Span</li><li class="ViperITP-lineageItem Viper-selected">Subscript</li>', $lineage);
         $this->clickKeyword(6);
 
     }//end testCorrectLanguageIconsWithSubscriptFormatTripleTags()
