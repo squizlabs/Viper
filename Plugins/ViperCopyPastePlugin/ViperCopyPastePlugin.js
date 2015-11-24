@@ -56,6 +56,11 @@ ViperCopyPastePlugin.prototype = {
             ViperSelection.addRange(data.range);
             var div = document.createElement('div');
             ViperUtil.setHtml(div, data.data);
+
+            if (bookmark) {
+                self.viper.removeBookmark(bookmark);
+            }
+
             self._beforePaste(data.range);
 
             if (self._bookmark) {
@@ -63,10 +68,6 @@ ViperCopyPastePlugin.prototype = {
             }
 
             self._handleFormattedPasteValue(false, div);
-
-            if (bookmark) {
-                self.viper.removeBookmark(bookmark);
-            }
 
             return false;
         });
@@ -756,7 +757,7 @@ ViperCopyPastePlugin.prototype = {
             }
         } else {
             try {
-                this.viper.insertNodeAtCaret(this._tmpNode);
+                this.viper.insertNodeAtCaret(this._tmpNode, range);
             } catch (e) {
                 this.viper.initEditableElement();
                 this.viper.insertNodeAtCaret(this._tmpNode);
