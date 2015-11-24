@@ -879,7 +879,9 @@ ViperKeyboardEditorPlugin.prototype = {
     handleDelete: function(e)
     {
         var range = this.viper.getViperRange();
-        this.viper.fireCallbacks('ViperKeyboardEditorPlugin:beforeDelete', e);
+        if (this.viper.fireCallbacks('ViperKeyboardEditorPlugin:beforeDelete', e) === false) {
+            return false;
+        }
 
         if (this._isWholeViperElementSelected(range) === true) {
             // The whole Viper element is selected, remove all of its content
