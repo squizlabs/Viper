@@ -177,6 +177,18 @@ Viper.prototype = {
 
     },
 
+    /**
+     * Sets the custom class of this Viper instance.
+     */
+    setCustomClass: function(className)
+    {
+        this._settings['customClass'] = className;
+        if (this._viperElementHolder) {
+            ViperUtil.addClass(this._viperElementHolder, customClass)
+        }
+
+    },
+
     getDefaultBlockTag: function()
     {
         var defaultBlockTag = this.getSetting('defaultBlockTag');
@@ -297,6 +309,10 @@ Viper.prototype = {
         if (browser && version) {
             ViperUtil.addClass(holder, 'Viper-browser-' + browser);
             ViperUtil.addClass(holder, 'Viper-browserVer-' + browser + version);
+        }
+
+        if (this._settings.customClass) {
+            ViperUtil.addClass(holder, this._settings.customClass);
         }
 
         return holder;
@@ -3426,90 +3442,6 @@ Viper.prototype = {
         }
 
         range.setStart(node, 0);
-        range.collapse(true);
-        ViperSelection.addRange(range);
-
-        this.fireCaretUpdated();
-
-        return true;
-
-    },
-
-    /**
-     * Sets the caret position right before the given node.
-     *
-     * If node does not have a text node sibling then it will be created.
-     *
-     * @param {DOMNode} node DOMNode to use.
-     *
-     * @return {boolean} True if it was successful.
-     */
-    setCaretBeforeNode: function(node)
-    {
-        if (!node || !node.parentNode) {
-            return false;
-        }
-
-        var range = this.getCurrentRange();
-        if (node.previousSibling && node.previousSibling.nodeType === ViperUtil.TEXT_NODE) {
-            // Next sibling is a textnode so move the caret to that node.
-            node = node.previousSibling;
-        } else {
-            // Create a new text node and set the caret to that node.
-            var text = this.createSpaceNode();
-            ViperUtil.insertBefore(node, text);
-            node = text;
-        }
-
-        range.setStart(node, node.data.length);
-        range.collapse(true);
-        ViperSelection.addRange(range);
-
-        this.fireCaretUpdated();
-
-    },
-
-    setCaretAtStart: function(node)
-    {
-        if (!node || !node.parentNode) {
-            return false;
-        }
-
-        var range = this.getCurrentRange();
-        if (node.nodeType !== ViperUtil.TEXT_NODE) {
-            node = range._getFirstSelectableChild(node);
-        }
-
-        if (!node) {
-            return false;
-        }
-
-        range.setStart(node, 0);
-        range.collapse(true);
-        ViperSelection.addRange(range);
-
-        this.fireCaretUpdated();
-
-        return true;
-
-    },
-
-    setCaretAtEnd: function(node)
-    {
-        if (!node || !node.parentNode) {
-            return false;
-        }
-
-        var range = this.getCurrentRange();
-        if (node.nodeType !== ViperUtil.TEXT_NODE) {
-            node = range._getLastSelectableChild(node);
-        }
-
-        if (!node) {
-            return false;
-        }
-
-        range.setStart(node, node.data.length);
         range.collapse(true);
         ViperSelection.addRange(range);
 
