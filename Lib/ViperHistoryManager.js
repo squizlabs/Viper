@@ -74,6 +74,21 @@ ViperHistoryManager.prototype = {
                 range: null
             };
         } else {
+            var startContainer = range.startContainer;
+            if (startContainer.nodeType === ViperUtil.ELEMENT_NODE
+                && startContainer.childNodes[range.startOffset]
+                && startContainer.childNodes[range.startOffset].nodeType === ViperUtil.ELEMENT_NODE
+                && range.collapsed === true
+            ) {
+                // When Viper is initialised and the element is empty the range might be set as the
+                // First block element, if it has child text node use that instead.
+                var child = range._getFirstSelectableChild(startContainer.childNodes[range.startOffset]);
+                if (child) {
+                    range.setStart(child, 0);
+                    range.collapse(true);
+                }
+            }
+
             var task  = {
                 content: this.viper.getRawHTML(),
                 range: {
