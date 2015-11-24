@@ -1633,6 +1633,9 @@ ViperCoreStylesPlugin.prototype = {
             if (startNode === endNode && startNode === viperElement) {
                 startNode = range._getFirstSelectableChild(viperElement);
                 endNode   = range._getLastSelectableChild(viperElement);
+                if (!startNode) {
+                    return activeStates;
+                }
             }
 
             // Justify state.

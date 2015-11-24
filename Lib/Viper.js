@@ -978,6 +978,7 @@ Viper.prototype = {
                 var blockTag = this.getDefaultBlockTag();
                 if (!blockTag) {
                     ViperUtil.setHtml(elem, '');
+                    elem.appendChild(document.createTextNode(' '));
                 } else {
                     var emptyCont = '<br/>';
                     if (ViperUtil.isBrowser('msie', '<9') === true) {
