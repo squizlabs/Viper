@@ -3532,7 +3532,14 @@ Viper.prototype = {
                 && (ViperUtil.isBlockElement(bookmark.end.nextSibling) === false || !bookmark.start.previousSibling || ViperUtil.isBlockElement(bookmark.start.previousSibling))
             ) {
                 if ((ViperUtil.isTag(bookmark.end.nextSibling, 'span') !== true || ViperUtil.hasClass(bookmark.end.nextSibling, 'viperBookmark') === false)) {
-                    startPos = ViperUtil.getFirstChildTextNode(bookmark.end.nextSibling);
+                    if (ViperUtil.isStubElement(bookmark.end.nextSibling) === false) {
+                        startPos = ViperUtil.getFirstChildTextNode(bookmark.end.nextSibling);
+                    } else if (ViperUtil.isTag(bookmark.end.nextSibling, 'br') === true) {
+                        startPos = bookmark.end.nextSibling;
+                    } else {
+                        startPos = document.createTextNode('');
+                        ViperUtil.insertAfter(bookmark.end, startPos);
+                    }
                 } else {
                     startPos = document.createTextNode('');
                     ViperUtil.insertAfter(bookmark.end, startPos);
