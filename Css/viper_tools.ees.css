@@ -6,7 +6,7 @@
 }
 .fixedScroll .ViperTP-bar {
   position: fixed !important;
-  top: 48px !important;
+  top: 43px !important;
   z-index: 98;
   background-color: #EDEDED;
   border-bottom-width: 1px;
