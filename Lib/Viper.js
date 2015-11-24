@@ -572,7 +572,7 @@ Viper.prototype = {
             var dataTransfer = e.originalEvent.dataTransfer;
 
             // Call the callback functions with dataTransfer object, range and original event.
-            if (self.fireCallbacks('Viper:dropped', {dataTransfer: dataTransfer, range: range, e: e, origRange: _dragRange}) === false) {
+            if (self.fireCallbacks('Viper:dropped', {dataTransfer: dataTransfer, range: range.cloneRange(), e: e, origRange: _dragRange.cloneRange()}) === false) {
                 return false;
             }
 
@@ -978,6 +978,7 @@ Viper.prototype = {
                 var blockTag = this.getDefaultBlockTag();
                 if (!blockTag) {
                     ViperUtil.setHtml(elem, '');
+                    elem.appendChild(document.createTextNode(' '));
                 } else {
                     var emptyCont = '<br/>';
                     if (ViperUtil.isBrowser('msie', '<9') === true) {
@@ -1721,9 +1722,9 @@ Viper.prototype = {
      *
      * @return void
      */
-    insertNodeAtCaret: function(node)
+    insertNodeAtCaret: function(node, range)
     {
-        var range = this.getViperRange();
+        range = range || this.getViperRange();
 
         // If we have any nodes highlighted, then we want to delete them before
         // inserting the new text.
