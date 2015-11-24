@@ -1088,12 +1088,19 @@ ViperCopyPastePlugin.prototype = {
             // TODO: We should move handleEnter function to somewhere else and make it
             // a little bit more generic.
             var keyboardEditor = this.viper.ViperPluginManager.getPlugin('ViperKeyboardEditorPlugin');
-            var range = this.viper.getViperRange();
+            var viperElem      = this.viper.getViperElement();
+            var prevBlock      = null;
+            var range          = this.viper.getViperRange();
+
+            if (ViperUtil.isPartOfDOM(this._tmpNode, viperElem) === false) {
+                // The tmp node is missing from DOM, add it back in.
+                var bookmark = this.viper.createBookmark();
+                this._insertTmpNodeBeforeBookmark(bookmark);
+            }
+
             range.setEnd(this._tmpNode, 0);
             range.collapse(false);
-            var viperElem = this.viper.getViperElement();
-            var prevBlock = null;
-            var viperElem = this.viper.getViperElement();
+
             if (ViperUtil.getHtml(viperElem) !== '') {
                 if (viperElem.firstChild === viperElem.lastChild
                     && (viperElem.firstChild === null || ViperUtil.isTag(viperElem.firstChild, 'br') === true)
@@ -1103,6 +1110,11 @@ ViperCopyPastePlugin.prototype = {
                     } else {
                         ViperUtil.insertBefore(this._tmpNode, viperElem.firstChild);
                     }
+                } else if (ViperUtil.trim(ViperUtil.getHtml(this._tmpNode.parentNode)) === '&nbsp;'
+                    && ViperUtil.isBlockElement(this._tmpNode.parentNode)
+                ) {
+                    ViperUtil.insertBefore(this._tmpNode.parentNode, this._tmpNode);
+                    ViperUtil.remove(this._tmpNode.nextSibling);
                 } else {
                     prevBlock = keyboardEditor.splitAtRange(true, range);
                 }
@@ -2354,7 +2366,7 @@ ViperCopyPastePlugin.prototype = {
                 'I': ['^[IVXLCDM]+[\\.\\)](\\s|&nbsp;)+'],
                 'a': ['^[a-z]+[\\.\\)](\\s|&nbsp;)+'],
                 'A': ['^[A-Z]+[\\.\\)](\\s|&nbsp;)+'],
-                decimal: ['^((?:\\d+|[a-z]+)[\\.\\)]?)+(?:\\s|&nbsp;)+']
+                decimal: ['^((?:\\d+|[a-z][^a-z])[\\.\\)]?)+(?:\\s|&nbsp;)+']
             }
         };
 
@@ -2383,6 +2395,10 @@ ViperCopyPastePlugin.prototype = {
                 // Change the list type to ul.
                 // TODO: Might have to check font-family here incase this is part of a OL list a -> z.
                 listType = 'ul';
+            }
+
+            if (ViperUtil.isTag(pEl.parentNode, 'li') === true) {
+                listType = ViperUtil.getTagName(pEl.parentNode.parentNode);
             }
 
             if (!level) {
@@ -2415,7 +2431,14 @@ ViperCopyPastePlugin.prototype = {
                 }
 
                 indentLvl[level] = ul;
-                ViperUtil.insertBefore(pEl, ul);
+                if (ViperUtil.isTag(pEl.parentNode, 'li') === true) {
+                    // IE somtimes have this strucuture: <ul><li><p>..</p><p>..</p>..</li></ul>.
+                    // Move the P before the list element.
+                    ViperUtil.insertBefore(pEl.parentNode.parentNode, ul);
+                    ViperUtil.remove(pEl.parentNode.parentNode);
+                } else {
+                    ViperUtil.insertBefore(pEl, ul);
+                }
             } else {
                 if (level !== prevLevel) {
                     if (ViperUtil.isset(indentLvl[level]) === true) {

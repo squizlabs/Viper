@@ -34,6 +34,7 @@ function Viper(id, options, callback, editables)
     this._registeredElements = [];
     this._attributeGetModifiers = [];
     this._attributeSetModifiers = [];
+    this._mouseDownEvent        = null;
 
     // This var is used to store the range of Viper before it loses focus. Any plugins
     // that steal focus from Viper element can use getPreviousRange.
@@ -4925,10 +4926,6 @@ Viper.prototype = {
             var nodeSelection = null;
             if (resetContent !== true) {
                 nodeSelection = range.getNodeSelection(range, true);
-                if (nodeSelection) {
-                    nodeSelection = range.getNodeSelection(range, true);
-                }
-
                 if (nodeSelection && nodeSelection === this.element) {
                     resetContent = true;
                 }
@@ -4986,18 +4983,24 @@ Viper.prototype = {
                         break;
 
                         default:
-                            // Set the content of the existing tag.
-                            ViperUtil.setHtml(nodeSelection, '');
-
-                            if (ViperUtil.isTag(nodeSelection, 'blockquote') === true) {
-                                // Blockquote must have at least one P tag.
-                                var quoteP = document.createElement('p');
-                                nodeSelection.appendChild(quoteP);
-                                nodeSelection = quoteP;
-                            }
-
                             var textNode = document.createTextNode(String.fromCharCode(e.which));
-                            nodeSelection.appendChild(textNode);
+
+                            if (ViperUtil.isStubElement(nodeSelection) === true) {
+                                ViperUtil.insertBefore(nodeSelection, textNode);
+                                ViperUtil.remove(nodeSelection);
+                            } else {
+                                // Set the content of the existing tag.
+                                ViperUtil.setHtml(nodeSelection, '');
+
+                                if (ViperUtil.isTag(nodeSelection, 'blockquote') === true) {
+                                    // Blockquote must have at least one P tag.
+                                    var quoteP = document.createElement('p');
+                                    nodeSelection.appendChild(quoteP);
+                                    nodeSelection = quoteP;
+                                }
+
+                                nodeSelection.appendChild(textNode);
+                            }
 
                             range.setStart(textNode, 1);
                             range.collapse(true);
@@ -5252,6 +5255,7 @@ Viper.prototype = {
 
     mouseDown: function(e)
     {
+        this._mouseDownEvent = e;
         if (e.which === 3) {
             this.fireCallbacks('Viper:rightMouseDown', e);
             return false;
@@ -5404,6 +5408,21 @@ Viper.prototype = {
             }
         }
 
+        if (endNode && endNode.nodeType === ViperUtil.TEXT_NODE
+            && range.endOffset === 0
+            && endNode !== startNode
+            && endNode.previousSibling
+            && endNode.previousSibling.nodeType !== ViperUtil.TEXT_NODE
+        ) {
+            // When a word at the end of a tag is double clicked then move the
+            // end of the range to the last selectable child of that tag.
+            var textChild = range._getLastSelectableChild(endNode.previousSibling);
+            if (textChild) {
+                range.setEnd(textChild, textChild.data.length);
+                ViperSelection.addRange(range);
+            }
+        }
+
         if (ViperUtil.isBrowser('firefox') === true) {
             if (startNode && startNode.nodeType === ViperUtil.TEXT_NODE
                 && endNode && endNode.nodeType === ViperUtil.TEXT_NODE
@@ -5420,19 +5439,6 @@ Viper.prototype = {
                 range.setStart(firstSelectable, 0);
                 range.setEnd(lastSelectable, lastSelectable.data.length);
                 ViperSelection.addRange(range);
-            } else if (endNode && endNode.nodeType === ViperUtil.TEXT_NODE
-                && range.endOffset === 0
-                && endNode !== startNode
-                && endNode.previousSibling
-                && endNode.previousSibling.nodeType !== ViperUtil.TEXT_NODE
-            ) {
-                // When a word at the end of a tag is double clicked then move the
-                // end of the range to the last selectable child of that tag.
-                var textChild = range._getLastSelectableChild(endNode.previousSibling);
-                if (textChild) {
-                    range.setEnd(textChild, textChild.data.length);
-                    ViperSelection.addRange(range);
-                }
             } else if (startNode && startNode.nodeType === ViperUtil.TEXT_NODE
                 && endNode && endNode.nodeType === ViperUtil.TEXT_NODE
                 && startNode.data.length === range.startOffset

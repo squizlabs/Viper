@@ -1068,6 +1068,24 @@ ViperDOMRange.prototype = {
         ) {
             this._nodeSel.node = range.endContainer.childNodes[range.endContainer.childNodes.length - 1];
             return this._nodeSel.node;
+        } else if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
+            && range.endContainer.nodeType === ViperUtil.TEXT_NODE
+            && range.startOffset === range.startContainer.data.length
+            && range.endOffset === 0
+            && range.startContainer.nextSibling === range.endContainer.previousSibling
+            && range.startContainer.nextSibling.nodeType === ViperUtil.ELEMENT_NODE
+        ) {
+            this._nodeSel.node = range.startContainer.nextSibling;
+            return this._nodeSel.node;
+        } else if (range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
+            && range.startContainer.childNodes[range.startOffset]
+            && range.startContainer.childNodes[range.startOffset].nodeType === ViperUtil.ELEMENT_NODE
+            && range.endContainer.nodeType === ViperUtil.TEXT_NODE
+            && range.endOffset === 0
+            && range.endContainer.previousSibling === range.startContainer.childNodes[range.startOffset]
+        ) {
+            this._nodeSel.node = range.endContainer.previousSibling;
+            return this._nodeSel.node;
         }
 
         // We may need to adjust the "startNode" depending on its offset.
@@ -1146,39 +1164,6 @@ ViperDOMRange.prototype = {
                 return startNode.parentNode;
             }
         }
-
-        var startParent = startNode;
-        while (startParent && startParent.parentNode !== common) {
-            startParent = startParent.parentNode;
-        }
-
-        if (!startParent) {
-            this._nodeSel.node = null;
-            return null;
-        }
-
-        var nextSibling = startParent.nextSibling;
-        if (!nextSibling && startParent.nodeType !== ViperUtil.TEXT_NODE && ViperUtil.getFirstElementChild(startParent.parentNode) === startParent) {
-            this._nodeSel.node = startNode.parentNode;
-            return startNode.parentNode;
-        }
-
-        /*var endParent = endNode;
-        while (endParent && endParent.parentNode !== common) {
-            endParent = endParent.parentNode;
-        }
-
-        while (nextSibling
-            && nextSibling.nodeType === ViperUtil.TEXT_NODE
-            && ViperUtil.isBlank(nextSibling.data) === true
-        ) {
-            nextSibling = nextSibling.nextSibling;
-        }
-
-        if (nextSibling === endParent) {
-            this._nodeSel.node = null;
-            return startParent;
-        }*/
 
         this._nodeSel.node = null;
         return null;

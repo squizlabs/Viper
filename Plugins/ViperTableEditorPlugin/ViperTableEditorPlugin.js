@@ -1366,7 +1366,7 @@ ViperTableEditorPlugin.prototype = {
             setTimeout(function() {
                 self.hideToolbar();
             }, 50);
-            
+
 
             self._setCaretToStart(table);
         });
@@ -3424,7 +3424,7 @@ ViperTableEditorPlugin.prototype = {
 
         // Insert table to the bookmarks position.
         var viperHtml = ViperUtil.trim(this.viper.getHtml());
-        if (viperHtml === '' || viperHtml === '<p>&nbsp;</p>') {
+        if (viperHtml === '' || viperHtml === '<p>&nbsp;</p>' || viperHtml === '<p></p>') {
             ViperUtil.empty(this.viper.getViperElement());
             this.viper.getViperElement().appendChild(table);
         } else {
