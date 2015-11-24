@@ -184,7 +184,7 @@ Viper.prototype = {
     {
         this._settings['customClass'] = className;
         if (this._viperElementHolder) {
-            ViperUtil.addClass(this._viperElementHolder, customClass)
+            ViperUtil.addClass(this._viperElementHolder, className)
         }
 
     },
