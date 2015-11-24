@@ -6110,6 +6110,22 @@ Viper.prototype = {
                 return;
             } else if (node.className !== '' || node.id !== '') {
                 // If the node has CSS classes or ID set then do not remove it.
+                switch (tagName) {
+                    case 'textarea':
+                    case 'form':
+                    case 'input':
+                    case 'button':
+                    case 'select':
+                    case 'label':
+                        // Form fields must be removed.
+                        ViperUtil.remove(node);
+                    break;
+
+                    default:
+                        // Keep node.
+                    break;
+                }
+
                 return;
             }
 
@@ -6200,7 +6216,12 @@ Viper.prototype = {
                 break;
 
                 case 'textarea':
-                    // Do not clean up.
+                case 'form':
+                case 'input':
+                case 'button':
+                case 'select':
+                case 'label':
+                    ViperUtil.remove(node);
                 break;
 
                 case 'strong':
