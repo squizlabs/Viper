@@ -1707,6 +1707,16 @@ Viper.prototype = {
             var viperElement    = this.getViperElement();
             var firstSelectable = range._getFirstSelectableChild(viperElement);
             if ((firstSelectable === range.startContainer || viperElement === range.startContainer) && range.startOffset === 0) {
+                var prevContainer   = range.getPreviousContainer(range.startContainer, null, false, true);
+                if (this.isOutOfBounds(prevContainer) === false) {
+                    return false;
+                }
+
+                var nextContainer = range.getNextContainer(range.endContainer, null, false, true);
+                if (this.isOutOfBounds(nextContainer) === false) {
+                    return false;
+                }
+
                 var lastSelectable  = range._getLastSelectableChild(viperElement);
                 if ((range.endContainer === viperElement && range.endOffset >= viperElement.childNodes.length)
                     || (range.endContainer === lastSelectable && range.endOffset === lastSelectable.data.length)
