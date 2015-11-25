@@ -1430,10 +1430,18 @@ ViperKeyboardEditorPlugin.prototype = {
                             range.collapse(true);
                             ViperSelection.addRange(range);
                             ViperUtil.remove(parent);
+                            this.viper.fireNodesChanged();
                             return false;
                         }
                     } else if (this.viper.isSpecialElement(range.startContainer.previousSibling) === true) {
-                        ViperUtil.remove(range.startContainer.previousSibling);
+                        var node = range.startContainer.previousSibling;
+                        var surroundingParents = ViperUtil.getSurroundingParents(node);
+                        if (surroundingParents.length > 0) {
+                            node = ViperUtil.remove(surroundingParents.pop());
+                        }
+                            
+                        ViperUtil.remove(node);
+                        this.viper.fireSelectionChanged(null, true);
                         this.viper.fireNodesChanged();
                         return false;
                     } else {
@@ -1444,6 +1452,7 @@ ViperKeyboardEditorPlugin.prototype = {
                             } else if (ViperUtil.isStubElement(previousContainer) === true) {
                                 // Handle case <p>text<strong>text</strong><br/>*</p>.
                                 ViperUtil.remove(previousContainer);
+                                this.viper.fireNodesChanged();
                                 return false;
                             } else {
                                 range.setStart(previousContainer, 0);
