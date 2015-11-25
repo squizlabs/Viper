@@ -123,6 +123,7 @@ class Viper_Tests_ViperReplacementPlugin_CopyAndPasteKeywordUnitTest extends Abs
         sleep(1);
         $this->sikuli->keyDown('Key.CMD + c');
         $this->moveToKeyword(1, 'left');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
 
         sleep(1);
