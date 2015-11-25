@@ -2312,7 +2312,7 @@ var ViperUtil = {
 
     removeArrayIndex: function(array, index)
     {
-        if (!array || ViperUtil.isset(array[index]) === false) {
+        if (!array || index >= array.length) {
             return null;
         }
 
