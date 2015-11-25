@@ -2108,6 +2108,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         $text = str_replace("\n", '', $text);
         $text = str_replace('\n', '', $text);
+        
+        // IE never has the px for width/height...
+        $text = preg_replace('#="(\d+)"#', '="$1px"', $text);
 
         // Google Chrome always adds an extra space at the end of a style attribute
         // remove it here...
