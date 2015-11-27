@@ -1043,7 +1043,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         // Test abbreviation applied to language applied to acronym
         $this->clickKeyword(3);
         $this->clickTopToolbarButton('langTools', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('Language', 'disabled', TRUE), 'Language button should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should not be active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
 
@@ -1496,7 +1496,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         // Test acronym applied to language applied to abbreviation
         $this->clickKeyword(5);
         $this->clickTopToolbarButton('langTools', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('Language', 'disabled', TRUE), 'Language button should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should not be active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
 
@@ -1885,7 +1885,7 @@ class Viper_Tests_ViperLangToolsPlugin_FormatLangToolsUnitTest extends AbstractV
         // Test acronym applied to language applied to abbreviation
         $this->clickKeyword(5);
         $this->clickTopToolbarButton('langTools', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('Language', 'disabled', TRUE), 'Language button should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should not be active');
         $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should be active');
         $this->assertTrue($this->topToolbarButtonExists('Abbreviation', 'active', TRUE), 'Abbreviation button should be active');
 
