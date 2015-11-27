@@ -291,14 +291,14 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">P</li>', $lineage);
 
-        $this->clickInlineToolbarButton('Div', NULL, TRUE);
+        $this->clickInlineToolbarButton('DIV', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Div</li>', $lineage);
         $this->clickInlineToolbarButton('P', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">P</li>', $lineage);
 
-        $this->clickInlineToolbarButton('Pre', NULL, TRUE);
+        $this->clickInlineToolbarButton('PRE', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Pre</li>', $lineage);
         $this->clickInlineToolbarButton('P', NULL, TRUE);
@@ -320,14 +320,14 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">P</li>', $lineage);
 
-        $this->clickInlineToolbarButton('Div', NULL, TRUE);
+        $this->clickInlineToolbarButton('DIV', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Div</li>', $lineage);
         $this->clickInlineToolbarButton('P', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">P</li>', $lineage);
 
-        $this->clickInlineToolbarButton('Pre', NULL, TRUE);
+        $this->clickInlineToolbarButton('PRE', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Pre</li>', $lineage);
         $this->clickInlineToolbarButton('P', NULL, TRUE);
@@ -360,14 +360,14 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Quote</li>', $lineage);
 
-        $this->clickInlineToolbarButton('Div', NULL, TRUE);
+        $this->clickInlineToolbarButton('DIV', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Div</li>', $lineage);
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Quote</li>', $lineage);
 
-        $this->clickInlineToolbarButton('Pre', NULL, TRUE);
+        $this->clickInlineToolbarButton('PRE', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Pre</li>', $lineage);
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
@@ -388,14 +388,14 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Quote</li>', $lineage);
 
-        $this->clickInlineToolbarButton('Div', NULL, TRUE);
+        $this->clickInlineToolbarButton('DIV', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Div</li>', $lineage);
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Quote</li>', $lineage);
 
-        $this->clickInlineToolbarButton('Pre', NULL, TRUE);
+        $this->clickInlineToolbarButton('PRE', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Pre</li>', $lineage);
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
@@ -424,21 +424,21 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $this->clickInlineToolbarButton('P', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">P</li>', $lineage);
-        $this->clickInlineToolbarButton('Div', NULL, TRUE);
+        $this->clickInlineToolbarButton('DIV', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Div</li>', $lineage);
 
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Quote</li>', $lineage);
-        $this->clickInlineToolbarButton('Div', NULL, TRUE);
+        $this->clickInlineToolbarButton('DIV', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Div</li>', $lineage);
 
-        $this->clickInlineToolbarButton('Pre', NULL, TRUE);
+        $this->clickInlineToolbarButton('PRE', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Pre</li>', $lineage);
-        $this->clickInlineToolbarButton('Div', NULL, TRUE);
+        $this->clickInlineToolbarButton('DIV', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Div</li>', $lineage);
 
@@ -452,21 +452,21 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Quote</li>', $lineage);
-        $this->clickInlineToolbarButton('Div', NULL, TRUE);
+        $this->clickInlineToolbarButton('DIV', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Div</li>', $lineage);
 
         $this->clickInlineToolbarButton('P', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">P</li>', $lineage);
-        $this->clickInlineToolbarButton('Div', NULL, TRUE);
+        $this->clickInlineToolbarButton('DIV', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Div</li>', $lineage);
 
-        $this->clickInlineToolbarButton('Pre', NULL, TRUE);
+        $this->clickInlineToolbarButton('PRE', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Pre</li>', $lineage);
-        $this->clickInlineToolbarButton('Div', NULL, TRUE);
+        $this->clickInlineToolbarButton('DIV', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Div</li>', $lineage);
 
@@ -492,11 +492,11 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Quote</li>', $lineage);
-        $this->clickInlineToolbarButton('Pre', NULL, TRUE);
+        $this->clickInlineToolbarButton('PRE', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Pre</li>', $lineage);
 
-        $this->clickInlineToolbarButton('Div', NULL, TRUE);
+        $this->clickInlineToolbarButton('DIV', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Div</li>', $lineage);
         $this->clickInlineToolbarButton('Pre', NULL, TRUE);
@@ -506,7 +506,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $this->clickInlineToolbarButton('P', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">P</li>', $lineage);
-        $this->clickInlineToolbarButton('Pre', NULL, TRUE);
+        $this->clickInlineToolbarButton('PRE', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Pre</li>', $lineage);
 
@@ -520,21 +520,21 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarFormatsUnitTest extends 
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Quote</li>', $lineage);
-        $this->clickInlineToolbarButton('Pre', NULL, TRUE);
+        $this->clickInlineToolbarButton('PRE', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Pre</li>', $lineage);
 
-        $this->clickInlineToolbarButton('Div', NULL, TRUE);
+        $this->clickInlineToolbarButton('DIV', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Div</li>', $lineage);
-        $this->clickInlineToolbarButton('Pre', NULL, TRUE);
+        $this->clickInlineToolbarButton('PRE', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Pre</li>', $lineage);
 
         $this->clickInlineToolbarButton('P', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">P</li>', $lineage);
-        $this->clickInlineToolbarButton('Pre', NULL, TRUE);
+        $this->clickInlineToolbarButton('PRE', NULL, TRUE);
         $lineage = $this->getHtml('.ViperITP-lineage');
         $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Pre</li>', $lineage);
 
