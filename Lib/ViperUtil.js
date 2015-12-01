@@ -2954,7 +2954,7 @@ var ViperUtil = {
     getBrowserType: function()
     {
         if (ViperUtil._browserType === null) {
-            var tests = ['trident', 'msie', 'firefox', 'chrome', 'safari'];
+            var tests = ['edge', 'trident', 'msie', 'firefox', 'chrome', 'safari'];
             var tln   = tests.length;
             for (var i = 0; i < tln; i++) {
                 var r = new RegExp(tests[i], 'i');
@@ -2987,7 +2987,7 @@ var ViperUtil = {
             return ViperUtil._browserVersion;
         }
 
-        var browsers = ['MSIE', 'Trident', 'Chrome', 'Safari', 'Firefox'];
+        var browsers = ['Edge', 'MSIE', 'Trident', 'Chrome', 'Safari', 'Firefox'];
         var c        = browsers.length;
         var uAgent   = navigator.userAgent;
 
