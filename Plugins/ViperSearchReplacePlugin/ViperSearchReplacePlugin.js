@@ -215,11 +215,15 @@ ViperSearchReplacePlugin.prototype = {
 
     },
 
-    find: function(text, backward, fromStart, testOnly)
+    find: function(text, backward, fromStart, testOnly, element)
     {
-        var element = this.viper.getViperElement();
+        var element = element || this.viper.getViperElement();
         if (!text || !element) {
             return;
+        }
+
+        if (ViperUtil.isBrowser('edge') === true) {
+            return this._edgeFind.apply(this, arguments);
         }
 
         var rangeClone = null;
@@ -317,6 +321,50 @@ ViperSearchReplacePlugin.prototype = {
         }//end if
 
         return true;
+
+    },
+
+    _edgeFind: function (text, backward, fromStart, testOnly, element)
+    {
+        // MS Edge browser does not support window.find or createTextRange, which basically stops us from finding text.
+        // Try finding it by scanning text nodes. For now its very simple text search in each node, does not work for
+        // broken strings (e.g. "find me" in <p><strong>find</strong> me</p>).
+        var element     = element || this.viper.getViperElement();
+        var textNodes   = ViperUtil.getTextNodes(element);
+        var range       = this.viper.getViperRange().cloneRange();
+        var startNode   = range.getStartNode();
+        var startOffset = (range.startOffset + 1);
+        text            = text.toLowerCase();
+
+        if (fromStart === true) {
+            startNode   = null;
+            startOffset = 0;
+        }
+
+        for (var i = 0; i < textNodes.length; i++) {
+            var node  =  textNodes[i];
+            if (startNode !== null && node !== startNode) {
+                continue;
+            } else {
+                startNode = null;
+            }
+
+            var index = node.data.toLowerCase().indexOf(text, startOffset);
+            if (index >= 0) {
+                range.setStart(node, index);
+                range.setEnd(node, index + text.length);
+
+                if (testOnly !== true) {
+                    ViperSelection.addRange(range);
+                }
+
+                return true;
+            }
+
+            startOffset = 0;
+        }
+
+        return false;
 
     },
 
