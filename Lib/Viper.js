@@ -698,6 +698,10 @@ Viper.prototype = {
         if (enabled === true && this.enabled === false) {
             this._addEvents();
             this.enabled = true;
+
+            // Word-wrap attribute changes when contentEditable is set to true.
+            this._setRadOnlyStyles()
+
             this.element.setAttribute('contentEditable', true);
             ViperUtil.setStyle(this.element, 'outline', 'none');
 
@@ -814,6 +818,22 @@ Viper.prototype = {
     isEnabled: function()
     {
         return this.enabled;
+
+    },
+
+    /**
+     * Sets the read only (contenteditable=false) styles so they remain the same when its set to true.
+     */
+    _setRadOnlyStyles: function () {
+        if (!this.element) {
+            return;
+        }
+
+        var styles = ['word-wrap'];
+        for (var i = 0; i < styles.length; i++) {
+            var value = ViperUtil.getComputedStyle(this.element, styles[i]);
+            ViperUtil.setStyle(this.element, styles[i], value);
+        }
 
     },
 
