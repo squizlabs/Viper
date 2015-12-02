@@ -1840,19 +1840,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             ($this->sikuli->getY($endRight) + 2)
         );
 
-        if (($this->sikuli->getBrowserid() !== 'ie11' || $startKeyword !== $endKeyword) && strpos($this->sikuli->getBrowserid(), 'ie') === 0) {
-            // Of course, even a simple thing like selecting words is a problem in
-            // IE. When you select words it also selects the space after it, causing
-            // tests to fail where style is applied to the selection or modification
-            // are made to the selection. To prevent this we need to select the words
-            // and then move the mouse back a few pixels while holding down left
-            // button and then drop it at the end of the last word.
-            $this->sikuli->drag($startLeft);
-            $this->sikuli->mouseMove($endRight);
-            $this->sikuli->mouseMoveOffset(-10, 0);
-            $this->sikuli->mouseMoveOffset(6, 0);
-            $this->sikuli->mouseUp();
-            usleep(500000);
+        if (strpos($this->sikuli->getBrowserid(), 'ie') === 0 || $this->sikuli->getBrowserid() === 'edge') {
+            $this->sikuli->dragDrop($endRight, $startLeft);
+            usleep(200000);
         } else {
             $this->sikuli->dragDrop($startLeft, $endRight);
             usleep(50000);
