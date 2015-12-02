@@ -5478,7 +5478,7 @@ Viper.prototype = {
     {
         if (this.element) {
             try {
-                if (ViperUtil.isBrowser('msie') === true) {
+                if (ViperUtil.isBrowser('msie') === true || ViperUtil.isBrowser('edge') === true) {
                     var range = this.getViperRange();
                     ViperSelection.addRange(range);
 
