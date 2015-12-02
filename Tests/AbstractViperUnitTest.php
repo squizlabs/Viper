@@ -2333,12 +2333,22 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         } else {
             $this->sikuli->rightClick($this->sikuli->getMouseLocation());
 
-            if ($this->sikuli->getBrowserid() === 'safari') {
-                $this->sikuli->keyDown('Key.DOWN');
-                $this->sikuli->keyDown('Key.ENTER');
-            } else {
-                $this->sikuli->keyDown('p');
-                $this->sikuli->keyDown('Key.ENTER');
+            switch ($this->sikuli->getBrowserid()) {
+                case 'safari':
+                    $this->sikuli->keyDown('Key.DOWN');
+                    $this->sikuli->keyDown('Key.ENTER');
+                break;
+
+                case 'edge':
+                    $this->sikuli->keyDown('Key.UP');
+                    $this->sikuli->keyDown('Key.UP');
+                    $this->sikuli->keyDown('Key.ENTER');
+                break;
+
+                default:
+                    $this->sikuli->keyDown('p');
+                    $this->sikuli->keyDown('Key.ENTER');
+                break;
             }//end if
 
             sleep(1);
@@ -2389,6 +2399,12 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 case 'ie8':
                     // Use the shortcut to select the cut menu option.
                     $this->sikuli->keyDown('t');
+                break;
+
+                case 'edge':
+                    $this->sikuli->keyDown('Key.DOWN');
+                    $this->sikuli->keyDown('Key.DOWN');
+                    $this->sikuli->keyDown('Key.ENTER');
                 break;
 
                 case 'chrome':
