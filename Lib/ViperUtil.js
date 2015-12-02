@@ -751,11 +751,11 @@ var ViperUtil = {
             var c = parent.childNodes.length;
             for (var i = 0; i < c; i++) {
                 var child = parent.childNodes[i];
-                if (child.nodeType == ViperUtil.ELEMENT_NODE) {
+                if (child.nodeType === ViperUtil.ELEMENT_NODE) {
                     if (child !== node) {
                         return parents;
                     }
-                } else if (includeEmptyParents !== true && ViperUtil.isBlank(ViperUtil.trim(child.data)) !== true) {
+                } else if (includeEmptyParents !== true || ViperUtil.isBlank(ViperUtil.trim(child.data)) !== true) {
                     return parents;
                 }
             }

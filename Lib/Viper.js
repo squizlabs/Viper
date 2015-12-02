@@ -5096,7 +5096,7 @@ Viper.prototype = {
                         }
                     }//end if
 
-                    if (foundNode !== null) {console.info(1)
+                    if (foundNode !== null) {
                         ViperUtil.insertBefore(foundNode, foundNode.firstChild);
                         foundNode.previousSibling.data = String.fromCharCode(e.which);
                         range.setEnd(foundNode.previousSibling, 1);

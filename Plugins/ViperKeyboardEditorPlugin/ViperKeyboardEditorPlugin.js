@@ -2034,7 +2034,7 @@ ViperKeyboardEditorPlugin.prototype = {
             } else if (range.startContainer !== startNode && range.startOffset === 0) {
                 range.setStart(startNode, 0);
             } else if (range.startOffset === 0
-                && ViperUtil.isBrowser('msie', '<9') === true
+                && (ViperUtil.isBrowser('msie', '<9') === true || ViperUtil.isBrowser('edge') === true)
             ) {
                 if (range.startContainer.data.length > 1) {
                     range.startContainer.data = range.startContainer.data.substr(1);
