@@ -332,7 +332,9 @@ ViperCopyPastePlugin.prototype = {
                         // Initial call to onbeforepaste, happens when right click menu opens.
                         // Create the paste div.
                         pasteDiv = self._createPasteDiv(true);
-                    } else if (self._pasteProcess === 2 || (self._pasteProcess === 1 && self._isRightClick === false)) {
+                    } else if (self._pasteProcess === 2 
+                        || (self._pasteProcess === 1 && self._isRightClick === false || ViperUtil.isBrowser('edge') === true)
+                    ) {
                         // Third call to onbeforepaste, happens when paste option is clicked.
                         self._beforePaste();
 
