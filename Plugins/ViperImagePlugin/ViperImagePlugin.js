@@ -719,6 +719,7 @@ ViperImagePlugin.prototype = {
             this.showImageResizeHandles(nodeSelection);
             this._updateToolbars(nodeSelection);
         } else if (this._resizeImage
+            && !nodeSelection
             &&  ViperUtil.isBrowser('msie', '<11') === true
         ) {
             setTimeout(

@@ -1150,7 +1150,7 @@ ViperListPlugin.prototype = {
         }
 
         // Select bookmark.
-        if (ViperUtil.isBrowser('msie') === true) {
+        if (ViperUtil.isBrowser('msie', '<9') === true) {
             var self = this;
             setTimeout(function() {
                 self.viper.selectBookmark(bookmark);
