@@ -588,6 +588,21 @@ ViperInlineToolbarPlugin.prototype = {
                 if (startNode.nodeType !== ViperUtil.TEXT_NODE && startNode !== range.getEndNode()) {
                     lineage.push(range.getEndNode());
                 } else {
+                    if (ViperUtil.isBrowser('edge') === true
+                        && startNode.nodeType === ViperUtil.TEXT_NODE
+                        && range.startOffset === startNode.data.length
+                        && range.collapsed === false
+                        && startNode.nextSibling
+                        && startNode.nextSibling.nodeType === ViperUtil.ELEMENT_NODE
+                        && ViperUtil.isStubElement(startNode.nextSibling) === false
+                    ) {
+                        // Handle <p>text[<strong>text] text</strong></p> -> <p>text<strong>[text] text</strong></p>.
+                        var firstSelectable = range._getFirstSelectableChild(startNode.nextSibling);
+                        if (firstSelectable) {
+                            startNode = firstSelectable;
+                        }
+                    }
+
                     lineage.push(startNode);
 
                     if (ViperUtil.isBrowser('msie') === true
