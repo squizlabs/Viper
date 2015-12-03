@@ -479,7 +479,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      * @return void
      * @throws Exception If Viper fails to load on the page.
      */
-    private function _waitForViper($retries=2)
+    private function _waitForViper($retries=1)
     {
         if ($retries === 0) {
             $this->resetConnection();
@@ -491,14 +491,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $this->getTopToolbar();
         } catch (Exception $e) {
             $this->resetConnection();
-            $this->fail('Browser is not functioning properly');
-            return FALSE;
-            // Its not working.. Try to start browser again.
-            $this->sikuli->restartBrowser();
-            $this->sikuli->resize();
             $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
-            sleep(2);
-            $this->getTopToolbar();
+            $this->_waitForViper($retries - 1);
+            return;
         }
 
         $this->sikuli->setAutoWaitTimeout(4, $this->getTopToolbar());
@@ -2098,7 +2093,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         $text = str_replace("\n", '', $text);
         $text = str_replace('\n', '', $text);
-        
+
         // IE never has the px for width/height...
         $text = preg_replace('#="(\d+)"#', '="$1px"', $text);
 
