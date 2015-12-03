@@ -56,6 +56,11 @@ ViperCopyPastePlugin.prototype = {
             ViperSelection.addRange(data.range);
             var div = document.createElement('div');
             ViperUtil.setHtml(div, data.data);
+
+            if (bookmark) {
+                self.viper.removeBookmark(bookmark);
+            }
+
             self._beforePaste(data.range);
 
             if (self._bookmark) {
@@ -63,10 +68,6 @@ ViperCopyPastePlugin.prototype = {
             }
 
             self._handleFormattedPasteValue(false, div);
-
-            if (bookmark) {
-                self.viper.removeBookmark(bookmark);
-            }
 
             return false;
         });
@@ -756,7 +757,7 @@ ViperCopyPastePlugin.prototype = {
             }
         } else {
             try {
-                this.viper.insertNodeAtCaret(this._tmpNode);
+                this.viper.insertNodeAtCaret(this._tmpNode, range);
             } catch (e) {
                 this.viper.initEditableElement();
                 this.viper.insertNodeAtCaret(this._tmpNode);
@@ -1399,11 +1400,22 @@ ViperCopyPastePlugin.prototype = {
                         var newElem = document.createElement(ViperUtil.getTagName(surrChildren[j]));
                         ViperUtil.insertBefore(aTags[i], newElem);
                         newElem.appendChild(aTags[i]);
+                    } else if (this.viper.isSpecialElement(surrChildren[j]) === true) {
+                        // Keyword.
+                        surrChildren[j] = null;
                     }
                 }
 
-                this._moveChildren(surrChildren[surrChildren.length - 1], surrChildren[0]);
-                ViperUtil.remove(surrChildren);
+                for (var j = (surrChildren.length - 1); j >= 0; j--) {
+                    if (surrChildren[j] === null) {
+                        ViperUtil.removeArrayIndex(surrChildren, j);
+                    }
+                }
+
+                if (surrChildren.length > 0) {
+                    this._moveChildren(surrChildren[surrChildren.length - 1], surrChildren[0]);
+                    ViperUtil.remove(surrChildren);
+                }
             }
 
             content = ViperUtil.getHtml(tmp);
