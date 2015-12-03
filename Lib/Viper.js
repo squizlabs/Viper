@@ -586,9 +586,14 @@ Viper.prototype = {
             // Get the range using the mouse pointer (drop location).
             var range        = self.getRangeFromCoords(e.originalEvent.clientX, e.originalEvent.clientY);
             var dataTransfer = e.originalEvent.dataTransfer;
+            var origRange    = null;
+
+            if (origRange !== null) {
+                origRange = _dragRange.cloneRange();
+            }
 
             // Call the callback functions with dataTransfer object, range and original event.
-            if (self.fireCallbacks('Viper:dropped', {dataTransfer: dataTransfer, range: range.cloneRange(), e: e, origRange: _dragRange.cloneRange()}) === false) {
+            if (self.fireCallbacks('Viper:dropped', {dataTransfer: dataTransfer, range: range.cloneRange(), e: e, origRange: origRange}) === false) {
                 return false;
             }
 
