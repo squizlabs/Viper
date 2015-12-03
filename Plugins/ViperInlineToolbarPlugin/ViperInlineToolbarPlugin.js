@@ -628,6 +628,7 @@ ViperInlineToolbarPlugin.prototype = {
                         && range.endContainer.nodeType === ViperUtil.TEXT_NODE
                         && range.endOffset === 0
                         && range.getPreviousContainer(range.endContainer) === range.startContainer
+                        && range.endContainer.previousSibling !== range.startContainer
                     ) {
                         lineage.push(range.startContainer.parentNode);
                     }

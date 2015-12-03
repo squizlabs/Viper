@@ -1840,19 +1840,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             ($this->sikuli->getY($endRight) + 2)
         );
 
-        if (($this->sikuli->getBrowserid() !== 'ie11' || $startKeyword !== $endKeyword) && strpos($this->sikuli->getBrowserid(), 'ie') === 0) {
-            // Of course, even a simple thing like selecting words is a problem in
-            // IE. When you select words it also selects the space after it, causing
-            // tests to fail where style is applied to the selection or modification
-            // are made to the selection. To prevent this we need to select the words
-            // and then move the mouse back a few pixels while holding down left
-            // button and then drop it at the end of the last word.
-            $this->sikuli->drag($startLeft);
-            $this->sikuli->mouseMove($endRight);
-            $this->sikuli->mouseMoveOffset(-10, 0);
-            $this->sikuli->mouseMoveOffset(6, 0);
-            $this->sikuli->mouseUp();
-            usleep(500000);
+        if (strpos($this->sikuli->getBrowserid(), 'ie') === 0 || $this->sikuli->getBrowserid() === 'edge') {
+            $this->sikuli->dragDrop($endRight, $startLeft);
+            usleep(200000);
         } else {
             $this->sikuli->dragDrop($startLeft, $endRight);
             usleep(50000);
@@ -2108,6 +2098,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         $text = str_replace("\n", '', $text);
         $text = str_replace('\n', '', $text);
+        
+        // IE never has the px for width/height...
+        $text = preg_replace('#="(\d+)"#', '="$1px"', $text);
 
         // Google Chrome always adds an extra space at the end of a style attribute
         // remove it here...
@@ -2340,12 +2333,22 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         } else {
             $this->sikuli->rightClick($this->sikuli->getMouseLocation());
 
-            if ($this->sikuli->getBrowserid() === 'safari') {
-                $this->sikuli->keyDown('Key.DOWN');
-                $this->sikuli->keyDown('Key.ENTER');
-            } else {
-                $this->sikuli->keyDown('p');
-                $this->sikuli->keyDown('Key.ENTER');
+            switch ($this->sikuli->getBrowserid()) {
+                case 'safari':
+                    $this->sikuli->keyDown('Key.DOWN');
+                    $this->sikuli->keyDown('Key.ENTER');
+                break;
+
+                case 'edge':
+                    $this->sikuli->keyDown('Key.UP');
+                    $this->sikuli->keyDown('Key.UP');
+                    $this->sikuli->keyDown('Key.ENTER');
+                break;
+
+                default:
+                    $this->sikuli->keyDown('p');
+                    $this->sikuli->keyDown('Key.ENTER');
+                break;
             }//end if
 
             sleep(1);
@@ -2396,6 +2399,12 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 case 'ie8':
                     // Use the shortcut to select the cut menu option.
                     $this->sikuli->keyDown('t');
+                break;
+
+                case 'edge':
+                    $this->sikuli->keyDown('Key.DOWN');
+                    $this->sikuli->keyDown('Key.DOWN');
+                    $this->sikuli->keyDown('Key.ENTER');
                 break;
 
                 case 'chrome':

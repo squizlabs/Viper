@@ -689,7 +689,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
 
 
     /**
-     * Tests changing a paragraph to a quote and back again.
+     * Tests adding content around a paragraph.
      *
      * @return void
      */

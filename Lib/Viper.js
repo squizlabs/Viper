@@ -177,6 +177,18 @@ Viper.prototype = {
 
     },
 
+    /**
+     * Sets the custom class of this Viper instance.
+     */
+    setCustomClass: function(className)
+    {
+        this._settings['customClass'] = className;
+        if (this._viperElementHolder) {
+            ViperUtil.addClass(this._viperElementHolder, className)
+        }
+
+    },
+
     getDefaultBlockTag: function()
     {
         var defaultBlockTag = this.getSetting('defaultBlockTag');
@@ -297,6 +309,10 @@ Viper.prototype = {
         if (browser && version) {
             ViperUtil.addClass(holder, 'Viper-browser-' + browser);
             ViperUtil.addClass(holder, 'Viper-browserVer-' + browser + version);
+        }
+
+        if (this._settings.customClass) {
+            ViperUtil.addClass(holder, this._settings.customClass);
         }
 
         return holder;
@@ -570,9 +586,14 @@ Viper.prototype = {
             // Get the range using the mouse pointer (drop location).
             var range        = self.getRangeFromCoords(e.originalEvent.clientX, e.originalEvent.clientY);
             var dataTransfer = e.originalEvent.dataTransfer;
+            var origRange    = null;
+
+            if (origRange !== null) {
+                origRange = _dragRange.cloneRange();
+            }
 
             // Call the callback functions with dataTransfer object, range and original event.
-            if (self.fireCallbacks('Viper:dropped', {dataTransfer: dataTransfer, range: range, e: e, origRange: _dragRange}) === false) {
+            if (self.fireCallbacks('Viper:dropped', {dataTransfer: dataTransfer, range: range.cloneRange(), e: e, origRange: origRange}) === false) {
                 return false;
             }
 
@@ -682,6 +703,10 @@ Viper.prototype = {
         if (enabled === true && this.enabled === false) {
             this._addEvents();
             this.enabled = true;
+
+            // Word-wrap attribute changes when contentEditable is set to true.
+            this._setRadOnlyStyles()
+
             this.element.setAttribute('contentEditable', true);
             ViperUtil.setStyle(this.element, 'outline', 'none');
 
@@ -798,6 +823,22 @@ Viper.prototype = {
     isEnabled: function()
     {
         return this.enabled;
+
+    },
+
+    /**
+     * Sets the read only (contenteditable=false) styles so they remain the same when its set to true.
+     */
+    _setRadOnlyStyles: function () {
+        if (!this.element) {
+            return;
+        }
+
+        var styles = ['word-wrap'];
+        for (var i = 0; i < styles.length; i++) {
+            var value = ViperUtil.getComputedStyle(this.element, styles[i]);
+            ViperUtil.setStyle(this.element, styles[i], value);
+        }
 
     },
 
@@ -978,6 +1019,7 @@ Viper.prototype = {
                 var blockTag = this.getDefaultBlockTag();
                 if (!blockTag) {
                     ViperUtil.setHtml(elem, '');
+                    elem.appendChild(document.createTextNode(' '));
                 } else {
                     var emptyCont = '<br/>';
                     if (ViperUtil.isBrowser('msie', '<9') === true) {
@@ -1690,6 +1732,16 @@ Viper.prototype = {
             var viperElement    = this.getViperElement();
             var firstSelectable = range._getFirstSelectableChild(viperElement);
             if ((firstSelectable === range.startContainer || viperElement === range.startContainer) && range.startOffset === 0) {
+                var prevContainer   = range.getPreviousContainer(range.startContainer, null, false, true);
+                if (this.isOutOfBounds(prevContainer) === false) {
+                    return false;
+                }
+
+                var nextContainer = range.getNextContainer(range.endContainer, null, false, true);
+                if (this.isOutOfBounds(nextContainer) === false) {
+                    return false;
+                }
+
                 var lastSelectable  = range._getLastSelectableChild(viperElement);
                 if ((range.endContainer === viperElement && range.endOffset >= viperElement.childNodes.length)
                     || (range.endContainer === lastSelectable && range.endOffset === lastSelectable.data.length)
@@ -1721,9 +1773,9 @@ Viper.prototype = {
      *
      * @return void
      */
-    insertNodeAtCaret: function(node)
+    insertNodeAtCaret: function(node, range)
     {
-        var range = this.getViperRange();
+        range = range || this.getViperRange();
 
         // If we have any nodes highlighted, then we want to delete them before
         // inserting the new text.
@@ -3434,90 +3486,6 @@ Viper.prototype = {
 
     },
 
-    /**
-     * Sets the caret position right before the given node.
-     *
-     * If node does not have a text node sibling then it will be created.
-     *
-     * @param {DOMNode} node DOMNode to use.
-     *
-     * @return {boolean} True if it was successful.
-     */
-    setCaretBeforeNode: function(node)
-    {
-        if (!node || !node.parentNode) {
-            return false;
-        }
-
-        var range = this.getCurrentRange();
-        if (node.previousSibling && node.previousSibling.nodeType === ViperUtil.TEXT_NODE) {
-            // Next sibling is a textnode so move the caret to that node.
-            node = node.previousSibling;
-        } else {
-            // Create a new text node and set the caret to that node.
-            var text = this.createSpaceNode();
-            ViperUtil.insertBefore(node, text);
-            node = text;
-        }
-
-        range.setStart(node, node.data.length);
-        range.collapse(true);
-        ViperSelection.addRange(range);
-
-        this.fireCaretUpdated();
-
-    },
-
-    setCaretAtStart: function(node)
-    {
-        if (!node || !node.parentNode) {
-            return false;
-        }
-
-        var range = this.getCurrentRange();
-        if (node.nodeType !== ViperUtil.TEXT_NODE) {
-            node = range._getFirstSelectableChild(node);
-        }
-
-        if (!node) {
-            return false;
-        }
-
-        range.setStart(node, 0);
-        range.collapse(true);
-        ViperSelection.addRange(range);
-
-        this.fireCaretUpdated();
-
-        return true;
-
-    },
-
-    setCaretAtEnd: function(node)
-    {
-        if (!node || !node.parentNode) {
-            return false;
-        }
-
-        var range = this.getCurrentRange();
-        if (node.nodeType !== ViperUtil.TEXT_NODE) {
-            node = range._getLastSelectableChild(node);
-        }
-
-        if (!node) {
-            return false;
-        }
-
-        range.setStart(node, node.data.length);
-        range.collapse(true);
-        ViperSelection.addRange(range);
-
-        this.fireCaretUpdated();
-
-        return true;
-
-    },
-
     createSpaceNode: function()
     {
         var node = null;
@@ -3599,7 +3567,14 @@ Viper.prototype = {
                 && (ViperUtil.isBlockElement(bookmark.end.nextSibling) === false || !bookmark.start.previousSibling || ViperUtil.isBlockElement(bookmark.start.previousSibling))
             ) {
                 if ((ViperUtil.isTag(bookmark.end.nextSibling, 'span') !== true || ViperUtil.hasClass(bookmark.end.nextSibling, 'viperBookmark') === false)) {
-                    startPos = ViperUtil.getFirstChildTextNode(bookmark.end.nextSibling);
+                    if (ViperUtil.isStubElement(bookmark.end.nextSibling) === false) {
+                        startPos = ViperUtil.getFirstChildTextNode(bookmark.end.nextSibling);
+                    } else if (ViperUtil.isTag(bookmark.end.nextSibling, 'br') === true) {
+                        startPos = bookmark.end.nextSibling;
+                    } else {
+                        startPos = document.createTextNode('');
+                        ViperUtil.insertAfter(bookmark.end, startPos);
+                    }
                 } else {
                     startPos = document.createTextNode('');
                     ViperUtil.insertAfter(bookmark.end, startPos);
@@ -5126,7 +5101,7 @@ Viper.prototype = {
                         }
                     }//end if
 
-                    if (foundNode !== null) {console.info(1)
+                    if (foundNode !== null) {
                         ViperUtil.insertBefore(foundNode, foundNode.firstChild);
                         foundNode.previousSibling.data = String.fromCharCode(e.which);
                         range.setEnd(foundNode.previousSibling, 1);
@@ -5508,7 +5483,7 @@ Viper.prototype = {
     {
         if (this.element) {
             try {
-                if (ViperUtil.isBrowser('msie', '<11') === true) {
+                if (ViperUtil.isBrowser('msie') === true || ViperUtil.isBrowser('edge') === true) {
                     var range = this.getViperRange();
                     ViperSelection.addRange(range);
 
@@ -6032,7 +6007,7 @@ Viper.prototype = {
 
     _closeStubTags: function (content)
     {
-        content = content.replace(/<(area|base|basefont|br|hr|input|img|link|meta|embed|viper:param|param)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "<$1$2 />");
+        content = content.replace(/<(area|base|basefont|br|hr|input|img|link|meta|embed|viper:param|param)((\s+\w+(\s*=\s*(?:"[^">\s]+"|\'[^\'>\s]+\'))?)+)?\s*>/ig, "<$1$2 />");
         return content;
 
     },
@@ -6177,6 +6152,22 @@ Viper.prototype = {
                 return;
             } else if (node.className !== '' || node.id !== '') {
                 // If the node has CSS classes or ID set then do not remove it.
+                switch (tagName) {
+                    case 'textarea':
+                    case 'form':
+                    case 'input':
+                    case 'button':
+                    case 'select':
+                    case 'label':
+                        // Form fields must be removed.
+                        ViperUtil.remove(node);
+                    break;
+
+                    default:
+                        // Keep node.
+                    break;
+                }
+
                 return;
             }
 
@@ -6267,7 +6258,12 @@ Viper.prototype = {
                 break;
 
                 case 'textarea':
-                    // Do not clean up.
+                case 'form':
+                case 'input':
+                case 'button':
+                case 'select':
+                case 'label':
+                    ViperUtil.remove(node);
                 break;
 
                 case 'strong':

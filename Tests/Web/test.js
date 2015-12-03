@@ -333,6 +333,18 @@ function gStringLoc(str)
                 y2: loc.bottom
             };
 
+    } else if (ViperUtil.isBrowser('edge') === true) {
+        var plugin = viper.getPluginManager().getPlugin('ViperSearchReplacePlugin');
+        if (plugin.find(str, false, true, false, ViperUtil.getid('content')) === true) {
+            range = viper.getCurrentRange();
+            loc = range.rangeObj.getBoundingClientRect();
+            loc = {
+                    x1: loc.left,
+                    x2: loc.right,
+                    y1: loc.top,
+                    y2: loc.bottom
+                };
+        }
     } else {
         range.setStart(range._getFirstSelectableChild(contentElement), 0);
         range.collapse(true);
