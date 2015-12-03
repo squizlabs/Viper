@@ -6007,7 +6007,7 @@ Viper.prototype = {
 
     _closeStubTags: function (content)
     {
-        content = content.replace(/<(area|base|basefont|br|hr|input|img|link|meta|embed|viper:param|param)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, "<$1$2 />");
+        content = content.replace(/<(area|base|basefont|br|hr|input|img|link|meta|embed|viper:param|param)((\s+\w+(\s*=\s*(?:"[^">\s]+"|\'[^\'>\s]+\'))?)+)?\s*>/ig, "<$1$2 />");
         return content;
 
     },
