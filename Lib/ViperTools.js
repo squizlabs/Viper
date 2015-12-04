@@ -494,7 +494,7 @@ ViperTools.prototype = {
                 ViperUtil.addClass(textBox, 'Viper-focused');
                 self.viper.highlightSelection();
 
-                if (ViperUtil.isBrowser('msie') === true) {
+                if (ViperUtil.isBrowser('msie') === true || ViperUtil.isBrowser('edge') === true) {
                     if (moveCaretToEnd === true) {
                         setTimeout(
                             function() {
@@ -502,6 +502,8 @@ ViperTools.prototype = {
                                     var textRange = input.createTextRange();
                                     textRange.move('character', input.value.length)
                                     textRange.select();
+                                } else if (ViperUtil.isBrowser('edge') === true) {
+                                    input.setSelectionRange(input.value.length, input.value.length);
                                 } else {
                                     input.focus();
                                     // Set the caret to the end of the textfield.
