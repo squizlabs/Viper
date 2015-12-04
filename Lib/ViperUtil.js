@@ -734,7 +734,7 @@ var ViperUtil = {
      *
      * @return {array} Parent elements.
      */
-    getSurroundingParents: function(node, tagName, elementType, stopElem, includeEmptyParents)
+    getSurroundingParents: function(node, tagName, elementType, stopElem)
     {
         var parents = [];
         if (!node) {
@@ -749,14 +749,16 @@ var ViperUtil = {
             }
 
             var c = parent.childNodes.length;
-            for (var i = 0; i < c; i++) {
-                var child = parent.childNodes[i];
-                if (child.nodeType === ViperUtil.ELEMENT_NODE) {
-                    if (child !== node) {
+            if (c > 1) {
+                for (var i = 0; i < c; i++) {
+                    var child = parent.childNodes[i];
+                    if (child.nodeType === ViperUtil.ELEMENT_NODE) {
+                        if (child !== node) {
+                            return parents;
+                        }
+                    } else if (child !== node && ViperUtil.isBlank(ViperUtil.trim(child.data)) !== true) {
                         return parents;
                     }
-                } else if (includeEmptyParents !== true || ViperUtil.isBlank(ViperUtil.trim(child.data)) !== true) {
-                    return parents;
                 }
             }
 
