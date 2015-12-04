@@ -279,8 +279,6 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
             // Reset zoom.
             $this->sikuli->keyDown('Key.CMD + 0');
-
-            $this->sikuli->setAutoWaitTimeout(1);
             $this->_waitForViper();
         } else {
             $this->sikuli->setSetting('MinSimilarity', self::$_similarity);
@@ -303,9 +301,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             // Reset zoom.
             $this->sikuli->keyDown('Key.CMD + 0');
 
-            $this->sikuli->setAutoWaitTimeout(1);
             $this->_waitForViper();
-
             self::$_testRun = true;
         }//end if
 
@@ -488,6 +484,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         try {
             // This will make sure that the browser has loaded the Viper page.
+            $this->sikuli->setAutoWaitTimeout(5);
             $this->getTopToolbar();
         } catch (Exception $e) {
             $this->resetConnection();
