@@ -5315,7 +5315,7 @@ Viper.prototype = {
                 && range.collapsed === true
                 && range.startContainer
                 && range.startContainer.nodeType === 9
-                && ViperUtil.isBrowser('msie') === true
+                && (ViperUtil.isBrowser('msie') === true || ViperUtil.isBrowser('edge') === true)
             ) {
                 // If clicked inside the previous selection then IE takes a lot
                 // longer to update the caret position so if the range is collapsed
@@ -5329,7 +5329,7 @@ Viper.prototype = {
             } else {
                 self.fireSelectionChanged(range, true);
             }
-        }, 5);
+        }, 8);
 
     },
 
