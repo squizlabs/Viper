@@ -89,6 +89,9 @@
                     }
                 );
 
+                if (location.hash.indexOf('#test-') === 0) {
+                    useTest(location.hash.replace('#', ''));
+                }
             };
         </script>
     </head>
