@@ -995,7 +995,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function useTest($id, $clickKeyword=1)
     {
-        $this->sikuli->execJS('useTest("test-'.$id.'")', FALSE);
+        $this->sikuli->execJS('useTest("test-'.$id.'")', TRUE);
         sleep(1);
 
         if ($clickKeyword !== null) {
