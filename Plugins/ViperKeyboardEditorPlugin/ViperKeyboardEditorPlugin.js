@@ -452,7 +452,11 @@ ViperKeyboardEditorPlugin.prototype = {
                 var br = document.createElement('br');
                 this.viper.insertNodeAtCaret(br);
 
-                if (!br.nextSibling) {
+                if (!br.nextSibling
+                    || br.nextSibling.nodeType !== ViperUtil.TEXT_NODE
+                    || br.nextSibling.data.charAt(0) === "\n"
+                ) {
+                    ViperUtil.insertAfter(br, document.createElement('br'));
                     ViperUtil.insertAfter(br, document.createTextNode(''));
                 }
 
