@@ -35,6 +35,7 @@ function Viper(id, options, callback, editables)
     this._attributeGetModifiers = [];
     this._attributeSetModifiers = [];
     this._mouseDownEvent        = null;
+    this._retrievingValues      = 0;
 
     // This var is used to store the range of Viper before it loses focus. Any plugins
     // that steal focus from Viper element can use getPreviousRange.
@@ -1385,7 +1386,7 @@ Viper.prototype = {
             var notModified    = true;
             var modifiersCount = this._attributeSetModifiers.length;
             if (modifiersCount > 0) {
-                this._retrievingValues = true;
+                this._retrievingValues++;
                 var doneCount          = 0;
                 for (var i = 0; i < modifiersCount; i++) {
                     notModified = this._attributeSetModifiers[i].call(
@@ -1396,7 +1397,7 @@ Viper.prototype = {
                         function() {
                             doneCount++;
                             if (doneCount === modifiersCount) {
-                                self._retrievingValues = false;
+                                self._retrievingValues--;
                                 if (self._valuesRetrievedCallback) {
                                     self._valuesRetrievedCallback.call(self);
                                 }
@@ -1407,7 +1408,7 @@ Viper.prototype = {
 
                 if (notModified !== false) {
                     element.setAttribute(attribute, value);
-                    self._retrievingValues = false;
+                    self._retrievingValues--;
                     if (self._valuesRetrievedCallback) {
                         self._valuesRetrievedCallback.call(self);
                     }
@@ -4483,7 +4484,7 @@ Viper.prototype = {
         ) {
             this._prevRange = range;
 
-            if (this._retrievingValues === true) {
+            if (this._retrievingValues > 0) {
                 var self = this;
                 this._valuesRetrievedCallback = function() {
                     self.fireCallbacks('Viper:selectionChanged', range);
