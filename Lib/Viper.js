@@ -5328,6 +5328,26 @@ Viper.prototype = {
                     self.fireSelectionChanged(self.adjustRange(), true);
                 }, 450);
             } else {
+                if (ViperUtil.isBrowser('msie', '>=11') === true 
+                    || ViperUtil.isBrowser('edge') === true
+                ) {
+                    if (range.startContainer !== range.endContainer
+                        && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                        && range.startOffset === range.startContainer.data.length
+                        && range.startContainer.nextSibling
+                        && range.startContainer.nextSibling.nodeType == ViperUtil.ELEMENT_NODE
+                    ) {
+                        // Handle <p>text [<strong>text] </strong></p> -> <p>text <strong>[text] </strong></p>.
+                        var firstChild = range._getFirstSelectableChild(range.startContainer.nextSibling);
+                        if (firstChild && firstChild.nodeType === ViperUtil.TEXT_NODE) {
+                            range.setStart(firstChild, 0);
+                            ViperSelection.addRange(range);
+                        }
+                    }
+
+                }
+
+
                 self.fireSelectionChanged(range, true);
             }
         }, 8);
