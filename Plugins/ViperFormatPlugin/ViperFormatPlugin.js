@@ -1099,7 +1099,7 @@ ViperFormatPlugin.prototype = {
                         isBlockQuote = true;
                     }
 
-                    if (isBlockQuote === false || ViperUtil.getTag('p', firstBlock).length === 1) {
+                    if (firstBlock && (isBlockQuote === false || ViperUtil.getTag('p', firstBlock).length === 1)) {
                         tools.enableButton('headings');
                     }
                 }

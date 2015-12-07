@@ -1469,6 +1469,11 @@ ViperCoreStylesPlugin.prototype = {
             startNode = range.startContainer;
         }
 
+        var endNode = range.getEndNode()
+        if (!endNode) {
+            endNode = range.endContainer;
+        }
+
         var tools = this.viper.ViperTools;
         if (this._canStyleNode(startNode, true) !== true) {
             for (var btn in buttons) {
@@ -1550,40 +1555,51 @@ ViperCoreStylesPlugin.prototype = {
             tools.disableButton('removeFormat');
         }
 
-        tools.enableButton('justify');
-
-        if (!states.alignment) {
-            states.alignment = 'start';
+        var hasParent = true;
+        if (!ViperUtil.getFirstBlockParent(startNode, null, true)
+            || !ViperUtil.getFirstBlockParent(endNode, null, true)
+        ) {
+            hasParent = false;
         }
 
-        if (states.alignment) {
-            var justify       = states.alignment;
-            var c             = buttons.justify.length;
-            var toolbarButton = tools.getItem('justify');
-            toolbarButton.setIconClass('Viper-justifyLeft');
+        if (hasParent) {
+            tools.enableButton('justify');
 
-            if (justify === 'justify') {
-                justify = 'block';
+            if (!states.alignment) {
+                states.alignment = 'start';
             }
 
-            var setToggleInactive = true;
-            for (var i = 0; i < c; i++) {
-                tools.enableButton('ViperCoreStylesPlugin:vtp:' + buttons.justify[i]);
+            if (states.alignment) {
+                var justify       = states.alignment;
+                var c             = buttons.justify.length;
+                var toolbarButton = tools.getItem('justify');
+                toolbarButton.setIconClass('Viper-justifyLeft');
 
-                if (buttons.justify[i] === justify) {
-                    tools.setButtonActive('ViperCoreStylesPlugin:vtp:' + buttons.justify[i]);
-                    toolbarButton.setIconClass('Viper-justify' + ViperUtil.ucFirst(justify));
-                    tools.setButtonActive('justify');
-                    setToggleInactive = false;
-                } else {
-                    tools.setButtonInactive('ViperCoreStylesPlugin:vtp:' + buttons.justify[i]);
+                if (justify === 'justify') {
+                    justify = 'block';
                 }
-            }
 
-            if (setToggleInactive === true) {
-                tools.setButtonInactive('justify');
-            }
-        }//end if
+                var setToggleInactive = true;
+                for (var i = 0; i < c; i++) {
+                    tools.enableButton('ViperCoreStylesPlugin:vtp:' + buttons.justify[i]);
+
+                    if (buttons.justify[i] === justify) {
+                        tools.setButtonActive('ViperCoreStylesPlugin:vtp:' + buttons.justify[i]);
+                        toolbarButton.setIconClass('Viper-justify' + ViperUtil.ucFirst(justify));
+                        tools.setButtonActive('justify');
+                        setToggleInactive = false;
+                    } else {
+                        tools.setButtonInactive('ViperCoreStylesPlugin:vtp:' + buttons.justify[i]);
+                    }
+                }
+
+                if (setToggleInactive === true) {
+                    tools.setButtonInactive('justify');
+                }
+            }//end if
+        } else {
+            tools.disableButton('justify');
+        }
 
         var enableHr     = true;
         var hrIgnoreTags = 'tr,td,th,li,caption,img,ul,ol,table';
@@ -1654,18 +1670,20 @@ ViperCoreStylesPlugin.prototype = {
                     endParent = ViperUtil.getFirstBlockParent(endNode, null, true);
                 }
 
-                var elems     = ViperUtil.getElementsBetween(startParent, endParent);
-                elems.unshift(startParent);
-                elems.push(endParent);
-                var c         = elems.length;
-                for (var i = 0; i < c; i++) {
-                    if (elems[i].nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isBlockElement(elems[i]) === true) {
-                        var alignment = elems[i].style.textAlign;
-                        if (activeStates.alignment !== null && alignment !== activeStates.alignment) {
-                            activeStates.alignment = null;
-                            break;
-                        } else {
-                            activeStates.alignment = alignment;
+                if (startParent && endParent) {
+                    var elems     = ViperUtil.getElementsBetween(startParent, endParent);
+                    elems.unshift(startParent);
+                    elems.push(endParent);
+                    var c         = elems.length;
+                    for (var i = 0; i < c; i++) {
+                        if (elems[i].nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isBlockElement(elems[i]) === true) {
+                            var alignment = elems[i].style.textAlign;
+                            if (activeStates.alignment !== null && alignment !== activeStates.alignment) {
+                                activeStates.alignment = null;
+                                break;
+                            } else {
+                                activeStates.alignment = alignment;
+                            }
                         }
                     }
                 }
