@@ -889,7 +889,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testDeleteContentLastElementTable()
     {
-        $this->useTest(6);
+        $this->useTest(6, null);
 
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + a');
@@ -915,7 +915,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testDeleteAndBackspaceInLastCellOfTable()
     {
-        $this->useTest(8);
+        $this->useTest(8, null);
 
         $this->clickCell(16);
 
