@@ -1138,29 +1138,33 @@ ViperFormatPlugin.prototype = {
                     // inside a blockquote. Then it becomes the blockquote.
                     var parent = getValidParent(startNode);
 
-                    // Enable the main toolbar button.
-                    tools.enableButton('formats');
+                    if (parent !== null) {
+                        // Enable the main toolbar button.
+                        tools.enableButton('formats');
 
-                    // Set the main toolbar button icon.
-                    var parentTagName = ViperUtil.getTagName(parent, range);
-                    if (formatButtons[parentTagName]) {
-                        tools.getItem('formats').setIconClass('Viper-formats-' + parentTagName);
-                    }
-
-                    var formatButtonStatuses = self.getFormatButtonStatuses(parent);
-                    for (var tag in formatButtons) {
-                        if (formatButtonStatuses[tag] === true) {
-                            tools.enableButton(prefix + 'formats:' + formatButtons[tag]);
-                        } else {
-                            tools.disableButton(prefix + 'formats:' + formatButtons[tag]);
+                        // Set the main toolbar button icon.
+                        var parentTagName = ViperUtil.getTagName(parent, range);
+                        if (formatButtons[parentTagName]) {
+                            tools.getItem('formats').setIconClass('Viper-formats-' + parentTagName);
                         }
 
-                        if (tag === parentTagName) {
-                            tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
-                            tools.setButtonActive('formats');
-                        } else {
-                            tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
+                        var formatButtonStatuses = self.getFormatButtonStatuses(parent);
+                        for (var tag in formatButtons) {
+                            if (formatButtonStatuses[tag] === true) {
+                                tools.enableButton(prefix + 'formats:' + formatButtons[tag]);
+                            } else {
+                                tools.disableButton(prefix + 'formats:' + formatButtons[tag]);
+                            }
+
+                            if (tag === parentTagName) {
+                                tools.setButtonActive(prefix + 'formats:' + formatButtons[tag]);
+                                tools.setButtonActive('formats');
+                            } else {
+                                tools.setButtonInactive(prefix + 'formats:' + formatButtons[tag]);
+                            }
                         }
+                    } else {
+                        tools.disableButton('formats');
                     }
                 } else if (nodeSelection && nodeSelection.nodeType === ViperUtil.ELEMENT_NODE) {
                     // This is an element selection.
