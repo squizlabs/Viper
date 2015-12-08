@@ -1853,20 +1853,34 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function moveToKeyword($keyword, $position='right')
     {
-        $this->selectKeyword($keyword);
+        $keyword = $this->findKeyword($keyword);
 
-        if ($position === 'right' && ($this->sikuli->getBrowserid() === 'ie8' || $this->sikuli->getBrowserid() === 'ie9')) {
-            $this->sikuli->keyDown('Key.LEFT');
-            $this->sikuli->keyDown('Key.RIGHT');
-            $this->sikuli->keyDown('Key.RIGHT');
-            $this->sikuli->keyDown('Key.RIGHT');
-        } else if ($position === 'right') {
-            $this->sikuli->keyDown('Key.RIGHT');
-        } else if ($position === 'left') {
-            $this->sikuli->keyDown('Key.LEFT');
-        } else if ($position === 'middle') {
-            $this->sikuli->keyDown('Key.LEFT');
-            $this->sikuli->keyDown('Key.RIGHT');
+        switch ($position) {
+            case 'left':
+                $left = $this->sikuli->getTopLeft($keyword);
+                $this->sikuli->setLocation(
+                    $left,
+                    ($this->sikuli->getX($left) + 2),
+                    $this->sikuli->getY($left)
+                );
+
+                $this->sikuli->click($left);
+            break;
+
+            case 'right':
+                $right = $this->sikuli->getTopRight($keyword);
+                $this->sikuli->setLocation(
+                    $right,
+                    ($this->sikuli->getX($right) - 2),
+                    $this->sikuli->getY($right)
+                );
+
+                $this->sikuli->click($right);
+            break;
+
+            default:
+                $this->clickKeyword($keyword);
+            break;
         }
 
     }//end moveToKeyword()
