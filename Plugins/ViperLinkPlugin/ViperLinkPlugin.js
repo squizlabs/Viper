@@ -218,7 +218,7 @@ ViperLinkPlugin.prototype = {
         var node  = range.getNodeSelection();
         var a     = document.createElement('a');
 
-        if (!node && ViperUtil.isBrowser('msie') === true) {
+        if (!node && (ViperUtil.isBrowser('msie') === true || ViperUtil.isBrowser('edge') === true)) {
             // IE fix for Img selections.
             var prevSibling = range.startContainer.previousSibling;
             var startNode   = range.getStartNode();
@@ -387,7 +387,7 @@ ViperLinkPlugin.prototype = {
         var selectedNode = range.getNodeSelection();
         var startNode    = range.getStartNode();
         var common       = range.getCommonElement();
-        if (!selectedNode && ViperUtil.isBrowser('msie') === true) {
+        if (!selectedNode && (ViperUtil.isBrowser('msie') === true || ViperUtil.isBrowser('edge') === true)) {
             var startNode = range.getStartNode();
             var endNode   = range.getEndNode();
             if (range.startContainer === range.endContainer
@@ -473,7 +473,7 @@ ViperLinkPlugin.prototype = {
 
         var contents = range.getHTMLContents();
         if (contents.toLowerCase().indexOf('<a ') >= 0) {
-            if (ViperUtil.isBrowser('msie') === true) {
+            if (ViperUtil.isBrowser('msie') === true || ViperUtil.isBrowser('edge') === true) {
                 var startNode = range.getStartNode();
                 var endNode   = range.getEndNode();
                 if (startNode

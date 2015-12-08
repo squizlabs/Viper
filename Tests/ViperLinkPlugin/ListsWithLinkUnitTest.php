@@ -150,7 +150,7 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
 
         // Check where only a word in the list item is linked
-        $this->moveToKeyword(1, 'middle');
+        $this->clickKeyword(1);
         sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
@@ -212,7 +212,7 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'));
 
         // Check where only a word in the list item is linked
-        $this->moveToKeyword(1, 'middle');
+        $this->clickKeyword(1);
         sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'));
@@ -497,7 +497,7 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'));
 
         // Check where only a word in the list item is linked
-        $this->moveToKeyword(1, 'middle');
+        $this->clickKeyword(1);
         $this->assertFalse($this->inlineToolbarButtonExists('formats'));
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'));
         $this->selectKeyword(1);
@@ -533,7 +533,7 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'));
 
         // Check where only a word in the list item is linked
-        $this->moveToKeyword(1, 'middle');
+        $this->clickKeyword(1);
         $this->assertFalse($this->inlineToolbarButtonExists('formats'));
         $this->assertTrue($this->topToolbarButtonExists('formats', 'disabled'));
         $this->selectKeyword(1);
