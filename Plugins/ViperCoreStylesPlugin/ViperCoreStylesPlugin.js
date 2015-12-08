@@ -856,18 +856,24 @@ ViperCoreStylesPlugin.prototype = {
         }
 
         var nextSibling = prev.nextSibling;
+        var blockTag    = this.viper.getDefaultBlockTag();
 
         ViperUtil.insertAfter(prev, hr);
 
-        if (!nextSibling || ViperUtil.isBlockElement(nextSibling) === false) {
-            var p = document.createElement('p');
+        if (ViperUtil.isTag(nextSibling, 'br') === true) {
+            ViperUtil.remove(nextSibling);
+            nextSibling = prev.nextSibling.nextSibling;
+        } else if (!nextSibling || (ViperUtil.isBlockElement(nextSibling) === false && blockTag !== '')) {
+            var p = document.createElement(blockTag);
             ViperUtil.setHtml(p, '&nbsp;');
             ViperUtil.insertAfter(hr, p);
             nextSibling = p;
         } else {
             if (ViperUtil.trim(ViperUtil.getNodeTextContent(nextSibling)) === '') {
                 if (!nextSibling.nextElementSibling || ViperUtil.isBlockElement(nextSibling.nextElementSibling) === false) {
-                    ViperUtil.setHtml(nextSibling, '&nbsp;');
+                    if (ViperUtil.isStubElement(nextSibling) !== true) {
+                        ViperUtil.setHtml(nextSibling, '&nbsp;');
+                    }
 
                     var nextEmptyElem = nextSibling.nextSibling;
                     while (nextEmptyElem) {

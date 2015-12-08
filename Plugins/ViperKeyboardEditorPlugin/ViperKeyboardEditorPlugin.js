@@ -2637,17 +2637,21 @@ ViperKeyboardEditorPlugin.prototype = {
             // Find the first parent block element.
             var parent = range.startContainer.parentNode;
             if (parent === this.viper.getViperElement()) {
-                // Check if there are any block elements before this node.
-                if (range.startContainer.previousSibling
-                    && range.startContainer.previousSibling.nodeType !== ViperUtil.TEXT_NODE
-                ) {
+                // Split the text node.
+                var newNode = range.startContainer;
+                if (range.startOffset !== 0 && range.startOffset !== range.startContainer.data.length) {
+                    // Not at start or end of text node. Split text node and insert a BR tag in between.
+                    newNode = range.startContainer.splitText(range.startOffset);
+                    ViperUtil.insertBefore(newNode, document.createElement('br'));
+                    return range.startContainer.nextSibling;
+                } else if (range.startOffset === 0) {
+                    if (range.previousSibling && ViperUtil.isTag(range.previousSibling, 'br') === true) {
+                        ViperUtil.remove(range.previousSibling)
+                    }
+
                     return range.startContainer.previousSibling;
                 } else {
-                    // Cretae a new paragraph and insert it at range position.
-                    var para = document.createElement('p');
-                    ViperUtil.setHtml(para, '&nbsp;');
-                    ViperUtil.insertAfter(range.startContainer, para);
-                    return para;
+                    return range.startContainer;
                 }
             }
 
