@@ -597,7 +597,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testComplextTableHighlightsNoCaption()
     {
-        $this->useTest(5);
+        $this->useTest(5, null);
 
         // Test highlights in heading.
         $icon = $this->_getTableToolsIcon(7);
