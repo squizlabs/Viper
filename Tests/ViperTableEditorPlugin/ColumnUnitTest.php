@@ -332,7 +332,7 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
      */
     public function testColspanChangesWhenNewColumnAdded()
     {
-        $this->useTest(2);
+        $this->useTest(2, null);
 
         $this->showTools(5, 'col');
         $this->clickInlineToolbarButton('addRight');
@@ -353,7 +353,7 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
      */
     public function testColspanChangesWhenYouDeleteTheLastColumn()
     {
-        $this->useTest(3);
+        $this->useTest(3, null);
 
         $this->showTools(6, 'col');
         $this->clickInlineToolbarButton('delete');
@@ -370,7 +370,7 @@ class Viper_Tests_ViperTableEditorPlugin_ColumnUnitTest extends AbstractViperTab
      */
     public function testColspanChangesWhenYouDeleteTheFirstColumnOfMergedCell()
     {
-        $this->useTest(4);
+        $this->useTest(4, null);
 
         $this->showTools(5, 'col');
         $this->clickInlineToolbarButton('delete');
