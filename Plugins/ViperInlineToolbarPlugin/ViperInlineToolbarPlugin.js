@@ -616,7 +616,7 @@ ViperInlineToolbarPlugin.prototype = {
                         // tag is selected IE thinks this is not inside the tag but in common parent.
                         // Add the parent of startNode to lineage here.
                         lineage.push(range.endContainer.childNodes[(range.endContainer.childNodes.length - 1)]);
-                    } else if (ViperUtil.isBrowser('msie') === true
+                    } else if ((ViperUtil.isBrowser('msie') === true || ViperUtil.isBrowser('edge') === true )
                         && range.startOffset === 0
                         && range.collapsed === true
                         && startNode.nodeType === ViperUtil.TEXT_NODE
