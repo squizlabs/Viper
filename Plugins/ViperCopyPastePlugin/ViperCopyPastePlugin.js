@@ -1258,7 +1258,7 @@ ViperCopyPastePlugin.prototype = {
                 }
 
                 // Check that previous container is not empty.
-                if (prevBlock) {
+                if (prevBlock && ViperUtil.isTag(prevBlock, 'table') === false) {
                     prevCheckCont = ViperUtil.trim(ViperUtil.getNodeTextContent(prevBlock));
                     if (prevCheckCont === '' || (prevCheckCont.length === 1 && prevCheckCont.charCodeAt(0) === 160)) {
                         if (ViperUtil.isChildOf(this._tmpNode, prevBlock) === true) {
