@@ -2791,6 +2791,23 @@ var ViperUtil = {
 
     },
 
+    /**
+     * Returns true if the given range start and end nodes are in different block tags.
+     *
+     * @return {boolean}
+     */
+    rangeInDiffBlocks: function(range)
+    {
+        if (range.startContainer !== range.endContainer
+            && this.getFirstBlockParent(range.startContainer, true) !== this.getFirstBlockParent(range.endContainer, true)
+        ) {
+            return true;
+        }
+
+        return false;
+
+    },
+
     clone: function(value, shallow)
     {
         if (typeof value !== 'object') {
