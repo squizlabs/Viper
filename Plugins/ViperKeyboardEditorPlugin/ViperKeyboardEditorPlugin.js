@@ -1043,7 +1043,6 @@ ViperKeyboardEditorPlugin.prototype = {
                         if (node.nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isTag(node, 'hr') === true) {
                             // Found the HR element, remove it.
                             ViperUtil.remove(node);
-                            ViperUtil.preventDefault(e);
                             this.viper.fireNodesChanged();
                             return false;
                         } else if (node.nodeType !== ViperUtil.TEXT_NODE || ViperUtil.trim(node.data).length !== 0) {
@@ -1180,7 +1179,6 @@ ViperKeyboardEditorPlugin.prototype = {
                         ViperSelection.addRange(range);
                     }
 
-                    ViperUtil.preventDefault(e);
                     this.viper.fireNodesChanged();
 
                     return false;
@@ -1779,7 +1777,6 @@ ViperKeyboardEditorPlugin.prototype = {
                     range.collapse(true);
                     ViperSelection.addRange(range);
 
-                    ViperUtil.preventDefault(e);
                     this.viper.fireNodesChanged();
                     return false;
                 } else {
@@ -1918,7 +1915,6 @@ ViperKeyboardEditorPlugin.prototype = {
                         }
                     }
 
-                    ViperUtil.preventDefault(e);
                     this.viper.fireNodesChanged();
                     this.viper.fireSelectionChanged();
                     return false;
@@ -2022,7 +2018,6 @@ ViperKeyboardEditorPlugin.prototype = {
                         if (node.nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isTag(node, 'hr') === true) {
                             // Found the HR element, remove it.
                             ViperUtil.remove(node);
-                            ViperUtil.preventDefault(e);
                             this.viper.fireNodesChanged();
                             this.viper.fireSelectionChanged();
                             return false;
@@ -2036,7 +2031,6 @@ ViperKeyboardEditorPlugin.prototype = {
                     if (foundSib === true) {
                         break;
                     } else if (ViperUtil.isTag(startNode, 'td') === true || ViperUtil.isTag(startNode, 'th') === true) {
-                        ViperUtil.preventDefault(e);
                         return false;
                     }
 
@@ -2209,7 +2203,6 @@ ViperKeyboardEditorPlugin.prototype = {
             if (currentParent !== nextParent && this.viper.isOutOfBounds(nextSelectable) === false) {
                 if (ViperUtil.isTag(currentParent, 'td') === true || ViperUtil.isTag(currentParent, 'th') === true) {
                     // At the end of a cell.. Do nothing.
-                    ViperUtil.preventDefault(e);
                     return false;
                 }
 
@@ -2218,7 +2211,6 @@ ViperKeyboardEditorPlugin.prototype = {
                 }
 
                 ViperUtil.remove(nextParent);
-                ViperUtil.preventDefault(e);
                 this.viper.fireNodesChanged();
                 return false;
             }
@@ -2257,7 +2249,6 @@ ViperKeyboardEditorPlugin.prototype = {
                 ViperSelection.addRange(range);
             }
 
-            ViperUtil.preventDefault(e);
             this.viper.fireNodesChanged();
             return false;
         } else if (e.keyCode === 8
@@ -2320,13 +2311,11 @@ ViperKeyboardEditorPlugin.prototype = {
                     ViperSelection.addRange(range);
                 }
 
-                ViperUtil.preventDefault(e);
                 this.viper.fireNodesChanged();
 
                 return false;
             } else if (ViperUtil.isTag(prevSelectable, 'br') === true) {
                 ViperUtil.remove(prevSelectable);
-                ViperUtil.preventDefault(e);
                 this.viper.fireNodesChanged();
                 return false;
             }
@@ -2383,7 +2372,6 @@ ViperKeyboardEditorPlugin.prototype = {
                 }
             }//end if
 
-            ViperUtil.preventDefault(e);
             range.collapse(true);
             ViperSelection.addRange(range);
             this.viper.fireNodesChanged();
@@ -2464,8 +2452,6 @@ ViperKeyboardEditorPlugin.prototype = {
                     ViperSelection.addRange(range);
                 }
 
-                ViperUtil.preventDefault(e);
-
                 this.viper.fireNodesChanged();
                 this.viper.fireSelectionChanged(null, true);
                 return false;
@@ -2517,7 +2503,6 @@ ViperKeyboardEditorPlugin.prototype = {
                             }
                         }
 
-                        ViperUtil.preventDefault(e);
                         this.viper.fireNodesChanged();
                         this.viper.fireSelectionChanged(null, true);
                         return false;
