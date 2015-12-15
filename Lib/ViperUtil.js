@@ -102,6 +102,14 @@ var ViperUtil = {
 
     },
 
+    moveChildrenToElement: function(sourceElement, targetElement)
+    {
+        while (sourceElement.firstChild) {
+            targetElement.appendChild(sourceElement.firstChild);
+        }
+
+    },
+
     /**
      * Applies the passed class to the element.
      *
