@@ -4663,10 +4663,10 @@ Viper.prototype = {
             return false;
         }
 
-        if (e.ctrlKey === false
-            && e.altKey === false
-            && (e.shiftKey === false || e.which !== 16)
-            && e.metaKey === false
+        if ((e.ctrlKey === false && e.which === 17)
+            && (e.altKey === false && e.which !== 18)
+            && (e.shiftKey === false && e.which !== 16)
+            && (e.metaKey === false && e.which !== 224)
             && e.which !== 27
         ) {
             // Nothing special about this key let the browser handle it unless
@@ -5328,7 +5328,7 @@ Viper.prototype = {
                     self.fireSelectionChanged(self.adjustRange(), true);
                 }, 450);
             } else {
-                if (ViperUtil.isBrowser('msie', '>=11') === true 
+                if (ViperUtil.isBrowser('msie', '>=11') === true
                     || ViperUtil.isBrowser('edge') === true
                 ) {
                     if (range.startContainer !== range.endContainer
