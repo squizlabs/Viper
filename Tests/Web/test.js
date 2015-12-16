@@ -323,7 +323,7 @@ function gStringLoc(str)
         textRange.setStart(selectable, 0);
         textRange.setEnd(selectable, 0);
         viperRange = textRange;
-        
+
         var found = viperRange.rangeObj.findText(str);
         loc = viperRange.rangeObj.getBoundingClientRect();
         loc = {
@@ -471,8 +471,10 @@ function pasteFromURL(url)
 
         copyPastePlugin._beforePaste();
 
-        var bookmark = copyPastePlugin._bookmark;
-        copyPastePlugin._insertTmpNodeBeforeBookmark(bookmark);
+        if (ViperUtil.isBrowser('msie') === true || ViperUtil.isBrowser('edge') === true) {
+            var bookmark = copyPastePlugin._bookmark;
+            copyPastePlugin._insertTmpNodeBeforeBookmark(bookmark);
+        }
 
         viper.removeBookmarks(null, true);
 
