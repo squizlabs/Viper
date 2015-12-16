@@ -280,11 +280,18 @@ ViperKeyboardEditorPlugin.prototype = {
                     if (ViperUtil.inArray(firstBlockTagName, this._tagList) === true) {
                         handleEnter = true;
                     } else if (firstBlockTagName === 'li'
-                        && (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true || ViperUtil.isBrowser('msie') === true)
                         && ViperUtil.trim(ViperUtil.getNodeTextContent(firstBlock)) === ''
                     ) {
-                        handleEnter = true;
-                        removeFirstBlock = true;
+                        if (defaultTagName === '') {
+                            // Default tag name is set to nothing. Move caret after the list.
+                            this.splitList(firstBlock);
+                            this.viper.fireNodesChanged();
+                            this.viper.fireSelectionChanged();
+                            return false;
+                        } else if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true || ViperUtil.isBrowser('msie') === true) {
+                            handleEnter = true;
+                            removeFirstBlock = true;
+                        }
                     }
 
                     if (handleEnter === true) {
@@ -452,7 +459,11 @@ ViperKeyboardEditorPlugin.prototype = {
                 var br = document.createElement('br');
                 this.viper.insertNodeAtCaret(br);
 
-                if (!br.nextSibling) {
+                if (!br.nextSibling
+                    || br.nextSibling.nodeType !== ViperUtil.TEXT_NODE
+                    || br.nextSibling.data.charAt(0) === "\n"
+                ) {
+                    ViperUtil.insertAfter(br, document.createElement('br'));
                     ViperUtil.insertAfter(br, document.createTextNode(''));
                 }
 
@@ -2050,10 +2061,21 @@ ViperKeyboardEditorPlugin.prototype = {
                     if (surroundingParents.length > 0) {
                         var parent = surroundingParents.pop();
                         if (ViperUtil.isBlockElement(parent) === false) {
-                            this.viper.moveCaretAway(range.startContainer);
+                            if (parent.nextSibling && ViperUtil.isStubElement(parent.nextSibling) === true) {
+                                ViperUtil.insertAfter(parent, document.createTextNode(''));
+                                range.setStart(parent.nextSibling, 0);
+                                range.collapse(true);
+                                ViperSelection.addRange(range);
+                            } else {
+                                this.viper.moveCaretAway(range.startContainer);
+                            }
+
                             ViperUtil.remove(parent);
                         } else {
                             range.startContainer.data = '';
+                            range.setStart(range.startContainer, 0);
+                            range.collapse(true);
+                            ViperSelection.addRange(range);
                         }
                     } else {
                         this.viper.moveCaretAway(range.startContainer);
@@ -2075,7 +2097,7 @@ ViperKeyboardEditorPlugin.prototype = {
                 }
             } else if (ViperUtil.isTag(startNode, 'br') === true
                 && startNode.parentNode
-                && (ViperUtil.isBrowser('firefox') === true || ViperUtil.isBrowser('msie') === true)
+                && (ViperUtil.isBrowser('firefox') === true || ViperUtil.isBrowser('msie') === true || ViperUtil.isBrowser('edge') === true)
             ) {
                 var nextSelectable = range.getNextContainer(startNode, null, true, true);
                 if (this.viper.isOutOfBounds(nextSelectable) === true) {
@@ -2622,17 +2644,21 @@ ViperKeyboardEditorPlugin.prototype = {
             // Find the first parent block element.
             var parent = range.startContainer.parentNode;
             if (parent === this.viper.getViperElement()) {
-                // Check if there are any block elements before this node.
-                if (range.startContainer.previousSibling
-                    && range.startContainer.previousSibling.nodeType !== ViperUtil.TEXT_NODE
-                ) {
+                // Split the text node.
+                var newNode = range.startContainer;
+                if (range.startOffset !== 0 && range.startOffset !== range.startContainer.data.length) {
+                    // Not at start or end of text node. Split text node and insert a BR tag in between.
+                    newNode = range.startContainer.splitText(range.startOffset);
+                    ViperUtil.insertBefore(newNode, document.createElement('br'));
+                    return range.startContainer.nextSibling;
+                } else if (range.startOffset === 0) {
+                    if (range.previousSibling && ViperUtil.isTag(range.previousSibling, 'br') === true) {
+                        ViperUtil.remove(range.previousSibling)
+                    }
+
                     return range.startContainer.previousSibling;
                 } else {
-                    // Cretae a new paragraph and insert it at range position.
-                    var para = document.createElement('p');
-                    ViperUtil.setHtml(para, '&nbsp;');
-                    ViperUtil.insertAfter(range.startContainer, para);
-                    return para;
+                    return range.startContainer;
                 }
             }
 
@@ -3091,6 +3117,50 @@ ViperKeyboardEditorPlugin.prototype = {
 
         return ViperUtil.isEmptyElement(element);
 
+    },
+
+    splitList: function (li)
+    {
+        var list = li.parentNode;
+
+        // If there is a list item after this one then split the list in to two.
+        if (ViperUtil.isTag(li.nextElementSibling, 'li') === true) {
+            var listType = ViperUtil.getTagName(list);
+            var newList  = document.createElement(listType);
+
+            // Insert the new list after the current list.
+            ViperUtil.insertAfter(list, newList);
+
+            // Move nodes after the current list item to the new list.
+            while (li.nextSibling) {
+                newList.appendChild(li.nextSibling);
+            }
+        }
+
+        if (ViperUtil.trim(ViperUtil.getNodeTextContent(li)) === '') {
+            // This list item is empty so it can be removed.
+            ViperUtil.remove(li);
+        }
+
+        // Now create the spacer element. This element is inserted after the current list.
+        var defaultTagName = this.viper.getDefaultBlockTag();
+        var elem           = null;
+        if (defaultTagName === '') {
+            elem = document.createElement('br');
+        } else {
+            elem = document.createElement(defaultTagName);
+        }
+
+        ViperUtil.insertAfter(list, elem);
+
+        if (defaultTagName !== '') {
+            elem.appendChild(document.createElement('br'));
+        }
+
+        var range = this.viper.getViperRange();
+        range.setStart(elem, 0);
+        range.collapse(true);
+        ViperSelection.addRange(range);
     }
 
 };

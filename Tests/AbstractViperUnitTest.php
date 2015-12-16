@@ -279,8 +279,6 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
             // Reset zoom.
             $this->sikuli->keyDown('Key.CMD + 0');
-
-            $this->sikuli->setAutoWaitTimeout(1);
             $this->_waitForViper();
         } else {
             $this->sikuli->setSetting('MinSimilarity', self::$_similarity);
@@ -303,9 +301,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             // Reset zoom.
             $this->sikuli->keyDown('Key.CMD + 0');
 
-            $this->sikuli->setAutoWaitTimeout(1);
             $this->_waitForViper();
-
             self::$_testRun = true;
         }//end if
 
@@ -479,7 +475,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      * @return void
      * @throws Exception If Viper fails to load on the page.
      */
-    private function _waitForViper($retries=2)
+    private function _waitForViper($retries=1)
     {
         if ($retries === 0) {
             $this->resetConnection();
@@ -488,17 +484,13 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         try {
             // This will make sure that the browser has loaded the Viper page.
+            $this->sikuli->setAutoWaitTimeout(5);
             $this->getTopToolbar();
         } catch (Exception $e) {
             $this->resetConnection();
-            $this->fail('Browser is not functioning properly');
-            return FALSE;
-            // Its not working.. Try to start browser again.
-            $this->sikuli->restartBrowser();
-            $this->sikuli->resize();
             $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
-            sleep(2);
-            $this->getTopToolbar();
+            $this->_waitForViper($retries - 1);
+            return;
         }
 
         $this->sikuli->setAutoWaitTimeout(4, $this->getTopToolbar());
@@ -1003,7 +995,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function useTest($id, $clickKeyword=1)
     {
-        $this->sikuli->execJS('useTest("test-'.$id.'")', FALSE);
+        $this->sikuli->execJS('useTest("test-'.$id.'")', TRUE);
         sleep(1);
 
         if ($clickKeyword !== null) {
@@ -1861,20 +1853,34 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function moveToKeyword($keyword, $position='right')
     {
-        $this->selectKeyword($keyword);
+        $keyword = $this->findKeyword($keyword);
 
-        if ($position === 'right' && ($this->sikuli->getBrowserid() === 'ie8' || $this->sikuli->getBrowserid() === 'ie9')) {
-            $this->sikuli->keyDown('Key.LEFT');
-            $this->sikuli->keyDown('Key.RIGHT');
-            $this->sikuli->keyDown('Key.RIGHT');
-            $this->sikuli->keyDown('Key.RIGHT');
-        } else if ($position === 'right') {
-            $this->sikuli->keyDown('Key.RIGHT');
-        } else if ($position === 'left') {
-            $this->sikuli->keyDown('Key.LEFT');
-        } else if ($position === 'middle') {
-            $this->sikuli->keyDown('Key.LEFT');
-            $this->sikuli->keyDown('Key.RIGHT');
+        switch ($position) {
+            case 'left':
+                $left = $this->sikuli->getTopLeft($keyword);
+                $this->sikuli->setLocation(
+                    $left,
+                    ($this->sikuli->getX($left) + 2),
+                    $this->sikuli->getY($left)
+                );
+
+                $this->sikuli->click($left);
+            break;
+
+            case 'right':
+                $right = $this->sikuli->getTopRight($keyword);
+                $this->sikuli->setLocation(
+                    $right,
+                    ($this->sikuli->getX($right) - 2),
+                    $this->sikuli->getY($right)
+                );
+
+                $this->sikuli->click($right);
+            break;
+
+            default:
+                $this->clickKeyword($keyword);
+            break;
         }
 
     }//end moveToKeyword()
@@ -2098,7 +2104,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         $text = str_replace("\n", '', $text);
         $text = str_replace('\n', '', $text);
-        
+
         // IE never has the px for width/height...
         $text = preg_replace('#="(\d+)"#', '="$1px"', $text);
 

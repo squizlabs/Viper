@@ -310,6 +310,7 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
         $this->assertHTMLMatchNoHeaders('<table border="0" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><img alt="Alt tag" src="%url%/ViperImagePlugin/Images/editing.png" /></td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>XCX</h3></td><td colspan="2">purus neque luctus<strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickElement('img', 0);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('image', 'active'), 'Image icon should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('move'), 'Move icon should appear in the inline toolbar.');
 
@@ -333,6 +334,7 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
         $this->sikuli->keyDown('Key.ENTER');
 
         $this->clickElement('img', 0);
+        sleep(1);  
         $this->clickInlineToolbarButton('image', 'active');
         $this->clickField('Image is decorative');
         $this->sikuli->keyDown('Key.ENTER');
