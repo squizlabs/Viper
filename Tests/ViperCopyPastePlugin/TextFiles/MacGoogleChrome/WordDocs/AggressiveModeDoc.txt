@@ -342,13 +342,13 @@
   mso-font-pitch:fixed;
   mso-font-signature:1 134676480 16 0 131072 0;}
 @font-face
-  {font-family:"ＭＳ ゴシック";
-  panose-1:0 0 0 0 0 0 0 0 0 0;
-  mso-font-charset:128;
-  mso-generic-font-family:modern;
+  {font-family:"Cambria Math";
+  panose-1:2 4 5 3 5 4 6 3 2 4;
+  mso-font-charset:1;
+  mso-generic-font-family:roman;
   mso-font-format:other;
-  mso-font-pitch:fixed;
-  mso-font-signature:1 134676480 16 0 131072 0;}
+  mso-font-pitch:variable;
+  mso-font-signature:0 0 0 0 0 0;}
 @font-face
   {font-family:Calibri;
   panose-1:2 15 5 2 2 2 4 3 2 4;
@@ -375,6 +375,7 @@ p.MsoNormal, li.MsoNormal, div.MsoNormal
   font-family:"Times New Roman";
   mso-fareast-font-family:Cambria;
   mso-fareast-theme-font:minor-latin;
+  mso-bidi-font-family:"Times New Roman";
   mso-fareast-language:JA;
   vertical-align:sub;}
 h1
@@ -652,7 +653,7 @@ aligned.<o:p></o:p></span></p>
 baseline">This is some content that has been right aligned.<o:p></o:p></span></p>
 
 <p class="MsoNormal" style="text-align:justify;text-justify:inter-ideograph"><span style="vertical-align:baseline">This is some <b style="mso-bidi-font-weight:
-normal">content</b> that has been justified.<o:p></o:p></span></p>
+normal">content</b> that has been <i style="mso-bidi-font-style:normal">justified</i>.<o:p></o:p></span></p>
 
 <p class="MsoNormal" style="text-align:justify;text-justify:inter-ideograph"><span style="vertical-align:baseline"><o:p>&nbsp;</o:p></span></p>
 
@@ -740,11 +741,11 @@ vertical-align:baseline"><span style="mso-list:Ignore">5)<span style="font:7.0pt
  <tbody><tr style="mso-yfti-irow:0;mso-yfti-firstrow:yes">
   <td width="85" valign="top" style="width:85.15pt;border:solid windowtext 1.0pt;
   mso-border-alt:solid windowtext .5pt;padding:14.2pt 14.2pt 14.2pt 14.2pt">
-  <p class="MsoNormal"><span style="vertical-align:baseline">Cell 1<o:p></o:p></span></p>
+  <p class="MsoNormal"><b style="mso-bidi-font-weight:normal"><span style="vertical-align:baseline">Cell 1<o:p></o:p></span></b></p>
   </td>
   <td width="85" valign="top" style="width:85.15pt;border:solid windowtext 1.0pt;
   mso-border-alt:solid windowtext .5pt;padding:14.2pt 14.2pt 14.2pt 14.2pt">
-  <p class="MsoNormal"><span style="vertical-align:baseline">Cell 2<o:p></o:p></span></p>
+  <p class="MsoNormal"><i style="mso-bidi-font-style:normal"><span style="vertical-align:baseline">Cell 2<o:p></o:p></span></i></p>
   </td>
   <td width="85" valign="top" style="width:85.15pt;border:solid windowtext 1.0pt;
   mso-border-alt:solid windowtext .5pt;padding:14.2pt 14.2pt 14.2pt 14.2pt">
