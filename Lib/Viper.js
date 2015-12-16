@@ -35,6 +35,7 @@ function Viper(id, options, callback, editables)
     this._attributeGetModifiers = [];
     this._attributeSetModifiers = [];
     this._mouseDownEvent        = null;
+    this._retrievingValues      = 0;
 
     // This var is used to store the range of Viper before it loses focus. Any plugins
     // that steal focus from Viper element can use getPreviousRange.
@@ -1385,7 +1386,7 @@ Viper.prototype = {
             var notModified    = true;
             var modifiersCount = this._attributeSetModifiers.length;
             if (modifiersCount > 0) {
-                this._retrievingValues = true;
+                this._retrievingValues++;
                 var doneCount          = 0;
                 for (var i = 0; i < modifiersCount; i++) {
                     notModified = this._attributeSetModifiers[i].call(
@@ -1396,7 +1397,7 @@ Viper.prototype = {
                         function() {
                             doneCount++;
                             if (doneCount === modifiersCount) {
-                                self._retrievingValues = false;
+                                self._retrievingValues--;
                                 if (self._valuesRetrievedCallback) {
                                     self._valuesRetrievedCallback.call(self);
                                 }
@@ -1407,7 +1408,7 @@ Viper.prototype = {
 
                 if (notModified !== false) {
                     element.setAttribute(attribute, value);
-                    self._retrievingValues = false;
+                    self._retrievingValues--;
                     if (self._valuesRetrievedCallback) {
                         self._valuesRetrievedCallback.call(self);
                     }
@@ -4483,7 +4484,7 @@ Viper.prototype = {
         ) {
             this._prevRange = range;
 
-            if (this._retrievingValues === true) {
+            if (this._retrievingValues > 0) {
                 var self = this;
                 this._valuesRetrievedCallback = function() {
                     self.fireCallbacks('Viper:selectionChanged', range);
@@ -4662,10 +4663,10 @@ Viper.prototype = {
             return false;
         }
 
-        if (e.ctrlKey === false
-            && e.altKey === false
-            && (e.shiftKey === false || e.which !== 16)
-            && e.metaKey === false
+        if ((e.ctrlKey === false && e.which === 17)
+            && (e.altKey === false && e.which !== 18)
+            && (e.shiftKey === false && e.which !== 16)
+            && (e.metaKey === false && e.which !== 224)
             && e.which !== 27
         ) {
             // Nothing special about this key let the browser handle it unless
@@ -5315,7 +5316,7 @@ Viper.prototype = {
                 && range.collapsed === true
                 && range.startContainer
                 && range.startContainer.nodeType === 9
-                && ViperUtil.isBrowser('msie') === true
+                && (ViperUtil.isBrowser('msie') === true || ViperUtil.isBrowser('edge') === true)
             ) {
                 // If clicked inside the previous selection then IE takes a lot
                 // longer to update the caret position so if the range is collapsed
@@ -5327,9 +5328,29 @@ Viper.prototype = {
                     self.fireSelectionChanged(self.adjustRange(), true);
                 }, 450);
             } else {
+                if (ViperUtil.isBrowser('msie', '>=11') === true
+                    || ViperUtil.isBrowser('edge') === true
+                ) {
+                    if (range.startContainer !== range.endContainer
+                        && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                        && range.startOffset === range.startContainer.data.length
+                        && range.startContainer.nextSibling
+                        && range.startContainer.nextSibling.nodeType == ViperUtil.ELEMENT_NODE
+                    ) {
+                        // Handle <p>text [<strong>text] </strong></p> -> <p>text <strong>[text] </strong></p>.
+                        var firstChild = range._getFirstSelectableChild(range.startContainer.nextSibling);
+                        if (firstChild && firstChild.nodeType === ViperUtil.TEXT_NODE) {
+                            range.setStart(firstChild, 0);
+                            ViperSelection.addRange(range);
+                        }
+                    }
+
+                }
+
+
                 self.fireSelectionChanged(range, true);
             }
-        }, 5);
+        }, 8);
 
     },
 
@@ -6007,7 +6028,8 @@ Viper.prototype = {
 
     _closeStubTags: function (content)
     {
-        content = content.replace(/<(area|base|basefont|br|hr|input|img|link|meta|embed|viper:param|param)((\s+\w+(\s*=\s*(?:"[^">\s]+"|\'[^\'>\s]+\'))?)+)?\s*>/ig, "<$1$2 />");
+        var re  = /<(area|base|basefont|br|hr|input|img|link|meta|embed|viper:param|param)((\s+\w+(\s*=\s*(?:"[^">]*"|\'[^\'>]+\'))?)+)?\s*>/ig;
+        content = content.replace(re, "<$1$2 />");
         return content;
 
     },

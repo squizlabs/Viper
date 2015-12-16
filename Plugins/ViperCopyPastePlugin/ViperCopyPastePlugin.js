@@ -25,7 +25,7 @@ function ViperCopyPastePlugin(viper)
     this._tmpNode        = null;
     this._tmpNodeOffset  = 0;
     this._iframe         = null;
-    this._isMSIE         = ViperUtil.isBrowser('msie');
+    this._isMSIE         = ViperUtil.isBrowser('msie') || ViperUtil.isBrowser('edge');
     this._toolbarElement = null;
     this._selectedRows   = null;
     this._pasteProcess   = 0;
@@ -332,7 +332,9 @@ ViperCopyPastePlugin.prototype = {
                         // Initial call to onbeforepaste, happens when right click menu opens.
                         // Create the paste div.
                         pasteDiv = self._createPasteDiv(true);
-                    } else if (self._pasteProcess === 2 || (self._pasteProcess === 1 && self._isRightClick === false)) {
+                    } else if (self._pasteProcess === 2 
+                        || (self._pasteProcess === 1 && self._isRightClick === false || ViperUtil.isBrowser('edge') === true)
+                    ) {
                         // Third call to onbeforepaste, happens when paste option is clicked.
                         self._beforePaste();
 
@@ -393,7 +395,7 @@ ViperCopyPastePlugin.prototype = {
             // IE needs space before B tag otherwise it gets stripped out..
             if (ViperUtil.isBrowser('msie', '<9') === true) {
                 selectedContent = '&nbsp;' + selectedContent + '&nbsp;';
-            } else if (ViperUtil.isBrowser('msie', '>=9') === true) {
+            } else if (ViperUtil.isBrowser('msie', '>=9') === true || ViperUtil.isBrowser('edge') === true) {
                 selectedContent = '&nbsp;' + selectedContent;
             }
 
@@ -584,7 +586,7 @@ ViperCopyPastePlugin.prototype = {
         var range      = self.viper.getViperRange();
         var rangeClone = range.cloneRange();
 
-        if (ViperUtil.isBrowser('msie', '>=11') === true) {
+        if (ViperUtil.isBrowser('msie', '>=11') === true || ViperUtil.isBrowser('edge') === true) {
             yCoord = window.pageYOffset;
         }
 
@@ -1256,7 +1258,7 @@ ViperCopyPastePlugin.prototype = {
                 }
 
                 // Check that previous container is not empty.
-                if (prevBlock) {
+                if (prevBlock && ViperUtil.isTag(prevBlock, 'table') === false) {
                     prevCheckCont = ViperUtil.trim(ViperUtil.getNodeTextContent(prevBlock));
                     if (prevCheckCont === '' || (prevCheckCont.length === 1 && prevCheckCont.charCodeAt(0) === 160)) {
                         if (ViperUtil.isChildOf(this._tmpNode, prevBlock) === true) {
@@ -1386,7 +1388,7 @@ ViperCopyPastePlugin.prototype = {
         content = content.replace(/<(font)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>\s*/ig, '');
         content = content.replace(/\s*<\/(font)((\s+\w+(\s*=\s*(?:".*?"|\'.*?\'|[^\'">\s]+))?)+)?\s*>/ig, '');
 
-        if (ViperUtil.isBrowser('msie') === true) {
+        if (ViperUtil.isBrowser('msie') === true || ViperUtil.isBrowser('edge') === true) {
             var tmp = document.createElement('div');
             ViperUtil.setHtml(tmp, content);
 

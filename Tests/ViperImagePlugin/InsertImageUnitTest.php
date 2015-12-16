@@ -229,6 +229,7 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p><img src="%url%/ViperImagePlugin/Images/editing.png" alt=""/>%1% Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
         $this->clickElement('img', 0);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('image', 'active'), 'Image icon should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('move'), 'Move icon should appear in the inline toolbar.');
 
@@ -242,6 +243,7 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>%1%<img src="%url%/ViperImagePlugin/Images/editing.png" alt=""/> Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
         $this->clickElement('img', 0);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('image', 'active'), 'Image icon should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('move'), 'Move icon should appear in the inline toolbar.');
 
@@ -255,6 +257,7 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>%1% Content to test inserting images</p><p>Another paragraph in the content %2%<img src="%url%/ViperImagePlugin/Images/editing.png" alt=""/></p>');
         $this->clickElement('img', 0);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('image', 'active'), 'Image icon should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('move'), 'Move icon should appear in the inline toolbar.');
 
@@ -269,6 +272,7 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>%1% Content to test inserting images</p><p>Another paragraph in the content %2%</p><p><img src="%url%/ViperImagePlugin/Images/editing.png" alt=""/></p>');
         $this->clickElement('img', 0);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('image', 'active'), 'Image icon should be active.');
         $this->assertTrue($this->inlineToolbarButtonExists('move'), 'Move icon should appear in the inline toolbar.');
 
