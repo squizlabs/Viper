@@ -422,7 +422,6 @@ ViperInputHandler.prototype = {
                         // Chrome adds extra styles and tags like span, font etc when range is in two different block
                         // tags and a character is typed.
                         this.handleDelete({which: 8, keyCode: 8, preventDefault:function() {}});
-                        return false;
                     }
                 }
             }//end if
