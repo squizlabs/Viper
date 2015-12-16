@@ -64,6 +64,7 @@ abstract class AbstractCopyPasteFromWordAndGoogleDocsUnitTest extends AbstractVi
         }//end switch
 
         $this->selectKeyword(1);
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + a');
         sleep(1);
         $this->sikuli->keyDown('Key.DELETE');
