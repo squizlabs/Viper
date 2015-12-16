@@ -3675,7 +3675,7 @@ Viper.prototype = {
                     break;
                 }
 
-                if (this.elementIsEmpty(parents[i]) === true) {
+                if (ViperUtil.elementIsEmpty(parents[i]) === true) {
                     ViperUtil.remove(parents[i]);
                 }
             }
@@ -3999,7 +3999,7 @@ Viper.prototype = {
             }
 
             var nextNode = null;
-            if (this.elementIsEmpty(tmp) === false) {
+            if (ViperUtil.elementIsEmpty(tmp) === false) {
                 while (tmp.lastChild) {
                     nextNode = tmp.lastChild;
                     ViperUtil.remove(tmp.lastChild);

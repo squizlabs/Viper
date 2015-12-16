@@ -3428,7 +3428,7 @@ ViperTableEditorPlugin.prototype = {
             ViperUtil.empty(this.viper.getViperElement());
             this.viper.getViperElement().appendChild(table);
         } else {
-            var prevNode = self.viper.getInputHandler().splitAtRange(true);
+            var prevNode = this.viper.getInputHandler().splitAtRange(true);
             if (ViperUtil.isTag(prevNode, 'li') === true) {
                 prevNode.appendChild(table);
                 if (ViperUtil.isBlank(ViperUtil.getNodeTextContent(prevNode.nextSibling)) === true) {
