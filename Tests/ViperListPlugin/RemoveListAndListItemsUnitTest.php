@@ -431,6 +431,9 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsUnitTest extends Abstrac
         $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item%2% second item%3% third item</li></ul>');
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Unordered List:%1% first item%2% second item%3% third item</p>');
         //Test ordered list
         $this->useTest(2);
         $this->moveToKeyword(3, 'left');
@@ -439,6 +442,9 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsUnitTest extends Abstrac
         $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% first item%2% second item%3% third item</li></ol>');
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Ordered List:%1% first item%2% second item%3% third item</p>');
 
     }//end testRemoveItemUsingBackspace()
 
@@ -450,7 +456,37 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsUnitTest extends Abstrac
      */
     public function testRemovingAllItemUsingBackspace()
     {
-        //Test unordered list
+        //Test unordered list from start of list
+        $this->useTest(1);
+
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Unordered List:%1% first item</p><ul><li>%2% second item</li><li>%3% third item</li></ul>');
+
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Unordered List:%1% first item%2% second item</p><ul><li>%3% third item</li></ul>');
+
+        $this->moveToKeyword(3, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Unordered List:%1% first item%2% second item%3% third item</p>');
+
+        //Test ordered list from start of list
+        $this->useTest(2);
+
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Ordered List:%1% first item</p><ol><li>%2% second item</li><li>%3% third item</li></ol>');
+
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Ordered List:%1% first item%2% second item</p><ol><li>%3% third item</li></ol>');
+
+        $this->moveToKeyword(3, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Ordered List:%1% first item%2% second item%3% third item</p>');
+
+        //Test unordered list from end of list
         $this->useTest(1);
 
         $this->moveToKeyword(3, 'left');
@@ -465,7 +501,7 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsUnitTest extends Abstrac
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->assertHTMLMatch('<p>Unordered List:%1% first item%2% second item%3% third item</p>');
 
-        //Test ordered list
+        //Test ordered list from end of list
         $this->useTest(2);
 
         $this->moveToKeyword(3, 'left');

@@ -597,7 +597,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testComplextTableHighlightsNoCaption()
     {
-        $this->useTest(5);
+        $this->useTest(5, null);
 
         // Test highlights in heading.
         $icon = $this->_getTableToolsIcon(7);
@@ -817,6 +817,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         // Paste content after table
         $this->clickCell(11);
         $this->sikuli->keyDown('Key.DOWN');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
 
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><thead><tr><th></th><th></th><th></th><th></th></tr></thead><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>%1%</p>');
@@ -889,7 +890,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testDeleteContentLastElementTable()
     {
-        $this->useTest(6);
+        $this->useTest(6, null);
 
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + a');
@@ -915,7 +916,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
      */
     public function testDeleteAndBackspaceInLastCellOfTable()
     {
-        $this->useTest(8);
+        $this->useTest(8, null);
 
         $this->clickCell(16);
 

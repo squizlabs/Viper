@@ -61,9 +61,13 @@ var ViperChangeTracker = {
      */
     init: function(viper, trackChanges)
     {
-        var self       = this;
         this._viper    = viper;
-        this._tracking = trackChanges || false;
+        this._tracking = false;
+
+        // Disable change tracking...
+        return;
+
+        var self       = this;
         this.cleanUp();
 
         this._viper.registerCallback('nodesChanged', 'ViperChangeTracker', function() {

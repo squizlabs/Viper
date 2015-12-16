@@ -54,6 +54,9 @@ abstract class AbstractCopyPasteFromWordAndGoogleDocsUnitTest extends AbstractVi
                     case 'ie11':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsIE11/WordDocs/'.$textFileName);
                         break;
+                    case 'edge':
+                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsEdge/WordDocs/'.$textFileName);
+                        break;
                     default:
                         throw new Exception('Browser is not supported on windows');
                 }//end switch

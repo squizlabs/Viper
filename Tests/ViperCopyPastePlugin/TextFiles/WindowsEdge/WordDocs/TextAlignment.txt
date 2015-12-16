@@ -1,0 +1,222 @@
+
+
+<p style="margin: 0in 0in 10pt;"><span lang="EN-AU"><font face="Calibri">First para default.</font></span></p>
+
+<p align="center" style="margin: 0in 0in 10pt; text-align: center;"><span lang="EN-AU"><font face="Calibri">Second
+para centered.</font></span></p>
+
+<p align="right" style="margin: 0in 0in 10pt; text-align: right;"><span lang="EN-AU"><font face="Calibri">Third
+para right aligned.</font></span></p>
+
+<p style="margin: 0in 0in 10pt; text-align: justify;"><span lang="EN-AU"><font face="Calibri">Fourth para
+justified (by love).</font></span></p>
+
+<p style="margin: 0in 0in 10pt;"><span lang="EN-AU"><font face="Calibri">Fifth para changed from justified to left
+align.</font></span></p>
+
+<h3 style="margin: 10pt 0in 0pt;"><span lang="EN-AU" style="mso-fareast-language:EN-US"><font color="#4f81bd" face="Cambria" size="3">Table Editing With
+Aligned Text</font></span></h3>
+
+<ul style="list-style-type: disc; direction: ltr;"><li style="color: rgb(0, 0, 0); font-family: Calibri; font-size: 11pt; font-style: normal; font-weight: normal;"><p align="right" style="text-align: right; color: rgb(0, 0, 0); font-family: Calibri; font-size: 11pt; font-style: normal; font-weight: normal; margin-top: 0in; margin-bottom: 0pt; mso-list: l0 level1 lfo1;"><span lang="EN-AU">One</span></p></li><li style="color: rgb(0, 0, 0); font-family: Calibri; font-size: 11pt; font-style: normal; font-weight: normal;"><p align="right" style="text-align: right; color: rgb(0, 0, 0); font-family: Calibri; font-size: 11pt; font-style: normal; font-weight: normal; margin-top: 0in; margin-bottom: 0pt; mso-list: l0 level1 lfo1;"><span lang="EN-AU">Two</span></p></li><li style="color: rgb(0, 0, 0); font-family: Calibri; font-size: 11pt; font-style: normal; font-weight: normal;"><p align="right" style="text-align: right; color: rgb(0, 0, 0); font-family: Calibri; font-size: 11pt; font-style: normal; font-weight: normal; margin-top: 0in; margin-bottom: 0pt; mso-list: l0 level1 lfo1;"><span lang="EN-AU">Three</span></p><ul style="list-style-type: circle;"><li style="color: rgb(0, 0, 0); font-family: Calibri; font-size: 11pt; font-style: normal; font-weight: normal;"><p align="right" style="text-align: right; color: rgb(0, 0, 0); font-family: Calibri; font-size: 11pt; font-style: normal; font-weight: normal; margin-top: 0in; margin-bottom: 0pt; mso-list: l0 level2 lfo1; mso-add-space: auto;"><span lang="EN-AU">Sub One</span></p></li><li style="color: rgb(0, 0, 0); font-family: Calibri; font-size: 11pt; font-style: normal; font-weight: normal;"><p align="right" style="text-align: right; color: rgb(0, 0, 0); font-family: Calibri; font-size: 11pt; font-style: normal; font-weight: normal; margin-top: 0in; margin-bottom: 0pt; mso-list: l0 level2 lfo1; mso-add-space: auto;"><span lang="EN-AU">Sub Two</span></p></li></ul></li><li style="color: rgb(0, 0, 0); font-family: Calibri; font-size: 11pt; font-style: normal; font-weight: normal;"><p align="right" style="text-align: right; color: rgb(0, 0, 0); font-family: Calibri; font-size: 11pt; font-style: normal; font-weight: normal; margin-top: 0in; margin-bottom: 0pt; mso-list: l0 level1 lfo1;"><span lang="EN-AU">Four</span></p></li></ul>
+
+
+
+
+
+
+
+
+
+
+
+<ol style="list-style-type: decimal; direction: ltr;"><li style="color: rgb(0, 0, 0); font-family: Calibri; font-size: 11pt; font-style: normal; font-weight: normal;"><p align="center" style="text-align: center; color: rgb(0, 0, 0); font-family: Calibri; font-size: 11pt; font-style: normal; font-weight: normal; margin-top: 0in; margin-bottom: 0pt; mso-list: l1 level1 lfo2;"><span lang="EN-AU">One</span></p></li><li style="color: rgb(0, 0, 0); font-family: Calibri; font-size: 11pt; font-style: normal; font-weight: normal;"><p align="center" style="text-align: center; color: rgb(0, 0, 0); font-family: Calibri; font-size: 11pt; font-style: normal; font-weight: normal; margin-top: 0in; margin-bottom: 0pt; mso-list: l1 level1 lfo2;"><span lang="EN-AU">Two</span></p></li><li style="color: rgb(0, 0, 0); font-family: Calibri; font-size: 11pt; font-style: normal; font-weight: normal;"><p align="center" style="text-align: center; color: rgb(0, 0, 0); font-family: Calibri; font-size: 11pt; font-style: normal; font-weight: normal; margin-top: 0in; margin-bottom: 0pt; mso-list: l1 level1 lfo2;"><span lang="EN-AU">Three</span></p><ol style="list-style-type: lower-alpha;"><li style="color: rgb(0, 0, 0); font-family: Calibri; font-size: 11pt; font-style: normal; font-weight: normal;"><p align="center" style="text-align: center; color: rgb(0, 0, 0); font-family: Calibri; font-size: 11pt; font-style: normal; font-weight: normal; margin-top: 0in; margin-bottom: 0pt; mso-list: l1 level2 lfo2; mso-add-space: auto;"><span lang="EN-AU">Sub One</span></p></li><li style="color: rgb(0, 0, 0); font-family: Calibri; font-size: 11pt; font-style: normal; font-weight: normal;"><p align="center" style="text-align: center; color: rgb(0, 0, 0); font-family: Calibri; font-size: 11pt; font-style: normal; font-weight: normal; margin-top: 0in; margin-bottom: 0pt; mso-list: l1 level2 lfo2; mso-add-space: auto;"><span lang="EN-AU">Sub Two</span></p></li></ol></li><li style="color: rgb(0, 0, 0); font-family: Calibri; font-size: 11pt; font-style: normal; font-weight: normal;"><p align="center" style="text-align: center; color: rgb(0, 0, 0); font-family: Calibri; font-size: 11pt; font-style: normal; font-weight: normal; margin-top: 0in; margin-bottom: 10pt; mso-list: l1 level1 lfo2;"><span lang="EN-AU">Four</span></p></li></ol>
+
+
+
+
+
+
+
+
+
+
+
+<h3 style="margin: 10pt 0in 0pt;"><span lang="EN-AU" style="mso-fareast-language:EN-US"><font color="#4f81bd" face="Cambria" size="3">Table Editing With
+Aligned Text</font></span></h3>
+
+<table width="100%" style="width:100.0%;border-collapse:collapse;border:none;mso-border-alt:solid windowtext .5pt;&#10; mso-yfti-tbllook:160;mso-border-insideh:.5pt solid windowtext;mso-border-insidev:&#10; .5pt solid windowtext" border="1" cellspacing="0" cellpadding="0">
+ <tbody><tr style="mso-yfti-irow:0;mso-yfti-firstrow:yes">
+  <td style="padding: 0.75pt; border: 1pt solid windowtext; border-image: none; background-color: transparent; mso-border-alt: solid windowtext .5pt;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center;"><span lang="EN-AU" style="font-size:10.0pt;line-height:115%;&#10;  font-family:Times;mso-bidi-font-weight:bold">Item </span></p>
+  </td>
+  <td style="border-width: 1pt 1pt 1pt 0px; border-style: solid solid solid none; border-color: windowtext windowtext windowtext rgb(0, 0, 0); padding: 0.75pt; border-image: none; background-color: transparent; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center;"><span lang="EN-AU" style="font-size:10.0pt;line-height:115%;&#10;  font-family:Times;mso-bidi-font-weight:bold">Price </span></p>
+  </td>
+  <td style="border-width: 1pt 1pt 1pt 0px; border-style: solid solid solid none; border-color: windowtext windowtext windowtext rgb(0, 0, 0); padding: 0.75pt; border-image: none; background-color: transparent; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center;"><span lang="EN-AU" style="font-size:10.0pt;line-height:115%;&#10;  font-family:Times;mso-bidi-font-weight:bold">Quantity </span></p>
+  </td>
+ </tr>
+ <tr style="mso-yfti-irow:1">
+  <td style="border-width: 0px 1pt 1pt; border-style: none solid solid; border-color: rgb(0, 0, 0) windowtext windowtext; padding: 0.75pt; border-image: none; background-color: transparent; mso-border-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt;">
+  <p style="margin: 0in 0in 0pt;"><span lang="EN-AU" style="font-size:10.0pt;line-height:115%;font-family:Times">Book
+  (hard cover) </span></p>
+  </td>
+  <td style="border-width: 0px 1pt 1pt 0px; border-style: none solid solid none; border-color: rgb(0, 0, 0) windowtext windowtext rgb(0, 0, 0); padding: 0.75pt; background-color: transparent; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center;"><span lang="EN-AU" style="font-size:10.0pt;line-height:115%;&#10;  font-family:Times">$15.60</span></p>
+  </td>
+  <td style="border-width: 0px 1pt 1pt 0px; border-style: none solid solid none; border-color: rgb(0, 0, 0) windowtext windowtext rgb(0, 0, 0); padding: 0.75pt; background-color: transparent; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center;"><span lang="EN-AU" style="font-size:10.0pt;line-height:115%;&#10;  font-family:Times">3</span></p>
+  </td>
+ </tr>
+ <tr style="mso-yfti-irow:2;mso-yfti-lastrow:yes">
+  <td style="border-width: 0px 1pt 1pt; border-style: none solid solid; border-color: rgb(0, 0, 0) windowtext windowtext; padding: 0.75pt; border-image: none; background-color: transparent; mso-border-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt;">
+  <p style="margin: 0in 0in 0pt;"><span lang="EN-AU" style="font-size:10.0pt;line-height:115%;font-family:Times">DVD </span></p>
+  </td>
+  <td style="border-width: 0px 1pt 1pt 0px; border-style: none solid solid none; border-color: rgb(0, 0, 0) windowtext windowtext rgb(0, 0, 0); padding: 0.75pt; background-color: transparent; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center;"><span lang="EN-AU" style="font-size:10.0pt;line-height:115%;&#10;  font-family:Times">$8.50</span></p>
+  </td>
+  <td style="border-width: 0px 1pt 1pt 0px; border-style: none solid solid none; border-color: rgb(0, 0, 0) windowtext windowtext rgb(0, 0, 0); padding: 0.75pt; background-color: transparent; mso-border-alt: solid windowtext .5pt; mso-border-left-alt: solid windowtext .5pt; mso-border-top-alt: solid windowtext .5pt;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center;"><span lang="EN-AU" style="font-size:10.0pt;line-height:115%;&#10;  font-family:Times">1</span></p>
+  </td>
+ </tr>
+</tbody></table>
+
+<p style="margin: 0in 0in 10pt;"><span lang="EN-AU"><font face="Calibri">&nbsp;</font></span></p>
+
+<table style="border-collapse:collapse;border:none;mso-border-top-alt:solid #4F81BD 1.0pt;&#10; mso-border-bottom-alt:solid #4F81BD 1.0pt;mso-yfti-tbllook:160;mso-padding-alt:&#10; 0in 5.4pt 0in 5.4pt" border="1" cellspacing="0" cellpadding="0">
+ <tbody><tr style="mso-yfti-irow:0;mso-yfti-firstrow:yes">
+  <td width="62" valign="top" style="border-width: 1pt 0px; border-style: solid none; border-color: rgb(79, 129, 189) rgb(0, 0, 0); padding: 0in 5.4pt; width: 46.2pt; background-color: transparent;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center; line-height: normal;"><b><span lang="EN-AU" style="color:#365F91"><font face="Calibri">H1</font></span></b></p>
+  </td>
+  <td width="62" valign="top" style="border-width: 1pt 0px; border-style: solid none; border-color: rgb(79, 129, 189) rgb(0, 0, 0); padding: 0in 5.4pt; width: 46.2pt; background-color: transparent;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center; line-height: normal;"><b><span lang="EN-AU" style="color:#365F91"><font face="Calibri">H2</font></span></b></p>
+  </td>
+  <td width="62" valign="top" style="border-width: 1pt 0px; border-style: solid none; border-color: rgb(79, 129, 189) rgb(0, 0, 0); padding: 0in 5.4pt; width: 46.2pt; background-color: transparent;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center; line-height: normal;"><b><span lang="EN-AU" style="color:#365F91"><font face="Calibri">H3</font></span></b></p>
+  </td>
+  <td width="62" valign="top" style="border-width: 1pt 0px; border-style: solid none; border-color: rgb(79, 129, 189) rgb(0, 0, 0); padding: 0in 5.4pt; width: 46.2pt; background-color: transparent;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center; line-height: normal;"><b><span lang="EN-AU" style="color:#365F91"><font face="Calibri">H4</font></span></b></p>
+  </td>
+  <td width="62" valign="top" style="border-width: 1pt 0px; border-style: solid none; border-color: rgb(79, 129, 189) rgb(0, 0, 0); padding: 0in 5.4pt; width: 46.2pt; background-color: transparent;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center; line-height: normal;"><b><span lang="EN-AU" style="color:#365F91"><font face="Calibri">H5</font></span></b></p>
+  </td>
+  <td width="62" valign="top" style="border-width: 1pt 0px; border-style: solid none; border-color: rgb(79, 129, 189) rgb(0, 0, 0); padding: 0in 5.4pt; width: 46.2pt; background-color: transparent;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center; line-height: normal;"><b><span lang="EN-AU" style="color:#365F91"><font face="Calibri">H6</font></span></b></p>
+  </td>
+  <td width="62" valign="top" style="border-width: 1pt 0px; border-style: solid none; border-color: rgb(79, 129, 189) rgb(0, 0, 0); padding: 0in 5.4pt; width: 46.2pt; background-color: transparent;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center; line-height: normal;"><b><span lang="EN-AU" style="color:#365F91"><font face="Calibri">H7</font></span></b></p>
+  </td>
+  <td width="62" valign="top" style="border-width: 1pt 0px; border-style: solid none; border-color: rgb(79, 129, 189) rgb(0, 0, 0); padding: 0in 5.4pt; width: 46.2pt; background-color: transparent;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center; line-height: normal;"><b><span lang="EN-AU" style="color:#365F91"><font face="Calibri">H8</font></span></b></p>
+  </td>
+  <td width="62" valign="top" style="border-width: 1pt 0px; border-style: solid none; border-color: rgb(79, 129, 189) rgb(0, 0, 0); padding: 0in 5.4pt; width: 46.25pt; background-color: transparent;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center; line-height: normal;"><b><span lang="EN-AU" style="color:#365F91"><font face="Calibri">H9</font></span></b></p>
+  </td>
+  <td width="62" valign="top" style="border-width: 1pt 0px; border-style: solid none; border-color: rgb(79, 129, 189) rgb(0, 0, 0); padding: 0in 5.4pt; width: 46.25pt; background-color: transparent;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center; line-height: normal;"><b><span lang="EN-AU" style="color:#365F91"><font face="Calibri">H10</font></span></b></p>
+  </td>
+ </tr>
+ <tr style="mso-yfti-irow:1">
+  <td width="62" valign="top" style="background: rgb(211, 223, 238); padding: 0in 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center; line-height: normal;"><b><span lang="EN-AU" style="color:#365F91"><font face="Calibri">1a</font></span></b></p>
+  </td>
+  <td width="62" valign="top" style="background: rgb(211, 223, 238); padding: 0in 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">2a</font></span></p>
+  </td>
+  <td width="62" valign="top" style="background: rgb(211, 223, 238); padding: 0in 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">3a</font></span></p>
+  </td>
+  <td width="62" valign="top" style="background: rgb(211, 223, 238); padding: 0in 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">4a</font></span></p>
+  </td>
+  <td width="62" valign="top" style="background: rgb(211, 223, 238); padding: 0in 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">5a</font></span></p>
+  </td>
+  <td width="62" valign="top" style="background: rgb(211, 223, 238); padding: 0in 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">6a</font></span></p>
+  </td>
+  <td width="62" valign="top" style="background: rgb(211, 223, 238); padding: 0in 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">7a</font></span></p>
+  </td>
+  <td width="62" valign="top" style="background: rgb(211, 223, 238); padding: 0in 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">8a</font></span></p>
+  </td>
+  <td width="62" valign="top" style="background: rgb(211, 223, 238); padding: 0in 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.25pt;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">9a</font></span></p>
+  </td>
+  <td width="62" valign="top" style="background: rgb(211, 223, 238); padding: 0in 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.25pt;">
+  <p align="center" style="margin: 0in 0in 0pt; text-align: center; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">10a</font></span></p>
+  </td>
+ </tr>
+ <tr style="mso-yfti-irow:2">
+  <td width="62" valign="top" style="padding: 0in 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt; background-color: transparent;">
+  <p align="right" style="margin: 0in 0in 0pt; text-align: right; line-height: normal;"><b><span lang="EN-AU" style="color:#365F91"><font face="Calibri">1b</font></span></b></p>
+  </td>
+  <td width="62" valign="top" style="padding: 0in 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt; background-color: transparent;">
+  <p align="right" style="margin: 0in 0in 0pt; text-align: right; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">2b</font></span></p>
+  </td>
+  <td width="62" valign="top" style="padding: 0in 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt; background-color: transparent;">
+  <p align="right" style="margin: 0in 0in 0pt; text-align: right; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">3b</font></span></p>
+  </td>
+  <td width="62" valign="top" style="padding: 0in 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt; background-color: transparent;">
+  <p align="right" style="margin: 0in 0in 0pt; text-align: right; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">4b</font></span></p>
+  </td>
+  <td width="62" valign="top" style="padding: 0in 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt; background-color: transparent;">
+  <p align="right" style="margin: 0in 0in 0pt; text-align: right; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">5b</font></span></p>
+  </td>
+  <td width="62" valign="top" style="padding: 0in 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt; background-color: transparent;">
+  <p align="right" style="margin: 0in 0in 0pt; text-align: right; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">6b</font></span></p>
+  </td>
+  <td width="62" valign="top" style="padding: 0in 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt; background-color: transparent;">
+  <p align="right" style="margin: 0in 0in 0pt; text-align: right; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">7b</font></span></p>
+  </td>
+  <td width="62" valign="top" style="padding: 0in 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.2pt; background-color: transparent;">
+  <p align="right" style="margin: 0in 0in 0pt; text-align: right; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">8b</font></span></p>
+  </td>
+  <td width="62" valign="top" style="padding: 0in 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.25pt; background-color: transparent;">
+  <p align="right" style="margin: 0in 0in 0pt; text-align: right; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">9b</font></span></p>
+  </td>
+  <td width="62" valign="top" style="padding: 0in 5.4pt; border: 0px rgb(0, 0, 0); border-image: none; width: 46.25pt; background-color: transparent;">
+  <p align="right" style="margin: 0in 0in 0pt; text-align: right; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">10b</font></span></p>
+  </td>
+ </tr>
+ <tr style="mso-yfti-irow:3;mso-yfti-lastrow:yes">
+  <td width="62" valign="top" style="background: rgb(211, 223, 238); border-width: 0px 0px 1pt; border-style: none none solid; border-color: rgb(0, 0, 0) rgb(0, 0, 0) rgb(79, 129, 189); padding: 0in 5.4pt; border-image: none; width: 46.2pt;">
+  <p style="margin: 0in 0in 0pt; line-height: normal;"><b><span lang="EN-AU" style="color:#365F91"><font face="Calibri">1c</font></span></b></p>
+  </td>
+  <td width="62" valign="top" style="background: rgb(211, 223, 238); border-width: 0px 0px 1pt; border-style: none none solid; border-color: rgb(0, 0, 0) rgb(0, 0, 0) rgb(79, 129, 189); padding: 0in 5.4pt; border-image: none; width: 46.2pt;">
+  <p style="margin: 0in 0in 0pt; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">2c</font></span></p>
+  </td>
+  <td width="62" valign="top" style="background: rgb(211, 223, 238); border-width: 0px 0px 1pt; border-style: none none solid; border-color: rgb(0, 0, 0) rgb(0, 0, 0) rgb(79, 129, 189); padding: 0in 5.4pt; border-image: none; width: 46.2pt;">
+  <p style="margin: 0in 0in 0pt; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">3c</font></span></p>
+  </td>
+  <td width="62" valign="top" style="background: rgb(211, 223, 238); border-width: 0px 0px 1pt; border-style: none none solid; border-color: rgb(0, 0, 0) rgb(0, 0, 0) rgb(79, 129, 189); padding: 0in 5.4pt; border-image: none; width: 46.2pt;">
+  <p style="margin: 0in 0in 0pt; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">4c</font></span></p>
+  </td>
+  <td width="62" valign="top" style="background: rgb(211, 223, 238); border-width: 0px 0px 1pt; border-style: none none solid; border-color: rgb(0, 0, 0) rgb(0, 0, 0) rgb(79, 129, 189); padding: 0in 5.4pt; border-image: none; width: 46.2pt;">
+  <p style="margin: 0in 0in 0pt; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">5c</font></span></p>
+  </td>
+  <td width="62" valign="top" style="background: rgb(211, 223, 238); border-width: 0px 0px 1pt; border-style: none none solid; border-color: rgb(0, 0, 0) rgb(0, 0, 0) rgb(79, 129, 189); padding: 0in 5.4pt; border-image: none; width: 46.2pt;">
+  <p style="margin: 0in 0in 0pt; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">6c</font></span></p>
+  </td>
+  <td width="62" valign="top" style="background: rgb(211, 223, 238); border-width: 0px 0px 1pt; border-style: none none solid; border-color: rgb(0, 0, 0) rgb(0, 0, 0) rgb(79, 129, 189); padding: 0in 5.4pt; border-image: none; width: 46.2pt;">
+  <p style="margin: 0in 0in 0pt; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">7c</font></span></p>
+  </td>
+  <td width="62" valign="top" style="background: rgb(211, 223, 238); border-width: 0px 0px 1pt; border-style: none none solid; border-color: rgb(0, 0, 0) rgb(0, 0, 0) rgb(79, 129, 189); padding: 0in 5.4pt; border-image: none; width: 46.2pt;">
+  <p style="margin: 0in 0in 0pt; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">8c</font></span></p>
+  </td>
+  <td width="62" valign="top" style="background: rgb(211, 223, 238); border-width: 0px 0px 1pt; border-style: none none solid; border-color: rgb(0, 0, 0) rgb(0, 0, 0) rgb(79, 129, 189); padding: 0in 5.4pt; border-image: none; width: 46.25pt;">
+  <p style="margin: 0in 0in 0pt; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">9c</font></span></p>
+  </td>
+  <td width="62" valign="top" style="background: rgb(211, 223, 238); border-width: 0px 0px 1pt; border-style: none none solid; border-color: rgb(0, 0, 0) rgb(0, 0, 0) rgb(79, 129, 189); padding: 0in 5.4pt; border-image: none; width: 46.25pt;">
+  <p style="margin: 0in 0in 0pt; line-height: normal;"><span lang="EN-AU" style="color:#365F91"><font face="Calibri">10c</font></span></p>
+  </td>
+ </tr>
+</tbody></table>
+
+<p style="margin: 0in 0in 10pt;"><a name="_GoBack"></a><span lang="EN-AU"><font face="Calibri">&nbsp;</font></span></p>
+
+<p style="margin: 0in 0in 10pt;"><span lang="EN-AU"><font face="Calibri">&nbsp;</font></span></p>
+
+<p style="margin: 0in 0in 10pt;"><span lang="EN-AU"><font face="Calibri">&nbsp;</font></span></p>
+
