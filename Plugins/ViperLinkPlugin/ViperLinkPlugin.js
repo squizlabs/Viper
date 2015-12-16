@@ -56,7 +56,7 @@ ViperLinkPlugin.prototype = {
 
         });
 
-        this.viper.registerCallback('ViperKeyboardEditorPlugin:beforeEnter', 'ViperLinkPlugin', function() {
+        this.viper.registerCallback('Viper:beforeEnter', 'ViperLinkPlugin', function() {
             self._autoLink(true);
         });
 

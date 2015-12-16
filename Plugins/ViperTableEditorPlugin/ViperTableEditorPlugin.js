@@ -3428,8 +3428,7 @@ ViperTableEditorPlugin.prototype = {
             ViperUtil.empty(this.viper.getViperElement());
             this.viper.getViperElement().appendChild(table);
         } else {
-            var keyboardEditorPlugin = this.viper.ViperPluginManager.getPlugin('ViperKeyboardEditorPlugin');
-            var prevNode = keyboardEditorPlugin.splitAtRange(true);
+            var prevNode = self.viper.getInputHandler().splitAtRange(true);
             if (ViperUtil.isTag(prevNode, 'li') === true) {
                 prevNode.appendChild(table);
                 if (ViperUtil.isBlank(ViperUtil.getNodeTextContent(prevNode.nextSibling)) === true) {

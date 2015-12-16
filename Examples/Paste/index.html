@@ -12,7 +12,7 @@
         var viper = null;
         ViperReadyCallback = function() {
             viper = new Viper('test');
-            viper.getPluginManager().setPlugins(['ViperCopyPastePlugin', 'ViperKeyboardEditorPlugin']);
+            viper.getPluginManager().setPlugins(['ViperCopyPastePlugin']);
             viper.setEditableElement(document.getElementById('content'));
 
             var copyPastePlugin = viper.getPluginManager().getPlugin('ViperCopyPastePlugin');

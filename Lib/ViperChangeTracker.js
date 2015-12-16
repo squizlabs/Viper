@@ -65,9 +65,7 @@ var ViperChangeTracker = {
         this._tracking = false;
 
         // Disable change tracking...
-        return;
-
-        var self       = this;
+        /*var self       = this;
         this.cleanUp();
 
         this._viper.registerCallback('nodesChanged', 'ViperChangeTracker', function() {
@@ -136,7 +134,7 @@ var ViperChangeTracker = {
 
         ViperUtil.$(window).resize(function() {
           self.updatePositionMarkers(true);
-        });
+      });*/
 
     },
 
@@ -256,8 +254,6 @@ var ViperChangeTracker = {
 
     enableChangeTracking: function()
     {
-        return;
-
         // Create infobox holder which will contain all the infoboxes.
         this._infoBoxHolder = this._createInfoboxHolder();
         this._markerHolder  = this._createMarkerHolder();
@@ -790,8 +786,6 @@ var ViperChangeTracker = {
 
     _createMarkerHolder: function()
     {
-        return;
-
         if (this._markerHolder) {
             ViperUtil.remove(this._markerHolder);
         }
@@ -922,8 +916,6 @@ var ViperChangeTracker = {
 
     _createInfoboxHolder: function()
     {
-        return;
-
         var id     = this._className + '-infoBoxHolder';
         var holder = ViperUtil.getid(id);
         if (holder) {
@@ -941,8 +933,6 @@ var ViperChangeTracker = {
 
     updateInfoBoxPosition: function()
     {
-        return;
-
         if (!this._infoBoxHolder) {
             this._infoBoxHolder = this._createInfoboxHolder();
         }

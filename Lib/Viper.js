@@ -135,6 +135,12 @@ Viper.prototype = {
 
     },
 
+    getInputHandler: function()
+    {
+        return this.ViperInputHandler;
+
+    },
+
     setSetting: function(setting, value)
     {
         this._settings[setting] = value;
@@ -1088,7 +1094,7 @@ Viper.prototype = {
     _useDefaultPlugins: function()
     {
         // Default plugins (all Viper plugins).
-        var plugins = 'ViperCoreStylesPlugin|ViperKeyboardEditorPlugin|ViperInlineToolbarPlugin|ViperHistoryPlugin|ViperListPlugin|ViperFormatPlugin|ViperToolbarPlugin|ViperTableEditorPlugin|ViperCopyPastePlugin|ViperImagePlugin|ViperLinkPlugin|ViperAccessibilityPlugin|ViperSourceViewPlugin|ViperSearchReplacePlugin|ViperLangToolsPlugin|ViperCharMapPlugin|ViperCursorAssistPlugin|ViperTrackChangesPlugin|ViperReplacementPlugin';
+        var plugins = 'ViperCoreStylesPlugin|ViperInlineToolbarPlugin|ViperHistoryPlugin|ViperListPlugin|ViperFormatPlugin|ViperToolbarPlugin|ViperTableEditorPlugin|ViperCopyPastePlugin|ViperImagePlugin|ViperLinkPlugin|ViperAccessibilityPlugin|ViperSourceViewPlugin|ViperSearchReplacePlugin|ViperLangToolsPlugin|ViperCharMapPlugin|ViperCursorAssistPlugin|ViperTrackChangesPlugin|ViperReplacementPlugin';
         this.ViperPluginManager.setPlugins(plugins.split('|'));
 
         // Default button ordering.
@@ -4688,7 +4694,7 @@ Viper.prototype = {
         this.fireCallbacks('Viper:nodesChanged', nodes);
 
         // Update the markers.
-        ViperChangeTracker.updatePositionMarkers(true);
+        //ViperChangeTracker.updatePositionMarkers(true);
 
         if (nodes.length === 1 && nodes[0] && nodes[0].nodeType === ViperUtil.TEXT_NODE) {
             this.ViperHistoryManager.add('Viper', 'text_change');
