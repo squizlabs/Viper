@@ -1342,7 +1342,25 @@ ViperInputHandler.prototype = {
             // Handle <p>test *<strong>text</strong></p>.
             this.splitAtRange();
             return false;
+        } else if (range.startContainer === range.endContainer
+            && defaultTagName !== ''
+            && ViperUtil.isBlockElement(range.startContainer) === true
+            && range.collapsed === true
+            && range.startOffset === range.startContainer.childNodes.length
+            && ViperUtil.isTag(range.startContainer.childNodes[(range.startOffset - 1)], 'table') === true
+        ) {
+            // Handle: <div>...<table>..</table>*</div>.
+            var newTag = document.createElement(defaultTagName);
+            ViperUtil.setHtml(newTag, '<br />');
+            ViperUtil.insertAfter(range.startContainer.childNodes[(range.startOffset - 1)], newTag);
+            range.setStart(newTag.firstChild, 0);
+            range.collapse(true);
+            ViperSelection.addRange(range);
+            this._viper.fireNodesChanged();
+            this._viper.fireSelectionChanged(null, true);
+            return false;
         }//end if
+
 
         if (range.startOffset === 0
             && range.collapsed === true
@@ -2629,11 +2647,11 @@ ViperInputHandler.prototype = {
             return false;
         }
 
-        var startCont = range.startContainer;
-        if (startCont.nodeType !== ViperUtil.TEXT_NODE) {
+        var startContainer = range.startContainer;
+        if (startContainer.nodeType !== ViperUtil.TEXT_NODE) {
             var startNode = range.getStartNode();
             if (startNode && startNode.nodeType !== ViperUtil.TEXT_NODE) {
-                var nextSelectable = range.getNextContainer(startCont, null, true, true, true);
+                var nextSelectable = range.getNextContainer(startContainer, null, true, true, true);
 
                 if (nextSelectable) {
                     var startParent = range.startContainer;
@@ -2995,29 +3013,29 @@ ViperInputHandler.prototype = {
         } else {
             // Delete from right.
             if (range.collapsed === true) {
-                var startCont = range.startContainer;
-                if (startCont.nodeType === ViperUtil.TEXT_NODE) {
+                var startContainer = range.startContainer;
+                if (startContainer.nodeType === ViperUtil.TEXT_NODE) {
                     if (range.startOffset === 0) {
-                        if (startCont.data.length === 2 && startCont.data.charAt(1) === ' ') {
+                        if (startContainer.data.length === 2 && startContainer.data.charAt(1) === ' ') {
                             // When the text node ends with a space and it will be the only remaining character in the
                             // node then replace it with non breaking space character as Webkit destroys the text node
                             // and make it appear like both 2nd last and space deleted.
-                            startCont.data = String.fromCharCode(160);
-                            range.setStart(startCont, 0);
+                            startContainer.data = String.fromCharCode(160);
+                            range.setStart(startContainer, 0);
                             range.collapse(true);
                             ViperSelection.addRange(range);
                             this._viper.fireNodesChanged();
                             this._viper.fireSelectionChanged(null, true);
                             return false;
                         }
-                    } else if (range.startOffset === startCont.data.length) {
+                    } else if (range.startOffset === startContainer.data.length) {
                         // At the end of a text node.
-                        if (startCont.nextSibling && this._viper.isSpecialElement(startCont.nextSibling) === true) {
-                            ViperUtil.remove(startCont.nextSibling);
+                        if (startContainer.nextSibling && this._viper.isSpecialElement(startContainer.nextSibling) === true) {
+                            ViperUtil.remove(startContainer.nextSibling);
                             return false;
-                        } else if (!startCont.nextSibling) {
+                        } else if (!startContainer.nextSibling) {
                             // Check if the next container is a special element.
-                            var nextSelectable = range.getNextContainer(startCont, null, true, true, true);
+                            var nextSelectable = range.getNextContainer(startContainer, null, true, true, true);
                             if (nextSelectable && this._viper.isSpecialElement(nextSelectable.parentNode) === true) {
                                 ViperUtil.remove(nextSelectable.parentNode);
                                 return false;
@@ -3027,7 +3045,7 @@ ViperInputHandler.prototype = {
                 } else {
                     var startNode = range.getStartNode();
                     if (startNode && startNode.nodeType !== ViperUtil.TEXT_NODE) {
-                        var nextSelectable = range.getNextContainer(startCont, null, true, true, true);
+                        var nextSelectable = range.getNextContainer(startContainer, null, true, true, true);
 
                         if (nextSelectable) {
                             var startParent = range.startContainer;
