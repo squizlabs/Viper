@@ -831,7 +831,7 @@ ViperReplacementPlugin.prototype = {
 
         ViperUtil.setHtml(elem, content);
 
-        if (!options.tagName && this.viper.hasBlockChildren(elem) !== true) {
+        if (!options.tagName && ViperUtil.hasBlockChildren(elem) !== true) {
             // There are no block elements so use a span instead.
             elem = document.createElement('span');
             ViperUtil.setHtml(elem, content);

@@ -260,7 +260,7 @@ ViperTools.prototype = {
                         'Viper:keyDown',
                         'ViperTools-' + id,
                         function(e) {
-                            if (self.viper.isKey(e, key) === true) {
+                            if (ViperUtil.isKey(e, key) === true) {
                                 if (ViperUtil.hasClass(button, 'Viper-disabled') !== true) {
                                     clickAction.call(e, button);
                                 }

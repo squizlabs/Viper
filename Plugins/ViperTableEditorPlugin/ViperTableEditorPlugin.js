@@ -226,7 +226,7 @@ ViperTableEditorPlugin.prototype = {
                         }
                     }
                 }
-            } else if (self.viper.isInputKey(e) === true && e.which !== 13) {
+            } else if (ViperUtil.isInputKey(e) === true && e.which !== 13) {
                 // Not input key or enter key, hide tools.
                 self.hideCellToolsIcon();
                 self.removeHighlights();

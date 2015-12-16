@@ -20,11 +20,11 @@ function ViperKeyboardEditorPlugin(viper)
     this.viper.addSpecialKey(13);
 
     this.viper.registerCallback('Viper:keyDown', 'ViperKeyboardEditorPlugin', function(e) {
-        if (viper.isKey(e, 'ENTER') === true) {
+        if (ViperUtil.isKey(e, 'ENTER') === true) {
             return self.handleEnter();
-        } else if (viper.isKey(e, 'SHIFT+ENTER') === true) {
+        } else if (ViperUtil.isKey(e, 'SHIFT+ENTER') === true) {
             return self.handleSoftEnter(e);
-        } else if (viper.isKey(e, 'DELETE') === true || viper.isKey(e, 'BACKSPACE') === true) {
+        } else if (ViperUtil.isKey(e, 'DELETE') === true || ViperUtil.isKey(e, 'BACKSPACE') === true) {
             return self.handleDelete(e);
         }
     });
@@ -1238,7 +1238,7 @@ ViperKeyboardEditorPlugin.prototype = {
             && range.collapsed === true
             && range.startContainer === range.endContainer
             && e.keyCode === 8
-            && (this.viper.elementIsEmpty(range.startContainer) === true || ViperUtil.getHtml(range.startContainer) === '<br>')
+            && (ViperUtil.elementIsEmpty(range.startContainer) === true || ViperUtil.getHtml(range.startContainer) === '<br>')
         ) {
             if ((ViperUtil.isTag(range.startContainer, 'br') !== true
                 || (ViperUtil.isTag(range.startContainer.parentNode, 'td') === false
@@ -2812,7 +2812,7 @@ ViperKeyboardEditorPlugin.prototype = {
             ViperChangeTracker.addChange('splitContainer', [elem]);
         }//end if
 
-        if (this.viper.elementIsEmpty(parent) === true) {
+        if (ViperUtil.elementIsEmpty(parent) === true) {
             ViperUtil.setHtml(parent, '&nbsp;');
         }
 

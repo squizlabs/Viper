@@ -163,7 +163,7 @@ ViperCoreStylesPlugin.prototype = {
         });
 
         this.viper.registerCallback('Viper:keyPress', 'ViperCoreStylesPlugin', function(e) {
-            if (self._onChangeAddStyle.length > 0 && self.viper.isInputKey(e) === true) {
+            if (self._onChangeAddStyle.length > 0 && ViperUtil.isInputKey(e) === true) {
                 var character = String.fromCharCode(e.which);
                 return self.viper.insertTextAtCaret(character);
             }

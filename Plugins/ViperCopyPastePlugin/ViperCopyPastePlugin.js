@@ -332,7 +332,7 @@ ViperCopyPastePlugin.prototype = {
                         // Initial call to onbeforepaste, happens when right click menu opens.
                         // Create the paste div.
                         pasteDiv = self._createPasteDiv(true);
-                    } else if (self._pasteProcess === 2 
+                    } else if (self._pasteProcess === 2
                         || (self._pasteProcess === 1 && self._isRightClick === false || ViperUtil.isBrowser('edge') === true)
                     ) {
                         // Third call to onbeforepaste, happens when paste option is clicked.
@@ -1087,7 +1087,7 @@ ViperCopyPastePlugin.prototype = {
         // If fragment contains block level elements most likely we will need to
         // do some spliting so we do not have P tags in P tags etc.. Split the
         // container from current selection and then insert paste contents after it.
-        if (this.viper.hasBlockChildren(fragment) === true) {
+        if (ViperUtil.hasBlockChildren(fragment) === true) {
             // TODO: We should move handleEnter function to somewhere else and make it
             // a little bit more generic.
             var keyboardEditor = this.viper.ViperPluginManager.getPlugin('ViperKeyboardEditorPlugin');

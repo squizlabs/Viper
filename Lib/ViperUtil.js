@@ -23,6 +23,97 @@ var ViperUtil = {
     _browserVersion: null,
     _viperElement: null,
 
+    isKey: function(e, keys)
+    {
+        var eKeys = [];
+        if (e.ctrlKey === true || e.metaKey === true) {
+            eKeys.push('ctrl');
+        }
+
+        if (e.shiftKey === true) {
+            eKeys.push('shift');
+        }
+
+        if (e.altKey === true) {
+            eKeys.push('alt');
+        }
+
+        switch (e.keyCode) {
+            case 13:
+                eKeys.push('enter');
+            break;
+
+            case ViperUtil.DOM_VK_LEFT:
+                eKeys.push('left');
+            break;
+
+            case ViperUtil.DOM_VK_RIGHT:
+                eKeys.push('right');
+            break;
+
+            case ViperUtil.DOM_VK_UP:
+                eKeys.push('up');
+            break;
+
+            case ViperUtil.DOM_VK_DOWN:
+                eKeys.push('down');
+            break;
+
+            case 9:
+                eKeys.push('tab');
+            break;
+
+            case ViperUtil.DOM_VK_DELETE:
+                eKeys.push('delete');
+            break;
+
+            case ViperUtil.DOM_VK_BACKSPACE:
+                eKeys.push('backspace');
+            break;
+
+            default:
+                var code = e.which;
+
+                // Other characters (a-z0-9..).
+                if (code) {
+                    eKeys.push(String.fromCharCode(code).toLowerCase());
+                }
+            break;
+        }//end switch
+
+        eKeys = eKeys.sort();
+
+        keys       = keys.toLowerCase().split('+').sort();
+        var kCount = keys.length;
+        if (kCount !== eKeys.length) {
+            return false;
+        }
+
+        for (var i = 0; i < kCount; i++) {
+            if (keys[i] !== eKeys[i]) {
+                return false;
+            }
+        }
+
+        return true;
+
+    },
+
+    isInputKey: function(e)
+    {
+        if ((e.which !== 0 || e.keyCode === 46)
+            && e.ctrlKey !== true
+            && e.altKey !== true
+            && e.metaKey !== true
+            && e.which !== 27
+        ) {
+            return true;
+        }
+
+        return false;
+
+    },
+
     isTag: function(node, tag)
     {
         if (typeof tag !== 'object') {
@@ -843,6 +934,70 @@ var ViperUtil = {
 
         children = children.concat(this.getSurroundedChildren(element.firstChild));
         return children;
+
+    },
+
+    getBlockChildren: function(parent)
+    {
+        var children = [];
+        var c        = parent.childNodes.length;
+        for (var i = 0; i < c; i++) {
+            if (parent.childNodes[i].nodeType === this.ELEMENT_NODE) {
+                if (this.isBlockElement(parent.childNodes[i]) === true) {
+                    children.push(parent.childNodes[i]);
+                }
+            }
+        }
+
+        return children;
+
+    },
+
+    hasBlockChildren: function(parent)
+    {
+        var c = parent.childNodes.length;
+        for (var i = 0; i < c; i++) {
+            if (parent.childNodes[i].nodeType === this.ELEMENT_NODE) {
+                if (this.isBlockElement(parent.childNodes[i]) === true) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+
+    },
+
+    elementIsEmpty: function(elem)
+    {
+        if (this.isBlank(this.getNodeTextContent(elem)) === true) {
+            // Might have stub elements.
+            var tags = this.getTag('*', elem);
+            var ln   = tags.length;
+            for (var i = 0; i < ln; i++) {
+                if (this.isStubElement(tags[i]) === true) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return false;
+
+    },
+
+    isChildOfElems: function(el, parents)
+    {
+        while (el && el.parentNode) {
+            if (this.inArray(el.parentNode, parents) === true) {
+                return true;
+            }
+
+            el = el.parentNode;
+        }
+
+        return false;
 
     },
 

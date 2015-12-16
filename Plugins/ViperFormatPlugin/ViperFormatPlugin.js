@@ -1082,7 +1082,7 @@ ViperFormatPlugin.prototype = {
                     if (ViperUtil.isBlockElement(nodeSelection) === true && ViperUtil.inArray(ViperUtil.getTagName(nodeSelection), ignoredTags) === false) {
                         // Check if this node contains any block elements, if it does
                         // then headings cannnot be applied.
-                        var blockChildren = self.viper.getBlockChildren(nodeSelection);
+                        var blockChildren = ViperUtil.getBlockChildren(nodeSelection);
                         if (blockChildren.length <= 1) {
                             tools.enableButton('headings');
                         }
@@ -2299,7 +2299,7 @@ ViperFormatPlugin.prototype = {
                 if (this.viper.getDefaultBlockTag() !== '') {
                     if (type === this.viper.getDefaultBlockTag()) {
                         return null;
-                    } else if (this.viper.hasBlockChildren(element) === false) {
+                    } else if (ViperUtil.hasBlockChildren(element) === false) {
                         return this._convertSingleElement(element, this.viper.getDefaultBlockTag());
                     } else {
                         var parentElem = null;
