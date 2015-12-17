@@ -4460,7 +4460,6 @@ Viper.prototype = {
 
                 }
 
-
                 self.fireSelectionChanged(range, true);
             }
         }, 8);
@@ -4607,6 +4606,13 @@ Viper.prototype = {
                     ViperSelection.addRange(range);
                 }
             }
+        } else if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
+            && range.endContainer.nodeType === ViperUtil.ELEMENT_NODE
+            && range.endOffset === 0
+            && range.startOffset === range.startContainer.data.length
+        ) {
+            range.collapse(true);
+            ViperSelection.addRange(range);
         }//end if
 
         return range;
