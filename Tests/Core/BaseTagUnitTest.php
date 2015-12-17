@@ -1005,7 +1005,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         // Test applying bold using keyboard shortcuts
         $this->useTest(1);
         $this->selectKeyword(1);
-        $this->getOSAltShortcut('Bold');
+        $this->sikuli->keyDown('Key.CMD + b');
         $this->assertHTMLMatch('<div><strong>%1%</strong></div>');
 
         // Test applying bold using the top toolbar
@@ -1017,8 +1017,10 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         // Test applying bold to multiple tags using keyboard shortcuts
         $this->useTest(6);
         $this->selectKeyword(1);
-        $this->getOSAltShortcut('SelectAll');
-        $this->getOSAltShortcut('Bold');
+        $this->sikuli->keyDown('Key.CMD + a');
+        sleep(1);
+        $this->sikuli->keyDown('Key.CMD + b');
+        sleep(1);
         $this->assertHTMLMatch('<p><strong>%1% %2%</strong></p><div><strong>test</strong></div>');
 
         // Test applying bold to multiple tags using the top toolbar
@@ -1346,5 +1348,534 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('superscript');
         $this->assertHTMLMatch('<p><sup>%1% %2%</sup></p><div><sup>test</sup></div>');
     }// end testDivBaseTagInputSuperscriptFormat()
+
+
+    /**
+     * Test that inputting text, creating new paragraphs etc work when no base tag is set.
+     *
+     * @return void
+     */
+    public function testDivBaseTagInputLinks()
+    {
+        $this->useTest(1);
+        $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
+
+        // Test links in top toolbar
+        // Test applying links
+        $this->useTest(23);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('link', NULL);
+        $this->type('test-link');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><a href="test-link">%1%</a> test content</div>');
+        sleep(5);
+
+        // Test removing link without title
+        $this->clickTopToolbarButton('linkRemove');
+        $this->assertHTMLMatch('<div>%1% test content</div>');
+
+        // Test removing link with title
+        $this->useTest(25);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('linkRemove');
+        $this->assertHTMLMatch('<div>%1% test content</div>');
+
+        // Test adding title
+        $this->useTest(24);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('link', 'active');
+        $this->clickField('Title');
+        $this->type('test-title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><a href="test-link" title="test-title">%1%</a> test content</div>');
+
+        // Test removing title
+        $this->clearFieldValue('Title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><a href="test-link">%1%</a> test content</div>');
+
+        // Test modifying title
+        $this->useTest(25);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('link', 'active');
+        $this->clearFieldValue('Title');
+        $this->clickField('Title');
+        $this->type('modified-title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><a href="test-link" title="modified-title">%1%</a> test content</div>');
+
+        // Test links in inline toolbar
+        // Test applying links
+        $this->useTest(23);
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('link', NULL);
+        $this->type('test-link');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><a href="test-link">%1%</a> test content</div>');
+
+        // Test removing link without title
+        $this->clickTopToolbarButton('linkRemove');
+        $this->assertHTMLMatch('<div>%1% test content</div>');
+
+        // Test removing link with title
+        $this->useTest(25);
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('linkRemove');
+        $this->assertHTMLMatch('<div>%1% test content</div>');
+
+        // Test adding title
+        $this->useTest(24);
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('link', 'active');
+        $this->clickField('Title');
+        $this->type('test-title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><a href="test-link" title="test-title">%1%</a> test content</div>');
+
+        // Test removing title
+        $this->clearFieldValue('Title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><a href="test-link">%1%</a> test content</div>');
+
+        // Test modifying title
+        $this->useTest(25);
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('link', 'active');
+        $this->clearFieldValue('Title');
+        $this->clickField('Title');
+        $this->type('modified-title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><a href="test-link" title="modified-title">%1%</a> test content</div>');
+
+    }// end testDivBaseTagInputLinks()
+
+
+    /**
+     * Test that inputting text, creating new paragraphs etc work when no base tag is set.
+     *
+     * @return void
+     */
+    public function testDivBaseTagInputLinkBoldFormat()
+    {
+        $this->useTest(1);
+        $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
+
+        // Using top toolbar 
+        // Test applying link to bold formatted content
+        $this->useTest(23);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->clickTopToolbarButton('link', NULL);
+        $this->type('test-link');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><strong><a href="test-link">%1%</a></strong> test content</div>');
+
+        // Test removing bold from linked content
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->assertHTMLMatch('<div><a href="test-link">%1%</a> test content</div>');
+
+        // Test applying bold to linked content
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->assertHTMLMatch('<div><strong><a href="test-link">%1%</a></strong> test content</div>');
+
+        // Test removing link from bold formatted content
+        $this->clickTopToolbarButton('linkRemove', NULL);
+        $this->assertHTMLMatch('<div><strong>%1%</strong> test content</div>');
+
+        // Test applying link and title to bold formatted content
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('link', NULL);
+        $this->type('test-link');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->clickField('Title');
+        $this->type('test-title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><strong><a href="test-link" title="test-title">%1%</a></strong> test content</div>');
+
+        // Test removing bold format from linked content with title
+        $this->clickTopToolbarButton('bold', 'active');
+        $this->assertHTMLMatch('<div><a href="test-link" title="test-title">%1%</a> test content</div>');
+
+        // Test appling bold format to linked content with title
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->assertHTMLMatch('<div><strong><a href="test-link" title="test-title">%1%</a></strong> test content</div>');
+
+        // Test modifying title of link with bold formatting
+        $this->clearFieldValue('Title');
+        $this->clickField('Title');
+        $this->type('modified-title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><strong><a href="test-link" title="modified-title">%1%</a></strong> test content</div>');
+
+        // Test removing title of link from bold formatted content
+        $this->clearFieldValue('Title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><strong><a href="test-link">%1%</a></strong> test content</div>');
+
+        // Using inline toolbar 
+        // Test applying link to bold formatted content
+        $this->useTest(23);
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('bold', NULL);
+        $this->clickInlineToolbarButton('link', NULL);
+        $this->type('test-link');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><strong><a href="test-link">%1%</a></strong> test content</div>');
+
+        // Test removing bold from linked content
+        $this->clickInlineToolbarButton('bold', 'active');
+        $this->assertHTMLMatch('<div><a href="test-link">%1%</a> test content</div>');
+
+        // Test applying bold to linked content
+        $this->clickInlineToolbarButton('bold', NULL);
+        $this->assertHTMLMatch('<div><strong><a href="test-link">%1%</a></strong> test content</div>');
+
+        // Test removing link from bold formatted content
+        $this->clickInlineToolbarButton('linkRemove', NULL);
+        $this->assertHTMLMatch('<div><strong>%1%</strong> test content</div>');
+
+        // Test applying link and title to bold formatted content
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('link', NULL);
+        $this->type('test-link');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->clickField('Title');
+        $this->type('test-title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><strong><a href="test-link" title="test-title">%1%</a></strong> test content</div>');
+
+        // Test removing bold format from linked content with title
+        $this->clickInlineToolbarButton('bold', 'active');
+        $this->assertHTMLMatch('<div><a href="test-link" title="test-title">%1%</a> test content</div>');
+
+        // Test appling bold format to linked content with title
+        $this->clickInlineToolbarButton('bold', NULL);
+        $this->assertHTMLMatch('<div><strong><a href="test-link" title="test-title">%1%</a></strong> test content</div>');
+
+        // Test modifying title of link with bold formatting
+        $this->clearFieldValue('Title');
+        $this->clickField('Title');
+        $this->type('modified-title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><strong><a href="test-link" title="modified-title">%1%</a></strong> test content</div>');
+
+        // Test removing title of link from bold formatted content
+        $this->clearFieldValue('Title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><strong><a href="test-link">%1%</a></strong> test content</div>');
+
+    }// end testDivBaseTagInputLinkBoldFormat()
+
+
+    /**
+     * Test that inputting text, creating new paragraphs etc work when no base tag is set.
+     *
+     * @return void
+     */
+    public function testDivBaseTagInputLinkItalicFormat()
+    {
+        $this->useTest(1);
+        $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
+
+        // Using top toolbar 
+        // Test applying link to italic formatted content
+        $this->useTest(23);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickTopToolbarButton('link', NULL);
+        $this->type('test-link');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><em><a href="test-link">%1%</a></em> test content</div>');
+
+        // Test removing italic from linked content
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->assertHTMLMatch('<div><a href="test-link">%1%</a> test content</div>');
+
+        // Test applying italic to linked content
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<div><em><a href="test-link">%1%</a></em> test content</div>');
+
+        // Test removing link from italic formatted content
+        $this->clickTopToolbarButton('linkRemove', NULL);
+        $this->assertHTMLMatch('<div><em>%1%</em> test content</div>');
+
+        // Test applying link and title to italic formatted content
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('link', NULL);
+        $this->type('test-link');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->clickField('Title');
+        $this->type('test-title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><em><a href="test-link" title="test-title">%1%</a></em> test content</div>');
+
+        // Test removing italic format from linked content with title
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->assertHTMLMatch('<div><a href="test-link" title="test-title">%1%</a> test content</div>');
+
+        // Test appling italic format to linked content with title
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<div><em><a href="test-link" title="test-title">%1%</a></em> test content</div>');
+
+        // Test modifying title of link with italic formatting
+        $this->clearFieldValue('Title');
+        $this->clickField('Title');
+        $this->type('modified-title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><em><a href="test-link" title="modified-title">%1%</a></em> test content</div>');
+
+        // Test removing title of link from italic formatted content
+        $this->clearFieldValue('Title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><em><a href="test-link">%1%</a></em> test content</div>');
+
+        // Using inline toolbar 
+        // Test applying link to italic formatted content
+        $this->useTest(23);
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('italic', NULL);
+        $this->clickInlineToolbarButton('link', NULL);
+        $this->type('test-link');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><em><a href="test-link">%1%</a></em> test content</div>');
+
+        // Test removing italic from linked content
+        $this->clickInlineToolbarButton('italic', 'active');
+        $this->assertHTMLMatch('<div><a href="test-link">%1%</a> test content</div>');
+
+        // Test applying italic to linked content
+        $this->clickInlineToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<div><em><a href="test-link">%1%</a></em> test content</div>');
+
+        // Test removing link from italic formatted content
+        $this->clickInlineToolbarButton('linkRemove', NULL);
+        $this->assertHTMLMatch('<div><em>%1%</em> test content</div>');
+
+        // Test applying link and title to italic formatted content
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('link', NULL);
+        $this->type('test-link');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->clickField('Title');
+        $this->type('test-title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><em><a href="test-link" title="test-title">%1%</a></em> test content</div>');
+
+        // Test removing italic format from linked content with title
+        $this->clickInlineToolbarButton('italic', 'active');
+        $this->assertHTMLMatch('<div><a href="test-link" title="test-title">%1%</a> test content</div>');
+
+        // Test appling italic format to linked content with title
+        $this->clickInlineToolbarButton('italic', NULL);
+        $this->assertHTMLMatch('<div><em><a href="test-link" title="test-title">%1%</a></em> test content</div>');
+
+        // Test modifying title of link with italic formatting
+        $this->clearFieldValue('Title');
+        $this->clickField('Title');
+        $this->type('modified-title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><em><a href="test-link" title="modified-title">%1%</a></em> test content</div>');
+
+        // Test removing title of link from italic formatted content
+        $this->clearFieldValue('Title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><em><a href="test-link">%1%</a></em> test content</div>');
+
+    }// end testDivBaseTagInputLinkItalicFormat()
+
+
+    /**
+     * Test that inputting text, creating new paragraphs etc work when no base tag is set.
+     *
+     * @return void
+     */
+    public function testDivBaseTagInputLinkStrikethroughFormat()
+    {
+        $this->useTest(1);
+        $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
+
+        // Using top toolbar 
+        // Test applying link to strikethrough formatted content
+        $this->useTest(23);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->clickTopToolbarButton('link', NULL);
+        $this->type('test-link');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><del><a href="test-link">%1%</a></del> test content</div>');
+
+        // Test removing strikethrough from linked content
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->assertHTMLMatch('<div><a href="test-link">%1%</a> test content</div>');
+
+        // Test applying strikethrough to linked content
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->assertHTMLMatch('<div><del><a href="test-link">%1%</a></del> test content</div>');
+
+        // Test removing link from strikethrough formatted content
+        $this->clickTopToolbarButton('linkRemove', NULL);
+        $this->assertHTMLMatch('<div><del>%1%</del> test content</div>');
+
+        // Test applying link and title to strikethrough formatted content
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('link', NULL);
+        $this->type('test-link');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->clickField('Title');
+        $this->type('test-title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><del><a href="test-link" title="test-title">%1%</a></del> test content</div>');
+
+        // Test removing strikethrough format from linked content with title
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->assertHTMLMatch('<div><a href="test-link" title="test-title">%1%</a> test content</div>');
+
+        // Test appling strikethrough format to linked content with title
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->assertHTMLMatch('<div><del><a href="test-link" title="test-title">%1%</a></del> test content</div>');
+
+        // Test modifying title of link with strikethrough formatting
+        $this->clearFieldValue('Title');
+        $this->clickField('Title');
+        $this->type('modified-title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><del><a href="test-link" title="modified-title">%1%</a></del> test content</div>');
+
+        // Test removing title of link from strikethrough formatted content
+        $this->clearFieldValue('Title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><del><a href="test-link">%1%</a></del> test content</div>');
+
+    }// end testDivBaseTagInputLinkStrikethroughFormat()
+
+
+    /**
+     * Test that inputting text, creating new paragraphs etc work when no base tag is set.
+     *
+     * @return void
+     */
+    public function testDivBaseTagInputLinkSubscriptFormat()
+    {
+        $this->useTest(1);
+        $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
+
+        // Using top toolbar 
+        // Test applying link to subscript formatted content
+        $this->useTest(23);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->clickTopToolbarButton('link', NULL);
+        $this->type('test-link');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><sub><a href="test-link">%1%</a></sub> test content</div>');
+
+        // Test removing subscript from linked content
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->assertHTMLMatch('<div><a href="test-link">%1%</a> test content</div>');
+
+        // Test applying subscript to linked content
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->assertHTMLMatch('<div><sub><a href="test-link">%1%</a></sub> test content</div>');
+
+        // Test removing link from subscript formatted content
+        $this->clickTopToolbarButton('linkRemove', NULL);
+        $this->assertHTMLMatch('<div><sub>%1%</sub> test content</div>');
+
+        // Test applying link and title to subscript formatted content
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('link', NULL);
+        $this->type('test-link');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->clickField('Title');
+        $this->type('test-title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><sub><a href="test-link" title="test-title">%1%</a></sub> test content</div>');
+
+        // Test removing subscript format from linked content with title
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->assertHTMLMatch('<div><a href="test-link" title="test-title">%1%</a> test content</div>');
+
+        // Test appling subscript format to linked content with title
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->assertHTMLMatch('<div><sub><a href="test-link" title="test-title">%1%</a></sub> test content</div>');
+
+        // Test modifying title of link with subscript formatting
+        $this->clearFieldValue('Title');
+        $this->clickField('Title');
+        $this->type('modified-title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><sub><a href="test-link" title="modified-title">%1%</a></sub> test content</div>');
+
+        // Test removing title of link from subscript formatted content
+        $this->clearFieldValue('Title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><sub><a href="test-link">%1%</a></sub> test content</div>');
+
+    }// end testDivBaseTagInputLinkSubscriptFormat()
+
+
+    /**
+     * Test that inputting text, creating new paragraphs etc work when no base tag is set.
+     *
+     * @return void
+     */
+    public function testDivBaseTagInputLinkSuperscriptFormat()
+    {
+        $this->useTest(1);
+        $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
+
+        // Using top toolbar 
+        // Test applying link to superscript formatted content
+        $this->useTest(23);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('link', NULL);
+        $this->type('test-link');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><sup><a href="test-link">%1%</a></sup> test content</div>');
+
+        // Test removing superscript from linked content
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->assertHTMLMatch('<div><a href="test-link">%1%</a> test content</div>');
+
+        // Test applying superscript to linked content
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->assertHTMLMatch('<div><sup><a href="test-link">%1%</a></sup> test content</div>');
+
+        // Test removing link from superscript formatted content
+        $this->clickTopToolbarButton('linkRemove', NULL);
+        $this->assertHTMLMatch('<div><sup>%1%</sup> test content</div>');
+
+        // Test applying link and title to superscript formatted content
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('link', NULL);
+        $this->type('test-link');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->clickField('Title');
+        $this->type('test-title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><sup><a href="test-link" title="test-title">%1%</a></sup> test content</div>');
+
+        // Test removing superscript format from linked content with title
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->assertHTMLMatch('<div><a href="test-link" title="test-title">%1%</a> test content</div>');
+
+        // Test appling superscript format to linked content with title
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->assertHTMLMatch('<div><sup><a href="test-link" title="test-title">%1%</a></sup> test content</div>');
+
+        // Test modifying title of link with superscript formatting
+        $this->clearFieldValue('Title');
+        $this->clickField('Title');
+        $this->type('modified-title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><sup><a href="test-link" title="modified-title">%1%</a></sup> test content</div>');
+
+        // Test removing title of link from superscript formatted content
+        $this->clearFieldValue('Title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<div><sup><a href="test-link">%1%</a></sup> test content</div>');
+
+    }// end testDivBaseTagInputLinkSuperscriptFormat()
 
 }//end class
