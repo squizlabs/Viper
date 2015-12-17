@@ -502,10 +502,10 @@ ViperInputHandler.prototype = {
             return false;
         }
 
-        if (e.ctrlKey === false
-            && e.altKey === false
-            && (e.shiftKey === false || e.which !== 16)
-            && e.metaKey === false
+        if ((e.ctrlKey === false && e.which === 17)
+            && (e.altKey === false && e.which !== 18)
+            && (e.shiftKey === false && e.which !== 16)
+            && (e.metaKey === false && e.which !== 224)
             && e.which !== 27
         ) {
             // Nothing special about this key let the browser handle it unless
