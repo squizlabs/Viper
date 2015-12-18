@@ -179,6 +179,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->useTest(6);
         $this->selectKeyword(1);
         $this->getOSAltShortcut('SelectAll');
+        sleep(2);
         $this->clickTopToolbarButton('italic');
         $this->assertHTMLMatch('<p><em>%1% %2%</em></p><em>test</em>');
 
@@ -827,7 +828,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<del><a href="test-link" title="test-title">%1%</a></del> test content');
 
         // Test modifying title of link with strikethrough formatting
-        $this->clickTopToolbarButton('link', 'active-selected');
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('link', 'active');
         $this->clearFieldValue('Title');
         $this->clickField('Title');
