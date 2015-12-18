@@ -275,6 +275,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         // it to be wrapped with a block tag.
         $this->useTest(15);
         $this->moveToKeyword(1, 'right');
+        sleep(1);
         $this->type(' test');
         $this->assertHTMLMatch('<sub>%1% test</sub>');
 
@@ -350,7 +351,9 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         // Test that typing characters in a node with no block parent does not cause
         // it to be wrapped with a block tag.
         $this->useTest(19);
+        sleep(1);
         $this->moveToKeyword(1, 'right');
+        sleep(1);
         $this->type(' test');
         $this->assertHTMLMatch('<sup>%1% test</sup>');
 
@@ -428,6 +431,8 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->useTest(23);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('link', NULL);
+        sleep(1);
+        $this->clickField('URL', TRUE);
         $this->type('test-link');
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<a href="test-link">%1%</a> test content');
@@ -587,11 +592,14 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<strong><a href="test-link">%1%</a></strong> test content');
 
         // Test removing bold from linked content
+        $this->selectKeyword(1);
         $this->clickInlineToolbarButton('bold', 'active');
         $this->assertHTMLMatch('<a href="test-link">%1%</a> test content');
 
         // Test applying bold to linked content
+        $this->selectKeyword(1);
         $this->clickInlineToolbarButton('bold', NULL);
+        sleep(1);
         $this->assertHTMLMatch('<strong><a href="test-link">%1%</a></strong> test content');
 
         // Test removing link from bold formatted content
@@ -654,14 +662,17 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<em><a href="test-link">%1%</a></em> test content');
 
         // Test removing italic from linked content
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('italic', 'active');
         $this->assertHTMLMatch('<a href="test-link">%1%</a> test content');
 
         // Test applying italic to linked content
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('italic', NULL);
         $this->assertHTMLMatch('<em><a href="test-link">%1%</a></em> test content');
 
         // Test removing link from italic formatted content
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('linkRemove', NULL);
         $this->assertHTMLMatch('<em>%1%</em> test content');
 
@@ -701,21 +712,26 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         // Test applying link to italic formatted content
         $this->useTest(23);
         $this->selectKeyword(1);
+        sleep(1);
         $this->clickInlineToolbarButton('italic', NULL);
+        sleep(1);
         $this->clickInlineToolbarButton('link', NULL);
         $this->type('test-link');
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<em><a href="test-link">%1%</a></em> test content');
 
         // Test removing italic from linked content
+        $this->selectKeyword(1);
         $this->clickInlineToolbarButton('italic', 'active');
         $this->assertHTMLMatch('<a href="test-link">%1%</a> test content');
 
         // Test applying italic to linked content
+        $this->selectKeyword(1);
         $this->clickInlineToolbarButton('italic', NULL);
         $this->assertHTMLMatch('<em><a href="test-link">%1%</a></em> test content');
 
         // Test removing link from italic formatted content
+        $this->selectKeyword(1);
         $this->clickInlineToolbarButton('linkRemove', NULL);
         $this->assertHTMLMatch('<em>%1%</em> test content');
 
@@ -1227,7 +1243,9 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         // Test that typing characters in a node with a block parent remain in
         // the block tag.
         $this->useTest(15);
+        sleep(1);
         $this->moveToKeyword(1, 'right');
+        sleep(1);
         $this->type(' test');
         $this->assertHTMLMatch('<div><sub>%1% test</sub></div>');
 
@@ -1304,6 +1322,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         // the block tag.
         $this->useTest(19);
         $this->moveToKeyword(1, 'right');
+        sleep(1);
         $this->type(' test');
         $this->assertHTMLMatch('<div><sup>%1% test</sup></div>');
 
