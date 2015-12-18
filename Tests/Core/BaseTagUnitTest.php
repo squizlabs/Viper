@@ -791,20 +791,24 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<del><a href="test-link">%1%</a></del> test content');
 
         // Test removing strikethrough from linked content
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('strikethrough', 'active');
         $this->assertHTMLMatch('<a href="test-link">%1%</a> test content');
 
         // Test applying strikethrough to linked content
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->assertHTMLMatch('<del><a href="test-link">%1%</a></del> test content');
 
         // Test removing link from strikethrough formatted content
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('linkRemove', NULL);
         $this->assertHTMLMatch('<del>%1%</del> test content');
 
         // Test applying link and title to strikethrough formatted content
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('link', NULL);
+        sleep(1);
         $this->type('test-link');
         $this->sikuli->keyDown('Key.ENTER');
         $this->clickField('Title');
@@ -813,10 +817,12 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<del><a href="test-link" title="test-title">%1%</a></del> test content');
 
         // Test removing strikethrough format from linked content with title
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('strikethrough', 'active');
         $this->assertHTMLMatch('<a href="test-link" title="test-title">%1%</a> test content');
 
         // Test appling strikethrough format to linked content with title
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->assertHTMLMatch('<del><a href="test-link" title="test-title">%1%</a></del> test content');
 
