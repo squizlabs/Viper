@@ -246,8 +246,9 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutFormatsUnitTest extends Abstrac
     {
         $this->useTest(7);
         $this->selectKeyword(3);
+        sleep(1);
         $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/CopyPasteFiles/HtmlCode.txt'));
-        sleep(10);
+        sleep(5);
         $this->assertHTMLMatch('<p>First paragraph<strong>%1% bold content %2%</strong></p><pre>Lorum this is more content &lt;strong&gt;strong tags&lt;/strong&gt; &lt;ul&gt;&lt;li&gt;List item&lt;/li&gt;&lt;li&gt;List item&lt;/li&gt;&lt;/ul&gt;  to test</pre>');
 
         $this->useTest(7);
