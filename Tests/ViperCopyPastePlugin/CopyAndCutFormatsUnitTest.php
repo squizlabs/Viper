@@ -207,9 +207,11 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutFormatsUnitTest extends Abstrac
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + c');
         $this->moveToKeyword(2, 'right');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->type('First paste ');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
         $this->assertHTMLMatch('<p>First paragraph</p><pre>Lorum this is more content %1% to test %2% First paste &lt;pre&gt;Lorum this is more content %1% to test %2%&lt;/pre&gt;</pre>');
@@ -218,12 +220,14 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutFormatsUnitTest extends Abstrac
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->type('Second paste ');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
         $this->assertHTMLMatch('<p>First paragraph</p><pre>Lorum this is more content %1% to test %2% First paste &lt;pre&gt;Lorum this is more content %1% to test %2%&lt;/pre&gt; Second paste &lt;pre&gt;Lorum this is more content %1% to test %2%&lt;/pre&gt;   </pre>');
 
         // Paste again in a new pre section
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
