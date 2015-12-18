@@ -928,8 +928,10 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
 
         // Test modifying title of link with superscript formatting
         $this->clearFieldValue('Title');
+        sleep(1);
         $this->clickField('Title');
         $this->type('modified-title');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<sup><a href="test-link" title="modified-title">%1%</a></sup> test content');
 
@@ -1368,7 +1370,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->type('test-link');
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<div><a href="test-link">%1%</a> test content</div>');
-        sleep(5);
+        $this->clickTopToolbarButton('link', 'active-selected');
 
         // Test removing link without title
         $this->clickTopToolbarButton('linkRemove');
@@ -1376,9 +1378,10 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
 
         // Test removing link with title
         $this->useTest(25);
+        sleep(2);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('linkRemove');
-        $this->assertHTMLMatch('<div>%1% test content</div>');
+        $this->assertHTMLMatch('<div>%1%test content</div>');
 
         // Test adding title
         $this->useTest(24);
@@ -1387,12 +1390,12 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->clickField('Title');
         $this->type('test-title');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<div><a href="test-link" title="test-title">%1%</a> test content</div>');
+        $this->assertHTMLMatch('<div><a href="test-link" title="test-title">%1%</a>test content</div>');
 
         // Test removing title
         $this->clearFieldValue('Title');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<div><a href="test-link">%1%</a> test content</div>');
+        $this->assertHTMLMatch('<div><a href="test-link">%1%</a>test content</div>');
 
         // Test modifying title
         $this->useTest(25);
@@ -1402,7 +1405,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->clickField('Title');
         $this->type('modified-title');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<div><a href="test-link" title="modified-title">%1%</a> test content</div>');
+        $this->assertHTMLMatch('<div><a href="test-link" title="modified-title">%1%</a>test content</div>');
 
         // Test links in inline toolbar
         // Test applying links
@@ -1421,7 +1424,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->useTest(25);
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('linkRemove');
-        $this->assertHTMLMatch('<div>%1% test content</div>');
+        $this->assertHTMLMatch('<div>%1%test content</div>');
 
         // Test adding title
         $this->useTest(24);
@@ -1430,12 +1433,12 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->clickField('Title');
         $this->type('test-title');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<div><a href="test-link" title="test-title">%1%</a> test content</div>');
+        $this->assertHTMLMatch('<div><a href="test-link" title="test-title">%1%</a>test content</div>');
 
         // Test removing title
         $this->clearFieldValue('Title');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<div><a href="test-link">%1%</a> test content</div>');
+        $this->assertHTMLMatch('<div><a href="test-link">%1%</a>test content</div>');
 
         // Test modifying title
         $this->useTest(25);
@@ -1445,7 +1448,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->clickField('Title');
         $this->type('modified-title');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<div><a href="test-link" title="modified-title">%1%</a> test content</div>');
+        $this->assertHTMLMatch('<div><a href="test-link" title="modified-title">%1%</a>test content</div>');
 
     }// end testDivBaseTagInputLinks()
 
@@ -1501,6 +1504,8 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<div><strong><a href="test-link" title="test-title">%1%</a></strong> test content</div>');
 
         // Test modifying title of link with bold formatting
+        $this->clickTopToolbarButton('link', 'active-selected');
+        $this->clickTopToolbarButton('link', 'active');
         $this->clearFieldValue('Title');
         $this->clickField('Title');
         $this->type('modified-title');
@@ -1553,7 +1558,10 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<div><strong><a href="test-link" title="test-title">%1%</a></strong> test content</div>');
 
         // Test modifying title of link with bold formatting
+        $this->clickInlineToolbarButton('link', 'active-selected');
+        $this->clickInlineToolbarButton('link', 'active');
         $this->clearFieldValue('Title');
+        sleep(1);
         $this->clickField('Title');
         $this->type('modified-title');
         $this->sikuli->keyDown('Key.ENTER');
@@ -1618,6 +1626,8 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<div><em><a href="test-link" title="test-title">%1%</a></em> test content</div>');
 
         // Test modifying title of link with italic formatting
+        $this->clickTopToolbarButton('link', 'active-selected');
+        $this->clickTopToolbarButton('link', 'active');
         $this->clearFieldValue('Title');
         $this->clickField('Title');
         $this->type('modified-title');
@@ -1670,6 +1680,8 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<div><em><a href="test-link" title="test-title">%1%</a></em> test content</div>');
 
         // Test modifying title of link with italic formatting
+        $this->clickInlineToolbarButton('link', 'active-selected');
+        $this->clickInlineToolbarButton('link', 'active');
         $this->clearFieldValue('Title');
         $this->clickField('Title');
         $this->type('modified-title');
@@ -1735,6 +1747,8 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<div><del><a href="test-link" title="test-title">%1%</a></del> test content</div>');
 
         // Test modifying title of link with strikethrough formatting
+        $this->clickTopToolbarButton('link', 'active-selected');
+        $this->clickTopToolbarButton('link', 'active');
         $this->clearFieldValue('Title');
         $this->clickField('Title');
         $this->type('modified-title');
@@ -1800,6 +1814,8 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<div><sub><a href="test-link" title="test-title">%1%</a></sub> test content</div>');
 
         // Test modifying title of link with subscript formatting
+        $this->clickTopToolbarButton('link', 'active-selected');
+        $this->clickTopToolbarButton('link', 'active');
         $this->clearFieldValue('Title');
         $this->clickField('Title');
         $this->type('modified-title');
@@ -1865,9 +1881,13 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<div><sup><a href="test-link" title="test-title">%1%</a></sup> test content</div>');
 
         // Test modifying title of link with superscript formatting
+        $this->clickTopToolbarButton('link', 'active-selected');
+        $this->clickTopToolbarButton('link', 'active');
         $this->clearFieldValue('Title');
+        sleep(1);
         $this->clickField('Title');
         $this->type('modified-title');
+        sleep(2);
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<div><sup><a href="test-link" title="modified-title">%1%</a></sup> test content</div>');
 
