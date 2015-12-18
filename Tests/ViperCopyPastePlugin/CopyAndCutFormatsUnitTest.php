@@ -227,11 +227,11 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutFormatsUnitTest extends Abstrac
 
         // Paste again in a new pre section
         $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
+        sleep(2);
         $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
+        sleep(2);
         $this->sikuli->keyDown('Key.CMD + v');
-        sleep(1);
+        sleep(2);
         $this->assertHTMLMatch('<p>First paragraph</p><pre>Lorum this is more content %1% to test %2% First paste &lt;pre&gt;Lorum this is more content %1% to test %2%&lt;/pre&gt; Second paste &lt;pre&gt;Lorum this is more content %1% to test %2%&lt;/pre&gt;</pre><pre>Lorum this is more content %1% to test %2%</pre>');
 
     }//end testCopyAndPastePreFormat()
