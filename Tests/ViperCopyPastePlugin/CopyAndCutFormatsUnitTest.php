@@ -16,7 +16,9 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutFormatsUnitTest extends Abstrac
         $this->useTest(1);
         $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.CMD + c');
+        sleep(1);
         $this->moveToKeyword(2, 'right');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
         $this->assertHTMLMatch('<p>First paragraph</p><pre>Lorum this is more content %1% to test %2%%1% to test %2%</pre>');
@@ -25,7 +27,9 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutFormatsUnitTest extends Abstrac
         $this->useTest(2);
         $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.CMD + c');
+        sleep(1);
         $this->moveToKeyword(2, 'right');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
         $this->assertHTMLMatch('<div>Lorum this is more content %1% to test %2%%1% to test %2%</div>');
@@ -34,7 +38,9 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutFormatsUnitTest extends Abstrac
         $this->useTest(3);
         $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.CMD + c');
+        sleep(1);
         $this->moveToKeyword(2, 'right');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
         $this->assertHTMLMatch('<p>First paragraph</p><blockquote><p>Lorum this is more content %1% to test %2%%1% to test %2%</p></blockquote>');
@@ -43,7 +49,9 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutFormatsUnitTest extends Abstrac
         $this->useTest(4);
         $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.CMD + c');
+        sleep(1);
         $this->moveToKeyword(2, 'right');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
         $this->assertHTMLMatch('<p>Lorum this is more content %1% to test %2%%1% to test %2%</p>');
@@ -127,6 +135,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutFormatsUnitTest extends Abstrac
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
         $this->assertHTMLMatch('<p>First paragraph</p><pre>Lorum this is more content %1% to test %2%</pre><pre>Lorum this is more content %1% to test %2%</pre>');
         $this->assertTrue($this->topToolbarButtonExists('formats-pre', 'active'));
         $this->sikuli->keyDown('Key.UP');
@@ -140,6 +149,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutFormatsUnitTest extends Abstrac
         $this->sikuli->keyDown('Key.CMD + c');
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
         $this->assertHTMLMatch('<div>Lorum this is more content %1% to test %2%</div><div>Lorum this is more content %1% to test %2%</div>');
@@ -156,6 +166,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutFormatsUnitTest extends Abstrac
         $this->sikuli->keyDown('Key.CMD + c');
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
         $this->assertHTMLMatch('<p>First paragraph</p><blockquote><p>Lorum this is more content %1% to test %2%</p></blockquote><blockquote><p>Lorum this is more content %1% to test %2%</p></blockquote>');
@@ -171,6 +182,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutFormatsUnitTest extends Abstrac
         $this->sikuli->keyDown('Key.CMD + c');
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
         $this->assertHTMLMatch('<p>Lorum this is more content %1% to test %2%</p><p>Lorum this is more content %1% to test %2%</p>');
@@ -195,27 +207,31 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutFormatsUnitTest extends Abstrac
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + c');
         $this->moveToKeyword(2, 'right');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
         $this->type('First paste ');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
         $this->assertHTMLMatch('<p>First paragraph</p><pre>Lorum this is more content %1% to test %2% First paste &lt;pre&gt;Lorum this is more content %1% to test %2%&lt;/pre&gt;</pre>');
 
         // Paste again to make sure the character is still there.
         $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
+        sleep(2);
         $this->type('Second paste ');
+        sleep(2);
         $this->sikuli->keyDown('Key.CMD + v');
-        sleep(1);
+        sleep(2);
         $this->assertHTMLMatch('<p>First paragraph</p><pre>Lorum this is more content %1% to test %2% First paste &lt;pre&gt;Lorum this is more content %1% to test %2%&lt;/pre&gt; Second paste &lt;pre&gt;Lorum this is more content %1% to test %2%&lt;/pre&gt;   </pre>');
 
         // Paste again in a new pre section
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(2);
         $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
+        sleep(2);
         $this->sikuli->keyDown('Key.CMD + v');
-        sleep(1);
+        sleep(2);
         $this->assertHTMLMatch('<p>First paragraph</p><pre>Lorum this is more content %1% to test %2% First paste &lt;pre&gt;Lorum this is more content %1% to test %2%&lt;/pre&gt; Second paste &lt;pre&gt;Lorum this is more content %1% to test %2%&lt;/pre&gt;</pre><pre>Lorum this is more content %1% to test %2%</pre>');
 
     }//end testCopyAndPastePreFormat()
@@ -230,6 +246,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutFormatsUnitTest extends Abstrac
     {
         $this->useTest(7);
         $this->selectKeyword(3);
+        sleep(1);
         $this->pasteFromURL($this->getTestURL('/ViperCopyPastePlugin/CopyPasteFiles/HtmlCode.txt'));
         sleep(5);
         $this->assertHTMLMatch('<p>First paragraph<strong>%1% bold content %2%</strong></p><pre>Lorum this is more content &lt;strong&gt;strong tags&lt;/strong&gt; &lt;ul&gt;&lt;li&gt;List item&lt;/li&gt;&lt;li&gt;List item&lt;/li&gt;&lt;/ul&gt;  to test</pre>');
