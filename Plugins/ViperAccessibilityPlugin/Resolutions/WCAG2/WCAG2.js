@@ -82,7 +82,7 @@ ViperAccessibilityPlugin_WCAG2 = {
         title   = title || 'Apply Changes';
 
         var disabled = !enabled;
-        var tools    = this.viper.ViperTools;
+        var tools    = this.viper.Tools;
         var self     = this;
         var buttonid = ViperUtil.getUniqueId();
         var button   = tools.createButton(buttonid, title, title, 'Viper-VAP-actionBtn', function() {
@@ -176,8 +176,8 @@ ViperAccessibilityPlugin_WCAG2 = {
 
             var self = this;
             var buttonid = ViperUtil.getUniqueId();
-            var dismissButton = this.viper.ViperTools.createButton(buttonid, 'Dismiss', 'Dismiss Issue', 'Viper-VAP-dismissBtn', function() {
-                self.viper.ViperTools.disableButton(buttonid);
+            var dismissButton = this.viper.Tools.createButton(buttonid, 'Dismiss', 'Dismiss Issue', 'Viper-VAP-dismissBtn', function() {
+                self.viper.Tools.disableButton(buttonid);
                 self.vap.dismissIssue(issueid);
             });
 
