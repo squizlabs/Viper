@@ -940,7 +940,7 @@
             table = table || this.getCellTable(this.activeCell);
 
             this.setTableHeaders(table);
-            this.viper.fireNodesChanged([table]);
+            this.viper.contentChanged(true);
 
         },
 
@@ -3162,10 +3162,7 @@
 
             ViperUtil.remove(table);
 
-            this.viper.fireSelectionChanged(null, true);
-            this.viper.fireNodesChanged(this.viper.getViperElement());
-
-
+            this.viper.contentChanged();
         },
 
         getCellTable: function(cell)
@@ -3474,8 +3471,7 @@
                 this.setActiveCell(firstCol);
             }
 
-            this.viper.fireSelectionChanged();
-            this.viper.fireNodesChanged([table]);
+            this.viper.contentChanged();
 
             this.setTableHeaders(table);
 

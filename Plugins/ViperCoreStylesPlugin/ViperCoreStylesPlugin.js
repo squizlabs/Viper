@@ -380,8 +380,7 @@
             }//end if
 
             this.viper.focus();
-            this.viper.fireSelectionChanged(null, true);
-            this.viper.fireNodesChanged();
+            this.viper.contentChanged();
 
         },
 
@@ -465,8 +464,7 @@
 
             this.viper.Tools.setButtonActive('justify');
 
-            this.viper.fireNodesChanged();
-            this.viper.fireSelectionChanged(null, true);
+            this.viper.contentChanged();
 
             this.viper.fireCallbacks('ViperCoreStylesPlugin:afterImageUpdate', image);
 
@@ -585,10 +583,8 @@
                 ViperUtil.remove(nextSibling.previousSibling);
             }
 
-            this.viper.fireNodesChanged('ViperCoreStylesPlugin:hr');
+            this.viper.contentChanged();
             this.viper.ViperHistoryManager.end();
-
-            this.viper.fireSelectionChanged(null, true);
 
         },
 
@@ -753,8 +749,7 @@
                 var self = this;
                 setTimeout(function() {
                     ViperSelection.addRange(range);
-                    self.viper.fireNodesChanged();
-                    self.viper.fireSelectionChanged();
+                    self.viper.contentChanged();
                 }, 10);
             } else {
                 if (nodeSelection && this.viper.isOutOfBounds(nodeSelection) === false) {
@@ -762,8 +757,7 @@
                     ViperSelection.addRange(range);
                 }
 
-                this.viper.fireSelectionChanged(null, true);
-                this.viper.fireNodesChanged();
+                this.viper.contentChanged();
 
                 if (nodeSelection
                     && ViperUtil.isTag(nodeSelection, 'table') === true
@@ -949,8 +943,7 @@
                 ) {
                     // Selection is inside the style tags. Remove styles.
                     this.viper.removeStyle(style);
-                    this.viper.fireNodesChanged();
-                    this.viper.fireSelectionChanged(this.viper.adjustRange(), true);
+                    this.viper.contentChanged(false, this.viper.adjustRange());
                     return;
                 }
             }
@@ -963,8 +956,7 @@
             ) {
                 // This selection is already styles, remove it.
                 this.viper.removeStyle(style);
-                this.viper.fireNodesChanged([commonParent]);
-                this.viper.fireSelectionChanged(this.viper.adjustRange(), true);
+                this.viper.contentChanged();
                 return false;
             }
 
@@ -973,10 +965,8 @@
             // Apply the new tag.
             this.applyTag(style);
 
-            this.viper.fireNodesChanged([commonParent]);
+            this.viper.contentChanged();
             this.viper.ViperHistoryManager.end();
-
-            this.viper.fireSelectionChanged(this.viper.adjustRange(), true);
 
             // Prevent event bubbling etc.
             return false;

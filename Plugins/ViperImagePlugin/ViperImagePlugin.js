@@ -103,7 +103,7 @@
                     if (self._ieImageResize) {
                         ViperUtil.remove(self._ieImageResize);
                         self._ieImageResize = null;
-                        self.viper.fireNodesChanged();
+                        self.viper.contentChanged(true);
                         return false;
                     } else {
                         var range        = self.viper.getViperRange();
@@ -332,8 +332,7 @@
                 ViperUtil.removeAttr(img, 'height');
             }
 
-            this.viper.fireSelectionChanged();
-            this.viper.fireNodesChanged([this.viper.getViperElement()]);
+            this.viper.contentChanged();
 
             return img;
 
@@ -377,7 +376,7 @@
                 range.collapse(true);
                 ViperSelection.addRange(range);
 
-                this.viper.fireNodesChanged();
+                this.viper.contentChanged();
 
                 return true;
             }
@@ -532,7 +531,7 @@
                 this.setImageAlt(image, alt, pres);
                 this.setImageTitle(image, title);
 
-                this.viper.fireNodesChanged([image]);
+                this.viper.contentChanged(true);
             }
 
             this._updateToolbars(image);
@@ -969,7 +968,7 @@
                         }
 
                         if (resized === true) {
-                            self.viper.fireNodesChanged();
+                            self.viper.contentChanged(true);
                         }
 
                         // Show the image toolbar.

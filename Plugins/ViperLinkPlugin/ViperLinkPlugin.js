@@ -203,8 +203,7 @@
             range.selectNode(node);
             ViperSelection.addRange(range);
 
-            this.viper.fireSelectionChanged(range, true);
-            this.viper.fireNodesChanged([node]);
+            this.viper.contentChanged(false, range);
 
         },
 
@@ -295,8 +294,7 @@
             range.selectNode(a);
             ViperSelection.addRange(range);
 
-            this.viper.fireSelectionChanged(range, true);
-            this.viper.fireNodesChanged([this.viper.getViperElement()]);
+            this.viper.contentChanged(false, range);
 
             return a;
 
@@ -323,8 +321,7 @@
 
             var self = this;
             setTimeout(function() {
-                self.viper.fireSelectionChanged(null, true);
-                self.viper.fireNodesChanged();
+                self.viper.contentChanged();
             }, 10);
 
 
@@ -378,7 +375,7 @@
                 this.viper.fireSelectionChanged(null, true);
             }//end if
 
-            this.viper.fireNodesChanged([this.viper.getViperElement()]);
+            this.viper.contentChanged(true);
 
         },
 

@@ -310,8 +310,7 @@
                                         ViperSelection.addRange(range);
 
                                         self.viper.fireCallbacks('Viper:cut');
-                                        self.viper.fireNodesChanged();
-                                        self.viper.fireSelectionChanged(range, true);
+                                        self.viper.contentChanged(false, range);
                                     }, 5);
                                 }
 
@@ -320,8 +319,7 @@
                                     self.viper.selectBookmark(self._bookmark);
 
                                     self.viper.fireCallbacks('Viper:copy');
-                                    self.viper.fireNodesChanged();
-                                    self.viper.fireSelectionChanged(null, true);
+                                    self.viper.contentChanged();
                                 }
                             }//end if
                         }//end if
@@ -477,8 +475,7 @@
 
                         self.viper.fireCallbacks('Viper:cut');
 
-                        self.viper.fireNodesChanged();
-                        self.viper.fireSelectionChanged();
+                        self.viper.contentChanged();
                     }, 5);
                 }
            } else {
@@ -632,12 +629,10 @@
                         rangeClone = self.viper.getViperRange();
                         rangeClone.deleteContents(self.viper.getViperElement(), self.viper.getDefaultBlockTag());
                         ViperSelection.addRange(rangeClone);
-                        self.viper.fireSelectionChanged();
-                        self.viper.fireNodesChanged();
+                        self.viper.contentChanged();
                     } else {
                         ViperSelection.addRange(rangeClone);
-                        self.viper.fireNodesChanged();
-                        self.viper.fireSelectionChanged();
+                        self.viper.contentChanged();
                     }
                 }, 0);
             }
@@ -1074,7 +1069,7 @@
                     this._updateSelection();
                     this.viper.cleanDOM();
 
-                    this.viper.fireNodesChanged();
+                    this.viper.contentChanged();
                     this.viper.fireCallbacks('ViperCopyPastePlugin:paste');
                     return;
                 } else {
@@ -1305,8 +1300,7 @@
 
             this._updateSelection();
 
-            this.viper.fireNodesChanged();
-            this.viper.fireSelectionChanged();
+            this.viper.contentChanged();
             this.viper.fireCallbacks('ViperCopyPastePlugin:paste');
 
         },

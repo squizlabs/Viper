@@ -1731,7 +1731,7 @@
                     return false;
                 }
 
-                this.fireNodesChanged([newNode.parentNode]);
+                this.contentChanged();
                 return;
             } else {
                 // We need to import nodes from a document fragment into the current
@@ -1893,7 +1893,7 @@
 
             Viper.Selection.addRange(range);
 
-            this.fireNodesChanged([this.element]);
+            this.contentChanged(true);
 
         },
 
@@ -2964,7 +2964,7 @@
 
             Viper.Util.insertAfter(node, newNode);
 
-            this.fireNodesChanged([node.parentNode]);
+            this.contentChanged(true);
 
         },
 
@@ -2988,7 +2988,7 @@
 
             Viper.Util.insertBefore(node, newNode);
 
-            this.fireNodesChanged([node.parentNode]);
+            this.contentChanged(true);
 
         },
 
@@ -4282,6 +4282,18 @@
 
         },
 
+        contentChanged: function(selectionNotChanged, range)
+        {
+            range = range || null;
+
+            if (selectionNotChanged !== true) {
+                this.fireSelectionChanged(range, true);
+            }
+
+            this.fireNodesChanged();
+
+        },
+
         getPluginForElement: function(element)
         {
             return this.getPluginManager().getPluginForElement(element);
@@ -4596,7 +4608,7 @@
                 self.element.innerHTML = html;
                 self.initEditableElement();
 
-                self.fireNodesChanged();
+                self.contentChanged();
                 if (callback) {
                     callback.call(this);
                 }

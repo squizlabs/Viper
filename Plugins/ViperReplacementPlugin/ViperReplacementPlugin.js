@@ -116,8 +116,7 @@
                                     // action so mo.
                                     var elem = ViperUtil.getTopSurroundingParent(rep) || rep;
                                     ViperUtil.remove(elem);
-                                    self.viper.fireSelectionChanged(null, true);
-                                    self.viper.fireNodesChanged();
+                                    self.viper.contentChanged();
                                     return false;
                                 }
 

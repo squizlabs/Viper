@@ -1421,7 +1421,7 @@
                         tools.setButtonInactive(prefix + 'classBtn-' + type);
                     }
 
-                    self.viper.fireNodesChanged();
+                    self.viper.contentChanged(true);
                 }, [prefix + 'class:input']);
 
                 tools.viper.registerCallback(
@@ -1497,8 +1497,7 @@
                 }
 
                 this.viper.setAttribute(selectedNode, attr, value);
-                this.viper.fireSelectionChanged(null, true);
-                this.viper.fireNodesChanged();
+                this.viper.contentChanged();
 
                 this.viper.fireCallbacks('ViperFormatPlugin:elementAttributeSet', {element: selectedNode, oldValue: oldVal, newValue:value});
                 return;
@@ -1535,8 +1534,7 @@
 
                 this.viper.adjustRange();
 
-                this.viper.fireSelectionChanged(range, true);
-                this.viper.fireNodesChanged();
+                this.viper.contentChanged();
 
                 this.viper.fireCallbacks('ViperFormatPlugin:elementAttributeSet', {element: span, oldValue: '', newValue:value});
 
@@ -2087,8 +2085,7 @@
                         }
                     }
 
-                    this.viper.fireSelectionChanged(null, true);
-                    this.viper.fireNodesChanged();
+                    this.viper.contentChanged();
                 } else {
                     // We cannot convert the Viper element so we need to create a new
                     // element from the textnodes that are around the current range.
@@ -2145,8 +2142,7 @@
                     ViperUtil.insertAfter(bookmark.start, newElement);
                     this.viper.selectBookmark(bookmark);
 
-                    this.viper.fireNodesChanged([parent]);
-                    this.viper.fireSelectionChanged(null, true);
+                    this.viper.contentChanged();
                     this.viper.fireCallbacks('ViperFormatPlugin:formatChanged', type);
 
                     return;
@@ -2247,8 +2243,7 @@
                     }
 
                     this.viper.selectBookmark(bookmark);
-                    this.viper.fireNodesChanged([viperElement]);
-                    this.viper.fireSelectionChanged(null, true);
+                    this.viper.contentChanged();
                 }
             }//end if
 
@@ -2534,9 +2529,7 @@
             }
 
             this.viper.selectBookmark(bookmark);
-
-            this.viper.fireNodesChanged([this.viper.getViperElement()]);
-            this.viper.fireSelectionChanged(null, true);
+            this.viper.contentChanged();
 
         },
 

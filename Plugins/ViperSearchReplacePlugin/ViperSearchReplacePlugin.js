@@ -78,7 +78,7 @@
             var _replace = function () {
                 self.replace(tools.getItem('ViperSearchPlugin:replaceInput').getValue());
                 self._updateButtonStates();
-                self.viper.fireNodesChanged();
+                self.viper.contentChanged(true);
                 return false;
             };
 
@@ -102,7 +102,7 @@
 
                 self._matchCount = 0;
                 self._updateButtonStates();
-                self.viper.fireNodesChanged();
+                self.viper.contentChanged(true);
             };
 
             var replaceAllBtn = tools.createButton('ViperSearchPlugin:replaceAll', _('Replace All'), _('Replace All'), 'Viper-replaceAll', function() {

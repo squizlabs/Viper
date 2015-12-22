@@ -227,8 +227,7 @@
                                 range.collapse(false);
                                 ViperSelection.addRange(range);
 
-                                self.viper.fireNodesChanged();
-                                self.viper.fireSelectionChanged(null, true);
+                                self.viper.contentChanged();
                             }, 10);
                         });
 

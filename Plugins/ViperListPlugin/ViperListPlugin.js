@@ -226,7 +226,7 @@
         unoderedList: function()
         {
             this.makeList(false);
-            this.viper.fireNodesChanged('ViperListPlugin:unordered');
+            this.viper.contentChanged(false);
             this.viper.element.focus();
 
         },
@@ -234,7 +234,7 @@
         oderedList: function()
         {
             this.makeList(true);
-            this.viper.fireNodesChanged('ViperListPlugin:ordered');
+            this.viper.contentChanged(false);
             this.viper.element.focus();
 
         },
@@ -510,8 +510,7 @@
             } else if (firstParent && outdent !==  true) {
                 updated  = this.convertRangeToList(range, testOnly, listType, true);
                 if (updated === true && testOnly !== true) {
-                    this.viper.fireNodesChanged();
-                    this.viper.fireSelectionChanged(null, true);
+                    this.viper.contentChanged();
                 }
 
                 return updated;
@@ -557,8 +556,7 @@
                         }
 
                         if (updated === true) {
-                            self.viper.fireNodesChanged([range.getCommonElement()]);
-                            self.viper.fireSelectionChanged(null, true);
+                            self.viper.contentChanged();
                         }
                     }, 5);
                 } else {
@@ -569,8 +567,7 @@
                     this.viper.adjustRange();
 
                     if (updated === true) {
-                        this.viper.fireNodesChanged([range.getCommonElement()]);
-                        this.viper.fireSelectionChanged(null, true);
+                        this.viper.contentChanged();
                     }
                 }
             }
@@ -1129,14 +1126,11 @@
                 var self = this;
                 setTimeout(function() {
                     self.viper.selectBookmark(bookmark);
-                    self.viper.fireSelectionChanged(null, true);
-                    self.viper.fireNodesChanged();
+                    self.viper.contentChanged();
                 }, 10);
             } else {
                 this.viper.selectBookmark(bookmark);
-
-                this.viper.fireSelectionChanged(null, true);
-                this.viper.fireNodesChanged(this.viper.getViperElement());
+                this.viper.contentChanged();
             }
 
             // TODO: Properly fix fireNodesChanged event firing as this method maybe called by other create list method
@@ -1197,8 +1191,7 @@
             }//end for
 
             this.viper.selectBookmark(bookmark);
-            this.viper.fireSelectionChanged(null, true);
-            this.viper.fireNodesChanged();
+            this.viper.contentChanged();
 
         },
 
@@ -1748,8 +1741,7 @@
 
             if (currentType !== listType) {
                 this.changeListType(newType);
-                this.viper.fireSelectionChanged(null, true);
-                this.viper.fireNodesChanged([this.viper.getViperElement()]);
+                this.viper.contentChanged();
                 return;
             } else if (currentType !== newType) {
                 this.tabRange(null, false, false, listType);
@@ -1767,8 +1759,7 @@
 
                 var pTags = this.listToParagraphs(list);
                 this.viper.selectBookmark(bookmark);
-                this.viper.fireSelectionChanged(null, true);
-                this.viper.fireNodesChanged([this.viper.getViperElement()]);
+                this.viper.contentChanged();
             }
 
         },

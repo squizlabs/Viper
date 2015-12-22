@@ -78,8 +78,7 @@
             range.selectNode(element);
             ViperSelection.addRange(range);
 
-            this.viper.fireSelectionChanged();
-            this.viper.fireNodesChanged([this.viper.getViperElement()]);
+            this.viper.contentChanged();
 
             return element;
 
@@ -140,8 +139,7 @@
             range.selectNode(element);
             ViperSelection.addRange(range);
 
-            this.viper.fireSelectionChanged();
-            this.viper.fireNodesChanged([this.viper.getViperElement()]);
+            this.viper.contentChanged();
 
             return element;
 
@@ -179,8 +177,7 @@
             }//end if
 
             ViperSelection.addRange(range);
-            this.viper.fireSelectionChanged(range, true);
-            this.viper.fireNodesChanged([this.viper.getViperElement()]);
+            this.viper.contentChanged(false, range);
 
         },
 
@@ -357,7 +354,7 @@
                         if (!node.className && !node.id && ViperUtil.isTag(node, 'span') === true) {
                             this.removeElement(node);
                         } else {
-                            this.viper.fireNodesChanged();
+                            this.viper.contentChanged();
                         }
                     } else {
                         var parents = this.getSurroundingParents(node);
