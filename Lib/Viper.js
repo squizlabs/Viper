@@ -23,7 +23,7 @@
         this.inlineMode   = false;
 
         this.HistoryManager = null;
-        this.ViperPluginManager  = null;
+        this.PluginManager  = null;
         this.Tools               = null;
 
         this._settings = {};
@@ -124,7 +124,7 @@
 
         getPluginManager: function()
         {
-            return this.ViperPluginManager;
+            return this.PluginManager;
 
         },
 
@@ -256,7 +256,7 @@
         {
             this.Tools               = new Viper.Tools(this);
             this.HistoryManager = new Viper.HistoryManager(this);
-            this.ViperPluginManager  = new Viper.PluginManager(this);
+            this.PluginManager  = new Viper.PluginManager(this);
             this.ViperInputHandler   = new Viper.ViperInputHandler(this);
 
             Viper.Selection._viper = this;
@@ -834,7 +834,7 @@
             }
 
             // Load default plugin set if nothing has been set yet.
-            if (this.ViperPluginManager.getPlugins() === null) {
+            if (this.PluginManager.getPlugins() === null) {
                 this._useDefaultPlugins();
             }
 
@@ -1079,7 +1079,7 @@
         {
             // Default plugins (all Viper plugins).
             var plugins = 'ViperCoreStylesPlugin|ViperInlineToolbarPlugin|ViperHistoryPlugin|ViperListPlugin|ViperFormatPlugin|ViperToolbarPlugin|ViperCopyPastePlugin|ViperImagePlugin|ViperLinkPlugin|ViperAccessibilityPlugin|ViperSourceViewPlugin|ViperSearchReplacePlugin|ViperLangToolsPlugin|ViperCharMapPlugin|ViperCursorAssistPlugin|ViperReplacementPlugin|ViperTableEditorPlugin';
-            this.ViperPluginManager.setPlugins(plugins.split('|'));
+            this.PluginManager.setPlugins(plugins.split('|'));
 
             // Default button ordering.
             var buttons = [

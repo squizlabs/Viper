@@ -26,7 +26,7 @@
         init: function()
         {
             var self = this;
-            var toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+            var toolbarPlugin = this.viper.PluginManager.getPlugin('ViperToolbarPlugin');
             if (toolbarPlugin) {
                 var self            = this;
                 var tools           = this.viper.Tools;
@@ -1665,7 +1665,7 @@
 
         _updateToolbar: function(toolbarButtons, range)
         {
-            var toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+            var toolbarPlugin = this.viper.PluginManager.getPlugin('ViperToolbarPlugin');
             if (!toolbarPlugin) {
                 return;
             }

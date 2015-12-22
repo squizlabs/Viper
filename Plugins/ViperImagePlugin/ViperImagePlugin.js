@@ -78,7 +78,7 @@
                     }
 
                     // Enable toolbar if its not already due to event cancelation.
-                    var toolbar = self.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+                    var toolbar = self.viper.PluginManager.getPlugin('ViperToolbarPlugin');
                     if (toolbar && toolbar.isDisabled() === true) {
                         toolbar.enable();
                     }
@@ -418,7 +418,7 @@
 
         initTopToolbar: function()
         {
-            var toolbar = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+            var toolbar = this.viper.PluginManager.getPlugin('ViperToolbarPlugin');
             if (!toolbar) {
                 return;
             }
@@ -557,7 +557,7 @@
 
         _updateToolbar: function(image, toolbarPrefix)
         {
-            var toolbar = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+            var toolbar = this.viper.PluginManager.getPlugin('ViperToolbarPlugin');
             if (!toolbar) {
                 return;
             }

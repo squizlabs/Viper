@@ -169,7 +169,7 @@
                 // Remove registered callbacks.
                 this.viper.removeCallback(null, pluginName);
 
-                this.viper.fireCallbacks('ViperPluginManager:pluginRemoved', pluginName);
+                this.viper.fireCallbacks('PluginManager:pluginRemoved', pluginName);
 
                 delete this._plugins[pluginName];
             }

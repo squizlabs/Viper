@@ -55,7 +55,7 @@
             var self = this;
 
             // Main toolbar.
-            this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+            this.toolbarPlugin = this.viper.PluginManager.getPlugin('ViperToolbarPlugin');
             if (this.toolbarPlugin) {
                 this._createToolbarContent();
             }
@@ -1390,7 +1390,7 @@
                 toolbar.addButton(button, buttonIndex);
 
                 var self = this;
-                var tableEditorPlugin = this.viper.ViperPluginManager.getPlugin('ViperTableEditorPlugin');
+                var tableEditorPlugin = this.viper.PluginManager.getPlugin('ViperTableEditorPlugin');
                 var classSection      = this._getClassSection(prefix);
                 toolbar.makeSubSection(prefix + 'class:subSection-' + type, classSection);
                 toolbar.setSubSectionAction(prefix + 'class:subSection-' + type, function() {

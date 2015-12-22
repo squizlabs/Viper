@@ -18,7 +18,7 @@
 
         this.init = function()
         {
-            var toolbarPlugin = viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+            var toolbarPlugin = viper.PluginManager.getPlugin('ViperToolbarPlugin');
             if (toolbarPlugin) {
                 _toolbarPlugin = toolbarPlugin;
                 var tools = viper.Tools;

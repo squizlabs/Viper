@@ -49,7 +49,7 @@
                     Viper.document.execCommand("enableObjectResizing", false, false);
                 }
 
-                var vap = self.viper.ViperPluginManager.getPlugin('ViperAccessibilityPlugin');
+                var vap = self.viper.PluginManager.getPlugin('ViperAccessibilityPlugin');
                 if (vap) {
                     vap.loadHTMLCS(function() {
                         var tables = ViperUtil.getTag('table', self.viper.getViperElement());
@@ -61,7 +61,7 @@
             });
 
             this.viper.registerCallback('ViperCopyPastePlugin:paste', 'ViperTableEditorPlugin', function() {
-                var vap = self.viper.ViperPluginManager.getPlugin('ViperAccessibilityPlugin');
+                var vap = self.viper.PluginManager.getPlugin('ViperAccessibilityPlugin');
                 if (vap) {
                     vap.loadHTMLCS(function() {
                         var tables = ViperUtil.getTag('table', self.viper.getViperElement());
@@ -73,7 +73,7 @@
             });
 
             this.viper.registerCallback('Viper:setHtml', 'ViperTableEditorPlugin', function(data, callback) {
-                var vap = self.viper.ViperPluginManager.getPlugin('ViperAccessibilityPlugin');
+                var vap = self.viper.PluginManager.getPlugin('ViperAccessibilityPlugin');
                 if (vap) {
                     vap.loadHTMLCS(function() {
                         var tables = ViperUtil.getTag('table', data.element);
@@ -257,7 +257,7 @@
                 }
             });
 
-            this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+            this.toolbarPlugin = this.viper.PluginManager.getPlugin('ViperToolbarPlugin');
             if (this.toolbarPlugin) {
                 var insertTable = true;
 

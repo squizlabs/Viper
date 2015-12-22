@@ -53,7 +53,7 @@
             }
 
             var tools = this.viper.Tools;
-            var toolbarPlugin  = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+            var toolbarPlugin  = this.viper.PluginManager.getPlugin('ViperToolbarPlugin');
             this.toolbarPlugin = toolbarPlugin;
 
             var toolbarButtons = {};
@@ -180,7 +180,7 @@
             });
 
             // Inline toolbar.
-            var inlineToolbar = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
+            var inlineToolbar = this.viper.PluginManager.getPlugin('ViperInlineToolbarPlugin');
             if (inlineToolbar) {
                 if (inlineToolbar.isInitialised() === true) {
                     self._createInlineToolbarContent(inlineToolbar.getToolbar());
@@ -765,7 +765,7 @@
                 ) {
                     // Webkit seems to fail to return the correct position for table
                     // range. Update position for specific table element and not range.
-                    var inlineToolbar = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
+                    var inlineToolbar = this.viper.PluginManager.getPlugin('ViperInlineToolbarPlugin');
                     inlineToolbar.getToolbar().updatePosition(null, nodeSelection);
                 }
             }

@@ -30,7 +30,7 @@
 
         _initToolbar: function()
         {
-            var toolbar = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+            var toolbar = this.viper.PluginManager.getPlugin('ViperToolbarPlugin');
             if (!toolbar) {
                 return;
             }

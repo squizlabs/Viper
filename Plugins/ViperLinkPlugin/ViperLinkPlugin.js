@@ -636,7 +636,7 @@
 
         showInlineToolbarIcons: function(data)
         {
-            var inlineToolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperInlineToolbarPlugin');
+            var inlineToolbarPlugin = this.viper.PluginManager.getPlugin('ViperInlineToolbarPlugin');
 
             var self          = this;
             var range         = this.viper.getCurrentRange();
@@ -702,7 +702,7 @@
 
         initToolbar: function()
         {
-            var toolbar = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+            var toolbar = this.viper.PluginManager.getPlugin('ViperToolbarPlugin');
             if (!toolbar) {
                 return;
             }

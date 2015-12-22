@@ -38,7 +38,7 @@
         init: function()
         {
             var self = this;
-            this.toolbarPlugin = this.viper.ViperPluginManager.getPlugin('ViperToolbarPlugin');
+            this.toolbarPlugin = this.viper.PluginManager.getPlugin('ViperToolbarPlugin');
             if (this.toolbarPlugin) {
                 var toggle = this.viper.Tools.createButton('sourceEditor', '', _('Toggle Source View'), 'Viper-sourceView', function() {
                     self.toggleSourceView();
