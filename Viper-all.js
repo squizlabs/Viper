@@ -78,7 +78,7 @@
     };
 
     // Viper core files.
-    var jsFiles = 'Viper.js|ViperUtil.js|ViperTranslation.js|ViperTools.js|ViperSelection.js|ViperDOMRange.js|ViperIERange.js|ViperMozRange.js|PluginManager.js|HistoryManager.js|ViperInputHandler.js';
+    var jsFiles = 'Viper.js|Util.js|Translation.js|Tools.js|Selection.js|DOMRange.js|IERange.js|MozRange.js|PluginManager.js|HistoryManager.js|KeyboardHandler.js';
     jsFiles     = jsFiles.split('|');
 
     _loadScripts(path + 'Lib/', jsFiles, function() {

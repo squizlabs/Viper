@@ -1,5 +1,5 @@
 (function(Viper) {
-    Viper.ViperTranslation = new function()
+    Viper.Translation = new function()
     {
         var _strings = {};
         var _lang    = null;

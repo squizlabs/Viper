@@ -1,5 +1,5 @@
 (function(ViperUtil, ViperSelection) {
-    Viper.ViperInputHandler = function(viper)
+    Viper.KeyboardHandler = function(viper)
     {
         this._viper           = viper;
         this._preventKeyPress = false;
@@ -15,7 +15,7 @@
         this._viper.addSpecialKey(13);
     }
 
-    Viper.ViperInputHandler.prototype = {
+    Viper.KeyboardHandler.prototype = {
         init: function() {
             var self      = this;
             var elem      = this._viper.getViperElement();
@@ -50,7 +50,7 @@
                 return self.keyUp(e);
             });
 
-            this._viper.registerCallback('ViperFormatPlugin:formatChanged', 'ViperInputHandler', function(type) {
+            this._viper.registerCallback('ViperFormatPlugin:formatChanged', 'KeyboardHandler', function(type) {
                 if (type === 'pre') {
                     self.cleanPreTags();
                 }

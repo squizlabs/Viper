@@ -136,7 +136,7 @@
 
         getInputHandler: function()
         {
-            return this.ViperInputHandler;
+            return this.KeyboardHandler;
 
         },
 
@@ -235,13 +235,13 @@
                 src = this.getViperPath().replace(/\/build$/, '') + '/build/Translation/' + code + '.js';
             }
 
-            if (Viper.ViperTranslation.isLoaded(code) === false && src) {
+            if (Viper.Translation.isLoaded(code) === false && src) {
                 this.loadScript(src, function() {
-                    Viper.ViperTranslation.setLanguage(code);
+                    Viper.Translation.setLanguage(code);
                     callback.call(this);
                 }, 2000);
             } else {
-                Viper.ViperTranslation.setLanguage(code);
+                Viper.Translation.setLanguage(code);
                 callback.call(this);
             }
 
@@ -254,10 +254,10 @@
          */
         init: function()
         {
-            this.Tools               = new Viper.Tools(this);
-            this.HistoryManager = new Viper.HistoryManager(this);
-            this.PluginManager  = new Viper.PluginManager(this);
-            this.ViperInputHandler   = new Viper.ViperInputHandler(this);
+            this.Tools           = new Viper.Tools(this);
+            this.HistoryManager  = new Viper.HistoryManager(this);
+            this.PluginManager   = new Viper.PluginManager(this);
+            this.KeyboardHandler = new Viper.KeyboardHandler(this);
 
             Viper.Selection._viper = this;
 
@@ -539,7 +539,7 @@
                 return self.mouseDown(e);
             });
 
-            this.ViperInputHandler.init();
+            this.KeyboardHandler.init();
 
             Viper.Util.addEvent(elem, 'blur.' + namespace, function(e) {
                 if (!self._viperRange) {
