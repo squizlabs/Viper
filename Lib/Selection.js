@@ -13,10 +13,7 @@
 (function(ViperUtil) {
 
     Viper.Selection = {
-        _lastTextRange: null,
         _selection: null,
-
-
         _viper: null,
 
         /**
@@ -127,7 +124,7 @@
             }
 
             if (this._viper) {
-                this._viper._viperRange = range;
+                this._viper.resetViperRange(range)
             }
 
         },
