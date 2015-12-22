@@ -14,7 +14,7 @@
             var search = window.location.search;
             if (search && search.indexOf('?lang=') === 0) {
                 lang = search.replace('?lang=', '');
-                ViperUtil.getid('langSelector').value = lang;
+                Viper.Util.getid('langSelector').value = lang;
             }
 
             viperTest = new Viper('test', {language: lang}, function(viper) {
@@ -46,7 +46,7 @@
 
         function changeLang(lang)
         {
-            window.location = ViperUtil.baseUrl(window.location.href) + '?lang=' + lang;
+            window.location = Viper.Util.baseUrl(window.location.href) + '?lang=' + lang;
         }
     </script>
 </head>
