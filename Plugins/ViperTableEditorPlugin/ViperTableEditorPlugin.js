@@ -3351,7 +3351,7 @@
 
         insertTable: function(rows, cols, headerType, tableid)
         {
-            this.viper.ViperHistoryManager.begin();
+            this.viper.HistoryManager.begin();
 
             rows = rows || 3;
             cols = cols || 3;
@@ -3475,7 +3475,7 @@
 
             this.setTableHeaders(table);
 
-            this.viper.ViperHistoryManager.end();
+            this.viper.HistoryManager.end();
 
             return table;
 

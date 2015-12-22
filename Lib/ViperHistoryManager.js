@@ -12,7 +12,7 @@
  */
 
 (function(ViperUtil, ViperSelection) {
-    Viper.ViperHistoryManager = function(viper)
+    Viper.HistoryManager = function(viper)
     {
         this.viper = viper;
 
@@ -30,7 +30,7 @@
 
     }
 
-    Viper.ViperHistoryManager.prototype = {
+    Viper.HistoryManager.prototype = {
 
         /**
          * Creates a new undo task.

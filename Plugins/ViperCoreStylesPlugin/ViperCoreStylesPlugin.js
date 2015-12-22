@@ -493,7 +493,7 @@
         handleHR: function()
         {
             var hr = document.createElement('hr');
-            this.viper.ViperHistoryManager.begin();
+            this.viper.HistoryManager.begin();
 
             var range = this.viper.getViperRange();
             if (range.collapsed !== true) {
@@ -584,7 +584,7 @@
             }
 
             this.viper.contentChanged();
-            this.viper.ViperHistoryManager.end();
+            this.viper.HistoryManager.end();
 
         },
 
@@ -960,13 +960,13 @@
                 return false;
             }
 
-            this.viper.ViperHistoryManager.begin();
+            this.viper.HistoryManager.begin();
 
             // Apply the new tag.
             this.applyTag(style);
 
             this.viper.contentChanged();
-            this.viper.ViperHistoryManager.end();
+            this.viper.HistoryManager.end();
 
             // Prevent event bubbling etc.
             return false;
@@ -983,9 +983,9 @@
 
         applyTag: function(tag)
         {
-            this.viper.ViperHistoryManager.begin();
+            this.viper.HistoryManager.begin();
             this.viper.surroundContents(tag);
-            this.viper.ViperHistoryManager.end();
+            this.viper.HistoryManager.end();
 
         },
 

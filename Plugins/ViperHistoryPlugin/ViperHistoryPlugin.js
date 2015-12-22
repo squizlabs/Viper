@@ -57,7 +57,7 @@
 
         this.handleUndo = function()
         {
-            viper.ViperHistoryManager.undo();
+            viper.HistoryManager.undo();
 
             return false;
 
@@ -65,7 +65,7 @@
 
         this.handleRedo = function()
         {
-            viper.ViperHistoryManager.redo();
+            viper.HistoryManager.redo();
 
             return false;
 
@@ -78,13 +78,13 @@
             }
 
             var tools = viper.Tools;
-            if (viper.ViperHistoryManager.getUndoCount() > 1) {
+            if (viper.HistoryManager.getUndoCount() > 1) {
                 tools.enableButton(toolbarButtons.undo);
             } else {
                 tools.disableButton(toolbarButtons.undo);
             }
 
-            if (viper.ViperHistoryManager.getRedoCount() > 0) {
+            if (viper.HistoryManager.getRedoCount() > 0) {
                 tools.enableButton(toolbarButtons.redo);
             } else {
                 tools.disableButton(toolbarButtons.redo);

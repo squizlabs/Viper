@@ -22,7 +22,7 @@
         this.enabled      = false;
         this.inlineMode   = false;
 
-        this.ViperHistoryManager = null;
+        this.HistoryManager = null;
         this.ViperPluginManager  = null;
         this.Tools               = null;
 
@@ -130,7 +130,7 @@
 
         getHistoryManager: function()
         {
-            return this.ViperHistoryManager;
+            return this.HistoryManager;
 
         },
 
@@ -255,7 +255,7 @@
         init: function()
         {
             this.Tools               = new Viper.Tools(this);
-            this.ViperHistoryManager = new Viper.ViperHistoryManager(this);
+            this.HistoryManager = new Viper.HistoryManager(this);
             this.ViperPluginManager  = new Viper.PluginManager(this);
             this.ViperInputHandler   = new Viper.ViperInputHandler(this);
 
@@ -856,7 +856,7 @@
             }
 
             this.setEnabled(true);
-            this.ViperHistoryManager.setActiveElement(elem);
+            this.HistoryManager.setActiveElement(elem);
             this.inlineMode = false;
             elem.setAttribute('contentEditable', true);
             Viper.Util.setStyle(elem, 'outline', 'none');
@@ -4275,9 +4275,9 @@
             this.fireCallbacks('Viper:nodesChanged', nodes);
 
             if (nodes.length === 1 && nodes[0] && nodes[0].nodeType === Viper.Util.TEXT_NODE) {
-                this.ViperHistoryManager.add('Viper', 'text_change');
+                this.HistoryManager.add('Viper', 'text_change');
             } else {
-                this.ViperHistoryManager.add();
+                this.HistoryManager.add();
             }
 
         },
