@@ -68,36 +68,6 @@
                 self._updateTableEditorContent(data);
             });
 
-            ViperChangeTracker.addChangeType('textFormatChange', 'Formatted', 'format');
-            ViperChangeTracker.setDescriptionCallback('textFormatChange', function(node) {
-                var format = self._getFormat(node);
-                return self.styleTags[format];
-            });
-
-            ViperChangeTracker.setApproveCallback('textFormatChange', function(clone, node) {
-                ViperChangeTracker.removeTrackChanges(node);
-            });
-
-            ViperChangeTracker.setRejectCallback('textFormatChange', function(clone, node) {
-                // Remove all nodes insede the specified node before it
-                // or to a new P tag if the parent is the top element.
-                if (node.parentNode === self.viper.element) {
-                    var elem = document.createElement('p');
-                    while (node.firstChild) {
-                        elem.appendChild(node.firstChild);
-                    }
-
-                    ViperUtil.insertBefore(node, elem);
-                } else {
-                    while (node.firstChild) {
-                        ViperUtil.insertBefore(node, node.firstChild);
-                    }
-                }
-
-                // Remove node.
-                ViperUtil.remove(node);
-            });
-
         },
 
         setSettings: function (settings) {
@@ -2588,14 +2558,6 @@
             }
 
             return null;
-
-        },
-
-        _addChangeTrackInfo: function(node)
-        {
-            if (ViperChangeTracker.isTracking() === true) {
-                ViperChangeTracker.addChange('textFormatChange', [node]);
-            }
 
         }
 

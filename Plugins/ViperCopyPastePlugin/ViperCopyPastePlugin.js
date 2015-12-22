@@ -1177,7 +1177,6 @@
                     var textNode = document.createTextNode(preHtml);
                     ViperUtil.insertBefore(this._tmpNode, textNode);
                 } else {
-                    var changeid    = ViperChangeTracker.startBatchChange('textAdded');
                     var prevChild   = null;
                     var lastChild   = null;
                     var prevWrapper = null;
@@ -1205,7 +1204,6 @@
                         if (ViperUtil.isBlockElement(fragment.lastChild) === true && ViperUtil.isStubElement(fragment.lastChild) === false) {
                             prevWrapper = null;
                             ctNode = fragment.lastChild;
-                            ViperChangeTracker.addChange('textAdd', [ctNode]);
 
                             if ((ViperUtil.isTag(ctNode, 'ul') === true
                                 || ViperUtil.isTag(ctNode, 'ol') === true)
@@ -1248,8 +1246,6 @@
                                 continue;
                             }
 
-                            ctNode = ViperChangeTracker.createCTNode('ins', 'textAdd', ctNode);
-                            ViperChangeTracker.addNodeToChange(changeid, ctNode);
                             ViperUtil.insertAfter(prevBlock, ctNode);
                         }
 
@@ -1285,16 +1281,10 @@
                         this._tmpNodeOffset = this._tmpNode.data.length;
                     }
                 }
-
-                ViperChangeTracker.endBatchChange(changeid);
             } else {
                 if (ViperUtil.getParents(this._tmpNode, 'pre', this.viper.getViperElement()).length > 0) {
-                    var changeid = ViperChangeTracker.startBatchChange('textAdded');
-                    var ctNode   = null;
                     var textNode = document.createTextNode(preHtml);
-                    var ctNode = ViperChangeTracker.createCTNode('ins', 'textAdd', textNode);
-                    ViperChangeTracker.addNodeToChange(changeid, ctNode);
-                    ViperUtil.insertBefore(this._tmpNode, ctNode);
+                    ViperUtil.insertBefore(this._tmpNode, textNode);
                 } else {
                     if (this._tmpNode.parentNode === this.viper.getViperElement()
                         && ViperUtil.isBlockElement(fragment.firstChild) === false

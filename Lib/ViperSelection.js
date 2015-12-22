@@ -10,8 +10,8 @@
  * +--------------------------------------------------------------------+
  *
  */
-(function(ViperUtil, ViperSelection) {
-    
+(function(ViperUtil) {
+
     Viper.Selection = {
         _lastTextRange: null,
         _selection: null,
@@ -156,4 +156,4 @@
 
     };
 
-})(Viper.Util, Viper.Selection);
+})(Viper.Util);

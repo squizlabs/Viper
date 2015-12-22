@@ -26,9 +26,7 @@
         this.ViperPluginManager  = null;
         this.Tools               = null;
 
-        this._settings = {
-            changeTracking: false
-        };
+        this._settings = {};
 
         this._viperElementHolder = null;
         this._subElementActive   = false;
@@ -261,11 +259,6 @@
             this.ViperPluginManager  = new Viper.PluginManager(this);
             this.ViperInputHandler   = new Viper.ViperInputHandler(this);
 
-            ViperChangeTracker.init(this, false);
-            this._setupCoreTrackChangeActions();
-            ViperChangeTracker.addChangeType('textRemoved', 'Deleted', 'remove');
-            ViperChangeTracker.addChangeType('textAdded', 'Inserted', 'insert');
-            ViperChangeTracker.addChangeType('merged', 'Merged', 'remove');
             Viper.Selection._viper = this;
 
             this.registerCallback('Viper:setHtmlContent', 'Viper', function(content, callback) {
@@ -757,7 +750,6 @@
                 this.fireCallbacks('Viper:enabled');
             } else if (enabled === false && this.enabled === true) {
                 // Back to final mode.
-                ViperChangeTracker.activateFinalMode();
                 this.cleanDOM(this.element);
 
                 if (Viper.Util.trim(Viper.Util.getNodeTextContent(this.element)) === '') {
@@ -776,8 +768,6 @@
 
                 // Fire disabled with previous state set to enabled.
                 this.fireCallbacks('Viper:disabled', true);
-                ViperChangeTracker.disableChangeTracking();
-                ViperChangeTracker.cleanUp();
             } else if (enabled === false) {
                 // Fire disabled with previous state set to disabled.
                 this.fireCallbacks('Viper:disabled', false);
@@ -855,10 +845,7 @@
                 Viper.Util.setStyle(this.element, 'outline', 'invert');
             }
 
-            // Turn off tracking.
-            ViperChangeTracker.cleanUp();
             this.setSubElementState(null, false);
-            ViperChangeTracker.init(this, false);
 
             this.setEnabled(false);
             this.element = elem;
@@ -873,10 +860,6 @@
             this.inlineMode = false;
             elem.setAttribute('contentEditable', true);
             Viper.Util.setStyle(elem, 'outline', 'none');
-
-            if (this.getSetting('changeTracking') === true) {
-                ViperChangeTracker.enableChangeTracking();
-            }
 
             this.fireCallbacks('Viper:editableElementChanged', {element: elem});
 
@@ -1095,17 +1078,17 @@
         _useDefaultPlugins: function()
         {
             // Default plugins (all Viper plugins).
-            var plugins = 'ViperCoreStylesPlugin|ViperInlineToolbarPlugin|ViperHistoryPlugin|ViperListPlugin|ViperFormatPlugin|ViperToolbarPlugin|ViperCopyPastePlugin|ViperImagePlugin|ViperLinkPlugin|ViperAccessibilityPlugin|ViperSourceViewPlugin|ViperSearchReplacePlugin|ViperLangToolsPlugin|ViperCharMapPlugin|ViperCursorAssistPlugin|ViperTrackChangesPlugin|ViperReplacementPlugin|ViperTableEditorPlugin';
+            var plugins = 'ViperCoreStylesPlugin|ViperInlineToolbarPlugin|ViperHistoryPlugin|ViperListPlugin|ViperFormatPlugin|ViperToolbarPlugin|ViperCopyPastePlugin|ViperImagePlugin|ViperLinkPlugin|ViperAccessibilityPlugin|ViperSourceViewPlugin|ViperSearchReplacePlugin|ViperLangToolsPlugin|ViperCharMapPlugin|ViperCursorAssistPlugin|ViperReplacementPlugin|ViperTableEditorPlugin';
             this.ViperPluginManager.setPlugins(plugins.split('|'));
 
             // Default button ordering.
-            // var buttons = [
-            //     ['bold', 'italic', 'subscript', 'superscript', 'strikethrough', 'class'], 'removeFormat', ['justify', 'formats', 'headings'], ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], 'insertTable', 'image', 'hr', ['insertLink', 'removeLink', 'anchor'], 'insertCharacter', 'searchReplace', 'langTools', 'accessibility', 'sourceEditor'
-            // ];
-            // this.getPluginManager().setPluginSettings('ViperToolbarPlugin', {buttons: buttons});
-            //
-            // var inlineToolbarButtons = [['bold', 'italic', 'class'], ['justify', 'formats', 'headings'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], ['insertLink', 'removeLink', 'anchor'], ['image', 'imageMove']];
-            // this.getPluginManager().setPluginSettings('ViperInlineToolbarPlugin', {buttons: inlineToolbarButtons});
+            var buttons = [
+                ['bold', 'italic', 'subscript', 'superscript', 'strikethrough', 'class'], 'removeFormat', ['justify', 'formats', 'headings'], ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], 'insertTable', 'image', 'hr', ['insertLink', 'removeLink', 'anchor'], 'insertCharacter', 'searchReplace', 'langTools', 'accessibility', 'sourceEditor'
+            ];
+            this.getPluginManager().setPluginSettings('ViperToolbarPlugin', {buttons: buttons});
+
+            var inlineToolbarButtons = [['bold', 'italic', 'class'], ['justify', 'formats', 'headings'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], ['insertLink', 'removeLink', 'anchor'], ['image', 'imageMove']];
+            this.getPluginManager().setPluginSettings('ViperInlineToolbarPlugin', {buttons: inlineToolbarButtons});
 
             // Accessibility Plugin, standard.
             this.getPluginManager().setPluginSettings('ViperAccessibilityPlugin', {standard: 'WCAG2AA'});
@@ -1719,31 +1702,26 @@
 
                 var newNode  = Viper.document.createTextNode(node);
                 var noBlock  = true;
-                var newRange = this.ctmInsertNodeAtCaret(range, newNode);
-                if (newRange !== false) {
-                    noBlock = false;
-                } else {
-                    newRange = range;
+                newRange = range;
 
-                    if (newRange.collapsed === true
-                        && newRange.startContainer.parentNode
-                        && newRange.startContainer.parentNode.firstChild.nodeType === Viper.Util.TEXT_NODE
-                        && newRange.startContainer.parentNode.firstChild === newRange.startContainer.parentNode.lastChild
-                        && Viper.Util.trim(newRange.startContainer.parentNode.firstChild.data) === ''
-                    ) {
-                        newRange.setStart(newRange.startContainer.parentNode.firstChild, 0);
-                        newRange.collapse(true);
-                        newRange.startContainer.parentNode.firstChild.data = '';
-                    } else if (newRange.collapsed === true
-                        && Viper.Util.isStubElement(newRange.startContainer) === true
-                    ) {
-                        var tmpTextNode = Viper.document.createTextNode('');
-                        Viper.Util.insertBefore(newRange.startContainer, tmpTextNode);
-                        Viper.Util.remove(newRange.startContainer);
-                        newRange.setStart(tmpTextNode, 0);
-                        newRange.collapse(true);
-                    }
-                }//end if
+                if (newRange.collapsed === true
+                    && newRange.startContainer.parentNode
+                    && newRange.startContainer.parentNode.firstChild.nodeType === Viper.Util.TEXT_NODE
+                    && newRange.startContainer.parentNode.firstChild === newRange.startContainer.parentNode.lastChild
+                    && Viper.Util.trim(newRange.startContainer.parentNode.firstChild.data) === ''
+                ) {
+                    newRange.setStart(newRange.startContainer.parentNode.firstChild, 0);
+                    newRange.collapse(true);
+                    newRange.startContainer.parentNode.firstChild.data = '';
+                } else if (newRange.collapsed === true
+                    && Viper.Util.isStubElement(newRange.startContainer) === true
+                ) {
+                    var tmpTextNode = Viper.document.createTextNode('');
+                    Viper.Util.insertBefore(newRange.startContainer, tmpTextNode);
+                    Viper.Util.remove(newRange.startContainer);
+                    newRange.setStart(tmpTextNode, 0);
+                    newRange.collapse(true);
+                }
 
                 if (this.fireCallbacks('Viper:nodesInserted', {node: newNode, range: newRange}) === false) {
                     noBlock = false;
@@ -1811,84 +1789,6 @@
                 range.setEndAfter(node, (this._getNodeOffset(node) + 1));
                 range.collapse(false);
             }//end if
-
-        },
-
-        /**
-         * Change Tracking Mode: InsertNodeAtCaret.
-         */
-        ctmInsertNodeAtCaret: function(range, node)
-        {
-            if (ViperChangeTracker.isTracking() === true) {
-                if (range.collapsed === false) {
-                    // Range should be collapsed by the time this method is called.
-                    return range;
-                }
-
-                var offset    = range.startOffset;
-                var ctNode    = null;
-                var startNode = range.getStartNode();
-
-                // Make sure startNode is not inside a textRemoved CTNode.
-                if (ViperChangeTracker.getCTNode(startNode, 'textRemoved') !== null) {
-                    return false;
-                }
-
-                // Determine if a new CTNode needs to be created.
-                ctNode = ViperChangeTracker.getCTNode(startNode, 'textAdd');
-
-                if (ctNode === null) {
-                    if (offset === 0) {
-                        // Look at the previous sibling to see if its a CTNode.
-                        while (startNode) {
-                            startNode = startNode.previousSibling;
-                            if (startNode && (startNode.nodeType !== Viper.Util.TEXT_NODE || startNode.data.length !== 0)) {
-                                break;
-                            }
-                        }
-
-                        ctNode = ViperChangeTracker.getCTNode(startNode, 'textAdd');
-                        if (ctNode !== null) {
-                            var newNode = Viper.document.createTextNode('');
-                            ctNode.appendChild(newNode);
-                            range.setStart(newNode, 0);
-                            range.collapse(true);
-                        }
-                    } else if (offset === startNode.data.length) {
-                        // Look at the next sibling to see if its a CTNode.
-                        while (startNode) {
-                            startNode = startNode.nextSibling;
-                            if (startNode && (startNode.nodeType !== Viper.Util.TEXT_NODE || startNode.data.length !== 0)) {
-                                break;
-                            }
-                        }
-
-                        ctNode = ViperChangeTracker.getCTNode(startNode, 'textAdd');
-                        if (ctNode !== null) {
-                            var newNode = Viper.document.createTextNode('');
-                            Viper.Util.insertBefore(ctNode.firstChild, newNode);
-                            range.setStart(newNode, 0);
-                            range.collapse(true);
-                        }
-                    }//end if
-                }//end if
-
-                if (ctNode === null) {
-                    // Create a new CTNode.
-                    ctNode = ViperChangeTracker.createCTNode('ins', 'textAdd', node);
-                    ViperChangeTracker.addChange('textAdded', [ctNode]);
-                    range.insertNode(ctNode);
-                    range.setEnd(node, 1);
-                    range.collapse(false);
-                    Viper.Selection.addRange(range);
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }//end if
-
-            return range;
 
         },
 
@@ -2043,50 +1943,6 @@
             // Remove all elements in between.
             var elements = Viper.Util.getElementsBetween(bookmark.start, bookmark.end);
 
-            // Tracking Mode.
-            // Intead of removing nodes just wrap them with a span tag.
-            if (ViperChangeTracker.isTracking() === true) {
-                var removedText = (this.getTextContentFromElements(elements)).join('');
-
-                var changeid = ViperChangeTracker.addChange('textRemoved');
-                var eln      = elements.length;
-                for (var i = 0; i < eln; i++) {
-                    var elem = elements[i];
-                    if (ViperChangeTracker.getCTNode(elem, 'textRemoved') === null) {
-                        if (Viper.Util.isBlockElement(elem) === true) {
-                            var del = Viper.document.createElement('del');
-                            Viper.Util.insertBefore(elem, del);
-                            del.appendChild(elem);
-                            ViperChangeTracker.addNodeToChange(changeid, del);
-                        } else {
-                            this._wrapElement(elem, 'del', function(newElem) {
-                                // Add new class to wrap element to mark it as "deleted".
-                                ViperChangeTracker.addNodeToChange(changeid, newElem);
-                            });
-                        }
-                    }
-                }
-
-                var startEl = bookmark.start.previousSibling;
-                if (!startEl) {
-                    startEl = Viper.document.createTextNode('');
-                    Viper.Util.insertBefore(bookmark.start, startEl);
-                    this.selectBookmark(bookmark);
-                    range = this.getCurrentRange();
-                    range.setStart(startEl, 0);
-                } else {
-                    this.selectBookmark(bookmark);
-                    range = this.getCurrentRange();
-                    // Move left and then right to position the start of range
-                    // just before the CTNode.
-                    range.moveStart(Viper.DOMRange.CHARACTER_UNIT, -1);
-                    range.moveStart(Viper.DOMRange.CHARACTER_UNIT, 1);
-                }
-
-                range.collapse(true);
-                return;
-            }//end if
-
             // Remove all the elements in between.
             this.removeElem(elements);
 
@@ -2152,55 +2008,20 @@
                 var firstSelectable = range._getFirstSelectableChild(nextContainer);
                 range.setStart(firstSelectable, 0);
 
-                if (ViperChangeTracker.isTracking() === true) {
-                    // Tracking Mode.
-                    // Instead of removing nodes wrap them around new
-                    // span tags.
-                    this._addTextNodeTracking(firstSelectable, range);
-                } else {
-                    range.collapse(true);
-                    range.moveEnd(Viper.DOMRange.CHARACTER_UNIT, 1);
-                    range.deleteContents();
-                    range.collapse(true);
+                range.collapse(true);
+                range.moveEnd(Viper.DOMRange.CHARACTER_UNIT, 1);
+                range.deleteContents();
+                range.collapse(true);
 
-                    // If the parent container is going to be empty then it
-                    // should be removed.
-                    if (this._parentWillBeDeleted(container) === true) {
-                        Viper.Util.remove(container.parentNode);
-                    }
+                // If the parent container is going to be empty then it
+                // should be removed.
+                if (this._parentWillBeDeleted(container) === true) {
+                    Viper.Util.remove(container.parentNode);
                 }
             } else {
-                var textNode    = range.getStartNode();
-                var isTracking  = ViperChangeTracker.isTracking();
-                var textAddNode = null;
-                if (isTracking === true) {
-                    textAddNode = ViperChangeTracker.getCTNode(textNode, 'textAdd');
-                }
+                range.moveEnd(Viper.DOMRange.CHARACTER_UNIT, 1);
+                range.deleteContents();
 
-                if (isTracking === true && textAddNode === null) {
-                    // Tracking Mode
-                    // Instead of removing contents, wrap them in a new
-                    // "delete" span tag.
-                    this._addTextNodeTracking(textNode, range, true);
-                } else {
-                    range.moveEnd(Viper.DOMRange.CHARACTER_UNIT, 1);
-                    range.deleteContents();
-
-                    // The textAddNode is a tracked inserted content, its contents
-                    // are deleted and it may be empty.
-                    if (textAddNode !== null && Viper.Util.isBlank(Viper.Util.getNodeTextContent(textAddNode)) === true) {
-                        // Content is now empty, so remove the node.
-                        var prevSibling = textAddNode.previousSibling;
-                        if (!prevSibling || prevSibling.nodeType !== Viper.Util.TEXT_NODE) {
-                            prevSibling = Viper.document.createTextNode('');
-                            Viper.Util.insertBefore(textAddNode, prevSibling);
-                        }
-
-                        range.setStart(prevSibling, prevSibling.data.length);
-
-                        Viper.Util.remove(textAddNode);
-                    }
-                }//end if
             }//end if
 
         },
@@ -2256,216 +2077,25 @@
                 }
 
                 if (Viper.Util.isStubElement(previousContainer) === true) {
-                    if (ViperChangeTracker.isTracking() === true) {
-                        // Tracking Mode
-                        // Mark the stub element as "deleted".
-                        range.moveStart(Viper.DOMRange.CHARACTER_UNIT, -1);
-                        Viper.Util.addClass(previousContainer, ViperChangeTracker.getCTNodeClass('textRemoved'));
-                        Viper.Util.attr(previousContainer, 'title', 'Content removed');
-                    } else {
-                        Viper.Util.remove(previousContainer);
-                    }
-
+                    Viper.Util.remove(previousContainer);
                     range.collapse(true);
                 } else {
                     var lastSelectable = range._getLastSelectableChild(previousContainer);
                     range.setStart(lastSelectable, lastSelectable.data.length);
 
-                    if (ViperChangeTracker.isTracking() === true) {
-                        // Tracking Mode.
-                        // Instead of removing nodes wrap them around new
-                        // span tags.
-                        this._addTextNodeTracking(lastSelectable, range);
-                    } else {
-                        range.collapse(true);
-                        range.moveStart(Viper.DOMRange.CHARACTER_UNIT, -1);
-                        range.deleteContents();
-
-                        // If the parent container is going to be empty then it
-                        // should be removed.
-                        if (this._parentWillBeDeleted(container) === true) {
-                            Viper.Util.remove(container.parentNode);
-                        }
-                    }
-                }//end if
-            } else {
-                var textNode    = range.getStartNode();
-                var isTracking  = ViperChangeTracker.isTracking();
-                var textAddNode = null;
-                if (isTracking === true) {
-                    textAddNode = ViperChangeTracker.getCTNode(textNode, 'textAdd');
-                }
-
-                if (isTracking === true && textAddNode === null) {
-                    // Tracking Mode
-                    // Instead of removing contents, wrap them in a new
-                    // "delete" span tag.
-                    this._addTextNodeTracking(textNode, range);
-                } else {
+                    range.collapse(true);
                     range.moveStart(Viper.DOMRange.CHARACTER_UNIT, -1);
                     range.deleteContents();
 
-                    // The textAddNode is a tracked inserted content, its contents
-                    // are deleted and it may be empty.
-                    if (textAddNode !== null && Viper.Util.isBlank(Viper.Util.getNodeTextContent(textAddNode)) === true) {
-                        // Content is now empty, so remove the node.
-                        var prevSibling = textAddNode.previousSibling;
-                        if (!prevSibling || prevSibling.nodeType !== Viper.Util.TEXT_NODE) {
-                            prevSibling = Viper.document.createTextNode('');
-                            Viper.Util.insertBefore(textAddNode, prevSibling);
-                        }
-
-                        range.setStart(prevSibling, prevSibling.data.length);
-
-                        Viper.Util.remove(textAddNode);
+                    // If the parent container is going to be empty then it
+                    // should be removed.
+                    if (this._parentWillBeDeleted(container) === true) {
+                        Viper.Util.remove(container.parentNode);
                     }
                 }//end if
-            }//end if
-
-        },
-
-        _addTextNodeTracking: function(textNode, range, del)
-        {
-            if ((del !== true && range.startOffset === 0) || ViperChangeTracker.getCTNode(textNode, 'textRemoved') !== null) {
-                return;
-            }
-
-            var beforeText  = '';
-            var removedChar = '';
-            var afterText   = '';
-
-            if (del !== true) {
-                beforeText  = textNode.nodeValue.substring(0, (range.startOffset - 1));
-                removedChar = textNode.nodeValue.substr((range.startOffset - 1), 1);
-                afterText   = textNode.nodeValue.substring(range.startOffset);
             } else {
-                beforeText  = textNode.nodeValue.substring(0, range.endOffset);
-                removedChar = textNode.nodeValue.substr(range.endOffset, 1);
-                afterText   = textNode.nodeValue.substring((range.endOffset + 1));
-            }
-
-            if ((range.startOffset === 1 && del !== true) || (del === true && range.startOffset === 0)) {
-                // Check if we can merge to an existing previous CTNode.
-                var ctNode = ViperChangeTracker.getCTNode(textNode.previousSibling, 'textRemoved');
-                if (ctNode) {
-                    // Can add the removed char to previous sibling.
-                    if (del !== true) {
-                        if (ctNode.lastChild && ctNode.lastChild.nodeType === Viper.Util.TEXT_NODE) {
-                            ctNode.lastChild.nodeValue += removedChar;
-                            range.setStart(ctNode.lastChild, (ctNode.lastChild.nodeValue.length - 1));
-                        } else {
-                            var charNode = Viper.document.createTextNode(removedChar);
-                            ctNode.appendChild(charNode);
-                            range.setStart(charNode, 0);
-                        }
-
-                        // Update textNode.
-                        textNode.nodeValue = beforeText + afterText;
-                        // Update textNode.
-                        textNode.nodeValue = beforeText + afterText;
-                        if (textNode.nodeValue.length === 0) {
-                            // Move the range to the right until there is valid sibling.
-                            var found           = false;
-                            var previousSibling = textNode.previousSibling;
-                            while (found !== true) {
-                                ctNode = ViperChangeTracker.getCTNode(previousSibling, 'textRemoved');
-                                if (!ctNode) {
-                                    found = true;
-                                } else {
-                                    previousSibling = previousSibling.previousSibling;
-                                }
-                            }
-
-                            if (previousSibling) {
-                                previousSibling = range._getLastSelectableChild(previousSibling);
-                                range.setStart(previousSibling, previousSibling.nodeValue.length);
-                                range.collapse(true);
-                            }
-                        } else {
-                            range.collapse(true);
-                        }//end if
-                    } else {
-                        if (ctNode.lastChild && ctNode.lastChild.nodeType === Viper.Util.TEXT_NODE) {
-                            ctNode.lastChild.nodeValue += removedChar;
-                        } else {
-                            var charNode = Viper.document.createTextNode(removedChar);
-                            ctNode.appendChild(charNode);
-                        }
-
-                        // Update textNode.
-                        textNode.nodeValue = beforeText + afterText;
-                        if (textNode.nodeValue.length === 0) {
-                            // Move the range to the right until there is valid sibling.
-                            var found       = false;
-                            var nextSibling = textNode.nextSibling;
-                            while (found !== true) {
-                                ctNode = ViperChangeTracker.getCTNode(nextSibling, 'textRemoved');
-                                if (!ctNode) {
-                                    found = true;
-                                } else {
-                                    nextSibling = nextSibling.nextSibling;
-                                }
-                            }
-
-                            if (nextSibling) {
-                                range.setStart(nextSibling, 0);
-                                range.collapse(true);
-                            }
-                        } else {
-                            range.setStart(textNode, 0);
-                            range.collapse(true);
-                        }//end if
-                    }//end if
-
-                    // TODO: Check if textNode is blank then check next and previous siblings.
-                    // If they are both textRemove tracking nodes and same user
-                    // then join them together.
-                    return;
-                }//end if
-            }//end if
-
-            if (range.startOffset === textNode.nodeValue.length) {
-                // Range is at the end of the text node. Check if next sibling
-                // is a CTNode that we can join to.
-                var ctNode = ViperChangeTracker.getCTNode(textNode.nextSibling, 'textRemoved');
-                if (ctNode) {
-                    if (ctNode.firstChild && ctNode.firstChild.nodeType === Viper.Util.TEXT_NODE) {
-                        ctNode.firstChild.nodeValue = removedChar + ctNode.firstChild.nodeValue;
-                    } else {
-                        var charNode = Viper.document.createTextNode(removedChar);
-                        Viper.Util.insertBefore(ctNode.firstChild, charNode);
-                    }
-
-                    // Update textNode.
-                    textNode.nodeValue = beforeText;
-                    range.setStart(textNode, textNode.nodeValue.length);
-                    range.collapse(true);
-                    return;
-                }
-            }
-
-            var ctNode  = ViperChangeTracker.createCTNode('del', 'textRemoved');
-            var newNode = null;
-            if (del !== true) {
-                newNode           = textNode.splitText(range.startOffset - 1);
-                newNode.nodeValue = newNode.nodeValue.substring(1);
-                ViperChangeTracker.addChange('textRemoved', [ctNode]);
-
-                Viper.Util.insertAfter(textNode, newNode);
-                ctNode.firstChild.nodeValue = removedChar;
-                Viper.Util.insertAfter(textNode, ctNode);
-                range.setStart(textNode, textNode.nodeValue.length);
-                range.collapse(true);
-            } else {
-                newNode           = textNode.splitText(range.endOffset);
-                newNode.nodeValue = newNode.nodeValue.substring(1);
-                ViperChangeTracker.addChange('textRemoved', [ctNode]);
-
-                Viper.Util.insertAfter(textNode, newNode);
-                ctNode.firstChild.nodeValue = removedChar;
-                Viper.Util.insertAfter(textNode, ctNode);
-                range.setStart(newNode, 0);
-                range.collapse(true);
+                range.moveStart(Viper.DOMRange.CHARACTER_UNIT, -1);
+                range.deleteContents();
             }//end if
 
         },
@@ -2474,12 +2104,6 @@
         {
             if (!node || !mergeToNode) {
                 return false;
-            }
-
-            if (ViperChangeTracker.isTracking() === true) {
-                var del = Viper.document.createElement('del');
-                mergeToNode.appendChild(del);
-                ViperChangeTracker.addChange('merged', [del]);
             }
 
             if (node.nodeType === Viper.Util.TEXT_NODE || Viper.Util.isStubElement(node) === true) {
@@ -2549,16 +2173,7 @@
                 return;
             }
 
-            var otag = tag;
-
-            if (ViperChangeTracker.isTracking() === true
-                && ViperChangeTracker.getCurrentMode() === 'original'
-            ) {
-                // If the original mode is active then new style tags should not be
-                // shown, but when final mode is activated they should be.
-                tag = 'span';
-            }
-
+            var otag           = tag;
             var startContainer = range.getStartNode();
             var endContainer   = range.getEndNode();
             var nodeSelection  = range.getNodeSelection(null, true);
@@ -2597,14 +2212,6 @@
                     var rangeContent = range.toString();
                     Viper.Util.setNodeTextContent(node, rangeContent);
 
-                    if (ViperChangeTracker.isTracking() === true) {
-                        if (ViperChangeTracker.getCurrentMode() === 'original') {
-                            ViperChangeTracker.setCTData(node, 'tagName', otag);
-                        }
-
-                        ViperChangeTracker.addChange('formatChange', [node]);
-                    }
-
                     range.deleteContents();
                     range.insertNode(node);
 
@@ -2616,22 +2223,8 @@
 
                     return node;
                 } else {
-                    var self     = this;
-                    var changeid = null;
-                    if (ViperChangeTracker.isTracking() === true) {
-                        changeid = ViperChangeTracker.addChange('formatChange', [newElem]);
-                    }
-
-                    this._wrapElement(startContainer.childNodes[range.startOffset], tag, function(newElem) {
-                        if (changeid !== null) {
-                            if (ViperChangeTracker.getCurrentMode() === 'original') {
-                                ViperChangeTracker.setCTData(newElem, 'tagName', otag);
-                            }
-
-                            // Add new class to wrap element to mark it as "changed".
-                            ViperChangeTracker.addNodeToChange(changeid, newElem);
-                        }
-                    }, attributes);
+                    var self = this;
+                    this._wrapElement(startContainer.childNodes[range.startOffset], tag, null, attributes);
                 }//end if
             } else {
                 if (nodeSelection && Viper.Util.isBlockElement(nodeSelection) === false && nodeSelection.nodeType !== Viper.Util.TEXT_NODE) {
@@ -2826,21 +2419,9 @@
                 var elements = Viper.Util.getElementsBetween(startContainer, endContainer);
                 var c        = elements.length;
                 var self     = this;
-                var changeid = null;
-                if (ViperChangeTracker.isTracking() === true) {
-                    changeid = ViperChangeTracker.addChange('formatChange');
-                }
 
                 for (var i = 0; i < c; i++) {
-                    this._wrapElement(elements[i], tag, function(newElem) {
-                        if (changeid !== null) {
-                            if (ViperChangeTracker.getCurrentMode() === 'original') {
-                                ViperChangeTracker.setCTData(newElem, 'tagName', otag);
-                            }
-
-                            ViperChangeTracker.addNodeToChange(changeid, newElem);
-                        }
-                    }, attributes);
+                    this._wrapElement(elements[i], tag, null, attributes);
                 }
 
                 if (keepSelection !== true) {
@@ -3037,13 +2618,6 @@
                 if (elem.nodeType === Viper.Util.ELEMENT_NODE) {
                     if (elem.tagName.toLowerCase() === tag) {
                         var span = null;
-                        if (ViperChangeTracker.isTracking() === true) {
-                            span = Viper.document.createElement('span');
-                            ViperChangeTracker.setCTData(span, 'tagName', tag);
-                            Viper.Util.insertBefore(elem, span);
-                            ViperChangeTracker.addChange('removedFormat', [span]);
-                        }
-
                         while (elem.firstChild) {
                             if (span !== null) {
                                 span.appendChild(elem.firstChild);
@@ -4700,78 +4274,11 @@
 
             this.fireCallbacks('Viper:nodesChanged', nodes);
 
-            // Update the markers.
-            //ViperChangeTracker.updatePositionMarkers(true);
-
             if (nodes.length === 1 && nodes[0] && nodes[0].nodeType === Viper.Util.TEXT_NODE) {
                 this.ViperHistoryManager.add('Viper', 'text_change');
             } else {
                 this.ViperHistoryManager.add();
             }
-
-        },
-
-        _setupCoreTrackChangeActions: function()
-        {
-            var self = this;
-            ViperChangeTracker.setApproveCallback('textRemoved', function(clone, node) {
-                // If removed text is approved then just remove the actual node.
-                self.removeElem(node);
-            });
-
-            ViperChangeTracker.setRejectCallback('textRemoved', function(clone, node) {
-                // Move all the content inside the node to outside.
-                while (node.firstChild) {
-                    if (node.firstChild.nodeType === Viper.Util.ELEMENT_NODE
-                        && ViperChangeTracker.isTrackingNode(node.firstChild)
-                    ) {
-                        Viper.Util.remove(node.firstChild);
-                    } else {
-                        Viper.Util.insertBefore(node, node.firstChild);
-                    }
-                }
-
-                self.removeElem(node);
-            });
-
-            ViperChangeTracker.setApproveCallback('textAdded', function(clone, node) {
-                // Move all the content inside the node to outside.
-                while (node.firstChild) {
-                    Viper.Util.insertBefore(node, node.firstChild);
-                }
-
-                self.removeElem(node);
-            });
-
-            ViperChangeTracker.setRejectCallback('textAdded', function(clone, node) {
-                // Just remove the INS node.
-                self.removeElem(node);
-            });
-
-            ViperChangeTracker.setApproveCallback('merged', function(clone, node) {
-                self.removeElem(node);
-            });
-
-            ViperChangeTracker.setDescriptionCallback('merged', function(node) {
-                return 'Text';
-            });
-
-            ViperChangeTracker.setRejectCallback('merged', function(clone, node) {
-                var newParent = node.parentNode.cloneNode(false);
-                Viper.Util.insertAfter(node.parentNode, newParent);
-
-                var elems = Viper.Util.getElementsBetween(node, newParent);
-                var elem  = null;
-                while (elem = elems.shift()) {
-                    newParent.appendChild(elem);
-                }
-
-                self.removeElem(node);
-            });
-
-            ViperChangeTracker.setApproveCallback('viperComment', function(clone, node) {
-                ViperChangeTracker.removeTrackChanges(node, false);
-            });
 
         },
 

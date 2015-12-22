@@ -71,26 +71,6 @@
                 return true;
             }
 
-            // Check that keyCode is not 0 as Firefox fires keyPress for arrow keys which
-            // have key code of 0.
-            if (e.which !== 0 && ViperChangeTracker.isTracking() === true) {
-                if (e.which === ViperUtil.DOM_VK_BACKSPACE) {
-                    // Handle delete OP here because some browsers (e.g. Chrome, IE) does not
-                    // fire keyPress when DELETE is held down.
-                    this._viper.deleteContents();
-                    return false;
-                }
-
-                // Need to call Viper function to track changes for this keyPress.
-                if (e.ctrlKey !== true
-                    && e.altKey !== true
-                    && e.shiftKey !== true
-                    && e.metaKey !== true
-                ) {
-                    return this._viper.insertTextAtCaret(String.fromCharCode(e.which));
-                }
-            }
-
             var returnValue = this._viper.fireCallbacks('Viper:keyPress', e);
             if (returnValue === false) {
                 ViperUtil.preventDefault(e);
@@ -477,16 +457,6 @@
 
             if (this._keyDownRangeCollapsed === true) {
                 this._keyDownRangeCollapsed = range.collapsed;
-            }
-
-            if (e.which === ViperUtil.DOM_VK_BACKSPACE
-                && ViperChangeTracker.isTracking() === true
-                && ViperUtil.isBrowser('firefox') === false
-            ) {
-                // Handle delete OP here because some browsers (e.g. Chrome, IE) does not
-                // fire keyPress when DELETE is held down.
-                this._viper.deleteContents();
-                return false;
             }
 
             if (ViperUtil.isKey(e, 'ENTER') === true) {
@@ -3308,10 +3278,6 @@
                 }
 
                 elem = pelem;
-                ViperChangeTracker.addChange('createContainer', [elem]);
-            } else {
-                ViperChangeTracker.removeTrackChanges(elem, true);
-                ViperChangeTracker.addChange('splitContainer', [elem]);
             }//end if
 
             if (ViperUtil.elementIsEmpty(parent) === true) {
@@ -3507,27 +3473,6 @@
             range.setStart(newNode, 0);
             range.collapse(true);
             ViperSelection.addRange(range);
-
-            if (ViperChangeTracker.isTracking() === true) {
-                var ctNode = null;
-                if (newNode.nextSibling) {
-                    var sibling = newNode.nextSibling;
-                    ctNode      = ViperChangeTracker.createCTNode('ins', 'textAdd', newNode);
-                    ViperUtil.insertBefore(sibling, ctNode);
-                } else if (newNode.previousSibling) {
-                    var sibling = newNode.previousSibling;
-                    ctNode      = ViperChangeTracker.createCTNode('ins', 'textAdd', newNode);
-                    ViperUtil.insertAfter(sibling, ctNode);
-                } else {
-                    var parent  = newNode.parentNode;
-                    ctNode      = ViperChangeTracker.createCTNode('ins', 'textAdd', newNode);
-                    parent.appendChild(ctNode);
-                }
-
-                if (ctNode) {
-                    ViperChangeTracker.addChange('textAdded', [ctNode]);
-                }
-            }
 
         },
 

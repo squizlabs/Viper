@@ -147,8 +147,6 @@
                 });
             });
 
-            this._initTrackChanges();
-
         },
 
         initInlineToolbar: function()
@@ -227,7 +225,6 @@
 
         unoderedList: function()
         {
-            this._changeType = 'makeList';
             this.makeList(false);
             this.viper.fireNodesChanged('ViperListPlugin:unordered');
             this.viper.element.focus();
@@ -236,7 +233,6 @@
 
         oderedList: function()
         {
-            this._changeType = 'makeList';
             this.makeList(true);
             this.viper.fireNodesChanged('ViperListPlugin:ordered');
             this.viper.element.focus();
@@ -262,7 +258,6 @@
                 }
             }
 
-            var changeType = null;
             // Check if the list item we are removing is at the end of the list or
             // not. If not then we need to break the list in to two parts with the
             // removed list item (as P tag) between those lists.
@@ -274,14 +269,6 @@
                 }
 
                 ViperUtil.insertAfter(list, clone);
-
-                if (li.previousSibling) {
-                    changeType = 'breakListUPDown';
-                } else {
-                    changeType = 'breakListDown';
-                }
-            } else {
-                changeType = 'breakListUP';
             }
 
             ViperUtil.remove(li);
@@ -296,11 +283,6 @@
 
             if (ViperUtil.getNodeTextContent(list) === '') {
                 ViperUtil.remove(list);
-            }
-
-            if (sameList !== true) {
-                this._changeType = changeType;
-                ViperChangeTracker.addChange(changeType, [newElem]);
             }
 
             return newElem;
@@ -399,10 +381,6 @@
 
                     if (convert === true) {
                         // Need to create a new list with the specified tag.
-                        if (this._changeType === 'makeList') {
-                            this._changeType += '-change';
-                        }
-
                         this.makeList(ordered);
                     }
                 }//end if
@@ -433,8 +411,7 @@
                     if (sameType === true) {
                         var self = this;
                         ViperUtil.foreach(comParents, function(i) {
-                            var newElem = self.removeListItem(comParents[i], isWholeList);
-                            ViperChangeTracker.addChange('removedList-' + tag, [newElem]);
+                            self.removeListItem(comParents[i], isWholeList);
                         });
 
                         // Select the range and update caret.
@@ -460,10 +437,6 @@
                             this.viper.selectBookmark(bookmark);
 
                             // Create the new list.
-                            if (this._changeType === 'makeList') {
-                                this._changeType += '-change'
-                            }
-
                             return this.makeList(ordered);
                         }//end if
                     }//end if
@@ -1953,10 +1926,6 @@
 
             var list = document.createElement(tag);
 
-            if (ViperChangeTracker.isTracking() === true) {
-                ViperChangeTracker.addChange(this._changeType, [list]);
-            }
-
             if (eln === 1) {
                 // Check for BR tags to create list items out of those.
                 // Note that the selection is ignored in this case. All BR tags
@@ -2269,230 +2238,6 @@
             ViperUtil.remove(this.viper.Tools.getItem('orderedList').element);
             ViperUtil.remove(this.viper.Tools.getItem('indentList').element);
             ViperUtil.remove(this.viper.Tools.getItem('outdentList').element);
-
-        },
-
-        _initTrackChanges: function()
-        {
-            var self = this;
-
-            // Change Tracker.
-            ViperChangeTracker.addChangeType('makeList', 'Formatted', 'insert');
-            ViperChangeTracker.addChangeType('removedList-ol', 'Formatted', 'format');
-            ViperChangeTracker.addChangeType('removedList-ul', 'Formatted', 'format');
-            ViperChangeTracker.addChangeType('makeList-change', 'Formatted', 'format');
-            ViperChangeTracker.addChangeType('addedListItem', 'Inserted', 'insert');
-            ViperChangeTracker.addChangeType('breakListUP', 'Formatted', 'format');
-            ViperChangeTracker.addChangeType('breakListUPDown', 'Formatted', 'format');
-            ViperChangeTracker.addChangeType('breakListDown', 'Formatted', 'format');
-
-            ViperChangeTracker.setDescriptionCallback('makeList', function(node) {
-                var listType = 'ordered';
-                if (ViperUtil.isTag(node, 'ul') === true) {
-                    listType = 'un-ordered';
-                }
-
-                return 'Changed to ' + listType + ' list';
-            });
-            ViperChangeTracker.setApproveCallback('makeList', function(clone, node) {
-                ViperChangeTracker.removeTrackChanges(node);
-            });
-            ViperChangeTracker.setRejectCallback('makeList', function(clone, node) {
-                var children = [];
-                ViperUtil.foreach(node.childNodes, function(i) {
-                    children.push(node.childNodes[i]);
-                });
-
-                while (child = children.shift()) {
-                    self.removeListItem(child, true);
-                }
-
-                ViperUtil.remove(node);
-            });
-
-            ViperChangeTracker.setDescriptionCallback('removedList-ol', function(node) {
-                return 'Removed from ordered list';
-            });
-            ViperChangeTracker.setApproveCallback('removedList-ol', function(clone, node) {
-                ViperChangeTracker.removeTrackChanges(node);
-            });
-            ViperChangeTracker.setRejectCallback('removedList-ol', function(clone, node) {
-                // Just create a new list.
-                var list = document.createElement('ol');
-                ViperUtil.insertBefore(node, list);
-                list.appendChild(self._createListItem(node));
-            });
-
-            ViperChangeTracker.setDescriptionCallback('removedList-ul', function(node) {
-                return 'Removed from un-ordered list';
-            });
-            ViperChangeTracker.setApproveCallback('removedList-ul', function(clone, node) {
-                ViperChangeTracker.removeTrackChanges(node);
-            });
-            ViperChangeTracker.setRejectCallback('removedList-ul', function(clone, node) {
-                // Just create a new list.
-                var list = document.createElement('ul');
-                ViperUtil.insertBefore(node, list);
-                list.appendChild(self._createListItem(node));
-            });
-
-            ViperChangeTracker.setDescriptionCallback('makeList-change', function(node) {
-                var listType = 'unordered';
-                if (ViperUtil.isTag(node, 'ol') === true) {
-                    listType = 'ordered';
-                }
-
-                return 'Changed to ' + listType + ' list';
-            });
-            ViperChangeTracker.setApproveCallback('makeList-change', function(clone, node) {
-                ViperChangeTracker.removeTrackChanges(node);
-            });
-            ViperChangeTracker.setRejectCallback('makeList-change', function(clone, node) {
-                var newTag = 'ol'
-                if (ViperUtil.isTag(node, 'ol') === true) {
-                    newTag = 'ul';
-                }
-
-                var newList = document.createElement(newTag);
-                while (node.firstChild) {
-                    newList.appendChild(node.firstChild);
-                }
-
-                ViperUtil.insertBefore(node, newList);
-                ViperUtil.remove(node);
-            });
-
-            // List break.
-            ViperChangeTracker.setDescriptionCallback('breakListUP', function(node) {
-                return 'Removed from list';
-            });
-            ViperChangeTracker.setApproveCallback('breakListUP', function(clone, node) {
-                ViperChangeTracker.removeTrackChanges(node);
-            });
-            ViperChangeTracker.setRejectCallback('breakListUP', function(clone, node) {
-                var prevList = node.previousSibling;
-                if (ViperUtil.isTag(prevList, 'ul') === true || ViperUtil.isTag(prevList, 'ol') === true) {
-                    if (self.isListNode(node) === true) {
-                        // Import children.
-                        while (node.firstChild) {
-                            prevList.appendChild(node.firstChild);
-                        }
-
-                        ViperUtil.remove(node);
-                    } else {
-                        var li = node;
-                        if (ViperUtil.isTag(li, 'li') === false) {
-                            li = self._createListItem(node)
-                        }
-
-                        prevList.appendChild(li);
-                    }
-                }
-            });
-
-            // List break.
-            ViperChangeTracker.setDescriptionCallback('breakListUPDown', function(node) {
-                return 'Removed from list';
-            });
-            ViperChangeTracker.setApproveCallback('breakListUPDown', function(clone, node) {
-                ViperChangeTracker.removeTrackChanges(node);
-            });
-            ViperChangeTracker.setRejectCallback('breakListUPDown', function(clone, node) {
-                var prevList = node.previousSibling;
-                var nextList = node.nextSibling;
-                if (ViperUtil.isTag(prevList, 'ul') === true || ViperUtil.isTag(prevList, 'ol') === true) {
-                    if (self.isListNode(node) === true) {
-                        // Import children.
-                        while (node.firstChild) {
-                            prevList.appendChild(node.firstChild);
-                        }
-
-                        ViperUtil.remove(node);
-                    } else {
-                        var li = node;
-                        if (ViperUtil.isTag(li, 'li') === false) {
-                            li = self._createListItem(node)
-                        }
-
-                        prevList.appendChild(li);
-                    }
-
-                    if (nextList) {
-                        // Join lists...
-                        while (nextList.firstChild) {
-                            var li = nextList.firstChild;
-                            if (ViperUtil.isTag(nextList.firstChild, 'li') === false) {
-                                li = self._createListItem(nextList.firstChild);
-                            }
-
-                            prevList.appendChild(li);
-                        }
-
-                        ViperUtil.remove(nextList);
-                    }
-                } else if (ViperUtil.isTag(nextList, 'ul') === true || ViperUtil.isTag(nextList, 'ol') === true) {
-                    if (self.isListNode(node) === true) {
-                        // Import children.
-                        if (nextList.firstChild) {
-                            ViperUtil.insertBefore(nextList.firstChild, node.childNodes);
-                        } else {
-                            while (node.firstChild) {
-                                nextList.appendChild(node.firstChild);
-                            }
-                        }
-
-                        ViperUtil.remove(node);
-                    } else {
-                        var li = node;
-                        if (ViperUtil.isTag(li, 'li') === false) {
-                            li = self._createListItem(node)
-                        }
-
-                        // Join to this list..
-                        if (nextList.firstChild) {
-                            ViperUtil.insertBefore(nextList.firstChild, li);
-                        } else {
-                            nextList.appendChild(li);
-                        }
-                    }//end if
-                }//end if
-            });
-
-             // List break.
-            ViperChangeTracker.setDescriptionCallback('breakListDown', function(node) {
-                return 'Removed from list';
-            });
-            ViperChangeTracker.setApproveCallback('breakListDown', function(clone, node) {
-                ViperChangeTracker.removeTrackChanges(node);
-            });
-            ViperChangeTracker.setRejectCallback('breakListDown', function(clone, node) {
-                var nextList = node.nextSibling;
-                if (ViperUtil.isTag(nextList, 'ul') === true || ViperUtil.isTag(nextList, 'ol') === true) {
-                    if (self.isListNode(node) === true) {
-                        // Import children.
-                        if (nextList.firstChild) {
-                            ViperUtil.insertBefore(nextList.firstChild, node.childNodes);
-                        } else {
-                            while (node.firstChild) {
-                                nextList.appendChild(node.firstChild);
-                            }
-                        }
-
-                        ViperUtil.remove(node);
-                    } else {
-                        var li = node;
-                        if (ViperUtil.isTag(li, 'li') === false) {
-                            li = self._createListItem(node)
-                        }
-
-                        if (nextList.firstChild) {
-                            ViperUtil.insertBefore(nextList.firstChild, li);
-                        } else {
-                            nextList.appendChild(li);
-                        }
-                    }//end if
-                }//end if
-            });
 
         }
 

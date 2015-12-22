@@ -274,312 +274,6 @@
                 return false;
             });
 
-            this.viper.registerCallback('ViperChangeTracker:modeChange', 'ViperCoreStylesPlugin', function(mode) {
-                // First get format change tags.
-                var nodes    = ViperChangeTracker.getCTNodes('formatChange');
-                var copyAttr = ['class', 'viperchangeid', 'time'];
-                if (mode === 'original') {
-                    // Format changes need to be converted to span/div/etc..
-                    ViperUtil.foreach(nodes, function(i) {
-                        var node = nodes[i];
-                        var span = Viper.document.createElement('span');
-                        ViperUtil.foreach(copyAttr, function(j) {
-                            var attrVal = ViperUtil.attr(node, copyAttr[j]);
-                            if (ViperUtil.isset(attrVal) === true) {
-                                ViperUtil.attr(span, copyAttr[j], attrVal);
-                            }
-                        });
-
-                        // Set data attribute.
-                        ViperChangeTracker.setCTData(span, 'tagName', node.tagName.toLowerCase());
-
-                        // Move child nodes in to the new element.
-                        while (node.firstChild) {
-                            span.appendChild(node.firstChild);
-                        }
-
-                        var changeid = ViperUtil.attr(span, 'viperchangeid');
-                        if (changeid) {
-                            ViperChangeTracker.addNodeToChange(changeid, span, node);
-                        }
-
-                        ViperUtil.insertBefore(node, span);
-                        ViperUtil.remove(node);
-                    });
-                } else {
-                    // Format changes need to be converted to strong/em/etc..
-                    ViperUtil.foreach(nodes, function(i) {
-                        var node    = nodes[i];
-                        var origTag = ViperChangeTracker.getCTData(node, 'tagName');
-                        if (!origTag) {
-                            // Cannot convert this without the old tag name.
-                            return;
-                        }
-
-                        var span = Viper.document.createElement(origTag);
-                        ViperUtil.foreach(copyAttr, function(j) {
-                            var attrVal = ViperUtil.attr(node, copyAttr[j]);
-                            if (ViperUtil.isset(attrVal) === true) {
-                                ViperUtil.attr(span, copyAttr[j], attrVal);
-                            }
-                        });
-
-                        // Move child nodes in to the new element.
-                        while (node.firstChild) {
-                            span.appendChild(node.firstChild);
-                        }
-
-                        var changeid = ViperUtil.attr(span, 'viperchangeid');
-                        if (changeid) {
-                            ViperChangeTracker.addNodeToChange(changeid, span, node);
-                        }
-
-                        ViperUtil.insertBefore(node, span);
-                        ViperUtil.remove(node);
-                    });
-                }//end if
-
-                var nodes = ViperChangeTracker.getCTNodes('alignmentChange');
-                if (nodes) {
-                    // Change the text alignment.
-                    if (mode === 'original') {
-                        ViperUtil.foreach(nodes, function(i) {
-                            var node  = nodes[i];
-                            var align = ViperChangeTracker.getCTData(node, 'text-align');
-                            if (!align) {
-                                align = '';
-                            }
-
-                            ViperChangeTracker.setCTData(node, 'fin-text-align', ViperUtil.getStyle(node, 'text-align'));
-                            ViperUtil.setStyle(node, 'text-align', align);
-                        });
-                    } else {
-                        ViperUtil.foreach(nodes, function(i) {
-                            var node  = nodes[i];
-                            var align = ViperChangeTracker.getCTData(node, 'fin-text-align');
-                            if (!align) {
-                                align = '';
-                            }
-
-                            ViperUtil.setStyle(node, 'text-align', align);
-                        });
-                    }//end if
-                }//end if
-
-                var nodes = ViperChangeTracker.getCTNodes('removedFormat');
-                if (nodes) {
-                    if (mode === 'original') {
-                        ViperUtil.foreach(nodes, function(i) {
-                            var node    = nodes[i];
-                            var origTag = ViperChangeTracker.getCTData(node, 'tagName');
-                            if (!origTag) {
-                                // Cannot convert this without the old tag name.
-                                return;
-                            }
-
-                            var span = Viper.document.createElement(origTag);
-                            ViperChangeTracker.setCTData(span, 'formatRemoved', origTag);
-
-                            ViperUtil.foreach(copyAttr, function(j) {
-                                var attrVal = ViperUtil.attr(node, copyAttr[j]);
-                                if (ViperUtil.isset(attrVal) === true) {
-                                    ViperUtil.attr(span, copyAttr[j], attrVal);
-                                }
-                            });
-
-                            // Move child nodes in to the new element.
-                            while (node.firstChild) {
-                                span.appendChild(node.firstChild);
-                            }
-
-                            var changeid = ViperUtil.attr(span, 'viperchangeid');
-                            if (changeid) {
-                                ViperChangeTracker.addNodeToChange(changeid, span, node);
-                            }
-
-                            ViperUtil.insertBefore(node, span);
-                            ViperUtil.remove(node);
-                        });
-                    } else {
-                        ViperUtil.foreach(nodes, function(i) {
-                            var node    = nodes[i];
-                            var origTag = ViperChangeTracker.getCTData(node, 'formatRemoved');
-                            if (!origTag) {
-                                // If formatRemoved is not set then dont remove format..
-                                return;
-                            }
-
-                            var span = Viper.document.createElement('span');
-                            ViperChangeTracker.setCTData(span, 'tagName', origTag);
-
-                            ViperUtil.foreach(copyAttr, function(j) {
-                                var attrVal = ViperUtil.attr(node, copyAttr[j]);
-                                if (ViperUtil.isset(attrVal) === true) {
-                                    ViperUtil.attr(span, copyAttr[j], attrVal);
-                                }
-                            });
-
-                            // Move child nodes in to the new element.
-                            while (node.firstChild) {
-                                span.appendChild(node.firstChild);
-                            }
-
-                            var changeid = ViperUtil.attr(span, 'viperchangeid');
-                            if (changeid) {
-                                ViperChangeTracker.addNodeToChange(changeid, span, node);
-                            }
-
-                            ViperUtil.insertBefore(node, span);
-                            ViperUtil.remove(node);
-                        });
-                    }//end if
-                }//end if
-            });
-
-            ViperChangeTracker.addChangeType('formatChange', 'Formatted', 'format');
-            ViperChangeTracker.addChangeType('alignmentChange', 'Formatted', 'format');
-            ViperChangeTracker.addChangeType('removedFormat', 'Formatted', 'format');
-
-            ViperChangeTracker.setDescriptionCallback('removedFormat', function(node) {
-                var changes = [];
-                var desc    = '';
-                var ctNodes = ViperChangeTracker.getCTNodes('removedFormat', node);
-                ctNodes.unshift(node);
-
-                ViperUtil.foreach(ctNodes, function(i) {
-                    if (ViperUtil.isTag(ctNodes[i], 'span') === true) {
-                        var ctdata = ViperChangeTracker.getCTData(ctNodes[i], 'tagName');
-                        if (tagNames[ctdata]) {
-                            changes.push('Not ' + tagNames[ctdata]);
-                        }
-                    }
-                });
-
-                desc += changes.join(', ');
-
-                return desc;
-            });
-
-            ViperChangeTracker.setDescriptionCallback('formatChange', function(node) {
-                var desc    = '';
-                var changes = [];
-                var ctNodes = ViperChangeTracker.getCTNodes('formatChange', node);
-                ctNodes.unshift(node);
-                ViperUtil.foreach(ctNodes, function(i) {
-                    var tagName = ctNodes[i].tagName.toLowerCase();
-                    if (tagNames[tagName]) {
-                        changes.push(tagNames[tagName]);
-                    } else {
-                        tagName = ViperChangeTracker.getCTData(ctNodes[i], 'tagName');
-                        if (tagNames[tagName]) {
-                            changes.push(tagNames[tagName]);
-                        }
-                    }
-                });
-
-                desc += changes.join(', ');
-                return desc;
-            });
-
-            ViperChangeTracker.setDescriptionCallback('alignmentChange', function(node) {
-                var style = '';
-                if (ViperChangeTracker.getCurrentMode() === 'original') {
-                    style = ViperChangeTracker.getCTData(node, 'fin-text-align') || '';
-                } else {
-                    style = ViperUtil.getStyle(node, 'text-align') || '';
-                }
-
-                if (style) {
-                    style = 'Aligned ' + ViperUtil.ucFirst(style);
-                }
-
-                return style;
-            });
-
-            ViperChangeTracker.setApproveCallback('formatChange', function(clone, node) {
-                ViperChangeTracker.removeTrackChanges(node);
-            });
-
-            ViperChangeTracker.setRejectCallback('formatChange', function(clone, node) {
-                // Remove all nodes insede the specified node before it.
-                while (node.firstChild) {
-                    ViperUtil.insertBefore(node, node.firstChild);
-                }
-
-                // Remove node.
-                ViperUtil.remove(node);
-            });
-
-            ViperChangeTracker.setRejectCallback('removedFormat', function(clone, node) {
-                var ctNodes = ViperChangeTracker.getCTNodes('removedFormat', node);
-                ctNodes.unshift(node);
-
-                var mode = ViperChangeTracker.getCurrentMode();
-                ViperUtil.foreach(ctNodes, function(i) {
-                    var elem = ctNodes[i];
-                    if (!elem.parentNode) {
-                        return;
-                    }
-
-                    var ctdata = '';
-                    if (mode === 'original') {
-                        ctdata = ViperChangeTracker.getCTData(elem, 'removedFormat');
-                    } else {
-                        ctdata = ViperChangeTracker.getCTData(elem, 'tagName');
-                    }
-
-                    if (ctdata) {
-                        var newElem = Viper.document.createElement(ctdata);
-                        while (elem.firstChild) {
-                            newElem.appendChild(elem.firstChild);
-                        }
-
-                        ViperUtil.insertBefore(elem, newElem);
-                        ViperUtil.remove(elem);
-                    }
-                });
-            });
-
-            ViperChangeTracker.setApproveCallback('removedFormat', function(clone, node) {
-                var ctNodes = ViperChangeTracker.getCTNodes('removedFormat', node);
-                ctNodes.unshift(node);
-
-                var mode = ViperChangeTracker.getCurrentMode();
-                ViperUtil.foreach(ctNodes, function(i) {
-                    var elem = ctNodes[i];
-                    if (mode === 'original') {
-                        var tag = ViperChangeTracker.getCTData(elem, 'formatRemoved');
-                        if (tag) {
-                            ViperUtil.insertBefore(elem, elem.childNodes);
-                            ViperUtil.remove(elem);
-                        }
-                    } else if (ViperUtil.isTag(elem, 'span') === true && elem.getAttribute('ctdata')) {
-                        ViperUtil.insertBefore(elem, elem.childNodes);
-                        ViperUtil.remove(elem);
-                    }
-                });
-            });
-
-            ViperChangeTracker.setApproveCallback('alignmentChange', function(clone, node) {
-                if (ViperChangeTracker.getCurrentMode() === 'original') {
-                    var finAlignment = ViperChangeTracker.getCTData(node, 'fin-text-align') || '';
-                    ViperUtil.setStyle(node, 'text-align', finAlignment);
-                }
-
-                ViperChangeTracker.removeTrackChanges(node);
-            });
-
-            ViperChangeTracker.setRejectCallback('alignmentChange', function(clone, node) {
-                // Restore old alignment.
-                var style = ViperChangeTracker.getCTData(node, 'text-align');
-                if (!style) {
-                    style = 'left';
-                }
-
-                ViperUtil.setStyle(node, 'text-align', style);
-                ViperChangeTracker.removeTrackChanges(node);
-            });
-
         },
 
         handleJustify: function(type)
@@ -606,7 +300,6 @@
                 && ViperUtil.inArray(ViperUtil.getTagName(common), ['tr', 'table']) === false
                 && ViperUtil.isChildOf(common, this.viper.element) === true
             ) {
-                this.setJustifyChangeTrackInfo(common);
                 this.toggleJustify(common, type);
             } else {
                 var parent       = null;
@@ -796,31 +489,6 @@
             }
 
             return type;
-
-        },
-
-        /**
-         * Make sure this method is called before changing the style of the node
-         * so that old alignment can be retrieved.
-         */
-        setJustifyChangeTrackInfo: function(node)
-        {
-            if (node && ViperChangeTracker.isTrackingNode(node) === false) {
-                // Get current style.
-                var style = ViperUtil.getStyle(node, 'text-align');
-                if (style
-                    && ( style === 'left'
-                    || style === 'right'
-                    || style === 'center'
-                    || style === 'justify')
-                ) {
-                    if (ViperChangeTracker.isTracking() === true) {
-                        ViperChangeTracker.setCTData(node, 'text-align', style);
-                    }
-                }
-
-                ViperChangeTracker.addChange('alignmentChange', [node]);
-            }
 
         },
 
@@ -1054,9 +722,6 @@
 
             var tags = this.styleTags.concat(['font', 'u', 'strike']);
 
-            // Start batch change for tracking..
-            var changeid = ViperChangeTracker.startBatchChange('removedFormat');
-
             // Remove all formating tags.
             var tmpSpan = null;
             if (nodeSelection) {
@@ -1083,8 +748,6 @@
                 ViperUtil.remove(tmpSpan);
                 this.viper.selectBookmark(bookmark);
             }
-
-            ViperChangeTracker.endBatchChange(changeid);
 
             if (ViperUtil.isBrowser('msie', '<11') === true && nodeSelection && !bookmark) {
                 var self = this;
@@ -1285,10 +948,7 @@
                     && ViperUtil.getParents(endNode, style, viperElement).length > 0
                 ) {
                     // Selection is inside the style tags. Remove styles.
-                    var changeid = ViperChangeTracker.startBatchChange('removedFormat');
                     this.viper.removeStyle(style);
-                    ViperChangeTracker.endBatchChange(changeid);
-
                     this.viper.fireNodesChanged();
                     this.viper.fireSelectionChanged(this.viper.adjustRange(), true);
                     return;
@@ -1302,10 +962,7 @@
                 || (selectedNode && this._getWholeStyleSelections(selectedNode, [style], []).length > 0)
             ) {
                 // This selection is already styles, remove it.
-                var changeid = ViperChangeTracker.startBatchChange('removedFormat');
                 this.viper.removeStyle(style);
-                ViperChangeTracker.endBatchChange(changeid);
-
                 this.viper.fireNodesChanged([commonParent]);
                 this.viper.fireSelectionChanged(this.viper.adjustRange(), true);
                 return false;

@@ -78,11 +78,11 @@
     };
 
     // Viper core files.
-    var jsFiles = 'Viper.js|ViperUtil.js|ViperTranslation.js|ViperChangeTracker.js|ViperTools.js|ViperDOMRange.js|ViperIERange.js|ViperMozRange.js|ViperSelection.js|ViperPluginManager.js|ViperHistoryManager.js|ViperInputHandler.js';
+    var jsFiles = 'Viper.js|ViperUtil.js|ViperTranslation.js|ViperTools.js|ViperSelection.js|ViperDOMRange.js|ViperIERange.js|ViperMozRange.js|ViperPluginManager.js|ViperHistoryManager.js|ViperInputHandler.js';
     jsFiles     = jsFiles.split('|');
 
     _loadScripts(path + 'Lib/', jsFiles, function() {
-        var plugins    = 'ViperCopyPastePlugin|ViperToolbarPlugin|ViperInlineToolbarPlugin|ViperCoreStylesPlugin|ViperFormatPlugin|ViperListPlugin|ViperHistoryPlugin|ViperTableEditorPlugin|ViperTrackChangesPlugin|ViperLinkPlugin|ViperAccessibilityPlugin|ViperSourceViewPlugin|ViperImagePlugin|ViperSearchReplacePlugin|ViperLangToolsPlugin|ViperCharMapPlugin|ViperCursorAssistPlugin|ViperReplacementPlugin';
+        var plugins    = 'ViperCopyPastePlugin|ViperToolbarPlugin|ViperInlineToolbarPlugin|ViperCoreStylesPlugin|ViperFormatPlugin|ViperListPlugin|ViperHistoryPlugin|ViperTableEditorPlugin|ViperLinkPlugin|ViperAccessibilityPlugin|ViperSourceViewPlugin|ViperImagePlugin|ViperSearchReplacePlugin|ViperLangToolsPlugin|ViperCharMapPlugin|ViperCursorAssistPlugin|ViperReplacementPlugin';
         plugins        = plugins.split('|');
 
 
