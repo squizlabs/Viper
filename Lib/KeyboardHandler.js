@@ -1361,6 +1361,8 @@
 
         handleDelete: function(e)
         {
+            e = e || {which:8, keyCode:8};
+
             var range = this._viper.getViperRange();
             if (this._viper.fireCallbacks('Viper:beforeDelete', e) === false) {
                 return false;
@@ -3091,7 +3093,7 @@
                     range.deleteContents();
                     ViperSelection.addRange(range);
                 } else {
-                    this._viper.deleteContents();
+                    this._viper.deleteRangeContent();
                     ViperSelection.addRange(this._viper.getCurrentRange());
                     range = this._viper.getViperRange();
                 }
@@ -3169,7 +3171,7 @@
                 var elem    = Viper.document.createElement('p');
                 var docFrag = range.extractContents('p');
 
-                this._viper.deleteContents();
+                this._viper.deleteRangeContent();
                 elem.appendChild(docFrag);
                 ViperUtil.insertAfter(range.startContainer, elem);
                 range.collapse(true);

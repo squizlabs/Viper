@@ -590,7 +590,7 @@
 
                 ViperUtil.addClass(tools, 'Viper-topBar');
 
-                var offset = this.viper.getDocumentOffset();
+                var offset = ViperUtil.getDocumentOffset();
                 var left   = (Math.ceil(cellCoords.x1 + ((cellCoords.x2 - cellCoords.x1) / 2) - (toolsWidth / 2)) + 1 + offset.x);
                 var top    = (cellCoords.y2 + 5 + offset.y);
 
@@ -1156,7 +1156,7 @@
                 coords = ViperUtil.getBoundingRectangle(element);
             }
 
-            var offset = this.viper.getDocumentOffset();
+            var offset = ViperUtil.getDocumentOffset();
             coords.x1 += offset.x;
             coords.y1 += offset.y;
             coords.x2 += offset.x;
@@ -3427,7 +3427,7 @@
                 ViperUtil.empty(this.viper.getViperElement());
                 this.viper.getViperElement().appendChild(table);
             } else {
-                var prevNode = this.viper.getInputHandler().splitAtRange(true);
+                var prevNode = this.viper.getKeyboardHandler().splitAtRange(true);
                 if (ViperUtil.isTag(prevNode, 'li') === true) {
                     prevNode.appendChild(table);
                     if (ViperUtil.isBlank(ViperUtil.getNodeTextContent(prevNode.nextSibling)) === true) {

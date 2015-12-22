@@ -78,6 +78,39 @@
 
     Viper.prototype = {
 
+        /**
+         * Initialise Viper.
+         *
+         * @return {void}
+         */
+        init: function()
+        {
+            this.Tools           = new Viper.Tools(this);
+            this.HistoryManager  = new Viper.HistoryManager(this);
+            this.PluginManager   = new Viper.PluginManager(this);
+            this.KeyboardHandler = new Viper.KeyboardHandler(this);
+
+            Viper.Selection._viper = this;
+
+            this.registerCallback('Viper:setHtmlContent', 'Viper', function(content, callback) {
+                callback.call(this, content);
+                return function() {};
+            });
+
+        },
+
+        destroy: function()
+        {
+            this.fireCallbacks('Viper:destroy');
+            this.setEnabled(false);
+            Viper.Util.removeEvent(Viper.Util.getDocuments(), '.' + this.getEventNamespace());
+
+            if (this._viperElementHolder) {
+                Viper.Util.remove(this._viperElementHolder);
+            }
+
+        },
+
         getId: function()
         {
             return this.id;
@@ -134,7 +167,7 @@
 
         },
 
-        getInputHandler: function()
+        getKeyboardHandler: function()
         {
             return this.KeyboardHandler;
 
@@ -236,46 +269,13 @@
             }
 
             if (Viper.Translation.isLoaded(code) === false && src) {
-                this.loadScript(src, function() {
+                Viper.Util.loadScript(src, function() {
                     Viper.Translation.setLanguage(code);
                     callback.call(this);
                 }, 2000);
             } else {
                 Viper.Translation.setLanguage(code);
                 callback.call(this);
-            }
-
-        },
-
-        /**
-         * Initialise Viper.
-         *
-         * @return {void}
-         */
-        init: function()
-        {
-            this.Tools           = new Viper.Tools(this);
-            this.HistoryManager  = new Viper.HistoryManager(this);
-            this.PluginManager   = new Viper.PluginManager(this);
-            this.KeyboardHandler = new Viper.KeyboardHandler(this);
-
-            Viper.Selection._viper = this;
-
-            this.registerCallback('Viper:setHtmlContent', 'Viper', function(content, callback) {
-                callback.call(this, content);
-                return function() {};
-            });
-
-        },
-
-        destroy: function()
-        {
-            this.fireCallbacks('Viper:destroy');
-            this.setEnabled(false);
-            Viper.Util.removeEvent(Viper.Util.getDocuments(), '.' + this.getEventNamespace());
-
-            if (this._viperElementHolder) {
-                Viper.Util.remove(this._viperElementHolder);
             }
 
         },
@@ -456,41 +456,6 @@
             }
 
             return path;
-
-        },
-
-        loadScript: function(src, callback, timeout)
-        {
-            var t = null;
-            if (timeout) {
-                t = setTimeout(callback, timeout);
-            }
-
-            var script = document.createElement('script');
-            script.onload = function() {
-                clearTimeout(t);
-                script.onload = null;
-                script.onreadystatechange = null;
-                callback.call(this);
-
-            };
-
-            script.onreadystatechange = function() {
-                if (/^(complete|loaded)$/.test(this.readyState) === true) {
-                    clearTimeout(t);
-                    script.onreadystatechange = null;
-                    script.onload();
-                }
-
-            }
-
-            script.src = src;
-
-            if (document.head) {
-                document.head.appendChild(script);
-            } else {
-                document.getElementsByTagName('head')[0].appendChild(script);
-            }
 
         },
 
@@ -1152,12 +1117,6 @@
 
         },
 
-        getViperActiveElement: function()
-        {
-            return this.element;
-
-        },
-
         /**
          * Returns the current range.
          *
@@ -1529,38 +1488,6 @@
 
         },
 
-        getDocumentOffset: function(doc)
-        {
-            var doc    = doc || Viper.document;
-            var offset = {
-                x: 0,
-                y: 0
-            };
-
-            while (document !== doc) {
-                var frameElem = doc.defaultView.frameElement;
-                if (!frameElem) {
-                    continue;
-                }
-
-                var coords = Viper.Util.getElementCoords(frameElem);
-                offset.x  += coords.x;
-                offset.y  += coords.y;
-                doc        = frameElem.ownerDocument;
-            }
-
-            return offset;
-
-        },
-
-
-        getDocumentWindow: function()
-        {
-            return Viper.document.defaultView;
-
-        },
-
-
         /**
          * Returns true if given selection is in side the Viper element false otherwise.
          *
@@ -1814,6 +1741,25 @@
         },
 
         /**
+         * Removes the selection contents and returns the updated range.
+         *
+         * @return DOMRange
+         */
+        deleteRangeContent: function()
+        {
+            var range = this.getViperRange();
+            if (this.KeyboardHandler.handleDelete() !== false) {
+                range.deleteContents();
+                Viper.Selection.addRange(range);
+            }
+
+            // Get the updated range.
+            range = this.getViperRange();
+            return range;
+
+        },
+
+        /**
          * Returns the offset where the node exists in the parent's childNodes property.
          *
          * @param DomNode node The node to obtain the offset for.
@@ -1829,297 +1775,6 @@
                     return i;
                 }
             }
-
-        },
-
-        _parentWillBeDeleted: function(node)
-        {
-            // Check to see if the container that we are deleting from will have
-            // any content in it after the delete operation. If not, then it should
-            // be removed to avoid having empty elements.
-            if (node.parentNode) {
-                var parentContent = Viper.Util.trim(Viper.Util.getNodeTextContent(node.parentNode));
-                if (parentContent === '' || parentContent === '&nbsp;') {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-
-            return false;
-
-        },
-
-        /**
-         * Returns the text contents of specified elements as an array.
-         */
-        getTextContentFromElements: function(elements)
-        {
-            var text = [];
-            Viper.Util.foreach(elements, function(i) {
-                if (elements[i].nodeType === Viper.Util.TEXT_NODE) {
-                    text.push(elements[i].data);
-                } else {
-                    text.push(Viper.Util.getNodeTextContent(elements[i]));
-                }
-            });
-
-            return text;
-
-        },
-
-        deleteContents: function(right)
-        {
-            var range = this.getCurrentRange();
-            if (range.collapsed === false) {
-                // Delete multiple elements.
-                this._deleteFromSelection(range);
-            } else {
-                // Range is collapsed.
-                var container = range.startContainer;
-                if (container.nodeType === Viper.Util.ELEMENT_NODE) {
-                    // Delete an element node.
-                    this._deleteNode(range);
-                } else if (container.nodeType === Viper.Util.TEXT_NODE) {
-                    if (right === true) {
-                        // Remove content from the right of the caret (delete).
-                        this._deleteFromRight(range);
-                    } else {
-                        // Remove content from the left of the caret (backspace).
-                        this._deleteFromLeft(range);
-                    }
-                }
-            }//end if
-
-            Viper.Selection.addRange(range);
-
-            this.contentChanged(true);
-
-        },
-
-        _deleteNode: function(range)
-        {
-            var container = range.startContainer;
-
-            // If the selection is a stub element (e.g. br, img)
-            // then just remove the node.
-            if (Viper.Util.isStubElement(container) === true) {
-                this.removeElem(container);
-                return;
-            } else if (container === this.element && range.startOffset === 0) {
-                // The whole editable element is selected then clear its contents.
-                var defaultTag = this.getDefaultBlockTag();
-                if (defaultTag) {
-                    Viper.Util.setHtml(this.element, '<' + defaultTag + '>&nbsp;</' + defaultTag + '>');
-                } else {
-                    Viper.Util.setHtml(this.element, '&nbsp;');
-                }
-
-                range.setStart(this.element.firstChild.firstChild, 0);
-                range.collapse(true);
-                return;
-            }
-
-        },
-
-        _deleteFromSelection: function(range)
-        {
-            var moveBeforeParent = false;
-            if (range.startContainer.nodeType === Viper.Util.TEXT_NODE
-                && range.startOffset === 0
-                && !range.startContainer.previousSibling
-            ) {
-                moveBeforeParent = range.startContainer.parentNode;
-            }
-
-            // Book mark the range.
-            var bookmark = this.createBookmark(range);
-
-            if (moveBeforeParent) {
-                // Move the range to before parent.
-                Viper.Util.insertBefore(moveBeforeParent, bookmark.start);
-            }
-
-            // Remove all elements in between.
-            var elements = Viper.Util.getElementsBetween(bookmark.start, bookmark.end);
-
-            // Remove all the elements in between.
-            this.removeElem(elements);
-
-            var parent    = bookmark.start.parentNode;
-            var endParent = bookmark.end.parentNode;
-
-            // Select Bookmark.
-            this.selectBookmark(bookmark);
-
-            if (parent && Viper.Util.getHtml(parent) === '') {
-                Viper.Util.setHtml(parent, '&nbsp;');
-                range.setStart(parent.firstChild, 0);
-            }
-
-            // Remove the parent node of the end range if its empty.
-            if (endParent && parent !== endParent && Viper.Util.getHtml(endParent) === '') {
-                Viper.Util.remove(endParent);
-            }
-
-            // Collapse range to the start.
-            range.collapse(true);
-
-        },
-
-        _deleteFromRight: function(range)
-        {
-            var container = range.startContainer;
-
-            // Remove content from the right of caret (i.e. delete key).
-            // First check if caret is at the end of a container.
-            if (range.endOffset === container.data.length) {
-                // Check if need to merge containers.
-                var cRange = range.cloneRange();
-                cRange.moveEnd(Viper.DOMRange.CHARACTER_UNIT, 1);
-                var eParent = Viper.Util.getFirstBlockParent(cRange.endContainer);
-                if (eParent) {
-                    if (Viper.Util.isChildOf(eParent, this.element) === false) {
-                        return;
-                    }
-
-                    var sParent = Viper.Util.getFirstBlockParent(cRange.startContainer);
-
-                    // If the start of the cloned range has moved to a new block
-                    // parent then merge these nodes.
-                    if (eParent !== sParent) {
-                        this.mergeContainers(eParent, sParent);
-                        range.setStart(cRange.startContainer, cRange.startContainer.data.length);
-                        range.collapse(true);
-                        return;
-                    }
-                }
-
-                // Caret is at the end of a container so it needs to
-                // move to the next container.
-                var nextContainer = range.getNextContainer(container);
-
-                // If range is at the end of the container and the
-                // next container is out side of Viper then do nothing.
-                if (Viper.Util.isChildOf(nextContainer, this.element) === false) {
-                    return false;
-                }
-
-                var firstSelectable = range._getFirstSelectableChild(nextContainer);
-                range.setStart(firstSelectable, 0);
-
-                range.collapse(true);
-                range.moveEnd(Viper.DOMRange.CHARACTER_UNIT, 1);
-                range.deleteContents();
-                range.collapse(true);
-
-                // If the parent container is going to be empty then it
-                // should be removed.
-                if (this._parentWillBeDeleted(container) === true) {
-                    Viper.Util.remove(container.parentNode);
-                }
-            } else {
-                range.moveEnd(Viper.DOMRange.CHARACTER_UNIT, 1);
-                range.deleteContents();
-
-            }//end if
-
-        },
-
-        _deleteFromLeft: function(range)
-        {
-            var container = range.startContainer;
-
-            // First check if caret is at the start of a container.
-            if (range.startOffset === 0) {
-                // Check if need to merge containers.
-                var cRange = range.cloneRange();
-                cRange.moveStart(Viper.DOMRange.CHARACTER_UNIT, -1);
-
-                var sParent = Viper.Util.getFirstBlockParent(cRange.startContainer);
-                if (sParent) {
-                    if (Viper.Util.isChildOf(sParent, this.element) === false) {
-                        // If the endContainer is inside the editable text region then
-                        // move the start of the range to the beginning.
-                        var firstChild = Viper.Util.getFirstChildTextNode(this.element);
-                        if (!firstChild) {
-                            return false;
-                        } else {
-                            cRange.setStart(firstChild, 0);
-                            sParent = Viper.Util.getFirstBlockParent(cRange.startContainer);
-                        }
-                    }
-
-                    var eParent = Viper.Util.getFirstBlockParent(cRange.endContainer);
-
-                    // If the start of the cloned range has moved to a new block
-                    // parent then merge these nodes.
-                    if (eParent !== sParent) {
-                        this.mergeContainers(eParent, sParent);
-
-                        range.setStart(cRange.startContainer, cRange.startContainer.data.length);
-                        range.collapse(true);
-
-                        // Two block containers merged, clean empty containers.
-                        this.removeEmptyNodes();
-                        return;
-                    }
-                }//end if
-
-                // Caret is at the start of a container so it needs to
-                // move to the previous container.
-                var previousContainer = range.getPreviousContainer(container);
-
-                // If range is at the beginning of the container and the
-                // previous container is out side of Viper then do nothing.
-                if (Viper.Util.isChildOf(previousContainer, this.element) === false) {
-                    return false;
-                }
-
-                if (Viper.Util.isStubElement(previousContainer) === true) {
-                    Viper.Util.remove(previousContainer);
-                    range.collapse(true);
-                } else {
-                    var lastSelectable = range._getLastSelectableChild(previousContainer);
-                    range.setStart(lastSelectable, lastSelectable.data.length);
-
-                    range.collapse(true);
-                    range.moveStart(Viper.DOMRange.CHARACTER_UNIT, -1);
-                    range.deleteContents();
-
-                    // If the parent container is going to be empty then it
-                    // should be removed.
-                    if (this._parentWillBeDeleted(container) === true) {
-                        Viper.Util.remove(container.parentNode);
-                    }
-                }//end if
-            } else {
-                range.moveStart(Viper.DOMRange.CHARACTER_UNIT, -1);
-                range.deleteContents();
-            }//end if
-
-        },
-
-        mergeContainers: function(node, mergeToNode)
-        {
-            if (!node || !mergeToNode) {
-                return false;
-            }
-
-            if (node.nodeType === Viper.Util.TEXT_NODE || Viper.Util.isStubElement(node) === true) {
-                // Move only this node.
-                mergeToNode.appendChild(node);
-            } else if (node.nodeType === Viper.Util.ELEMENT_NODE) {
-                // Move all the child nodes to the new parent.
-                while (node.firstChild) {
-                    mergeToNode.appendChild(node.firstChild);
-                }
-
-                // Remove the node.
-                Viper.Util.remove(node);
-            }
-
-            return true;
 
         },
 
@@ -3932,7 +3587,7 @@
                 inside = false;
 
                 // Ask plugins if its one of their element.
-                var pluginName = this.getPluginForElement(target);
+                var pluginName = this._getPluginForElement(target);
                 if (!pluginName && Viper.Util.isChildOfElems(target, [this._viperElementHolder]) !== true) {
                     this.setEnabled(false);
                     return this.fireCallbacks('Viper:clickedOutside', e);
@@ -3985,7 +3640,7 @@
             }
 
             var target     = Viper.Util.getMouseEventTarget(e);
-            var pluginName = this.getPluginForElement(target);
+            var pluginName = this._getPluginForElement(target);
             if (pluginName || Viper.Util.isChildOfElems(target, [this._viperElementHolder]) === true) {
                 return;
             }
@@ -4208,7 +3863,7 @@
                     }
 
                     var elementScrollCoords = Viper.Util.getElementScrollCoords(this.element);
-                    var scrollCoords        = Viper.Util.getScrollCoords(this.getDocumentWindow());
+                    var scrollCoords        = Viper.Util.getScrollCoords(Viper.Util.getDocumentWindow());
                     this.element.focus();
 
                     var range = this.getViperRange();
@@ -4294,7 +3949,7 @@
 
         },
 
-        getPluginForElement: function(element)
+        _getPluginForElement: function(element)
         {
             return this.getPluginManager().getPluginForElement(element);
 
@@ -5017,6 +4672,7 @@
         }
     };
 
+    // Add Viper to global namespace.
     window.Viper = Viper;
 
 }) (window);

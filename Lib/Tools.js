@@ -2320,7 +2320,7 @@
             var frameOffset = {x: 0, y: 0};
             if (Viper.document !== document && Viper.document.defaultView.frameElement) {
                 // Viper element is inside an iframe, need to adjust the position.
-                frameOffset      = tools.viper.getDocumentOffset();
+                frameOffset      = ViperUtil.getDocumentOffset();
                 var newCoords    = {};
                 newCoords.bottom = (rangeCoords.bottom + frameOffset.y);
                 newCoords.top    = (rangeCoords.top + frameOffset.y);
@@ -2391,7 +2391,7 @@
                 if (left < viperElemCoords.left && this._verticalPosUpdateOnly !== true) {
                     ViperUtil.setStyle(element, 'left', viperElemCoords.left + 50 + 'px');
                 }
-            } else if (Viper.document !== document && top < tools.viper.getDocumentOffset().y) {
+            } else if (Viper.document !== document && top < ViperUtil.getDocumentOffset().y) {
                 if (hideCallback) {
                     hideCallback.call(this);
                 }

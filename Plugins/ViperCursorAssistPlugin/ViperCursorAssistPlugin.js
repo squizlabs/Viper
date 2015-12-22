@@ -236,7 +236,7 @@
                             elemRect.y1 -= childScrollCoords.y;
                             elemRect.y2 -= childScrollCoords.y;
 
-                            var frameOffset = self.viper.getDocumentOffset(hoverElem.ownerDocument);
+                            var frameOffset = ViperUtil.getDocumentOffset(hoverElem.ownerDocument);
                             elemRect.y1 += frameOffset.y;
                             elemRect.y2 += frameOffset.y;
                             elemRect.x1 += frameOffset.x;

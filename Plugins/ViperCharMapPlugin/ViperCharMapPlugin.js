@@ -161,10 +161,7 @@
         {
             var range = this.viper.getViperRange();
             if (range.collapsed !== true) {
-                this.viper.deleteContents();
-
-                // Get the updated range.
-                range = this.viper.getViperRange();
+                range = this.viper.deleteRangeContent();
             }
 
             var newNode = document.createTextNode(String.fromCharCode(charCode));

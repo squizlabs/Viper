@@ -2289,6 +2289,37 @@
 
         },
 
+        getDocumentOffset: function(doc)
+        {
+            var doc    = doc || Viper.document;
+            var offset = {
+                x: 0,
+                y: 0
+            };
+
+            while (document !== doc) {
+                var frameElem = doc.defaultView.frameElement;
+                if (!frameElem) {
+                    continue;
+                }
+
+                var coords = this.getElementCoords(frameElem);
+                offset.x  += coords.x;
+                offset.y  += coords.y;
+                doc        = frameElem.ownerDocument;
+            }
+
+            return offset;
+
+        },
+
+
+        getDocumentWindow: function()
+        {
+            return Viper.document.defaultView;
+
+        },
+
         /**
          * Very basic implementation of sprintf.
          *
@@ -3075,6 +3106,41 @@
             } else {
                 var baseUrl = fullUrl.substr(0, qStartIdx);
                 return baseUrl;
+            }
+
+        },
+
+        loadScript: function(src, callback, timeout)
+        {
+            var t = null;
+            if (timeout) {
+                t = setTimeout(callback, timeout);
+            }
+
+            var script = document.createElement('script');
+            script.onload = function() {
+                clearTimeout(t);
+                script.onload = null;
+                script.onreadystatechange = null;
+                callback.call(this);
+
+            };
+
+            script.onreadystatechange = function() {
+                if (/^(complete|loaded)$/.test(this.readyState) === true) {
+                    clearTimeout(t);
+                    script.onreadystatechange = null;
+                    script.onload();
+                }
+
+            }
+
+            script.src = src;
+
+            if (document.head) {
+                document.head.appendChild(script);
+            } else {
+                document.getElementsByTagName('head')[0].appendChild(script);
             }
 
         },

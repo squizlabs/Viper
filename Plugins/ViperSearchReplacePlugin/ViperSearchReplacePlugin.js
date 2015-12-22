@@ -305,7 +305,7 @@
                 this.viper.focus();
                 ViperSelection.addRange(viperRange);
 
-                var found = this.viper.getDocumentWindow().find(text, false, backward);
+                var found = Viper.Util.getDocumentWindow().find(text, false, backward);
                 if (found !== true || this.viper.rangeInViperBounds() === false) {
                     if (testOnly === true) {
                         ViperSelection.addRange(rangeClone);

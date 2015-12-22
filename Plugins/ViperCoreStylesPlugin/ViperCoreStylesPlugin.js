@@ -510,7 +510,7 @@
             ) {
                 var prev = range.startContainer.parentNode;
             } else {
-                var prev = this.viper.getInputHandler().splitAtRange(true, null);
+                var prev = this.viper.getKeyboardHandler().splitAtRange(true, null);
                 if (ViperUtil.isTag(prev, 'br') === true && prev.nextSibling === null && prev.previousSibling === null) {
                     prev = prev.parentNode;
                     var prevElemSib = prev.previousElementSibling;

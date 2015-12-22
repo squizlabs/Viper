@@ -466,7 +466,7 @@
                     setTimeout(function() {
                         var fakeEvent = self._getFakeKeyboardEvent();
 
-                        if (self.viper.getInputHandler().handleDelete(fakeEvent) !== false || fakeEvent.prevent !== true) {
+                        if (self.viper.getKeyboardHandler().handleDelete(fakeEvent) !== false || fakeEvent.prevent !== true) {
                             // Update the range object as it might have changed by handleDelete().
                             range = self.viper.getCurrentRange();
                             range.deleteContents(self.viper.getViperElement(), self.viper.getDefaultBlockTag());
@@ -625,7 +625,7 @@
 
                     // Use the InputHandler to remove the selected contents, if it did not prevent default
                     // use browsers deleteContents() method.
-                    if (self.viper.getInputHandler().handleDelete({keyCode: 8, which: 8}) !== false) {
+                    if (self.viper.getKeyboardHandler().handleDelete({keyCode: 8, which: 8}) !== false) {
                         rangeClone = self.viper.getViperRange();
                         rangeClone.deleteContents(self.viper.getViperElement(), self.viper.getDefaultBlockTag());
                         ViperSelection.addRange(rangeClone);
@@ -1086,7 +1086,7 @@
             if (ViperUtil.hasBlockChildren(fragment) === true) {
                 // TODO: We should move handleEnter function to somewhere else and make it
                 // a little bit more generic.
-                var keyboardEditor = this.viper.getInputHandler()
+                var keyboardEditor = this.viper.getKeyboardHandler()
                 var viperElem      = this.viper.getViperElement();
                 var prevBlock      = null;
                 var range          = this.viper.getViperRange();

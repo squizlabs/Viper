@@ -869,7 +869,7 @@
             ViperUtil.addClass(swHandle, 'Viper-image-handle Viper-image-handle-sw');
 
             var rect   = ViperUtil.getBoundingRectangle(image);
-            var offset = this.viper.getDocumentOffset();
+            var offset = ViperUtil.getDocumentOffset();
             rect.x1 += offset.x;
             rect.x2 += offset.x;
             rect.y1 += offset.y;
