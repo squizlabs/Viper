@@ -196,7 +196,7 @@
                         }//end switch
 
                         ViperSelection.addRange(range);
-                        this._viper.fireNodesChanged([range.getStartNode()]);
+                        this._viper.contentChanged(false);
                         return false;
                     } else if (range.startContainer === range.endContainer
                         && ViperUtil.isTag(range.startContainer, 'br') === true
@@ -227,7 +227,7 @@
                             range.setStart(range.startContainer, range.startContainer.data.length);
                             range.collapse(true);
                             ViperSelection.addRange(range);
-                            this._viper.fireNodesChanged([range.getStartNode()]);
+                            this._viper.contentChanged(true);
                             return false;
                         } else if (range.startContainer.data.length === 0) {
                             if (range.startContainer.previousSibling
@@ -239,7 +239,7 @@
                                     range.setStart(prevSib, prevSib.data.length);
                                     range.collapse(true);
                                     ViperSelection.addRange(range);
-                                    this._viper.fireNodesChanged([range.getStartNode()]);
+                                    this._viper.contentChanged(true);
                                     return false;
                                 }
                             } else if (range.startContainer.parentNode
@@ -257,7 +257,7 @@
                                     range.setStart(parentPrevSib, parentPrevSib.data.length);
                                     range.collapse(true);
                                     ViperSelection.addRange(range);
-                                    this._viper.fireNodesChanged([range.getStartNode()]);
+                                    this._viper.contentChanged(true);
                                     return false;
                                 }
                             }
@@ -280,7 +280,7 @@
                         range.setStart(range.startContainer, range.startContainer.data.length);
                         range.collapse(true);
                         ViperSelection.addRange(range);
-                        this._viper.fireNodesChanged();
+                        this._viper.contentChanged(true);
                         return false;
                     }
 
@@ -363,7 +363,7 @@
                             range.setStart(textContainer, 1);
                             range.collapse(true);
                             ViperSelection.addRange(range);
-                            this._viper.fireNodesChanged([range.getStartNode()]);
+                            this._viper.contentChanged(true);
                             return false;
                         }
                     } else if (ViperUtil.isBrowser('msie', '<11') === true
@@ -407,7 +407,7 @@
                     }
                 }//end if
 
-                this._viper.fireNodesChanged([range.getStartNode()]);
+                this._viper.contentChanged(true);
                 return true;
             }//end if
 
@@ -488,7 +488,7 @@
                         && (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true || ViperUtil.isBrowser('msie') === true)
                     ) {
                         // Webkit does not fire keypress event for delete and backspace keys..
-                        this._viper.fireNodesChanged();
+                        this._viper.contentChanged(true);
                     } else if (ViperUtil.isBrowser('msie', '10') === true) {
                         // Strange issue with IE10.. If a paragraph has only an anchor tag and caret is at the end
                         // of this anchor tag then typing any chracter removes the whole tag...
@@ -753,8 +753,7 @@
                         if (defaultTagName === '') {
                             // Default tag name is set to nothing. Move caret after the list.
                             this.splitList(firstBlock);
-                            this._viper.fireNodesChanged();
-                            this._viper.fireSelectionChanged();
+                            this._viper.contentChanged();
                             return false;
                         } else if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true || ViperUtil.isBrowser('msie') === true) {
                             handleEnter = true;
@@ -865,8 +864,7 @@
 
                         ViperSelection.addRange(range);
 
-                        this._viper.fireNodesChanged();
-                        this._viper.fireSelectionChanged();
+                        this._viper.contentChanged();
                         return false;
                     }//end if
                 }//end if
@@ -908,8 +906,7 @@
                     ViperSelection.addRange(range);
                 } else {
                     this.insertTextAtRange(range, "\n");
-                    this._viper.fireNodesChanged();
-                    this._viper.fireSelectionChanged(null, true);
+                    this._viper.contentChanged();
                 }
 
                 return false;
@@ -1169,7 +1166,7 @@
                 }
 
                 ViperUtil.insertBefore(parent, newEl);
-                this._viper.fireNodesChanged();
+                this._viper.contentChanged(true);
                 return false;
             } else if (ViperUtil.isBrowser('msie', '>=11') === true
                 && startNode === endNode
@@ -1187,8 +1184,7 @@
                 range.selectNode(li.firstChild);
                 range.collapse(true);
                 ViperSelection.addRange(range);
-                self._viper.fireSelectionChanged(null, true);
-                this._viper.fireNodesChanged();
+                this._viper.contentChanged();
                 return false;
             } else if (startNode
                 && startNode === endNode
@@ -1280,7 +1276,7 @@
                 var newParent = document.createElement(ViperUtil.getTagName(parent));
                 ViperUtil.setHtml(newParent, '<br />');
                 ViperUtil.insertBefore(parent, newParent);
-                this._viper.fireNodesChanged();
+                this._viper.contentChanged(true);
                 return false;
             } else if (range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
                 && range.collapsed === true
@@ -1327,8 +1323,7 @@
                 range.setStart(newTag.firstChild, 0);
                 range.collapse(true);
                 ViperSelection.addRange(range);
-                this._viper.fireNodesChanged();
-                this._viper.fireSelectionChanged(null, true);
+                this._viper.contentChanged();
                 return false;
             }//end if
 
@@ -1373,8 +1368,7 @@
                 // and then initialise the Viper element.
                 ViperUtil.setHtml(this._viper.getViperElement(), '');
                 this._viper.initEditableElement();
-                this._viper.fireNodesChanged();
-                this._viper.fireSelectionChanged(null, true);
+                this._viper.contentChanged();
                 return false;
             }
 
@@ -1423,7 +1417,7 @@
                     range.setStart(range.startContainer, range.startOffset - 1)
                     range.collapse(true);
                     ViperSelection.addRange(range);
-                    this._viper.fireNodesChanged();
+                    this._viper.contentChanged();
                     return false;
                 }
             }
@@ -1489,8 +1483,7 @@
                                 ViperUtil.remove(startNode.parentNode.parentNode);
                             }
 
-                            this._viper.fireNodesChanged();
-                            this._viper.fireSelectionChanged(null, true);
+                            this._viper.contentChanged();
                         }
 
                         return false;
@@ -1503,7 +1496,7 @@
                 // and then initialise the Viper element.
                 ViperUtil.setHtml(viperElement, '');
                 this._viper.initEditableElement();
-                this._viper.fireNodesChanged();
+                this._viper.contentChanged();
                 return false;
             } else if (ViperUtil.isBrowser('msie') === true) {
                 var rangeClone = range.cloneRange();
@@ -1517,7 +1510,7 @@
                             if (node.nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isTag(node, 'hr') === true) {
                                 // Found the HR element, remove it.
                                 ViperUtil.remove(node);
-                                this._viper.fireNodesChanged();
+                                this._viper.contentChanged();
                                 return false;
                             } else if (node.nodeType !== ViperUtil.TEXT_NODE || ViperUtil.trim(node.data).length !== 0) {
                                 // Not an empty text node or another node type, no need to continue.
@@ -1575,8 +1568,7 @@
                                 ViperSelection.addRange(range);
                             }
 
-                            this._viper.fireSelectionChanged(null, true);
-                            this._viper.fireNodesChanged();
+                            this._viper.contentChanged();
 
                             return false;
                         }//end if
@@ -1653,7 +1645,7 @@
                             ViperSelection.addRange(range);
                         }
 
-                        this._viper.fireNodesChanged();
+                        this._viper.contentChanged();
 
                         return false;
                     } //end if
@@ -1701,8 +1693,7 @@
                                     ViperUtil.remove(parent);
                                 }
 
-                                this._viper.fireNodesChanged();
-                                this._viper.fireSelectionChanged(null, true);
+                                this._viper.contentChanged();
                                 return false;
                             }//end if
                         }//end if
@@ -1784,8 +1775,7 @@
                     range.collapse(false);
                     ViperSelection.addRange(range);
 
-                    this._viper.fireNodesChanged();
-                    this._viper.fireSelectionChanged(null, true);
+                    this._viper.contentChanged();
                     return false;
                 } else if (!range.startContainer.previousSibling) {
                     return false;
@@ -1807,8 +1797,7 @@
                     ViperUtil.remove(nodeSelection);
                 }
 
-                this._viper.fireNodesChanged();
-                this._viper.fireSelectionChanged(null, true);
+                this._viper.contentChanged();
                 return false;
             }
 
@@ -1844,8 +1833,7 @@
                             range.setStart(textNode, textNode.data.length);
                             range.collapse(true);
                             ViperSelection.addRange(range);
-                            this._viper.fireNodesChanged();
-                            this._viper.fireSelectionChanged(null, true);
+                            this._viper.contentChanged();
                             return false;
                         }
                     }
@@ -1890,10 +1878,7 @@
                         }
 
                         ViperSelection.addRange(range);
-
-                        this._viper.fireNodesChanged();
-                        this._viper.fireSelectionChanged(null, true);
-
+                        this._viper.contentChanged();
                         return false;
                     } else {
                         this._normaliseNextNodes(range.startContainer);
@@ -1913,7 +1898,7 @@
                                 range.collapse(true);
                                 ViperSelection.addRange(range);
                                 ViperUtil.remove(parent);
-                                this._viper.fireNodesChanged();
+                                this._viper.contentChanged();
                                 return false;
                             }
                         } else if (this._viper.isSpecialElement(range.startContainer.previousSibling) === true) {
@@ -1924,8 +1909,7 @@
                             }
 
                             ViperUtil.remove(node);
-                            this._viper.fireSelectionChanged(null, true);
-                            this._viper.fireNodesChanged();
+                            this._viper.contentChanged();
                             return false;
                         } else {
                             var previousContainer = range.getPreviousContainer(range.startContainer);
@@ -1935,7 +1919,7 @@
                                 } else if (ViperUtil.isStubElement(previousContainer) === true) {
                                     // Handle case <p>text<strong>text</strong><br/>*</p>.
                                     ViperUtil.remove(previousContainer);
-                                    this._viper.fireNodesChanged();
+                                    this._viper.contentChanged(true);
                                     return false;
                                 } else {
                                     range.setStart(previousContainer, 0);
@@ -1966,8 +1950,7 @@
                                 if (ViperUtil.isBlockElement(parent) === true) {
                                     this._viper.moveCaretAway(parent, true);
                                     ViperUtil.remove(parent);
-                                    this._viper.fireNodesChanged();
-                                    this._viper.fireSelectionChanged(null, true);
+                                    this._viper.contentChanged();
                                     return false;
                                 } else if (parent.previousSibling && parent.previousSibling.nodeType === ViperUtil.TEXT_NODE) {
                                     textNode = parent.previousSibling;
@@ -1981,8 +1964,7 @@
                                 ViperUtil.remove(parent);
                             }
 
-                            this._viper.fireNodesChanged();
-                            this._viper.fireSelectionChanged(null, true);
+                            this._viper.contentChanged();
                             return false;
                         }
                     }
@@ -2087,8 +2069,7 @@
                         range.setStart(nodeSelection, 0);
                         range.collapse(true);
                         ViperSelection.addRange(range);
-                        this._viper.fireNodesChanged();
-                        this._viper.fireSelectionChanged(range, true);
+                        this._viper.contentChanged(false, range);
                         return false;
                     } else {
                         var parents = ViperUtil.getSurroundingParents(nodeSelection, null, null, this.viperElement);
@@ -2130,8 +2111,7 @@
                         }
                     }
 
-                    this._viper.fireNodesChanged();
-                    this._viper.fireSelectionChanged();
+                    this._viper.contentChanged();
                     return false;
                 }
             }//end if
@@ -2208,8 +2188,7 @@
 
                 range.collapse(true);
                 ViperSelection.addRange(range);
-                this._viper.fireNodesChanged();
-                this._viper.fireSelectionChanged(null, true);
+                this._viper.contentChanged();
                 return false;
             }
 
@@ -2251,7 +2230,7 @@
                         range.collapse(true);
                         ViperSelection.addRange(range);
 
-                        this._viper.fireNodesChanged();
+                        this._viper.contentChanged(true);
                         return false;
                     } else {
                         // This is the first LI in the content. Remove it from list.
@@ -2288,8 +2267,7 @@
                         range.setStart(firstSelectable, 0);
                         range.collapse(true);
                         ViperSelection.addRange(range);
-                        this._viper.fireSelectionChanged(range);
-                        this._viper.fireNodesChanged();
+                        this._viper.contentChanged(false, range);
                         return false;
                     }//end if
                 }//end if
@@ -2337,8 +2315,7 @@
                     ViperUtil.remove(list);
                 }
 
-                this._viper.fireSelectionChanged(range, true);
-                this._viper.fireNodesChanged();
+                this._viper.contentChanged(false, range);
                 return false;
             }//end if
 
@@ -2354,8 +2331,7 @@
                     // and then initialise the Viper element.
                     ViperUtil.setHtml(this._viper.getViperElement(), '');
                     this._viper.initEditableElement();
-                    this._viper.fireNodesChanged();
-                    this._viper.fireSelectionChanged();
+                    this._viper.contentChanged();
                     return false;
                 } else if (this._isStartToEndOfMultiContainerSelection(range) === true) {
                     return this._removeContentFromStartToEndOfContainers(range);
@@ -2389,8 +2365,7 @@
                             }
                         }
 
-                        this._viper.fireNodesChanged();
-                        this._viper.fireSelectionChanged();
+                        this._viper.contentChanged();
                         return false;
                     } else if (
                         !nodeSelection
@@ -2411,8 +2386,7 @@
                         range.setStart(endContainer, 0);
                         range.collapse(true);
                         ViperSelection.addRange(range);
-                        this._viper.fireNodesChanged();
-                        this._viper.fireSelectionChanged(range);
+                        this._viper.contentChanged();
                         return false;
                     } else if (
                         !nodeSelection
@@ -2474,8 +2448,7 @@
                     if (startNode.nextSibling && this._viper.isSpecialElement(startNode.nextSibling) === true) {
                         // Remove the whole special element.
                         ViperUtil.remove(startNode.nextSibling);
-                        this._viper.fireNodesChanged();
-                        this._viper.fireSelectionChanged();
+                        this._viper.contentChanged();
                         return false;
                     } else if (!startNode.nextSibling) {
                         // Check if the next container is a special element.
@@ -2492,8 +2465,7 @@
                             if (node.nodeType === ViperUtil.ELEMENT_NODE && ViperUtil.isTag(node, 'hr') === true) {
                                 // Found the HR element, remove it.
                                 ViperUtil.remove(node);
-                                this._viper.fireNodesChanged();
-                                this._viper.fireSelectionChanged();
+                                this._viper.contentChanged();
                                 return false;
                             } else if (node.nodeType !== ViperUtil.TEXT_NODE || ViperUtil.trim(node.data).length !== 0) {
                                 // Not an empty text node or another node type, no need to continue.
@@ -2551,8 +2523,7 @@
                         }
                     }
 
-                    this._viper.fireNodesChanged();
-                    this._viper.fireSelectionChanged();
+                    this._viper.contentChanged();
 
                     return false;
                 }//end if
@@ -2586,8 +2557,7 @@
                         range.setStart(nextSelectable, 0);
                         range.collapse(true);
                         ViperSelection.addRange(range);
-                        this._viper.fireNodesChanged();
-                        this._viper.fireSelectionChanged();
+                        this._viper.contentChanged();
                         return false;
                     } else if (startNode.parentNode.childNodes.length === 1) {
                         var tmpNode = document.createTextNode('');
@@ -2602,8 +2572,7 @@
                         range.collapse(true);
                         ViperUtil.remove(startNode);
                         ViperSelection.addRange(range);
-                        this._viper.fireNodesChanged();
-                        this._viper.fireSelectionChanged();
+                        this._viper.contentChanged();
                         return false;
                     }
                 }
@@ -2685,7 +2654,7 @@
                     }
 
                     ViperUtil.remove(nextParent);
-                    this._viper.fireNodesChanged();
+                    this._viper.contentChanged(true);
                     return false;
                 }
             } if (e.keyCode === 46
@@ -2723,7 +2692,7 @@
                     ViperSelection.addRange(range);
                 }
 
-                this._viper.fireNodesChanged();
+                this._viper.contentChanged(true);
                 return false;
             } else if (e.keyCode === 8
                 && range.collapsed === true
@@ -2785,12 +2754,12 @@
                         ViperSelection.addRange(range);
                     }
 
-                    this._viper.fireNodesChanged();
+                    this._viper.contentChanged(true);
 
                     return false;
                 } else if (ViperUtil.isTag(prevSelectable, 'br') === true) {
                     ViperUtil.remove(prevSelectable);
-                    this._viper.fireNodesChanged();
+                    this._viper.contentChanged(true);
                     return false;
                 }
             } else if (
@@ -2820,7 +2789,7 @@
                             range.setStart(nodeSelection, 0);
                             range.collapse(true);
                             ViperSelection.addRange(range);
-                            this._viper.fireNodesChanged();
+                            this._viper.contentChanged(true);
                             return false;
                         } else if (this._viper.isOutOfBounds(nextSelectable) === true) {
                             nextSelectable = range.getPreviousContainer(range.startContainer, null, true);
@@ -2848,16 +2817,14 @@
 
                 range.collapse(true);
                 ViperSelection.addRange(range);
-                this._viper.fireNodesChanged();
-                this._viper.fireSelectionChanged(null, true);
+                this._viper.contentChanged();
                 return false;
             } else if (this._isWholeViperElementSelected(range) === true) {
                 // The whole Viper element is selected, remove all of its content
                 // and then initialise the Viper element.
                 ViperUtil.setHtml(this._viper.getViperElement(), '');
                 this._viper.initEditableElement();
-                this._viper.fireNodesChanged();
-                this._viper.fireSelectionChanged(null, true);
+                this._viper.contentChanged();
                 return false;
             } else if (range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
                 && range.startContainer === range.endContainer
@@ -2870,8 +2837,7 @@
                     // Single empty list item being removed. Remove the whole list.
                     this._placeCaretToValidPosition(range.startContainer.parentNode, range.startContainer.parentNode);
                     ViperUtil.remove(range.startContainer.parentNode);
-                    this._viper.fireNodesChanged();
-                    this._viper.fireSelectionChanged(null, true);
+                    this._viper.contentChanged();
                     return false;
                 }
             } else if (range.collapsed === false
@@ -2926,8 +2892,7 @@
                         ViperSelection.addRange(range);
                     }
 
-                    this._viper.fireNodesChanged();
-                    this._viper.fireSelectionChanged(null, true);
+                    this._viper.contentChanged();
                     return false;
                 }
 
@@ -2977,8 +2942,7 @@
                                 }
                             }
 
-                            this._viper.fireNodesChanged();
-                            this._viper.fireSelectionChanged(null, true);
+                            this._viper.contentChanged();
                             return false;
                         }
                     }
@@ -2997,8 +2961,7 @@
                                 range.setStart(startContainer, 0);
                                 range.collapse(true);
                                 ViperSelection.addRange(range);
-                                this._viper.fireNodesChanged();
-                                this._viper.fireSelectionChanged(null, true);
+                                this._viper.contentChanged();
                                 return false;
                             }
                         } else if (range.startOffset === startContainer.data.length) {
@@ -3330,8 +3293,7 @@
                 var startNode = range.getStartNode();
                 if (startNode && ViperUtil.isTag(ViperUtil.getFirstBlockParent(startNode), 'pre') === true) {
                     this.insertTextAtRange(range, "\n");
-                    this._viper.fireNodesChanged();
-                    this._viper.fireSelectionChanged(null, true);
+                    this._viper.contentChanged();
                     return false;
                 }
             }
@@ -3350,8 +3312,7 @@
                 ViperUtil.insertBefore(node.parentNode, node);
             }
 
-            this._viper.fireNodesChanged();
-            this._viper.fireSelectionChanged(null, true);
+            this._viper.contentChanged();
             return !this._viper.setCaretAfterNode(node);
 
         },
@@ -3440,7 +3401,7 @@
             }
 
             ViperSelection.addRange(range);
-            this._viper.fireNodesChanged();
+            this._viper.contentChanged(true);
 
             // Prevent default action.
             return false;
