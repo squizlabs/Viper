@@ -45,24 +45,24 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
                     var editPanel = this.parent.getResolutionActionsContainer(contentElement);
 
                     var captionid = ViperUtil.getUniqueId();
-                    var caption   = viper.ViperTools.createTextarea(captionid, 'Caption', this._getTableCaption(element));
+                    var caption   = viper.Tools.createTextarea(captionid, 'Caption', this._getTableCaption(element));
                     editPanel.appendChild(caption);
 
                     var summaryid = ViperUtil.getUniqueId();
-                    var summary   = viper.ViperTools.createTextarea(summaryid, 'Summary', this._getTableSummary(element));
+                    var summary   = viper.Tools.createTextarea(summaryid, 'Summary', this._getTableSummary(element));
                     editPanel.appendChild(summary);
 
                     action = function() {
-                        var captionVal = viper.ViperTools.getItem(captionid).getValue();
-                        var summaryVal = viper.ViperTools.getItem(summaryid).getValue();
+                        var captionVal = viper.Tools.getItem(captionid).getValue();
+                        var summaryVal = viper.Tools.getItem(summaryid).getValue();
 
                         self._setTableCaption(element, captionVal);
                         self._setTableSummary(element, summaryVal);
                     };
 
                     this.parent.addActionButton(action, contentElement, [captionid, summaryid], null, null, function() {
-                        var captionVal = viper.ViperTools.getItem(captionid).getValue();
-                        var summaryVal = viper.ViperTools.getItem(summaryid).getValue();
+                        var captionVal = viper.Tools.getItem(captionid).getValue();
+                        var summaryVal = viper.Tools.getItem(summaryid).getValue();
                         if (ViperUtil.trim(captionVal) === ViperUtil.trim(summaryVal)) {
                             return false;
                         }
@@ -84,11 +84,11 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
                     useCaption = true;
                 }
 
-                var checkbox   = viper.ViperTools.createCheckbox(checkboxid, 'Use caption', useCaption, function(checked) {
+                var checkbox   = viper.Tools.createCheckbox(checkboxid, 'Use caption', useCaption, function(checked) {
                     if (checked === true) {
-                        viper.ViperTools.getItem(captionid).enable();
+                        viper.Tools.getItem(captionid).enable();
                     } else {
-                        viper.ViperTools.getItem(captionid).disable();
+                        viper.Tools.getItem(captionid).disable();
                     }
                 });
                 editPanel.appendChild(checkbox);
@@ -96,26 +96,26 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
                 captionid = ViperUtil.getUniqueId();
                 var tableCaption = this._getTableCaption(element);
 
-                var caption = viper.ViperTools.createTextarea(captionid, 'Caption', tableCaption);
+                var caption = viper.Tools.createTextarea(captionid, 'Caption', tableCaption);
 
                 if (!tableCaption && useCaption === false) {
-                    viper.ViperTools.getItem(captionid).disable();
+                    viper.Tools.getItem(captionid).disable();
                 }
 
                 editPanel.appendChild(caption);
 
                 action = function() {
                     var captionVal = '';
-                    if (viper.ViperTools.getItem(checkboxid).getValue() === true) {
-                        captionVal = viper.ViperTools.getItem(captionid).getValue();
+                    if (viper.Tools.getItem(checkboxid).getValue() === true) {
+                        captionVal = viper.Tools.getItem(captionid).getValue();
                     }
 
                     self._setTableCaption(element, captionVal);
                 };
 
                 this.parent.addActionButton(action, contentElement, [captionid, checkboxid], null, null, function() {
-                    var captionVal = viper.ViperTools.getItem(captionid).getValue();
-                    if (!captionVal && viper.ViperTools.getItem(checkboxid).getValue() !== false) {
+                    var captionVal = viper.Tools.getItem(captionid).getValue();
+                    if (!captionVal && viper.Tools.getItem(checkboxid).getValue() !== false) {
                         return false;
                     }
                 });
@@ -135,37 +135,37 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
                     useSummary = true;
                 }
 
-                var checkbox   = viper.ViperTools.createCheckbox(checkboxid, 'Use summary', useSummary, function(checked) {
+                var checkbox   = viper.Tools.createCheckbox(checkboxid, 'Use summary', useSummary, function(checked) {
                     if (checked === true) {
-                        viper.ViperTools.getItem(summaryid).enable();
+                        viper.Tools.getItem(summaryid).enable();
                     } else {
-                        viper.ViperTools.getItem(summaryid).disable();
+                        viper.Tools.getItem(summaryid).disable();
                     }
                 });
                 editPanel.appendChild(checkbox);
 
                 summaryid   = ViperUtil.getUniqueId();
                 var tableSummary = this._getTableSummary(element);
-                var summary = viper.ViperTools.createTextarea(summaryid, 'Summary', tableSummary);
+                var summary = viper.Tools.createTextarea(summaryid, 'Summary', tableSummary);
 
                 if (!tableSummary && useSummary === false) {
-                    viper.ViperTools.getItem(summaryid).disable();
+                    viper.Tools.getItem(summaryid).disable();
                 }
 
                 editPanel.appendChild(summary);
 
                 action = function() {
                     var summaryVal = '';
-                    if (viper.ViperTools.getItem(checkboxid).getValue() === true) {
-                        summaryVal = viper.ViperTools.getItem(summaryid).getValue();
+                    if (viper.Tools.getItem(checkboxid).getValue() === true) {
+                        summaryVal = viper.Tools.getItem(summaryid).getValue();
                     }
 
                     self._setTableSummary(element, summaryVal);
                 };
 
                 this.parent.addActionButton(action, contentElement, [summaryid, checkboxid], null, null, function() {
-                    var summaryVal = ViperUtil.trim(viper.ViperTools.getItem(summaryid).getValue());
-                    if (!summaryVal && viper.ViperTools.getItem(checkboxid).getValue() !== false) {
+                    var summaryVal = ViperUtil.trim(viper.Tools.getItem(summaryid).getValue());
+                    if (!summaryVal && viper.Tools.getItem(checkboxid).getValue() !== false) {
                         return false;
                     }
                 });
@@ -379,7 +379,7 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_3 = {
                             (function(headingLevel) {
                                 var action = function() {
                                     for (var j = 0; j < actionButtonids.length; j++) {
-                                        viper.ViperTools.disableButton(actionButtonids[j]);
+                                        viper.Tools.disableButton(actionButtonids[j]);
                                     }
 
                                     var newTag = document.createElement('h' + headingLevel);

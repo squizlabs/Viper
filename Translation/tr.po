@@ -189,8 +189,8 @@ msgid "Title"
 msgstr "Başlik"
 
 msgid ""
-"The selected image will be moved to the next location you click. To cancel "
-"press the move icon again or ESC"
+"The selected image will be moved to the next location you click. To cancel, "
+"press the move icon again, or ESC"
 msgstr ""
 "Seçilen resim birdahaki tıkladığınız konuma taşınacaktır. İptal etmek için "
 "tekrar konum değiştirme simgesine  veya ESC tuşuna basın."
@@ -456,3 +456,9 @@ msgstr "Kullanılamaz"
 
 msgid "required"
 msgstr "zorunlu"
+
+msgid "Custom Class"
+msgstr "Özel Sınıf"
+
+msgid "Choose Styles"
+msgstr "Stiller Seçimi"

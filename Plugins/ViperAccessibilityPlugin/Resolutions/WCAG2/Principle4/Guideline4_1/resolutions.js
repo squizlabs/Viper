@@ -18,16 +18,16 @@ ViperAccessibilityPlugin_WCAG2_Principle4_Guideline4_1 = {
 
                 var idAttrid =  null;
                 idAttrid     = ViperUtil.getUniqueId();
-                var idAttr   = viper.ViperTools.createTextbox(idAttrid, 'ID', element.getAttribute('id') || '');
+                var idAttr   = viper.Tools.createTextbox(idAttrid, 'ID', element.getAttribute('id') || '');
                 editPanel.appendChild(idAttr);
 
                 action = function() {
-                    var idAttrVal = viper.ViperTools.getItem(idAttrid).getValue();
+                    var idAttrVal = viper.Tools.getItem(idAttrid).getValue();
                     element.setAttribute('id', idAttrVal);
                 };
 
                 this.parent.addActionButton(action, contentElement, [idAttrid], null, null, function() {
-                    var idAttrVal = ViperUtil.trim(viper.ViperTools.getItem(idAttrid).getValue());
+                    var idAttrVal = ViperUtil.trim(viper.Tools.getItem(idAttrid).getValue());
                     if (!idAttrVal) {
                         return false;
                     } else {
