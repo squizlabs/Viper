@@ -242,6 +242,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
     {
         $this->useTest(3);
 
+        $this->clickKeyword(2);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         sleep(2);
