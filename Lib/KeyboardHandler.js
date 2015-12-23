@@ -407,7 +407,11 @@
                     }
                 }//end if
 
-                this._viper.contentChanged(true);
+                var self = this;
+                setTimeout(function() {
+                    self._viper.contentChanged();
+                }, 5);
+
                 return true;
             }//end if
 
