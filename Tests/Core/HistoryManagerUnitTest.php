@@ -137,7 +137,7 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
         $this->topToolbarButtonExists('historyUndo');
         $this->topToolbarButtonExists('historyRedo');
 
-        $this->assertHTMLMatch('<p>%1%aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1%'.$chars.'</p><p>EIB MOZ</p>');
         sleep(1);
 
         $this->sikuli->keyDown('Key.CMD + z');
