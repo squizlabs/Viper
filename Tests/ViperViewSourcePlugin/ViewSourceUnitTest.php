@@ -126,21 +126,19 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViper
         $this->useTest(3);
         $this->clickTopToolbarButton('sourceView');
         sleep(2);
-        $this->moveToKeyword(2, 'left');
 
-        for ($i = 0; $i < 13; $i++) {
+        for ($i = 0; $i < 4; $i++) {
             $this->sikuli->keyDown('Key.LEFT');
         }
         $this->type('<!---');
-        $this->moveToKeyword(3, 'right');
 
-        for ($i = 0; $i < 5; $i++) {
-            $this->sikuli->keyDown('Key.RIGHT');
+        for ($i = 0; $i < 9; $i++) {
+            $this->sikuli->keyDown('Key.DOWN');
         }
         $this->type('--->');
 
         $this->clickButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<!---<p>%1%Test%2% content.</p><p>More test content.</p><p>Even more test content.%3%</p>--->');
+        $this->assertHTMLMatch('<!---<p>%1% Test %2% content.</p><p>More test content.</p><p>Even more test content.%3%</p>--->');
 
     }//end testCommentingInSourceCode()
 
