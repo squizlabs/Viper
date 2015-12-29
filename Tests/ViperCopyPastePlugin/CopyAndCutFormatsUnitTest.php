@@ -371,16 +371,45 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutFormatsUnitTest extends Abstrac
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + c');
         sleep(1);
-        $this->moveToKeyword(4, 'right');
+        $this->selectKeyword(4);
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
-        $this->assertHTMLMatch('<h1>Heading One %1%</h1><p>This is a paragraph %2%</p><h1>Heading One %1%</h1><h2>Heading Two %3%</h2><p>This is another paragraph %4%</p><h2>Heading Two %3%</h2>');
+        $this->assertHTMLMatch('<h1>Heading One %1%</h1><p>This is a paragraph %2%</p><h1>Heading One %1%</h1><h2>Heading Two %3%</h2><p>This is another paragraph</p><h2>Heading Two %3%</h2>');
 
     }//end testCopyPasteHeading()
 
 
+    /**
+     * Test cut and pasting a heading.
+     *
+     * @return void
+     */
+    public function testCutPasteHeading()
+    {
+        $this->useTest(6);
 
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->sikuli->keyDown('Key.CMD + x');
+        sleep(1);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
+        $this->assertHTMLMatch('<p>This is a paragraph %2%</p><h1>Heading One %1%</h1><h2>Heading Two %3%</h2><p>This is another paragraph %4%</p>');
+
+        $this->selectKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->sikuli->keyDown('Key.CMD + x');
+        sleep(1);
+        $this->moveToKeyword(4, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
+        $this->assertHTMLMatch('<p>This is a paragraph %2%</p><h1>Heading One %1%</h1><p>This is another paragraph %4%</p><h2>Heading Two %3%</h2>');
+
+    }//end testCutPasteHeading()
 
 
     /**
@@ -626,38 +655,6 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutFormatsUnitTest extends Abstrac
         $this->assertHTMLMatch('<p>This is a paragraph section %1%</p><div>This is a div section %2%</div><pre>This is a pre section %3%</pre><p>Space paragraph</p><p>Another paragraph %5%</p><blockquote><p>This is a quote section %4%</p></blockquote>');
 
     }//end testCutPasteBlockElements()
-
-
-    /**
-     * Test cut and pasting a heading.
-     *
-     * @return void
-     */
-    public function testCutPasteHeading()
-    {
-        $this->useTest(6);
-
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->sikuli->keyDown('Key.CMD + x');
-        sleep(1);
-        $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.CMD + v');
-        sleep(1);
-        $this->assertHTMLMatch('<p>This is a paragraph %2%</p><h1>Heading One %1%</h1><h2>Heading Two %3%</h2><p>This is another paragraph %4%</p>');
-
-        $this->selectKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->sikuli->keyDown('Key.CMD + x');
-        sleep(1);
-        $this->moveToKeyword(4, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.CMD + v');
-        sleep(1);
-        $this->assertHTMLMatch('<p>This is a paragraph %2%</p><h1>Heading One %1%</h1><p>This is another paragraph %4%</p><h2>Heading Two %3%</h2>');
-
-    }//end testCutPasteHeading()
 
 
 }//end class
