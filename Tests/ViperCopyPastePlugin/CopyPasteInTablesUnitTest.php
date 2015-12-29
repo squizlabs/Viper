@@ -65,6 +65,8 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteInTablesUnitTest extends Abstrac
         $this->selectKeyword(2, 3);
         sleep(2);
         $this->sikuli->keyDown('Key.CMD + c');
+        sleep(1);
+        $this->clickKeyword(1);
         
         $this->moveToKeyword(4, 'right');
         $this->sikuli->keyDown('Key.CMD + v');
@@ -111,6 +113,9 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteInTablesUnitTest extends Abstrac
         sleep(2);
         $this->selectInlineToolbarLineageItem(2);
         $this->sikuli->keyDown('Key.CMD + c');
+        sleep(1);
+        $this->clickKeyword(1);
+        sleep(1);
         $this->moveToKeyword(4, 'right');
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(2);
