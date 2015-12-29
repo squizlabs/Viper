@@ -131,13 +131,16 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViper
             $this->sikuli->keyDown('Key.LEFT');
         }
         $this->type('<!---');
+        sleep(1);
 
         for ($i = 0; $i < 9; $i++) {
             $this->sikuli->keyDown('Key.DOWN');
         }
         $this->type('--->');
+        sleep(1);
 
         $this->clickButton('Apply Changes', NULL, TRUE);
+        sleep(2);
         $this->assertHTMLMatch('<!---<p>%1% Test %2% content.</p><p>More test content.</p><p>Even more test content.%3%</p>--->');
 
     }//end testCommentingInSourceCode()
