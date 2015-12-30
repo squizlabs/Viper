@@ -118,13 +118,14 @@ class Viper_Tests_ViperReplacementPlugin_ListsWithKeywordsUnitTest extends Abstr
         $this->clickTopToolbarButton('listUL');
 
         $this->assertHTMLMatch('<ul><li>%1% Test content<img alt="TITLE" src="((prop:url))" /> more test content.%2%</li></ul>');
-        $this->assertRawHTMLMatch('<ul><li>%1% Test content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /> more test content.%2%</li></ul>');
+        $this->assertRawHTMLMatch('<ul><li>%1% Test content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'"> more test content.%2%</li></ul>');
         // Test for revert
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('listUL', 'active');
 
         $this->assertHTMLMatch('<p>%1% Test content <img alt="TITLE" src="((prop:url))" /> more test content.%2%</p>');
-        $this->assertRawHTMLMatch('<p>%1% Test content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /> more test content.%2%</p>');
+        $this->assertRawHTMLMatch('<p>%1% Test content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'"> more test content.%2%</p>');
+        
     }//end testImageKeywordUnorderedList()
 
     /**
