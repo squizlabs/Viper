@@ -23,7 +23,7 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>test content %1%</p><p>more content <img alt="TITLE" title="test" src="((prop:url))" /> even more content</p>');
-        $this->assertRawHTMLMatch('<p>test content %1%</p><p>more content <img class="__viper_selHighlight __viper_cleanOnly" data-viper-attribite-keywords="true" title="test" alt="TITLE" src="'.$this->getTestURL('/Web/testImage.png').'" data-viper-src="((prop:url))" /> even more content</p>');
+        $this->assertRawHTMLMatch('<p>test content %1%</p><p>more content <img class="__viper_selHighlight __viper_cleanOnly" data-viper-attribite-keywords="true" title="test" alt="TITLE" src="'.$this->getTestURL('/Web/testImage.png').'" data-viper-src="((prop:url))"> even more content</p>');
 
         // Edit the title tag
         $this->clickElement('img', 0);
@@ -33,7 +33,7 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>test content %1%</p><p>more content <img alt="TITLE" title="test title" src="((prop:url))" /> even more content</p>');
-        $this->assertRawHTMLMatch('<p>test content %1%</p><p>more content <img class="__viper_selHighlight __viper_cleanOnly" data-viper-attribite-keywords="true" title="test title" alt="TITLE" src="'.$this->getTestURL('/Web/testImage.png').'" data-viper-src="((prop:url))" /> even more content</p>');
+        $this->assertRawHTMLMatch('<p>test content %1%</p><p>more content <img class="__viper_selHighlight __viper_cleanOnly" data-viper-attribite-keywords="true" title="test title" alt="TITLE" src="'.$this->getTestURL('/Web/testImage.png').'" data-viper-src="((prop:url))"> even more content</p>');
 
         // Using top toolbar
         $this->clickElement('img', 0);
@@ -45,7 +45,7 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         $this->clickKeyword(1);
 
         $this->assertHTMLMatch('<p>test content %1%</p><p>more content <img alt="TITLE" title="test" src="((prop:url))" /> even more content</p>');
-        $this->assertRawHTMLMatch('<p>test content %1%</p><p>more content<img alt="TITLE" data-viper-attribite-keywords="true" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" title="test" /> even more content</p>');
+        $this->assertRawHTMLMatch('<p>test content %1%</p><p>more content<img alt="TITLE" data-viper-attribite-keywords="true" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" title="test"> even more content</p>');
 
         // Edit the Title tag
         $this->clickElement('img', 0);
@@ -56,7 +56,7 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         $this->clickKeyword(1);
 
         $this->assertHTMLMatch('<p>test content %1%</p><p>more content <img alt="TITLE" title="test title" src="((prop:url))" /> even more content</p>');
-        $this->assertRawHTMLMatch('<p>test content %1%</p><p>more content<img alt="TITLE" data-viper-attribite-keywords="true" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" title="test title" /> even more content</p>');
+        $this->assertRawHTMLMatch('<p>test content %1%</p><p>more content<img alt="TITLE" data-viper-attribite-keywords="true" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" title="test title"> even more content</p>');
 
     }//end testImageKeywordTitleChange()
 
@@ -81,7 +81,7 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         $this->sikuli->mouseUp('Button.LEFT');
 
         $this->assertHTMLMatch('<p>test content %1%<img alt="TITLE" src="((prop:url))" /></p><p>more content&nbsp;&nbsp;even more content</p>');
-        $this->assertRawHTMLMatch('<p>test content %1% <img alt="TITLE" src="'.$this->getTestURL('/Web/testImage.png').'" data-viper-src="((prop:url))" /></p><p>more content  even more content</p>');
+        $this->assertRawHTMLMatch('<p>test content %1% <img alt="TITLE" src="'.$this->getTestURL('/Web/testImage.png').'" data-viper-src="((prop:url))"></p><p>more content  even more content</p>');
 
     }//end testMovingImageKeyword()
 
@@ -106,7 +106,7 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         $this->sikuli->mouseUp('Button.LEFT');
 
         $this->assertHTMLMatch('<p>test content %1%<a href="www.squizlabs.com.au"><img alt="TITLE" src="((prop:url))" /></a></p><p>more content&nbsp;&nbsp;even more content</p>');
-        $this->assertRawHTMLMatch('<p>test content %1%<a href="www.squizlabs.com.au"><img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /></a></p><p>more content  even more content</p>');
+        $this->assertRawHTMLMatch('<p>test content %1%<a href="www.squizlabs.com.au"><img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'"></a></p><p>more content  even more content</p>');
 
     }//end testMovingLinkedImageKeyword()
 
@@ -263,7 +263,7 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         $this->resizeImage(200);
 
         $this->assertHTMLMatch('<p>test content %1% ((prop:viperKeyword))</p><p>more content <img src="((prop:url))" alt="TITLE" height="170" width="200" /> even more content</p>');
-        $this->assertRawHTMLMatch('<p>test content %1% <span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span></p><p>more content<img alt="TITLE" data-viper-src="((prop:url))" height="170" src="'.$this->getTestURL('/Web/testImage.png').'" width="200" /> even more content</p>');
+        $this->assertRawHTMLMatch('<p>test content %1% <span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span></p><p>more content<img alt="TITLE" data-viper-src="((prop:url))" height="170px" src="'.$this->getTestURL('/Web/testImage.png').'" width="200px"> even more content</p>');
 
     }//end testResizingImageKeyword()
 
