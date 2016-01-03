@@ -160,11 +160,13 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperUnitT
 
         // Test two words
         $this->moveToKeyword(2);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should be available.');
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'Link icon should be available.');
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'), 'Link icon should be active in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'), 'Remove link icon should be available.');
         $this->moveToKeyword(3);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should be available.');
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'Link icon should be available.');
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'), 'Link icon should be active in the top toolbar');
