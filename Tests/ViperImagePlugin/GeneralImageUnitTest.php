@@ -237,7 +237,7 @@ class Viper_Tests_ViperImagePlugin_GeneralImageUnitTest extends AbstractViperIma
             $this->sikuli->keyDown('Key.BACKSPACE');
         }
         
-        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>XuT %3%</p><p>%1%<img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /> test %2%</p><p>%4%LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>XuT %3%</p><p>%1%<img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" /> test %2%</p><p>%4%LABS is ORSM</p>');
                 
         // Test content after image
         $this->useTest(2);
@@ -251,7 +251,7 @@ class Viper_Tests_ViperImagePlugin_GeneralImageUnitTest extends AbstractViperIma
             $this->sikuli->keyDown('Key.DELETE');
         }
 
-        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>XuT %3%</p><p>%1% test<img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /> %2%</p><p>%4%LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>XuT %3%</p><p>%1% test<img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" /> %2%</p><p>%4%LABS is ORSM</p>');
 
         // Test paragraph before image
         $this->useTest(2);
@@ -259,7 +259,7 @@ class Viper_Tests_ViperImagePlugin_GeneralImageUnitTest extends AbstractViperIma
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.BACKSPACE');
         
-        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>%1% test<img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /> test %2%</p><p>%4%LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>%1% test<img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" /> test %2%</p><p>%4%LABS is ORSM</p>');
                 
         // Test paragraph after image
         $this->useTest(2);
@@ -267,7 +267,7 @@ class Viper_Tests_ViperImagePlugin_GeneralImageUnitTest extends AbstractViperIma
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.DELETE');
 
-        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>XuT %3%</p><p>%1% test<img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /> test %2%</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>XuT %3%</p><p>%1% test<img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" /> test %2%</p>');
 
     }//end testRemovingContentAroundImages()
 
