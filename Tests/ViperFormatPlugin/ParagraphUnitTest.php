@@ -722,6 +722,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
 
         // Test adding after of paragraph
         $this->moveToKeyword(3, 'right');
+        sleep(2);
         $this->type(' test ');
 
         // Test adding additional content to added content
