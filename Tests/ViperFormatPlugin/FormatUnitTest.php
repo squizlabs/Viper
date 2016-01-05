@@ -3090,7 +3090,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
      *
      * @return void
      */
-    public function testRemovingFormatsOnDifferentElements()
+ /*   public function testRemovingFormatsOnDifferentElements()
     {
         // Test bold using top toolbar
         $this->useTest(16);
@@ -3133,7 +3133,7 @@ class Viper_Tests_ViperFormatPlugin_FormatUnitTest extends AbstractFormatsUnitTe
         $this->selectKeyword(1,2);
         $this->clickTopToolbarButton('superscript', 'active');
         $this->assertHTMLMatch('<p>Text <sup>more </sup>%1%text text and more%2%<sup> text</sup></p>');
-    }//end testStrikethroughWithThreeAdditionalFormats()
+    }//end testStrikethroughWithThreeAdditionalFormats()*/
 
 }//end class
 

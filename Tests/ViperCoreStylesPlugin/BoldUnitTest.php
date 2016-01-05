@@ -740,6 +740,48 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
 
     }//end testBoldIconForHeadingInInlineToolbar()
 
+
+    /**
+     * Test that you can remove bold from two different sections of content at the same time.
+     *
+     * @return void
+     */
+    public function testRemovingBoldFromDifferentSectionsInContent()
+    {
+        // Remove using top toolbar
+        $this->useTest(6);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('bold', 'active');
+
+        // Perform the check using raw html as there is a bug that removes the space after 'more' when it removes the bold formatting
+        $this->assertEquals('<p>Text <strong>more </strong>%1%text text and more%2%<strong> text</strong></p>', $this->getRawHtml());        
+
+        // Reapply using top toolbar
+        $this->clickTopToolbarButton('bold');
+        $this->assertEquals('<p>Text<strong>more %1%text text and more%2% text</strong></p>', $this->getRawHtml());
+
+        // Using inline toolbar
+        $this->useTest(6);
+        $this->selectKeyword(1, 2);
+        $this->clickInlineToolbarButton('bold', 'active');
+        $this->assertEquals('<p>Text <strong>more </strong>%1%text text and more%2%<strong> text</strong></p>', $this->getRawHtml());
+
+        // Reapply using inline toolbar
+        $this->clickInlineToolbarButton('bold');
+        $this->assertEquals('<p>Text<strong>more %1%text text and more%2% text</strong></p>', $this->getRawHtml());
+
+        // Using keyboard shortcut
+        $this->useTest(6);
+        $this->selectKeyword(1, 2);
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->assertEquals('<p>Text <strong>more </strong>%1%text text and more%2%<strong> text</strong></p>', $this->getRawHtml());
+
+        // Reapply using keyboard shortcut
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->assertEquals('<p>Text<strong>more %1%text text and more%2% text</strong></p>', $this->getRawHtml());
+
+    }//end testRemovingBoldFromDifferentSectionsInContent()
+
 }//end class
 
 ?>

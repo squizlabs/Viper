@@ -44,8 +44,6 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
         $this->assertTrue($this->topToolbarButtonExists('strikethrough'), 'Strikethrough icon in the top toolbar is active');
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-
-
     }//end testStartOfParaStrikethrough()
 
 
@@ -172,6 +170,28 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
         $this->assertTrue($this->topToolbarButtonExists('strikethrough'), 'strikethrough icon should not be active');
 
     }//end testAddAndRemoveStrikethroughForLink()
+
+
+    /**
+     * Test that you can remove strikethrough from two different sections of content at the same time.
+     *
+     * @return void
+     */
+    public function testRemovingStrikethroughFromDifferentSectionsInContent()
+    {
+        // Remove using top toolbar
+        $this->useTest(3);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('strikethrough', 'active');
+
+        // Perform the check using raw html as there is a bug that removes the space after 'more' when it removes the strikethrough formatting
+        $this->assertEquals('<p>Text <del>more </del>%1%text text and more%2%<del> text</del></p>', $this->getRawHtml());        
+
+        // Reapply using top toolbar
+        $this->clickTopToolbarButton('strikethrough');
+        $this->assertEquals('<p>Text<del>more %1%text text and more%2% text</del></p>', $this->getRawHtml());
+
+    }//end testRemovingStrikethroughFromDifferentSectionsInContent()
 
 }//end class
 

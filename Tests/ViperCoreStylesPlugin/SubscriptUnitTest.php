@@ -194,6 +194,27 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
     }//end testAddAndRemoveSubscriptForLink()
 
 
+    /**
+     * Test that you can remove subscript from two different sections of content at the same time.
+     *
+     * @return void
+     */
+    public function testRemovingSubscriptFromDifferentSectionsInContent()
+    {
+        // Remove using top toolbar
+        $this->useTest(3);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('subscript', 'active');
+
+        // Perform the check using raw html as there is a bug that removes the space after 'more' when it removes the subscript formatting
+        $this->assertEquals('<p>Text <sub>more </sub>%1%text text and more%2%<sub> text</sub></p>', $this->getRawHtml());        
+
+        // Reapply using top toolbar
+        $this->clickTopToolbarButton('subscript');
+        $this->assertEquals('<p>Text<sub>more %1%text text and more%2% text</sub></p>', $this->getRawHtml());
+
+    }//end testRemovingSubscriptFromDifferentSectionsInContent()
+
 }//end class
 
 ?>
