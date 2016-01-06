@@ -442,6 +442,8 @@
                 // WORKING ON IE8
                 if (ViperUtil.isBrowser('msie', '<11') === true) {
                     range.setStart(firstChild, 1);
+                } else if (firstChild === null) {
+                    range.setStart(tmp.firstChild, 0);
                 } else {
                     range.setStart(firstChild, 0);
                 }
