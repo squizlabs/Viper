@@ -166,7 +166,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
 
          if ($this->sikuli->getOS() === 'osx') {
              $leftX  = ($this->sikuli->getX($this->sikuli->getTopLeft($start)));
-             $width  = ($this->sikuli->execJS('ViperUtil.getElementWidth(ViperUtil.getid("content"))') / 2);
+             $width  = ($this->sikuli->execJS('Viper.Util.getElementWidth(Viper.Util.getid("content"))') / 2);
              $center = ($leftX + $width);
          } else {
              $leftX  = $this->sikuli->getX($this->sikuli->getTopLeft($start));
@@ -207,7 +207,7 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testPositionOrientationLeft()
     {
-        $this->sikuli->execJS('viperTest.getWindow().ViperUtil.setStyle(viperTest.getWindow().ViperUtil.getid("content"), "margin-left", "10px")');
+        $this->sikuli->execJS('viperTest.getWindow().Viper.Util.setStyle(viperTest.getWindow().Viper.Util.getid("content"), "margin-left", "10px")');
 
         $word = $this->findKeyword(1);
         $this->selectKeyword(1);

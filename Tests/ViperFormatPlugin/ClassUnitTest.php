@@ -726,7 +726,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('cssClass');
         $this->clickInlineToolbarButton('italic', 'active');
 
-        $viperBookmarkElements = $this->sikuli->execJS('viperTest.getWindow().ViperUtil.getClass("viperBookmark").length');
+        $viperBookmarkElements = $this->sikuli->execJS('viperTest.getWindow().Viper.Util.getClass("viperBookmark").length');
         $this->assertEquals(0, $viperBookmarkElements, 'There should be no viper bookmark elements');
 
         // Only strong tag should appear around keyword 2
