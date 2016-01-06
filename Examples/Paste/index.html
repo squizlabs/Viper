@@ -28,28 +28,28 @@
                 var html = pasteElement.innerHTML;
 
                 if (!_tmpNode) {
-                    ViperUtil.getid('rawContent').value = html;
+                    Viper.Util.getid('rawContent').value = html;
                 }
 
                 defaultFunction.apply(this, arguments);
 
                 viperHtml = viper.getHtml();
 
-                if (_tmpNode && ViperUtil.isBrowser('firefox') === true) {
+                if (_tmpNode && Viper.Util.isBrowser('firefox') === true) {
                     // Firefox seems to have an issue with creating some of the fragments
                     // thinking they are only text.
                     viperHtml = viperHtml.replace('&lt;', '<', 'g');
                     viperHtml = viperHtml.replace('&gt;', '>', 'g');
-                    ViperUtil.setHtml(viper.element, viperHtml);
-                    ViperUtil.getid('cleanContent').value = StyleHTML(ViperUtil.getHtml(viper.element));
+                    Viper.Util.setHtml(viper.element, viperHtml);
+                    Viper.Util.getid('cleanContent').value = StyleHTML(Viper.Util.getHtml(viper.element));
                 } else {
-                    ViperUtil.getid('cleanContent').value = StyleHTML(viperHtml);
+                    Viper.Util.getid('cleanContent').value = StyleHTML(viperHtml);
                 }
 
             };
 
-            var rawContent     = ViperUtil.getid('rawContent');
-            var cleanContent   = ViperUtil.getid('cleanContent');
+            var rawContent     = Viper.Util.getid('rawContent');
+            var cleanContent   = Viper.Util.getid('cleanContent');
             rawContent.value   = '';
             cleanContent.value = '';
 
@@ -57,18 +57,18 @@
                 setTimeout(function() {
                     viper.element.focus();
                     var tmp = document.createElement('div');
-                    ViperUtil.setHtml(tmp, rawContent.value);
-                    copyPastePlugin._handleFormattedPasteValue(false, tmp, ViperUtil.getid('content').firstChild.firstChild);
+                    Viper.Util.setHtml(tmp, rawContent.value);
+                    copyPastePlugin._handleFormattedPasteValue(false, tmp, Viper.Util.getid('content').firstChild.firstChild);
                 }, 30);
             };
 
-            ViperUtil.remove(ViperUtil.getid('loading'));
-            ViperUtil.setStyle(ViperUtil.getid('mainContent'), 'display', 'block');
+            Viper.Util.remove(Viper.Util.getid('loading'));
+            Viper.Util.setStyle(Viper.Util.getid('mainContent'), 'display', 'block');
         };
 
         setTimeout(function() {
-            if (ViperUtil.getid('loading')) {
-                ViperUtil.setHtml(ViperUtil.getid('loading'), 'Loading... FAILED!');
+            if (Viper.Util.getid('loading')) {
+                Viper.Util.setHtml(Viper.Util.getid('loading'), 'Loading... FAILED!');
             }
 
         }, 5000);
