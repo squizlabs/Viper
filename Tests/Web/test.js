@@ -348,7 +348,7 @@ function gStringLoc(str)
     } else {
         range.setStart(range._getFirstSelectableChild(contentElement), 0);
         range.collapse(true);
-        ViperSelection.addRange(range);
+        Viper.Selection.addRange(range);
         if (window.find(str, true, false, true, true, true) === true) {
             loc = viper.getCurrentRange().rangeObj.getBoundingClientRect();
             loc = {
@@ -361,7 +361,7 @@ function gStringLoc(str)
     }
 
     // Reset selection.
-    ViperSelection.addRange(clone);
+    Viper.Selection.addRange(clone);
 
     return loc;
 
@@ -449,7 +449,7 @@ function useTest(id)
     viper.getHistoryManager().clear();
     viper.getHistoryManager().add();
 
-    ViperSelection.removeAllRanges();
+    Viper.Selection.removeAllRanges();
 
     if (Viper.Util.isBrowser('msie') === true) {
         viper.setEditableElement(contentElement);
@@ -458,6 +458,8 @@ function useTest(id)
     } else {
         viper.initEditableElement(contentElement);
     }
+
+    viper.cleanDOM(contentElement);
 
 }
 
