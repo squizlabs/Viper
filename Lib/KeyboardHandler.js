@@ -435,6 +435,17 @@
                 }
             }
 
+        // Shift, Control, Alt, Caps lock, esc, CMD.
+        var ignoredKeys = [16, 17, 18, 20, 27, 91];
+        if ((this._keyDownRangeCollapsed === false && ViperUtil.inArray(e.which, ignoredKeys) === false)
+            && (e.ctrlKey === false && e.metaKey === false)
+            || e.which === 8
+            || e.which === 46
+            || (e.which >= 37 && e.which <= 40)
+        ) {
+             this._viper.fireSelectionChanged();
+        }
+
             this._keyDownRangeCollapsed = true;
 
         },
