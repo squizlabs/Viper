@@ -190,6 +190,10 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                                                    'width'  => 1270,
                                                    'height' => 850,
                                                   ),
+                              'position'       => array(
+                                                   'x' => 50,
+                                                   'y' => 50,
+                                                  ),
                               'fileGroupOwner' => '_www',
                              );
             self::$_sikuli = new PHPSikuliBrowser($browser, $options);
@@ -707,11 +711,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $this->sikuli->execJS('viper.destroy()', TRUE);
 
         // Create image for the text field actions.
-        $textFieldActionRevertRegion = $this->sikuli->getRegionOnPage($this->sikuli->execJS('ViperUtil.getBoundingRectangle(ViperUtil.getid("textboxActionRevert"))'));
+        $textFieldActionRevertRegion = $this->sikuli->getRegionOnPage($this->sikuli->execJS('Viper.Util.getBoundingRectangle(Viper.Util.getid("textboxActionRevert"))'));
         $textFieldActionRevertImage  = $this->sikuli->capture($textFieldActionRevertRegion);
         copy($textFieldActionRevertImage, $imgPath.'/textField_action_revert.png');
 
-        $textFieldActionClearRegion = $this->sikuli->getRegionOnPage($this->sikuli->execJS('ViperUtil.getBoundingRectangle(ViperUtil.getid("textboxActionClear"))'));
+        $textFieldActionClearRegion = $this->sikuli->getRegionOnPage($this->sikuli->execJS('Viper.Util.getBoundingRectangle(Viper.Util.getid("textboxActionClear"))'));
         $textFieldActionClearImage  = $this->sikuli->capture($textFieldActionClearRegion);
         copy($textFieldActionClearImage, $imgPath.'/textField_action_clear.png');
 
