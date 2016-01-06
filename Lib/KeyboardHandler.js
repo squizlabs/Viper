@@ -435,16 +435,48 @@
                 }
             }
 
-        // Shift, Control, Alt, Caps lock, esc, CMD.
-        var ignoredKeys = [16, 17, 18, 20, 27, 91];
-        if ((this._keyDownRangeCollapsed === false && ViperUtil.inArray(e.which, ignoredKeys) === false)
-            && (e.ctrlKey === false && e.metaKey === false)
-            || e.which === 8
-            || e.which === 46
-            || (e.which >= 37 && e.which <= 40)
-        ) {
-             this._viper.fireSelectionChanged();
-        }
+            if (ViperUtil.isBrowser('firefox') === true && e.which >= 37 && e.which <= 40) {
+                // Handle the case where selecting whole content and pressing arrow keys puts the caret outside of the
+                // first/last selected element. E.g. <p>test</p>*.
+                var range = this._viper.getCurrentRange();
+                if (e.which >= 39
+                    && range.startContainer === range.endContainer
+                    && range.startOffset === range.endOffset
+                    && range.endOffset >= range.startContainer.childNodes.length
+                ) {
+                    // Right and down arrow keys.
+                    var lastSelectable = range._getLastSelectableChild(range.startContainer.childNodes[range.endOffset - 1]);
+                    if (lastSelectable && lastSelectable.nodeType === ViperUtil.TEXT_NODE) {
+                        range.setStart(lastSelectable, lastSelectable.data.length);
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+                    }
+                } else if (e.which <= 38
+                    && range.startOffset === 0
+                    && range.startOffset === range.endOffset
+                    && range.startContainer === range.endContainer
+                    && range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
+                ) {
+                    // Left and up arrow keys.
+                    var firstSelectable = range._getFirstSelectableChild(range.startContainer.childNodes[range.startOffset]);
+                    range.setStart(firstSelectable, 0);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                }
+
+                return;
+            }
+
+            // Shift, Control, Alt, Caps lock, esc, CMD.
+            var ignoredKeys = [16, 17, 18, 20, 27, 91];
+            if ((this._keyDownRangeCollapsed === false && ViperUtil.inArray(e.which, ignoredKeys) === false)
+                && (e.ctrlKey === false && e.metaKey === false)
+                || e.which === 8
+                || e.which === 46
+                || (e.which >= 37 && e.which <= 40)
+            ) {
+                 this._viper.fireSelectionChanged();
+            }
 
             this._keyDownRangeCollapsed = true;
 
