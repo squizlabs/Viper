@@ -435,7 +435,7 @@
                 }
             }
 
-            if (ViperUtil.isBrowser('firefox') === true && e.which >= 37 && e.which <= 40) {
+            if (e.which >= 37 && e.which <= 40) {
                 // Handle the case where selecting whole content and pressing arrow keys puts the caret outside of the
                 // first/last selected element. E.g. <p>test</p>*.
                 var range = this._viper.getCurrentRange();
@@ -456,6 +456,7 @@
                     && range.startOffset === range.endOffset
                     && range.startContainer === range.endContainer
                     && range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
+                    && ViperUtil.isStubElement(range.startContainer.childNodes[range.startOffset]) === false
                 ) {
                     // Left and up arrow keys.
                     var firstSelectable = range._getFirstSelectableChild(range.startContainer.childNodes[range.startOffset]);
