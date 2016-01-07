@@ -556,7 +556,9 @@
                 && ((stubElementIsSelectable === true && ViperUtil.isTag(selChild, 'br') === true)
                 || (skipSpaceTextNodes !== true || ViperUtil.trim(selChild.data) !== ''))
             ) {
-                return selChild;
+                if (selChild.nodeType !== ViperUtil.TEXT_NODE || selChild.data.charCodeAt(0) !== 10) {
+                    return selChild;
+                }
             }
 
             return this.getNextContainer(container, skippedBlockElem, skipSpaceTextNodes, stubElementIsSelectable);

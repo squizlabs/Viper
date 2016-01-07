@@ -2209,27 +2209,31 @@
                     ViperUtil.remove(range.startContainer.parentNode);
                 }
 
-                // If the startParent is empty remove it if the endParent is the viperElement.
-                if (ViperUtil.isBlank(ViperUtil.trim(ViperUtil.getHtml(startParent))) !== true
-                    || endParent != this._viper.getViperElement()
-                ) {
-                    // Now bring the contents of the next selectable to the
-                    // start parent.
-                    var nextSelectable = range.getNextContainer(range.startContainer, null, true);
-                    if (this._viper.isOutOfBounds(nextSelectable) === false) {
-                        var nextParent = ViperUtil.getFirstBlockParent(nextSelectable);
-                        if (startParent !== nextParent) {
-                            while (nextParent.firstChild) {
-                                startParent.appendChild(nextParent.firstChild);
-                            }
+                if (ViperUtil.isEmptyElement(endParent) === false) {
+                    // If the startParent is empty remove it if the endParent is the viperElement.
+                    if (ViperUtil.isBlank(ViperUtil.trim(ViperUtil.getHtml(startParent))) !== true
+                        || endParent != this._viper.getViperElement()
+                    ) {
+                        // Now bring the contents of the next selectable to the
+                        // start parent.
+                        var nextSelectable = range.getNextContainer(range.startContainer, null, true);
+                        if (this._viper.isOutOfBounds(nextSelectable) === false) {
+                            var nextParent = ViperUtil.getFirstBlockParent(nextSelectable);
+                            if (startParent !== nextParent) {
+                                while (nextParent.firstChild) {
+                                    startParent.appendChild(nextParent.firstChild);
+                                }
 
-                            if (this.canRemoveNode(nextParent) === true) {
-                                ViperUtil.remove(nextParent);
+                                if (this.canRemoveNode(nextParent) === true) {
+                                    ViperUtil.remove(nextParent);
+                                }
                             }
                         }
+                    } else {
+                        ViperUtil.remove(startParent);
                     }
                 } else {
-                    ViperUtil.remove(startParent);
+                    ViperUtil.remove(endParent);
                 }
 
                 range.collapse(true);
@@ -2693,6 +2697,10 @@
                     if (ViperUtil.isTag(currentParent, 'td') === true || ViperUtil.isTag(currentParent, 'th') === true) {
                         // At the end of a cell.. Do nothing.
                         return false;
+                    }
+
+                    if (ViperUtil.isTag(currentParent.lastChild, 'br') === true) {
+                        ViperUtil.remove(currentParent.lastChild);
                     }
 
                     while (nextParent.firstChild) {
