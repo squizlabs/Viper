@@ -463,8 +463,6 @@
                     range.collapse(true);
                     ViperSelection.addRange(range);
                 }
-
-                return;
             }
 
             // Shift, Control, Alt, Caps lock, esc, CMD.
