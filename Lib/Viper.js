@@ -4359,10 +4359,12 @@
 
             this._cleanDOM(elem, tagName, true);
 
-            var range    = this.getViperRange(elem);
-            var lastElem = range._getLastSelectableChild(elem);
-            if (lastElem && lastElem.nodeType === Viper.Util.TEXT_NODE) {
-                lastElem.data = Viper.Util.rtrim(lastElem.data.replace(/(&nbsp;)*$/, ''));
+            if (Viper.Util.isBlockElement(elem) === true) {
+                var range    = this.getViperRange(elem);
+                var lastElem = range._getLastSelectableChild(elem);
+                if (lastElem && lastElem.nodeType === Viper.Util.TEXT_NODE) {
+                    lastElem.data = Viper.Util.rtrim(lastElem.data.replace(/(&nbsp;)*$/, ''));
+                }
             }
 
         },
