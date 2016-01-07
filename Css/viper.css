@@ -24,7 +24,7 @@
     z-index: 1000;
 }
 
-[contentEditable="true"] li br:last-child {
+[contentEditable="true"] li br + br:last-child {
   display: none;
 }
 
