@@ -470,6 +470,15 @@
 
         },
 
+        isText: function (node) {
+            if (node && node.nodeType === this.TEXT_NODE) {
+                return true;
+            }
+
+            return false;
+
+        },
+
         /**
          * returns a left trimmed string.
          *

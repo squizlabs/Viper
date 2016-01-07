@@ -216,6 +216,34 @@
                 }
             });
 
+            if (ViperUtil.isBrowser('safari') === true) {
+                this.viper.registerCallback('Viper:keyPress', 'ViperReplacementPlugin', function(e) {
+                    var range     = self.viper.getViperRange();
+                    var startNode = range.getStartNode();
+                    var selNode   = range.getNodeSelection();
+                    var rep       = self._getKeywordElement(startNode);
+
+                    if (!rep) {
+                        return;
+                    }
+
+                    if (ViperUtil.isText(range.startContainer) === true
+                        && range.startOffset === range.startContainer.data.length
+                        && range.collapsed === true
+                    ) {
+                        // Safari has issue with placing the caret outside of the keyword when caret is at the end.
+                        // Handle char insertion here.
+                        var textNode = document.createTextNode(String.fromCharCode(e.which));
+                        ViperUtil.insertAfter(rep, textNode);
+                        range.setStart(textNode, 1);
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+                        return false;
+                    }
+
+                });
+            }
+
             var ignoreSelectionChange = false;
             this.viper.registerCallback('Viper:selectionChanged', 'ViperReplacementPlugin', function(range) {
                 if (ignoreSelectionChange === true) {
@@ -233,8 +261,12 @@
                     if (range.collapsed === true && start.nodeType === ViperUtil.TEXT_NODE) {
                         if (range.startOffset === start.data.length) {
                             // At the end.
-                            var textNode = document.createTextNode('');
-                            ViperUtil.insertAfter(startKeyword, textNode);
+                            var textNode = startKeyword.nextSibling;
+                            if (!textNode || textNode.nodeType !== ViperUtil.TEXT_NODE) {
+                                textNode = document.createTextNode('');
+                                ViperUtil.insertAfter(startKeyword, textNode);
+                            }
+
                             range.setStart(textNode, 0);
                             range.collapse(true);
                             ViperSelection.addRange(range);
