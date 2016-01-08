@@ -530,8 +530,6 @@
                 this.setImageURL(image, this.getImageUrl(url));
                 this.setImageAlt(image, alt, pres);
                 this.setImageTitle(image, title);
-
-                this.viper.contentChanged(true);
             }
 
             this._updateToolbars(image);
@@ -545,7 +543,7 @@
 
             image.onload  = imageLoaded;
             image.onerror = imageLoaded;
-            self.viper.fireSelectionChanged(null, true);
+            this.viper.contentChanged(true);
         },
 
         _updateToolbars: function(image)
