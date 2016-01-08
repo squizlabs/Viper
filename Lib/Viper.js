@@ -3704,7 +3704,7 @@
          * @return {Viper.DOMRange} The updated range.
          */
         adjustRange: function(range)
-        {return range;
+        {
             range = range || this.getViperRange();
             if (range.collapsed !== false) {
                 if (Viper.Util.isBrowser('msie', '9') === true) {

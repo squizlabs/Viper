@@ -256,11 +256,11 @@
                         this.viper.highlightToSelection();
                     } catch (e) {}
                 }
-
-                viperRange = this.viper.getCurrentRange();
             }
 
             if (ViperUtil.isBrowser('msie') === true) {
+                viperRange = this.viper.getCurrentRange();
+
                 if (this.viper.rangeInViperBounds(this.viper.getCurrentRange()) === false) {
                     viperRange.setStart(viperRange._getFirstSelectableChild(element), 0);
                     viperRange.collapse(true);
@@ -303,6 +303,7 @@
                 return found;
             } else {
                 this.viper.focus();
+                viperRange = this.viper.getCurrentRange();
                 ViperSelection.addRange(viperRange);
 
                 var found = Viper.Util.getDocumentWindow().find(text, false, backward);
