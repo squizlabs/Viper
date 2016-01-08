@@ -11,7 +11,7 @@ ViperAccessibilityPlugin_WCAG2 = {
         var code = this._parseCode(issue.code);
 
         var content = '<strong>' + code.standard + ' References</strong><br>';
-        content    += '<em>Principle: </em> <a target="_blank" href="http://www.w3.org/TR/WCAG20/#' + code.principleName + '">' + ViperUtil.ucFirst(code.principleName) + '</a><br>';
+        content    += '<em>Principle: </em> <a target="_blank" href="http://www.w3.org/TR/WCAG20/#' + code.principleName + '">' + Viper.Util.ucFirst(code.principleName) + '</a><br>';
         content    += '<em>Techniques: </em> ';
 
         var techStrs = [];
@@ -22,8 +22,8 @@ ViperAccessibilityPlugin_WCAG2 = {
         content += techStrs.join(', ');
 
         var element = document.createElement('div');
-        ViperUtil.setHtml(element, content);
-        ViperUtil.addClass(element, 'Viper-issueWcag');
+        Viper.Util.setHtml(element, content);
+        Viper.Util.addClass(element, 'Viper-issueWcag');
 
         callback.call(this, element);
 
@@ -39,7 +39,7 @@ ViperAccessibilityPlugin_WCAG2 = {
         var obj     = window[objName];
         if (obj) {
             var fn = obj['res_' + code.section.replace('.', '_')];
-            if (ViperUtil.isFn(fn) === true) {
+            if (Viper.Util.isFn(fn) === true) {
                 obj.parent = this;
                 fn.call(obj, contentElement, issue.element, issue, code, vap.viper, issueid);
             }
@@ -70,7 +70,7 @@ ViperAccessibilityPlugin_WCAG2 = {
             obj.parent = self;
 
             var fn = obj['res_' + code.section.replace('.', '_')];
-            if (ViperUtil.isFn(fn) === true) {
+            if (Viper.Util.isFn(fn) === true) {
                 fn.call(obj, contentElement, issue.element, issue, code, vap.viper, issueid);
             }
         });
@@ -84,11 +84,11 @@ ViperAccessibilityPlugin_WCAG2 = {
         var disabled = !enabled;
         var tools    = this.viper.Tools;
         var self     = this;
-        var buttonid = ViperUtil.getUniqueId();
+        var buttonid = Viper.Util.getUniqueId();
         var button   = tools.createButton(buttonid, title, title, 'Viper-VAP-actionBtn', function() {
             tools.disableButton(buttonid);
 
-            var dismissBtn = ViperUtil.getClass('Viper-VAP-dismissBtn', resolutionContainer);
+            var dismissBtn = Viper.Util.getClass('Viper-VAP-dismissBtn', resolutionContainer);
             if (dismissBtn.length === 1) {
                 tools.disableButton(dismissBtn[0].id.replace(self.viper.getId() + '-', ''));
             }
@@ -118,13 +118,13 @@ ViperAccessibilityPlugin_WCAG2 = {
             }
         }
 
-        var actionButtons = ViperUtil.getClass('Viper-actionButtons', resolutionContainer)[0];
+        var actionButtons = Viper.Util.getClass('Viper-actionButtons', resolutionContainer)[0];
         if (actionButtons.firstChild) {
-            var otherActionButtons = ViperUtil.getClass('Viper-VAP-actionBtn', actionButtons);
+            var otherActionButtons = Viper.Util.getClass('Viper-VAP-actionBtn', actionButtons);
             if (otherActionButtons && otherActionButtons.length > 0) {
-                ViperUtil.insertAfter(otherActionButtons[otherActionButtons.length - 1], button);
+                Viper.Util.insertAfter(otherActionButtons[otherActionButtons.length - 1], button);
             } else {
-                ViperUtil.insertBefore(actionButtons.firstChild, button);
+                Viper.Util.insertBefore(actionButtons.firstChild, button);
             }
         } else {
             actionButtons.appendChild(button);
@@ -136,8 +136,8 @@ ViperAccessibilityPlugin_WCAG2 = {
 
     removeActionButtons: function(resolutionContainer)
     {
-        var actionButtons = ViperUtil.getClass('Viper-VAP-actionBtn', resolutionContainer);
-        ViperUtil.remove(actionButtons);
+        var actionButtons = Viper.Util.getClass('Viper-VAP-actionBtn', resolutionContainer);
+        Viper.Util.remove(actionButtons);
 
     },
 
@@ -152,7 +152,7 @@ ViperAccessibilityPlugin_WCAG2 = {
         }
 
         var div = document.createElement('div');
-        ViperUtil.addClass(div, objName);
+        Viper.Util.addClass(div, objName);
 
         var content = '<div class="Viper-resolutionInstructions">';
 
@@ -169,13 +169,13 @@ ViperAccessibilityPlugin_WCAG2 = {
 
         content += '</div>';
         content += '<div class="Viper-resolutionActions"><div class="Viper-editing"></div><div class="Viper-actionButtons"></div></div>';
-        ViperUtil.setHtml(div, content);
+        Viper.Util.setHtml(div, content);
 
         if (issue.type !== HTMLCS.ERROR) {
-            var actionButtons = ViperUtil.getClass('Viper-actionButtons', div)[0];
+            var actionButtons = Viper.Util.getClass('Viper-actionButtons', div)[0];
 
             var self = this;
-            var buttonid = ViperUtil.getUniqueId();
+            var buttonid = Viper.Util.getUniqueId();
             var dismissButton = this.viper.Tools.createButton(buttonid, 'Dismiss', 'Dismiss Issue', 'Viper-VAP-dismissBtn', function() {
                 self.viper.Tools.disableButton(buttonid);
                 self.vap.dismissIssue(issueid);
@@ -190,12 +190,12 @@ ViperAccessibilityPlugin_WCAG2 = {
 
     setResolutionInstruction: function(resolutionContainer, content)
     {
-        var instructionCont = ViperUtil.getClass('Viper-resolutionInstructions', resolutionContainer)[0];
+        var instructionCont = Viper.Util.getClass('Viper-resolutionInstructions', resolutionContainer)[0];
 
         if (typeof content === 'string') {
-            ViperUtil.setHtml(instructionCont, content);
+            Viper.Util.setHtml(instructionCont, content);
         } else {
-            ViperUtil.empty(instructionCont);
+            Viper.Util.empty(instructionCont);
             instructionCont.appendChild(content);
         }
 
@@ -203,8 +203,8 @@ ViperAccessibilityPlugin_WCAG2 = {
 
     getResolutionActionsContainer: function(resolutionContainer)
     {
-        var instructionCont = ViperUtil.getClass('Viper-editing', resolutionContainer)[0];
-        ViperUtil.empty(instructionCont);
+        var instructionCont = Viper.Util.getClass('Viper-editing', resolutionContainer)[0];
+        Viper.Util.empty(instructionCont);
         return instructionCont;
 
     },
