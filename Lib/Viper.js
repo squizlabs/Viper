@@ -3508,7 +3508,10 @@
         isSpecialElement: function(element)
         {
             var isSpecialElem = false;
-            isSpecialElem     = this.getPluginManager().isSpecialElement(element);
+            if (element) {
+                isSpecialElem = this.getPluginManager().isSpecialElement(element);
+            }
+
             return isSpecialElem;
 
         },

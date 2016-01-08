@@ -2495,7 +2495,7 @@
                 // In a text node.
                 if (range.startOffset === startNode.data.length) {
                     // End of the text node.
-                    if (startNode.nextSibling && this._viper.isSpecialElement(startNode.nextSibling) === true) {
+                    if (this._viper.isSpecialElement(startNode.nextSibling) === true) {
                         // Remove the whole special element.
                         ViperUtil.remove(startNode.nextSibling);
                         this._viper.contentChanged();
@@ -2998,6 +2998,11 @@
 
                             this._viper.contentChanged();
                             return false;
+                        } else if (range.startOffset === 0) {
+                            if (this._viper.isSpecialElement(range.startContainer.previousSibling) === true) {
+                                ViperUtil.remove(range.startContainer.previousSibling);
+                                return false;
+                            }
                         }
                     }
                 }
@@ -3017,10 +3022,15 @@
                                 ViperSelection.addRange(range);
                                 this._viper.contentChanged();
                                 return false;
+                            } else if (startContainer.data.length === 0) {
+                                if (this._viper.isSpecialElement(startContainer.nextSibling) === true) {
+                                    ViperUtil.remove(startContainer.nextSibling);
+                                    return false;
+                                }
                             }
                         } else if (range.startOffset === startContainer.data.length) {
                             // At the end of a text node.
-                            if (startContainer.nextSibling && this._viper.isSpecialElement(startContainer.nextSibling) === true) {
+                            if (this._viper.isSpecialElement(startContainer.nextSibling) === true) {
                                 ViperUtil.remove(startContainer.nextSibling);
                                 return false;
                             } else if (!startContainer.nextSibling) {
@@ -3031,6 +3041,15 @@
                                     return false;
                                 }
                             }
+                        } else if (range.startOffset - 1 === ViperUtil.rtrim(startContainer.data).length
+                            && startContainer.data.length !== ViperUtil.rtrim(startContainer.data).length
+                            && this._viper.isSpecialElement(startContainer.nextSibling) === true
+                        ) {
+                            ViperUtil.remove(startContainer.nextSibling);
+                            range.setStart(startContainer, startContainer.data.length);
+                            range.collapse(true);
+                            ViperSelection.addRange(range);
+                            return false;
                         }
                     } else {
                         var startNode = range.getStartNode();
