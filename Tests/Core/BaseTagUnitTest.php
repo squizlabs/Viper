@@ -1004,14 +1004,6 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->type(' test');
         $this->assertHTMLMatch('<div><strong>%1% test</strong></div>');
 
-        // Test that enter key creates a BR tag instead of creating new block elements
-        // if the text already has wrapping block elements.
-        $this->useTest(4);
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<div><strong>%1%</strong></div><div><strong> %2%</strong></div>');
-
         // Test that removing whole content and typing does wrap text in a block
         // element.
         $this->useTest(2);
@@ -1096,14 +1088,6 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->assertHTMLMatch('<p><em>%1%</em></p><p><em>test %2%</em></p><div><em>test</em></div>');
 
-        // Test that enter key creates a BR tag instead of creating new block elements
-        // if the text already has wrapping block elements.
-        $this->useTest(9);
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<div><em>%1%</em></div><div><em> %2%</em></div>');
-
         // Test that removing whole content and typing does wrap text in a block
         // element.
         $this->useTest(7);
@@ -1185,14 +1169,6 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->assertHTMLMatch('<p><del>%1%</del></p><p><del>test %2%</del></p><div><del>test</del></div>');
 
-        // Test that enter key creates a BR tag instead of creating new block elements
-        // if the text already has wrapping block elements.
-        $this->useTest(13);
-        $this->moveToKeyword(1, 'right');
-        sleep(2);
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<div><del>%1%</del></div><div><del> %2%</del></div>');
 
         // Test that removing whole content and typing does wrap text in a block
         // element.
@@ -1264,14 +1240,6 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->assertHTMLMatch('<p><sub>%1%</sub></p><p><sub>test %2%</sub></p><div><sub>test</sub></div>');
 
-        // Test that enter key creates a BR tag instead of creating new block elements
-        // if the text already has wrapping block elements.
-        $this->useTest(17);
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<div><sub>%1%</sub></div><div><sub> %2%</sub></div>');
-
         // Test that removing whole content and typing does wrap text in a block
         // element.
         $this->useTest(15);
@@ -1340,14 +1308,6 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test');
         $this->assertHTMLMatch('<p><sup>%1%</sup></p><p><sup>test %2%</sup></p><div><sup>test</sup></div>');
-
-        // Test that enter key creates a BR tag instead of creating new block elements
-        // if the text already has wrapping block elements.
-        $this->useTest(21);
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<div><sup>%1%</sup></div><div><sup> %2%</sup></div>');
 
         // Test that removing whole content and typing does wrap text in a block
         // element.
