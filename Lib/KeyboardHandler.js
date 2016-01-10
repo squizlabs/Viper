@@ -227,7 +227,8 @@
                             range.setStart(range.startContainer, range.startContainer.data.length);
                             range.collapse(true);
                             ViperSelection.addRange(range);
-                            this._viper.contentChanged(true);
+                            this._viper.fireNodesChanged([range.startContainer]);
+                            //this._viper.contentChanged(true);
                             return false;
                         } else if (range.startContainer.data.length === 0) {
                             if (range.startContainer.previousSibling
@@ -239,7 +240,7 @@
                                     range.setStart(prevSib, prevSib.data.length);
                                     range.collapse(true);
                                     ViperSelection.addRange(range);
-                                    this._viper.contentChanged(true);
+                                    this._viper.fireNodesChanged([range.startContainer]);
                                     return false;
                                 }
                             } else if (range.startContainer.parentNode
@@ -257,7 +258,7 @@
                                     range.setStart(parentPrevSib, parentPrevSib.data.length);
                                     range.collapse(true);
                                     ViperSelection.addRange(range);
-                                    this._viper.contentChanged(true);
+                                    this._viper.fireNodesChanged([parentPrevSib]);
                                     return false;
                                 }
                             }
@@ -280,7 +281,7 @@
                         range.setStart(range.startContainer, range.startContainer.data.length);
                         range.collapse(true);
                         ViperSelection.addRange(range);
-                        this._viper.contentChanged(true);
+                        this._viper.fireNodesChanged([range.startContainer]);
                         return false;
                     }
 
@@ -363,7 +364,7 @@
                             range.setStart(textContainer, 1);
                             range.collapse(true);
                             ViperSelection.addRange(range);
-                            this._viper.contentChanged(true);
+                            this._viper.fireNodesChanged([textContainer]);
                             return false;
                         }
                     } else if (ViperUtil.isBrowser('msie', '<11') === true
@@ -409,7 +410,7 @@
 
                 var self = this;
                 setTimeout(function() {
-                    self._viper.contentChanged();
+                    self._viper.fireNodesChanged([range.startContainer]);
                 }, 5);
 
                 return true;
