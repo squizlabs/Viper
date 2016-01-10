@@ -54,7 +54,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     public function testMidOfParaBold()
     {
         $this->useTest(1);
-        
+
         // Use inline toolbar
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('bold');
@@ -94,7 +94,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     public function testEndOfParaBold()
     {
         $this->useTest(1);
-        
+
         // Use inline toolbar
         $this->selectKeyword(3);
         $this->clickInlineToolbarButton('bold');
@@ -134,7 +134,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     public function testRemoveBoldFromPartOfContent()
     {
         $this->useTest(1);
-        
+
         // Apply bold to two words
         $this->selectKeyword(2, 3);
         $this->clickInlineToolbarButton('bold');
@@ -174,7 +174,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     public function testStrongTagsAppliedCorrectlyWhenReapplyingBold()
     {
         $this->useTest(1);
-        
+
         // Apply bold to two words
         $this->selectKeyword(2, 3);
         $this->clickInlineToolbarButton('bold');
@@ -220,7 +220,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     public function testDeletingBoldContent()
     {
         $this->useTest(7);
-        
+
         // Delete bold word and replace with new content
         $this->selectKeyword(5);
         $this->selectInlineToolbarLineageItem(1);
@@ -239,7 +239,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     public function testBoldShortcutCommand()
     {
         $this->useTest(1);
-        
+
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + b');
         $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
@@ -263,7 +263,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     public function testAdjacentBoldStyling()
     {
         $this->useTest(1);
-        
+
         $this->selectKeyword(2);
         $this->sikuli->keyDown('Key.CMD + b');
 
@@ -298,7 +298,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     public function testSpaceSeparatedBoldStyling()
     {
         $this->useTest(1);
-        
+
         $this->selectKeyword(2);
         $this->sikuli->keyDown('Key.CMD + b');
 
@@ -321,7 +321,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     public function testBoldIconIsRstrongovedFromInlineToolbar()
     {
         $this->useTest(1);
-        
+
         $this->selectKeyword(2);
 
         // Inline Toolbar icon should be displayed.
@@ -350,7 +350,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     public function testAddBoldToTwoWordsWhereOneItalic()
     {
         $this->useTest(1);
-        
+
         $this->selectKeyword(2);
         sleep(1);
         $this->sikuli->keyDown('Key.CMD + i');
@@ -374,7 +374,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     public function testAddBoldToTwoWordsWhereOneBoldAndOneItalics()
     {
         $this->useTest(1);
-        
+
         $this->selectKeyword(4, 5);
         $this->sikuli->keyDown('Key.CMD + b');
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <strong><em>%4%</em> %5%</strong></p>');
@@ -419,7 +419,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     public function testAddAndRemoveBoldToParagraph()
     {
         $this->useTest(1);
-        
+
         $this->selectKeyword(1, 3);
 
         // The bold icon in the inline toolbar icon should not be displayed.
@@ -529,7 +529,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     public function testAddAndRemoveBoldToAllContent()
     {
         $this->useTest(1);
-        
+
         $this->moveToKeyword(2);
         $this->sikuli->keyDown('Key.CMD + a');
         sleep(1);
@@ -561,7 +561,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     public function testAddAndRemovingBoldForLink()
     {
         $this->useTest(4);
-        
+
         // Using inline toolbar
         $this->moveToKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
@@ -666,7 +666,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon should not be active');
 
     }//end testRemoveBoldForLinkInBoldParagraph()
-    
+
 
     /**
      * Test that undo and redo buttons for bold formatting.
@@ -676,7 +676,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     public function testUndoAndRedoForBold()
     {
         $this->useTest(1);
-        
+
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('bold');
 
@@ -701,7 +701,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     public function testBoldIconForHeadingInInlineToolbar()
     {
         $this->useTest(5);
-        
+
         // Test H1
         $this->selectKeyword(1);
         $this->assertFalse($this->inlineToolbarButtonExists('bold'));
@@ -754,11 +754,11 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->clickTopToolbarButton('bold', 'active');
 
         // Perform the check using raw html as there is a bug that removes the space after 'more' when it removes the bold formatting
-        $this->assertEquals('<p>Text <strong>more </strong>%1%text text and more%2%<strong> text</strong></p>', $this->getRawHtml());        
+        $this->assertEquals('<p>Text <strong>more </strong>%1%text text and more%2%<strong> text</strong></p>', $this->getRawHtml());
 
         // Reapply using top toolbar
         $this->clickTopToolbarButton('bold');
-        $this->assertEquals('<p>Text<strong>more %1%text text and more%2% text</strong></p>', $this->getRawHtml());
+        $this->assertEquals('<p>Text <strong>more %1%text text and more%2% text</strong></p>', $this->getRawHtml());
 
         // Using inline toolbar
         $this->useTest(8);
@@ -768,7 +768,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
 
         // Reapply using inline toolbar
         $this->clickInlineToolbarButton('bold');
-        $this->assertEquals('<p>Text<strong>more %1%text text and more%2% text</strong></p>', $this->getRawHtml());
+        $this->assertEquals('<p>Text <strong>more %1%text text and more%2% text</strong></p>', $this->getRawHtml());
 
         // Using keyboard shortcut
         $this->useTest(8);
@@ -778,7 +778,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
 
         // Reapply using keyboard shortcut
         $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertEquals('<p>Text<strong>more %1%text text and more%2% text</strong></p>', $this->getRawHtml());
+        $this->assertEquals('<p>Text <strong>more %1%text text and more%2% text</strong></p>', $this->getRawHtml());
 
     }//end testRemovingBoldFromDifferentSectionsInContent()
 
