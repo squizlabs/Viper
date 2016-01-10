@@ -207,11 +207,11 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('subscript', 'active');
 
         // Perform the check using raw html as there is a bug that removes the space after 'more' when it removes the subscript formatting
-        $this->assertEquals('<p>Text <sub>more </sub>%1%text text and more%2%<sub> text</sub></p>', $this->getRawHtml());        
+        $this->assertEquals('<p>Text <sub>more </sub>%1%text text and more%2%<sub> text</sub></p>', $this->getRawHtml());
 
         // Reapply using top toolbar
         $this->clickTopToolbarButton('subscript');
-        $this->assertEquals('<p>Text<sub>more %1%text text and more%2% text</sub></p>', $this->getRawHtml());
+        $this->assertEquals('<p>Text <sub>more %1%text text and more%2% text</sub></p>', $this->getRawHtml());
 
     }//end testRemovingSubscriptFromDifferentSectionsInContent()
 

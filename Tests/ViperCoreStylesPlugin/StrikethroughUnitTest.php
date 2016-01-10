@@ -106,7 +106,7 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
      */
     public function testSpaceSeparatedStrikethroughStyling()
     {
-        $this->usetest(1);        
+        $this->usetest(1);
         $this->selectKeyword(2);
          $this->clickTopToolbarButton('strikethrough');
 
@@ -128,7 +128,7 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
      */
     public function testUndoAndRedoStrikethrough()
     {
-        $this->usetest(1);        
+        $this->usetest(1);
         $this->selectKeyword(2);
 
         $this->clickTopToolbarButton('strikethrough');
@@ -185,11 +185,11 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
         $this->clickTopToolbarButton('strikethrough', 'active');
 
         // Perform the check using raw html as there is a bug that removes the space after 'more' when it removes the strikethrough formatting
-        $this->assertEquals('<p>Text <del>more </del>%1%text text and more%2%<del> text</del></p>', $this->getRawHtml());        
+        $this->assertEquals('<p>Text <del>more </del>%1%text text and more%2%<del> text</del></p>', $this->getRawHtml());
 
         // Reapply using top toolbar
         $this->clickTopToolbarButton('strikethrough');
-        $this->assertEquals('<p>Text<del>more %1%text text and more%2% text</del></p>', $this->getRawHtml());
+        $this->assertEquals('<p>Text <del>more %1%text text and more%2% text</del></p>', $this->getRawHtml());
 
     }//end testRemovingStrikethroughFromDifferentSectionsInContent()
 
