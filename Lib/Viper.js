@@ -1870,9 +1870,24 @@
                     range.deleteContents();
                     range.insertNode(node);
 
+                    var textNode = node.firstChild;
+
+                    if (!attributes && Viper.Util.isTag(node.previousSibling, tag) === true) {
+                        // Move contents to previous sibling.
+                        Viper.Util.moveChildrenToElement(node, node.previousSibling);
+                        node = node.previousSibling;
+                        Viper.Util.remove(node.nextSibling);
+                    }
+
+                    // Check if the next sibling is the same tag.
+                    if (!attributes && Viper.Util.isTag(node.nextSibling, tag) === true) {
+                        Viper.Util.moveChildrenToElement(node.nextSibling, node);
+                        Viper.Util.remove(node.nextSibling);
+                    }
+
                     if (keepSelection !== true) {
-                        range.setStart(node.firstChild, 0);
-                        range.setEnd(node.firstChild, node.firstChild.data.length);
+                        range.setStart(textNode, 0);
+                        range.setEnd(textNode, textNode.data.length);
                         Viper.Selection.addRange(range);
                     }
 
