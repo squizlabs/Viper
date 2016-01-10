@@ -749,7 +749,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     public function testRemovingBoldFromDifferentSectionsInContent()
     {
         // Remove using top toolbar
-        $this->useTest(6);
+        $this->useTest(8);
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('bold', 'active');
 
@@ -761,7 +761,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->assertEquals('<p>Text<strong>more %1%text text and more%2% text</strong></p>', $this->getRawHtml());
 
         // Using inline toolbar
-        $this->useTest(6);
+        $this->useTest(8);
         $this->selectKeyword(1, 2);
         $this->clickInlineToolbarButton('bold', 'active');
         $this->assertEquals('<p>Text <strong>more </strong>%1%text text and more%2%<strong> text</strong></p>', $this->getRawHtml());
@@ -771,7 +771,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->assertEquals('<p>Text<strong>more %1%text text and more%2% text</strong></p>', $this->getRawHtml());
 
         // Using keyboard shortcut
-        $this->useTest(6);
+        $this->useTest(8);
         $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.CMD + b');
         $this->assertEquals('<p>Text <strong>more </strong>%1%text text and more%2%<strong> text</strong></p>', $this->getRawHtml());
