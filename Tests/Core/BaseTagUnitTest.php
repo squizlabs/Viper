@@ -1189,6 +1189,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         // if the text already has wrapping block elements.
         $this->useTest(13);
         $this->moveToKeyword(1, 'right');
+        sleep(2);
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<div><del>%1%</del></div><div><del> %2%</del></div>');
