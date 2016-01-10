@@ -24,12 +24,14 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
 
         // Remove left justify
         $this->moveToKeyword(1);
+        usleep(300000);
         $this->clickTopToolbarButton('justifyLeft', 'active');
         $this->clickTopToolbarButton('justifyLeft', 'active');
         $this->assertHTMLMatch('<p>%1% test content %2%</p>');
 
         // Apply centre justify
         $this->moveToKeyword(1);
+        usleep(300000);
         $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyCenter');
         $this->assertHTMLMatch('<p style="text-align: center;">%1% test content %2%</p>');
@@ -37,12 +39,14 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
 
         // Remove centre justify
         $this->moveToKeyword(1);
+        usleep(300000);
         $this->clickTopToolbarButton('justifyCenter', 'active');
         $this->clickTopToolbarButton('justifyCenter', 'active');
         $this->assertHTMLMatch('<p>%1% test content %2%</p>');
 
         // Apply right justify
         $this->moveToKeyword(1);
+        usleep(300000);
         $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyRight');
         $this->assertHTMLMatch('<p style="text-align: right;">%1% test content %2%</p>');
@@ -50,12 +54,14 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
 
         // Remove left justify
         $this->moveToKeyword(1);
+        usleep(300000);
         $this->clickTopToolbarButton('justifyRight', 'active');
         $this->clickTopToolbarButton('justifyRight', 'active');
         $this->assertHTMLMatch('<p>%1% test content %2%</p>');
 
         // Apply block justify
         $this->moveToKeyword(1);
+        usleep(300000);
         $this->clickTopToolbarButton('justifyLeft');
         $this->clickTopToolbarButton('justifyBlock');
         $this->assertHTMLMatch('<p style="text-align: justify;">%1% test content %2%</p>');
@@ -63,6 +69,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentUnitTest extends AbstractViperUnitT
 
         // Remove block justify
         $this->moveToKeyword(1);
+        usleep(300000);
         $this->clickTopToolbarButton('justifyBlock', 'active');
         $this->clickTopToolbarButton('justifyBlock', 'active');
         $this->assertHTMLMatch('<p>%1% test content %2%</p>');
