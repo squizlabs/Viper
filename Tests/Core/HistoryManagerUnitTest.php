@@ -120,10 +120,11 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
      *
      * @return void
      */
-    public function testMaxCharlimit()
+    public function testUndoAndRedoMaxCharlimit()
     {
         $this->moveToKeyword(1, 'right');
 
+        // Add 54 characters to the content
         $chars = '';
         for ($i = 0; $i < 55; $i++) {
             $chars .= 'a';
@@ -131,23 +132,22 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
 
         $this->type($chars);
 
+        // Pressing undo will remove the last 5 characters that were added
         $this->sikuli->keyDown('Key.CMD + z');
 
         // Both Undo and Redo button should be active.
         $this->topToolbarButtonExists('historyUndo');
         $this->topToolbarButtonExists('historyRedo');
-
-        $this->assertHTMLMatch('<p>%1%'.$chars.'</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1%aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p><p>EIB MOZ</p>');
         sleep(1);
 
+        // Pressing undo will remove the remaining characters that were added
         $this->sikuli->keyDown('Key.CMD + z');
-
         $this->topToolbarButtonExists('historyUndo', 'disabled');
         $this->topToolbarButtonExists('historyRedo', 'disabled');
-
         $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
 
-    }//end testMaxCharlimit()
+    }//end testUndoAndRedoMaxCharlimit()
 
 
     /**
