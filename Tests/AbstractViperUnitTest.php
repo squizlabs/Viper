@@ -1980,9 +1980,13 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $fieldLabel   = $this->_getLabel($label);
         $fieldRegion  = $this->sikuli->extendRight($fieldLabel, 400);
         $actionImage  = $this->getBrowserImagePath().'/textField_action_clear.png';
-        $actionButton = $this->sikuli->find($actionImage, $fieldRegion, 0.6);
 
-        $this->sikuli->click($actionButton);
+        try {
+            $actionButton = $this->sikuli->find($actionImage, $fieldRegion, 0.4);
+            $this->sikuli->click($actionButton);
+        } catch (FindFailedException $e) {
+            $this->clickElement('.Viper-textbox.Viper-focused.Viper-actionClear .Viper-textbox-action');
+        }
 
     }//end clearFieldValue()
 
@@ -2006,9 +2010,13 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         );
 
         $actionImage  = $this->getBrowserImagePath().'/textField_action_revert.png';
-        $actionButton = $this->sikuli->find($actionImage, $fieldRegion, 0.4);
 
-        $this->sikuli->click($actionButton);
+        try {
+            $actionButton = $this->sikuli->find($actionImage, $fieldRegion, 0.4);
+            $this->sikuli->click($actionButton);
+        } catch (FindFailedException $e) {
+            $this->clickElement('.Viper-textbox.Viper-focused.Viper-actionRevert .Viper-textbox-action');
+        }
 
     }//end revertFieldValue()
 
