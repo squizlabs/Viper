@@ -196,7 +196,7 @@
                         }//end switch
 
                         ViperSelection.addRange(range);
-                        this._viper.contentChanged(false);
+                        this._viper.fireNodesChanged([textNode]);
                         return false;
                     } else if (range.startContainer === range.endContainer
                         && ViperUtil.isTag(range.startContainer, 'br') === true
