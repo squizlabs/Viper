@@ -66,8 +66,9 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
         // Click warning.
         $warningIcon = $this->findImage('HTMLCS-report-warning', '.HTMLCS-issue-type.HTMLCS-warning');
         $this->sikuli->click($warningIcon);
-
+        sleep(1);
         $bubble = $this->getActiveBubble();
+        sleep(1);
 
         // View source.
         $this->clickElement('.Viper-resolutionHeader .Viper-button.Viper-sourceView');
