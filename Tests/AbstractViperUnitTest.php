@@ -1944,7 +1944,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     protected function fieldExists($label)
     {
         try {
-            $this->sikuli->find($this->_getLabel($label), null, 0.7);
+            $this->_getLabel($label);
         } catch (FindFailedException $e) {
             return false;
         }
@@ -1963,7 +1963,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function clickField($label, $required=FALSE)
     {
-        $this->sikuli->click($this->sikuli->find($this->_getLabel($label, false, $required), null, 0.7));
+        $this->sikuli->click($this->_getLabel($label, false, $required));
 
     }//end clickField()
 
@@ -1977,12 +1977,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function clearFieldValue($label)
     {
-        try {
-            $fieldLabel = $this->sikuli->find($this->_getLabel($label), null, 0.7);
-        } catch (FindFailedException $e) {
-            $fieldLabel = $this->sikuli->find($this->_getLabel($label, true), null, 0.7);
-        }
-
+        $fieldLabel   = $this->_getLabel($label);
         $fieldRegion  = $this->sikuli->extendRight($fieldLabel, 400);
         $actionImage  = $this->getBrowserImagePath().'/textField_action_clear.png';
         $actionButton = $this->sikuli->find($actionImage, $fieldRegion, 0.6);
@@ -2001,12 +1996,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function revertFieldValue($label)
     {
-        try {
-            $fieldLabel = $this->sikuli->find($this->_getLabel($label), null, 0.7);
-        } catch (FindFailedException $e) {
-            $fieldLabel = $this->sikuli->find($this->_getLabel($label, true), null, 0.7);
-        }
-
+        $fieldLabel  = $this->_getLabel($label);
         $topLeft     = $this->sikuli->getTopLeft($fieldLabel);
         $fieldRegion = $this->sikuli->createRegion(
             $this->sikuli->getX($topLeft),
@@ -2061,12 +2051,26 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         if (file_exists($imagePath) === false || $force === true) {
             $rect    = $this->sikuli->execJS('gField("'.$label.'")');
+            if (is_array($rect) === false) {
+                throw new FindFailedException('Failed to get location of field: ' + $label);
+            }
+
             $region  = $this->sikuli->getRegionOnPage($rect);
             $tmpPath = $this->sikuli->capture($region);
             copy($tmpPath, $imagePath);
         }
 
-        return $imagePath;
+        $labelLoc = null;
+        try {
+            $labelLoc = $this->sikuli->find($imagePath, null, 0.7);
+        } catch (FindFailedException $e) {
+            if ($force === false) {
+                // Try forcing...
+                $labelLoc = $this->_getLabel($label, true, $required);
+            }
+        }
+
+        return $labelLoc;
 
     }//end _getLabel()
 
