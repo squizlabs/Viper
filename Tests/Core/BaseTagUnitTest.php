@@ -1802,6 +1802,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('link', NULL);
         $this->type('test-link');
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(2);
         $this->clickField('Title');
         $this->type('test-title');
         $this->sikuli->keyDown('Key.ENTER');
