@@ -536,6 +536,7 @@
                 'blur',
                 function() {
                     ViperUtil.removeClass(textBox, 'Viper-active');
+                    ViperUtil.removeClass(textBox, 'Viper-focused');
                 }
             );
 
