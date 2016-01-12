@@ -631,7 +631,6 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<strong><a href="test-link" title="test-title">%1%</a></strong> test content');
 
         // Test modifying title of link with bold formatting
-        $this->clickInlineToolbarButton('link', 'active-selected');
         $this->clickInlineToolbarButton('link', 'active');
         $this->clearFieldValue('Title');
         $this->clickField('Title');
@@ -770,10 +769,11 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->clickField('Title');
         $this->type('modified-title');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton('link', 'active-selected');
+        $this->clickInlineToolbarButton('link', 'active-selected');
         $this->assertHTMLMatch('<em><a href="test-link" title="modified-title">%1%</a></em> test content');
 
         // Test removing title of link from italic formatted content
+        $this->clickInlineToolbarButton('link', 'active');
         $this->clearFieldValue('Title');
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<em><a href="test-link">%1%</a></em> test content');
@@ -1595,6 +1595,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->clickField('Title');
         $this->type('modified-title');
         $this->sikuli->keyDown('Key.ENTER');
+        $this->clickInlineToolbarButton('link', 'active-selected');
         $this->assertHTMLMatch('<div><strong><a href="test-link" title="modified-title">%1%</a></strong> test content</div>');
 
         // Test removing title of link from bold formatted content
