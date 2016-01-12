@@ -1836,7 +1836,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('link', NULL);
         $this->type('test-link');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton('link', 'active-selected')
+        $this->clickTopToolbarButton('link', 'active-selected');
         $this->assertHTMLMatch('<div><sub><a href="test-link">%1%</a></sub> test content</div>');
 
         // Test removing subscript from linked content
