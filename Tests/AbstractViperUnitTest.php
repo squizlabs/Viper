@@ -1830,16 +1830,22 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             ($this->sikuli->getY($startLeft) + 2)
         );
 
-        $this->sikuli->setLocation(
-            $endRight,
-            ($this->sikuli->getX($endRight) + 1),
-            ($this->sikuli->getY($endRight) + 2)
-        );
-
         if (strpos($this->sikuli->getBrowserid(), 'ie') === 0 || $this->sikuli->getBrowserid() === 'edge') {
+            $this->sikuli->setLocation(
+                $endRight,
+                ($this->sikuli->getX($endRight) - 1),
+                ($this->sikuli->getY($endRight) + 2)
+            );
+
             $this->sikuli->dragDrop($endRight, $startLeft);
             usleep(200000);
         } else {
+            $this->sikuli->setLocation(
+                $endRight,
+                ($this->sikuli->getX($endRight) - 3),
+                ($this->sikuli->getY($endRight) + 2)
+            );
+
             $this->sikuli->dragDrop($startLeft, $endRight);
             usleep(50000);
         }//end if
