@@ -318,7 +318,7 @@ function gStringLoc(str)
     if (Viper.Util.isBrowser('msie') === true) {
         // Range search.
         var viperRange = null;
-        var textRange  = new ViperIERange(document.body.createTextRange());
+        var textRange  = new Viper.IERange(document.body.createTextRange());
         var selectable = range._getFirstSelectableChild(contentElement);
         textRange.setStart(selectable, 0);
         textRange.setEnd(selectable, 0);

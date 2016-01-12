@@ -247,9 +247,10 @@
                     Viper.document.activeElement.blur();
                 }
 
-                viperRange = this.viper.getCurrentRange().cloneRange();
+                viperRange = this.viper.getCurrentRange();
                 viperRange.setStart(viperRange._getFirstSelectableChild(element), 0);
                 viperRange.collapse(true);
+                ViperSelection.addRange(viperRange);
             } else {
                 if (ViperUtil.isBrowser('msie') === true && this._finding === true) {
                     try {
@@ -272,7 +273,7 @@
                         viperRange.collapse(false);
                     }
 
-                    var textRange = new ViperIERange(document.body.createTextRange());
+                    var textRange = new Viper.IERange(document.body.createTextRange());
                     textRange.setStart(viperRange.startContainer, viperRange.startOffset);
                     textRange.setEnd(viperRange.endContainer, viperRange.endOffset);
                     viperRange = textRange;
@@ -303,7 +304,7 @@
                 return found;
             } else {
                 this.viper.focus();
-                viperRange = this.viper.getCurrentRange();
+                viperRange = this.viper.getViperRange();
                 ViperSelection.addRange(viperRange);
 
                 var found = Viper.Util.getDocumentWindow().find(text, false, backward);
@@ -320,6 +321,8 @@
                 } else if (testOnly === true) {
                     ViperSelection.addRange(rangeClone);
                     return true;
+                } else {
+                    ViperSelection.addRange(this.viper.getCurrentRange());
                 }
             }//end if
 
