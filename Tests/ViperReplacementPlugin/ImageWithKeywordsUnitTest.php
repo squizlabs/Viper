@@ -106,7 +106,7 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         $this->sikuli->mouseUp('Button.LEFT');
 
         $this->assertHTMLMatch('<p>test content %1%<a href="www.squizlabs.com.au"><img alt="TITLE" src="((prop:url))" /></a></p><p>more content&nbsp;&nbsp;even more content</p>');
-        $this->assertRawHTMLMatch('<p>test content %1%<a href="www.squizlabs.com.au"><img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').' /"></a></p><p>more content&nbsp;&nbsp;even more content</p>');
+        $this->assertRawHTMLMatch('<p>test content %1%<a href="www.squizlabs.com.au"><img alt="TITLE" src="'.$this->getTestURL('/Web/testImage.png').'" data-viper-src="((prop:url))" /></a></p><p>more content&nbsp;&nbsp;even more content</p>');
 
     }//end testMovingLinkedImageKeyword()
 
