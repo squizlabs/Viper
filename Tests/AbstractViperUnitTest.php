@@ -2412,7 +2412,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      * @return void
      * @throws Exception If the browser is not supported.
      */
-    protected function cut($rightClick=false)
+    protected function cut($rightClick=false, $isImage=false)
     {
         if ($rightClick !== true) {
             $this->sikuli->keyDown('Key.CMD + x');
@@ -2429,10 +2429,29 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                     $this->sikuli->keyDown('t');
                 break;
 
-                case 'edge':
-                    $this->sikuli->keyDown('Key.DOWN');
-                    $this->sikuli->keyDown('Key.DOWN');
-                    $this->sikuli->keyDown('Key.ENTER');
+               case 'edge':
+                    // The right click menu is different if you have selected an image.
+                    if ($isImage == true) {
+                        // Press the down arrow to get to the cut option in the menu.
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.ENTER');
+                    } else {
+                        // Press the down arrow to get to the cut option in the menu.
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.ENTER');
+                    }
                 break;
 
                 case 'chrome':
@@ -2465,7 +2484,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      * @return void
      * @throws Exception If the browser is not supported.
      */
-    protected function copy($rightClick=false)
+    protected function copy($rightClick=false, $isImage=false)
     {
         if ($rightClick !== true) {
             $this->sikuli->keyDown('Key.CMD + c');
@@ -2484,10 +2503,39 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
                 case 'chrome':
                 case 'safari':
-                    // Use the shortcut menu to select the menu option and then move the mouse up to copy.
+                    // Use the shortcut menu to highlight the menu option and then press enter to select the menu option.
                     $this->sikuli->keyDown('c');
                     sleep(2);
                     $this->sikuli->keyDown('Key.ENTER');
+                break;
+
+                case 'edge':
+                    // The right click menu is different if you have selected an image.
+                    if ($isImage == true) {
+                        // Press the down arrow to get to the copy option in the menu.
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.ENTER');
+                    } else {
+                        // Press the down arrow to get to the copy option in the menu.
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.ENTER');
+                    }
                 break;
 
                 default:
