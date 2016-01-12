@@ -2352,7 +2352,7 @@
             var styleToLvl = {};
             var prevCssStyle = null;
 
-            var circleCharsArray = [111, 167, 183, 216, 222, 223, 252, 8721, 8226];
+            var circleCharsArray = [111, 118, 167, 183, 216, 222, 223, 252, 8721, 8226];
             var circleChars      = [];
             for (var i = 0; i < circleCharsArray.length; i++) {
                 circleChars.push(String.fromCharCode(circleCharsArray[i]));
