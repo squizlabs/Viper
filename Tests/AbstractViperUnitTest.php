@@ -1842,7 +1842,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         } else {
             $this->sikuli->setLocation(
                 $endRight,
-                ($this->sikuli->getX($endRight) - 3),
+                ($this->sikuli->getX($endRight) + 1),
                 ($this->sikuli->getY($endRight) + 2)
             );
 
