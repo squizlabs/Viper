@@ -64,6 +64,11 @@ function getRawHTML(selector, index)
         html = Viper.Util.getHtml(viper.getViperElement());
     }
 
+    var tmp = document.createElement('div');
+    Viper.Util.setHtml(tmp, html);
+    viper.cleanDOM(tmp);
+    html = Viper.Util.getHtml(tmp);
+
     if (html) {
         html = html.replace(/<\/?\s*([A-Z\d:]+)/g, function(str) {
             return str.toLowerCase();
