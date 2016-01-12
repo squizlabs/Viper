@@ -536,6 +536,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('link', NULL);
         $this->type('test-link');
         $this->sikuli->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton('link','active-selected');
         $this->assertHTMLMatch('<strong><a href="test-link">%1%</a></strong> test content');
 
         // Test removing bold from linked content
@@ -547,6 +548,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<strong><a href="test-link">%1%</a></strong> test content');
 
         // Test removing link from bold formatted content
+        sleep(2);
         $this->clickTopToolbarButton('linkRemove', NULL);
         $this->assertHTMLMatch('<strong>%1%</strong> test content');
 
@@ -558,6 +560,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->clickField('Title');
         $this->type('test-title');
         $this->sikuli->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton('link', 'active-selected');
         $this->assertHTMLMatch('<strong><a href="test-link" title="test-title">%1%</a></strong> test content');
 
         // Test removing bold format from linked content with title
@@ -569,7 +572,6 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<strong><a href="test-link" title="test-title">%1%</a></strong> test content');
 
         // Test modifying title of link with bold formatting
-        $this->clickTopToolbarButton('link', 'active-selected');
         $this->clickTopToolbarButton('link', 'active');
         $this->clearFieldValue('Title');
         $this->clickField('Title');
@@ -660,6 +662,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('link', NULL);
         $this->type('test-link');
         $this->sikuli->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton('link', 'active-selected');
         $this->assertHTMLMatch('<em><a href="test-link">%1%</a></em> test content');
 
         // Test removing italic from linked content
@@ -674,6 +677,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
 
         // Test removing link from italic formatted content
         $this->selectKeyword(1);
+        sleep(2);
         $this->clickTopToolbarButton('linkRemove', NULL);
         $this->assertHTMLMatch('<em>%1%</em> test content');
 
@@ -789,6 +793,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('link', NULL);
         $this->type('test-link');
         $this->sikuli->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton('link', 'active-selected');
         $this->assertHTMLMatch('<del><a href="test-link">%1%</a></del> test content');
 
         // Test removing strikethrough from linked content
@@ -803,6 +808,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
 
         // Test removing link from strikethrough formatted content
         $this->selectKeyword(1);
+        sleep(2);
         $this->clickTopToolbarButton('linkRemove', NULL);
         $this->assertHTMLMatch('<del>%1%</del> test content');
 
@@ -862,6 +868,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('link', NULL);
         $this->type('test-link');
         $this->sikuli->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton('link', 'active-selected');
         $this->assertHTMLMatch('<sub><a href="test-link">%1%</a></sub> test content');
 
         // Test removing subscript from linked content
@@ -895,7 +902,6 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<sub><a href="test-link" title="test-title">%1%</a></sub> test content');
 
         // Test modifying title of link with subscript formatting
-        $this->clickTopToolbarButton('link', 'active-selected');
         $this->clickTopToolbarButton('link', 'active');
         $this->clearFieldValue('Title');
         $this->clickField('Title');
@@ -929,6 +935,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('link', NULL);
         $this->type('test-link');
         $this->sikuli->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton('link', 'active-selected');
         $this->assertHTMLMatch('<sup><a href="test-link">%1%</a></sup> test content');
 
         // Test removing superscript from linked content
