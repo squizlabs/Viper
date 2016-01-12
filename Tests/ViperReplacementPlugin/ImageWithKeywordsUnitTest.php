@@ -23,7 +23,7 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>test content %1%</p><p>more content <img alt="TITLE" title="test" src="((prop:url))" /> even more content</p>');
-        $this->assertRawHTMLMatch('<p>test content %1%</p><p>more content <img class="__viper_selHighlight __viper_cleanOnly" data-viper-attribite-keywords="true" title="test" alt="TITLE" src="'.$this->getTestURL('/Web/testImage.png').'" data-viper-src="((prop:url))" /> even more content</p>');
+        $this->assertRawHTMLMatch('<p>test content XAX</p><p>more content<img alt="TITLE" data-viper-attribite-keywords="true" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" title="test" /> even more content</p>');
 
         // Edit the title tag
         $this->clickElement('img', 0);
@@ -33,7 +33,7 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>test content %1%</p><p>more content <img alt="TITLE" title="test title" src="((prop:url))" /> even more content</p>');
-        $this->assertRawHTMLMatch('<p>test content %1%</p><p>more content <img class="__viper_selHighlight __viper_cleanOnly" data-viper-attribite-keywords="true" title="test title" alt="TITLE" src="'.$this->getTestURL('/Web/testImage.png').'" data-viper-src="((prop:url))" /> even more content</p>');
+        $this->assertRawHTMLMatch('<p>test content XAX</p><p>more content<img alt="TITLE" data-viper-attribite-keywords="true" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" title="test title" /> even more content</p>');
 
         // Using top toolbar
         $this->clickElement('img', 0);
@@ -131,7 +131,7 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>test content %1%</p><p>more content<img src="((prop:url))" alt="" /> even more content</p>');
-        $this->assertRawHTMLMatch('<p>test content XAX</p><p>more content<img alt="" data-viper-attribite-keywords="true" data-viper-src="((prop:url))" src="http://localhost/vt/Tests/Web/testImage.png" /> even more content</p>');
+        $this->assertRawHTMLMatch('<p>test content XAX</p><p>more content<img alt="" data-viper-attribite-keywords="true" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /> even more content</p>');
 
         // Changing back
 		$this->clickField('Image is decorative');
@@ -143,7 +143,7 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>test content %1%</p><p>more content<img alt="TITLE" src="((prop:url))" /> even more content</p>');
-        $this->assertRawHTMLMatch('<p>test content XAX</p><p>more content<img alt="TITLE" data-viper-attribite-keywords="true" data-viper-src="((prop:url))" src="http://localhost/vt/Tests/Web/testImage.png" /> even more content</p>');
+        $this->assertRawHTMLMatch('<p>test content XAX</p><p>more content<img alt="TITLE" data-viper-attribite-keywords="true" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /> even more content</p>');
 
         // Using top toolbar
         $this->clickElement('img', 0);
@@ -208,7 +208,7 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         $this->paste(true);
 
         $this->assertHTMLMatch('<p>test content XAX</p><p><img alt="TITLE" src="((prop:url))" /></p><p><img alt="TITLE" src="((prop:url))" /></p><p>more content<img alt="TITLE" src="((prop:url))" /> even more content</p>');
-        $this->assertRawHTMLMatch('<p>test content XAX</p><p><img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /></p><p><img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'"></p><p>more content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /> even more content</p>');
+        $this->assertRawHTMLMatch('<p>test content XAX</p><p><img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /></p><p><img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /></p><p>more content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /> even more content</p>');
 
     }//end testCopyAndPasteImageKeyword()
 
