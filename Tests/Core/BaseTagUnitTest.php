@@ -624,6 +624,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<a href="test-link" title="test-title">%1%</a> test content');
 
         // Test appling bold format to linked content with title
+        sleep(2);
         $this->clickInlineToolbarButton('bold', NULL);
         $this->assertHTMLMatch('<strong><a href="test-link" title="test-title">%1%</a></strong> test content');
 
@@ -696,6 +697,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<a href="test-link" title="test-title">%1%</a> test content');
 
         // Test appling italic format to linked content with title
+        sleep(2);
         $this->clickTopToolbarButton('italic', NULL);
         $this->assertHTMLMatch('<em><a href="test-link" title="test-title">%1%</a></em> test content');
 
@@ -894,10 +896,12 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<sub><a href="test-link" title="test-title">%1%</a></sub> test content');
 
         // Test removing subscript format from linked content with title
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('subscript', 'active');
         $this->assertHTMLMatch('<a href="test-link" title="test-title">%1%</a> test content');
 
         // Test appling subscript format to linked content with title
+        $this->selectKeyword(1);
         $this->clickTopToolbarButton('subscript', NULL);
         $this->assertHTMLMatch('<sub><a href="test-link" title="test-title">%1%</a></sub> test content');
 
@@ -939,10 +943,12 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<sup><a href="test-link">%1%</a></sup> test content');
 
         // Test removing superscript from linked content
+        sleep(2);
         $this->clickTopToolbarButton('superscript', 'active');
         $this->assertHTMLMatch('<a href="test-link">%1%</a> test content');
 
         // Test applying superscript to linked content
+        sleep(2);
         $this->clickTopToolbarButton('superscript', NULL);
         $this->assertHTMLMatch('<sup><a href="test-link">%1%</a></sup> test content');
 
