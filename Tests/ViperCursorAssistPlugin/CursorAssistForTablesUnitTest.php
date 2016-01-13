@@ -14,7 +14,7 @@ class Viper_Tests_ViperCursorAssistPlugin_CursorAssistForTablesUnitTest extends 
     public function testCursorAssistAboveTable()
     {
         $this->useTest(1, 3);
-        
+
         $this->moveMouseToElement('table', 'top');
 
         // Check to see if the cursor assit line appears above the table
@@ -40,7 +40,12 @@ class Viper_Tests_ViperCursorAssistPlugin_CursorAssistForTablesUnitTest extends 
         $this->clickKeyword(1);
 
         sleep(2);
-        $this->moveMouseToElement('table', 'bottom', 0, -25);
+        $offset = -25;
+        if ($this->sikuli->getBrowserid() === 'firefox') {
+            $offset = 0;
+        }
+
+        $this->moveMouseToElement('table', 'bottom', 0, $offset);
         sleep(4);
 
         // Check to see if the cursor assit line appears above the table
