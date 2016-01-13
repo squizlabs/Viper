@@ -194,10 +194,18 @@
 
         },
 
-        moveChildrenToElement: function(sourceElement, targetElement)
+        moveChildrenToElement: function(sourceElement, targetElement, joinTextNodes)
         {
             while (sourceElement.firstChild) {
-                targetElement.appendChild(sourceElement.firstChild);
+                if (joinTextNodes === true
+                    && this.isText(targetElement.lastChild) === true
+                    && this.isText(sourceElement.firstChild) === true
+                ) {
+                    targetElement.lastChild.data += sourceElement.firstChild.data;
+                    ViperUtil.remove(sourceElement.firstChild);
+                } else {
+                    targetElement.appendChild(sourceElement.firstChild);
+                }
             }
 
         },

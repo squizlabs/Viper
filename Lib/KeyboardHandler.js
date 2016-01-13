@@ -2492,6 +2492,21 @@
                 startNode = range.startContainer;
             }
 
+            // Do a few range checks..
+            if (startNode.nodeType === ViperUtil.ELEMENT_NODE) {
+                if (range.startContainer === startNode
+                    && startNode.childNodes.length === range.startOffset
+                    && ViperUtil.isText(startNode.lastChild)
+                ) {
+                    // When the range is set after the last text node of a parent
+                    // move the range to the end of the text node.
+                    range.setStart(startNode.lastChild, startNode.lastChild.length);
+                    range.collapse(true);
+                    ViperSelection.addRange(range);
+                    startNode = startNode.lastChild;
+                }
+            }
+
             if (startNode.nodeType === ViperUtil.TEXT_NODE) {
                 // In a text node.
                 if (range.startOffset === startNode.data.length) {
@@ -2506,6 +2521,29 @@
                         var nextSelectable = range.getNextContainer(startNode, null, true, true, true);
                         if (nextSelectable && this._viper.isSpecialElement(nextSelectable.parentNode) === true) {
                             ViperUtil.remove(nextSelectable.parentNode);
+                        }
+                    } else {
+                        // There is a next node.
+                        if (ViperUtil.isTag(startNode.nextSibling, 'br') === true && !startNode.nextSibling.nextSibling) {
+                            ViperUtil.remove(startNode.nextSibling);
+
+                            var selectable = range.getNextContainer(startNode, null, true, true);
+                            if (!selectable || this._viper.isOutOfBounds(selectable) === true) {
+                                // Stop here nothing else to delete.
+                                return false;
+                            }
+
+                            var firstBlock = ViperUtil.getFirstBlockParent(selectable);
+                            if (firstBlock) {
+                                // Move children.
+                                var len = startNode.data.length;
+                                ViperUtil.moveChildrenToElement(firstBlock, ViperUtil.getFirstBlockParent(startNode), true);
+                                ViperUtil.remove(firstBlock);
+                                range.setStart(startNode, len);
+                                range.collapse(true);
+                                ViperSelection.addRange(range);
+                                return false;
+                            }
                         }
                     }
 
