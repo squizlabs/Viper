@@ -92,6 +92,12 @@
 
             this.viper.registerCallback(['Viper:keyDown', 'Viper:beforeDelete'], 'ViperImagePlugin', function(e) {
                 if (e.which === 8 || e.which === 46) {
+                    var range = self.viper.getViperRange();
+                    if (range.getHTMLContentsObj().childNodes.length > 1) {
+                        // Other content is also selected.
+                        return;
+                    }
+
                     if (self._resizeImage) {
                         if (self.removeImage(self._resizeImage) === true) {
                             self._updateToolbars();
