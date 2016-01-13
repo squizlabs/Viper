@@ -247,6 +247,7 @@
                     Viper.document.activeElement.blur();
                 }
 
+                this.viper.focus();
                 viperRange = this.viper.getCurrentRange();
                 viperRange.setStart(viperRange._getFirstSelectableChild(element), 0);
                 viperRange.collapse(true);
