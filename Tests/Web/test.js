@@ -503,3 +503,8 @@ function testJSExec()
 {
     return 'Pass';
 }
+
+function changeTextColour(colour)
+{
+    Viper.Util.setStyle(viper.getViperElement(), 'color', colour);
+}

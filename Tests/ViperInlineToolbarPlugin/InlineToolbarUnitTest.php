@@ -27,7 +27,11 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
 
         $arrowImg .= '.png';
 
-        return $this->sikuli->find($this->getBrowserImagePath().'/'.$arrowImg, NULL, 0.95);
+        $this->sikuli->execJS('changeTextColour("#eee !important")');
+        $loc = $this->sikuli->find($this->getBrowserImagePath().'/'.$arrowImg, NULL, 0.6);
+        $this->sikuli->execJS('changeTextColour("")');
+
+        return $loc;
 
     }//end _getToolbarArrow()
 
@@ -60,8 +64,16 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     private function _assertPosition($targetX, $targetY, $orientation=NULL)
     {
-        $toolbarX = $this->sikuli->getX($this->_getToolbarArrowLocation($orientation));
-        $diff     = abs($targetX - $toolbarX);
+        $toolbarX = null;
+        if ($orientation === 'left') {
+            // TODO: For some reason the position returned by getX is incorrect at this point. However, page X position
+            // is good.
+            $toolbarX = $this->sikuli->getPageX($this->_getToolbarArrowLocation($orientation));
+        } else {
+            $toolbarX = $this->sikuli->getX($this->_getToolbarArrowLocation($orientation));
+        }
+
+        $diff = abs($targetX - $toolbarX);
         $this->assertTrue(($diff <= 15), 'X Position of toolbar arrow is incorrect. Difference was '.$diff.' pixels');
 
         $toolbarY = $this->sikuli->getY($this->sikuli->getTopLeft($this->_getToolbarArrow($orientation)));
@@ -208,13 +220,14 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
     public function testPositionOrientationLeft()
     {
         $this->sikuli->execJS('viperTest.getWindow().Viper.Util.setStyle(viperTest.getWindow().Viper.Util.getid("content"), "margin-left", "10px")');
-
-        $word = $this->findKeyword(1);
-        $this->selectKeyword(1);
         sleep(1);
 
-        $wordX = $this->sikuli->getX($this->sikuli->getCenter($word));
+        $word  = $this->findKeyword(1);
+        $this->selectKeyword(1);
+
+        $wordX = $this->sikuli->getPageX($this->sikuli->getCenter($word));
         $wordY = $this->sikuli->getY($this->sikuli->getBottomLeft($word));
+
         $this->_assertPosition($wordX, $wordY, 'left');
 
     }//end testPositionOrientationLeft()
