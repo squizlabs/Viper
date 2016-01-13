@@ -36,6 +36,7 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         $this->type('test title');
         sleep(1);
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickKeyword(1);
 
         $this->assertHTMLMatch('<p>test content %1%</p><p>more content <img alt="TITLE" title="test title" src="((prop:url))" /> even more content</p>');
         $this->assertRawHTMLMatch('<p>test content %1%</p><p>more content<img alt="TITLE" data-viper-attribite-keywords="true" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" title="test title" /> even more content</p>');
@@ -63,7 +64,6 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         $this->type('test title');
         sleep(1);
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
- 
         $this->clickKeyword(1);
 
         $this->assertHTMLMatch('<p>test content %1%</p><p>more content <img alt="TITLE" title="test title" src="((prop:url))" /> even more content</p>');
