@@ -57,23 +57,23 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
         $this->clickKeyword(1);
         $this->clickTopToolbarButton('accessAudit');
 
-        sleep(2);
+        sleep(3);
 
         // View Report.
         $viewReportButton = $this->findImage('HTMLCSViewReport', '#HTMLCS-settings-view-report');
         $this->sikuli->click($viewReportButton);
-        sleep(2);
+        sleep(3);
 
         // Click warning.
         $warningIcon = $this->findImage('HTMLCS-report-warning', '.HTMLCS-issue-type.HTMLCS-warning');
         $this->sikuli->click($warningIcon);
-        sleep(1);
+        sleep(2);
         $bubble = $this->getActiveBubble();
-        sleep(1);
+        sleep(2);
 
         // View source.
         $this->clickElement('.Viper-resolutionHeader .Viper-button.Viper-sourceView');
-        sleep(2);
+        sleep(3);
 
         // Check to make sure the source view appears.
         try {
