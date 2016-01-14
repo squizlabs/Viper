@@ -511,15 +511,22 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         // Select bold in the lineage
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->clickInlineToolbarButton('cssClass');
+        sleep(1);
         $this->type('test');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->assertHTMLMatch('<p>This is some content <strong class="test"><em>XAX</em></strong> in my unit test XBX</p>');
 
         // Check that the class field stayed open in the inline toolbar has remaind open with the class field
         $this->clickField('Class');
+        sleep(1);
         $this->type('class');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->assertHTMLMatch('<p>This is some content <strong class="testclass"><em>XAX</em></strong> in my unit test XBX</p>');
 
     }//end testClassFieldRemainsOpenAfterApplyingBoldAndItalic()
