@@ -356,40 +356,60 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
 
         // Test using keyboard shortcuts
         $this->moveToKeyword(4, 'right');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + i');
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('italic'), 'italic icon in the top toolbar should not be active');
         $this->type(' test ');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + i');
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'italic icon in the top toolbar should be active');
         $this->type('%6%');
+        sleep(1);
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> test <em>%6%</em> <strong>%5%</strong></p>');
 
         $this->moveToKeyword(5, 'right');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + b');
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('bold'), 'bold icon in the top toolbar should not be active');
         $this->type(' test ');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + b');
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'bold icon in the top toolbar should be active');
         $this->type('%7%');
+        sleep(1);
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> test <em>%6%</em> <strong>%5%</strong> test <strong>%7%</strong></p>');
 
         // Test using toolbar icons
         $this->moveToKeyword(6, 'right');
+        sleep(1);
         $this->clickTopToolbarButton('italic', 'active');
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('italic'), 'italic icon in the top toolbar should not be active');
         $this->type('test');
+        sleep(1);
         $this->clickTopToolbarButton('italic');
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'italic icon in the top toolbar should be active');
         $this->type('test');
+        sleep(1);
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> test <em>%6%</em>test<em>test</em> <strong>%5%</strong> test <strong>%7%</strong></p>');
 
         $this->moveToKeyword(7, 'right');
+        sleep(1);
         $this->clickTopToolbarButton('bold', 'active');
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('bold'), 'bold icon in the top toolbar should not be active');
         $this->type('test');
+        sleep(1);
         $this->clickTopToolbarButton('bold');
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'bold icon in the top toolbar should be active');
         $this->type('test');
+        sleep(1);
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> test <em>%6%</em>test<em>test</em> <strong>%5%</strong> test <strong>%7%</strong>test<strong>test</strong></p>');
 
     }//end testStartingAndStoppingStylesAfterWordThatIsStyled()
