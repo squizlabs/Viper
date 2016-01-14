@@ -119,7 +119,7 @@ class Viper_Tests_ViperReplacementPlugin_UndoAndRedoKeywordUnitTest extends Abst
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         sleep(2);
         $this->assertHTMLMatch('<p>%1% test content<img alt="TITLE" src="((prop:url))" /></p><p>more content&nbsp;&nbsp;even more %2% content</p>');
-        $this->assertRawHTMLMatch('<p>%1% test content<img alt="TITLE" data-viper-src="((prop:url))" src="http://localhost/~dsherwood/Viper/Tests/Web/testImage.png" /></p><p>more content&nbsp;&nbsp;even more %2% content</p>');
+        $this->assertRawHTMLMatch('<p>%1% test content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /></p><p>more content&nbsp;&nbsp;even more %2% content</p>');
 
     }//end testUndoAndRedoMovingImageKeywordsUsingKeyboardShortcuts()
 
