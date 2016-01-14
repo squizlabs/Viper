@@ -141,7 +141,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViper
 
         $this->clickButton('Apply Changes', NULL, TRUE);
         sleep(2);
-        $this->assertEquals('<!---<p>%1% Test %2% content.</p><p>More test content.</p><p>Even more test content.%3%</p>---><p><br /></p>', $this->getRawHtml());
+        $this->assertEquals('<!---<p>%1% Test %2% content.</p><p>More test content.</p><p>Even more test content.%3%</p>--->', $this->getRawHtml());
 
     }//end testCommentingInSourceCode()
 
