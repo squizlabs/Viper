@@ -173,29 +173,45 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
         $this->moveToKeyword(1, 'right');
 
         $this->sikuli->keyDown('Key.CMD + b');
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
         $this->type('TEST');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + b');
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
 
         $this->type(' ');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + i');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + b');
+        sleep(1);
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar is not active');
         $this->type('TEST');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + b');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + i');
+        sleep(1);
 
         $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
         $this->assertTrue($this->topToolbarButtonExists('italic'), 'Italic icon in the top toolbar is active');
         $this->type('TEST');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + b');
+        sleep(1);
         $this->type('TEST');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + i');
+        sleep(1);
         $this->type('TEST');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + i');
-        $this->sikuli->keyDown('Key.CMD + b');
+        sleep(1);
+        $this->sikuli->keyDown('Key.CMD + b');\
+        sleep(1);
 
         $this->assertHTMLMatch('<p>%1%<strong>TEST</strong><em><strong>TEST</strong></em>TEST<strong>TEST<em>TEST</em></strong> %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
