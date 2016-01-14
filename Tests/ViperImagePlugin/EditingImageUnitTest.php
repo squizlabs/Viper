@@ -449,51 +449,76 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
 
         // Edit the source code
         $this->clickElement('img', 0);
+        sleep(1);
         $this->clickTopToolbarButton('sourceView');
         sleep(2);
         $this->sikuli->keyDown('Key.CMD + a');
+        sleep(1);
         $this->sikuli->keyDown('Key.DELETE');
+        sleep(1);
         $this->type('<img src="'.$this->getTestURL('/ViperImagePlugin/Images/editing.png').'" alt="New alt tag" />');
+        sleep(1);
         $this->clickButton('Apply Changes', NULL, TRUE);
+        sleep(1);
         $this->assertHTMLMatch('<p><img src="%url%/ViperImagePlugin/Images/editing.png" alt="New alt tag" /></p>');
 
         // Check value of alt field in inline toolbar
         $this->clickElement('img', 0);
         sleep(1);
         $this->clickInlineToolbarButton('image', 'active');
+        sleep(1);
         $this->sikuli->keyDown('Key.TAB');
+        sleep(1);
         $altField = $this->sikuli->execJS('document.activeElement.value');
+        sleep(2);
         $this->assertEquals("New alt tag", $altField, 'Alt field should be updated with new value');
 
         // Check value of alt field in top toolbar
         $this->clickTopToolbarButton('image', 'active');
+        sleep(1);
         $this->sikuli->keyDown('Key.TAB');
+        sleep(2);
         $altField = $this->sikuli->execJS('document.activeElement.value');
+        sleep(2);
         $this->assertEquals("New alt tag", $altField, 'Alt field should be updated with new value');
 
         // Edit the source code
         $this->clickElement('img', 0);
+        sleep(1);
         $this->clickTopToolbarButton('sourceView');
         sleep(2);
         $this->sikuli->keyDown('Key.CMD + a');
+        sleep(1);
         $this->sikuli->keyDown('Key.DELETE');
+        sleep(1);
         $this->type('<img src="'.$this->getTestURL('/ViperImagePlugin/Images/editing.png').'" alt="" />');
+        sleep(1);
         $this->clickButton('Apply Changes', NULL, TRUE);
+        sleep(1);
         $this->assertHTMLMatch('<p><img src="%url%/ViperImagePlugin/Images/editing.png" alt="" /></p>');
 
         // Check value of alt field in inline toolbar
         $this->clickElement('img', 0);
+        sleep(1);
         $this->clickInlineToolbarButton('image', 'active');
+        sleep(1);
         $this->clickField('Image is decorative');
+        sleep(1);
         $this->sikuli->keyDown('Key.TAB');
+        sleep(1);
         $altField = $this->sikuli->execJS('document.activeElement.value');
+        sleep(1);
         $this->assertEquals("", $altField, 'Alt field should be updated with new value');
 
         // Check value of alt field in top toolbar
         $this->clickTopToolbarButton('image', 'active');
+        sleep(1);
         $this->clickField('Image is decorative');
+        sleep(1);
         $this->sikuli->keyDown('Key.TAB');
+        sleep(1);
         $altField = $this->sikuli->execJS('document.activeElement.value');
+        sleep(1);
         $this->assertEquals("", $altField, 'Alt field should be updated with new value');
 
     }//end testAltFieldIsUpdatedWhenYouUpdateSourceCode()
