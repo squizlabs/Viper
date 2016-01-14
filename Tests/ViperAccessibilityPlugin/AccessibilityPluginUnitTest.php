@@ -175,6 +175,66 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
     }//end testTableIdErrorCountInHTMLCS()
 
 
+    /**
+     * Test the you can open and close the accessibility auditor multiple times.
+     *
+     * @return void
+     */
+    public function testReopeningAccessibilityAuditor()
+    {
+        $this->useTest(1);
+
+        $this->clickKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('accessAudit'), 'Accessibility auditor icon should be active.');
+
+        $this->clickTopToolbarButton('accessAudit');
+
+        sleep(1);
+
+        // Check to make sure the auditor appear.
+        try {
+            $this->findImage('HTMLCSViewReport', '#HTMLCS-settings-view-report');
+        } catch (Exception $e) {
+            $this->fail('The accessibility auditor was not found');
+        }
+
+        // View report.
+        $viewReportButton = $this->findImage('HTMLCSViewReport', '#HTMLCS-settings-view-report');
+        $this->sikuli->click($viewReportButton);
+
+        // Check closing auditor editor.
+        $this->clickTopToolbarButton('accessAudit', 'selected');
+
+        sleep(1);
+
+        try
+        {
+            $this->findImage('HTMLCSViewReport', '#HTMLCS-settings-view-report');
+        } catch (Exception $e) {
+            // Expecting the expection as we closed the sub toolbar
+            $imageFound = false;
+        }
+
+        $this->assertFalse($imageFound, 'The accessibility auditor was found');
+
+        // Test reopening auditor editor.
+        $this->clickTopToolbarButton('accessAudit');
+
+        sleep(1);
+
+        try {
+            $this->findImage('HTMLCSViewReport', '#HTMLCS-settings-view-report');
+        } catch (Exception $e) {
+            $this->fail('The accessibility auditor was not found');
+        }
+
+        // View report.
+        $viewReportButton = $this->findImage('HTMLCSViewReport', '#HTMLCS-settings-view-report');
+        $this->sikuli->click($viewReportButton);
+
+    }//end testReopeningAccessibilityAuditor()
+
+
 
 }//end class
 

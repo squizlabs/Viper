@@ -7,7 +7,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
 
 
 	/**
-     * Test that inputting text, creating new paragraphs etc work when no base tag is set.
+     * Test how having no base tag effects bold formatting.
      *
      * @return void
      */
@@ -97,7 +97,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that inputting text, creating new paragraphs etc work when no base tag is set.
+     * Test how having no base tag effects italic formatting.
      *
      * @return void
      */
@@ -187,7 +187,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that inputting text, creating new paragraphs etc work when no base tag is set.
+     * Test how having no base tag effects strikethrough formatting.
      *
      * @return void
      */
@@ -263,7 +263,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that inputting text, creating new paragraphs etc work when no base tag is set.
+     * Test how having no base tag effects subscript formatting.
      *
      * @return void
      */
@@ -340,7 +340,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that inputting text, creating new paragraphs etc work when no base tag is set.
+     * Test how having no base tag effects superscript formatting.
      *
      * @return void
      */
@@ -418,7 +418,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that inputting text, creating new paragraphs etc work when no base tag is set.
+     * Test how having no base tag effects link tags.
      *
      * @return void
      */
@@ -519,7 +519,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that inputting text, creating new paragraphs etc work when no base tag is set.
+     * Test how having no base tag effects bold and link formatting.
      *
      * @return void
      */
@@ -647,7 +647,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that inputting text, creating new paragraphs etc work when no base tag is set.
+     * Test how having no base tag effects italic and link formatting.
      *
      * @return void
      */
@@ -782,7 +782,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that inputting text, creating new paragraphs etc work when no base tag is set.
+     * Test how having no base tag effects strikethrough and link formatting.
      *
      * @return void
      */
@@ -857,7 +857,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that inputting text, creating new paragraphs etc work when no base tag is set.
+     * Test how having no base tag effects subscript and link formatting.
      *
      * @return void
      */
@@ -926,7 +926,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that inputting text, creating new paragraphs etc work when no base tag is set.
+     * Test how having no base tag effects superscript and link formatting.
      *
      * @return void
      */
@@ -998,7 +998,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that inputting text, creating new paragraphs etc work when a div base tag is set.
+     * Test how the div base tag effects bold formatting.
      *
      * @return void
      */
@@ -1082,7 +1082,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that inputting text, creating new paragraphs etc work when a div base tag is set.
+     * Test how the div base tag effects italic formatting.
      *
      * @return void
      */
@@ -1163,7 +1163,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that inputting text, creating new paragraphs etc work when a div base tag is set.
+     * Test how the div base tag effects strikethrough formatting.
      *
      * @return void
      */
@@ -1232,7 +1232,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that inputting text, creating new paragraphs etc work when a div base tag is set.
+     * Test how the div base tag effects subscript formatting.
      *
      * @return void
      */
@@ -1302,7 +1302,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that inputting text, creating new paragraphs etc work when a div base tag is set.
+     * Test how the div base tag effects superscript formatting.
      *
      * @return void
      */
@@ -1371,7 +1371,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that inputting text, creating new paragraphs etc work when no base tag is set.
+     * Test how div base tag is effected by links
      *
      * @return void
      */
@@ -1472,7 +1472,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that inputting text, creating new paragraphs etc work when no base tag is set.
+     * Test how the div base tag effects bold and link formatting.
      *
      * @return void
      */
@@ -1608,7 +1608,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that inputting text, creating new paragraphs etc work when no base tag is set.
+     * Test how the div base tag effects italic and link formatting.
      *
      * @return void
      */
@@ -1744,7 +1744,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that inputting text, creating new paragraphs etc work when no base tag is set.
+     * Test how the div base tag effects strikethrough and link formatting.
      *
      * @return void
      */
@@ -1820,7 +1820,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that inputting text, creating new paragraphs etc work when no base tag is set.
+     * Test how the div base tag effects subscript and link formatting.
      *
      * @return void
      */
@@ -1897,7 +1897,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that inputting text, creating new paragraphs etc work when no base tag is set.
+     * Test how the div base tag effects superscript and link formatting.
      *
      * @return void
      */
@@ -2058,12 +2058,24 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         // Test redo adding hr tag using keyboard shortcuts
         $this->getOSAltShortcut('Redo');
         $this->assertHTMLMatch('%1%<br /><hr /> Test content %2% %3% more test content. %4%');
+
+        // Test undo adding hr tag using top toolbar
+        $this->useTest(26);
+        $this->moveToKeyword(1, 'right');
+        $this->clickTopToolbarButton('insertHr');
+        sleep(1);
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('%1% Test content %2% %3% more test content. %4%');
+
+        // Test redo adding hr tag using top toolbar
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('%1%<br /><hr /> Test content %2% %3% more test content. %4%');
         
     }//end testHorizontalRuleNoBaseTag()
 
 
     /**
-     * Test horizontal rule when there is no default block tag.
+     * Test caret position when interacting with lists when there is no default block tag.
      *
      * @return void
      */

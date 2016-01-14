@@ -89,25 +89,66 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
      */
     public function testAddingContentAroundKeywords()
     {
-        // Test before keyword
+/*
+        // Test before keyword at the start of a paragraph
         $this->useTest(4);
-        $this->moveToKeyword(1, 'right');
+        $this->moveToKeyword(1, 'left');
+        sleep(1);
+        for ($i = 0; $i < 6; $i++) {
+            $this->sikuli->keyDown('Key.LEFT');
+        }
+        $this->type('Test content ');
+        sleep(1);
+*/
+        $this->assertHTMLMatch('<p>Test content ((prop:productName)) %1%</p><p>((prop:productName)) %2%</p><p>%3% ((prop:productName)) more test content</p><p>Test content ((prop:productName)) %4%</p><p>%5% ((prop:productName))</p><p>%6% ((prop:productName))</p>');
+        $this->assertRawHTMLMatch('<p>Test content<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %1%</p><p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %2%</p><p>%3%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> more test content</p><p>Test content<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %4%</p><p>%5%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%6%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p>');
+
+        // Test after keyword at the start of a paragraph
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type(' test content');
+        sleep(1);
+
+        $this->assertHTMLMatch('<p>Test content ((prop:productName)) %1%</p><p>((prop:productName)) test content %2%</p><p>%3% ((prop:productName)) more test content</p><p>Test content ((prop:productName)) %4%</p><p>%5% ((prop:productName))</p><p>%6% ((prop:productName))</p>');
+        $this->assertRawHTMLMatch('<p>Test content<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %1%</p><p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> test content %2%</p><p>%3%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> more test content</p><p>Test content<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %4%</p><p>%5%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%6%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p>');
+
+        // Test before keyword in the middle of a paragraph
+        $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->type('Test content ');
         sleep(1);
 
-        $this->assertHTMLMatch('<p>%1% Test content ((prop:productName)) %2%</p>');
-        $this->assertRawHTMLMatch('<p>%1% Test content&nbsp;<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %2%</p>');
+        $this->assertHTMLMatch('<p>Test content ((prop:productName)) %1%</p><p>((prop:productName)) test content %2%</p><p>%3% Test content ((prop:productName)) more test content</p><p>Test content ((prop:productName)) %4%</p><p>%5% ((prop:productName))</p><p>%6% ((prop:productName))</p>');
+        $this->assertRawHTMLMatch('<p>Test content<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %1%</p><p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> test content %2%</p><p>%3% Test content <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> more test content</p><p>Test content<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %4%</p><p>%5%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%6%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p>');
 
-        // Test after keyword
-        $this->moveToKeyword(2, 'left');
+        // Test after keyword in the middle of a paragraph
+        $this->moveToKeyword(4, 'left');
         $this->sikuli->keyDown('Key.LEFT');
-        sleep(2);
         $this->type(' more test content');
         sleep(1);
 
-        $this->assertHTMLMatch('<p>%1% Test content ((prop:productName)) more test content %2%</p>');
-        $this->assertRawHTMLMatch('<p>%1% Test content&nbsp;<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span>&nbsp;more test content %2%</p>');
+        $this->assertHTMLMatch('<p>Test content ((prop:productName)) %1%</p><p>((prop:productName)) test content %2%</p><p>%3% Test content ((prop:productName)) more test content</p><p>Test content ((prop:productName)) more test content %4%</p><p>%5% ((prop:productName))</p><p>%6% ((prop:productName))</p>');
+        $this->assertRawHTMLMatch('<p>Test content<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %1%</p><p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> test content %2%</p><p>%3% Test content <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> more test content</p><p>Test content<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> more test content %4%</p><p>%5%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%6%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p>');
+
+        // Test before keyword at the end of a paragraph
+        $this->moveToKeyword(5, 'right');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->type('Test content ');
+        sleep(1);
+
+        $this->assertHTMLMatch('<p>Test content ((prop:productName)) %1%</p><p>((prop:productName)) test content %2%</p><p>%3% Test content ((prop:productName)) more test content</p><p>Test content ((prop:productName)) more test content %4%</p><p>%5% Test content ((prop:productName))</p><p>%6% ((prop:productName))</p>');
+        $this->assertRawHTMLMatch('<p>Test content<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %1%</p><p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> test content %2%</p><p>%3% Test content <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> more test content</p><p>Test content<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> more test content %4%</p><p>%5% Test content <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%6%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p>');
+
+        // Test after keyword at the end of a paragraph
+        $this->moveToKeyword(6, 'right');
+        for ($i = 0; $i < 6; $i++) {
+            $this->sikuli->keyDown('Key.RIGHT');
+        }
+        $this->type(' test content');
+        sleep(1);
+
+        $this->assertHTMLMatch('<p>Test content ((prop:productName)) %1%</p><p>((prop:productName)) test content %2%</p><p>%3% Test content ((prop:productName)) more test content</p><p>Test content ((prop:productName)) more test content %4%</p><p>%5% Test content ((prop:productName))</p><p>%6% ((prop:productName)) test content</p>');
+        $this->assertRawHTMLMatch('<p>Test content<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %1%</p><p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> test content %2%</p><p>%3% Test content <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> more test content</p><p>Test content<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> more test content %4%</p><p>%5% Test content <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%6%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> test content</p>');
 
     }//end testAddingContentAroundKeywords()
 
