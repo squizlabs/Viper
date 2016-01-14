@@ -89,7 +89,7 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
      */
     public function testAddingContentAroundKeywords()
     {
-/*
+
         // Test before keyword at the start of a paragraph
         $this->useTest(4);
         $this->moveToKeyword(1, 'left');
@@ -99,7 +99,7 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
         }
         $this->type('Test content ');
         sleep(1);
-*/
+
         $this->assertHTMLMatch('<p>Test content ((prop:productName)) %1%</p><p>((prop:productName)) %2%</p><p>%3% ((prop:productName)) more test content</p><p>Test content ((prop:productName)) %4%</p><p>%5% ((prop:productName))</p><p>%6% ((prop:productName))</p>');
         $this->assertRawHTMLMatch('<p>Test content<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %1%</p><p><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %2%</p><p>%3%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> more test content</p><p>Test content<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %4%</p><p>%5%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%6%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p>');
 
