@@ -462,25 +462,34 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
 
         // Check that the heading toolbar doesn't appear in the inline toolbar for a multiline quote (by design)
         $this->selectKeyword(2);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('headings'));
 
         // Check that the heading icon doesn't appear in the inline toolbar for a quote with multiple paragraphs (by design)
         $this->selectKeyword(3);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('headings'));
 
         $this->selectKeyword(4);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('headings'));
 
         // Using the top toolbar
