@@ -2360,10 +2360,10 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $this->sikuli->keyDown('Key.CMD + v');
         } else {
             $this->sikuli->rightClick($this->sikuli->getMouseLocation());
+            sleep(1);
 
             switch ($this->sikuli->getBrowserid()) {
                 case 'safari':
-                    sleep(1);
                     $this->sikuli->keyDown('c');
                     sleep(2);
                     $this->sikuli->keyDown('Key.DOWN');
@@ -2373,7 +2373,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
                 case 'edge':
                     $this->sikuli->keyDown('Key.UP');
+                    sleep(1);
                     $this->sikuli->keyDown('Key.UP');
+                    sleep(1);
                     $this->sikuli->keyDown('Key.ENTER');
                 break;
 
