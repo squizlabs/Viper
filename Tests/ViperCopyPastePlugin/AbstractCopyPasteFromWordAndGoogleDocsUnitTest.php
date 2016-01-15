@@ -142,6 +142,7 @@ abstract class AbstractCopyPasteFromWordAndGoogleDocsUnitTest extends AbstractVi
         sleep(5);
 
         $this->removeTableHeaders();
+        sleep(1);
         $this->assertHTMLMatch($expectedHtmlCode);
 
     }//end copyAndPasteFromGoogleDocs
