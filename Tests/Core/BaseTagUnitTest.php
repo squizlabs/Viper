@@ -2015,11 +2015,13 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         // Test deleting using delete key
         $this->useTest(27);
         $this->moveToKeyword(1, 'right');
+        sleep(1);
         $this->sikuli->keyDown('Key.DELETE');
         $this->assertHTMLMatch('%1% Test content %2%<br /><hr /><br /><hr />%3% more test content.<br /><hr />%4%');
 
         // Test deleting using backspace key
         $this->moveToKeyword(3, 'left');
+        sleep(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->assertHTMLMatch('%1% Test content %2%<br /><hr /><br />%3% more test content.<br /><hr />%4%');
 
