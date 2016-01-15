@@ -2363,7 +2363,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
             switch ($this->sikuli->getBrowserid()) {
                 case 'safari':
+                    sleep(1);
+                    $this->sikuli->keyDown('c');
+                    sleep(2);
                     $this->sikuli->keyDown('Key.DOWN');
+                    sleep(1);
                     $this->sikuli->keyDown('Key.ENTER');
                 break;
 
@@ -2457,6 +2461,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 case 'chrome':
                 case 'safari':
                     // Use the shortcut menu to select the menu option and then move the mouse up to cut.
+                    sleep(1);
                     $this->sikuli->keyDown('c');
                     sleep(2);
                     $this->sikuli->keyDown('Key.UP');

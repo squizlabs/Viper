@@ -257,9 +257,13 @@ class Viper_Tests_ViperReplacementPlugin_ImageWithKeywordsUnitTest extends Abstr
         $this->clickKeyword(1);
         sleep(1);
         $this->clickElement('img', 0);
+        sleep(1);
         $this->cut(true, true);
+        sleep(1);
         $this->moveToKeyword(1, 'right');
+        sleep(1);
         $this->paste(true);
+        sleep(1);
 
         $this->assertHTMLMatch('<p>test content %1%</p><p><img alt="TITLE" src="((prop:url))" /></p><p>more content&nbsp;&nbsp;even more content</p>');
         $this->assertRawHTMLMatch('<p>test content %1%</p><p><img alt="TITLE" src="'.$this->getTestURL('/Web/testImage.png').'" data-viper-src="((prop:url))" /></p><p>more content&nbsp;&nbsp;even more content</p>');
