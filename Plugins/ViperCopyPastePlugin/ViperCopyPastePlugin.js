@@ -446,6 +446,9 @@
                     range.setStart(firstChild, 1);
                 } else if (firstChild === null) {
                     range.setStart(tmp.firstChild, 0);
+                } else if (tmp.firstChild.nodeType === ViperUtil.ELEMENT_NODE) {
+                    ViperUtil.insertBefore(firstChild, document.createTextNode(''));
+                    range.setStart(tmp.firstChild, 0);
                 } else {
                     range.setStart(firstChild, 0);
                 }
