@@ -3047,10 +3047,6 @@
                             // Normalise text nodes.
                             this._normaliseNextNodes(textNode);
 
-                            range.setStart(textNode, range.startOffset - 1);
-                            range.collapse(true);
-                            ViperSelection.addRange(range);
-
                             if (textNode.data.length === 0
                                 && textNode.nextSibling === null
                                 && textNode.previousSibling === null
@@ -3060,6 +3056,9 @@
                                     // Add a BR to keep the blockelement 'selectable'.
                                     var br = document.createElement('br');
                                     textNode.parentNode.appendChild(br);
+                                    range.selectNode(br);
+                                    range.collapse(true);
+                                    ViperSelection.addRange(range);
                                 } else if (textNode.parentNode.previousSibling
                                     && textNode.parentNode.previousSibling.nodeType === ViperUtil.TEXT_NODE
                                 ) {
@@ -3078,6 +3077,10 @@
                                     range.collapse(true);
                                     ViperSelection.addRange(range);
                                 }
+                            } else {
+                                range.setStart(textNode, range.startOffset - 1);
+                                range.collapse(true);
+                                ViperSelection.addRange(range);
                             }
 
                             this._viper.contentChanged();
