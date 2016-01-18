@@ -2080,7 +2080,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         } catch (FindFailedException $e) {
             if ($force === false) {
                 // Try forcing...
-                $labelLoc = $this->_getLabel($label, true, $required);
+                try {
+                    $labelLoc = $this->_getLabel($label, true, $required);
+                } catch (Exception $e) {
+                    throw new FindFailedException('Failed to get location of field: ' + $label);
+                }
             }
         }
 
