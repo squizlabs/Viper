@@ -2947,6 +2947,7 @@
                     var endParent   = ViperUtil.getFirstBlockParent(range.endContainer, null, true);
                     if (startParent === endParent) {
                         // Deletion between two different parents within the same block parent. Let browser handle it.
+                        this._viper.contentChanged(true);
                         return;
                     } else {
                         this._deleteFromDifferentBlockParents(range);
@@ -3039,7 +3040,11 @@
             if (e.keyCode === 8) {
                 if (range.collapsed === true) {
                     if (range.startContainer.nodeType === ViperUtil.TEXT_NODE) {
-                        if (range.startOffset === 1) {
+                        if (this._viper.isSpecialElement(range.startContainer.parentNode) === true) {
+                            ViperUtil.remove(range.startContainer);
+                            this._viper.contentChanged();
+                            return false;
+                        } else if (range.startOffset === 1) {
                             // Delete a character from left.
                             var textNode = range.startContainer;
                             textNode.data = textNode.data.substr(0, range.startOffset - 1) + textNode.data.substr(range.startOffset);
@@ -3161,6 +3166,8 @@
                     }
                 }
             }
+
+            this._viper.contentChanged();
 
         },
 
