@@ -2964,6 +2964,59 @@
 
         },
 
+        normaliseTextNodeSiblings: function (element)
+        {
+            var prevCont = element.previousSibling;
+            var nextCont = element.nextSibling;
+            var info     = null;
+
+            var joinTextNodes = function(toNode, node) {
+                if (ViperUtil.isText(toNode) !== true || ViperUtil.isText(node) !== true) {
+                    return;
+                }
+
+                if (node.data[0] === ' ' && toNode.data[(toNode.data.length - 1)] === ' ') {
+                    // Node starts with space and toNode ends with space, convert space to nbsp.
+                    node.data = String.fromCharCode(160) + node.data.substr(1);
+                }
+
+                toNode.data += node.data;
+
+                ViperUtil.remove(node);
+            };
+
+            if (prevCont
+                && nextCont
+                && prevCont.nodeType === ViperUtil.TEXT_NODE
+                && nextCont.nodeType === ViperUtil.TEXT_NODE
+            ) {
+                // Both siblings
+                info = {
+                    splitOffset: prevCont.data.length,
+                    textNode: prevCont
+                };
+
+                if (nextCont.data[0] === ' ' && prevCont.data[(prevCont.data.length - 1)] === ' ') {
+                    nextCont.data = String.fromCharCode(160) + nextCont.data.substr(1);
+                }
+
+                prevCont.data += nextCont.data;
+            } else if (this.isText(nextCont) === true) {
+                // Next container is text.
+                info = {
+                    splitOffset: element.data.length,
+                    textNode: element
+                };
+
+                while (this.isText(element.nextSibling) === true) {
+                    joinTextNodes(element, element.nextSibling);
+                }
+            }
+
+            return info;
+
+        },
+
         getCommonAncestor: function(a, b)
         {
             var node = a;

@@ -358,6 +358,19 @@
                                 } else {
                                     textContainer.data = ' ' + textContainer.data.substr(1);
                                 }
+                            } else if (!textContainer.previousSibling) {
+                                var parent = textContainer.parentNode;
+                                while (!parent.previousSibling) {
+                                    parent = parent.previousSibling;
+                                }
+
+                                if (ViperUtil.isText(parent.previousSibling) === true) {
+                                    range.setStart(parent.previousSibling, parent.previousSibling.data.length);
+                                    range.collapse(true);
+                                    ViperSelection.addRange(range);
+                                    this._viper.fireNodesChanged([textContainer]);
+                                    return true;
+                                }
                             }
 
                             textContainer.data = char + textContainer.data;
@@ -2055,6 +2068,12 @@
                                     ViperUtil.remove(parent);
                                 }
 
+                                if (ViperUtil.isText(container.previousSibling) === true) {
+                                    container = container.previousSibling;
+                                    offset    = container.data.length;
+                                    ViperUtil.normaliseTextNodeSiblings(container);
+                                }
+
                                 range.setStart(container, offset);
                                 range.collapse(true);
                                 ViperSelection.addRange(range);
@@ -2471,6 +2490,32 @@
                                 range.setStart(rangeNode, range.startOffset);
                                 range.collapse(true);
                                 ViperSelection.addRange(range);
+                            } else {
+                                node = range.getStartNode();
+                                if (node && ViperUtil.isText(node) === false && ViperUtil.elementIsEmpty(node) === true) {
+                                    // Node is empty, check siblings and join text nodes if needed.
+                                    var rangeNode = null;
+                                    var offset    = 0;
+                                    if (ViperUtil.isText(node.previousSibling) === true) {
+                                        rangeNode = node.previousSibling;
+                                        offset    = node.previousSibling.data.length;
+
+                                        if (ViperUtil.isText(node.nextSibling) === true) {
+                                            // Join these nodes.
+                                            ViperUtil.remove(node);
+                                            ViperUtil.normaliseTextNodeSiblings(node)
+                                        } else {
+                                            ViperUtil.remove(node);
+                                        }
+                                    } else if (ViperUtil.isText(node.nextSibling) === true) {
+                                        rangeNode = node.nextSibling;
+                                        ViperUtil.remove(node);
+                                    }
+
+                                    range.setStart(rangeNode, offset);
+                                    range.collapse(true);
+                                    ViperSelection.addRange(range);
+                                }
                             }
                         }, 10);
                     }
