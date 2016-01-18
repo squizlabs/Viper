@@ -64,12 +64,10 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutImagesUnitTest extends Abstract
      */
     public function testCopyPasteImageWithTextBefore()
     {
-        $this->clickElement('img', 0);
-        sleep(1);
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->selectKeyword(1);
+
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.CMD + c');
         sleep(1);
         $this->moveToKeyword(3, 'right');
@@ -157,11 +155,9 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutImagesUnitTest extends Abstract
      */
     public function testCutPasteImageWithTextBefore()
     {
-        $this->clickElement('img', 0);
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.CMD + x');
         sleep(1);
         $this->moveToKeyword(3, 'right');
