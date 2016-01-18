@@ -528,7 +528,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
 
-        // Using top toolbar 
+        // Using top toolbar
         // Test applying link to bold formatted content
         $this->useTest(23);
         $this->selectKeyword(1);
@@ -584,7 +584,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<strong><a href="test-link">%1%</a></strong> test content');
 
-        // Using inline toolbar 
+        // Using inline toolbar
         // Test applying link to bold formatted content
         $this->useTest(23);
         $this->selectKeyword(1);
@@ -656,7 +656,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
 
-        // Using top toolbar 
+        // Using top toolbar
         // Test applying link to italic formatted content
         $this->useTest(23);
         $this->selectKeyword(1);
@@ -716,7 +716,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<em><a href="test-link">%1%</a></em> test content');
 
-        // Using inline toolbar 
+        // Using inline toolbar
         // Test applying link to italic formatted content
         $this->useTest(23);
         $this->selectKeyword(1);
@@ -791,7 +791,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
 
-        // Using top toolbar 
+        // Using top toolbar
         // Test applying link to strikethrough formatted content
         $this->useTest(23);
         $this->selectKeyword(1);
@@ -866,7 +866,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
 
-        // Using top toolbar 
+        // Using top toolbar
         // Test applying link to subscript formatted content
         $this->useTest(23);
         $this->selectKeyword(1);
@@ -935,7 +935,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
 
-        // Using top toolbar 
+        // Using top toolbar
         // Test applying link to superscript formatted content
         $this->useTest(23);
         $this->selectKeyword(1);
@@ -1481,7 +1481,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
 
-        // Using top toolbar 
+        // Using top toolbar
         // Test applying link to bold formatted content
         $this->useTest(23);
         $this->selectKeyword(1);
@@ -1543,7 +1543,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<div><strong><a href="test-link">%1%</a></strong> test content</div>');
 
-        // Using inline toolbar 
+        // Using inline toolbar
         // Test applying link to bold formatted content
         $this->useTest(23);
         $this->selectKeyword(1);
@@ -1617,7 +1617,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
 
-        // Using top toolbar 
+        // Using top toolbar
         // Test applying link to italic formatted content
         $this->useTest(23);
         $this->selectKeyword(1);
@@ -1680,7 +1680,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<div><em><a href="test-link">%1%</a></em> test content</div>');
 
-        // Using inline toolbar 
+        // Using inline toolbar
         // Test applying link to italic formatted content
         $this->useTest(23);
         $this->selectKeyword(1);
@@ -1753,7 +1753,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
 
-        // Using top toolbar 
+        // Using top toolbar
         // Test applying link to strikethrough formatted content
         $this->useTest(23);
         $this->selectKeyword(1);
@@ -1829,7 +1829,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
 
-        // Using top toolbar 
+        // Using top toolbar
         // Test applying link to subscript formatted content
         $this->useTest(23);
         $this->selectKeyword(1);
@@ -1906,7 +1906,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
 
-        // Using top toolbar 
+        // Using top toolbar
         // Test applying link to superscript formatted content
         $this->useTest(23);
         $this->selectKeyword(1);
@@ -1981,14 +1981,14 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
     public function testHorizontalRuleNoBaseTag()
     {
 
-        $this->useTest(1);
-        $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
+         $this->useTest(1);
+         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
 
         // Test applying after first word of content
         $this->useTest(26);
         $this->moveToKeyword(1, 'right');
         $this->clickTopToolbarButton('insertHr');
-        $this->assertHTMLMatch('%1%<br /><hr /> Test content %2% %3% more test content. %4%'); 
+        $this->assertHTMLMatch('%1%<br /><hr /> Test content %2% %3% more test content. %4%');
 
         // Test applying before last word of content
         $this->useTest(26);
@@ -2018,14 +2018,14 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         $this->moveToKeyword(1, 'right');
         sleep(3);
         $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('%1% Test content %2%<br /><hr /><br /><hr />%3% more test content.<br /><hr />%4%');
+        $this->assertHTMLMatch('%1%Test content %2%<br /><hr /><br /><hr />%3% more test content.<br /><hr />%4%');
 
         // Test deleting using backspace key
         sleep(1);
         $this->moveToKeyword(3, 'left');
         sleep(2);
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('%1% Test content %2%<br /><hr /><br />%3% more test content.<br /><hr />%4%');
+        $this->assertHTMLMatch('%1%Test content %2%<br /><hr /><br />%3% more test content.<br /><hr />%4%');
 
         // Test br tag
         $this->useTest(28);
@@ -2074,7 +2074,7 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
         // Test redo adding hr tag using top toolbar
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('%1%<br /><hr /> Test content %2% %3% more test content. %4%');
-        
+
     }//end testHorizontalRuleNoBaseTag()
 
 
