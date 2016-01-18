@@ -3041,7 +3041,15 @@
                 if (range.collapsed === true) {
                     if (range.startContainer.nodeType === ViperUtil.TEXT_NODE) {
                         if (this._viper.isSpecialElement(range.startContainer.parentNode) === true) {
-                            ViperUtil.remove(range.startContainer);
+                            var prevSib = range.startContainer.parentNode.previousSibling;
+                            ViperUtil.remove(range.startContainer.parentNode);
+                            if (ViperUtil.isText(prevSib) === true) {
+                                var info = ViperUtil.normaliseTextNodeSiblings(prevSib);
+                                range.setStart(info.textNode, info.splitOffset);
+                                range.collapse(true);
+                                ViperSelection.addRange(range);
+                            }
+
                             this._viper.contentChanged();
                             return false;
                         } else if (range.startOffset === 1) {
