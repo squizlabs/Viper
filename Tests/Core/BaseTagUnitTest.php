@@ -2078,30 +2078,4 @@ class Viper_Tests_Core_BaseTagUnitTest extends AbstractViperUnitTest
     }//end testHorizontalRuleNoBaseTag()
 
 
-    /**
-     * Test caret position when interacting with lists when there is no default block tag.
-     *
-     * @return void
-     */
-    public function testCaretWithNoBaseTagList()
-    {
-        $this->useTest(1);
-        $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
-
-        // Test adding to list with enter
-        $this->useTest(30);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('...');
-        $this->assertHTMLMatch('<li>%1% Test content</li><li>%2% Test content</li><li>%3%</li><li>...</li>');
-
-        // Test adding outside the list with enter
-        $this->useTest(30);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('...');
-        $this->assertHTMLMatch('<li>%1% Test content</li><li>%2% Test content</li><li>%3%</li>...');
-    }//end testCaretWithNoBaseTag()
-
 }//end class
