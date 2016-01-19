@@ -93,8 +93,8 @@
             this.viper.registerCallback('Viper:keyDown', 'ViperReplacementPlugin', function(e) {
                 if (ViperUtil.inArray(e.which, ignoredKeys) === true) {
                     return;
-                } else if ((e.which === 88 || e.which === 67) && (e.metaKey === true || e.ctrlKey === true)) {
-                    // Copy/Cut operation.
+                } else if ((e.which === 88 || e.which === 67 || e.which === 86) && (e.metaKey === true || e.ctrlKey === true)) {
+                    // Copy/Cut/Paste operation.
                     return;
                 }
 
@@ -161,7 +161,12 @@
                                     setTimeout(
                                         function () {
                                             startNode.data = ViperUtil.rtrim(startNode.data);
-                                            range.setStart(startNode, 1);
+                                            if (startNode.data.length > 0) {
+                                                range.setStart(startNode, 1);
+                                            } else {
+                                                range.setStart(startNode, 0);
+                                            }
+
                                             range.collapse(true);
                                             ViperSelection.addRange(range);
                                         },
