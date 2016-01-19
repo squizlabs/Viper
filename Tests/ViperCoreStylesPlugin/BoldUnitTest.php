@@ -314,11 +314,11 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
 
 
     /**
-     * Test that the VITP bold icon is rstrongoved from the toolbar when you click the P tag.
+     * Test that the VITP bold icon is removed from the toolbar when you click the P tag.
      *
      * @return void
      */
-    public function testBoldIconIsRstrongovedFromInlineToolbar()
+    public function testBoldIconIsRemovedFromInlineToolbar()
     {
         $this->useTest(1);
 
@@ -339,7 +339,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         // Inline Toolbar icon should be displayed.
         $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon does appear in the inline toolbar');
 
-    }//end testBoldIconIsRstrongovedFromInlineToolbar()
+    }//end testBoldIconIsRemovedFromInlineToolbar()
 
 
     /**
@@ -781,6 +781,48 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->assertEquals('<p>Text <strong>more %1%text text and more%2% text</strong></p>', $this->getRawHtml());
 
     }//end testRemovingBoldFromDifferentSectionsInContent()
+
+
+    /**
+     * Test adding content before and after bold content
+     *
+     * @return void
+     */
+    public function testAddingContentAroundBoldContent()
+    {
+        // Test adding content before bold content when cursor starts inside the bold content
+        $this->useTest(9);
+        $this->clickKeyword(2);
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('new');
+        $this->assertHTMLMatch('<p>%1% new<strong>%2%</strong> %3%</p>');
+
+        // Test adding content before bold content when cursor starts elsewhere in content
+        $this->useTest(9);
+        $this->clickKeyword(1);
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->type('new');
+        $this->assertHTMLMatch('<p>%1% new<strong>%2%</strong> %3%</p>');
+
+        // Test adding content after bold content when cursor starts inside the bold content
+        $this->useTest(9);
+        $this->clickKeyword(2);
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->type('new');
+        $this->assertHTMLMatch('<p>%1% <strong>%2%new</strong> %3%</p>');
+
+        // Test adding content before bold content when cursor starts elsewhere in content
+        $this->useTest(9);
+        $this->clickKeyword(3);
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('new');
+        $this->assertHTMLMatch('<p>%1% <strong>%2%new</strong> %3%</p>');
+
+    }//end testAddingContentAroundBoldContent()
 
 }//end class
 
