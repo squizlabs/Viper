@@ -233,11 +233,29 @@
                     ) {
                         // Safari has issue with placing the caret outside of the keyword when caret is at the end.
                         // Handle char insertion here.
-                        var textNode = document.createTextNode(String.fromCharCode(e.which));
+                        var char     = String.fromCharCode(e.which);
+                        var textNode = rep.nextSibling;
+                        if (ViperUtil.isText(textNode) === true && textNode.data.length === 0) {
+                            textNode.data = char + textNode.data;
+                        } else {
+                            textNode = document.createTextNode(char);
+                        }
+
                         ViperUtil.insertAfter(rep, textNode);
+
+                        if (char === ' '
+                            && textNode.nextSibling === null
+                            && ViperUtil.isBlockElement(textNode.parentNode) === true
+                        ) {
+                            // Last text node with space requires a BR element after it.
+                            textNode.parentNode.appendChild(document.createElement('br'));
+                        }
+
                         range.setStart(textNode, 1);
                         range.collapse(true);
                         ViperSelection.addRange(range);
+
+                        self.viper.fireNodesChanged();
                         return false;
                     }
 

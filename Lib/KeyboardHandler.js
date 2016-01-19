@@ -265,7 +265,6 @@
                         }
                     }
 
-
                     var char = String.fromCharCode(e.which);
                     if (range.collapsed === true
                         && char !== ' '
@@ -365,11 +364,22 @@
                                 }
 
                                 if (ViperUtil.isText(parent.previousSibling) === true) {
-                                    range.setStart(parent.previousSibling, parent.previousSibling.data.length);
-                                    range.collapse(true);
-                                    ViperSelection.addRange(range);
-                                    this._viper.fireNodesChanged([textContainer]);
-                                    return true;
+                                    if (parent.previousSibling.data.length === 0
+                                        && ViperUtil.isBrowser('safari') === true
+                                    ) {
+                                        parent.previousSibling.data = char;
+                                        range.setStart(parent.previousSibling, 1);
+                                        range.collapse(true);
+                                        ViperSelection.addRange(range);
+                                        this._viper.fireNodesChanged([textContainer]);
+                                        return false;
+                                    } else {
+                                        range.setStart(parent.previousSibling, parent.previousSibling.data.length);
+                                        range.collapse(true);
+                                        ViperSelection.addRange(range);
+                                        this._viper.fireNodesChanged([textContainer]);
+                                        return true;
+                                    }
                                 }
                             }
 
