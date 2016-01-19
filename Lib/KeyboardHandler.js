@@ -3111,11 +3111,25 @@
                         } else if (range.startOffset === 0) {
                             if (this._viper.isSpecialElement(range.startContainer.previousSibling) === true) {
                                 ViperUtil.remove(range.startContainer.previousSibling);
+                                this._viper.fireNodesChanged();
                                 return false;
                             }
+                        } else if (range.startOffset === range.startContainer.data.length) {
+                            // End of text node.
+                            if (ViperUtil.isBrowser('safari') === true) {
+                                 // Removing the last character from text node sometimes replaces the next node's space
+                                 // character with &nbsp;.
+                                 var ln = (range.startContainer.data.length - 1);
+                                 range.startContainer.data = range.startContainer.data.substr(0, ln);
+                                 range.setStart(range.startContainer, ln);
+                                 range.collapse(true);
+                                 ViperSelection.addRange(range);
+                                 this._viper.fireNodesChanged();
+                                 return false;
+                            }
                         }
-                    }
-                }
+                    }//end if
+                }//end if
             } else {
                 // Delete from right.
                 if (range.collapsed === true) {
