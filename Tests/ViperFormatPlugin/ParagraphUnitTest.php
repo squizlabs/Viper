@@ -693,7 +693,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
      *
      * @return void
      */
-    public function testAddingContentAroundParagraph()
+    public function testAddingContentToParagraph()
     {
         $this->useTest(9);
 
@@ -706,8 +706,8 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
             $this->sikuli->keyDown('Key.LEFT');
         }
         
-        $this->type(' ');
-        $this->assertHTMLMatch('<p>test %1%Test content more test content even more %2%test content and even more test content.%3%</p>');
+        $this->type('abc');
+        $this->assertHTMLMatch('<p>abc test %1%Test content more test content even more %2%test content and even more test content.%3%</p>');
 
         // Test adding in the middle of paragraph
         $this->moveToKeyword(2, 'right');
@@ -718,7 +718,7 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
             $this->sikuli->keyDown('Key.LEFT');
         }
         $this->type(' ');
-        $this->assertHTMLMatch('<p>test %1%Test content more test content even more %2%&nbsp;&nbsp;test test content and even more test content.%3%</p>');
+        $this->assertHTMLMatch('<p>abc test %1%Test content more test content even more %2%&nbsp;&nbsp;test test content and even more test content.%3%</p>');
 
         // Test adding after of paragraph
         $this->moveToKeyword(3, 'right');
@@ -727,10 +727,10 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
         sleep(1);
 
         // Test adding additional content to added content
-        $this->type(' ');
-        $this->assertHTMLMatch('<p>test %1%Test content more test content even more %2%&nbsp;&nbsp;test test content and even more test content.%3% test</p>');
+        $this->type('abc');
+        $this->assertHTMLMatch('<p>abc test %1%Test content more test content even more %2%&nbsp;&nbsp;test test content and even more test content.%3% test abc</p>');
 
-    }//end testAddingContentAroundParagraph()
+    }//end testAddingContentToParagraph()
 
 }//end class
 
