@@ -732,6 +732,80 @@ class Viper_Tests_ViperFormatPlugin_ParagraphUnitTest extends AbstractFormatsUni
 
     }//end testAddingContentToParagraph()
 
+
+    /**
+     * Tests adding content to multiple paragraphs.
+     *
+     * @return void
+     */
+    public function testAddingContentToDifferentParagraphs()
+    {
+
+        $this->useTest(10);
+
+        // Test clicking in the second paragraph and adding content to the first paragraph
+        $this->clickKeyword(2);
+
+        for ($i = 0; $i < 9; $i++) {
+            $this->sikuli->keyDown('Key.LEFT');
+        }
+        
+        $this->type('abc');
+        $this->assertHTMLMatch('<p>First paragraph %1% testabc</p><p>Second %2% para test</p>');
+
+        // Test clicking in the first paragraph and adding content to the second paragraph
+        $this->clickKeyword(1);
+
+        for ($i = 0; $i < 11; $i++) {
+            $this->sikuli->keyDown('Key.RIGHT');
+        }
+        
+        $this->type('abc');
+        $this->assertHTMLMatch('<p>First paragraph %1% testabc</p><p>abcSecond %2% para test</p>');
+
+        // Test clicking in the first paragraph and adding content to the start of the first paragraph
+        $this->clickKeyword(1);
+
+        for ($i = 0; $i < 17; $i++) {
+            $this->sikuli->keyDown('Key.LEFT');
+        }
+        
+        $this->type('abc');
+        $this->assertHTMLMatch('<p>abcFirst paragraph %1% testabc</p><p>abcSecond %2% para test</p>');
+
+        // Test clicking in the first paragraph and adding content to the end of the first paragraph
+        $this->clickKeyword(1);
+
+        for ($i = 0; $i < 10; $i++) {
+            $this->sikuli->keyDown('Key.RIGHT');
+        }
+        
+        $this->type('test');
+        $this->assertHTMLMatch('<p>abcFirst paragraph %1% testabctest</p><p>abcSecond %2% para test</p>');
+
+        // Test clicking in the second paragraph and adding content to the start of the second paragraph
+        $this->clickKeyword(2);
+
+        for ($i = 0; $i < 11; $i++) {
+            $this->sikuli->keyDown('Key.LEFT');
+        }
+        
+        $this->type('test');
+        $this->assertHTMLMatch('<p>abcFirst paragraph %1% testabctest</p><p>testabcSecond %2% para test</p>');
+
+        // Test clicking in the second paragraph and adding content to the end of the second paragraph
+        $this->clickKeyword(2);
+
+        for ($i = 0; $i < 12; $i++) {
+            $this->sikuli->keyDown('Key.RIGHT');
+        }
+        
+        $this->type('test');
+        $this->assertHTMLMatch('<p>abcFirst paragraph %1% testabctest</p><p>testabcSecond %2% para testtest</p>');
+
+    }//end testAddingContentToDifferentParagraphs()
+
+
 }//end class
 
 ?>
