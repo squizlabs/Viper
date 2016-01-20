@@ -2,7 +2,7 @@
 
 // require_once 'AbstractViperUnitTest.php';
 
-// class Viper_Tests_Core_DivBaseTagUnitTest extends AbstractViperUnitTest
+// class Viper_Tests_BaseTag_DivBaseTagUnitTest extends AbstractViperUnitTest
 // {
 
 //     /**

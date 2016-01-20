@@ -2,7 +2,7 @@
 
 require_once 'AbstractViperUnitTest.php';
 
-class Viper_Tests_Core_BaseTagWithListsUnitTest extends AbstractViperUnitTest
+class Viper_Tests_BaseTag_BaseTagWithListsUnitTest extends AbstractViperUnitTest
 {
 
 
