@@ -1960,6 +1960,28 @@
             var tmp = document.createElement('div');
             ViperUtil.setHtml(tmp, content);
 
+            // Remove all tags with language=JavaScript. These are tags used by MS track changes.
+            var tags = ViperUtil.find(tmp, '[language="JavaScript"]');
+            for (var i = 0; i < tags.length; i++) {
+                // Could be a comment.
+                if (tags[i].id
+                    && tags[i].id.indexOf('_com_') === 0
+                    && tags[i].parentNode
+                    && ViperUtil.isTag(tags[i].parentNode, 'div') === true
+                ) {
+                    // Check if parent has an hr sibling.
+                    if (ViperUtil.isTag(tags[i].parentNode.previousElementSibling, 'hr') === true) {
+                        // Remove the parent of this tag. Actual structure is:
+                        // <div><hr/><div><div id="_com_1">...</div></div></div>.
+                        ViperUtil.remove(tags[i].parentNode.parentNode);
+                    } else {
+                        ViperUtil.remove(tags[i].parentNode);
+                    }
+                } else {
+                    ViperUtil.remove(tags[i]);
+                }
+            }
+
             // Remove the link tags with no href attributes. Usualy for the footnotes.
             var aTags = ViperUtil.getTag('a', tmp);
             var c     = aTags.length;
