@@ -2501,12 +2501,40 @@
                 newList = false;
             }//end for
 
+            // Find all ol/ul tags inside other ol/ul tags.
+            var nestedLists = ViperUtil.find(div, 'ol > ol,ol > ul, ul > ul, ul > ol');
+            for (var i = 0; i < nestedLists.length; i++) {
+                var list = nestedLists[i];
+                if (!list.previousElementSibling && !list.nextElementSibling) {
+                    // Nested list for no reason.. Take it out of its parent and remove the old parent.
+                    ViperUtil.insertBefore(list.parentNode, list);
+                    ViperUtil.remove(list.nextElementSibling);
+                }
+            }
+
             // Make sure the sub lists are inside list items.
             var lists = ViperUtil.getTag('ul,ol', div);
             var lc    = lists.length;
             for (var i = 0; i < lc; i++) {
                 var list = lists[i];
+                var styleToType = {
+                    'lower-alpha': 'a',
+                    'lower-roman': 'i',
+                    'upper-alpha': 'A',
+                    'upper-roman': 'I'
+                };
+
+                // Convert list style to type.
+                var listStyle = ViperUtil.getStyle(list, 'list-style-type');
+                if (listStyle) {console.info(listStyle);
+                    var type = styleToType[listStyle];
+                    if (type) {
+                        list.setAttribute('type', type);
+                    }
+                } 
+
                 ViperUtil.removeAttr(list, 'style');
+
                 if (ViperUtil.isTag(list.parentNode, 'ul') === true
                     || ViperUtil.isTag(list.parentNode, 'ol') === true
                 ) {
