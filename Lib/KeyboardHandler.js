@@ -360,7 +360,11 @@
                             } else if (!textContainer.previousSibling) {
                                 var parent = textContainer.parentNode;
                                 while (!parent.previousSibling) {
-                                    parent = parent.previousSibling;
+                                    if (parent === viperElement) {
+                                        break;
+                                    }
+
+                                    parent = parent.parentNode;
                                 }
 
                                 if (ViperUtil.isText(parent.previousSibling) === true) {
@@ -380,6 +384,8 @@
                                         this._viper.fireNodesChanged([textContainer]);
                                         return true;
                                     }
+                                } else if (char === ' ') {
+                                    char = String.fromCharCode(160);
                                 }
                             }
 
