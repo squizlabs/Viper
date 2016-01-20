@@ -317,6 +317,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreStylesUnitTest extends AbstractViper
         $this->assertHTMLMatch('<p><strong><em>%1% %2% %3%</em></strong></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
         $this->moveToKeyword(3, 'right');
+        sleep(1);
 
         $this->sikuli->keyDown('Key.CMD + b');
         $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
