@@ -874,7 +874,7 @@
                     var bookmark = self._bookmark;
                     self._insertTmpNodeBeforeBookmark(bookmark);
 
-                    self.viper.removeBookmark(bookmark);
+                    self.viper.removeBookmark(bookmark, true);
                     setTimeout(function() {
                         self._handleFormattedPasteValue(null, div);
                         self.viper.focus();
