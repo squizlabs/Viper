@@ -467,7 +467,6 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperUnitT
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Link</li>', $this->getHtml('.ViperITP-lineage'));
 
         // Test end of a word at the start of a paragraph
-        $this->clickKeyword(1);
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');

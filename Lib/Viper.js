@@ -3669,7 +3669,7 @@
             setTimeout(function() {
                 var range = null;
                 try {
-                    range = self.adjustRange();
+                    range = self.adjustRange(null, 'mouseup');
                 } catch (e) {
                 }
 
@@ -3686,7 +3686,7 @@
                     // document node.
                     setTimeout(function() {
                         var x = self.getCurrentRange();
-                        self.fireSelectionChanged(self.adjustRange(), true);
+                        self.fireSelectionChanged(self.adjustRange(null, 'mouseup'), true);
                     }, 450);
                 } else {
                     if (Viper.Util.isBrowser('msie', '>=11') === true
@@ -3721,7 +3721,7 @@
          *
          * @return {Viper.DOMRange} The updated range.
          */
-        adjustRange: function(range)
+        adjustRange: function(range, type)
         {
             range = range || this.getViperRange();
             if (range.collapsed !== false) {
@@ -3764,7 +3764,9 @@
                 }
             }
 
-            if (endNode && endNode.nodeType === Viper.Util.TEXT_NODE
+            if (type === 'mouseup'
+                && endNode 
+                && endNode.nodeType === Viper.Util.TEXT_NODE
                 && range.endOffset === 0
                 && endNode !== startNode
                 && endNode.previousSibling
