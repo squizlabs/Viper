@@ -534,7 +534,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
         $this->clickTopToolbarButton('subscript', NULL);
         $this->clickTopToolbarButton('italic', NULL);
         $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->assertHTMLMatch('<p><del><em><sub><strong>%1%</strong></sup></em></del></p>');
+        $this->assertHTMLMatch('<p><del><em><sub><strong>%1%</strong></sub></em></del></p>');
 
     }//end testBoldWithTheThreeOtherFormatsSubscriptThenItalicThenStrikethroughApplied()
 
