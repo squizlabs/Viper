@@ -1359,6 +1359,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
         // Check deleting a paragraph before the list
         $this->useTest(10);
         $this->moveToKeyword(1, 'left');
+        sleep(1);
         $this->sikuli->keyDown('Key.DELETE');
         $this->sikuli->keyDown('Key.DELETE');
         $this->sikuli->keyDown('Key.DELETE');
@@ -1372,7 +1373,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
         // Check deleting the paragraph before the list and content in the list
         $this->useTest(10);
         $this->moveToKeyword(1, 'left');
-
+        sleep(1);
         for ($i = 0; $i < 9; $i++) {
             $this->sikuli->keyDown('Key.DELETE');
         }

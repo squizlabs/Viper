@@ -2786,6 +2786,13 @@
                 ) {
                     // Handle: <p>test * test</p> -> <p>test *test</p>.
                     range.startContainer.data = range.startContainer.data.substr(0, range.startContainer.data.length - 1) + ' ';
+                } else if (!range.startContainer.nextSibling
+                    && range.collapsed === true
+                    && ViperUtil.isBlockElement(range.startContainer.parentNode) === true
+                    && range.startContainer.data.length === 1
+                ) {
+                    // Insert a br element at the end.
+                    range.startContainer.parentNode.appendChild(document.createElement('br'));
                 }
             }
 
