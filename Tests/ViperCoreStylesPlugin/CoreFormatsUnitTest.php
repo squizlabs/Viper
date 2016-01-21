@@ -472,7 +472,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
         $this->clickTopToolbarButton('italic', NULL);
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->clickTopToolbarButton('subscript', NULL);
-        $this->assertHTMLMatch('<p><sup><del><em><strong>%1%</strong></em></del></sup></p>');
+        $this->assertHTMLMatch('<p><sub><del><em><strong>%1%</strong></em></del></sub></p>');
 
     }//end testBoldWithTheThreeOtherFormatsItalicThenStrikethroughThenSubscriptApplied()
 
@@ -534,7 +534,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
         $this->clickTopToolbarButton('subscript', NULL);
         $this->clickTopToolbarButton('italic', NULL);
         $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->assertHTMLMatch('<p><del><sup><em><strong>%1%</strong></em></sup></del></p>');
+        $this->assertHTMLMatch('<p><del><em><sub><strong>%1%</strong></sup></em></del></p>');
 
     }//end testBoldWithTheThreeOtherFormatsSubscriptThenItalicThenStrikethroughApplied()
 
