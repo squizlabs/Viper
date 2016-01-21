@@ -3861,6 +3861,19 @@
             ) {
                 range.collapse(true);
                 Viper.Selection.addRange(range);
+            } else if (Viper.Util.isBrowser('msie', '>=11')
+                && Viper.Util.isText(range.startContainer) === true
+                && range.startOffset === range.startContainer.data.length
+                && Viper.Util.isText(range.startContainer.nextSibling) === false
+                && range.collapsed === false
+            ) {
+                // Range needs to be moved when <p>text [<strong>te]xt</strong></p> so that range is
+                // inside the tag.
+                var sel = range._getFirstSelectableChild(range.startContainer.nextSibling);
+                if (Viper.Util.isText(sel) === true) {
+                    range.setStart(sel, 0);
+                    Viper.Selection.addRange(range);
+                }
             }//end if
 
             return range;
