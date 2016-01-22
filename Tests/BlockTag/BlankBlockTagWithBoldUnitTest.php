@@ -2,7 +2,7 @@
 
 require_once 'AbstractViperUnitTest.php';
 
-class Viper_Tests_BaseTag_BlankBlockTagWithBoldUnitTest extends AbstractViperUnitTest
+class Viper_Tests_BlockTag_BlankBlockTagWithBoldUnitTest extends AbstractViperUnitTest
 {
     /**
      * Test adding bold formatting to content

@@ -2,7 +2,7 @@
 
 require_once 'AbstractViperUnitTest.php';
 
-class Viper_Tests_BaseTag_BlankBlockTagWithSuperscriptUnitTest extends AbstractViperUnitTest
+class Viper_Tests_BlockTag_BlankBlockTagWithSuperscriptUnitTest extends AbstractViperUnitTest
 {
     /**
      * Test adding superscript formatting to content

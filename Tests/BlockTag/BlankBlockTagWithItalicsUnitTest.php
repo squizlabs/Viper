@@ -2,7 +2,7 @@
 
 require_once 'AbstractViperUnitTest.php';
 
-class Viper_Tests_BaseTag_BlankBlockTagWithItalicsUnitTest extends AbstractViperUnitTest
+class Viper_Tests_BlockTag_BlankBlockTagWithItalicsUnitTest extends AbstractViperUnitTest
 {
     /**
      * Test adding italic formatting to content

@@ -2,7 +2,7 @@
 
 require_once 'AbstractViperUnitTest.php';
 
-class Viper_Tests_BaseTag_BlankBlockTagWithStrikethroughUnitTest extends AbstractViperUnitTest
+class Viper_Tests_BlockTag_BlankBlockTagWithStrikethroughUnitTest extends AbstractViperUnitTest
 {
     /**
      * Test adding strikethrough formatting to content
