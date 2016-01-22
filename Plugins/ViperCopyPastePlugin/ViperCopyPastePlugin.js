@@ -887,15 +887,8 @@
         },
 
         _insertTmpNodeBeforeBookmark: function (bookmark) {
-            if (!bookmark.start.previousSibling) {
-                if (bookmark.start.parentNode !== this.viper.getViperElement()) {
-                    ViperUtil.insertBefore(bookmark.start.parentNode, this._tmpNode);
-                } else {
-                    ViperUtil.insertBefore(bookmark.start, this._tmpNode);
-                }
-            } else {
-                ViperUtil.insertBefore(bookmark.start, this._tmpNode);
-            }
+            ViperUtil.insertBefore(bookmark.start, this._tmpNode);
+            
         },
 
         _createPasteIframe: function(parent)
@@ -1207,17 +1200,23 @@
                             prevWrapper = null;
                             ctNode = fragment.lastChild;
 
-                            if ((ViperUtil.isTag(ctNode, 'ul') === true
-                                || ViperUtil.isTag(ctNode, 'ol') === true)
-                                && ViperUtil.isTag(prevBlock, 'li') === true
+                            if (ViperUtil.isTag(ctNode, ['ul', 'ol']) === true
+                                && ViperUtil.isTag(prevBlock, ['li', 'ul', 'ol']) === true
                             ) {
                                 // If this list is being pasted inside another list use its items instead.
                                 var insAfter = prevBlock;
+                                if (ViperUtil.isTag(insAfter, 'li') === false) {
+                                    insAfter = this._tmpNode.nextSibling;
+                                }
+
                                 while (ctNode.firstChild) {
                                     var firstChild = ctNode.firstChild;
                                     ViperUtil.insertAfter(insAfter, firstChild);
                                     insAfter = firstChild;
                                 }
+
+                                // Remove other list.
+                                ViperUtil.remove(ctNode);
                             } else if (ViperUtil.isTag(ctNode, 'table') === true
                                 && ViperUtil.getParents(prevBlock, 'table', this.viper.getViperElement()).length > 0
                             ) {
