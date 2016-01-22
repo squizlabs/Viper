@@ -2211,7 +2211,19 @@
             var c    = tags.length;
             for (var i = 0; i < c; i++) {
                 var tagContent = ViperUtil.getHtml(tags[i]);
-                if (tagContent === '&nbsp;' || ViperUtil.isBlank(tagContent) === true) {
+                if (tagContent === '&nbsp;' || ViperUtil.isBlank(tagContent) === true || ViperUtil.trim(tagContent).replace(/[\r\n]/, '') === "<br><br>") {
+                    // Before removing this empty P tag check previous and next siblings for lists, 
+                    // empty P tag might have split a single list in to two.
+                    if (tags[i].previousSibling && tags[i].nextSibling) {
+                        var prevTagName = ViperUtil.getTagName(tags[i].previousElementSibling);
+                        var nextTagName = ViperUtil.getTagName(tags[i].nextElementSibling);
+                        if (prevTagName === nextTagName && ViperUtil.isTag(tags[i].previousElementSibling, ['ul', 'ol'])) {
+                            // Move child elements of the next sibling in to the prev list.
+                            ViperUtil.moveChildrenToElement(tags[i].nextElementSibling, tags[i].previousElementSibling);
+                            ViperUtil.remove(tags[i].nextElementSibling);
+                        }
+                    }
+
                     ViperUtil.remove(tags[i]);
                 }
             }
