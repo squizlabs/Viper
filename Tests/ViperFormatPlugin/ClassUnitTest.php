@@ -511,15 +511,22 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
 
         // Select bold in the lineage
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->clickInlineToolbarButton('cssClass');
+        sleep(1);
         $this->type('test');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->assertHTMLMatch('<p>This is some content <strong class="test"><em>XAX</em></strong> in my unit test XBX</p>');
 
         // Check that the class field stayed open in the inline toolbar has remaind open with the class field
         $this->clickField('Class');
+        sleep(1);
         $this->type('class');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->assertHTMLMatch('<p>This is some content <strong class="testclass"><em>XAX</em></strong> in my unit test XBX</p>');
 
     }//end testClassFieldRemainsOpenAfterApplyingBoldAndItalic()
@@ -726,7 +733,7 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('cssClass');
         $this->clickInlineToolbarButton('italic', 'active');
 
-        $viperBookmarkElements = $this->sikuli->execJS('viperTest.getWindow().ViperUtil.getClass("viperBookmark").length');
+        $viperBookmarkElements = $this->sikuli->execJS('viperTest.getWindow().Viper.Util.getClass("viperBookmark").length');
         $this->assertEquals(0, $viperBookmarkElements, 'There should be no viper bookmark elements');
 
         // Only strong tag should appear around keyword 2
@@ -880,34 +887,53 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractViperUnitTest
         $this->clearFieldValue('Class');
         sleep(2);
         $this->revertFieldValue('Class');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->assertHTMLMatch('<p>This is some content <span class="myclass">%1%</span> with classes applied %2%.</p>');
 
         // Remove class value and revert using top toolbar
         $this->selectKeyword(1);
+        sleep(1);
         $this->clickTopToolbarButton('cssClass', 'active');
+        sleep(1);
         $this->clearFieldValue('Class');
+        sleep(1);
         $this->revertFieldValue('Class');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->assertHTMLMatch('<p>This is some content <span class="myclass">%1%</span> with classes applied %2%.</p>');
 
         // Apply class value, clear field and revert using inline toolbar
         $this->useTest(1);
         $this->selectKeyword(1);
+        sleep(1);
         $this->clickInlineToolbarButton('cssClass');
+        sleep(1);
         $this->type('test');
+        sleep(1);
         $this->clearFieldValue('Class');
+        sleep(1);
         $this->revertFieldValue('Class');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->assertHTMLMatch('<p>This is some content <span class="test">%1%</span> in my unit test %2%</p>');
 
         // Apply anchor value and revert using top toolbar
         $this->useTest(1);
+        sleep(1);
         $this->selectKeyword(1);
+        sleep(1);
         $this->clickTopToolbarButton('cssClass');
+        sleep(1);
         $this->type('abc');
+        sleep(1);
         $this->revertFieldValue('Class');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->assertHTMLMatch('<p>This is some content %1% in my unit test %2%</p>');
 
     }//end testRevertClassValueIcon()

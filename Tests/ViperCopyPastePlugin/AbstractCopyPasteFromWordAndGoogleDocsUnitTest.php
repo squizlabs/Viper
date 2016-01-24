@@ -64,6 +64,7 @@ abstract class AbstractCopyPasteFromWordAndGoogleDocsUnitTest extends AbstractVi
         }//end switch
 
         $this->selectKeyword(1);
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + a');
         sleep(1);
         $this->sikuli->keyDown('Key.DELETE');
@@ -123,6 +124,9 @@ abstract class AbstractCopyPasteFromWordAndGoogleDocsUnitTest extends AbstractVi
                     case 'ie11':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsIE11/GoogleDocs/'.$textFileName);
                         break;
+                    case 'edge':
+                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsEdge/GoogleDocs/'.$textFileName);
+                        break;
                     default:
                         throw new Exception('Browser is not supported on windows');
                 }//end switch
@@ -138,6 +142,7 @@ abstract class AbstractCopyPasteFromWordAndGoogleDocsUnitTest extends AbstractVi
         sleep(5);
 
         $this->removeTableHeaders();
+        sleep(1);
         $this->assertHTMLMatch($expectedHtmlCode);
 
     }//end copyAndPasteFromGoogleDocs

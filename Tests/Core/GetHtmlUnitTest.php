@@ -200,6 +200,36 @@ class Viper_Tests_Core_GetHtmlUnitTest extends AbstractViperUnitTest
     }//end testRemovingContenteditableAttribute()
 
 
+    /**
+     * Test getHTML removes the form tag from the HTML code.
+     *
+     * @return void
+     */
+    public function testRemovingFormTag()
+    {
+        $this->useTest(14);
+
+        $this->moveToKeyword(1);
+        $this->assertHTMLMatch('<p>Some content before the form %1%</p><p>Some content after the form</p>');
+
+    }//end testRemovingFormTag()
+
+
+    /**
+     * Test getHTML removes the input tag from the HTML code.
+     *
+     * @return void
+     */
+    public function testRemovingInputTag()
+    {
+        $this->useTest(15);
+
+        $this->moveToKeyword(1);
+        $this->assertHTMLMatch('<p>Some content before the input tags %1%</p><p>Some content after the input tags</p>');
+
+    }//end testRemovingInputTag()
+
+
 }//end class
 
 ?>

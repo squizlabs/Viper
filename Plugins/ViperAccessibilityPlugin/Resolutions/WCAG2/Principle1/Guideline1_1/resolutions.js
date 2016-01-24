@@ -25,35 +25,35 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
                 var altid      = null;
                 var titleid    = null;
                 var checkboxid = null;
-                checkboxid   = ViperUtil.getUniqueId();
-                var checkbox = viper.ViperTools.createCheckbox(checkboxid, 'Image is decorative', (technique === 'H67.2'), function(checked) {
+                checkboxid   = Viper.Util.getUniqueId();
+                var checkbox = viper.Tools.createCheckbox(checkboxid, 'Image is decorative', (technique === 'H67.2'), function(checked) {
                     if (checked === true) {
-                        viper.ViperTools.getItem(altid).disable();
-                        viper.ViperTools.getItem(titleid).disable();
+                        viper.Tools.getItem(altid).disable();
+                        viper.Tools.getItem(titleid).disable();
                     } else {
-                        viper.ViperTools.getItem(altid).enable();
-                        viper.ViperTools.getItem(titleid).enable();
+                        viper.Tools.getItem(altid).enable();
+                        viper.Tools.getItem(titleid).enable();
                     }
                 });
                 editPanel.appendChild(checkbox);
 
-                altid   = ViperUtil.getUniqueId();
-                var alt = viper.ViperTools.createTextbox(altid, 'Alt', element.getAttribute('alt'));
+                altid   = Viper.Util.getUniqueId();
+                var alt = viper.Tools.createTextbox(altid, 'Alt', element.getAttribute('alt'));
                 editPanel.appendChild(alt);
 
-                titleid   = ViperUtil.getUniqueId();
-                var title = viper.ViperTools.createTextbox(titleid, 'Title', element.getAttribute('title'));
+                titleid   = Viper.Util.getUniqueId();
+                var title = viper.Tools.createTextbox(titleid, 'Title', element.getAttribute('title'));
                 editPanel.appendChild(title);
 
                 if (technique === 'H67.2') {
-                    viper.ViperTools.getItem(altid).disable();
-                    viper.ViperTools.getItem(titleid).disable();
+                    viper.Tools.getItem(altid).disable();
+                    viper.Tools.getItem(titleid).disable();
                 }
 
                 action = function() {
-                    if (viper.ViperTools.getItem(checkboxid).getValue() !== true) {
-                        element.setAttribute('alt', viper.ViperTools.getItem(altid).getValue());
-                        element.setAttribute('title', viper.ViperTools.getItem(titleid).getValue());
+                    if (viper.Tools.getItem(checkboxid).getValue() !== true) {
+                        element.setAttribute('alt', viper.Tools.getItem(altid).getValue());
+                        element.setAttribute('title', viper.Tools.getItem(titleid).getValue());
                     } else {
                         element.setAttribute('alt', '');
                         element.removeAttribute('title');
@@ -61,8 +61,8 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
                 };
 
                 this.parent.addActionButton(action, contentElement, [checkboxid, titleid, altid], null, null, function() {
-                    if (viper.ViperTools.getItem(checkboxid).getValue() !== true
-                        && viper.ViperTools.getItem(altid).getValue() === ''
+                    if (viper.Tools.getItem(checkboxid).getValue() !== true
+                        && viper.Tools.getItem(altid).getValue() === ''
                     ) {
                         return false;
                     }
@@ -82,19 +82,19 @@ ViperAccessibilityPlugin_WCAG2_Principle1_Guideline1_1 = {
                     msg = 'Ensure the image\'s alt text describes the purpose or content of the image.';
                 }
 
-                if (ViperUtil.isTag(element, 'a') === true) {
-                    element = ViperUtil.getTag('img', element)[0];
+                if (Viper.Util.isTag(element, 'a') === true) {
+                    element = Viper.Util.getTag('img', element)[0];
                 }
 
                 this._getImageResContent(contentElement, element, msg);
 
                 editPanel = this.parent.getResolutionActionsContainer(contentElement);
 
-                var altid = ViperUtil.getUniqueId();
-                var alt   = viper.ViperTools.createTextbox(altid, 'Alt', element.getAttribute('alt'));
+                var altid = Viper.Util.getUniqueId();
+                var alt   = viper.Tools.createTextbox(altid, 'Alt', element.getAttribute('alt'));
                 editPanel.appendChild(alt);
                 action = function() {
-                    element.setAttribute('alt', viper.ViperTools.getItem(altid).getValue());
+                    element.setAttribute('alt', viper.Tools.getItem(altid).getValue());
                 };
 
                 this.parent.addActionButton(action, contentElement, [altid]);

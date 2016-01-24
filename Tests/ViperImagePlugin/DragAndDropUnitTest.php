@@ -12,7 +12,7 @@ class Viper_Tests_ViperImagePlugin_DragAndDropUnitTest extends AbstractViperImag
      */
     public function testDragAndDropImage()
     {
-        $this->skipTestFor('windows', array('ie9', 'ie8'));
+        $this->skipTestFor('windows', array('ie9', 'ie8', 'ie11', 'edge'));
         $this->useTest(1);
 
         $this->clickKeyword(1);
@@ -50,7 +50,7 @@ class Viper_Tests_ViperImagePlugin_DragAndDropUnitTest extends AbstractViperImag
      */
     public function testDragAndDropImageAndEditContent()
     {
-        $this->skipTestFor('windows', array('ie9', 'ie8'));
+        $this->skipTestFor('windows', array('ie9', 'ie8', 'ie11', 'edge'));
         $this->useTest(1);
 
         $this->clickKeyword(1);
@@ -84,7 +84,7 @@ class Viper_Tests_ViperImagePlugin_DragAndDropUnitTest extends AbstractViperImag
      */
     public function testDragAndDropMultipleImages()
     {
-        $this->skipTestFor('windows', array('ie9', 'ie8'));
+        $this->skipTestFor('windows', array('ie9', 'ie8', 'ie11', 'edge'));
         $this->useTest(1);
 
         // Drag and drop first image
@@ -120,7 +120,7 @@ class Viper_Tests_ViperImagePlugin_DragAndDropUnitTest extends AbstractViperImag
      */
     public function testDragAndDropImageOnEmptyPage()
     {
-        $this->skipTestFor('windows', array('ie9', 'ie8'));
+        $this->skipTestFor('windows', array('ie9', 'ie8', 'ie11', 'edge'));
         $this->useTest(1);
 
         $this->clickKeyword(1);
@@ -152,7 +152,7 @@ class Viper_Tests_ViperImagePlugin_DragAndDropUnitTest extends AbstractViperImag
      */
     public function testDragAndDropOntoExistingImage()
     {
-        $this->skipTestFor('windows', array('ie9', 'ie8'));
+        $this->skipTestFor('windows', array('ie9', 'ie8', 'ie11', 'edge'));
         $this->useTest(2);
 
         $this->clickKeyword(1);
@@ -181,7 +181,7 @@ class Viper_Tests_ViperImagePlugin_DragAndDropUnitTest extends AbstractViperImag
      */
     public function testUndoDragAndDropImage()
     {
-        $this->skipTestFor('windows', array('ie9', 'ie8'));
+        $this->skipTestFor('windows', array('ie9', 'ie8', 'ie11', 'edge'));
         
         // Test undo when dragging in a new image
         $this->useTest(1);

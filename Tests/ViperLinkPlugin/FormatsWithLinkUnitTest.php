@@ -141,7 +141,7 @@ class Viper_Tests_ViperLinkPlugin_FormatsWithLinkUnitTest extends AbstractViperU
         $this->sikuli->keyDown('Key.ENTER');
 
         // Click away before adding the link
-        $this->moveToKeyword(2);
+        $this->clickKeyword(1);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('link');
         $this->type('http://www.squizlabs.com');

@@ -21,10 +21,10 @@
         <script type="text/javascript">
             var viper   = null;
             ViperReadyCallback = function() {
-                var contentElement = ViperUtil.getid('content');
+                var contentElement = Viper.Util.getid('content');
 
                 viper = new Viper('test', null, null, [contentElement]);
-                viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperKeyboardEditorPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperTrackChangesPlugin', 'ViperCursorAssistPlugin', 'ViperReplacementPlugin']);
+                viper.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin', 'ViperCursorAssistPlugin', 'ViperReplacementPlugin']);
 
                 $('.Viper-button[title]').removeAttr('title');
 
@@ -36,15 +36,15 @@
                 }
 
                 // Check for test cases.
-                var testCases = ViperUtil.find(contentElement, 'div[id^="test"]');
+                var testCases = Viper.Util.find(contentElement, 'div[id^="test"]');
                 if (testCases.length > 0) {
                     var testCasesHtml = [];
                     for (var i = 0; i < testCases.length; i++) {
-                        testCasesHtml[testCases[i].id] = ViperUtil.getHtml(testCases[i]);
+                        testCasesHtml[testCases[i].id] = Viper.Util.getHtml(testCases[i]);
                     }
 
                     viperTest.set('testCases', testCasesHtml);
-                    ViperUtil.empty(contentElement);
+                    Viper.Util.empty(contentElement);
                 }
 
                 // Setup keywords.

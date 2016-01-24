@@ -62,8 +62,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsUnitTest extends AbstractViperUn
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>This is some %1% content</p><p>Squiz<span lang="en">%2%</span> is orsm</p><p>Squiz<abbr title="abc">%3%</abbr> is orsm</p><p>Squiz<abbr title="abc"><acronym title="abc">%4%</acronym></abbr> is orsm</p>');
 
-        // Check that the acronym button is no longer active as you are now on the abbr instead of the acronym
-        $this->assertTrue($this->topToolbarButtonExists('Acronym', NULL, TRUE), 'Acronym button should no longer be active');
+        $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should still be active');
 
         $this->selectKeyword(4);
         $lineage = $this->getHtml('.ViperITP-lineage');
@@ -188,8 +187,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsUnitTest extends AbstractViperUn
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>This is some %1% content</p><p>Squiz<span lang="en">%2%</span> is orsm</p><p>Squiz<abbr title="abc">%3%</abbr> is orsm</p><p>Squiz<abbr title="abc"><acronym title="abc">%4%</acronym></abbr> is orsm</p>');
 
-        // Check that the language button is no longer active as you are now on the abbr instead of the span
-        $this->assertTrue($this->topToolbarButtonExists('Acronym', NULL, TRUE), 'Acronym button should no longer be active');
+        $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Acronym button should still be active');
 
         $this->selectKeyword(4);
         $lineage = $this->getHtml('.ViperITP-lineage');
@@ -379,7 +377,7 @@ class Viper_Tests_ViperLangToolsPlugin_LangToolsUnitTest extends AbstractViperUn
         $this->useTest(4);
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('langTools', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('Acronym', 'active', TRUE), 'Language button should be active');
+        $this->assertTrue($this->topToolbarButtonExists('Language', 'active', TRUE), 'Language button should be active');
 
         $this->clickTopToolbarButton('Acronym', NULL, TRUE);
         $this->clickField('Acronym');

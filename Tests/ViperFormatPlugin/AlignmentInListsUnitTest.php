@@ -24,99 +24,144 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         
         // Remove left justify for unordered list item
         $this->moveToKeyword(1);
+        sleep(1);
         $this->clickTopToolbarButton('justifyLeft', 'active');
+        sleep(1);
         $this->clickTopToolbarButton('justifyLeft', 'active');
+        sleep(1);
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
 
         // Apply left justify to ordered list item
         $this->moveToKeyword(2);
+        sleep(1);
         $this->clickTopToolbarButton('justifyLeft');
+        sleep(1);
         $this->clickTopToolbarButton('justifyLeft');
+        sleep(1);
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li style="text-align: left;">item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
         
         // Remove left justify for ordered list item
         $this->moveToKeyword(2);
+        sleep(1);
         $this->clickTopToolbarButton('justifyLeft', 'active');
+        sleep(1);
         $this->clickTopToolbarButton('justifyLeft', 'active');
+        sleep(1);
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
 
         // Apply center justify to unordered list item
         $this->moveToKeyword(1);
+        sleep(1);
         $this->clickTopToolbarButton('justifyLeft');
+        sleep(1);
         $this->clickTopToolbarButton('justifyCenter');
+        sleep(1);
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li style="text-align: center;">item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Active center justify icon does not appear in the top toolbar');
         
         // Remove center justify for unordered list item
         $this->moveToKeyword(1);
+        sleep(1);
         $this->clickTopToolbarButton('justifyCenter', 'active');
+        sleep(1);
         $this->clickTopToolbarButton('justifyCenter', 'active');
+        sleep(1);
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
 
         // Apply center justify to ordered list item
         $this->moveToKeyword(2);
+        sleep(1);
         $this->clickTopToolbarButton('justifyLeft');
+        sleep(1);
         $this->clickTopToolbarButton('justifyCenter');
+        sleep(1);
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li style="text-align: center;">item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Active center justify icon does not appear in the top toolbar');
         
         // Remove center justify for ordered list item
         $this->moveToKeyword(2);
+        sleep(1);
         $this->clickTopToolbarButton('justifyCenter', 'active');
+        sleep(1);
         $this->clickTopToolbarButton('justifyCenter', 'active');
+        sleep(1);
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
 
         // Apply right justify to unordered list item
         $this->moveToKeyword(1);
+        sleep(1);
         $this->clickTopToolbarButton('justifyLeft');
+        sleep(1);
         $this->clickTopToolbarButton('justifyRight');
+        sleep(1);
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li style="text-align: right;">item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Active right justify icon does not appear in the top toolbar');
         
         // Remove right justify for unordered list item
         $this->moveToKeyword(1);
+        sleep(1);
         $this->clickTopToolbarButton('justifyRight', 'active');
+        sleep(1);
         $this->clickTopToolbarButton('justifyRight', 'active');
+        sleep(1);
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
 
         // Apply right justify to ordered list item
         $this->moveToKeyword(2);
+        sleep(1);
         $this->clickTopToolbarButton('justifyLeft');
+        sleep(1);
         $this->clickTopToolbarButton('justifyRight');
+        sleep(1);
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li style="text-align: right;">item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Active right justify icon does not appear in the top toolbar');
         
         // Remove center justify for ordered list item
         $this->moveToKeyword(2);
+        sleep(1);
         $this->clickTopToolbarButton('justifyRight', 'active');
+        sleep(1);
         $this->clickTopToolbarButton('justifyRight', 'active');
+        sleep(1);
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
 
         // Apply block justify to unordered list item
         $this->moveToKeyword(1);
+        sleep(1);
         $this->clickTopToolbarButton('justifyLeft');
+        sleep(1);
         $this->clickTopToolbarButton('justifyBlock');
+        sleep(1);
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li style="text-align: justify;">item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Active block justify icon does not appear in the top toolbar');
         
         // Remove block justify for unordered list item
         $this->moveToKeyword(1);
+        sleep(1);
         $this->clickTopToolbarButton('justifyBlock', 'active');
+        sleep(1);
         $this->clickTopToolbarButton('justifyBlock', 'active');
+        sleep(1);
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
 
         // Apply block justify to ordered list item
         $this->moveToKeyword(2);
+        sleep(1);
         $this->clickTopToolbarButton('justifyLeft');
+        sleep(1);
         $this->clickTopToolbarButton('justifyBlock');
+        sleep(1);
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li style="text-align: justify;">item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Active right justify icon does not appear in the top toolbar');
         
         // Remove block justify for ordered list item
         $this->moveToKeyword(2);
+        sleep(1);
         $this->clickTopToolbarButton('justifyBlock', 'active');
+        sleep(1);
         $this->clickTopToolbarButton('justifyBlock', 'active');
+        sleep(1);
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
 
     }//end testApplyAndRemoveJustificationWhenClickingInListItem()
