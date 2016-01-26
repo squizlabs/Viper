@@ -888,7 +888,7 @@
 
         _insertTmpNodeBeforeBookmark: function (bookmark) {
             ViperUtil.insertBefore(bookmark.start, this._tmpNode);
-            
+
         },
 
         _createPasteIframe: function(parent)
@@ -2211,7 +2211,7 @@
             for (var i = 0; i < c; i++) {
                 var tagContent = ViperUtil.getHtml(tags[i]);
                 if (tagContent === '&nbsp;' || ViperUtil.isBlank(tagContent) === true || ViperUtil.trim(tagContent).replace(/[\r\n]/, '') === "<br><br>") {
-                    // Before removing this empty P tag check previous and next siblings for lists, 
+                    // Before removing this empty P tag check previous and next siblings for lists,
                     // empty P tag might have split a single list in to two.
                     if (tags[i].previousSibling && tags[i].nextSibling) {
                         var prevTagName = ViperUtil.getTagName(tags[i].previousElementSibling);
@@ -2542,7 +2542,7 @@
                     if (type) {
                         list.setAttribute('type', type);
                     }
-                } 
+                }
 
                 ViperUtil.removeAttr(list, 'style');
 
