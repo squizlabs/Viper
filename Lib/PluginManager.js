@@ -211,6 +211,12 @@
 
         },
 
+        getPluginObject: function(name)
+        {
+            return _plugins[name].obj;
+
+        },
+
         getPlugins: function()
         {
             return this._plugins;
