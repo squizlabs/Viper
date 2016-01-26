@@ -26,10 +26,12 @@
         this._originalSource = null;
         this._inNewWindow    = false;
 
-        this._ignoreUpdate       = false;
-        this._ignoreSourceUpdate = false;
-        this._newWindowContents  = '';
-        this._jqueryURL          = null;
+        this._ignoreUpdate         = false;
+        this._ignoreSourceUpdate   = false;
+        this._newWindowContents    = '';
+        this._jqueryURL            = null;
+        this._containerid          = null;
+        this._toolbarButtonToggles = false;
     }
 
     Viper.PluginManager.addPlugin('ViperSourceViewPlugin', ViperSourceViewPlugin);
@@ -67,7 +69,7 @@
                 }, 250);
             });
 
-            this.viper.registerCallback(['Viper:editableElementChanged', 'Viper:disabled'], 'ViperSourceViewPlugin', function(nodes) {
+            this.viper.registerCallback(['Viper:editableElementChanged', 'Viper:disabled', 'Viper:clickedInside'], 'ViperSourceViewPlugin', function(nodes) {
                 self.hideSourceView();
             });
 
@@ -77,6 +79,14 @@
         {
             if (settings.jqueryURL) {
                 this._jqueryURL = settings.jqueryURL;
+            }
+
+            if (settings.parentid) {
+                this._containerid = settings.parentid;
+            }
+
+            if (settings.toolbarButtonToggles) {
+                this._toolbarButtonToggles = settings.toolbarButtonToggles;
             }
 
         },
@@ -134,7 +144,16 @@
                     self._originalSource = self._editor.getSession().getValue();
 
                     // Show the editor.
-                    self.viper.Tools.openPopup('VSVP:popup', 800, 600);
+                    if (!this._containerid) {
+                        self.viper.Tools.openPopup('VSVP:popup', 800, 600);
+                    } else if (this._toolbarButtonToggles === true) {
+                        // Do the disabling of toolbar here when the custom container provided.
+                        this.toolbarPlugin.disable();
+                        this.viper.Tools.enableButton('sourceEditor');
+                        this.viper.Tools.setButtonActive('sourceEditor');
+                    }
+
+                    this.viper.fireCallbacks('ViperSourceViewPlugin:showSourceView');
 
                     setTimeout(function() {
                         self._editor.resize();
@@ -166,18 +185,31 @@
                 this._sourceView = null;
                 this._editor     = null;
             } else if (this._sourceView) {
-                if (newWindow === true) {
-                    this.viper.Tools.closePopup('VSVP:popup', 'discardChanges');
-                } else {
-                    this.viper.Tools.closePopup('VSVP:popup');
+                if (!this._containerid) {
+                    if (newWindow === true) {
+                        this.viper.Tools.closePopup('VSVP:popup', 'discardChanges');
+                    } else {
+                        this.viper.Tools.closePopup('VSVP:popup');
+                    }
                 }
+
+                if (this._toolbarButtonToggles === true) {
+                    // Apply changes.
+                    this.updatePageContents();
+                    this.viper.Tools.setButtonInactive('sourceEditor');
+                }
+
+                this.viper.fireCallbacks('ViperSourceViewPlugin:hideSourceView');
             }
 
         },
 
         toggleSourceView: function()
         {
-            if (!this._sourceView || (!this._sourceView.parentNode || this._sourceView.nodeType !== ViperUtil.DOCUMENT_FRAGMENT_NODE)) {
+            if (!this._sourceView
+                || (!this._sourceView.parentNode || (this._sourceView.nodeType !== ViperUtil.DOCUMENT_FRAGMENT_NODE && !this._containerid))
+                || ViperUtil.getElementWidth(this._sourceView) === 0
+            ) {
                 this.showSourceView();
             } else {
                 this.hideSourceView();
@@ -253,6 +285,13 @@
 
         _createSourceView: function(callback)
         {
+            if (this._containerid) {
+                // Custom container provided.
+                this._sourceView = ViperUtil.getid(this._containerid);
+                this._initAceEditor(this._sourceView, callback);
+                return;
+            }
+
             var self  = this;
             var tools = this.viper.Tools
 
@@ -316,16 +355,9 @@
                         }
                     }
 
-                    self._removeScrollAttribute();
-
                     // Hide the Confirm message.
                     self.viper.Tools.getItem('VSVP:popup').hideTop();
-                    self._isVisible = false;
-                    self.toolbarPlugin.enable();
-
-                    setTimeout(function() {
-                        self.viper.focus();
-                    }, 10);
+                    self._closeEditor();
                 },
                 function() {
                     if (self._editor) {
@@ -343,20 +375,39 @@
                     callback.call(self);
                 });
             } else {
-                this._includeAce(function() {
-                    // Setup the Ace editor.
-                    var editor   = ace.edit(source);
-                    self._editor = editor;
-                    editor.$blockScrolling = Infinity;
-
-                    self.applyEditorSettings(editor);
-
-                    // Init editor events.
-                    self.initEditorEvents(editor);
-
-                    callback.call(self);
-                });
+                this._initAceEditor(source, callback);
             }
+
+        },
+
+        _closeEditor: function()
+        {
+            var self = this;
+            this._removeScrollAttribute();
+            this._isVisible = false;
+            this.toolbarPlugin.enable();
+
+            setTimeout(function() {
+                self.viper.focus();
+            }, 10);
+        },
+
+        _initAceEditor: function(containerElement, callback)
+        {
+            var self = this;
+            this._includeAce(function() {
+                // Setup the Ace editor.
+                var editor   = ace.edit(containerElement);
+                self._editor = editor;
+                editor.$blockScrolling = Infinity;
+
+                self.applyEditorSettings(editor);
+
+                // Init editor events.
+                self.initEditorEvents(editor);
+
+                callback.call(self);
+            });
 
         },
 
@@ -452,21 +503,25 @@
                         return;
                     }
 
-                    if (keyString === 'esc') {
-                        self.viper.Tools.closePopup('VSVP:popup');
-                    } else if (e.metaKey !== true
-                        && e.ctrlKey !== true
-                        && e.which !== 16
-                    ) {
-                        popup.hideTop();
+                    if (!self._containerid) {
+                        if (keyString === 'esc') {
+                            self.viper.Tools.closePopup('VSVP:popup');
+                        } else if (e.metaKey !== true
+                            && e.ctrlKey !== true
+                            && e.which !== 16
+                        ) {
+                            popup.hideTop();
+                        }
                     }
                 }
             });
 
             var onFocus = editor.onFocus;
             editor.onFocus = function() {
-                if (self._inNewWindow !== true) {
-                    self.toolbarPlugin.disable();
+                if (self._toolbarButtonToggles !== true) {
+                    if (self._inNewWindow !== true) {
+                        self.toolbarPlugin.disable();
+                    }
                 }
 
                 if (self.viper.isEnabled() === false) {
@@ -475,9 +530,12 @@
                 }
 
                 onFocus.call(editor);
-                setTimeout(function() {
-                    popup.hideTop();
-                }, 200);
+
+                if (!self._containerid) {
+                    setTimeout(function() {
+                        popup.hideTop();
+                    }, 200);
+                }
             }
 
             editor.onBlur = function() {
