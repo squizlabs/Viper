@@ -210,6 +210,28 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
 
     }//end testAddAndRemoveSuperscriptForLink()
 
+
+    /**
+     * Test that you can remove superscript from two different sections of content at the same time.
+     *
+     * @return void
+     */
+    public function testRemovingSuperscriptFromDifferentSectionsInContent()
+    {
+        // Remove using top toolbar
+        $this->useTest(3);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('superscript', 'active');
+
+        // Perform the check using raw html as there is a bug that removes the space after 'more' when it removes the superscript formatting
+        $this->assertEquals('<p>Text <sup>more </sup>%1%text text and more%2%<sup> text</sup></p>', $this->getRawHtml());
+
+        // Reapply using top toolbar
+        $this->clickTopToolbarButton('superscript');
+        $this->assertEquals('<p>Text <sup>more %1%text text and more%2% text</sup></p>', $this->getRawHtml());
+
+    }//end testRemovingSuperscriptFromDifferentSectionsInContent()
+
 }//end class
 
 ?>

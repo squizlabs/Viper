@@ -239,7 +239,8 @@ class Viper_Tests_ViperReplacementPlugin_FormatsWithKeywordsUnitTest extends Abs
         $this->useTest(2);
         $this->clickKeyword(1);
         sleep(1);
-        $this->moveToKeyword(1 , 'right');
+        $this->moveToKeyword(1, 'right');
+        sleep(1);
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
@@ -249,7 +250,7 @@ class Viper_Tests_ViperReplacementPlugin_FormatsWithKeywordsUnitTest extends Abs
         $this->assertEquals($this->replaceKeywords('Viper %1%'), $this->getSelectedText(), 'First line of text should be selected');
 
         // Test middle of paragraph
-        $this->selectKeyword(2,3);
+        $this->selectKeyword(2, 3);
         $this->sikuli->keyDown('Key.CMD + b');
         $this->assertEquals($this->replaceKeywords('%2% Viper %3%'), $this->getSelectedText(), 'Second line of text should be selected');
 

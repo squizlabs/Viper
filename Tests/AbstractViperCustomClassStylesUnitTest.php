@@ -48,7 +48,7 @@ abstract class AbstractViperCustomClassStylesUnitTest extends AbstractViperUnitT
      */
     protected function getSelectedStyles()
     {
-        return $this->sikuli->execJS('viper.ViperTools.getItem(\'ViperFormatPlugin-classList\').getSelectedItems()');
+        return $this->sikuli->execJS('viper.Tools.getItem(\'ViperFormatPlugin-classList\').getSelectedItems()');
 
     }//end getSelectedStyles()
 

@@ -129,11 +129,13 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperUnitT
 
         // Test two words
         $this->moveToKeyword(2);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should be available.');
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'Link icon should be available.');
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'), 'Link icon should be active in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'), 'Remove link icon should be available.');
         $this->moveToKeyword(3);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should be available.');
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'Link icon should be available.');
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'), 'Link icon should be active in the top toolbar');
@@ -160,11 +162,13 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperUnitT
 
         // Test two words
         $this->moveToKeyword(2);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should be available.');
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'Link icon should be available.');
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'), 'Link icon should be active in the top toolbar');
         $this->assertTrue($this->topToolbarButtonExists('linkRemove'), 'Remove link icon should be available.');
         $this->moveToKeyword(3);
+        sleep(1);
         $this->assertTrue($this->inlineToolbarButtonExists('linkRemove'), 'Remove link icon should be available.');
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'Link icon should be available.');
         $this->assertTrue($this->topToolbarButtonExists('link', 'active'), 'Link icon should be active in the top toolbar');
@@ -269,7 +273,7 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperUnitT
         // Test using inline toolbar
         $this->useTest(2);
         $this->selectKeyword(1);
-        $this->clickInlineToolbarButton('link', 'active'); 
+        $this->clickInlineToolbarButton('link', 'active');
         $this->clearFieldValue('Title');
         $this->clearFieldValue('URL');
         sleep(1);
@@ -400,7 +404,7 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperUnitT
         $this->useTest(5);
         $this->selectKeyword(2, 3);
         $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>%1%Test content test content.%4%</p>');
+        $this->assertHTMLMatch('<p>%1%Test content&nbsp;&nbsp;test content.%4%</p>');
 
         // Test adding text before deleted content
         $this->moveToKeyword(1, 'right');
@@ -424,7 +428,7 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperUnitT
         $this->useTest(5);
         $this->selectKeyword(2, 3);
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>%1%Test content test content.%4%</p>');
+        $this->assertHTMLMatch('<p>%1%Test content&nbsp;&nbsp;test content.%4%</p>');
 
         // Test adding text before deleted content
         $this->moveToKeyword(1, 'right');
@@ -448,7 +452,7 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperUnitT
 
 
     /**
-     * Test that you can edit the title and new window value for a link
+     * Test selecting links
      *
      * @return void
      */
@@ -458,66 +462,65 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperUnitT
         $this->useTest(6);
         $this->moveToKeyword(1, 'left');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Link</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Link</li>', $this->getHtml('.ViperITP-lineage'));
 
         // Test end of a word at the start of a paragraph
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Link</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
-
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Link</li>', $this->getHtml('.ViperITP-lineage'));
         // Test start of a word in the middle of a paragraph
         $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Link</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
-
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Link</li>', $this->getHtml('.ViperITP-lineage'));
         // Test end of a word in the middle of a paragraph
+        $this->clickKeyword(2);
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Link</li>', $this->getHtml('.ViperITP-lineage'));
 
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Link</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
-    
         // Test start of a word at the end of a paragraph
         $this->moveToKeyword(3, 'left');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Link</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
-
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Link</li>', $this->getHtml('.ViperITP-lineage'));
         // Test end of a word at the end of a paragraph
+        $this->clickKeyword(3);
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Link</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
-
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Link</li>', $this->getHtml('.ViperITP-lineage'));
         // Test start of a paragraph
+        $this->clickKeyword(4);
         $this->moveToKeyword(4, 'left');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Link</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
-
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Link</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $this->getHtml('.ViperITP-lineage'));
         // Test middle of a paragraph
+        $this->clickKeyword(5);
         $this->moveToKeyword(5, 'right');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Link</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
-
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Link</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $this->getHtml('.ViperITP-lineage'));
         // Test end of a paragraph
+        $this->clickKeyword(6);
         $this->moveToKeyword(6, 'right');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Link</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Link</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $this->getHtml('.ViperITP-lineage'));
 
     }//end testLinkSelection()
 

@@ -21,6 +21,16 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutImagesUnitTest extends Abstract
         sleep(1);
         $this->assertHTMLMatch('<p>First paragraph</p><p>text %1% <img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" /> %2% text</p><p>This is the second paragraph in the content of the page %3%</p><p><img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" /></p>');
 
+        // Try again
+        $this->clickElement('img', 0);
+        $this->sikuli->keyDown('Key.CMD + c');
+        sleep(1);
+        $this->moveToKeyword(3, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
+        $this->assertHTMLMatch('<p>First paragraph</p><p>text %1% <img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" /> %2% text</p><p>This is the second paragraph in the content of the page %3%</p><p><img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" /></p><p><img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" /></p>');
+
     }//end testCopyPasteImage()
 
 
@@ -54,12 +64,13 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutImagesUnitTest extends Abstract
      */
     public function testCopyPasteImageWithTextBefore()
     {
-        $this->clickElement('img', 0);
-        sleep(1);
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+         $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        
         $this->sikuli->keyDown('Key.CMD + c');
         sleep(1);
         $this->moveToKeyword(3, 'right');
@@ -106,6 +117,15 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutImagesUnitTest extends Abstract
         sleep(1);
         $this->assertHTMLMatch('<p>First paragraph</p><p>text %1%&nbsp;&nbsp;%2% text</p><p>This is the second paragraph in the content of the page %3%</p><p><img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" /></p>');
 
+        $this->clickElement('img', 0);
+        $this->sikuli->keyDown('Key.CMD + x');
+        sleep(1);
+        $this->moveToKeyword(3, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
+        $this->assertHTMLMatch('<p>First paragraph</p><p>text %1%&nbsp;&nbsp;%2% text</p><p>This is the second paragraph in the content of the page %3%</p><p><img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" /></p>');
+
     }//end testCutPasteImage()
 
 
@@ -138,18 +158,19 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutImagesUnitTest extends Abstract
      */
     public function testCutPasteImageWithTextBefore()
     {
-        $this->clickElement('img', 0);
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.CMD + x');
         sleep(1);
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.CMD + v');
         sleep(1);
-        $this->assertHTMLMatch('<p>First paragraph</p><p>text&nbsp;&nbsp;%2% textThis is the second paragraph in the content of the page %3%</p><p>%1%<img alt="Alt tag" src="%url%/ViperImagePlugin/Images/editing.png" /></p>');
+        $this->assertHTMLMatch('<p>First paragraph</p><p>text&nbsp;&nbsp;%2% text</p><p>This is the second paragraph in the content of the page %3%</p><p>%1%<img alt="Alt tag" src="%url%/ViperImagePlugin/Images/editing.png" /></p>');
 
     }//end testCutPasteImageWithTextBefore()
 

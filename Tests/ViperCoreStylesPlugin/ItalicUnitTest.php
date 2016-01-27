@@ -672,6 +672,48 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
 
     }//end testItalicIconForHeadingInInlineToolbar()
 
+
+    /**
+     * Test that you can remove italic from two different sections of content at the same time.
+     *
+     * @return void
+     */
+    public function testRemovingItalicFromDifferentSectionsInContent()
+    {
+        // Remove using top toolbar
+        $this->useTest(8);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('italic', 'active');
+
+        // Perform the check using raw html as there is a bug that removes the space after 'more' when it removes the italic formatting
+        $this->assertEquals('<p>Text <em>more </em>%1%text text and more%2%<em> text</em></p>', $this->getRawHtml());
+
+        // Reapply using top toolbar
+        $this->clickTopToolbarButton('italic');
+        $this->assertEquals('<p>Text <em>more %1%text text and more%2% text</em></p>', $this->getRawHtml());
+
+        // Using inline toolbar
+        $this->useTest(8);
+        $this->selectKeyword(1, 2);
+        $this->clickInlineToolbarButton('italic', 'active');
+        $this->assertEquals('<p>Text <em>more </em>%1%text text and more%2%<em> text</em></p>', $this->getRawHtml());
+
+        // Reapply using inline toolbar
+        $this->clickInlineToolbarButton('italic');
+        $this->assertEquals('<p>Text <em>more %1%text text and more%2% text</em></p>', $this->getRawHtml());
+
+        // Using keyboard shortcut
+        $this->useTest(8);
+        $this->selectKeyword(1, 2);
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->assertEquals('<p>Text <em>more </em>%1%text text and more%2%<em> text</em></p>', $this->getRawHtml());
+
+        // Reapply using keyboard shortcut
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->assertEquals('<p>Text <em>more %1%text text and more%2% text</em></p>', $this->getRawHtml());
+
+    }//end testRemovingItalicFromDifferentSectionsInContent()
+
 }//end class
 
 ?>

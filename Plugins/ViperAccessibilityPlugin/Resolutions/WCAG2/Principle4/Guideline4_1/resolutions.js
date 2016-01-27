@@ -17,22 +17,22 @@ ViperAccessibilityPlugin_WCAG2_Principle4_Guideline4_1 = {
                 var editPanel = this.parent.getResolutionActionsContainer(contentElement);
 
                 var idAttrid =  null;
-                idAttrid     = ViperUtil.getUniqueId();
-                var idAttr   = viper.ViperTools.createTextbox(idAttrid, 'ID', element.getAttribute('id') || '');
+                idAttrid     = Viper.Util.getUniqueId();
+                var idAttr   = viper.Tools.createTextbox(idAttrid, 'ID', element.getAttribute('id') || '');
                 editPanel.appendChild(idAttr);
 
                 action = function() {
-                    var idAttrVal = viper.ViperTools.getItem(idAttrid).getValue();
+                    var idAttrVal = viper.Tools.getItem(idAttrid).getValue();
                     element.setAttribute('id', idAttrVal);
                 };
 
                 this.parent.addActionButton(action, contentElement, [idAttrid], null, null, function() {
-                    var idAttrVal = ViperUtil.trim(viper.ViperTools.getItem(idAttrid).getValue());
+                    var idAttrVal = Viper.Util.trim(viper.Tools.getItem(idAttrid).getValue());
                     if (!idAttrVal) {
                         return false;
                     } else {
-                        var elem = ViperUtil.getid(idAttrVal);
-                        if (ViperUtil.inArray(viper.getViperElement(), ViperUtil.getParents(elem)) === true) {
+                        var elem = Viper.Util.getid(idAttrVal);
+                        if (Viper.Util.inArray(viper.getViperElement(), Viper.Util.getParents(elem)) === true) {
                             return false;
                         }
                     }

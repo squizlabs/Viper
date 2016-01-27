@@ -462,25 +462,34 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
 
         // Check that the heading toolbar doesn't appear in the inline toolbar for a multiline quote (by design)
         $this->selectKeyword(2);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('headings'));
 
         // Check that the heading icon doesn't appear in the inline toolbar for a quote with multiple paragraphs (by design)
         $this->selectKeyword(3);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('headings'));
 
         $this->selectKeyword(4);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(1);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('headings'));
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->assertFalse($this->inlineToolbarButtonExists('headings'));
 
         // Using the top toolbar
@@ -1073,12 +1082,14 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
 
         // Apply a heading to the Quote section
         $this->clickTopToolbarButton('headings');
+        sleep(1);
         $this->clickTopToolbarButton('H1', NULL, TRUE);
+        sleep(1);
         $this->assertHTMLMatch('<div><h1>sit amet %1%</h1><pre>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar.</pre></div>');
 
         // Undo the changes so we can test the second Pre section
         $this->sikuli->keyDown('Key.CMD + z');
-
+        sleep(1);
         $this->moveToKeyword(2);
         $this->assertTrue($this->topToolbarButtonExists('headings'), 'Heading icon should appear in the top toolbar');
 
@@ -1092,12 +1103,14 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
 
         // Apply a heading to the Quote section
         $this->clickTopToolbarButton('headings');
+        sleep(1);
         $this->clickTopToolbarButton('H1', NULL, TRUE);
+        sleep(1);
         $this->assertHTMLMatch('<div><pre>sit amet %1%</pre><h1>%2% long paragraph for testing that the heading icon does not appear in the inline toolbar.</h1></div>');
 
         // Undo the changes so we can test chagning the Div section
         $this->sikuli->keyDown('Key.CMD + z');
-
+        sleep(1);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('headings', 'disabled'), 'Heading icon should be enabled in the top toolbar');

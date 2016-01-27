@@ -57,21 +57,23 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
         $this->clickKeyword(1);
         $this->clickTopToolbarButton('accessAudit');
 
-        sleep(2);
+        sleep(3);
 
         // View Report.
         $viewReportButton = $this->findImage('HTMLCSViewReport', '#HTMLCS-settings-view-report');
         $this->sikuli->click($viewReportButton);
+        sleep(3);
 
         // Click warning.
         $warningIcon = $this->findImage('HTMLCS-report-warning', '.HTMLCS-issue-type.HTMLCS-warning');
         $this->sikuli->click($warningIcon);
-
+        sleep(2);
         $bubble = $this->getActiveBubble();
+        sleep(2);
 
         // View source.
         $this->clickElement('.Viper-resolutionHeader .Viper-button.Viper-sourceView');
-        sleep(2);
+        sleep(3);
 
         // Check to make sure the source view appears.
         try {
@@ -171,6 +173,66 @@ class Viper_Tests_ViperAccessibilityPlugin_AccessibilityPluginUnitTest extends A
         $this->assertEquals(9, $errorCount, 'The page should have 8 errors');
 
     }//end testTableIdErrorCountInHTMLCS()
+
+
+    /**
+     * Test the you can open and close the accessibility auditor multiple times.
+     *
+     * @return void
+     */
+    public function testReopeningAccessibilityAuditor()
+    {
+        $this->useTest(1);
+
+        $this->clickKeyword(1);
+        $this->assertTrue($this->topToolbarButtonExists('accessAudit'), 'Accessibility auditor icon should be active.');
+
+        $this->clickTopToolbarButton('accessAudit');
+
+        sleep(1);
+
+        // Check to make sure the auditor appear.
+        try {
+            $this->findImage('HTMLCSViewReport', '#HTMLCS-settings-view-report');
+        } catch (Exception $e) {
+            $this->fail('The accessibility auditor was not found');
+        }
+
+        // View report.
+        $viewReportButton = $this->findImage('HTMLCSViewReport', '#HTMLCS-settings-view-report');
+        $this->sikuli->click($viewReportButton);
+
+        // Check closing auditor editor.
+        $this->clickTopToolbarButton('accessAudit', 'selected');
+
+        sleep(1);
+
+        try
+        {
+            $this->findImage('HTMLCSViewReport', '#HTMLCS-settings-view-report');
+        } catch (Exception $e) {
+            // Expecting the expection as we closed the sub toolbar
+            $imageFound = false;
+        }
+
+        $this->assertFalse($imageFound, 'The accessibility auditor was found');
+
+        // Test reopening auditor editor.
+        $this->clickTopToolbarButton('accessAudit');
+
+        sleep(1);
+
+        try {
+            $this->findImage('HTMLCSViewReport', '#HTMLCS-settings-view-report');
+        } catch (Exception $e) {
+            $this->fail('The accessibility auditor was not found');
+        }
+
+        // View report.
+        $viewReportButton = $this->findImage('HTMLCSViewReport', '#HTMLCS-settings-view-report');
+        $this->sikuli->click($viewReportButton);
+
+    }//end testReopeningAccessibilityAuditor()
 
 
 
