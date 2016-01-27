@@ -455,10 +455,12 @@
                             ) {
                                 // New character is being inserted in between two spaces where one
                                 // is a nbsp. Convert the nbsp to normal space.
-                                range.startContainer.data = range.startContainer.data.substr(0, range.startOffset) + ' ' + range.startContainer.data.substr(range.startOffset + 1);
-                                range.setStart(range.startContainer, range.startOffset);
+                                range.startContainer.data = range.startContainer.data.substr(0, range.startOffset) + char + ' ' + range.startContainer.data.substr(range.startOffset + 1);
+                                range.setStart(range.startContainer, range.startOffset + 1);
                                 range.collapse(true);
                                 ViperSelection.addRange(range);
+                                this._viper.fireNodesChanged([range.startContainer]);
+                                return false;
                             }
                         }
                     }
