@@ -395,6 +395,16 @@
                             ViperSelection.addRange(range);
                             this._viper.fireNodesChanged([textContainer]);
                             return false;
+                        } else if (ViperUtil.isTag(startNode, 'br') === true) {
+                            // Handle: <div>*<br/><ul><li>aaa</li></ul></div>.
+                            var textNode = document.createTextNode(char);
+                            ViperUtil.insertBefore(startNode, textNode);
+                            ViperUtil.remove(startNode);
+                            range.setStart(textNode, 1);
+                            range.collapse(true);
+                            ViperSelection.addRange(range);
+                            this._viper.fireNodesChanged([textNode]);
+                            return false;
                         }
                     } else if (ViperUtil.isBrowser('msie', '<11') === true
                         && range.collapsed === true
