@@ -3193,7 +3193,7 @@
                             }
                         } else if (range.startOffset === range.startContainer.data.length) {
                             // End of text node.
-                            if (ViperUtil.isBrowser('safari') === true) {
+                            if (ViperUtil.isText(range.startContainer.nextSibling) === true && ViperUtil.isBrowser('safari') === true) {
                                  // Removing the last character from text node sometimes replaces the next node's space
                                  // character with &nbsp;.
                                  var ln = (range.startContainer.data.length - 1);
