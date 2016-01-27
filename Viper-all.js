@@ -10,12 +10,7 @@
  * +--------------------------------------------------------------------+
  *
  */
-ViperReadyCallback = null;
 (function() {
-    if (!window.ViperVersion) {
-        ViperVersion = null;
-    }
-
     var scripts = document.getElementsByTagName('script');
     var path       = null;
 
@@ -60,7 +55,7 @@ ViperReadyCallback = null;
             script.src = path + scriptName;
         }
 
-        if (ViperVersion) {
+        if (window.ViperVersion) {
             script.src += '?v=' + ViperVersion;
         }
 
@@ -83,22 +78,23 @@ ViperReadyCallback = null;
     };
 
     // Viper core files.
-    var jsFiles = 'ViperUtil.js|Viper.js|ViperTranslation.js|ViperChangeTracker.js|ViperTools.js|ViperDOMRange.js|ViperIERange.js|ViperMozRange.js|ViperSelection.js|ViperPluginManager.js|ViperHistoryManager.js';
+    var jsFiles = 'Viper.js|Util.js|Translation.js|Tools.js|Selection.js|DOMRange.js|IERange.js|MozRange.js|PluginManager.js|HistoryManager.js|KeyboardHandler.js';
     jsFiles     = jsFiles.split('|');
 
     _loadScripts(path + 'Lib/', jsFiles, function() {
-        var plugins    = 'ViperCopyPastePlugin|ViperToolbarPlugin|ViperInlineToolbarPlugin|ViperCoreStylesPlugin|ViperFormatPlugin|ViperKeyboardEditorPlugin|ViperListPlugin|ViperHistoryPlugin|ViperTableEditorPlugin|ViperTrackChangesPlugin|ViperLinkPlugin|ViperAccessibilityPlugin|ViperSourceViewPlugin|ViperImagePlugin|ViperSearchReplacePlugin|ViperLangToolsPlugin|ViperCharMapPlugin|ViperCursorAssistPlugin|ViperReplacementPlugin';
+        var plugins    = 'ViperCopyPastePlugin|ViperToolbarPlugin|ViperInlineToolbarPlugin|ViperCoreStylesPlugin|ViperFormatPlugin|ViperListPlugin|ViperHistoryPlugin|ViperTableEditorPlugin|ViperLinkPlugin|ViperAccessibilityPlugin|ViperSourceViewPlugin|ViperImagePlugin|ViperSearchReplacePlugin|ViperLangToolsPlugin|ViperCharMapPlugin|ViperCursorAssistPlugin|ViperReplacementPlugin';
         plugins        = plugins.split('|');
 
+
         _loadScripts(path + 'Plugins/', plugins.concat([]), function() {
-            if (ViperReadyCallback) {
-                ViperReadyCallback.call(window);
+            if (window.ViperReadyCallback) {
+                window.ViperReadyCallback.call(window);
             } else {
                 var maxTry = 10;
                 var interval = setInterval(function() {
                     maxTry--;
-                    if (ViperReadyCallback) {
-                        ViperReadyCallback.call(window);
+                    if (window.ViperReadyCallback) {
+                        window.ViperReadyCallback.call(window);
                         clearInterval(interval);
                     } else if (maxTry === 0) {
                         clearInterval(interval);
@@ -114,8 +110,8 @@ ViperReadyCallback = null;
             link.rel   = 'stylesheet';
             link.media = 'screen';
             link.href  = path + 'Css/' + coreCSS[j] + '.css';
-            if (ViperVersion) {
-                link.href += '?v=' + ViperVersion;
+            if (window.ViperVersion) {
+                link.href += '?v=' + window.ViperVersion;
             }
 
             document.getElementsByTagName('head')[0].appendChild(link);
@@ -126,8 +122,8 @@ ViperReadyCallback = null;
             link.rel   = 'stylesheet';
             link.media = 'screen';
             link.href  = path + 'Plugins/' + plugins[j] + '/' + plugins[j] + '.css';
-            if (ViperVersion) {
-                link.href += '?v=' + ViperVersion;
+            if (window.ViperVersion) {
+                link.href += '?v=' + window.ViperVersion;
             }
 
             document.getElementsByTagName('head')[0].appendChild(link);

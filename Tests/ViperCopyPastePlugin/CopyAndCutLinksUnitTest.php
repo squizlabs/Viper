@@ -37,6 +37,8 @@ class Viper_Tests_ViperCopyPastePlugin_CopyAndCutLinksUnitTest extends AbstractV
         sleep(1);
         $this->sikuli->keyDown('Key.CMD + c');
         sleep(1);
+        $this->clickKeyword(3);
+        Sleep(1);
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.SPACE');
         sleep(1);

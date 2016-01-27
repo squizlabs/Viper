@@ -9,12 +9,12 @@
     <script type="text/javascript" src="../../Viper-all.js"></script>
     <script type="text/javascript">
         var viperTest = null;
-        ViperReadyCallback = function() {
+        var ViperReadyCallback = function() {
             var lang = 'en';
             var search = window.location.search;
             if (search && search.indexOf('?lang=') === 0) {
                 lang = search.replace('?lang=', '');
-                ViperUtil.getid('langSelector').value = lang;
+                Viper.Util.getid('langSelector').value = lang;
             }
 
             viperTest = new Viper('test', {language: lang}, function(viper) {
@@ -41,12 +41,13 @@
 
                 viper.setEditableElement(document.getElementById('content'));
                 viper.getPluginManager().setPluginSettings('ViperFormatPlugin', formatPluginSettings);
+                viper.setSetting('defaultBlockTag', 'P');
             });
         };
 
         function changeLang(lang)
         {
-            window.location = ViperUtil.baseUrl(window.location.href) + '?lang=' + lang;
+            window.location = Viper.Util.baseUrl(window.location.href) + '?lang=' + lang;
         }
     </script>
 </head>

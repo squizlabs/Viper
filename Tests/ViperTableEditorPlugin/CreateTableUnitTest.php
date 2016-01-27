@@ -336,7 +336,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
 
         // Need to insert the table using JS calls due to zoom level increase causes issues with JS positioning.
         // TODO: most likely need to add scaling to JS location values etc. How do we solve scale issue for Sikuli?
-        $this->sikuli->execJS('viper.ViperPluginManager.getPlugin("ViperTableEditorPlugin").insertTable(3, 4, 0)');
+        $this->sikuli->execJS('viper.PluginManager.getPlugin("ViperTableEditorPlugin").insertTable(3, 4, 0)');
 
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table style="width: 100%;" border="1"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
@@ -348,7 +348,7 @@ class Viper_Tests_ViperTableEditorPlugin_CreateTableUnitTest extends AbstractVip
         // Zoom in.
         $this->sikuli->keyDown('Key.CMD + =');
 
-        $this->sikuli->execJS('viper.ViperPluginManager.getPlugin("ViperTableEditorPlugin").insertTable(5, 8, 0)');
+        $this->sikuli->execJS('viper.PluginManager.getPlugin("ViperTableEditorPlugin").insertTable(5, 8, 0)');
         $this->assertHTMLMatchNoHeaders('<p>Test %1%</p><table border="1" style="width: 100%;"><tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><table border="1" style="width: 100%;"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
     }//end testCreateTableWithZoom()

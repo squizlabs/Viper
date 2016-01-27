@@ -433,46 +433,64 @@ class Viper_Tests_ViperFormatPlugin_QuoteUnitTest extends AbstractFormatsUnitTes
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->clickInlineToolbarButton('formats-pre', 'active');
+        sleep(1);
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
+        sleep(1);
         $this->assertHTMLMatch('<blockquote><p>%1% xtn dolor</p></blockquote>');
 
         // Using top toolbar with a single line
         $this->useTest(3);
         $this->moveToKeyword(1);
+        sleep(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
+        sleep(1);
         $this->clickTopToolbarButton('PRE', NULL, TRUE);
+        sleep(1);
         $this->assertHTMLMatch('<pre>%1% xtn dolor</pre>');
 
         $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-pre', 'active');
+        sleep(1);
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        sleep(1);
         $this->assertHTMLMatch('<blockquote><p>%1% xtn dolor</p></blockquote>');
 
         // Using inline toolbar with multiline section
         $this->useTest(2);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->clickInlineToolbarButton('formats-blockquote', 'active');
+        sleep(1);
         $this->clickInlineToolbarButton('PRE', NULL, TRUE);
+        sleep(1);
         $this->assertHTMLMatch('<pre>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre>');
 
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
         $this->clickInlineToolbarButton('formats-pre', 'active');
+        sleep(1);
         $this->clickInlineToolbarButton('Quote', NULL, TRUE);
+        sleep(1);
         $this->assertHTMLMatch('<blockquote><p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
 
         // Using top toolbar with multiline section
         $this->useTest(2);
         $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-blockquote', 'active');
+        sleep(1);
         $this->clickTopToolbarButton('PRE', NULL, TRUE);
+        sleep(1);
         $this->assertHTMLMatch('<pre>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</pre>');
 
         $this->moveToKeyword(1);
         $this->clickTopToolbarButton('formats-pre', 'active');
+        sleep(1);
         $this->clickTopToolbarButton('Quote', NULL, TRUE);
+        sleep(1);
         $this->assertHTMLMatch('<blockquote><p>%1% %2% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac augue mi. Nam risus massa, aliquam non porta vel, lacinia a sapien. Nam iaculis sollicitudin sem, vitae dapibus massa dignissim vitae.</p></blockquote>');
 
     }//end testChangingAQuoteToAPre()

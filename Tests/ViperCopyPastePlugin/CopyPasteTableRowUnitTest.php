@@ -50,6 +50,9 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteTableRowUnitTest extends Abstrac
                     case 'ie11':
                         $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsIE11/WordDocs/TableRowForPartialCopyPaste.txt');
                         break;
+                    case 'edge':
+                        $testFile = $this->getTestURL('/ViperCopyPastePlugin/TextFiles/WindowsEdge/WordDocs/TableRowForPartialCopyPaste.txt');
+                        break;
                     default:
                         $this->fail('Testing for '.$this->sikuli->getBrowserid().' is not supported on Windows for this test');
                 }//end switch

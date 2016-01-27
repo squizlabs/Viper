@@ -25,7 +25,7 @@ var viperTest = {
 function sendResult(result)
 {
     result = JSON.stringify(result);
-    ViperUtil.$.post(PHPSikuliBrowser.getScriptURL(), {res: result, _t:(new Date().getTime())}, function() {
+    Viper.Util.$.post(PHPSikuliBrowser.getScriptURL(), {res: result, _t:(new Date().getTime())}, function() {
         PHPSikuliBrowser.startPolling();
     });
 
@@ -44,7 +44,7 @@ function gHtml(selector, index, removeTableHeaders)
     var html = '';
     index = index || 0;
     if (selector) {
-        html = viperTest.getWindow().ViperUtil.getHtml(viperTest.getWindow().ViperUtil.$(selector)[index]).replace("\n", '');
+        html = viperTest.getWindow().Viper.Util.getHtml(viperTest.getWindow().Viper.Util.$(selector)[index]).replace("\n", '');
         html = viperTest.getWindow().viper.getHtml(html);
     } else {
         html = viperTest.getWindow().viper.getHtml();
@@ -59,10 +59,15 @@ function getRawHTML(selector, index)
     var html = '';
     index    = index || 0;
     if (selector) {
-        html = ViperUtil.getHtml(ViperUtil.$(selector)[index]).replace("\n", '');
+        html = Viper.Util.getHtml(Viper.Util.$(selector)[index]).replace("\n", '');
     } else {
-        html = ViperUtil.getHtml(viper.getViperElement());
+        html = Viper.Util.getHtml(viper.getViperElement());
     }
+
+    var tmp = document.createElement('div');
+    Viper.Util.setHtml(tmp, html);
+    viper.cleanDOM(tmp);
+    html = Viper.Util.getHtml(tmp);
 
     if (html) {
         html = html.replace(/<\/?\s*([A-Z\d:]+)/g, function(str) {
@@ -79,10 +84,10 @@ function getRawHTML(selector, index)
 function gText()
 {
     var selection    = '';
-    var selHighlights = viperTest.getWindow().ViperUtil.getClass('__viper_selHighlight');
+    var selHighlights = viperTest.getWindow().Viper.Util.getClass('__viper_selHighlight');
     if (selHighlights.length > 0) {
         for (var i = 0; i < selHighlights.length; i++) {
-            selection += viperTest.getWindow().ViperUtil.getNodeTextContent(selHighlights[i]);
+            selection += viperTest.getWindow().Viper.Util.getNodeTextContent(selHighlights[i]);
         }
     } else {
         selection = viperTest.getWindow().viper.getViperRange().toString();
@@ -90,7 +95,7 @@ function gText()
 
     // Remove extra spaces from the end of the string (Chrome likes to add new line
     // character for block element selections).
-    selection = viperTest.getWindow().ViperUtil.rtrim(selection);
+    selection = viperTest.getWindow().Viper.Util.rtrim(selection);
 
     return selection;
 
@@ -139,32 +144,32 @@ function gBtn(text, state, selectorPrefix)
 
     selector += ':contains(' + text + ')';
 
-    var buttons = viperTest.getWindow().ViperUtil.$.find(selector);
+    var buttons = viperTest.getWindow().Viper.Util.$.find(selector);
     if (buttons.length === 0) {
         return false;
     }
 
     var button = null;
     for (var i = 0; i < buttons.length; i++) {
-        if (viperTest.getWindow().ViperUtil.getHtml(buttons[i]) !== text) {
+        if (viperTest.getWindow().Viper.Util.getHtml(buttons[i]) !== text) {
             continue;
         }
 
-        if (viperTest.getWindow().ViperUtil.getElementHeight(buttons[i]) !== 0) {
+        if (viperTest.getWindow().Viper.Util.getElementHeight(buttons[i]) !== 0) {
             button = buttons[i];
             break;
         }
     }
 
     if (!state
-        && (viperTest.getWindow().ViperUtil.hasClass(button, 'Viper-active') === true || viperTest.getWindow().ViperUtil.hasClass(button, 'Viper-disabled') === true)
+        && (viperTest.getWindow().Viper.Util.hasClass(button, 'Viper-active') === true || viperTest.getWindow().Viper.Util.hasClass(button, 'Viper-disabled') === true)
     ) {
         return false;
     }
 
     var rect = null;
     if (button) {
-        rect = viperTest.getWindow().ViperUtil.getBoundingRectangle(button);
+        rect = viperTest.getWindow().Viper.Util.getBoundingRectangle(button);
         if (rect) {
             rect.x1 = (parseInt(rect.x1) + 3);
             rect.x2 = (parseInt(rect.x2) - 1);
@@ -182,12 +187,12 @@ function gField(label)
     var selector = '.Viper-subSection.Viper-active label span';
     selector    += ':contains(' + label + ')';
 
-    var field = viperTest.getWindow().ViperUtil.$.find(selector)[0];
+    var field = viperTest.getWindow().Viper.Util.$.find(selector)[0];
     if (!field) {
         return false;
     }
 
-    var rect = viperTest.getWindow().ViperUtil.getBoundingRectangle(field);
+    var rect = viperTest.getWindow().Viper.Util.getBoundingRectangle(field);
     if (rect) {
         rect.x1 = parseInt(rect.x1);
         rect.x2 = parseInt(rect.x2);
@@ -204,7 +209,7 @@ function gFieldValue(label)
     var selector = '.Viper-subSection.Viper-active label span';
     selector    += ':contains(' + label + ')';
 
-    var field = viperTest.getWindow().ViperUtil.$.find(selector)[0];
+    var field = viperTest.getWindow().Viper.Util.$.find(selector)[0];
     if (!field) {
         return false;
     }
@@ -220,12 +225,12 @@ function gFieldValue(label)
  */
 function execJS()
 {
-    var val = viperTest.getWindow().ViperUtil.getid('jsExec').value;
-    viperTest.getWindow().ViperUtil.getid('jsRes').value  = '';
-    viperTest.getWindow().ViperUtil.getid('jsExec').value = '';
+    var val = viperTest.getWindow().Viper.Util.getid('jsExec').value;
+    viperTest.getWindow().Viper.Util.getid('jsRes').value  = '';
+    viperTest.getWindow().Viper.Util.getid('jsExec').value = '';
 
     val  = 'var jsResult = ' + val + ';';
-    val += 'ViperUtil.getid("jsRes").value = JSON.stringify(jsResult);';
+    val += 'Viper.Util.getid("jsRes").value = JSON.stringify(jsResult);';
 
     // Execute JS.
     eval(val);
@@ -237,8 +242,8 @@ function execJS()
  */
 function gBRec(selector, index)
 {
-    var elem = ViperUtil.$(selector)[index];
-    var rect = viperTest.getWindow().ViperUtil.getBoundingRectangle(elem);
+    var elem = Viper.Util.$(selector)[index];
+    var rect = viperTest.getWindow().Viper.Util.getBoundingRectangle(elem);
     rect.x1  = parseInt(rect.x1);
     rect.x2  = parseInt(rect.x2);
     rect.y1  = parseInt(rect.y1);
@@ -250,12 +255,12 @@ function gBRec(selector, index)
 
 function gVITPArrow()
 {
-    var toolbar = ViperUtil.getClass('ViperITP Viper-visible')[0];
+    var toolbar = Viper.Util.getClass('ViperITP Viper-visible')[0];
     if (!toolbar) {
         return  null;
     }
 
-    var rect  = viperTest.getWindow().ViperUtil.getBoundingRectangle(toolbar);
+    var rect  = viperTest.getWindow().Viper.Util.getBoundingRectangle(toolbar);
     var arrow = {
         x1: rect.x1 + (((rect.x2 - rect.x1) / 2) - 10),
         x2: rect.x1 + (((rect.x2 - rect.x1) / 2) + 10),
@@ -275,9 +280,9 @@ function gTagCounts(tagNames)
 {
     tagNames = tagNames || '*';
     var tagCounts = {};
-    var tags = viperTest.getWindow().ViperUtil.getTag(tagNames, viperTest.getWindow().ViperUtil.getid('content'));
+    var tags = viperTest.getWindow().Viper.Util.getTag(tagNames, viperTest.getWindow().Viper.Util.getid('content'));
     for (var i = 0; i < tags.length; i++) {
-        var tagName = viperTest.getWindow().ViperUtil.getTagName(tags[i]);
+        var tagName = viperTest.getWindow().Viper.Util.getTagName(tags[i]);
         if (!tagCounts[tagName]) {
             tagCounts[tagName] = 1;
         } else {
@@ -304,7 +309,7 @@ function gActBubble()
         return null;
     }
 
-    var rect = viperTest.getWindow().ViperUtil.getBoundingRectangle(activeBubble.element);
+    var rect = viperTest.getWindow().Viper.Util.getBoundingRectangle(activeBubble.element);
     return rect;
 
 }
@@ -315,15 +320,15 @@ function gStringLoc(str)
     var clone          = range.cloneRange();
     var loc            = null;
     var contentElement = document.getElementById('content');
-    if (ViperUtil.isBrowser('msie') === true) {
+    if (Viper.Util.isBrowser('msie') === true) {
         // Range search.
         var viperRange = null;
-        var textRange  = new ViperIERange(document.body.createTextRange());
+        var textRange  = new Viper.IERange(document.body.createTextRange());
         var selectable = range._getFirstSelectableChild(contentElement);
         textRange.setStart(selectable, 0);
         textRange.setEnd(selectable, 0);
         viperRange = textRange;
-        
+
         var found = viperRange.rangeObj.findText(str);
         loc = viperRange.rangeObj.getBoundingClientRect();
         loc = {
@@ -333,9 +338,9 @@ function gStringLoc(str)
                 y2: loc.bottom
             };
 
-    } else if (ViperUtil.isBrowser('edge') === true) {
+    } else if (Viper.Util.isBrowser('edge') === true) {
         var plugin = viper.getPluginManager().getPlugin('ViperSearchReplacePlugin');
-        if (plugin.find(str, false, true, false, ViperUtil.getid('content')) === true) {
+        if (plugin.find(str, false, true, false, Viper.Util.getid('content')) === true) {
             range = viper.getCurrentRange();
             loc = range.rangeObj.getBoundingClientRect();
             loc = {
@@ -348,7 +353,7 @@ function gStringLoc(str)
     } else {
         range.setStart(range._getFirstSelectableChild(contentElement), 0);
         range.collapse(true);
-        ViperSelection.addRange(range);
+        Viper.Selection.addRange(range);
         if (window.find(str, true, false, true, true, true) === true) {
             loc = viper.getCurrentRange().rangeObj.getBoundingClientRect();
             loc = {
@@ -361,7 +366,7 @@ function gStringLoc(str)
     }
 
     // Reset selection.
-    ViperSelection.addRange(clone);
+    Viper.Selection.addRange(clone);
 
     return loc;
 
@@ -369,11 +374,11 @@ function gStringLoc(str)
 
 function hideToolbarsAtLocation(loc)
 {
-    var toolbars = ViperUtil.find(document.body, '.ViperITP.Viper-visible');
+    var toolbars = Viper.Util.find(document.body, '.ViperITP.Viper-visible');
     for (var i = 0; i < toolbars.length; i++) {
-        var toolbarLoc = ViperUtil.getBoundingRectangle(toolbars[i]);
-        if (ViperUtil.isIntersectingRect(loc, toolbarLoc) === true) {
-            ViperUtil.setStyle(toolbars[i], 'left', '-1000px');
+        var toolbarLoc = Viper.Util.getBoundingRectangle(toolbars[i]);
+        if (Viper.Util.isIntersectingRect(loc, toolbarLoc) === true) {
+            Viper.Util.setStyle(toolbars[i], 'left', '-1000px');
         }
     }
 
@@ -392,7 +397,7 @@ function insTable(rows, cols, header, id)
 
 function rmTableHeaders(tblIndex, removeid)
 {
-    var tables = viperTest.getWindow().ViperUtil.getTag('table');
+    var tables = viperTest.getWindow().Viper.Util.getTag('table');
 
     if (tblIndex === null) {
         for (var i = 0; i < tables.length; i++) {
@@ -411,12 +416,12 @@ function rmTableHeaders(tblIndex, removeid)
         table.removeAttribute('id');
     }
 
-    var cells = viperTest.getWindow().ViperUtil.getTag('td,th');
+    var cells = viperTest.getWindow().Viper.Util.getTag('td,th');
     for (var i = 0; i < cells.length; i++) {
         cells[i].removeAttribute('id');
     }
 
-    var headers      = viperTest.getWindow().ViperUtil.find(table, '[headers]');
+    var headers      = viperTest.getWindow().Viper.Util.find(table, '[headers]');
     var headersCount = headers.length;
     if (headersCount > 0) {
         for (var i = 0; i < headersCount; i++) {
@@ -437,10 +442,10 @@ function useTest(id)
 
     viper.fireCallbacks('Viper:clickedOutside');
 
-    var contentElement = win.ViperUtil.getid('content');
-    ViperUtil.setHtml(contentElement, testCases[id]);
+    var contentElement = win.Viper.Util.getid('content');
+    Viper.Util.setHtml(contentElement, testCases[id]);
 
-    ViperUtil.setHtml(win.ViperUtil.getid('testCaseTitle'), '(Using Test #' + id + ')');
+    Viper.Util.setHtml(win.Viper.Util.getid('testCaseTitle'), '(Using Test #' + id + ')');
 
     if (viper.element) {
         viper.element.blur();
@@ -449,9 +454,9 @@ function useTest(id)
     viper.getHistoryManager().clear();
     viper.getHistoryManager().add();
 
-    ViperSelection.removeAllRanges();
+    Viper.Selection.removeAllRanges();
 
-    if (ViperUtil.isBrowser('msie') === true) {
+    if (Viper.Util.isBrowser('msie') === true) {
         viper.setEditableElement(contentElement);
         viper.setEnabled(false);
         viper.initEditableElement(contentElement);
@@ -459,20 +464,24 @@ function useTest(id)
         viper.initEditableElement(contentElement);
     }
 
+    viper.cleanDOM(contentElement);
+
 }
 
 function pasteFromURL(url)
 {
     var copyPastePlugin = viper.getPluginManager().getPlugin('ViperCopyPastePlugin');
 
-    ViperUtil.$.get(url, null, function(data) {
+    Viper.Util.$.get(url, null, function(data) {
         var tmp = document.createElement('div');
-        ViperUtil.setHtml(tmp, data);
+        Viper.Util.setHtml(tmp, data);
 
         copyPastePlugin._beforePaste();
 
-        var bookmark = copyPastePlugin._bookmark;
-        copyPastePlugin._insertTmpNodeBeforeBookmark(bookmark);
+        if (Viper.Util.isBrowser('msie') === true || Viper.Util.isBrowser('edge') === true) {
+            var bookmark = copyPastePlugin._bookmark;
+            copyPastePlugin._insertTmpNodeBeforeBookmark(bookmark);
+        }
 
         viper.removeBookmarks(null, true);
 
@@ -485,12 +494,17 @@ function pasteFromURL(url)
 function clean()
 {
     viper.destroy();
-    ViperUtil.remove(ViperUtil.getid('windowTarget'));
-    ViperUtil.setHtml(ViperUtil.getid('content'), '');
+    Viper.Util.remove(Viper.Util.getid('windowTarget'));
+    Viper.Util.setHtml(Viper.Util.getid('content'), '');
 
 }
 
 function testJSExec()
 {
     return 'Pass';
+}
+
+function changeTextColour(colour)
+{
+    Viper.Util.setStyle(viper.getViperElement(), 'color', colour);
 }

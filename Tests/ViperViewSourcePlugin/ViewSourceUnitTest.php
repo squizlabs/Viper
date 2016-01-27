@@ -126,21 +126,22 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViper
         $this->useTest(3);
         $this->clickTopToolbarButton('sourceView');
         sleep(2);
-        $this->moveToKeyword(2, 'left');
 
-        for ($i = 0; $i < 13; $i++) {
+        for ($i = 0; $i < 4; $i++) {
             $this->sikuli->keyDown('Key.LEFT');
         }
         $this->type('<!---');
-        $this->moveToKeyword(3, 'right');
+        sleep(1);
 
-        for ($i = 0; $i < 5; $i++) {
-            $this->sikuli->keyDown('Key.RIGHT');
+        for ($i = 0; $i < 9; $i++) {
+            $this->sikuli->keyDown('Key.DOWN');
         }
         $this->type('--->');
+        sleep(1);
 
         $this->clickButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<!---<p>%1%Test%2% content.</p><p>More test content.</p><p>Even more test content.%3%</p>--->');
+        sleep(2);
+        $this->assertEquals('<!---<p>%1% Test %2% content.</p><p>More test content.</p><p>Even more test content.%3%</p>--->', $this->getRawHtml());
 
     }//end testCommentingInSourceCode()
 
@@ -328,13 +329,14 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViper
 
 
     /**
-     * Test different types of tags in Viper
+     * Test that when you add unsupported tags into the source code they are stripped.
      *
      * @return void
      */
-    public function testAddingDifferentTagsInSourceCode()
+    public function testAddingUnsupportedTagsInSourceCode()
     {
         $this->useTest(1);
+
         // Test that script tags are removed when they are entered in source code
         $this->moveToKeyword(2);
         $this->clickTopToolbarButton('sourceView');
@@ -353,7 +355,7 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViper
         $this->clickButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<p><canvas id="myCanvas"></canvas></p>');
 
-        // Test form and text area tags remain when they are entered in source code.
+        // Test that form tags are removed when they are entered in source code
         $this->clickTopToolbarButton('sourceView');
 
         // Check to make sure the source editor appears.
@@ -363,15 +365,31 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViper
             $this->fail('Source editor did not appear on the screen');
         }
 
-        // Embed script tags
+        // Embed form tags
         $this->sikuli->keyDown('Key.CMD + a');
         $this->sikuli->keyDown('Key.DELETE');
-        $this->type('<form><label>Dave</label><input type="text"><textarea rows="5"></textarea><input type="submit" value="submit"></form>');
+        $this->type('<p>test forms</p><form><label>Dave</label><input type="text"><textarea rows="5"></textarea><input type="submit" value="submit"></form>');
         $this->clickButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<form><label>Dave</label><input type="text" /><textarea rows="5"></textarea><input type="submit" value="submit" /></form>');
+        $this->assertHTMLMatch('<p>test forms</p>');
 
+        // Test that input tags are removed when they are entered in source code
+        $this->clickTopToolbarButton('sourceView');
 
-    }//end testAddingDifferentTagsInSourceCode()
+        // Check to make sure the source editor appears.
+        try {
+            $image = $this->findImage('dragPopupIcon', '.Viper-popup-dragIcon');
+        } catch (Exception $e) {
+            $this->fail('Source editor did not appear on the screen');
+        }
+
+        // Embed input tags
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('<p>test input</p><input name="usr_name" type="text" /><input type="submit" value="Submit Query"/>');
+        $this->clickButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<p>test input</p>');
+
+    }//end testAddingUnsupportedTagsInSourceCode()
 
 
     /**

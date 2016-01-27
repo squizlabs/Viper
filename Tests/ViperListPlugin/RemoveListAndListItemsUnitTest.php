@@ -667,7 +667,7 @@ class Viper_Tests_ViperListPlugin_RemoveListAndListItemsUnitTest extends Abstrac
      */
     private function _getHtmllWithBlankLiTags()
     {
-        $html = $this->sikuli->execJS('ViperUtil.getHtml(ViperUtil.getid(\'content\'))');
+        $html = $this->sikuli->execJS('Viper.Util.getHtml(Viper.Util.getid(\'content\'))');
         $html = str_replace('<br>', '', $html);
 
         return $html;

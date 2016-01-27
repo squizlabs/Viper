@@ -113,7 +113,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
      */
     public function testRightClickPaste()
     {
-        $this->useTest(1);
+        $this->useTest(5);
 
         $this->selectKeyword(1);
         sleep(1);
@@ -124,7 +124,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
         $this->paste(TRUE);
 
         sleep(1);
-        $this->assertHTMLMatch('<p>%1%</p><p>%1%</p>');
+        $this->assertHTMLMatch('<p>%1%</p><p>%1%</p><p>test</p>');
 
     }//end testRightClickPaste()
 
@@ -242,6 +242,7 @@ class Viper_Tests_ViperCopyPastePlugin_CopyPasteUnitTest extends AbstractViperUn
     {
         $this->useTest(3);
 
+        $this->clickKeyword(2);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         sleep(2);

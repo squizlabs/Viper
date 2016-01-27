@@ -190,6 +190,10 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                                                    'width'  => 1270,
                                                    'height' => 850,
                                                   ),
+                              'position'       => array(
+                                                   'x' => 50,
+                                                   'y' => 50,
+                                                  ),
                               'fileGroupOwner' => '_www',
                              );
             self::$_sikuli = new PHPSikuliBrowser($browser, $options);
@@ -707,11 +711,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $this->sikuli->execJS('viper.destroy()', TRUE);
 
         // Create image for the text field actions.
-        $textFieldActionRevertRegion = $this->sikuli->getRegionOnPage($this->sikuli->execJS('ViperUtil.getBoundingRectangle(ViperUtil.getid("textboxActionRevert"))'));
+        $textFieldActionRevertRegion = $this->sikuli->getRegionOnPage($this->sikuli->execJS('Viper.Util.getBoundingRectangle(Viper.Util.getid("textboxActionRevert"))'));
         $textFieldActionRevertImage  = $this->sikuli->capture($textFieldActionRevertRegion);
         copy($textFieldActionRevertImage, $imgPath.'/textField_action_revert.png');
 
-        $textFieldActionClearRegion = $this->sikuli->getRegionOnPage($this->sikuli->execJS('ViperUtil.getBoundingRectangle(ViperUtil.getid("textboxActionClear"))'));
+        $textFieldActionClearRegion = $this->sikuli->getRegionOnPage($this->sikuli->execJS('Viper.Util.getBoundingRectangle(Viper.Util.getid("textboxActionClear"))'));
         $textFieldActionClearImage  = $this->sikuli->capture($textFieldActionClearRegion);
         copy($textFieldActionClearImage, $imgPath.'/textField_action_clear.png');
 
@@ -1826,16 +1830,22 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             ($this->sikuli->getY($startLeft) + 2)
         );
 
-        $this->sikuli->setLocation(
-            $endRight,
-            ($this->sikuli->getX($endRight) + 1),
-            ($this->sikuli->getY($endRight) + 2)
-        );
-
         if (strpos($this->sikuli->getBrowserid(), 'ie') === 0 || $this->sikuli->getBrowserid() === 'edge') {
+            $this->sikuli->setLocation(
+                $endRight,
+                ($this->sikuli->getX($endRight) - 1),
+                ($this->sikuli->getY($endRight) + 2)
+            );
+
             $this->sikuli->dragDrop($endRight, $startLeft);
             usleep(200000);
         } else {
+            $this->sikuli->setLocation(
+                $endRight,
+                ($this->sikuli->getX($endRight) + 1),
+                ($this->sikuli->getY($endRight) + 2)
+            );
+
             $this->sikuli->dragDrop($startLeft, $endRight);
             usleep(50000);
         }//end if
@@ -1861,7 +1871,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 $this->sikuli->setLocation(
                     $left,
                     ($this->sikuli->getX($left) + 2),
-                    $this->sikuli->getY($left)
+                    ($this->sikuli->getY($left) + 2)
                 );
 
                 $this->sikuli->click($left);
@@ -1872,7 +1882,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 $this->sikuli->setLocation(
                     $right,
                     ($this->sikuli->getX($right) - 2),
-                    $this->sikuli->getY($right)
+                    ($this->sikuli->getY($right) + 2)
                 );
 
                 $this->sikuli->click($right);
@@ -1940,7 +1950,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     protected function fieldExists($label)
     {
         try {
-            $this->sikuli->find($this->_getLabel($label), null, 0.7);
+            $this->_getLabel($label);
         } catch (FindFailedException $e) {
             return false;
         }
@@ -1959,7 +1969,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function clickField($label, $required=FALSE)
     {
-        $this->sikuli->click($this->sikuli->find($this->_getLabel($label, false, $required), null, 0.7));
+        $this->sikuli->click($this->_getLabel($label, false, $required));
 
     }//end clickField()
 
@@ -1973,17 +1983,16 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function clearFieldValue($label)
     {
-        try {
-            $fieldLabel = $this->sikuli->find($this->_getLabel($label), null, 0.7);
-        } catch (FindFailedException $e) {
-            $fieldLabel = $this->sikuli->find($this->_getLabel($label, true), null, 0.7);
-        }
-
+        $fieldLabel   = $this->_getLabel($label);
         $fieldRegion  = $this->sikuli->extendRight($fieldLabel, 400);
         $actionImage  = $this->getBrowserImagePath().'/textField_action_clear.png';
-        $actionButton = $this->sikuli->find($actionImage, $fieldRegion, 0.6);
 
-        $this->sikuli->click($actionButton);
+        try {
+            $actionButton = $this->sikuli->find($actionImage, $fieldRegion, 0.4);
+            $this->sikuli->click($actionButton);
+        } catch (FindFailedException $e) {
+            $this->clickElement('.Viper-textbox.Viper-focused.Viper-actionClear .Viper-textbox-action');
+        }
 
     }//end clearFieldValue()
 
@@ -1997,12 +2006,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function revertFieldValue($label)
     {
-        try {
-            $fieldLabel = $this->sikuli->find($this->_getLabel($label), null, 0.7);
-        } catch (FindFailedException $e) {
-            $fieldLabel = $this->sikuli->find($this->_getLabel($label, true), null, 0.7);
-        }
-
+        $fieldLabel  = $this->_getLabel($label);
         $topLeft     = $this->sikuli->getTopLeft($fieldLabel);
         $fieldRegion = $this->sikuli->createRegion(
             $this->sikuli->getX($topLeft),
@@ -2012,9 +2016,13 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         );
 
         $actionImage  = $this->getBrowserImagePath().'/textField_action_revert.png';
-        $actionButton = $this->sikuli->find($actionImage, $fieldRegion, 0.4);
 
-        $this->sikuli->click($actionButton);
+        try {
+            $actionButton = $this->sikuli->find($actionImage, $fieldRegion, 0.4);
+            $this->sikuli->click($actionButton);
+        } catch (FindFailedException $e) {
+            $this->clickElement('.Viper-textbox.Viper-focused.Viper-actionRevert .Viper-textbox-action');
+        }
 
     }//end revertFieldValue()
 
@@ -2057,12 +2065,30 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         if (file_exists($imagePath) === false || $force === true) {
             $rect    = $this->sikuli->execJS('gField("'.$label.'")');
+            if (is_array($rect) === false) {
+                throw new FindFailedException('Failed to get location of field: ' + $label);
+            }
+
             $region  = $this->sikuli->getRegionOnPage($rect);
             $tmpPath = $this->sikuli->capture($region);
             copy($tmpPath, $imagePath);
         }
 
-        return $imagePath;
+        $labelLoc = null;
+        try {
+            $labelLoc = $this->sikuli->find($imagePath, null, 0.7);
+        } catch (FindFailedException $e) {
+            if ($force === false) {
+                // Try forcing...
+                try {
+                    $labelLoc = $this->_getLabel($label, true, $required);
+                } catch (Exception $e) {
+                    throw new FindFailedException('Failed to get location of field: ' + $label);
+                }
+            }
+        }
+
+        return $labelLoc;
 
     }//end _getLabel()
 
@@ -2338,16 +2364,22 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $this->sikuli->keyDown('Key.CMD + v');
         } else {
             $this->sikuli->rightClick($this->sikuli->getMouseLocation());
+            sleep(1);
 
             switch ($this->sikuli->getBrowserid()) {
                 case 'safari':
+                    $this->sikuli->keyDown('c');
+                    sleep(2);
                     $this->sikuli->keyDown('Key.DOWN');
+                    sleep(1);
                     $this->sikuli->keyDown('Key.ENTER');
                 break;
 
                 case 'edge':
                     $this->sikuli->keyDown('Key.UP');
+                    sleep(1);
                     $this->sikuli->keyDown('Key.UP');
+                    sleep(1);
                     $this->sikuli->keyDown('Key.ENTER');
                 break;
 
@@ -2390,7 +2422,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      * @return void
      * @throws Exception If the browser is not supported.
      */
-    protected function cut($rightClick=false)
+    protected function cut($rightClick=false, $isImage=false)
     {
         if ($rightClick !== true) {
             $this->sikuli->keyDown('Key.CMD + x');
@@ -2407,15 +2439,35 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                     $this->sikuli->keyDown('t');
                 break;
 
-                case 'edge':
-                    $this->sikuli->keyDown('Key.DOWN');
-                    $this->sikuli->keyDown('Key.DOWN');
-                    $this->sikuli->keyDown('Key.ENTER');
+               case 'edge':
+                    // The right click menu is different if you have selected an image.
+                    if ($isImage == true) {
+                        // Press the down arrow to get to the cut option in the menu.
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.ENTER');
+                    } else {
+                        // Press the down arrow to get to the cut option in the menu.
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.ENTER');
+                    }
                 break;
 
                 case 'chrome':
                 case 'safari':
                     // Use the shortcut menu to select the menu option and then move the mouse up to cut.
+                    sleep(1);
                     $this->sikuli->keyDown('c');
                     sleep(2);
                     $this->sikuli->keyDown('Key.UP');
@@ -2443,7 +2495,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      * @return void
      * @throws Exception If the browser is not supported.
      */
-    protected function copy($rightClick=false)
+    protected function copy($rightClick=false, $isImage=false)
     {
         if ($rightClick !== true) {
             $this->sikuli->keyDown('Key.CMD + c');
@@ -2462,10 +2514,39 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
                 case 'chrome':
                 case 'safari':
-                    // Use the shortcut menu to select the menu option and then move the mouse up to copy.
+                    // Use the shortcut menu to highlight the menu option and then press enter to select the menu option.
                     $this->sikuli->keyDown('c');
                     sleep(2);
                     $this->sikuli->keyDown('Key.ENTER');
+                break;
+
+                case 'edge':
+                    // The right click menu is different if you have selected an image.
+                    if ($isImage == true) {
+                        // Press the down arrow to get to the copy option in the menu.
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.ENTER');
+                    } else {
+                        // Press the down arrow to get to the copy option in the menu.
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.DOWN');
+                        sleep(1);
+                        $this->sikuli->keyDown('Key.ENTER');
+                    }
                 break;
 
                 default:

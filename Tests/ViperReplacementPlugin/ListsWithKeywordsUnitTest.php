@@ -125,6 +125,7 @@ class Viper_Tests_ViperReplacementPlugin_ListsWithKeywordsUnitTest extends Abstr
 
         $this->assertHTMLMatch('<p>%1% Test content <img alt="TITLE" src="((prop:url))" /> more test content.%2%</p>');
         $this->assertRawHTMLMatch('<p>%1% Test content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /> more test content.%2%</p>');
+
     }//end testImageKeywordUnorderedList()
 
     /**
@@ -141,6 +142,7 @@ class Viper_Tests_ViperReplacementPlugin_ListsWithKeywordsUnitTest extends Abstr
 
         $this->assertHTMLMatch('<ol><li>%1% Test content<img alt="TITLE" src="((prop:url))" /> more test content.%2%</li></ol>');
         $this->assertRawHTMLMatch('<ol><li>%1% Test content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /> more test content.%2%</li></ol>');
+
         // Test for revert
         $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
@@ -148,5 +150,6 @@ class Viper_Tests_ViperReplacementPlugin_ListsWithKeywordsUnitTest extends Abstr
 
         $this->assertHTMLMatch('<p>%1% Test content <img alt="TITLE" src="((prop:url))" /> more test content.%2%</p>');
         $this->assertRawHTMLMatch('<p>%1% Test content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /> more test content.%2%</p>');
+        
     }//end testImageKeywordOrderedList()
 }
