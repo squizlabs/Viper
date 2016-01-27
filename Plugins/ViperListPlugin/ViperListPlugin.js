@@ -895,16 +895,19 @@
                     return true;
                 }
 
-                // Convert this item to a paragraph.
+                // Convert this item to a default block tag.
                 var subList = null;
                 var p       = document.createElement('p');
-                while (li.firstChild) {
-                    if (ViperUtil.isTag(li.firstChild, 'ul') === true || ViperUtil.isTag(li.firstChild, 'ol') === true) {
-                        // Sub list needs to go after the p tag.
-                        subList = li.firstChild;
-                        li.removeChild(li.firstChild);
-                    } else {
-                        p.appendChild(li.firstChild);
+                var bTag    = this.viper.getDefaultBlockTag();
+                if (bTag !== '') {
+                    while (li.firstChild) {
+                        if (ViperUtil.isTag(li.firstChild, 'ul') === true || ViperUtil.isTag(li.firstChild, 'ol') === true) {
+                            // Sub list needs to go after the p tag.
+                            subList = li.firstChild;
+                            li.removeChild(li.firstChild);
+                        } else {
+                            p.appendChild(li.firstChild);
+                        }
                     }
                 }
 
@@ -921,17 +924,32 @@
                 if (siblingItems.length === 0) {
                     if (firstItem === true) {
                         // This is the only item in the list.
-                        ViperUtil.insertBefore(list, p);
-                        ViperUtil.remove(list);
+                        if (bTag !== '') {
+                            ViperUtil.insertBefore(list, p);
+                        } else {
+                            ViperUtil.insertBefore(list, li.childNodes);
+                        }
+
+                        ViperUtil.remove(li);
                     } else {
                         // Last item on the list. Add the p tag after the list.
-                        ViperUtil.insertAfter(list, p);
+                        if (bTag !== '') {
+                            ViperUtil.insertAfter(list, p);
+                        } else {
+                            ViperUtil.insertAfter(list, li.childNodes);
+                        }
+
                         ViperUtil.remove(li);
                     }
                 } else {
                     if (firstItem === true) {
                         // This is the only item in the list.
-                        ViperUtil.insertBefore(list, p);
+                        if (bTag !== '') {
+                            ViperUtil.insertBefore(list, p);
+                        } else {
+                            ViperUtil.insertBefore(list, li.childNodes);
+                        }
+
                         ViperUtil.remove(li);
                     } else {
                         // Move the list items after this item to a new list.
@@ -943,8 +961,13 @@
                         ViperUtil.remove(li);
 
                         ViperUtil.insertAfter(list, newList);
-                        ViperUtil.insertAfter(list, p);
-                    }
+
+                        if (bTag !== '') {
+                            ViperUtil.insertAfter(list, p);
+                        } else {
+                            ViperUtil.insertAfter(list, li.childNodes);
+                        }
+                    }//end if
                 }
 
                 if (subList) {
