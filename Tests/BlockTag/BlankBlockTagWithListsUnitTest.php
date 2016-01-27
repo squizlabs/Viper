@@ -72,7 +72,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithListsUnitTest extends AbstractViperU
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test');
         $this->assertHTMLMatch('<ol><li>%1% Test content</li><li>%2% Test content</li><li>%3%</li></ol>test');
-        
+
     }//end testAddingContentAfterList()
 
 
@@ -103,7 +103,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithListsUnitTest extends AbstractViperU
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->type('test');
         $this->assertHTMLMatch('test<ol><li>%1% Test content</li><li>%2% Test content</li><li>%3%</li></ol>');
-        
+
     }//end testAddingContentBeforeList()
 
 
@@ -121,38 +121,38 @@ class Viper_Tests_BlockTag_BlankBlockTagWithListsUnitTest extends AbstractViperU
         $this->useTest(2);
         $this->clickKeyword(1);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('%1% Test content<ul><li>%2%Test content</li><li>%3%</li></ul>');
+        $this->assertHTMLMatch('%1% Test content<ul><li>%2% Test content</li><li>%3%</li></ul>');
 
         // Test removing the middle element from an unordered list
         $this->useTest(2);
         $this->clickKeyword(2);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ul><li>%1% Test content</li></ul>%2%Test content<ul><li>%3%</li></ul>');
+        $this->assertHTMLMatch('<ul><li>%1% Test content</li></ul>%2% Test content<ul><li>%3%</li></ul>');
 
         // Test removing the last element from an unordered list
         $this->useTest(2);
         $this->clickKeyword(3);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ul><li>%1% Test content</li><li>%2%Test content</li></ul>%3%');
+        $this->assertHTMLMatch('<ul><li>%1% Test content</li><li>%2% Test content</li></ul>%3%');
 
         // Test removing the first element from an ordered list
         $this->useTest(3);
         $this->clickKeyword(1);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('%1% Test content<ol><li>%2%Test content</li><li>%3%</li></ol>');
+        $this->assertHTMLMatch('%1% Test content<ol><li>%2% Test content</li><li>%3%</li></ol>');
 
         // Test removing the middle element from an ordered list
         $this->useTest(3);
         $this->clickKeyword(2);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ol><li>%1% Test content</li></ol>%2%Test content<ol><li>%3%</li></ol>');
+        $this->assertHTMLMatch('<ol><li>%1% Test content</li></ol>%2% Test content<ol><li>%3%</li></ol>');
 
         // Test removing the last element from an ordered list
         $this->useTest(2);
         $this->clickKeyword(3);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ol><li>%1% Test content</li><li>%2%Test content</li></ol>%3%');
-        
+        $this->assertHTMLMatch('<ul><li>%1% Test content</li><li>%2% Test content</li></ul>%3%');
+
     }//end testRemovingItemsFromList()
 
 }//end class
