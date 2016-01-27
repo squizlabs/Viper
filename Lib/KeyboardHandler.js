@@ -329,7 +329,7 @@
                     if (e.which !== 0
                         && range.startContainer === range.endContainer
                         && range.collapsed === true
-                        && range.startOffset === 0
+                        && (range.startOffset === 0 || (ViperUtil.isBrowser('safari') === true && range.startOffset === 1 && ViperUtil.isText(range.startContainer) === true && range.startContainer.data.charAt(0) === ' '))
                     ) {
                         var textContainer = null;
                         if (range.startContainer.nodeType === ViperUtil.ELEMENT_NODE) {
