@@ -28,26 +28,38 @@ class Viper_Tests_BlockTag_BlankBlockTagWithBoldUnitTest extends AbstractViperUn
 
         // Test applying bold formatting to one word using the keyboard shortcut
         $this->useTest(2);
+        sleep(1);
         $this->selectKeyword(1);
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + b');
+        sleep(1);
         $this->assertHTMLMatch('This is <strong>%1%</strong> %2% some content');
 
         // Test applying bold formatting to multiple words using the inline toolbar
         $this->useTest(2);
+        sleep(1);
         $this->selectKeyword(1, 2);
+        sleep(1);
         $this->clickInlineToolbarButton('bold');
+        sleep(1);
         $this->assertHTMLMatch('This is <strong>%1% %2%</strong> some content');
 
         // Test applying bold formatting to multiple words using the top toolbar
         $this->useTest(2);
+        sleep(1);
         $this->selectKeyword(1, 2);
+        sleep(1);
         $this->clickTopToolbarButton('bold');
+        sleep(1);
         $this->assertHTMLMatch('This is <strong>%1% %2%</strong> some content');
 
         // Test applying bold formatting to multiple words using the keyboard shortcut
         $this->useTest(2);
+        sleep(1);
         $this->selectKeyword(1, 2);
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + b');
+        sleep(1);
         $this->assertHTMLMatch('This is <strong>%1% %2%</strong> some content');
 
     }//end testAddingBoldFormattingToContent()
