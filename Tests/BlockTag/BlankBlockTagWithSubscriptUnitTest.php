@@ -192,7 +192,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithSubscriptUnitTest extends AbstractVi
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('Some subscript <sub>%1% %2%</sub><br />test content to test');
+        $this->assertHTMLMatch('Some subscript <sub>%1% %2%</sub><br />test&nbsp;&nbsp;content to test');
 
     }//end testSplittingSubscriptContent()
 

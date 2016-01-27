@@ -268,7 +268,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithBoldUnitTest extends AbstractViperUn
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('Some bold <strong>%1% %2%</strong><br />test content to test');
+        $this->assertHTMLMatch('Some bold <strong>%1% %2%</strong><br />test&nbsp;&nbsp;content to test');
 
     }//end testSplittingBoldContent()
 

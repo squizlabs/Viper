@@ -192,7 +192,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithSuperscriptUnitTest extends Abstract
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('Some superscript <sup>%1% %2%</sup><br />test content to test');
+        $this->assertHTMLMatch('Some superscript <sup>%1% %2%</sup><br />test&nbsp;&nbsp;content to test');
 
     }//end testSplittingSuperscriptContent()
 

@@ -192,7 +192,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithStrikethroughUnitTest extends Abstra
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('Some strikethrough <del>%1% %2%</del><br />test content to test');
+        $this->assertHTMLMatch('Some strikethrough <del>%1% %2%</del><br />test&nbsp;&nbsp;content to test');
 
     }//end testSplittingStrikethroughContent()
 

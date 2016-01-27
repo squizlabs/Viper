@@ -708,6 +708,7 @@
             var range          = this._viper.getCurrentRange();
             var endNode        = range.getEndNode();
             var startNode      = range.getStartNode();
+            var viperElem      = this._viper.getViperElement();
 
             if (!endNode) {
                 if (startNode) {
@@ -1015,13 +1016,48 @@
                 }
 
                 var br = document.createElement('br');
-                this._viper.insertNodeAtCaret(br);
+                if (ViperUtil.isText(range.startContainer) === true
+                    && range.startOffset === range.startContainer.data.length
+                    && !range.startContainer.nextSibling
+                ) {
+                    // handle:  test<sup>XAX XBX*</sup> test.
+                    var parent = range.startContainer.parentNode;
+                    while (parent !== viperElem) {
+                        if (parent.nextSibling) {
+                            break;
+                        }
+
+                        parent = parent.parentNode;
+                    }
+
+                    if (parent && parent !== viperElem) {
+                        ViperUtil.insertAfter(parent, br);
+                    }
+                } else if (ViperUtil.isText(range.startContainer) === true
+                    && range.startOffset === 0
+                    && !range.startContainer.previousSibling
+                ) {
+                    // handle:  test<sup>*XAX XBX</sup> test.
+                    var parent = range.startContainer.parentNode;
+                    while (parent !== viperElem) {
+                        if (parent.previousSibling) {
+                            break;
+                        }
+
+                        parent = parent.parentNode;
+                    }
+
+                    if (parent && parent !== viperElem) {
+                        ViperUtil.insertBefore(parent, br);
+                    }
+                } else {
+                    this._viper.insertNodeAtCaret(br);
+                }
 
                 if (!br.nextSibling
                     || br.nextSibling.nodeType !== ViperUtil.TEXT_NODE
                     || br.nextSibling.data.charAt(0) === "\n"
                 ) {
-                    ViperUtil.insertAfter(br, document.createElement('br'));
                     ViperUtil.insertAfter(br, document.createTextNode(''));
                 }
 
@@ -1053,7 +1089,6 @@
             }//end if
 
             var selectedNode = range.getNodeSelection();
-            var viperElem    = this._viper.getViperElement();
             if (selectedNode && selectedNode === viperElem) {
                 if (ViperUtil.isBrowser('msie') === true) {
                     // Let IE do it as there is no way of telling if the caret is
