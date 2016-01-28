@@ -10,7 +10,7 @@ class Viper_Tests_BlockTag_BlankBlockTagUnitTest extends AbstractViperUnitTest
      *
      * @return void
      */
-    public function testHorizontalRule()
+   /* public function testHorizontalRule()
     {
 
          $this->useTest(1);
@@ -107,7 +107,7 @@ class Viper_Tests_BlockTag_BlankBlockTagUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('%1%<br /><hr /> Test content %2% %3% more test content. %4%');
 
-    }//end testHorizontalRule()
+    }//end testHorizontalRule()*/
 
 
 }//end class

@@ -76,30 +76,30 @@ class Viper_Tests_BlockTag_BlankBlockTagWithSubscriptUnitTest extends AbstractVi
         $this->useTest(4);
         $this->clickKeyword(1);
         $this->sikuli->keyDown('Key.LEFT');
-        $this->type('test');
-        $this->assertHTMLMatch('Some subscript test<sub>%1% %2%</sub> content to test');
+        $this->type('test ');
+        $this->assertHTMLMatch('Some subscript test <sub>%1% %2%</sub> content to test');
 
         // Test adding content in the middle of subscript formatting
         $this->moveToKeyword(1, 'right');
         $this->type(' test');
-        $this->assertHTMLMatch('Some subscript test<sub>%1% test %2%</sub> content to test');
+        $this->assertHTMLMatch('Some subscript test <sub>%1% test %2%</sub> content to test');
 
         // Test adding content to the end of subscript formatting
         $this->clickKeyword(2);
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->type(' test');
-        $this->assertHTMLMatch('Some subscript test<sub>%1% test %2% test</sub> content to test');
+        $this->assertHTMLMatch('Some subscript test <sub>%1% test %2% test</sub> content to test');
 
         // Test highlighting some content in the sub tags and replacing it
         $this->selectKeyword(2);
         $this->type('abc');
-        $this->assertHTMLMatch('Some subscript test<sub>%1% test abc test</sub> content to test');
+        $this->assertHTMLMatch('Some subscript test <sub>%1% test abc test</sub> content to test');
 
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('abc');
-        $this->assertHTMLMatch('Some subscript test<sub>abc test abc test</sub> content to test');
+        $this->assertHTMLMatch('Some subscript test <sub>abc test abc test</sub> content to test');
 
     }//end testEditingSubscriptContent()
 
@@ -192,7 +192,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithSubscriptUnitTest extends AbstractVi
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('Some subscript <sub>%1% %2%</sub><br />test content to test');
+        $this->assertHTMLMatch('Some subscript <sub>%1% %2%</sub><br />test&nbsp;&nbsp;content to test');
 
     }//end testSplittingSubscriptContent()
 
