@@ -242,33 +242,6 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test that removing characters using BACKSPACE works.
-     *
-     * @return void
-     */
-    public function testBackspace()
-    {
-        $this->useTest(1);
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.CMD + b');
-        $this->type('test');
-        $this->sikuli->keyDown('Key.CMD + b');
-        $this->type(' input...');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('Testing...');
-
-        $this->assertHTMLMatch('<p>XAX<strong>test</strong> input...</p><p>Testing...</p><p>EIB MOZ %2%</p>');
-
-        for ($i = 0; $i < 30; $i++) {
-            $this->sikuli->keyDown('Key.BACKSPACE');
-        }
-
-        $this->assertHTMLMatch('<p>EIB MOZ %2%</p>');
-
-    }//end testBackspace()
-
-
-    /**
      * Test that command left and right moves the caret to the start and end of the line.
      *
      * @return void

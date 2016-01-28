@@ -204,11 +204,14 @@
                         && range.startOffset === 0
                     ) {
                         // IE text insert when BR tag is selected.
-                        var textNode = document.createTextNode('');
+                        var textNode = document.createTextNode(String.fromCharCode(e.which));
                         ViperUtil.insertBefore(range.startContainer, textNode);
                         ViperUtil.remove(range.startContainer);
-                        range.setStart(textNode, 0);
+                        range.setStart(textNode, 1);
                         range.collapse(true);
+                        ViperSelection.addRange(range);
+                        this._viper.fireNodesChanged([textNode]);
+                        return false;
                     } else if (range.startContainer === range.endContainer
                         && range.startContainer.nodeType === ViperUtil.TEXT_NODE
                         && range.collapsed === true
@@ -329,7 +332,7 @@
                     if (e.which !== 0
                         && range.startContainer === range.endContainer
                         && range.collapsed === true
-                        && range.startOffset === 0
+                        && (range.startOffset === 0 || (ViperUtil.isBrowser('safari') === true && range.startOffset === 1 && ViperUtil.isText(range.startContainer) === true && range.startContainer.data.charAt(0) === ' '))
                     ) {
                         var textContainer = null;
                         if (range.startContainer.nodeType === ViperUtil.ELEMENT_NODE) {
@@ -359,7 +362,7 @@
                                 }
                             } else if (!textContainer.previousSibling) {
                                 var parent = textContainer.parentNode;
-                                while (!parent.previousSibling) {
+                                while (!parent.previousSibling && ViperUtil.isBlockElement(parent) === false) {
                                     if (parent === viperElement) {
                                         break;
                                     }
@@ -455,10 +458,12 @@
                             ) {
                                 // New character is being inserted in between two spaces where one
                                 // is a nbsp. Convert the nbsp to normal space.
-                                range.startContainer.data = range.startContainer.data.substr(0, range.startOffset) + ' ' + range.startContainer.data.substr(range.startOffset + 1);
-                                range.setStart(range.startContainer, range.startOffset);
+                                range.startContainer.data = range.startContainer.data.substr(0, range.startOffset) + char + ' ' + range.startContainer.data.substr(range.startOffset + 1);
+                                range.setStart(range.startContainer, range.startOffset + 1);
                                 range.collapse(true);
                                 ViperSelection.addRange(range);
+                                this._viper.fireNodesChanged([range.startContainer]);
+                                return false;
                             }
                         }
                     }
@@ -3191,7 +3196,7 @@
                             }
                         } else if (range.startOffset === range.startContainer.data.length) {
                             // End of text node.
-                            if (ViperUtil.isBrowser('safari') === true) {
+                            if (ViperUtil.isText(range.startContainer.nextSibling) === true && ViperUtil.isBrowser('safari') === true) {
                                  // Removing the last character from text node sometimes replaces the next node's space
                                  // character with &nbsp;.
                                  var ln = (range.startContainer.data.length - 1);

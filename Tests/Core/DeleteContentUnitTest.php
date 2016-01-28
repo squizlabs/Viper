@@ -37,15 +37,26 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Test Delete and Backspace.
+     * Test deleting content
      *
      * @return void
      */
-    public function testDeleteAndBackspace()
+    public function testDeleteContent()
     {
-        // Test delete
-        $this->useTest(1);
 
+        // Press delete to remove individual characters from end of paragraph
+        $this->useTest(1);
+        $this->moveToKeyword(1, 'left');
+
+        for ($i = 0; $i < 3; $i++) {
+            $this->sikuli->keyDown('Key.DELETE');
+        }
+
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Content test</p><p>EIB MOZ %2% additional %3% content</p>');
+
+        // Place cursor infront of word and press delete for content across two paragraphs
+        $this->useTest(1);
         $this->moveToKeyword(1, 'left');
         sleep(1);
 
@@ -54,21 +65,149 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
         }
 
         $this->type('test');
-        $this->assertHTMLMatch('<p>Content testMOZ %2%</p>');
+        $this->assertHTMLMatch('<p>Content testMOZ %2% additional %3% content</p>');
 
-        // Test backspace
+        // Select a word at the end of a paragraph and press delete 
         $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Content test</p><p>EIB MOZ %2% additional %3% content</p>');
 
-        $this->moveToKeyword(2, 'right');
+        // Select content across two paragraphs and press delete
+        $this->useTest(1);
+        $this->selectKeyword(1, 2);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Content test additional %3% content</p>');
 
-        for ($i = 0; $i < 8; $i++) {
+        // Press delete to remove individual characters from centre of paragraph
+        $this->useTest(1);
+        $this->moveToKeyword(2, 'left');
+
+        for ($i = 0; $i < 3; $i++) {
+            $this->sikuli->keyDown('Key.DELETE');
+        }
+
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Content %1%</p><p>EIB MOZ test additional %3% content</p>');
+
+        // Select a word and press DELETE
+        $this->useTest(1);
+        $this->selectKeyword(2);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Content %1%</p><p>EIB MOZ test additional %3% content</p>');
+
+        // Select content between two keywords and press DELETE
+        $this->useTest(1);
+        $this->selectKeyword(2, 3);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Content %1%</p><p>EIB MOZ test content</p>');
+
+    }//end testDeleteContent()
+
+
+    /**
+     * Test backspace with content
+     *
+     * @return void
+     */
+    public function testBackspaceWithContent()
+    {
+
+        // Press backspace to remove individual characters from end of paragraph
+        $this->useTest(1);
+        $this->moveToKeyword(1, 'right');
+
+        for ($i = 0; $i < 3; $i++) {
             $this->sikuli->keyDown('Key.BACKSPACE');
         }
 
         $this->type('test');
-        $this->assertHTMLMatch('<p>Content %1%</p><p>EIBtest</p>');
+        $this->assertHTMLMatch('<p>Content test</p><p>EIB MOZ %2% additional %3% content</p>');
 
-    }//end testDeleteAndBackspace()
+        // Place cursor at end of word and press backsapce for content across two paragraphs
+        $this->useTest(1);
+        $this->moveToKeyword(2, 'right');
+        sleep(1);
+
+        for ($i = 0; $i < 12; $i++) {
+            $this->sikuli->keyDown('Key.BACKSPACE');
+        }
+
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Content %1%test additional %3% content</p>');
+
+        // Select a word at the end of a paragraph and press backspace 
+        $this->useTest(1);
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Content test</p><p>EIB MOZ %2% additional %3% content</p>');
+
+        // Select content across two paragraphs and press backspace
+        $this->useTest(1);
+        $this->selectKeyword(1, 2);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Content test additional %3% content</p>');
+
+
+        // Press backspace to remove individual characters from centre of paragraph
+        $this->useTest(1);
+        $this->moveToKeyword(2, 'right');
+
+        for ($i = 0; $i < 3; $i++) {
+            $this->sikuli->keyDown('Key.BACKSPACE');
+        }
+
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Content %1%</p><p>EIB MOZ test additional %3% content</p>');
+
+        // Select a word and press backspace
+        $this->useTest(1);
+        $this->selectKeyword(2);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Content %1%</p><p>EIB MOZ test additional %3% content</p>');
+
+        // Select content between two keywords and press backspace
+        $this->useTest(1);
+        $this->selectKeyword(2, 3);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Content %1%</p><p>EIB MOZ test content</p>');
+
+    }//end testBackspaceWithContent()
+
+
+    /**
+     * Test that removing characters using BACKSPACE works.
+     *
+     * @return void
+     */
+    public function testBackspace()
+    {
+        $this->useTest(1);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->type('test');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->type(' input...');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('Testing...');
+
+        $this->assertHTMLMatch('<p>Content %1%<strong>test</strong> input...</p><p>Testing...</p><p>EIB MOZ %2% additional %3% content</p>');
+
+        for ($i = 0; $i < 35; $i++) {
+            $this->sikuli->keyDown('Key.BACKSPACE');
+        }
+
+        $this->assertHTMLMatch('<p>EIB MOZ %2% additional %3% content</p>');
+
+    }//end testBackspace()
 
 
     /**

@@ -232,6 +232,168 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
 
     }//end testRemovingSuperscriptFromDifferentSectionsInContent()
 
+
+    /**
+     * Test deleting superscript content
+     *
+     * @return void
+     */
+    public function testDeletingSuperscriptContent()
+    {
+        // Test selecting a single word and replacing with new content
+        $this->useTest(4);
+        $this->selectKeyword(1);
+        $this->type('this is new content');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>this is new content</sup></p><p>Some more superscript <sup>%2% %3%</sup> content to test</p>');
+
+        $this->useTest(4);
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('this is new content');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content this is new content</p><p>Some more superscript <sup>%2% %3%</sup> content to test</p>');
+
+        $this->useTest(4);
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('this is new content');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content this is new content</p><p>Some more superscript <sup>%2% %3%</sup> content to test</p>');
+
+        // Test replacing superscript section with new content with highlighting
+        $this->useTest(4);
+        $this->selectKeyword(2, 3);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript <sup>test</sup> content to test</p>');
+
+        $this->useTest(4);
+        $this->selectKeyword(2, 3);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript test content to test</p>');
+
+        $this->useTest(4);
+        $this->selectKeyword(2, 3);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript test content to test</p>');
+
+        // Test replacing superscript content with new content when selecting one keyword and using the lineage
+        $this->useTest(4);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript <sup>test</sup> content to test</p>');
+
+        $this->useTest(4);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript test content to test</p>');
+
+        $this->useTest(4);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript test content to test</p>');
+
+        // Test replacing all content
+        $this->useTest(5);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>test</p>');
+
+    }//end testDeletingSuperscriptContent()
+
+
+    /**
+     * Test editing superscript content
+     *
+     * @return void
+     */
+    public function testEditingSuperscriptContent()
+    {
+
+        $this->useTest(4);
+
+        // Test adding content to the start of the superscript formatting
+        $this->clickKeyword(2);
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('test ');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript test <sup>%2% %3%</sup> content to test</p>');
+
+        // Test adding content in the middle of superscript formatting
+        $this->moveToKeyword(2, 'right');
+        $this->type(' test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript test <sup>%2% test %3%</sup> content to test</p>');
+
+        // Test adding content to the end of superscript formatting
+        $this->clickKeyword(3);
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->type(' %4%');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript test <sup>%2% test %3% %4%</sup> content to test</p>');
+
+        // Test highlighting some content in the superscript tags and replacing it
+        $this->selectKeyword(3);
+        $this->type('abc');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript test <sup>%2% test abc %4%</sup> content to test</p>');
+
+        $this->selectKeyword(2);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('abc');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript test <sup>abc test abc %4%</sup> content to test</p>');
+
+        $this->selectKeyword(4);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript test <sup>abc test abc test</sup> content to test</p>');
+
+    }//end testEditingSuperscriptContent()
+
+
+    /**
+     * Test adding content before and after superscript content
+     *
+     * @return void
+     */
+    public function testAddingContentAroundSuperscriptContent()
+    {
+        // Test adding content before superscript content when cursor starts inside the superscript content
+        $this->useTest(6);
+        $this->clickKeyword(2);
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('new');
+        $this->assertHTMLMatch('<p>%1% new<sup>%2%</sup> %3%</p>');
+
+        // Test adding content before superscript content when cursor starts elsewhere in content
+        $this->useTest(6);
+        $this->clickKeyword(1);
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->type('new');
+        $this->assertHTMLMatch('<p>%1% new<sup>%2%</sup> %3%</p>');
+
+        // Test adding content after superscript content when cursor starts inside the superscript content
+        $this->useTest(6);
+        $this->clickKeyword(2);
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->type('new');
+        $this->assertHTMLMatch('<p>%1% <sup>%2%new</sup> %3%</p>');
+
+        // Test adding content before superscript content when cursor starts elsewhere in content
+        $this->useTest(6);
+        $this->clickKeyword(3);
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('new');
+        $this->assertHTMLMatch('<p>%1% <sup>%2%new</sup> %3%</p>');
+
+    }//end testAddingContentAroundSuperscriptContent()
+
 }//end class
 
 ?>

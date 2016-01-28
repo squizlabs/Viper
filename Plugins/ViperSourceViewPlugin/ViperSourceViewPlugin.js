@@ -32,6 +32,7 @@
         this._jqueryURL            = null;
         this._containerid          = null;
         this._toolbarButtonToggles = false;
+        this._aceTheme             = 'ace/theme/viper';
     }
 
     Viper.PluginManager.addPlugin('ViperSourceViewPlugin', ViperSourceViewPlugin);
@@ -73,6 +74,10 @@
                 self.hideSourceView();
             });
 
+            this.viper.registerCallback('Viper:getHtml', 'ViperSourceViewPlugin', function(data) {
+                self._removeScrollAttribute(data.element);
+            });
+
         },
 
         setSettings: function(settings)
@@ -87,6 +92,10 @@
 
             if (settings.toolbarButtonToggles) {
                 this._toolbarButtonToggles = settings.toolbarButtonToggles;
+            }
+
+            if (settings.aceTheme) {
+                this._aceTheme = settings.aceTheme;
             }
 
         },
@@ -413,7 +422,7 @@
 
         applyEditorSettings: function(editor)
         {
-            editor.setTheme("ace/theme/viper");
+            editor.setTheme(this._aceTheme);
             editor.getSession().setUseWorker(false);
             editor.getSession().setMode("ace/mode/html");
 
@@ -777,9 +786,10 @@
             }
         },
 
-        _removeScrollAttribute: function () {
+        _removeScrollAttribute: function (elem) {
             // Remove Viper scroll attribute from content.
-            var elems = ViperUtil.find(this.viper.getViperElement(), '[__viper_scrollpos]');
+            elem      = elem || this.viper.getViperElement();
+            var elems = ViperUtil.find(elem, '[__viper_scrollpos]');
             for (var i = 0; i < elems.length; i++) {
                 ViperUtil.removeAttr(elems[i], '__viper_scrollpos');
             }
