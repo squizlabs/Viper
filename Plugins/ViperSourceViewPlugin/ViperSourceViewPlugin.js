@@ -32,6 +32,7 @@
         this._jqueryURL            = null;
         this._containerid          = null;
         this._toolbarButtonToggles = false;
+        this._aceTheme             = 'ace/theme/viper';
     }
 
     Viper.PluginManager.addPlugin('ViperSourceViewPlugin', ViperSourceViewPlugin);
@@ -91,6 +92,10 @@
 
             if (settings.toolbarButtonToggles) {
                 this._toolbarButtonToggles = settings.toolbarButtonToggles;
+            }
+
+            if (settings.aceTheme) {
+                this._aceTheme = settings.aceTheme;
             }
 
         },
@@ -417,7 +422,7 @@
 
         applyEditorSettings: function(editor)
         {
-            editor.setTheme("ace/theme/viper");
+            editor.setTheme(this._aceTheme);
             editor.getSession().setUseWorker(false);
             editor.getSession().setMode("ace/mode/html");
 
