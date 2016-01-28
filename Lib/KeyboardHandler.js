@@ -359,7 +359,7 @@
                                 }
                             } else if (!textContainer.previousSibling) {
                                 var parent = textContainer.parentNode;
-                                while (!parent.previousSibling) {
+                                while (!parent.previousSibling && ViperUtil.isBlockElement(parent) === false) {
                                     if (parent === viperElement) {
                                         break;
                                     }
