@@ -184,6 +184,33 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
 
 
     /**
+     * Test that removing characters using BACKSPACE works.
+     *
+     * @return void
+     */
+    public function testBackspace()
+    {
+        $this->useTest(1);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->type('test');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->type(' input...');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('Testing...');
+
+        $this->assertHTMLMatch('<p>Content %1%<strong>test</strong> input...</p><p>Testing...</p><p>EIB MOZ %2% additional %3% content</p>');
+
+        for ($i = 0; $i < 35; $i++) {
+            $this->sikuli->keyDown('Key.BACKSPACE');
+        }
+
+        $this->assertHTMLMatch('<p>EIB MOZ %2% additional %3% content</p>');
+
+    }//end testBackspace()
+
+
+    /**
      * Test deleting a line of content in a paragraph.
      *
      * @return void

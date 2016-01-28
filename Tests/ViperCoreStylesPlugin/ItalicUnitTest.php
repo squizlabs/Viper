@@ -135,21 +135,21 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
     {
         $this->useTest(1);
 
-        // Apply bold to two words
+        // Apply italic to two words
         $this->selectKeyword(2, 3);
         $this->clickInlineToolbarButton('italic');
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar is not active');
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar is not active');
         $this->assertHTMLMatch('<p>%1% <em>%2% %3%</em></p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        // Remove bold from one word
+        // Remove italic from one word
         $this->selectKeyword(3);
         $this->clickInlineToolbarButton('italic', 'active');
         $this->assertTrue($this->inlineToolbarButtonExists('italic'), 'Italic icon in the inline toolbar is still active');
         $this->assertTrue($this->topToolbarButtonExists('italic'), 'Italic icon in the top toolbar is still active');
         $this->assertHTMLMatch('<p>%1% <em>%2% </em>%3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-        // Remove bold from the other words
+        // Check icons for second word
         $this->selectKeyword(2);
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar is not active');
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar is not active');
@@ -158,22 +158,78 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
 
 
     /**
-     * Test checking that the italic tag is not used when you delete bold content and add new content.
+     * Test deleting italic content
      *
      * @return void
      */
     public function testDeletingItalicContent()
     {
+        // Test selecting a single word and replacing with new content
         $this->useTest(7);
+        $this->selectKeyword(1);
+        $this->type('this is new content');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>this is new content</em></p><p>Some more italic <em>%2% %3%</em> content to test</p>');
 
-        // Delete italic word and replace with new content
-        $this->selectKeyword(4);
-        $this->selectInlineToolbarLineageItem(1);
+        $this->useTest(7);
+        $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('this is new content');
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit this is new content</p><p>Extra content under the paragraph</p>');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content this is new content</p><p>Some more italic <em>%2% %3%</em> content to test</p>');
+
+        $this->useTest(7);
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('this is new content');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content this is new content</p><p>Some more italic <em>%2% %3%</em> content to test</p>');
+
+        // Test replacing italic section with new content with highlighting
+        $this->useTest(7);
+        $this->selectKeyword(2, 3);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic <em>test</em> content to test</p>');
+
+        $this->useTest(7);
+        $this->selectKeyword(2, 3);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic test content to test</p>');
+
+        $this->useTest(7);
+        $this->selectKeyword(2, 3);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic test content to test</p>');
+
+        // Test replacing italic content with new content when selecting one keyword and using the lineage
+        $this->useTest(7);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic <em>test</em> content to test</p>');
+
+        $this->useTest(7);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic test content to test</p>');
+
+        $this->useTest(7);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic test content to test</p>');
+
+        // Test replacing all content
+        $this->useTest(10);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>test</p>');
 
     }//end testDeletingItalicContent()
+
 
     /**
      * Test that the shortcut command works for Italics.
@@ -713,6 +769,94 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->assertEquals('<p>Text <em>more %1%text text and more%2% text</em></p>', $this->getRawHtml());
 
     }//end testRemovingItalicFromDifferentSectionsInContent()
+
+
+    /**
+     * Test adding content before and after italic content
+     *
+     * @return void
+     */
+    public function testAddingContentAroundItalicContent()
+    {
+        // Test adding content before italic content when cursor starts inside the italic content
+        $this->useTest(9);
+        $this->clickKeyword(2);
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('new');
+        $this->assertHTMLMatch('<p>%1% new<em>%2%</em> %3%</p>');
+
+        // Test adding content before italic content when cursor starts elsewhere in content
+        $this->useTest(9);
+        $this->clickKeyword(1);
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->type('new');
+        $this->assertHTMLMatch('<p>%1% new<em>%2%</em> %3%</p>');
+
+        // Test adding content after italic content when cursor starts inside the italic content
+        $this->useTest(9);
+        $this->clickKeyword(2);
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->type('new');
+        $this->assertHTMLMatch('<p>%1% <em>%2%new</em> %3%</p>');
+
+        // Test adding content before italic content when cursor starts elsewhere in content
+        $this->useTest(9);
+        $this->clickKeyword(3);
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('new');
+        $this->assertHTMLMatch('<p>%1% <em>%2%new</em> %3%</p>');
+
+    }//end testAddingContentAroundItalicContent()
+
+
+    /**
+     * Test editing italic content
+     *
+     * @return void
+     */
+    public function testEditingItalicContent()
+    {
+
+        $this->useTest(7);
+
+        // Test adding content to the start of the italic formatting
+        $this->clickKeyword(2);
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('test ');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic test <em>%2% %3%</em> content to test</p>');
+
+        // Test adding content in the middle of italic formatting
+        $this->moveToKeyword(2, 'right');
+        $this->type(' test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic test <em>%2% test %3%</em> content to test</p>');
+
+        // Test adding content to the end of italic formatting
+        $this->clickKeyword(3);
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->type(' %4%');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic test <em>%2% test %3% %4%</em> content to test</p>');
+
+        // Test highlighting some content in the italic tags and replacing it
+        $this->selectKeyword(3);
+        $this->type('abc');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic test <em>%2% test abc %4%</em> content to test</p>');
+
+        $this->selectKeyword(2);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('abc');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic test <em>abc test abc %4%</em> content to test</p>');
+
+        $this->selectKeyword(4);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic test <em>abc test abc test</em> content to test</p>');
+
+    }//end testEditingItalicContent()
 
 }//end class
 
