@@ -11,7 +11,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
      *
      * @return void
      */
-    public function testStartOfParaBold()
+    public function testApplyBoldToStartOfParragraph()
     {
         $this->useTest(1);
 
@@ -43,7 +43,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-    }//end testStartOfParaBold()
+    }//end testApplyBoldToStartOfParragraph()
 
 
     /**
@@ -51,7 +51,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
      *
      * @return void
      */
-    public function testMidOfParaBold()
+    public function testApplyyBoldtoMiddleOfParagraph()
     {
         $this->useTest(1);
 
@@ -83,7 +83,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-    }//end testMidOfParaBold()
+    }//end testApplyyBoldtoMiddleOfParagraph()
 
 
     /**
@@ -91,7 +91,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
      *
      * @return void
      */
-    public function testEndOfParaBold()
+    public function testApplyBoldToEndOfParagraph()
     {
         $this->useTest(1);
 
@@ -123,7 +123,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-    }//end testEndOfParaBold()
+    }//end testApplyBoldToEndOfParagraph()
 
 
     /**
@@ -210,25 +210,6 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->assertTrue($this->inlineToolbarButtonExists('link'), 'Link icon does not exist in the inline toolbar');
 
     }//end testStrongTagsAppliedCorrectlyWhenReapplyingBold()
-
-
-    /**
-     * Test that the strong tag is not used when you delete bold content and add new content.
-     *
-     * @return void
-     */
-    public function testDeletingBoldContent()
-    {
-        $this->useTest(7);
-
-        // Delete bold word and replace with new content
-        $this->selectKeyword(5);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->type('this is new content');
-        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> this is new content</p><p>Extra content under the paragraph</p>');
-
-    }//end testDeletingBoldContent()
 
 
     /**
@@ -742,6 +723,80 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
 
 
     /**
+     * Test deleting bold content
+     *
+     * @return void
+     */
+    public function testDeletingBoldContent()
+    {
+        // Test selecting a single word and replacing with new content
+        $this->useTest(7);
+        $this->selectKeyword(1);
+        $this->type('this is new content');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>this is new content</strong></p><p>Some more bold <strong>%2% %3%</strong> content to test</p>');
+
+        $this->useTest(7);
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('this is new content');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content this is new content</p><p>Some more bold <strong>%2% %3%</strong> content to test</p>');
+
+        $this->useTest(7);
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('this is new content');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content this is new content</p><p>Some more bold <strong>%2% %3%</strong> content to test</p>');
+
+        // Test replacing bold section with new content with highlighting
+        $this->useTest(7);
+        $this->selectKeyword(2, 3);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold <strong>test</strong> content to test</p>');
+
+        $this->useTest(7);
+        $this->selectKeyword(2, 3);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test content to test</p>');
+
+        $this->useTest(7);
+        $this->selectKeyword(2, 3);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test content to test</p>');
+
+        // Test replacing bold content with new content when selecting one keyword and using the lineage
+        $this->useTest(7);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold <strong>test</strong> content to test</p>');
+
+        $this->useTest(7);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test content to test</p>');
+
+        $this->useTest(7);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test content to test</p>');
+
+        // Test replacing all content
+        $this->useTest(10);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>test</p>');
+
+    }//end testDeletingBoldContent()
+
+
+    /**
      * Test that you can remove bold from two different sections of content at the same time.
      *
      * @return void
@@ -823,6 +878,52 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->assertHTMLMatch('<p>%1% <strong>%2%new</strong> %3%</p>');
 
     }//end testAddingContentAroundBoldContent()
+
+
+    /**
+     * Test editing bold content
+     *
+     * @return void
+     */
+    public function testEditingBoldContent()
+    {
+
+        $this->useTest(7);
+
+        // Test adding content to the start of the bold formatting
+        $this->clickKeyword(2);
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('test ');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test <strong>%2% %3%</strong> content to test</p>');
+
+        // Test adding content in the middle of bold formatting
+        $this->moveToKeyword(2, 'right');
+        $this->type(' test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test <strong>%2% test %3%</strong> content to test</p>');
+
+        // Test adding content to the end of bold formatting
+        $this->clickKeyword(3);
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->type(' %4%');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test <strong>%2% test %3% %4%</strong> content to test</p>');
+
+        // Test highlighting some content in the strong tags and replacing it
+        $this->selectKeyword(3);
+        $this->type('abc');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test <strong>%2% test abc %4%</strong> content to test</p>');
+
+        $this->selectKeyword(2);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('abc');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test <strong>abc test abc %4%</strong> content to test</p>');
+
+        $this->selectKeyword(4);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test <strong>abc test abc test</strong> content to test</p>');
+
+    }//end testEditingBoldContent()
 
 }//end class
 
