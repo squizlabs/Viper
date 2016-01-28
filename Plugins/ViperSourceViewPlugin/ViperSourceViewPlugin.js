@@ -73,6 +73,10 @@
                 self.hideSourceView();
             });
 
+            this.viper.registerCallback('Viper:getHtml', 'ViperSourceViewPlugin', function(data) {
+                self._removeScrollAttribute(data.element);
+            });
+
         },
 
         setSettings: function(settings)
@@ -777,9 +781,10 @@
             }
         },
 
-        _removeScrollAttribute: function () {
+        _removeScrollAttribute: function (elem) {
             // Remove Viper scroll attribute from content.
-            var elems = ViperUtil.find(this.viper.getViperElement(), '[__viper_scrollpos]');
+            elem      = elem || this.viper.getViperElement();
+            var elems = ViperUtil.find(elem, '[__viper_scrollpos]');
             for (var i = 0; i < elems.length; i++) {
                 ViperUtil.removeAttr(elems[i], '__viper_scrollpos');
             }
