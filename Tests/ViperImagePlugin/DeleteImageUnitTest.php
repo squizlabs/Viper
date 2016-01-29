@@ -6,19 +6,155 @@ class Viper_Tests_ViperImagePlugin_DeleteImageUnitTest extends AbstractViperImag
 {
 
     /**
-     * Test deleting an image.
+     * Test deleting an image with various justifications in a paragraph.
      *
      * @return void
      */
-    public function testDeletingAnImage()
+    public function testDeletingAnImageWithJustification()
     {
+        // Test left justification on image using backspace key
         $this->useTest(1);
         $this->clickElement('img', 0);
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>%1% XuT</p><p>LABS is ORSM</p>');
-        $this->assertTrue($this->topToolbarButtonExists('image'), 'Image icon should be active.');
+        $this->clickTopToolbarButton('justifyLeft', NULL);
+        $this->clickTopToolbarButton('justifyLeft', NULL);
+        
+        $this->clickElement('img', 0);
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1% Test content %2%&nbsp;&nbsp;%3% more test content. %4%</p>');
 
-    }//end testDeletingAnImage()
+        // Test left justification on image using delete key
+        $this->useTest(1);
+        $this->clickElement('img', 0);
+        $this->clickTopToolbarButton('justifyLeft', NULL);
+        $this->clickTopToolbarButton('justifyLeft', NULL);
+
+        $this->clickElement('img', 0);
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p>%1% Test content %2%&nbsp;&nbsp;%3% more test content. %4%</p>');
+
+        // Test center justification on image using backspace key
+        $this->useTest(1);
+        $this->clickElement('img', 0);
+        $this->clickTopToolbarButton('justifyLeft', NULL);
+        $this->clickTopToolbarButton('justifyCenter', NULL);
+
+        $this->clickElement('img', 0);
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1% Test content %2%&nbsp;&nbsp;%3% more test content. %4%</p>');
+
+        // Test center justification on image using delete key
+        $this->useTest(1);
+        $this->clickElement('img', 0);
+        $this->clickTopToolbarButton('justifyLeft', NULL);
+        $this->clickTopToolbarButton('justifyCenter', NULL);
+
+        $this->clickElement('img', 0);
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p>%1% Test content %2%&nbsp;&nbsp;%3% more test content. %4%</p>');
+
+        // Test right justification on image using backspace key
+        $this->useTest(1);
+        $this->clickElement('img', 0);
+        $this->clickTopToolbarButton('justifyLeft', NULL);
+        $this->clickTopToolbarButton('justifyRight', NULL);
+
+        $this->clickElement('img', 0);
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1% Test content %2%&nbsp;&nbsp;%3% more test content. %4%</p>');
+
+        // Test right justification on image using delete key
+        $this->useTest(1);
+        $this->clickElement('img', 0);
+        $this->clickTopToolbarButton('justifyLeft', NULL);
+        $this->clickTopToolbarButton('justifyRight', NULL);
+
+        $this->clickElement('img', 0);
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p>%1% Test content %2%&nbsp;&nbsp;%3% more test content. %4%</p>');
+
+    }//end testDeletingAnImageWithJustification()
+
+
+    /**
+     * Test deleting a linked image with various justifications in a paragraph.
+     *
+     * @return void
+     */
+    public function testDeletingALinkedImageWithJustification()
+    {
+        // Test left justification on image using backspace key
+        $this->useTest(2);
+        $this->clickElement('img', 0);
+        $this->clickTopToolbarButton('justifyLeft', NULL);
+        $this->clickTopToolbarButton('justifyLeft', NULL);
+        
+        $this->clickElement('img', 0);
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1% Test content %2%&nbsp;&nbsp;%3% more test content. %4%</p>');
+
+        // Test left justification on image using delete key
+        $this->useTest(2);
+        $this->clickElement('img', 0);
+        $this->clickTopToolbarButton('justifyLeft', NULL);
+        $this->clickTopToolbarButton('justifyLeft', NULL);
+
+        $this->clickElement('img', 0);
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1% Test content %2%&nbsp;&nbsp;%3% more test content. %4%</p>');
+
+        // Test center justification on image using backspace key
+        $this->useTest(2);
+        $this->clickElement('img', 0);
+        $this->clickTopToolbarButton('justifyLeft', NULL);
+        $this->clickTopToolbarButton('justifyCenter', NULL);
+
+        $this->clickElement('img', 0);
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1% Test content %2%&nbsp;&nbsp;%3% more test content. %4%</p>');
+
+        // Test center justification on image using delete key
+        $this->useTest(2);
+        $this->clickElement('img', 0);
+        $this->clickTopToolbarButton('justifyLeft', NULL);
+        $this->clickTopToolbarButton('justifyCenter', NULL);
+
+        $this->clickElement('img', 0);
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1% Test content %2%&nbsp;&nbsp;%3% more test content. %4%</p>');
+
+        // Test right justification on image using backspace key
+        $this->useTest(2);
+        $this->clickElement('img', 0);
+        $this->clickTopToolbarButton('justifyLeft', NULL);
+        $this->clickTopToolbarButton('justifyRight', NULL);
+
+        $this->clickElement('img', 0);
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1% Test content %2%&nbsp;&nbsp;%3% more test content. %4%</p>');
+
+        // Test right justification on image using delete key
+        $this->useTest(2);
+        $this->clickElement('img', 0);
+        $this->clickTopToolbarButton('justifyLeft', NULL);
+        $this->clickTopToolbarButton('justifyRight', NULL);
+
+        $this->clickElement('img', 0);
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1% Test content %2%&nbsp;&nbsp;%3% more test content. %4%</p>');
+
+    }//end testDeletingALinkedImageWithJustification()
 
 
     /**
