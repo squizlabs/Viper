@@ -52,7 +52,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testBoldWithTheOtherFormatItalicApplied()
+    public function testBoldThenItalic()
     {
         // Test applying bold and italic using the top toolbar
         $this->useTest(1);
@@ -86,8 +86,8 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
         // Test applying bold and italic using keyboard shortcuts
         $this->useTest(1);
         $this->selectKeyword(1);
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + i');
 
         $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
@@ -95,15 +95,15 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
 
         // Test removing bold and italic using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + i');
 
         $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
         $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
 
         // Test re-applying bold and italic using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + i');
         
         $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
@@ -112,7 +112,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><em><strong>%1%</strong></em></p>');
 
-    }//end testBoldWithTheOtherFormatItalicApplied()
+    }//end testBoldThenItalic()
 
 
     /**
@@ -120,7 +120,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testBoldWithTheOtherFormatSubscriptApplied()
+    public function testBoldThenSubscript()
     {
         // Test applying bold and subscript
         $this->useTest(1);
@@ -149,34 +149,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sub><strong>%1%</strong></sub></p>');
 
-        // Test applying bold and subscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        // Test removing bold and subscript using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('subscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-
-        // Test re-applying bold and subscript using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('subscript', NULL);
-        
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sub><strong>%1%</strong></sub></p>');
-
-    }//end testBoldWithTheOtherFormatSubscriptApplied()
+    }//end testBoldThenSubscript()
 
 
     /**
@@ -184,7 +157,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testBoldWithTheOtherFormatSuperscriptApplied()
+    public function testBoldThenSuperscript()
     {
         // Test applying bold and superscript
         $this->useTest(1);
@@ -213,34 +186,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sup><strong>%1%</strong></sup></p>');
 
-        // Test applying bold and superscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        // Test removing bold and superscript using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('superscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-
-        // Test re-applying bold and superscript using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('superscript', NULL);
-        
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sup><strong>%1%</strong></sup></p>');
-
-    }//end testBoldWithTheOtherFormatSuperscriptApplied()
+    }//end testBoldThenSuperscript()
 
 
     /**
@@ -248,7 +194,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testBoldWithTheOtherFormatStrikethroughApplied()
+    public function testBoldThenStrikethrough()
     {
         // Test applying bold and strikethrough
         $this->useTest(1);
@@ -270,40 +216,14 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
         // Test re-applying bold and strikethrough
         $this->clickTopToolbarButton('bold', NULL);
         $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->assertHTMLMatch('<p><del><strong>%1%</strong></del></p>');
 
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test applying bold and strikethrough using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test removing bold and strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-
-        // Test re-applying bold and strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        
         $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
         $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
 
         $this->assertHTMLMatch('<p><del><strong>%1%</strong></del></p>');
 
-    }//end testBoldWithTheOtherFormatStrikethroughApplied()
+    }//end testBoldThenStrikethrough()
 
 
     /**
@@ -311,7 +231,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testBoldWithTheTwoOtherFormatsItalicThenSubscriptApplied()
+    public function testBoldThenItalicThenSubscript()
     {
         // Test applying bold and italic then subscript
         $this->useTest(1);
@@ -348,42 +268,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sub><em><strong>%1%</strong></em></sub></p>');
 
-        // Test applying bold and italic then subscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        // Test removing bold and italic then subscript using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-
-        // Test re-applying bold and italic then subscript using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sub><em><strong>%1%</strong></em></sub></p>');
-
-    }//end testBoldWithTheTwoOtherFormatsItalicThenSubscriptApplied()
+    }//end testBoldThenItalicThenSubscript()
 
 
     /**
@@ -391,7 +276,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testBoldWithTheTwoOtherFormatsItalicThenSuperscriptApplied()
+    public function testBoldThenItalicThenSuperscript()
     {
         // Test applying bold and italic then superscript
         $this->useTest(1);
@@ -428,42 +313,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sup><em><strong>%1%</strong></em></sup></p>');
 
-        // Test applying bold and italic then superscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        // Test removing bold and italic then superscript using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-
-        // Test re-applying bold and italic then superscript using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sup><em><strong>%1%</strong></em></sup></p>');
-
-    }//end testBoldWithTheTwoOtherFormatsItalicThenSuperscriptApplied()
+    }//end testBoldThenItalicThenSuperscript()
 
 
     /**
@@ -471,7 +321,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testBoldWithTheTwoOtherFormatsItalicThenStrikethroughApplied()
+    public function testBoldThenItalicThenStrikethrough()
     {
         // Test applying bold and italic then strikethrough
         $this->useTest(1);
@@ -508,43 +358,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><del><em><strong>%1%</strong></em></del></p>');
 
-        // Test applying bold and italic then strikethrough using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test removing bold and italic then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-
-        // Test re-applying bold and italic then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><del><em><strong>%1%</strong></em></del></p>');
-
-
-    }//end testBoldWithTheTwoOtherFormatsItalicThenStrikethroughApplied()
+    }//end testBoldThenItalicThenStrikethrough()
 
 
     /**
@@ -552,7 +366,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testBoldWithTheTwoOtherFormatsSubscriptThenItalicApplied()
+    public function testBoldThenSubscriptThenItalic()
     {
         // Test applying bold and subscript then italic
         $this->useTest(1);
@@ -589,42 +403,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><em><sub><strong>%1%</strong></sub></em></p>');
 
-        // Test applying bold and subscript then italic using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        // Test removing bold and subscript then italic using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-
-        // Test re-applying bold and subscript then italic using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><em><sub><strong>%1%</strong></sub></em></p>');
-
-    }//end testBoldWithTheTwoOtherFormatsSubscriptThenItalicApplied()
+    }//end testBoldThenSubscriptThenItalic()
 
 
     /**
@@ -632,7 +411,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testBoldWithTheTwoOtherFormatsSubscriptThenStrikethroughApplied()
+    public function testBoldThenSubscriptThenStrikethrough()
     {
         // Test applying bold and subscript then strikethrough
         $this->useTest(1);
@@ -667,40 +446,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><del><sub><strong>%1%</strong></sub></del></p>');
 
-        // Test applying bold and subscript then strikethrough using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test removing bold and subscript then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-
-        // Test re-applying bold and subscript then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><del><sub><strong>%1%</strong></sub></del></p>');
-
-    }//end testBoldWithTheTwoOtherFormatsSubscriptThenStrikethroughApplied()
+    }//end testBoldThenSubscriptThenStrikethrough()
 
 
     /**
@@ -708,7 +454,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testBoldWithTheTwoOtherFormatsSuperscriptThenItalicApplied()
+    public function testBoldThenSuperscriptThenItalic()
     {
         // Test applying bold and superscript then italic
         $this->useTest(1);
@@ -745,42 +491,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><em><sup><strong>%1%</strong></sup></em></p>');
 
-        // Test applying bold and superscript then italic using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        // Test removing bold and superscript then italic using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-
-        // Test re-applying bold and superscript then italic using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><em><sup><strong>%1%</strong></sup></em></p>');
-
-    }//end testBoldWithTheTwoOtherFormatsSuperscriptThenItalicApplied()
+    }//end testBoldThenSuperscriptThenItalic()
 
 
     /**
@@ -788,7 +499,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testBoldWithTheTwoOtherFormatsSuperscriptThenStrikethroughApplied()
+    public function testBoldThenSuperscriptThenStrikethrough()
     {
         // Test applying bold and superscript then strikethrough
         $this->useTest(1);
@@ -823,40 +534,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><del><sup><strong>%1%</strong></sup></del></p>');
 
-        // Test applying bold and superscript then strikethrough using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test removing bold and superscript then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-
-        // Test re-applying bold and superscript then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><del><sup><strong>%1%</strong></sup></del></p>');
-
-    }//end testBoldWithTheTwoOtherFormatsSuperscriptThenStrikethroughApplied()
+    }//end testBoldThenSuperscriptThenStrikethrough()
 
 
     /**
@@ -864,7 +542,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testBoldWithTheTwoOtherFormatsStrikethroughThenItalicApplied()
+    public function testBoldThenStrikethroughThenItalic()
     {
         // Test applying bold and strikethrough then italic
         $this->useTest(1);
@@ -901,42 +579,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><em><del><strong>%1%</strong></del></em></p>');
 
-        // Test applying bold and strikethrough then italic using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        // Test removing bold and strikethrough then italic using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-
-        // Test re-applying bold and strikethrough then italic using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><em><del><strong>%1%</strong></del></em></p>');
-
-    }//end testBoldWithTheTwoOtherFormatsStrikethroughThenItalicApplied()
+    }//end testBoldThenStrikethroughThenItalic()
 
 
     /**
@@ -944,7 +587,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testBoldWithTheTwoOtherFormatsStrikethroughThenSubscriptApplied()
+    public function testBoldThenStrikethroughThenSubscript()
     {
         // Test applying bold and strikethrough then subscript
         $this->useTest(1);
@@ -979,40 +622,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sub><del><strong>%1%</strong></del></sub></p>');
 
-        // Test applying bold and strikethrough then subscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        // Test removing bold and strikethrough then subscript using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('subscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-
-        // Test re-applying bold and strikethrough then subscript using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sub><del><strong>%1%</strong></del></sub></p>');
-
-    }//end testBoldWithTheTwoOtherFormatsStrikethroughThenSubscriptApplied()
+    }//end testBoldThenStrikethroughThenSubscript()
 
 
     /**
@@ -1020,7 +630,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testBoldWithTheTwoOtherFormatsStrikethroughThenSuperscriptApplied()
+    public function testBoldThenStrikethroughThenSuperscript()
     {
         // Test applying bold and strikethrough then superscript
         $this->useTest(1);
@@ -1055,40 +665,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sup><del><strong>%1%</strong></del></sup></p>');
 
-        // Test applying bold and strikethrough then superscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        // Test removing bold and strikethrough then superscript using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('superscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-
-        // Test re-applying bold and strikethrough then superscript using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sup><del><strong>%1%</strong></del></sup></p>');
-
-    }//end testBoldWithTheTwoOtherFormatsStrikethroughThenSuperscriptApplied()
+    }//end testBoldThenStrikethroughThenSuperscript()
 
 
     /**
@@ -1096,7 +673,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testBoldWithTheThreeOtherFormatsItalicThenSubscriptThenStrikethroughApplied()
+    public function testBoldThenItalicThenSubscriptThenStrikethrough()
     {
         // Test applying bold and italic then subscript then strikethrough
         $this->useTest(1);
@@ -1140,49 +717,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><del><sub><em><strong>%1%</strong></em></sub></del></p>');
 
-        // Test applying bold and italic then subscript then strikethrough using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test removing bold and italic then subscript then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-
-        // Test re-applying bold and italic then subscript then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><del><sub><em><strong>%1%</strong></em></sub></del></p>');
-
-    }//end testBoldWithTheThreeOtherFormatsItalicThenSubscriptThenStrikethroughApplied()
+    }//end testBoldThenItalicThenSubscriptThenStrikethrough()
 
 
     /**
@@ -1190,7 +725,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testBoldWithTheThreeOtherFormatsItalicThenSuperscriptThenStrikethroughApplied()
+    public function testBoldThenItalicThenSuperscriptThenStrikethrough()
     {
         // Test applying bold and italic then superscript then strikethrough
         $this->useTest(1);
@@ -1234,49 +769,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><del><sup><em><strong>%1%</strong></em></sup></del></p>');
 
-        // Test applying bold and italic then superscript then strikethrough using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test removing bold and italic then superscript then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-
-        // Test re-applying bold and italic then superscript then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><del><sup><em><strong>%1%</strong></em></sup></del></p>');
-
-    }//end testBoldWithTheThreeOtherFormatsItalicThenSuperscriptThenStrikethroughApplied()
+    }//end testBoldThenItalicThenSuperscriptThenStrikethrough()
 
 
     /**
@@ -1284,7 +777,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testBoldWithTheThreeOtherFormatsItalicThenStrikethroughThenSubscriptApplied()
+    public function testBoldThenItalicThenStrikethroughThenSubscript()
     {
         // Test applying bold and italic then strikethrough then subscript
         $this->useTest(1);
@@ -1328,49 +821,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sub><del><em><strong>%1%</strong></em></del></sub></p>');
 
-        // Test applying bold and italic then strikethrough then subscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        // Test removing bold and italic then strikethrough then subscript using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('subscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-
-        // Test re-applying bold and italic then strikethrough then subscript using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sub><del><em><strong>%1%</strong></em></del></sub></p>');
-
-    }//end testBoldWithTheThreeOtherFormatsItalicThenStrikethroughThenSubscriptApplied()
+    }//end testBoldThenItalicThenStrikethroughThenSubscript()
 
 
     /**
@@ -1378,7 +829,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testBoldWithTheThreeOtherFormatsItalicThenStrikethroughThenSuperscriptApplied()
+    public function testBoldThenItalicThenStrikethroughThenSuperscript()
     {
         // Test applying bold and italic then strikethrough then superscript
         $this->useTest(1);
@@ -1422,49 +873,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sup><del><em><strong>%1%</strong></em></del></sup></p>');
 
-        // Test applying bold and italic then strikethrough then superscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        // Test removing bold and italic then strikethrough then superscript using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('superscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-
-        // Test re-applying bold and italic then strikethrough then superscript using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sup><del><em><strong>%1%</strong></em></del></sup></p>');
-
-    }//end testBoldWithTheThreeOtherFormatsItalicThenStrikethroughThenSuperscriptApplied()
+    }//end testBoldThenItalicThenStrikethroughThenSuperscript()
 
 
     /**
@@ -1472,7 +881,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testBoldWithTheThreeOtherFormatsSubscriptThenItalicThenStrikethroughApplied()
+    public function testBoldThenSubscriptThenItalicThenStrikethrough()
     {
         // Test applying bold and subscript then italic then strikethrough
         $this->useTest(1);
@@ -1516,49 +925,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><del><em><sub><strong>%1%</strong></sub></em></del></p>');
 
-        // Test applying bold and subscript then italic then strikethrough using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test removing bold and subscript then italic then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-
-        // Test re-applying bold and subscript then italic then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><del><em><sub><strong>%1%</strong></sub></em></del></p>');
-
-    }//end testBoldWithTheThreeOtherFormatsSubscriptThenItalicThenStrikethroughApplied()
+    }//end testBoldThenSubscriptThenItalicThenStrikethrough()
 
 
     /**
@@ -1566,7 +933,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testBoldWithTheThreeOtherFormatsSubscriptThenStrikethroughThenItalicApplied()
+    public function testBoldThenSubscriptThenStrikethroughThenItalic()
     {
         // Test applying bold and subscript then strikethrough then italic
         $this->useTest(1);
@@ -1587,8 +954,8 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
         // Test removing bold and subscript then strikethrough then italic
         $this->clickTopToolbarButton('bold', 'active');
         $this->clickTopToolbarButton('subscript', 'active');
-        $this->clickTopToolbarButton('italic', 'active');
         $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
 
         $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
         $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
@@ -1610,49 +977,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><em><del><sub><strong>%1%</strong></sub></del></em></p>');
 
-        // Test applying bold and subscript then strikethrough then italic using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-
-        // Test removing bold and subscript then strikethrough then italic using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the inline toolbar should not be active');
-
-        // Test re-applying bold and subscript then strikethrough then italic using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-
-        $this->assertHTMLMatch('<p><em><del><sub><strong>%1%</strong></sub></del></em></p>');
-
-    }//end testBoldWithTheThreeOtherFormatsSubscriptThenStrikethroughThenItalicApplied()
+    }//end testBoldThenSubscriptThenStrikethroughThenItalic()
 
 
     /**
@@ -1660,7 +985,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testBoldWithTheThreeOtherFormatsSuperscriptThenItalicThenStrikethroughApplied()
+    public function testBoldThenSuperscriptThenItalicThenStrikethrough()
     {
         // Test applying bold and superscript then italic then strikethrough
         $this->useTest(1);
@@ -1704,49 +1029,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><del><em><sup><strong>%1%</strong></sup></em></del></p>');
 
-        // Test applying bold and superscript then italic then strikethrough using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test removing bold and superscript then italic then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-
-        // Test re-applying bold and superscript then italic then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><del><em><sup><strong>%1%</strong></sup></em></del></p>');
-
-    }//end testBoldWithTheThreeOtherFormatsSuperscriptThenItalicThenStrikethroughApplied()
+    }//end testBoldThenSuperscriptThenItalicThenStrikethrough()
 
 
     /**
@@ -1754,7 +1037,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testBoldWithTheThreeOtherFormatsSuperscriptThenStrikethroughThenItalicApplied()
+    public function testBoldThenSuperscriptThenStrikethroughThenItalic()
     {
         // Test applying bold and superscript then strikethrough then italic
         $this->useTest(1);
@@ -1775,8 +1058,8 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
         // Test removing bold and superscript then strikethrough then italic
         $this->clickTopToolbarButton('bold', 'active');
         $this->clickTopToolbarButton('superscript', 'active');
-        $this->clickTopToolbarButton('italic', 'active');
         $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
 
         $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
         $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
@@ -1798,49 +1081,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><em><del><sup><strong>%1%</strong></sup></del></em></p>');
 
-        // Test applying bold and superscript then strikethrough then italic using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-
-        // Test removing bold and superscript then strikethrough then italic using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the inline toolbar should not be active');
-
-        // Test re-applying bold and superscript then strikethrough then italic using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-
-        $this->assertHTMLMatch('<p><em><del><sup><strong>%1%</strong></sup></del></em></p>');
-
-    }//end testBoldWithTheThreeOtherFormatsSuperscriptThenStrikethroughThenItalicApplied()
+    }//end testBoldThenSuperscriptThenStrikethroughThenItalic()
 
 
     /**
@@ -1848,7 +1089,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testBoldWithTheThreeOtherFormatsStrikethroughThenItalicThenSubscriptApplied()
+    public function testBoldThenStrikethroughThenItalicThenSubscript()
     {
         // Test applying bold and strikethrough then italic then subscript
         $this->useTest(1);
@@ -1892,49 +1133,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sub><em><del><strong>%1%</strong></del></em></sub></p>');
 
-        // Test applying bold and strikethrough then italic then subscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        // Test removing bold and strikethrough then italic then subscript using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-
-        // Test re-applying bold and strikethrough then italic then subscript using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sub><em><del><strong>%1%</strong></del></em></sub></p>');
-
-    }//end testBoldWithTheThreeOtherFormatsStrikethroughThenItalicThenSubscriptApplied()
+    }//end testBoldThenStrikethroughThenItalicThenSubscript()
 
 
     /**
@@ -1942,7 +1141,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testBoldWithTheThreeOtherFormatsStrikethroughThenItalicThenSuperscriptApplied()
+    public function testBoldThenStrikethroughThenItalicThenSuperscript()
     {
         // Test applying bold and strikethrough then italic then superscript
         $this->useTest(1);
@@ -1986,49 +1185,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sup><em><del><strong>%1%</strong></del></em></sup></p>');
 
-        // Test applying bold and strikethrough then italic then superscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        // Test removing bold and strikethrough then italic then superscript using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-
-        // Test re-applying bold and strikethrough then italic then superscript using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sup><em><del><strong>%1%</strong></del></em></sup></p>');
-
-    }//end testBoldWithTheThreeOtherFormatsStrikethroughThenItalicThenSuperscriptApplied()
+    }//end testBoldThenStrikethroughThenItalicThenSuperscript()
 
 
     /**
@@ -2036,7 +1193,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testBoldWithTheThreeOtherFormatsStrikethroughThenSubscriptThenItalicApplied()
+    public function testBoldThenStrikethroughThenSubscriptThenItalic()
     {
         // Test applying bold and strikethrough then subscript then italic
         $this->useTest(1);
@@ -2080,49 +1237,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><em><sub><del><strong>%1%</strong></del></sub></em></p>');
 
-        // Test applying bold and strikethrough then subscript then italic using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-
-        // Test removing bold and strikethrough then subscript then italic using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the inline toolbar should not be active');
-
-        // Test re-applying bold and strikethrough then subscript then italic using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-
-        $this->assertHTMLMatch('<p><em><sub><del><strong>%1%</strong></del></sub></em></p>');
-
-    }//end testBoldWithTheThreeOtherFormatsStrikethroughThenSubscriptThenItalicApplied()
+    }//end testBoldThenStrikethroughThenSubscriptThenItalic()
 
 
     /**
@@ -2130,7 +1245,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testBoldWithTheThreeOtherFormatsStrikethroughThenSuperscriptThenItalicApplied()
+    public function testBoldStrikethroughThenSuperscriptThenItalic()
     {
         // Test applying bold and strikethrough then superscript then italic
         $this->useTest(1);
@@ -2174,49 +1289,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><em><sup><del><strong>%1%</strong></del></sup></em></p>');
 
-        // Test applying bold and strikethrough then superscript then italic using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-
-        // Test removing bold and strikethrough then superscript then italic using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the inline toolbar should not be active');
-
-        // Test re-applying bold and strikethrough then superscript then italic using keyboard shortcuts
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-
-        $this->assertHTMLMatch('<p><em><sup><del><strong>%1%</strong></del></sup></em></p>');
-
-    }//end testBoldWithTheThreeOtherFormatsStrikethroughThenSuperscriptThenItalicApplied()
+    }//end testBoldStrikethroughThenSuperscriptThenItalic()
 
 
     /**
@@ -2224,7 +1297,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testItalicWithTheOtherFormatBoldApplied()
+    public function testItalicThenBold()
     {
         // Test applying italic and bold using the top toolbar
         $this->useTest(1);
@@ -2258,8 +1331,8 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
         // Test applying italic and bold using keyboard shortcuts
         $this->useTest(1);
         $this->selectKeyword(1);
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + b');
 
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
@@ -2267,15 +1340,15 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
 
         // Test removing italic and bold using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + b');
 
         $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
         $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
 
         // Test re-applying italic and bold using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->sikuli->keyDown('Key.CMD + b');
         
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
@@ -2284,7 +1357,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><strong><em>%1%</em></strong></p>');
 
-    }//end testItalicWithTheOtherFormatBoldApplied()
+    }//end testItalicThenBold()
 
 
     /**
@@ -2292,7 +1365,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testItalicWithTheOtherFormatSubscriptApplied()
+    public function testItalicThenSubscript()
     {
         // Test applying italic and subscript
         $this->useTest(1);
@@ -2321,34 +1394,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sub><em>%1%</em></sub></p>');
 
-        // Test applying italic and subscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        // Test removing italic and subscript using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-
-        // Test re-applying italic and subscript using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', NULL);
-        
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sub><em>%1%</em></sub></p>');
-
-    }//end testItalicWithTheOtherFormatSubscriptApplied()
+    }//end testItalicThenSubscript()
 
 
     /**
@@ -2356,7 +1402,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testItalicWithTheOtherFormatSuperscriptApplied()
+    public function testItalicThenSuperscript()
     {
         // Test applying italic and superscript
         $this->useTest(1);
@@ -2385,34 +1431,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sup><em>%1%</em></sup></p>');
 
-        // Test applying italic and superscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        // Test removing italic and superscript using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-
-        // Test re-applying italic and superscript using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', NULL);
-        
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sup><em>%1%</em></sup></p>');
-
-    }//end testItalicWithTheOtherFormatSuperscriptApplied()
+    }//end testItalicThenSuperscript()
 
 
     /**
@@ -2420,7 +1439,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testItalicWithTheOtherFormatStrikethroughApplied()
+    public function testItalicThenStrikethrough()
     {
         // Test applying italic and strikethrough
         $this->useTest(1);
@@ -2442,40 +1461,14 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
         // Test re-applying italic and strikethrough
         $this->clickTopToolbarButton('italic', NULL);
         $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->assertHTMLMatch('<p><del><em>%1%</em></del></p>');
 
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test applying italic and strikethrough using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test removing italic and strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-
-        // Test re-applying italic and strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        
         $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
         $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
         $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
 
         $this->assertHTMLMatch('<p><del><em>%1%</em></del></p>');
 
-    }//end testItalicWithTheOtherFormatStrikethroughApplied()
+    }//end testItalicThenStrikethrough()
 
 
     /**
@@ -2483,7 +1476,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testItalicWithTheTwoOtherFormatsBoldThenSubscriptApplied()
+    public function testItalicThenBoldThenSubscript()
     {
         // Test applying italic and bold then subscript
         $this->useTest(1);
@@ -2520,42 +1513,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sub><strong><em>%1%</em></strong></sub></p>');
 
-        // Test applying italic and bold then subscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        // Test removing italic and bold then subscript using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('subscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-
-        // Test re-applying italic and bold then subscript using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sub><strong><em>%1%</em></strong></sub></p>');
-
-    }//end testItalicWithTheTwoOtherFormatsBoldThenSubscriptApplied()
+    }//end testItalicThenBoldThenSubscript()
 
 
     /**
@@ -2563,7 +1521,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testItalicWithTheTwoOtherFormatsBoldThenSuperscriptApplied()
+    public function testItalicThenBoldThenSuperscript()
     {
         // Test applying italic and bold then superscript
         $this->useTest(1);
@@ -2600,42 +1558,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sup><strong><em>%1%</em></strong></sup></p>');
 
-        // Test applying italic and bold then superscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        // Test removing italic and bold then superscript using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('superscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-
-        // Test re-applying italic and bold then superscript using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sup><strong><em>%1%</em></strong></sup></p>');
-
-    }//end testItalicWithTheTwoOtherFormatsBoldThenSuperscriptApplied()
+    }//end testItalicThenBoldThenSuperscript()
 
 
     /**
@@ -2643,7 +1566,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testItalicWithTheTwoOtherFormatsBoldThenStrikethroughApplied()
+    public function testItalicThenBoldThenStrikethrough()
     {
         // Test applying italic and bold then strikethrough
         $this->useTest(1);
@@ -2680,43 +1603,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><del><strong><em>%1%</em></strong></del></p>');
 
-        // Test applying italic and bold then strikethrough using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test removing italic and bold then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-
-        // Test re-applying italic and bold then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><del><strong><em>%1%</em></strong></del></p>');
-
-
-    }//end testItalicWithTheTwoOtherFormatsBoldThenStrikethroughApplied()
+    }//end testItalicThenBoldThenStrikethrough()
 
 
     /**
@@ -2724,7 +1611,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testItalicWithTheTwoOtherFormatsSubscriptThenBoldApplied()
+    public function testItalicThenSubscriptThenBold()
     {
         // Test applying italic and subscript then bold
         $this->useTest(1);
@@ -2761,42 +1648,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><strong><sub><em>%1%</em></sub></strong></p>');
 
-        // Test applying italic and subscript then bold using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        // Test removing italic and subscript then bold using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-
-        // Test re-applying italic and subscript then bold using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><strong><sub><em>%1%</em></sub></strong></p>');
-
-    }//end testItalicWithTheTwoOtherFormatsSubscriptThenBoldApplied()
+    }//end testItalicThenSubscriptThenBold()
 
 
     /**
@@ -2804,7 +1656,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testItalicWithTheTwoOtherFormatsSubscriptThenStrikethroughApplied()
+    public function testItalicThenSubscriptThenStrikethrough()
     {
         // Test applying italic and subscript then strikethrough
         $this->useTest(1);
@@ -2839,40 +1691,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><del><sub><em>%1%</em></sub></del></p>');
 
-        // Test applying italic and subscript then strikethrough using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test removing italic and subscript then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-
-        // Test re-applying italic and subscript then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><del><sub><em>%1%</em></sub></del></p>');
-
-    }//end testItalicWithTheTwoOtherFormatsSubscriptThenStrikethroughApplied()
+    }//end testItalicThenSubscriptThenStrikethrough()
 
 
     /**
@@ -2880,7 +1699,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testItalicWithTheTwoOtherFormatsSuperscriptThenBoldApplied()
+    public function testItalicThenSuperscriptThenBold()
     {
         // Test applying italic and superscript then bold
         $this->useTest(1);
@@ -2917,42 +1736,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><strong><sup><em>%1%</em></sup></strong></p>');
 
-        // Test applying italic and superscript then bold using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        // Test removing italic and superscript then bold using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-
-        // Test re-applying italic and superscript then bold using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><strong><sup><em>%1%</em></sup></strong></p>');
-
-    }//end testItalicWithTheTwoOtherFormatsSuperscriptThenBoldApplied()
+    }//end testItalicThenSuperscriptThenBold()
 
 
     /**
@@ -2960,7 +1744,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testItalicWithTheTwoOtherFormatsSuperscriptThenStrikethroughApplied()
+    public function testItalicThenSuperscriptThenStrikethrough()
     {
         // Test applying italic and superscript then strikethrough
         $this->useTest(1);
@@ -2995,40 +1779,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><del><sup><em>%1%</em></sup></del></p>');
 
-        // Test applying italic and superscript then strikethrough using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test removing italic and superscript then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-
-        // Test re-applying italic and superscript then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><del><sup><em>%1%</em></sup></del></p>');
-
-    }//end testItalicWithTheTwoOtherFormatsSuperscriptThenStrikethroughApplied()
+    }//end testItalicThenSuperscriptThenStrikethrough()
 
 
     /**
@@ -3036,7 +1787,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testItalicWithTheTwoOtherFormatsStrikethroughThenBoldApplied()
+    public function testItalicThenStrikethroughThenBold()
     {
         // Test applying italic and strikethrough then bold
         $this->useTest(1);
@@ -3073,42 +1824,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><strong><del><em>%1%</em></del></strong></p>');
 
-        // Test applying italic and strikethrough then bold using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        // Test removing italic and strikethrough then bold using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-
-        // Test re-applying italic and strikethrough then bold using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><strong><del><em>%1%</em></del></strong></p>');
-
-    }//end testItalicWithTheTwoOtherFormatsStrikethroughThenBoldApplied()
+    }//end testItalicThenStrikethroughThenBold()
 
 
     /**
@@ -3116,7 +1832,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testItalicWithTheTwoOtherFormatsStrikethroughThenSubscriptApplied()
+    public function testItalicThenStrikethroughThenSubscript()
     {
         // Test applying italic and strikethrough then subscript
         $this->useTest(1);
@@ -3151,40 +1867,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sub><del><em>%1%</em></del></sub></p>');
 
-        // Test applying italic and strikethrough then subscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        // Test removing italic and strikethrough then subscript using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('subscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-
-        // Test re-applying italic and strikethrough then subscript using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sub><del><em>%1%</em></del></sub></p>');
-
-    }//end testItalicWithTheTwoOtherFormatsStrikethroughThenSubscriptApplied()
+    }//end testItalicThenStrikethroughThenSubscript()
 
 
     /**
@@ -3192,7 +1875,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testItalicWithTheTwoOtherFormatsStrikethroughThenSuperscriptApplied()
+    public function testItalicThenStrikethroughThenSuperscript()
     {
         // Test applying italic and strikethrough then superscript
         $this->useTest(1);
@@ -3227,40 +1910,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sup><del><em>%1%</em></del></sup></p>');
 
-        // Test applying italic and strikethrough then superscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        // Test removing italic and strikethrough then superscript using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('superscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-
-        // Test re-applying italic and strikethrough then superscript using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sup><del><em>%1%</em></del></sup></p>');
-
-    }//end testItalicWithTheTwoOtherFormatsStrikethroughThenSuperscriptApplied()
+    }//end testItalicThenStrikethroughThenSuperscript()
 
 
     /**
@@ -3268,7 +1918,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testItalicWithTheThreeOtherFormatsBoldThenSubscriptThenStrikethroughApplied()
+    public function testItalicThenBoldThenSubscriptThenStrikethrough()
     {
         // Test applying italic and bold then subscript then strikethrough
         $this->useTest(1);
@@ -3312,49 +1962,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><del><sub><strong><em>%1%</em></strong></sub></del></p>');
 
-        // Test applying italic and bold then subscript then strikethrough using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test removing italic and bold then subscript then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-
-        // Test re-applying italic and bold then subscript then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><del><sub><strong><em>%1%</em></strong></sub></del></p>');
-
-    }//end testItalicWithTheThreeOtherFormatsBoldThenSubscriptThenStrikethroughApplied()
+    }//end testItalicThenBoldThenSubscriptThenStrikethrough()
 
 
     /**
@@ -3362,7 +1970,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testItalicWithTheThreeOtherFormatsBoldThenSuperscriptThenStrikethroughApplied()
+    public function testItalicThenBoldThenSuperscriptThenStrikethrough()
     {
         // Test applying italic and bold then superscript then strikethrough
         $this->useTest(1);
@@ -3406,49 +2014,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><del><sup><strong><em>%1%</em></strong></sup></del></p>');
 
-        // Test applying italic and bold then superscript then strikethrough using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test removing italic and bold then superscript then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-
-        // Test re-applying italic and bold then superscript then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><del><sup><strong><em>%1%</em></strong></sup></del></p>');
-
-    }//end testItalicWithTheThreeOtherFormatsBoldThenSuperscriptThenStrikethroughApplied()
+    }//end testItalicThenBoldThenSuperscriptThenStrikethrough()
 
 
     /**
@@ -3456,7 +2022,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testItalicWithTheThreeOtherFormatsBoldThenStrikethroughThenSubscriptApplied()
+    public function testItalicThenBoldThenStrikethroughThenSubscript()
     {
         // Test applying italic and bold then strikethrough then subscript
         $this->useTest(1);
@@ -3500,49 +2066,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sub><del><strong><em>%1%</em></strong></del></sub></p>');
 
-        // Test applying italic and bold then strikethrough then subscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        // Test removing italic and bold then strikethrough then subscript using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('subscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-
-        // Test re-applying italic and bold then strikethrough then subscript using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sub><del><strong><em>%1%</em></strong></del></sub></p>');
-
-    }//end testItalicWithTheThreeOtherFormatsBoldThenStrikethroughThenSubscriptApplied()
+    }//end testItalicThenBoldThenStrikethroughThenSubscript()
 
 
     /**
@@ -3550,7 +2074,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testItalicWithTheThreeOtherFormatsBoldThenStrikethroughThenSuperscriptApplied()
+    public function testItalicThenBoldThenStrikethroughThenSuperscript()
     {
         // Test applying italic and bold then strikethrough then superscript
         $this->useTest(1);
@@ -3594,49 +2118,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sup><del><strong><em>%1%</em></strong></del></sup></p>');
 
-        // Test applying italic and bold then strikethrough then superscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        // Test removing italic and bold then strikethrough then superscript using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('superscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-
-        // Test re-applying italic and bold then strikethrough then superscript using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sup><del><strong><em>%1%</em></strong></del></sup></p>');
-
-    }//end testItalicWithTheThreeOtherFormatsBoldThenStrikethroughThenSuperscriptApplied()
+    }//end testItalicThenBoldThenStrikethroughThenSuperscript()
 
 
     /**
@@ -3644,7 +2126,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testItalicWithTheThreeOtherFormatsSubscriptThenBoldThenStrikethroughApplied()
+    public function testItalicThenSubscriptThenBoldThenStrikethrough()
     {
         // Test applying italic and subscript then bold then strikethrough
         $this->useTest(1);
@@ -3688,49 +2170,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><del><strong><sub><em>%1%</em></sub></strong></del></p>');
 
-        // Test applying italic and subscript then bold then strikethrough using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test removing italic and subscript then bold then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-
-        // Test re-applying italic and subscript then bold then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><del><strong><sub><em>%1%</em></sub></strong></del></p>');
-
-    }//end testItalicWithTheThreeOtherFormatsSubscriptThenBoldThenStrikethroughApplied()
+    }//end testItalicThenSubscriptThenBoldThenStrikethrough()
 
 
     /**
@@ -3738,7 +2178,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testItalicWithTheThreeOtherFormatsSubscriptThenStrikethroughThenBoldApplied()
+    public function testItalicThenSubscriptThenStrikethroughThenBold()
     {
         // Test applying italic and subscript then strikethrough then bold
         $this->useTest(1);
@@ -3759,8 +2199,8 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
         // Test removing italic and subscript then strikethrough then bold
         $this->clickTopToolbarButton('italic', 'active');
         $this->clickTopToolbarButton('subscript', 'active');
-        $this->clickTopToolbarButton('bold', 'active');
         $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
 
         $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
         $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
@@ -3782,49 +2222,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><strong><del><sub><em>%1%</em></sub></del></strong></p>');
 
-        // Test applying italic and subscript then strikethrough then bold using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-
-        // Test removing italic and subscript then strikethrough then bold using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the inline toolbar should not be active');
-
-        // Test re-applying italic and subscript then strikethrough then bold using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-
-        $this->assertHTMLMatch('<p><strong><del><sub><em>%1%</em></sub></del></strong></p>');
-
-    }//end testItalicWithTheThreeOtherFormatsSubscriptThenStrikethroughThenBoldApplied()
+    }//end testItalicThenSubscriptThenStrikethroughThenBold()
 
 
     /**
@@ -3832,7 +2230,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testItalicWithTheThreeOtherFormatsSuperscriptThenBoldThenStrikethroughApplied()
+    public function testItalicThenSuperscriptThenBoldThenStrikethrough()
     {
         // Test applying italic and superscript then bold then strikethrough
         $this->useTest(1);
@@ -3876,49 +2274,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><del><strong><sup><em>%1%</em></sup></strong></del></p>');
 
-        // Test applying italic and superscript then bold then strikethrough using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test removing italic and superscript then bold then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-
-        // Test re-applying italic and superscript then bold then strikethrough using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><del><strong><sup><em>%1%</em></sup></strong></del></p>');
-
-    }//end testItalicWithTheThreeOtherFormatsSuperscriptThenBoldThenStrikethroughApplied()
+    }//end testItalicThenSuperscriptThenBoldThenStrikethrough()
 
 
     /**
@@ -3926,7 +2282,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testItalicWithTheThreeOtherFormatsSuperscriptThenStrikethroughThenBoldApplied()
+    public function testItalicThenSuperscriptThenStrikethroughThenBold()
     {
         // Test applying italic and superscript then strikethrough then bold
         $this->useTest(1);
@@ -3947,8 +2303,8 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
         // Test removing italic and superscript then strikethrough then bold
         $this->clickTopToolbarButton('italic', 'active');
         $this->clickTopToolbarButton('superscript', 'active');
-        $this->clickTopToolbarButton('bold', 'active');
         $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
 
         $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
         $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
@@ -3970,49 +2326,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><strong><del><sup><em>%1%</em></sup></del></strong></p>');
 
-        // Test applying italic and superscript then strikethrough then bold using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-
-        // Test removing italic and superscript then strikethrough then bold using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the inline toolbar should not be active');
-
-        // Test re-applying italic and superscript then strikethrough then bold using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-
-        $this->assertHTMLMatch('<p><strong><del><sup><em>%1%</em></sup></del></strong></p>');
-
-    }//end testItalicWithTheThreeOtherFormatsSuperscriptThenStrikethroughThenBoldApplied()
+    }//end testItalicThenSuperscriptThenStrikethroughThenBold()
 
 
     /**
@@ -4020,7 +2334,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testItalicWithTheThreeOtherFormatsStrikethroughThenBoldThenSubscriptApplied()
+    public function testItalicThenStrikethroughThenBoldThenSubscript()
     {
         // Test applying italic and strikethrough then bold then subscript
         $this->useTest(1);
@@ -4064,49 +2378,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sub><strong><del><em>%1%</em></del></strong></sub></p>');
 
-        // Test applying italic and strikethrough then bold then subscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        // Test removing italic and strikethrough then bold then subscript using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('subscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-
-        // Test re-applying italic and strikethrough then bold then subscript using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sub><strong><del><em>%1%</em></del></strong></sub></p>');
-
-    }//end testItalicWithTheThreeOtherFormatsStrikethroughThenBoldThenSubscriptApplied()
+    }//end testItalicThenStrikethroughThenBoldThenSubscript()
 
 
     /**
@@ -4114,7 +2386,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testItalicWithTheThreeOtherFormatsStrikethroughThenBoldThenSuperscriptApplied()
+    public function testItalicThenStrikethroughThenBoldThenSuperscript()
     {
         // Test applying italic and strikethrough then bold then superscript
         $this->useTest(1);
@@ -4158,49 +2430,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sup><strong><del><em>%1%</em></del></strong></sup></p>');
 
-        // Test applying italic and strikethrough then bold then superscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        // Test removing italic and strikethrough then bold then superscript using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('superscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-
-        // Test re-applying italic and strikethrough then bold then superscript using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sup><strong><del><em>%1%</em></del></strong></sup></p>');
-
-    }//end testItalicWithTheThreeOtherFormatsStrikethroughThenBoldThenSuperscriptApplied()
+    }//end testItalicThenStrikethroughThenBoldThenSuperscript()
 
 
     /**
@@ -4208,7 +2438,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testItalicWithTheThreeOtherFormatsStrikethroughThenSubscriptThenBoldApplied()
+    public function testItalicThenStrikethroughThenSubscriptThenBold()
     {
         // Test applying italic and strikethrough then subscript then bold
         $this->useTest(1);
@@ -4252,49 +2482,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><strong><sub><del><em>%1%</em></del></sub></strong></p>');
 
-        // Test applying italic and strikethrough then subscript then bold using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-
-        // Test removing italic and strikethrough then subscript then bold using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the inline toolbar should not be active');
-
-        // Test re-applying italic and strikethrough then subscript then bold using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-
-        $this->assertHTMLMatch('<p><strong><sub><del><em>%1%</em></del></sub></strong></p>');
-
-    }//end testItalicWithTheThreeOtherFormatsStrikethroughThenSubscriptThenBoldApplied()
+    }//end testItalicThenStrikethroughThenSubscriptThenBold()
 
 
     /**
@@ -4302,7 +2490,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testItalicWithTheThreeOtherFormatsStrikethroughThenSuperscriptThenBoldApplied()
+    public function testItalicThenStrikethroughThenSuperscriptThenBold()
     {
         // Test applying italic and strikethrough then superscript then bold
         $this->useTest(1);
@@ -4346,49 +2534,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><strong><sup><del><em>%1%</em></del></sup></strong></p>');
 
-        // Test applying italic and strikethrough then superscript then bold using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-
-        // Test removing italic and strikethrough then superscript then bold using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the inline toolbar should not be active');
-
-        // Test re-applying italic and strikethrough then superscript then bold using keyboard shortcuts
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-
-        $this->assertHTMLMatch('<p><strong><sup><del><em>%1%</em></del></sup></strong></p>');
-
-    }//end testItalicWithTheThreeOtherFormatsStrikethroughThenSuperscriptThenBoldApplied()
+    }//end testItalicThenStrikethroughThenSuperscriptThenBold()
 
 
     /**
@@ -4396,7 +2542,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSubscriptWithTheOtherFormatBoldApplied()
+    public function testSubscriptThenBold()
     {
         // Test applying subscript and bold using the top toolbar
         $this->useTest(1);
@@ -4425,34 +2571,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><strong><sub>%1%</sub></strong></p>');
 
-        // Test applying subscript and bold using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        // Test removing subscript and bold using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-
-        // Test re-applying subscript and bold using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Bold');
-        
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><strong><sub>%1%</sub></strong></p>');
-
-    }//end testSubscriptWithTheOtherFormatBoldApplied()
+    }//end testSubscriptThenBold()
 
 
     /**
@@ -4460,7 +2579,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSubscriptWithTheOtherFormatItalicApplied()
+    public function testSubscriptThenItalic()
     {
         // Test applying subscript and italic
         $this->useTest(1);
@@ -4489,34 +2608,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><em><sub>%1%</sub></em></p>');
 
-        // Test applying subscript and italic using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        // Test removing subscript and italic using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-
-        // Test re-applying subscript and italic using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Italic');
-        
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><em><sub>%1%</sub></em></p>');
-
-    }//end testSubscriptWithTheOtherFormatItalicApplied()
+    }//end testSubscriptThenItalic()
 
 
     /**
@@ -4524,7 +2616,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSubscriptWithTheOtherFormatStrikethroughApplied()
+    public function testSubscriptThenStrikethrough()
     {
         // Test applying subscript and strikethrough
         $this->useTest(1);
@@ -4545,37 +2637,13 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
         // Test re-applying subscript and strikethrough
         $this->clickTopToolbarButton('subscript', NULL);
         $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->assertHTMLMatch('<p><del><sub>%1%</sub></del></p>');
 
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test applying subscript and strikethrough using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test removing subscript and strikethrough using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-
-        // Test re-applying subscript and strikethrough using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        
         $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
         $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
 
         $this->assertHTMLMatch('<p><del><sub>%1%</sub></del></p>');
 
-    }//end testSubscriptWithTheOtherFormatStrikethroughApplied()
+    }//end testSubscriptThenStrikethrough()
 
 
     /**
@@ -4583,7 +2651,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSubscriptWithTheTwoOtherFormatsBoldThenItalicApplied()
+    public function testSubscriptThenBoldThenItalic()
     {
         // Test applying subscript and bold then italic
         $this->useTest(1);
@@ -4620,42 +2688,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><em><strong><sub>%1%</sub></strong></em></p>');
 
-        // Test applying subscript and bold then italic using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        // Test removing subscript and bold then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-
-        // Test re-applying subscript and bold then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><em><strong><sub>%1%</sub></strong></em></p>');
-
-    }//end testSubscriptWithTheTwoOtherFormatsBoldThenItalicApplied()
+    }//end testSubscriptThenBoldThenItalic()
 
 
     /**
@@ -4663,7 +2696,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSubscriptWithTheTwoOtherFormatsBoldThenStrikethroughApplied()
+    public function testSubscriptThenBoldThenStrikethrough()
     {
         // Test applying subscript and bold then strikethrough
         $this->useTest(1);
@@ -4698,41 +2731,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><del><strong><sub>%1%</sub></strong></del></p>');
 
-        // Test applying subscript and bold then strikethrough using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test removing subscript and bold then strikethrough using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-
-        // Test re-applying subscript and bold then strikethrough using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><del><strong><sub>%1%</sub></strong></del></p>');
-
-
-    }//end testSubscriptWithTheTwoOtherFormatsBoldThenStrikethroughApplied()
+    }//end testSubscriptThenBoldThenStrikethrough()
 
 
     /**
@@ -4740,7 +2739,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSubscriptWithTheTwoOtherFormatsItalicThenBoldApplied()
+    public function testSubscriptThenItalicThenBold()
     {
         // Test applying subscript and italic then bold
         $this->useTest(1);
@@ -4777,42 +2776,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><strong><em><sub>%1%</sub></em></strong></p>');
 
-        // Test applying subscript and italic then bold using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        // Test removing subscript and italic then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-
-        // Test re-applying subscript and italic then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><strong><em><sub>%1%</sub></em></strong></p>');
-
-    }//end testSubscriptWithTheTwoOtherFormatsItalicThenBoldApplied()
+    }//end testSubscriptThenItalicThenBold()
 
 
     /**
@@ -4820,7 +2784,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSubscriptWithTheTwoOtherFormatsItalicThenStrikethroughApplied()
+    public function testSubscriptThenItalicThenStrikethrough()
     {
         // Test applying subscript and italic then strikethrough
         $this->useTest(1);
@@ -4855,40 +2819,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><del><em><sub>%1%</sub></em></del></p>');
 
-        // Test applying subscript and italic then strikethrough using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('italic', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test removing subscript and italic then strikethrough using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-
-        // Test re-applying subscript and italic then strikethrough using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><del><em><sub>%1%</sub></em></del></p>');
-
-    }//end testSubscriptWithTheTwoOtherFormatsItalicThenStrikethroughApplied()
+    }//end testSubscriptThenItalicThenStrikethrough()
 
 
     /**
@@ -4896,7 +2827,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSubscriptWithTheTwoOtherFormatsStrikethroughThenBoldApplied()
+    public function testSubscriptThenStrikethroughThenBold()
     {
         // Test applying subscript and strikethrough then bold
         $this->useTest(1);
@@ -4931,40 +2862,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><strong><del><sub>%1%</sub></del></strong></p>');
 
-        // Test applying subscript and strikethrough then bold using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        // Test removing subscript and strikethrough then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-
-        // Test re-applying subscript and strikethrough then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><strong><del><sub>%1%</sub></del></strong></p>');
-
-    }//end testSubscriptWithTheTwoOtherFormatsStrikethroughThenBoldApplied()
+    }//end testSubscriptThenStrikethroughThenBold()
 
 
     /**
@@ -4972,7 +2870,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSubscriptWithTheTwoOtherFormatsStrikethroughThenItalicApplied()
+    public function testSubscriptThenStrikethroughThenItalic()
     {
         // Test applying subscript and strikethrough then italic
         $this->useTest(1);
@@ -5007,40 +2905,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><em><del><sub>%1%</sub></del></em></p>');
 
-        // Test applying subscript and strikethrough then italic using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        // Test removing subscript and strikethrough then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-
-        // Test re-applying subscript and strikethrough then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><em><del><sub>%1%</sub></del></em></p>');
-
-    }//end testSubscriptWithTheTwoOtherFormatsStrikethroughThenItalicApplied()
+    }//end testSubscriptThenStrikethroughThenItalic()
 
 
     /**
@@ -5048,7 +2913,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSubscriptWithTheThreeOtherFormatsBoldThenItalicThenStrikethroughApplied()
+    public function testSubscriptThenBoldThenItalicThenStrikethrough()
     {
         // Test applying subscript and bold then italic then strikethrough
         $this->useTest(1);
@@ -5092,49 +2957,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><del><em><strong><sub>%1%</sub></strong></em></del></p>');
 
-        // Test applying subscript and bold then italic then strikethrough using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test removing subscript and bold then italic then strikethrough using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-
-        // Test re-applying subscript and bold then italic then strikethrough using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><del><em><strong><sub>%1%</sub></strong></em></del></p>');
-
-    }//end testSubscriptWithTheThreeOtherFormatsBoldThenItalicThenStrikethroughApplied()
+    }//end testSubscriptThenBoldThenItalicThenStrikethrough()
 
 
     /**
@@ -5142,7 +2965,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSubscriptWithTheThreeOtherFormatsBoldThenStrikethroughThenItalicApplied()
+    public function testSubscriptThenBoldThenStrikethroughThenItalic()
     {
         // Test applying subscript and bold then strikethrough then italic
         $this->useTest(1);
@@ -5186,49 +3009,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><em><del><strong><sub>%1%</sub></strong></del></em></p>');
 
-        // Test applying subscript and bold then strikethrough then italic using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        // Test removing subscript and bold then strikethrough then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-
-        // Test re-applying subscript and bold then strikethrough then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><em><del><strong><sub>%1%</sub></strong></del></em></p>');
-
-    }//end testSubscriptWithTheThreeOtherFormatsBoldThenStrikethroughThenItalicApplied()
+    }//end testSubscriptThenBoldThenStrikethroughThenItalic()
 
 
     /**
@@ -5236,7 +3017,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSubscriptWithTheThreeOtherFormatsItalicThenBoldThenStrikethroughApplied()
+    public function testSubscriptThenItalicThenBoldThenStrikethrough()
     {
         // Test applying subscript and italic then bold then strikethrough
         $this->useTest(1);
@@ -5280,49 +3061,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><del><strong><em><sub>%1%</sub></em></strong></del></p>');
 
-        // Test applying subscript and italic then bold then strikethrough using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test removing subscript and italic then bold then strikethrough using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-
-        // Test re-applying subscript and italic then bold then strikethrough using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><del><strong><em><sub>%1%</sub></em></strong></del></p>');
-
-    }//end testSubscriptWithTheThreeOtherFormatsItalicThenBoldThenStrikethroughApplied()
+    }//end testSubscriptThenItalicThenBoldThenStrikethrough()
 
 
     /**
@@ -5330,7 +3069,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSubscriptWithTheThreeOtherFormatsItalicThenStrikethroughThenBoldApplied()
+    public function testSubscriptThenItalicThenStrikethroughThenBold()
     {
         // Test applying subscript and italic then strikethrough then bold
         $this->useTest(1);
@@ -5351,8 +3090,8 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
         // Test removing subscript and italic then strikethrough then bold
         $this->clickTopToolbarButton('subscript', 'active');
         $this->clickTopToolbarButton('italic', 'active');
-        $this->clickTopToolbarButton('bold', 'active');
         $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->clickTopToolbarButton('bold', 'active');
 
         $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
         $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
@@ -5374,49 +3113,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><strong><del><em><sub>%1%</sub></em></del></strong></p>');
 
-        // Test applying subscript and italic then strikethrough then bold using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-
-        // Test removing subscript and italic then strikethrough then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the inline toolbar should not be active');
-
-        // Test re-applying subscript and italic then strikethrough then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-
-        $this->assertHTMLMatch('<p><strong><del><em><sub>%1%</sub></em></del></strong></p>');
-
-    }//end testSubscriptWithTheThreeOtherFormatsItalicThenStrikethroughThenBoldApplied()
+    }//end testSubscriptThenItalicThenStrikethroughThenBold()
 
 
     /**
@@ -5424,7 +3121,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSubscriptWithTheThreeOtherFormatsStrikethroughThenBoldThenItalicApplied()
+    public function testSubscriptThenStrikethroughThenBoldThenItalic()
     {
         // Test applying subscript and strikethrough then bold then italic
         $this->useTest(1);
@@ -5468,49 +3165,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><em><strong><del><sub>%1%</sub></del></strong></em></p>');
 
-        // Test applying subscript and strikethrough then bold then italic using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        // Test removing subscript and strikethrough then bold then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-
-        // Test re-applying subscript and strikethrough then bold then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><em><strong><del><sub>%1%</sub></del></strong></em></p>');
-
-    }//end testSubscriptWithTheThreeOtherFormatsStrikethroughThenBoldThenItalicApplied()
+    }//end testSubscriptThenStrikethroughThenBoldThenItalic()
 
 
     /**
@@ -5518,7 +3173,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSubscriptWithTheThreeOtherFormatsStrikethroughThenItalicThenBoldApplied()
+    public function testSubscriptThenStrikethroughThenItalicThenBold()
     {
         // Test applying subscript and strikethrough then italic then bold
         $this->useTest(1);
@@ -5562,49 +3217,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><strong><em><del><sub>%1%</sub></del></em></strong></p>');
 
-        // Test applying subscript and strikethrough then italic then bold using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-
-        // Test removing subscript and strikethrough then italic then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the inline toolbar should not be active');
-
-        // Test re-applying subscript and strikethrough then italic then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-
-        $this->assertHTMLMatch('<p><strong><em><del><sub>%1%</sub></del></em></strong></p>');
-
-    }//end testSubscriptWithTheThreeOtherFormatsStrikethroughThenItalicThenBoldApplied()
+    }//end testSubscriptThenStrikethroughThenItalicThenBold()
 
 
     /**
@@ -5612,7 +3225,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSuperscriptWithTheOtherFormatBoldApplied()
+    public function testSuperscriptThenBold()
     {
         // Test applying superscript and bold using the top toolbar
         $this->useTest(1);
@@ -5641,34 +3254,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><strong><sup>%1%</sup></strong></p>');
 
-        // Test applying superscript and bold using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        // Test removing superscript and bold using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-
-        // Test re-applying superscript and bold using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Bold');
-        
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><strong><sup>%1%</sup></strong></p>');
-
-    }//end testSuperscriptWithTheOtherFormatBoldApplied()
+    }//end testSuperscriptThenBold()
 
 
     /**
@@ -5676,7 +3262,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSuperscriptWithTheOtherFormatItalicApplied()
+    public function testSuperscriptThenItalic()
     {
         // Test applying superscript and italic
         $this->useTest(1);
@@ -5705,34 +3291,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><em><sup>%1%</sup></em></p>');
 
-        // Test applying superscript and italic using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        // Test removing superscript and italic using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-
-        // Test re-applying superscript and italic using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Italic');
-        
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><em><sup>%1%</sup></em></p>');
-
-    }//end testSuperscriptWithTheOtherFormatItalicApplied()
+    }//end testSuperscriptThenItalic()
 
 
     /**
@@ -5740,7 +3299,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSuperscriptWithTheOtherFormatStrikethroughApplied()
+    public function testSuperscriptThenStrikethrough()
     {
         // Test applying superscript and strikethrough
         $this->useTest(1);
@@ -5761,37 +3320,13 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
         // Test re-applying superscript and strikethrough
         $this->clickTopToolbarButton('superscript', NULL);
         $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->assertHTMLMatch('<p><del><sup>%1%</sup></del></p>');
 
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test applying superscript and strikethrough using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test removing superscript and strikethrough using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-
-        // Test re-applying superscript and strikethrough using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        
         $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
         $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
 
         $this->assertHTMLMatch('<p><del><sup>%1%</sup></del></p>');
 
-    }//end testSuperscriptWithTheOtherFormatStrikethroughApplied()
+    }//end testSuperscriptThenStrikethrough()
 
 
     /**
@@ -5799,7 +3334,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSuperscriptWithTheTwoOtherFormatsBoldThenItalicApplied()
+    public function testSuperscriptThenBoldThenItalic()
     {
         // Test applying superscript and bold then italic
         $this->useTest(1);
@@ -5836,42 +3371,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><em><strong><sup>%1%</sup></strong></em></p>');
 
-        // Test applying superscript and bold then italic using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        // Test removing superscript and bold then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-
-        // Test re-applying superscript and bold then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><em><strong><sup>%1%</sup></strong></em></p>');
-
-    }//end testSuperscriptWithTheTwoOtherFormatsBoldThenItalicApplied()
+    }//end testSuperscriptThenBoldThenItalic()
 
 
     /**
@@ -5879,7 +3379,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSuperscriptWithTheTwoOtherFormatsBoldThenStrikethroughApplied()
+    public function testSuperscriptThenBoldThenStrikethrough()
     {
         // Test applying superscript and bold then strikethrough
         $this->useTest(1);
@@ -5914,41 +3414,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><del><strong><sup>%1%</sup></strong></del></p>');
 
-        // Test applying superscript and bold then strikethrough using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test removing superscript and bold then strikethrough using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-
-        // Test re-applying superscript and bold then strikethrough using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><del><strong><sup>%1%</sup></strong></del></p>');
-
-
-    }//end testSuperscriptWithTheTwoOtherFormatsBoldThenStrikethroughApplied()
+    }//end testSuperscriptThenBoldThenStrikethrough()
 
 
     /**
@@ -5956,7 +3422,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSuperscriptWithTheTwoOtherFormatsItalicThenBoldApplied()
+    public function testSuperscriptThenItalicThenBold()
     {
         // Test applying superscript and italic then bold
         $this->useTest(1);
@@ -5993,42 +3459,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><strong><em><sup>%1%</sup></em></strong></p>');
 
-        // Test applying superscript and italic then bold using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        // Test removing superscript and italic then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-
-        // Test re-applying superscript and italic then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><strong><em><sup>%1%</sup></em></strong></p>');
-
-    }//end testSuperscriptWithTheTwoOtherFormatsItalicThenBoldApplied()
+    }//end testSuperscriptThenItalicThenBold()
 
 
     /**
@@ -6036,7 +3467,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSuperscriptWithTheTwoOtherFormatsItalicThenStrikethroughApplied()
+    public function testSuperscriptThenItalicThenStrikethrough()
     {
         // Test applying superscript and italic then strikethrough
         $this->useTest(1);
@@ -6071,40 +3502,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><del><em><sup>%1%</sup></em></del></p>');
 
-        // Test applying superscript and italic then strikethrough using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test removing superscript and italic then strikethrough using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-
-        // Test re-applying superscript and italic then strikethrough using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><del><em><sup>%1%</sup></em></del></p>');
-
-    }//end testSuperscriptWithTheTwoOtherFormatsItalicThenStrikethroughApplied()
+    }//end testSuperscriptThenItalicThenStrikethrough()
 
 
     /**
@@ -6112,7 +3510,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSuperscriptWithTheTwoOtherFormatsStrikethroughThenBoldApplied()
+    public function testSuperscriptThenStrikethroughThenBold()
     {
         // Test applying superscript and strikethrough then bold
         $this->useTest(1);
@@ -6147,40 +3545,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><strong><del><sup>%1%</sup></del></strong></p>');
 
-        // Test applying superscript and strikethrough then bold using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        // Test removing superscript and strikethrough then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-
-        // Test re-applying superscript and strikethrough then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><strong><del><sup>%1%</sup></del></strong></p>');
-
-    }//end testSuperscriptWithTheTwoOtherFormatsStrikethroughThenBoldApplied()
+    }//end testSuperscriptThenStrikethroughThenBold()
 
 
     /**
@@ -6188,7 +3553,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSuperscriptWithTheTwoOtherFormatsStrikethroughThenItalicApplied()
+    public function testSuperscriptThenStrikethroughThenItalic()
     {
         // Test applying superscript and strikethrough then italic
         $this->useTest(1);
@@ -6223,40 +3588,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><em><del><sup>%1%</sup></del></em></p>');
 
-        // Test applying superscript and strikethrough then italic using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        // Test removing superscript and strikethrough then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-
-        // Test re-applying superscript and strikethrough then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><em><del><sup>%1%</sup></del></em></p>');
-
-    }//end testSuperscriptWithTheTwoOtherFormatsStrikethroughThenItalicApplied()
+    }//end testSuperscriptThenStrikethroughThenItalic()
 
 
     /**
@@ -6264,7 +3596,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSuperscriptWithTheThreeOtherFormatsBoldThenItalicThenStrikethroughApplied()
+    public function testSuperscriptThenBoldThenItalicThenStrikethrough()
     {
         // Test applying superscript and bold then italic then strikethrough
         $this->useTest(1);
@@ -6308,49 +3640,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><del><em><strong><sup>%1%</sup></strong></em></del></p>');
 
-        // Test applying superscript and bold then italic then strikethrough using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test removing superscript and bold then italic then strikethrough using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-
-        // Test re-applying superscript and bold then italic then strikethrough using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><del><em><strong><sup>%1%</sup></strong></em></del></p>');
-
-    }//end testSuperscriptWithTheThreeOtherFormatsBoldThenItalicThenStrikethroughApplied()
+    }//end testSuperscriptThenBoldThenItalicThenStrikethrough()
 
 
     /**
@@ -6358,7 +3648,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSuperscriptWithTheThreeOtherFormatsBoldThenStrikethroughThenItalicApplied()
+    public function testSuperscriptThenBoldThenStrikethroughThenItalic()
     {
         // Test applying superscript and bold then strikethrough then italic
         $this->useTest(1);
@@ -6402,49 +3692,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><em><del><strong><sup>%1%</sup></strong></del></em></p>');
 
-        // Test applying superscript and bold then strikethrough then italic using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        // Test removing superscript and bold then strikethrough then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-
-        // Test re-applying superscript and bold then strikethrough then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><em><del><strong><sup>%1%</sup></strong></del></em></p>');
-
-    }//end testSuperscriptWithTheThreeOtherFormatsBoldThenStrikethroughThenItalicApplied()
+    }//end testSuperscriptThenBoldThenStrikethroughThenItalic()
 
 
     /**
@@ -6452,7 +3700,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSuperscriptWithTheThreeOtherFormatsItalicThenBoldThenStrikethroughApplied()
+    public function testSuperscriptThenItalicThenBoldThenStrikethrough()
     {
         // Test applying superscript and italic then bold then strikethrough
         $this->useTest(1);
@@ -6496,49 +3744,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><del><strong><em><sup>%1%</sup></em></strong></del></p>');
 
-        // Test applying superscript and italic then bold then strikethrough using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        // Test removing superscript and italic then bold then strikethrough using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-
-        // Test re-applying superscript and italic then bold then strikethrough using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><del><strong><em><sup>%1%</sup></em></strong></del></p>');
-
-    }//end testSuperscriptWithTheThreeOtherFormatsItalicThenBoldThenStrikethroughApplied()
+    }//end testSuperscriptThenItalicThenBoldThenStrikethrough()
 
 
     /**
@@ -6546,7 +3752,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSuperscriptWithTheThreeOtherFormatsItalicThenStrikethroughThenBoldApplied()
+    public function testSuperscriptThenItalicThenStrikethroughThenBold()
     {
         // Test applying superscript and italic then strikethrough then bold
         $this->useTest(1);
@@ -6590,49 +3796,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><strong><del><em><sup>%1%</sup></em></del></strong></p>');
 
-        // Test applying superscript and italic then strikethrough then bold using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-
-        // Test removing superscript and italic then strikethrough then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the inline toolbar should not be active');
-
-        // Test re-applying superscript and italic then strikethrough then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-
-        $this->assertHTMLMatch('<p><strong><del><em><sup>%1%</sup></em></del></strong></p>');
-
-    }//end testSuperscriptWithTheThreeOtherFormatsItalicThenStrikethroughThenBoldApplied()
+    }//end testSuperscriptThenItalicThenStrikethroughThenBold()
 
 
     /**
@@ -6640,7 +3804,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSuperscriptWithTheThreeOtherFormatsStrikethroughThenBoldThenItalicApplied()
+    public function testSuperscriptThenStrikethroughThenBoldThenItalic()
     {
         // Test applying superscript and strikethrough then bold then italic
         $this->useTest(1);
@@ -6684,49 +3848,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><em><strong><del><sup>%1%</sup></del></strong></em></p>');
 
-        // Test applying superscript and strikethrough then bold then italic using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        // Test removing superscript and strikethrough then bold then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-
-        // Test re-applying superscript and strikethrough then bold then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Bold');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><em><strong><del><sup>%1%</sup></del></strong></em></p>');
-
-    }//end testSuperscriptWithTheThreeOtherFormatsStrikethroughThenBoldThenItalicApplied()
+    }//end testSuperscriptThenStrikethroughThenBoldThenItalic()
 
 
     /**
@@ -6734,7 +3856,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testSuperscriptWithTheThreeOtherFormatsStrikethroughThenItalicThenBoldApplied()
+    public function testSuperscriptThenStrikethroughThenItalicThenBold()
     {
         // Test applying superscript and strikethrough then italic then bold
         $this->useTest(1);
@@ -6778,49 +3900,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><strong><em><del><sup>%1%</sup></del></em></strong></p>');
 
-        // Test applying superscript and strikethrough then italic then bold using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-
-        // Test removing superscript and strikethrough then italic then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the inline toolbar should not be active');
-
-        // Test re-applying superscript and strikethrough then italic then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->getOSAltShortcut('Bold');
-
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-
-        $this->assertHTMLMatch('<p><strong><em><del><sup>%1%</sup></del></em></strong></p>');
-
-    }//end testSuperscriptWithTheThreeOtherFormatsStrikethroughThenItalicThenBoldApplied()
+    }//end testSuperscriptThenStrikethroughThenItalicThenBold()
 
 
     /**
@@ -6828,7 +3908,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testStrikethroughWithTheOtherFormatBoldApplied()
+    public function testStrikethroughThenBold()
     {
         // Test applying strikethrough and bold
         $this->useTest(1);
@@ -6850,40 +3930,14 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
         // Test re-applying strikethrough and bold
         $this->clickTopToolbarButton('strikethrough', NULL);
         $this->clickTopToolbarButton('bold', NULL);
-        $this->assertHTMLMatch('<p><strong><del>%1%</del></strong></p>');
 
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        // Test applying strikethrough and bold using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        // Test removing strikethrough and bold using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('bold', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-
-        // Test re-applying strikethrough and bold using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-        
         $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
         $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
         $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
 
         $this->assertHTMLMatch('<p><strong><del>%1%</del></strong></p>');
 
-    }//end testStrikethroughWithTheOtherFormatBoldApplied()
+    }//end testStrikethroughThenBold()
 
 
     /**
@@ -6891,7 +3945,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testStrikethroughWithTheOtherFormatItalicApplied()
+    public function testStrikethroughThenItalic()
     {
         // Test applying strikethrough and italic using the top toolbar
         $this->useTest(1);
@@ -6920,34 +3974,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><em><del>%1%</del></em></p>');
 
-        // Test applying strikethrough and italic using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        // Test removing strikethrough and italic using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-
-        // Test re-applying strikethrough and italic using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-        
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><em><del>%1%</del></em></p>');
-
-    }//end testStrikethroughWithTheOtherFormatItalicApplied()
+    }//end testStrikethroughThenItalic()
 
 
     /**
@@ -6955,7 +3982,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testStrikethroughWithTheOtherFormatSubscriptApplied()
+    public function testStrikethroughThenSubscript()
     {
         // Test applying strikethrough and subscript
         $this->useTest(1);
@@ -6982,32 +4009,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sub><del>%1%</del></sub></p>');
 
-        // Test applying strikethrough and subscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        // Test removing strikethrough and subscript using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('subscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-
-        // Test re-applying strikethrough and subscript using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-        
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sub><del>%1%</del></sub></p>');
-
-    }//end testStrikethroughWithTheOtherFormatSubscriptApplied()
+    }//end testStrikethroughThenSubscript()
 
 
     /**
@@ -7015,7 +4017,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testStrikethroughWithTheOtherFormatSuperscriptApplied()
+    public function testStrikethroughThenSuperscript()
     {
         // Test applying strikethrough and superscript
         $this->useTest(1);
@@ -7042,32 +4044,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sup><del>%1%</del></sup></p>');
 
-        // Test applying strikethrough and superscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        // Test removing strikethrough and superscript using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('superscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-
-        // Test re-applying strikethrough and superscript using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-        
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sup><del>%1%</del></sup></p>');
-
-    }//end testStrikethroughWithTheOtherFormatSuperscriptApplied()
+    }//end testStrikethroughThenSuperscript()
 
 
     /**
@@ -7075,7 +4052,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testStrikethroughWithTheTwoOtherFormatsItalicThenSubscriptApplied()
+    public function testStrikethroughThenItalicThenSubscript()
     {
         // Test applying strikethrough and italic then subscript
         $this->useTest(1);
@@ -7110,40 +4087,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sub><em><del>%1%</del></em></sub></p>');
 
-        // Test applying strikethrough and italic then subscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        // Test removing strikethrough and italic then subscript using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-
-        // Test re-applying strikethrough and italic then subscript using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sub><em><del>%1%</del></em></sub></p>');
-
-    }//end testStrikethroughWithTheTwoOtherFormatsItalicThenSubscriptApplied()
+    }//end testStrikethroughThenItalicThenSubscript()
 
 
     /**
@@ -7151,7 +4095,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testStrikethroughWithTheTwoOtherFormatsItalicThenSuperscriptApplied()
+    public function testStrikethroughThenItalicThenSuperscript()
     {
         // Test applying strikethrough and italic then superscript
         $this->useTest(1);
@@ -7186,40 +4130,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sup><em><del>%1%</del></em></sup></p>');
 
-        // Test applying strikethrough and italic then superscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        // Test removing strikethrough and italic then superscript using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-
-        // Test re-applying strikethrough and italic then superscript using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sup><em><del>%1%</del></em></sup></p>');
-
-    }//end testStrikethroughWithTheTwoOtherFormatsItalicThenSuperscriptApplied()
+    }//end testStrikethroughThenItalicThenSuperscript()
 
 
     /**
@@ -7227,7 +4138,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testStrikethroughWithTheTwoOtherFormatsItalicThenBoldApplied()
+    public function testStrikethroughThenItalicThenBold()
     {
         // Test applying strikethrough and italic then bold
         $this->useTest(1);
@@ -7264,43 +4175,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><strong><em><del>%1%</del></em></strong></p>');
 
-        // Test applying strikethrough and italic then bold using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('bold', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        // Test removing strikethrough and italic then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('bold', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-
-        // Test re-applying strikethrough and italic then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('bold', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><strong><em><del>%1%</del></em></strong></p>');
-
-
-    }//end testStrikethroughWithTheTwoOtherFormatsItalicThenBoldApplied()
+    }//end testStrikethroughThenItalicThenBold()
 
 
     /**
@@ -7308,7 +4183,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testStrikethroughWithTheTwoOtherFormatsSubscriptThenItalicApplied()
+    public function testStrikethroughThenSubscriptThenItalic()
     {
         // Test applying strikethrough and subscript then italic
         $this->useTest(1);
@@ -7343,40 +4218,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><em><sub><del>%1%</del></sub></em></p>');
 
-        // Test applying strikethrough and subscript then italic using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        // Test removing strikethrough and subscript then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-
-        // Test re-applying strikethrough and subscript then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><em><sub><del>%1%</del></sub></em></p>');
-
-    }//end testStrikethroughWithTheTwoOtherFormatsSubscriptThenItalicApplied()
+    }//end testStrikethroughThenSubscriptThenItalic()
 
 
     /**
@@ -7384,7 +4226,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testStrikethroughWithTheTwoOtherFormatsSubscriptThenBoldApplied()
+    public function testStrikethroughThenSubscriptThenBold()
     {
         // Test applying strikethrough and subscript then bold
         $this->useTest(1);
@@ -7419,40 +4261,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><strong><sub><del>%1%</del></sub></strong></p>');
 
-        // Test applying strikethrough and subscript then bold using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        // Test removing strikethrough and subscript then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->clickTopToolbarButton('bold', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-
-        // Test re-applying strikethrough and subscript then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><strong><sub><del>%1%</del></sub></strong></p>');
-
-    }//end testStrikethroughWithTheTwoOtherFormatsSubscriptThenBoldApplied()
+    }//end testStrikethroughThenSubscriptThenBold()
 
 
     /**
@@ -7460,7 +4269,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testStrikethroughWithTheTwoOtherFormatsSuperscriptThenItalicApplied()
+    public function testStrikethroughThenSuperscriptThenItalic()
     {
         // Test applying strikethrough and superscript then italic
         $this->useTest(1);
@@ -7495,40 +4304,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><em><sup><del>%1%</del></sup></em></p>');
 
-        // Test applying strikethrough and superscript then italic using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        // Test removing strikethrough and superscript then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-
-        // Test re-applying strikethrough and superscript then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><em><sup><del>%1%</del></sup></em></p>');
-
-    }//end testStrikethroughWithTheTwoOtherFormatsSuperscriptThenItalicApplied()
+    }//end testStrikethroughThenSuperscriptThenItalic()
 
 
     /**
@@ -7536,7 +4312,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testStrikethroughWithTheTwoOtherFormatsSuperscriptThenBoldApplied()
+    public function testStrikethroughThenSuperscriptThenBold()
     {
         // Test applying strikethrough and superscript then bold
         $this->useTest(1);
@@ -7571,40 +4347,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><strong><sup><del>%1%</del></sup></strong></p>');
 
-        // Test applying strikethrough and superscript then bold using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        // Test removing strikethrough and superscript then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->clickTopToolbarButton('bold', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-
-        // Test re-applying strikethrough and superscript then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><strong><sup><del>%1%</del></sup></strong></p>');
-
-    }//end testStrikethroughWithTheTwoOtherFormatsSuperscriptThenBoldApplied()
+    }//end testStrikethroughThenSuperscriptThenBold()
 
 
     /**
@@ -7612,7 +4355,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testStrikethroughWithTheTwoOtherFormatsBoldThenItalicApplied()
+    public function testStrikethroughThenBoldThenItalic()
     {
         // Test applying strikethrough and bold then italic
         $this->useTest(1);
@@ -7649,42 +4392,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><em><strong><del>%1%</del></strong></em></p>');
 
-        // Test applying strikethrough and bold then italic using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        // Test removing strikethrough and bold then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('bold', 'active');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the top toolbar should not be active');
-
-        // Test re-applying strikethrough and bold then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><em><strong><del>%1%</del></strong></em></p>');
-
-    }//end testStrikethroughWithTheTwoOtherFormatsBoldThenItalicApplied()
+    }//end testStrikethroughThenBoldThenItalic()
 
 
     /**
@@ -7692,7 +4400,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testStrikethroughWithTheTwoOtherFormatsBoldThenSubscriptApplied()
+    public function testStrikethroughThenBoldThenSubscript()
     {
         // Test applying strikethrough and bold then subscript
         $this->useTest(1);
@@ -7727,40 +4435,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sub><strong><del>%1%</del></strong></sub></p>');
 
-        // Test applying strikethrough and bold then subscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        // Test removing strikethrough and bold then subscript using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('bold', 'active');
-        $this->clickTopToolbarButton('subscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-
-        // Test re-applying strikethrough and bold then subscript using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sub><strong><del>%1%</del></strong></sub></p>');
-
-    }//end testStrikethroughWithTheTwoOtherFormatsBoldThenSubscriptApplied()
+    }//end testStrikethroughThenBoldThenSubscript()
 
 
     /**
@@ -7768,7 +4443,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testStrikethroughWithTheTwoOtherFormatsBoldThenSuperscriptApplied()
+    public function testStrikethroughThenBoldThenSuperscript()
     {
         // Test applying strikethrough and bold then superscript
         $this->useTest(1);
@@ -7803,40 +4478,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sup><strong><del>%1%</del></strong></sup></p>');
 
-        // Test applying strikethrough and bold then superscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        // Test removing strikethrough and bold then superscript using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('bold', 'active');
-        $this->clickTopToolbarButton('superscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-
-        // Test re-applying strikethrough and bold then superscript using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sup><strong><del>%1%</del></strong></sup></p>');
-
-    }//end testStrikethroughWithTheTwoOtherFormatsBoldThenSuperscriptApplied()
+    }//end testStrikethroughThenBoldThenSuperscript()
 
 
     /**
@@ -7844,7 +4486,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testStrikethroughWithTheThreeOtherFormatsItalicThenSubscriptThenBoldApplied()
+    public function testStrikethroughThenItalicThenSubscriptThenBold()
     {
         // Test applying strikethrough and italic then subscript then bold
         $this->useTest(1);
@@ -7888,48 +4530,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><strong><sub><em><del>%1%</del></em></sub></strong></p>');
 
-        // Test applying strikethrough and italic then subscript then bold using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        // Test removing strikethrough and italic then subscript then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->clickTopToolbarButton('bold', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-
-        // Test re-applying strikethrough and italic then subscript then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><strong><sub><em><del>%1%</del></em></sub></strong></p>');
-
-    }//end testStrikethroughWithTheThreeOtherFormatsItalicThenSubscriptThenBoldApplied()
+    }//end testStrikethroughThenItalicThenSubscriptThenBold()
 
 
     /**
@@ -7937,7 +4538,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testStrikethroughWithTheThreeOtherFormatsItalicThenSuperscriptThenBoldApplied()
+    public function testStrikethroughThenItalicThenSuperscriptThenBold()
     {
         // Test applying strikethrough and italic then superscript then bold
         $this->useTest(1);
@@ -7981,48 +4582,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><strong><sup><em><del>%1%</del></em></sup></strong></p>');
 
-        // Test applying strikethrough and italic then superscript then bold using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        // Test removing strikethrough and italic then superscript then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->clickTopToolbarButton('bold', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-
-        // Test re-applying strikethrough and italic then superscript then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><strong><sup><em><del>%1%</del></em></sup></strong></p>');
-
-    }//end testStrikethroughWithTheThreeOtherFormatsItalicThenSuperscriptThenBoldApplied()
+    }//end testStrikethroughThenItalicThenSuperscriptThenBold()
 
 
     /**
@@ -8030,7 +4590,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testStrikethroughWithTheThreeOtherFormatsItalicThenBoldThenSubscriptApplied()
+    public function testStrikethroughThenItalicThenBoldThenSubscript()
     {
         // Test applying strikethrough and italic then bold then subscript
         $this->useTest(1);
@@ -8074,48 +4634,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sub><strong><em><del>%1%</del></em></strong></sub></p>');
 
-        // Test applying strikethrough and italic then bold then subscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('bold', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        // Test removing strikethrough and italic then bold then subscript using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('bold', 'active');
-        $this->clickTopToolbarButton('subscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-
-        // Test re-applying strikethrough and italic then bold then subscript using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('bold', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sub><strong><em><del>%1%</del></em></strong></sub></p>');
-
-    }//end testStrikethroughWithTheThreeOtherFormatsItalicThenBoldThenSubscriptApplied()
+    }//end testStrikethroughThenItalicThenBoldThenSubscript()
 
 
     /**
@@ -8123,7 +4642,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testStrikethroughWithTheThreeOtherFormatsItalicThenBoldThenSuperscriptApplied()
+    public function testStrikethroughThenItalicThenBoldThenSuperscript()
     {
         // Test applying strikethrough and italic then bold then superscript
         $this->useTest(1);
@@ -8167,48 +4686,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sup><strong><em><del>%1%</del></em></strong></sup></p>');
 
-        // Test applying strikethrough and italic then bold then superscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('bold', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        // Test removing strikethrough and italic then bold then superscript using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('bold', 'active');
-        $this->clickTopToolbarButton('superscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-
-        // Test re-applying strikethrough and italic then bold then superscript using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('bold', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sup><strong><em><del>%1%</del></em></strong></sup></p>');
-
-    }//end testStrikethroughWithTheThreeOtherFormatsItalicThenBoldThenSuperscriptApplied()
+    }//end testStrikethroughThenItalicThenBoldThenSuperscript()
 
 
     /**
@@ -8216,7 +4694,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testStrikethroughWithTheThreeOtherFormatsSubscriptThenItalicThenBoldApplied()
+    public function testStrikethroughThenSubscriptThenItalicThenBold()
     {
         // Test applying strikethrough and subscript then italic then bold
         $this->useTest(1);
@@ -8260,48 +4738,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><strong><em><sub><del>%1%</del></sub></em></strong></p>');
 
-        // Test applying strikethrough and subscript then italic then bold using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('bold', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        // Test removing strikethrough and subscript then italic then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('bold', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-
-        // Test re-applying strikethrough and subscript then italic then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('bold', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><strong><em><sub><del>%1%</del></sub></em></strong></p>');
-
-    }//end testStrikethroughWithTheThreeOtherFormatsSubscriptThenItalicThenBoldApplied()
+    }//end testStrikethroughThenSubscriptThenItalicThenBold()
 
 
     /**
@@ -8309,7 +4746,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testStrikethroughWithTheThreeOtherFormatsSubscriptThenBoldThenItalicApplied()
+    public function testStrikethroughThenSubscriptThenBoldThenItalic()
     {
         // Test applying strikethrough and subscript then bold then italic
         $this->useTest(1);
@@ -8330,8 +4767,8 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
         // Test removing strikethrough and subscript then bold then italic
         $this->clickTopToolbarButton('strikethrough', 'active');
         $this->clickTopToolbarButton('subscript', 'active');
-        $this->clickTopToolbarButton('italic', 'active');
         $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
 
         $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
         $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
@@ -8353,48 +4790,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><em><strong><sub><del>%1%</del></sub></strong></em></p>');
 
-        // Test applying strikethrough and subscript then bold then italic using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-
-        // Test removing strikethrough and subscript then bold then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->clickTopToolbarButton('bold', 'active');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the inline toolbar should not be active');
-
-        // Test re-applying strikethrough and subscript then bold then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-
-        $this->assertHTMLMatch('<p><em><strong><sub><del>%1%</del></sub></strong></em></p>');
-
-    }//end testStrikethroughWithTheThreeOtherFormatsSubscriptThenBoldThenItalicApplied()
+    }//end testStrikethroughThenSubscriptThenBoldThenItalic()
 
 
     /**
@@ -8402,7 +4798,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testStrikethroughWithTheThreeOtherFormatsSuperscriptThenItalicThenBoldApplied()
+    public function testStrikethroughThenSuperscriptThenItalicThenBold()
     {
         // Test applying strikethrough and superscript then italic then bold
         $this->useTest(1);
@@ -8446,48 +4842,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><strong><em><sup><del>%1%</del></sup></em></strong></p>');
 
-        // Test applying strikethrough and superscript then italic then bold using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('bold', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        // Test removing strikethrough and superscript then italic then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('bold', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-
-        // Test re-applying strikethrough and superscript then italic then bold using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('bold', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><strong><em><sup><del>%1%</del></sup></em></strong></p>');
-
-    }//end testStrikethroughWithTheThreeOtherFormatsSuperscriptThenItalicThenBoldApplied()
+    }//end testStrikethroughThenSuperscriptThenItalicThenBold()
 
 
     /**
@@ -8495,7 +4850,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testStrikethroughWithTheThreeOtherFormatsSuperscriptThenBoldThenItalicApplied()
+    public function testStrikethroughThenSuperscriptThenBoldThenItalic()
     {
         // Test applying strikethrough and superscript then bold then italic
         $this->useTest(1);
@@ -8516,8 +4871,8 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
         // Test removing strikethrough and superscript then bold then italic
         $this->clickTopToolbarButton('strikethrough', 'active');
         $this->clickTopToolbarButton('superscript', 'active');
-        $this->clickTopToolbarButton('italic', 'active');
         $this->clickTopToolbarButton('bold', 'active');
+        $this->clickTopToolbarButton('italic', 'active');
 
         $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
         $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
@@ -8539,48 +4894,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><em><strong><sup><del>%1%</del></sup></strong></em></p>');
 
-        // Test applying strikethrough and superscript then bold then italic using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-
-        // Test removing strikethrough and superscript then bold then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->clickTopToolbarButton('bold', 'active');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the inline toolbar should not be active');
-
-        // Test re-applying strikethrough and superscript then bold then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-
-        $this->assertHTMLMatch('<p><em><strong><sup><del>%1%</del></sup></strong></em></p>');
-
-    }//end testStrikethroughWithTheThreeOtherFormatsSuperscriptThenBoldThenItalicApplied()
+    }//end testStrikethroughThenSuperscriptThenBoldThenItalic()
 
 
     /**
@@ -8588,7 +4902,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testStrikethroughWithTheThreeOtherFormatsBoldThenItalicThenSubscriptApplied()
+    public function testStrikethroughThenBoldThenItalicThenSubscript()
     {
         // Test applying strikethrough and bold then italic then subscript
         $this->useTest(1);
@@ -8632,48 +4946,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sub><em><strong><del>%1%</del></strong></em></sub></p>');
 
-        // Test applying strikethrough and bold then italic then subscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        // Test removing strikethrough and bold then italic then subscript using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('bold', 'active');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-
-        // Test re-applying strikethrough and bold then italic then subscript using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('subscript', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sub><em><strong><del>%1%</del></strong></em></sub></p>');
-
-    }//end testStrikethroughWithTheThreeOtherFormatsBoldThenItalicThenSubscriptApplied()
+    }//end testStrikethroughThenBoldThenItalicThenSubscript()
 
 
     /**
@@ -8681,7 +4954,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testStrikethroughWithTheThreeOtherFormatsBoldThenItalicThenSuperscriptApplied()
+    public function testStrikethroughThenBoldThenItalicThenSuperscript()
     {
         // Test applying strikethrough and bold then italic then superscript
         $this->useTest(1);
@@ -8725,48 +4998,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><sup><em><strong><del>%1%</del></strong></em></sup></p>');
 
-        // Test applying strikethrough and bold then italic then superscript using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        // Test removing strikethrough and bold then italic then superscript using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('bold', 'active');
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', 'active');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the inline toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-
-        // Test re-applying strikethrough and bold then italic then superscript using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-        $this->getOSAltShortcut('Italic');
-        $this->clickTopToolbarButton('superscript', NULL);
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-
-        $this->assertHTMLMatch('<p><sup><em><strong><del>%1%</del></strong></em></sup></p>');
-
-    }//end testStrikethroughWithTheThreeOtherFormatsBoldThenItalicThenSuperscriptApplied()
+    }//end testStrikethroughThenBoldThenItalicThenSuperscript()
 
 
     /**
@@ -8774,7 +5006,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testStrikethroughWithTheThreeOtherFormatsBoldThenSubscriptThenItalicApplied()
+    public function testStrikethroughThenBoldThenSubscriptThenItalic()
     {
         // Test applying strikethrough and bold then subscript then italic
         $this->useTest(1);
@@ -8818,48 +5050,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><em><sub><strong><del>%1%</del></strong></sub></em></p>');
 
-        // Test applying strikethrough and bold then subscript then italic using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-
-        // Test removing strikethrough and bold then subscript then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('bold', 'active');
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL), 'Subscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the inline toolbar should not be active');
-
-        // Test re-applying strikethrough and bold then subscript then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-        $this->clickTopToolbarButton('subscript', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-
-        $this->assertHTMLMatch('<p><em><sub><strong><del>%1%</del></strong></sub></em></p>');
-
-    }//end testStrikethroughWithTheThreeOtherFormatsBoldThenSubscriptThenItalicApplied()
+    }//end testStrikethroughThenBoldThenSubscriptThenItalic()
 
 
     /**
@@ -8867,7 +5058,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testStrikethroughWithTheThreeOtherFormatsBoldThenSuperscriptThenItalicApplied()
+    public function testStrikethroughThenBoldThenSuperscriptThenItalic()
     {
         // Test applying strikethrough and bold then superscript then italic
         $this->useTest(1);
@@ -8911,48 +5102,7 @@ class Viper_Tests_ViperCoreStylesPlugin_CoreFormatsUnitTest extends AbstractVipe
 
         $this->assertHTMLMatch('<p><em><sup><strong><del>%1%</del></strong></sup></em></p>');
 
-        // Test applying strikethrough and bold then superscript then italic using keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-
-        // Test removing strikethrough and bold then superscript then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->clickTopToolbarButton('bold', 'active');
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL), 'Strikethrough icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL), 'Bold icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL), 'Superscript icon in the top toolbar should not be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL), 'Italic icon in the inline toolbar should not be active');
-
-        // Test re-applying strikethrough and bold then superscript then italic using keyboard shortcuts
-        $this->clickTopToolbarButton('strikethrough', NULL);
-        $this->clickTopToolbarButton('bold', NULL);
-        $this->clickTopToolbarButton('superscript', NULL);
-        $this->getOSAltShortcut('Italic');
-
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar should be active');
-        $this->assertTrue($this->inlineToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-        $this->assertTrue($this->topToolbarButtonExists('italic', 'active'), 'Italic icon in the inline toolbar should be active');
-
-        $this->assertHTMLMatch('<p><em><sup><strong><del>%1%</del></strong></sup></em></p>');
-
-    }//end testStrikethroughWithTheThreeOtherFormatsBoldThenSuperscriptThenItalicApplied()
+    }//end testStrikethroughThenBoldThenSuperscriptThenItalic()
     
 }//end class
 
