@@ -940,6 +940,10 @@
         getSurroundedChildren: function(element, asTagNames)
         {
             var children = [];
+            if (!element) {
+                return children;
+            }
+
             if (element.childNodes.length !== 1 || element.firstChild.nodeType !== ViperUtil.ELEMENT_NODE) {
                 return children;
             }
