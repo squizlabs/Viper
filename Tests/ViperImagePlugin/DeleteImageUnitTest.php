@@ -265,7 +265,7 @@ class Viper_Tests_ViperImagePlugin_DeleteImageUnitTest extends AbstractViperImag
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->assertHTMLMatch('<p>%1% Test content.</p>');
 
-        // Test arrow keys and delete key 
+        // Test arrow keys and delete key
         $this->useTest(7);
         $this->moveToKeyword(1, 'left');
         $this->sikuli->keyDown('Key.LEFT');
@@ -284,7 +284,7 @@ class Viper_Tests_ViperImagePlugin_DeleteImageUnitTest extends AbstractViperImag
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->assertHTMLMatch('<p>%1%&nbsp;&nbsp;%2% Test content.</p>');
 
-        // Test arrow keys and delete key 
+        // Test arrow keys and delete key
         $this->useTest(8);
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
@@ -302,7 +302,7 @@ class Viper_Tests_ViperImagePlugin_DeleteImageUnitTest extends AbstractViperImag
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->assertHTMLMatch('<p>Test content. %1%</p>');
 
-        // Test arrow keys and delete key 
+        // Test arrow keys and delete key
         $this->useTest(9);
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');

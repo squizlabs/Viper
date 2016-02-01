@@ -1955,7 +1955,19 @@
                         var textNode  = null;
 
                         // Find the relevant text node.
-                        if (ViperUtil.isStubElement(lastChild) === true) {
+                        if (ViperUtil.isStubElement(ViperUtil.getSurroundedChildren(range.startContainer).pop()) === true) {
+                            // Remove the whole element.
+                            textNode = range.getPreviousContainer(range.startContainer);
+                            ViperUtil.remove(range.startContainer);
+                            if (textNode) {
+                                range.setStart(textNode, textNode.data.length);
+                                range.collapse(true);
+                                ViperSelection.addRange(range);
+                            }
+
+                            this._viper.contentChanged();
+                            return false;
+                        } else if (ViperUtil.isStubElement(lastChild) === true) {
                             // For stub elements get the previous container.
                             textNode = range.getPreviousContainer(lastChild);
                         } else if (lastChild.nodeType === ViperUtil.ELEMENT_NODE) {
@@ -2044,7 +2056,11 @@
                                 this._viper.contentChanged();
                                 return false;
                             }
-                        } else if (this._viper.isSpecialElement(range.startContainer.previousSibling) === true) {
+                        } else if (this._viper.isSpecialElement(range.startContainer.previousSibling) === true
+                            || ViperUtil.isStubElement(range.startContainer.previousSibling) === true
+                            || ViperUtil.isStubElement(ViperUtil.getSurroundedChildren(range.startContainer.previousSibling).pop()) === true
+                        ) {
+                            // Previous sibling is a stub element (img, br, hr etc).
                             var node = range.startContainer.previousSibling;
                             var surroundingParents = ViperUtil.getSurroundingParents(node);
                             if (surroundingParents.length > 0) {
@@ -2057,20 +2073,28 @@
                         } else {
                             var previousContainer = range.getPreviousContainer(range.startContainer);
                             if (previousContainer) {
-                                if (previousContainer.nodeType === ViperUtil.TEXT_NODE) {
-                                    range.setStart(previousContainer, previousContainer.data.length);
-                                } else if (ViperUtil.isStubElement(previousContainer) === true) {
-                                    // Handle case <p>text<strong>text</strong><br/>*</p>.
-                                    ViperUtil.remove(previousContainer);
-                                    this._viper.contentChanged(true);
-                                    return false;
+                                if (this._viper.isOutOfBounds(previousContainer) === true) {
+                                    if (range.startContainer.previousSibling) {
+                                        ViperUtil.remove(range.startContainer.previousSibling);
+                                        this._viper.contentChanged(true);
+                                        return false;
+                                    }
                                 } else {
-                                    range.setStart(previousContainer, 0);
-                                }
+                                    if (previousContainer.nodeType === ViperUtil.TEXT_NODE) {
+                                        range.setStart(previousContainer, previousContainer.data.length);
+                                    } else if (ViperUtil.isStubElement(previousContainer) === true) {
+                                        // Handle case <p>text<strong>text</strong><br/>*</p>.
+                                        ViperUtil.remove(previousContainer);
+                                        this._viper.contentChanged(true);
+                                        return false;
+                                    } else {
+                                        range.setStart(previousContainer, 0);
+                                    }
 
-                                range.collapse(true);
-                                ViperSelection.addRange(range);
-                                return;
+                                    range.collapse(true);
+                                    ViperSelection.addRange(range);
+                                    return;
+                                }
                             }
                         }
                     }
@@ -2644,6 +2668,10 @@
                         ViperUtil.remove(startNode.nextSibling);
                         this._viper.contentChanged();
                         return false;
+                    } else if (ViperUtil.isStubElement(ViperUtil.getSurroundedChildren(startNode.nextSibling).pop()) === true) {
+                        ViperUtil.remove(startNode.nextSibling);
+                        this._viper.contentChanged();
+                        return false;
                     } else if (!startNode.nextSibling) {
                         // Check if the next container is a special element.
                         var nextSelectable = range.getNextContainer(startNode, null, true, true, true);
@@ -2746,11 +2774,16 @@
                 }//end if
             } else {
                 // Element Node.
-                if (ViperUtil.isStubElement(startNode) === false) {
+                var startNodeIsStub = ViperUtil.isStubElement(startNode);
+                if (startNodeIsStub === false) {
                     var textNode = range._getFirstSelectableChild(startNode);
                     if (textNode) {
                         range.setStart(textNode, 0);
                     }
+                } else if (startNodeIsStub === true) {
+                    this._viper.moveCaretAway(startNodeIsStub);
+                    var surroundingParents = ViperUtil.getSurroundingParents(startNodeIsStub);
+                    ViperUtil.remove(surroundingParents.pop() || startNode);
                 } else if (ViperUtil.isTag(startNode, 'br') === true
                     && startNode.parentNode
                     && (ViperUtil.isBrowser('firefox') === true || ViperUtil.isBrowser('msie') === true || ViperUtil.isBrowser('edge') === true)
@@ -3259,6 +3292,18 @@
                         var startNode = range.getStartNode();
                         if (startNode && startNode.nodeType !== ViperUtil.TEXT_NODE) {
                             var nextSelectable = range.getNextContainer(startContainer, null, true, true, true);
+
+                            if (ViperUtil.isStubElement(startNode) === true) {
+                                // Remove stub element or its surroundingParents.
+                                var parents = ViperUtil.getSurroundingParents(startNode);
+                                if (parents.length > 0) {
+                                    startNode = parents.pop();
+                                }
+
+                                ViperUtil.remove(startNode);
+                                this._viper.contentChanged();
+                                return false;
+                            }
 
                             if (nextSelectable) {
                                 var startParent = range.startContainer;
