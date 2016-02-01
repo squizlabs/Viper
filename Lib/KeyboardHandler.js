@@ -560,7 +560,7 @@
          */
         keyDown: function(e)
         {
-            this._viper._viperRange = null;
+            this._viper.resetViperRange(null);
             var range        = this._viper.getCurrentRange();
 
             if (this._keyDownRangeCollapsed === true) {
