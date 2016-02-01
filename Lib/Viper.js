@@ -1148,10 +1148,10 @@
                 this.highlightToSelection(element);
             }
 
-            if (this._viperRange) {console.info('viper');
+            if (this._viperRange) {
                 return this._viperRange;
             }
-console.info('current')
+
             return this.getCurrentRange();
 
         },
