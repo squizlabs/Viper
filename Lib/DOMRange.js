@@ -1067,7 +1067,9 @@
                 && range.startOffset === range.startContainer.data.length
                 && range.endContainer.nodeType === ViperUtil.ELEMENT_NODE
                 && range.endOffset === range.endContainer.childNodes.length
+                && ViperUtil.isText((range.endContainer.childNodes[range.endContainer.childNodes.length - 1]).previousSibling) === true
             ) {
+                // <p>text[<img />]</p>.
                 this._nodeSel.node = range.endContainer.childNodes[range.endContainer.childNodes.length - 1];
                 return this._nodeSel.node;
             } else if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
