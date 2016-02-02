@@ -1970,6 +1970,15 @@
                         } else if (ViperUtil.isStubElement(lastChild) === true) {
                             // For stub elements get the previous container.
                             textNode = range.getPreviousContainer(lastChild);
+                            ViperUtil.remove(lastChild);
+                            if (textNode) {
+                                range.setStart(textNode, textNode.data.length);
+                                range.collapse(true);
+                                ViperSelection.addRange(range);
+                            }
+
+                            this._viper.contentChanged();
+                            return false;
                         } else if (lastChild.nodeType === ViperUtil.ELEMENT_NODE) {
                             // Node with content, get the last selectable child.
                             textNode = range._getLastSelectableChild(lastChild);
@@ -2669,6 +2678,12 @@
                         this._viper.contentChanged();
                         return false;
                     } else if (ViperUtil.isStubElement(ViperUtil.getSurroundedChildren(startNode.nextSibling).pop()) === true) {
+                        ViperUtil.remove(startNode.nextSibling);
+                        this._viper.contentChanged();
+                        return false;
+                    } else if (ViperUtil.isStubElement(startNode.nextSibling) === true
+                        && ViperUtil.isTag(startNode.nextSibling, 'br') === false
+                    ) {
                         ViperUtil.remove(startNode.nextSibling);
                         this._viper.contentChanged();
                         return false;
