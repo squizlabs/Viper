@@ -231,7 +231,6 @@
                             range.collapse(true);
                             ViperSelection.addRange(range);
                             this._viper.fireNodesChanged([range.startContainer]);
-                            //this._viper.contentChanged(true);
                             return false;
                         } else if (range.startContainer.data.length === 0) {
                             if (range.startContainer.previousSibling
@@ -347,6 +346,26 @@
                         }
 
                         if (textContainer && textContainer.nodeType === ViperUtil.TEXT_NODE) {
+                            if (textContainer.previousSibling
+                                && ViperUtil.isStubElement(textContainer.previousSibling) === false
+                                && ViperUtil.isText(textContainer.previousSibling) === false
+                                && ViperUtil.isBrowser('firefox') === true
+                            ) {
+                                // Firefox needs to insert the character to the previous sibling.
+                                // <p>text<strong>insert text here</strong>* more text</p> ->
+                                // <p>text<strong>insert text hereNEW*</strong> more text</p>.
+                                var prevCont = range._getLastSelectableChild(textContainer.previousSibling);
+                                if (ViperUtil.isText(prevCont) === true) {
+                                    prevCont.data += char;
+                                    range.setStart(prevCont, prevCont.data.length);
+                                    range.collapse(true);
+                                    ViperSelection.addRange(range);
+                                    this._viper.fireNodesChanged([textContainer]);
+                                    return false;
+                                }
+
+                            }
+
                             // At the start of a text node with an element sibling. Make sure character is inserted in this
                             // text node.
                             // Also make sure that there is no non breaking space at the start text node followed by a non
