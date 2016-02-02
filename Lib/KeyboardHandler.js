@@ -217,6 +217,23 @@
                         && range.collapsed === true
                         && range.startOffset === range.startContainer.data.length
                     ) {
+                        if (range.startContainer.nextSibling
+                            && ViperUtil.isText(range.startContainer.nextSibling) === false
+                            && ViperUtil.isStubElement(range.startContainer.nextSibling) === false
+                        ) {
+                            // At the end of a text node with element sibling.. Insert the text to the start of the
+                            // next sibling.
+                            var textNode = range._getFirstSelectableChild(range.startContainer.nextSibling);
+                            if (ViperUtil.isText(textNode) === true) {
+                                textNode.data = String.fromCharCode(e.which) + textNode.data;
+                                range.setStart(textNode, 1);
+                                range.collapse(true);
+                                ViperSelection.addRange(range);
+                                this._viper.contentChanged();
+                                return false;
+                            }
+                        }
+
                         if (range.startContainer.data.charAt(range.startOffset - 1) === ' ') {
                             // Inserting text at the end of a text node that ends with a space to prevent browser removing the
                             // space.
@@ -399,12 +416,6 @@
                                         ViperSelection.addRange(range);
                                         this._viper.fireNodesChanged([textContainer]);
                                         return false;
-                                    } else {
-                                        range.setStart(parent.previousSibling, parent.previousSibling.data.length);
-                                        range.collapse(true);
-                                        ViperSelection.addRange(range);
-                                        this._viper.fireNodesChanged([textContainer]);
-                                        return true;
                                     }
                                 } else if (char === ' ') {
                                     char = String.fromCharCode(160);
