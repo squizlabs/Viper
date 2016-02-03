@@ -795,6 +795,10 @@
                     && ViperUtil.trim(ViperUtil.trim(endNode.data)).replace(String.fromCharCode(160), '') === ''
                 ) {
                     endNode.data = '';
+                    if (range.startContainer === endNode && range.collapsed === true && range.startOffset > 0) {
+                        range.setStart(endNode, 0);
+                        range.collapse(true);
+                    }
                 }
             } catch (e) {
                 // IE error catch...
@@ -2440,8 +2444,23 @@
                 ) {
                      // Check if there is a parent element with a selectable.
                     var prevSelectable = range.getPreviousContainer(firstSelectable, null, true, true);
+                    var prevParent     = prevSelectable.parentNode;
                     if (prevSelectable && this._viper.isOutOfBounds(prevSelectable) === false) {
                         while (firstBlock.lastChild) {
+                            if (ViperUtil.isText(firstBlock.lastChild) === true
+                                && ViperUtil.isBlank(ViperUtil.trim(firstBlock.lastChild.data)) === true
+                                && firstBlock.lastChild === firstBlock.firstChild
+                            ) {
+                                // If the text node is empty and its the only child then do not join it to the previous
+                                // container.
+                                if (firstSelectable === firstBlock.lastChild) {
+                                    firstSelectable = null;
+                                }
+
+                                ViperUtil.remove(firstBlock.lastChild);
+                                continue;
+                            }
+
                             ViperUtil.insertAfter(prevSelectable, firstBlock.lastChild);
                         }
 
@@ -2455,7 +2474,15 @@
                             ViperUtil.remove(firstBlockParent);
                         }
 
-                        range.setStart(firstSelectable, 0);
+                        var offset = 0;
+                        if (firstSelectable === null) {
+                            firstSelectable = range._getLastSelectableChild(prevParent);
+                            if (ViperUtil.isText(firstSelectable) === true) {
+                                offset = firstSelectable.data.length;
+                            }
+                        }
+
+                        range.setStart(firstSelectable, offset);
                         range.collapse(true);
                         ViperSelection.addRange(range);
 
