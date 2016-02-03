@@ -17,24 +17,28 @@
 
     Viper.KeyboardHandler.prototype = {
         init: function() {
-            var self      = this;
-            var elem      = this._viper.getViperElement();
-            var namespace = this._viper.getEventNamespace();
+            var self            = this;
+            var elem            = this._viper.getViperElement();
+            var namespace       = this._viper.getEventNamespace();
+            var isKeyboardEvent = false;
 
             // Add key events. Note that there is a known issue with IME keyboard events
             // see https://bugzilla.mozilla.org/show_bug.cgi?id=354358. This effects
             // change tracking while using Korean, Chinese etc.
             ViperUtil.addEvent(elem, 'keypress.' + namespace, function(e) {
+                isKeyboardEvent = true;
                 return self.keyPress(e);
             });
 
             ViperUtil.addEvent(elem, 'keydown.' + namespace, function(e) {
+                isKeyboardEvent = true;
                 return self.keyDown(e);
             });
 
             // This keydown event will make sure that any selection started outside of Viper element and ended inside
             // Viper element is not going to trigger browser's 'back button'.
             ViperUtil.addEvent(Viper.document, 'keydown.' + namespace, function(e) {
+                isKeyboardEvent = true;
                 if (e.which === 8 || e.which === 46) {
                     var range = self._viper.getCurrentRange();
                     if (self._viper.isOutOfBounds(range.startContainer) === true
@@ -47,7 +51,16 @@
             });
 
             ViperUtil.addEvent(elem, 'keyup.' + namespace, function(e) {
+                isKeyboardEvent = false;
                 return self.keyUp(e);
+            });
+
+            Viper.Util.addEvent(elem, 'input.' + namespace, function(e) {
+                if (isKeyboardEvent === false) {
+                    // Browser's spellchecker correction fires this event. But this event also fires for
+                    // keydown, keyup and keypress.
+                    self._viper.contentChanged();
+                }
             });
 
             this._viper.registerCallback('ViperFormatPlugin:formatChanged', 'KeyboardHandler', function(type) {
