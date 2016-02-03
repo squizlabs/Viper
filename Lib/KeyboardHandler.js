@@ -866,7 +866,7 @@
                     range.selectNode(midP.firstChild);
                     range.collapse(true);
                     ViperSelection.addRange(range);
-                    this._viper.fireSelectionChanged();
+                    this._viper.contentChanged();
                     return false;
                 }
             }//end if
@@ -895,7 +895,7 @@
                     range.setStart(br.nextSibling, 0);
                     range.collapse(true);
                     ViperSelection.addRange(range);
-
+                    this._viper.contentChanged();
                     return false;
                 } else if (firstBlock) {
                     var firstBlockTagName = ViperUtil.getTagName(firstBlock);
@@ -924,6 +924,7 @@
                             range.setStart(br, 0);
                             range.collapse(true);
                             ViperSelection.addRange(range);
+                            this._viper.contentChanged();
                             return false;
                         }
 
@@ -975,6 +976,7 @@
                                         range.selectNode(newList.firstChild);
                                         range.collapse(true);
                                         ViperSelection.addRange(range);
+                                        this._viper.contentChanged();
                                         return false;
                                     }
                                 }
@@ -1498,6 +1500,7 @@
             ) {
                 // Handle <p>test *<strong>text</strong></p>.
                 this.splitAtRange();
+                this._viper.contentChanged();
                 return false;
             } else if (range.startContainer === range.endContainer
                 && defaultTagName !== ''
@@ -1526,6 +1529,7 @@
             ) {
                 // Hande enter when <p><strong>test</strong><em>*test</em></p> and  <p><strong>test</strong>*test</p>.
                 this.splitAtRange();
+                this._viper.contentChanged();
                 return false;
             }//end if
 
@@ -1779,6 +1783,7 @@
                     // Firefox does not handle deletion at the start of a block element
                     // very well when the previous sibling is a stub element (e.g. HR).
                     ViperUtil.remove(firstBlock.previousElementSibling);
+                    this._viper.contentChanged();
                     return false;
                 } else if (e.keyCode === 8
                     && range.collapsed === true
@@ -1858,6 +1863,7 @@
                     && startNode.data.length === range.endOffset
                 ) {
                     ViperUtil.setHtml(startNode.parentNode, '<br />');
+                    this._viper.contentChanged();
                     return false;
                 } else if ((ViperUtil.isTag(range.commonAncestorContainer, 'ul') || ViperUtil.isTag(range.commonAncestorContainer, 'ol'))) {
                     // Second issue is with removing multiple list items.
@@ -2783,6 +2789,7 @@
                                 range.setStart(startNode, len);
                                 range.collapse(true);
                                 ViperSelection.addRange(range);
+                                this._viper.contentChanged();
                                 return false;
                             }
                         }
@@ -3060,6 +3067,7 @@
                 ) {
                     // Previous element is a stub element, remove it.
                     ViperUtil.remove(currentParent.previousElementSibling);
+                    this._viper.contentChanged();
                     return false;
                 } else if (currentParent !== prevParent && this._viper.isOutOfBounds(prevSelectable) === false) {
                     // Check if there are any other elements in between.
@@ -3347,6 +3355,7 @@
                             } else if (startContainer.data.length === 0) {
                                 if (this._viper.isSpecialElement(startContainer.nextSibling) === true) {
                                     ViperUtil.remove(startContainer.nextSibling);
+                                    this._viper.contentChanged(true);
                                     return false;
                                 }
                             }
@@ -3354,12 +3363,14 @@
                             // At the end of a text node.
                             if (this._viper.isSpecialElement(startContainer.nextSibling) === true) {
                                 ViperUtil.remove(startContainer.nextSibling);
+                                this._viper.contentChanged(true);
                                 return false;
                             } else if (!startContainer.nextSibling) {
                                 // Check if the next container is a special element.
                                 var nextSelectable = range.getNextContainer(startContainer, null, true, true, true);
                                 if (nextSelectable && this._viper.isSpecialElement(nextSelectable.parentNode) === true) {
                                     ViperUtil.remove(nextSelectable.parentNode);
+                                    this._viper.contentChanged(true);
                                     return false;
                                 }
                             }
@@ -3371,6 +3382,7 @@
                             range.setStart(startContainer, startContainer.data.length);
                             range.collapse(true);
                             ViperSelection.addRange(range);
+                            this._viper.contentChanged();
                             return false;
                         }
                     } else {
