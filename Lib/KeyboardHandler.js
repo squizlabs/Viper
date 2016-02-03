@@ -911,7 +911,11 @@
                             this.splitList(firstBlock);
                             this._viper.contentChanged();
                             return false;
-                        } else if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true || ViperUtil.isBrowser('msie') === true) {
+                        } else if (ViperUtil.isBrowser('chrome') === true 
+                            || ViperUtil.isBrowser('safari') === true 
+                            || ViperUtil.isBrowser('msie') === true 
+                            || ViperUtil.isBrowser('edge') === true
+                        ) {
                             handleEnter = true;
                             removeFirstBlock = true;
                         }
@@ -949,7 +953,7 @@
                             removeFirstBlock = true;
                         } else {
                             if (firstBlockTagName === 'li') {
-                                if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true || ViperUtil.isBrowser('msie') === true) {
+                                if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true || ViperUtil.isBrowser('msie') === true || ViperUtil.isBrowser('edge') === true) {
                                     var parentListItem = ViperUtil.getFirstBlockParent(firstBlock.parentNode);
                                     if (parentListItem && ViperUtil.isTag(parentListItem, 'li') === true) {
                                         newList = document.createElement('li');
