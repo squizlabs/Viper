@@ -445,7 +445,6 @@
                             // Handle: <div>*<br/><ul><li>aaa</li></ul></div>.
                             var textNode = document.createTextNode(char);
                             ViperUtil.insertBefore(startNode, textNode);
-                            ViperUtil.remove(startNode);
                             range.setStart(textNode, 1);
                             range.collapse(true);
                             ViperSelection.addRange(range);
