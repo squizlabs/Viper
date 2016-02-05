@@ -507,6 +507,28 @@
                                 return false;
                             }
                         }
+                    } else if (ViperUtil.isText(range.startContainer) === false && range.collapsed === true && char !== ' ') {
+                        var startNode = range.getStartNode();
+                        if (ViperUtil.isText(startNode) === true) {
+                            // At the start of a text node.
+                            if (ViperUtil.isText(startNode.previousSibling) === true) {
+                                var prevSib = startNode.previousSibling;
+                                var prevLen  = prevSib.data.length;
+                                // Previous sibling is also a text node. Join these nodes and insert character in between.
+                                if (prevSib.data.charCodeAt(prevLen - 1) === 160) {
+                                    // Fix space.
+                                    prevSib.data = prevSib.data.substr(0, (prevLen - 1)) + ' ';
+                                }
+
+                                prevSib.data += char + startNode.data;
+                                ViperUtil.remove(startNode);
+                                range.setStart(prevSib, prevLen + 1);
+                                range.collapse(true);
+                                ViperSelection.addRange(range);
+                                this._viper.fireNodesChanged([prevSib]);
+                                return false;
+                            }
+                        }
                     }
                 }//end if
 
