@@ -1893,6 +1893,10 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             break;
         }
 
+        if ($this->sikuli->getBrowserid() === 'edge') {
+            usleep(500000);
+        }
+
     }//end moveToKeyword()
 
 
