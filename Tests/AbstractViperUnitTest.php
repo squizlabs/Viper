@@ -1837,7 +1837,18 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 ($this->sikuli->getY($endRight) + 2)
             );
 
-            $this->sikuli->dragDrop($endRight, $startLeft);
+            if ($this->sikuli->getY($startLeft) !== $this->sikuli->getY($endRight)) {
+                // When the selection is in different paragraphs, list items etc then
+                // IE and Edge selects the whole paragraph/list item. Need to move the mouse
+                // slightly to the right and then back to final destination.
+                $this->sikuli->drag($endRight);
+                $this->sikuli->mouseMove($startLeft);
+                $this->sikuli->mouseMoveOffset(10, 0);
+                $this->sikuli->mouseMoveOffset(-10, 0);
+                $this->sikuli->dropAt($startLeft);
+            } else {
+                $this->sikuli->dragDrop($endRight, $startLeft);
+            }
             usleep(200000);
         } else {
             $this->sikuli->setLocation(
