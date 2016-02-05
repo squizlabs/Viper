@@ -495,12 +495,11 @@
                         // Text node and range is collapsed.
                         if (range.startOffset > 0) {
                             if (char !== ' '
-                                && range.startContainer.data.charCodeAt(range.startOffset - 1) === 32
-                                && range.startContainer.data.charCodeAt(range.startOffset) === 160
+                                && (range.startContainer.data.charCodeAt(range.startOffset - 1) === 32 || range.startContainer.data.charCodeAt(range.startOffset - 1) === 160)
+                                && (range.startContainer.data.charCodeAt(range.startOffset) === 160 || range.startContainer.data.charCodeAt(range.startOffset) === 32)
                             ) {
-                                // New character is being inserted in between two spaces where one
-                                // is a nbsp. Convert the nbsp to normal space.
-                                range.startContainer.data = range.startContainer.data.substr(0, range.startOffset) + char + ' ' + range.startContainer.data.substr(range.startOffset + 1);
+                                // New character is being inserted in between two spaces, convert the nbsp to normal space.
+                                range.startContainer.data = range.startContainer.data.substr(0, range.startOffset - 1) + ' ' + char + ' ' + range.startContainer.data.substr(range.startOffset + 1);
                                 range.setStart(range.startContainer, range.startOffset + 1);
                                 range.collapse(true);
                                 ViperSelection.addRange(range);
