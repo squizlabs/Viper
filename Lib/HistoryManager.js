@@ -193,7 +193,7 @@
 
             // Fire nodesChanged event.
             this._ignoreAdd = true;
-            this.viper._viperRange = null;
+            this.viper.resetViperRange(null);
             this.viper.fireNodesChanged([this.viper.getViperElement()]);
             this.viper.fireCallbacks('ViperHistoryManager:undo');
             this.viper.fireSelectionChanged();
@@ -226,7 +226,7 @@
 
             // Fire nodesChanged event.
             this._ignoreAdd = true;
-            this.viper._viperRange = null;
+            this.viper.resetViperRange(null);
             this.viper.fireNodesChanged([this.viper.getViperElement()]);
             this.viper.fireCallbacks('ViperHistoryManager:redo');
             this.viper.fireSelectionChanged();

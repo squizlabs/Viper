@@ -891,7 +891,9 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->useTest(7);
 
         // Test adding content to the start of the bold formatting
-        $this->clickKeyword(2);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test ');
         $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test <strong>%2% %3%</strong> content to test</p>');
@@ -902,7 +904,8 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test <strong>%2% test %3%</strong> content to test</p>');
 
         // Test adding content to the end of bold formatting
-        $this->clickKeyword(3);
+        $this->moveToKeyword(3, 'left');
+        $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->type(' %4%');

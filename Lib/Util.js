@@ -940,6 +940,10 @@
         getSurroundedChildren: function(element, asTagNames)
         {
             var children = [];
+            if (!element) {
+                return children;
+            }
+
             if (element.childNodes.length !== 1 || element.firstChild.nodeType !== ViperUtil.ELEMENT_NODE) {
                 return children;
             }
@@ -1437,6 +1441,23 @@
             }
 
             return null;
+
+        },
+
+        copyAttributes: function(fromElem, toElem, override)
+        {
+            override = override || true;
+
+            if (!fromElem || !toElem) {
+                return;
+            }
+
+            for (var i = 0; i < fromElem.attributes.length; i++) {
+                var attr = fromElem.attributes[i];
+                if (override !== true || this.hasAttribute(toElem, attr.name) === false) {
+                    this.attr(toElem, attr.name, attr.value);
+                }
+            }
 
         },
 

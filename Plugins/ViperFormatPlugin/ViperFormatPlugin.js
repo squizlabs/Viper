@@ -2346,6 +2346,8 @@
                     ViperUtil.remove(element);
                 }
 
+                ViperUtil.copyAttributes(element, newElem);
+
                 return newElem;
             } else {
                 var newElem = document.createElement(type);
@@ -2373,6 +2375,7 @@
                         var childPTag = childPTags[i];
 
                         var div = document.createElement('div');
+                        ViperUtil.copyAttributes(element, div);
                         ViperUtil.insertBefore(element, div);
                         while (childPTag.firstChild) {
                             div.appendChild(childPTag.firstChild);
@@ -2411,6 +2414,8 @@
                     }
 
                     ViperUtil.insertBefore(element, newElem);
+
+                    ViperUtil.copyAttributes(element, newElem);
                 }
 
                 ViperUtil.remove(element);
