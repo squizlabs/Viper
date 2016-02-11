@@ -508,7 +508,7 @@
 
             Viper.Util.addEvent(elem, 'blur.' + namespace, function(e) {
                 if (!self._viperRange) {
-                    self._viperRange = self._currentRange;
+                    self.resetViperRange(self._currentRange);
                 }
             });
 
@@ -637,7 +637,7 @@
          */
         setEnabled: function(enabled)
         {
-            this._viperRange = null;
+            this.resetViperRange(null);
 
             var range = null;
             if (enabled === true && this.enabled === false) {
@@ -645,7 +645,8 @@
                 this.enabled = true;
 
                 // Word-wrap attribute changes when contentEditable is set to true.
-                this._setRadOnlyStyles()
+                this._setRadOnlyStyles();
+                Viper.Selection._viper = this;
 
                 this.element.setAttribute('contentEditable', true);
                 Viper.Util.setStyle(this.element, 'outline', 'none');
@@ -803,7 +804,7 @@
                 this._useDefaultPlugins();
             }
 
-            this._viperRange = null;
+            this.resetViperRange(null);
 
             if (this.element) {
                 this.element.setAttribute('contentEditable', false);
@@ -3458,7 +3459,7 @@
 
             if (element === this.element) {
                 Viper.Selection.addRange(range);
-                this._viperRange = range.cloneRange();
+                this.resetViperRange(range.cloneRange());
             }
 
             return true;
@@ -3641,7 +3642,7 @@
                 }, 5);
             }
 
-            this._viperRange = null;
+            this.resetViperRange(null);
 
         },
 
@@ -3765,7 +3766,7 @@
             }
 
             if (type === 'mouseup'
-                && endNode 
+                && endNode
                 && endNode.nodeType === Viper.Util.TEXT_NODE
                 && range.endOffset === 0
                 && endNode !== startNode
@@ -4272,7 +4273,7 @@
                 clone.appendChild(contents);
             }
 
-            this._viperRange = null;
+            this.resetViperRange(null);
 
             var range          = this.getCurrentRange();
             var lastSelectable = range._getLastSelectableChild(clone);

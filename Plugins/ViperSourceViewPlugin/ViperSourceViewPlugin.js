@@ -70,8 +70,24 @@
                 }, 250);
             });
 
-            this.viper.registerCallback(['Viper:editableElementChanged', 'Viper:disabled', 'Viper:clickedInside'], 'ViperSourceViewPlugin', function(nodes) {
-                self.hideSourceView();
+            this.viper.registerCallback(['Viper:editableElementChanged', 'Viper:disabled'], 'ViperSourceViewPlugin', function(nodes) {
+                if (self._toolbarButtonToggles !== true) {
+                    self.hideSourceView();
+                }
+            });
+
+            this.viper.registerCallback('ViperToolbarPlugin:canEnableToolbar', 'ViperSourceViewPlugin', function() {
+                if (self._toolbarButtonToggles === true && self._isVisible === true) {
+                    self.toolbarPlugin.disable();
+                    return false;
+                }
+            });
+
+            this.viper.registerCallback('ViperToolbarPlugin:disabled', 'ViperSourceViewPlugin', function() {
+                if (self._toolbarButtonToggles === true && self._isVisible === true) {
+                    self.viper.Tools.enableButton('sourceEditor');
+                    self.viper.Tools.setButtonActive('sourceEditor');
+                }
             });
 
             this.viper.registerCallback('Viper:getHtml', 'ViperSourceViewPlugin', function(data) {
@@ -157,9 +173,8 @@
                         self.viper.Tools.openPopup('VSVP:popup', 800, 600);
                     } else if (this._toolbarButtonToggles === true) {
                         // Do the disabling of toolbar here when the custom container provided.
+                        this._isVisible = true;
                         this.toolbarPlugin.disable();
-                        this.viper.Tools.enableButton('sourceEditor');
-                        this.viper.Tools.setButtonActive('sourceEditor');
                     }
 
                     this.viper.fireCallbacks('ViperSourceViewPlugin:showSourceView');
@@ -204,7 +219,9 @@
 
                 if (this._toolbarButtonToggles === true) {
                     // Apply changes.
+                    this._isVisible = false;
                     this.updatePageContents();
+                    this.toolbarPlugin.enable();
                     this.viper.Tools.setButtonInactive('sourceEditor');
                 }
 
@@ -394,11 +411,15 @@
             var self = this;
             this._removeScrollAttribute();
             this._isVisible = false;
-            this.toolbarPlugin.enable();
 
-            setTimeout(function() {
-                self.viper.focus();
-            }, 10);
+            if (this.viper.isEnabled() !== false) {
+                this.toolbarPlugin.enable();
+
+                setTimeout(function() {
+                    self.viper.focus();
+                }, 10);
+            }
+
         },
 
         _initAceEditor: function(containerElement, callback)

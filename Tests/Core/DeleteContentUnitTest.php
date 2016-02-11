@@ -58,7 +58,6 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
         // Place cursor infront of word and press delete for content across two paragraphs
         $this->useTest(1);
         $this->moveToKeyword(1, 'left');
-        sleep(1);
 
         for ($i = 0; $i < 8; $i++) {
             $this->sikuli->keyDown('Key.DELETE');
