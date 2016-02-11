@@ -760,7 +760,7 @@
 
         enable: function()
         {
-            if (this._enabled === true) {
+            if (this._enabled === true || this.viper.fireCallbacks('ViperToolbarPlugin:canEnableToolbar') === false) {
                 return;
             }
 
@@ -768,11 +768,11 @@
             ViperUtil.removeClass(this._toolbar, 'viper-inactive');
             ViperUtil.addClass(this._toolbar, 'viper-active');
 
-            this.viper.fireCallbacks('ViperToolbarPlugin:enabled');
-
             while (this._enabledButtons.length) {
                 this.viper.Tools.enableButton(this._enabledButtons.pop());
             }
+
+            this.viper.fireCallbacks('ViperToolbarPlugin:enabled');
 
         },
 
@@ -832,7 +832,7 @@
 
         _updateToolbar: function(range)
         {
-            if (this.viper.isEnabled() === false) {
+            if (this.viper.isEnabled() === false || this._enabled === false) {
                 return;
             }
 

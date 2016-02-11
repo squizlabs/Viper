@@ -62,6 +62,7 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->moveToKeyword(3, 'right');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
@@ -76,6 +77,7 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
         $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
 
         $this->moveToKeyword(4, 'right');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
@@ -325,6 +327,7 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
         $this->moveToKeyword(3, 'right');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
@@ -339,6 +342,7 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 
         $this->moveToKeyword(4, 'right');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
 

@@ -2537,7 +2537,7 @@
 
                 // Convert list style to type.
                 var listStyle = ViperUtil.getStyle(list, 'list-style-type');
-                if (listStyle) {console.info(listStyle);
+                if (listStyle) {
                     var type = styleToType[listStyle];
                     if (type) {
                         list.setAttribute('type', type);

@@ -645,7 +645,8 @@
                 this.enabled = true;
 
                 // Word-wrap attribute changes when contentEditable is set to true.
-                this._setRadOnlyStyles()
+                this._setRadOnlyStyles();
+                Viper.Selection._viper = this;
 
                 this.element.setAttribute('contentEditable', true);
                 Viper.Util.setStyle(this.element, 'outline', 'none');

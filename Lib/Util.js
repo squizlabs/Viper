@@ -1444,6 +1444,23 @@
 
         },
 
+        copyAttributes: function(fromElem, toElem, override)
+        {
+            override = override || true;
+
+            if (!fromElem || !toElem) {
+                return;
+            }
+
+            for (var i = 0; i < fromElem.attributes.length; i++) {
+                var attr = fromElem.attributes[i];
+                if (override !== true || this.hasAttribute(toElem, attr.name) === false) {
+                    this.attr(toElem, attr.name, attr.value);
+                }
+            }
+
+        },
+
         hasAttribute: function(element, attribute)
         {
             if (element.hasAttribute) {
