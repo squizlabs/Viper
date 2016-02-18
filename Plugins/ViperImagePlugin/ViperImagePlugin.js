@@ -904,6 +904,34 @@
 
             this._resizeImage = image;
 
+            var windowWidth = ViperUtil.getWindowDimensions().width;
+            var sizeDiv     = document.createElement('div');
+            ViperUtil.addClass(sizeDiv, 'ViperImagePlugin-sizeDiv');
+            this.viper.addElement(sizeDiv);
+            this._resizeHandles.push(sizeDiv);
+            ViperUtil.addEvent(
+                sizeDiv,
+                'mousedown',
+                function (e) {
+                    // Reset size.
+                    ViperUtil.attr(image, 'width', image.naturalWidth + 'px');
+                    ViperUtil.attr(image, 'height', image.naturalHeight + 'px');
+                    _updateSize();
+                    ViperUtil.preventDefault(e);
+                }
+            );
+
+            var _updateSize = function (rect) {
+                rect = rect || ViperUtil.getBoundingRectangle(image);
+                ViperUtil.setStyle(sizeDiv, 'right', windowWidth - (rect.x2) + 15 + 'px');
+                ViperUtil.setStyle(sizeDiv, 'top', (rect.y2) - 30 + 'px');
+                var sizeHtml = image.width + ' x ' + image.height;
+                sizeHtml    += ' <span class="ViperImagePlugin-origSize">(' + image.naturalWidth + ' x ' + image.naturalHeight + ')</span>';
+                sizeHtml    += ' <span class="ViperImagePlugin-reset">' + _('Reset') + '</span>';
+                ViperUtil.setHtml(sizeDiv, sizeHtml);
+            };
+            _updateSize(rect);
+
             var self = this;
             var _addMouseEvents = function(handle, rev) {
                 ViperUtil.addEvent(handle, 'mousedown', function(e) {
@@ -957,6 +985,8 @@
 
                         ViperUtil.setStyle(swHandle, 'left', (rect.x1 + offset.x) + 'px');
                         ViperUtil.setStyle(swHandle, 'top', (rect.y2 + offset.y) + 'px');
+
+                        _updateSize(rect);
 
                         ViperUtil.preventDefault(e);
                         return false;
