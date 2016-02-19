@@ -1260,6 +1260,36 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
     }//end testUndoAndRedoForHeadings()
 
 
+    /**
+     * Test undo and redo for headings.
+     *
+     * @return void
+     */
+    public function testChangingHeadingTypeWithClassAndAnchor()
+    {
+        $this->useTest(18);
+
+        $this->selectKeyword(1,2);
+        $this->clickTopToolbarButton('headings');
+        $this->clickTopToolbarButton('H1', NULL, TRUE);
+
+        $this->clickTopToolbarButton('cssClass');
+        $this->type('test-class');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test-anchor');
+        $this->sikuli->keyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<h1 class="test-class" id="test-anchor">%1% Test Heading %2%</h1><p>%3% Test content.</p>');
+
+        $this->clickTopToolbarButton('headings', 'active');
+        $this->clickTopToolbarButton('H2', NULL, TRUE);
+
+        $this->assertHTMLMatch('<h2 class="test-class" id="test-anchor">%1% Test Heading %2%</h2><p>%3% Test content.</p>');
+
+    }//end testChangingHeadingTypeWithClassAndAnchor()
+
+
 }//end class
 
 ?>

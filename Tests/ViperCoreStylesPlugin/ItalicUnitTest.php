@@ -824,9 +824,9 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->useTest(7);
 
         // Test adding content to the start of the italic formatting
-        $this->clickKeyword(2);
+        $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.LEFT');
-        $this->type('test ');
+        $this->type(' test');
         $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic test <em>%2% %3%</em> content to test</p>');
 
         // Test adding content in the middle of italic formatting
@@ -835,9 +835,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic test <em>%2% test %3%</em> content to test</p>');
 
         // Test adding content to the end of italic formatting
-        $this->clickKeyword(3);
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.RIGHT');
+        $this->moveToKeyword(3, 'right');
         $this->type(' %4%');
         $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic test <em>%2% test %3% %4%</em> content to test</p>');
 

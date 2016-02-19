@@ -552,6 +552,32 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
     }//end testFormatIconForLinkedListItems()
 
 
+    /**
+     * Test removing a link for a list item.
+     *
+     * @return void
+     */
+    public function testAddingListItemsToLinkedItem()
+    {
+        // Test ordered list
+        $this->useTest(7);
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->clickTopToolbarButton('listOl');
+        $this->moveToKeyword(1, 'right');
+
+        for ($i = 0; $i < 22; $i++) {
+            $this->sikuli->keyDown('Key.RIGHT');
+        }
+
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('Test content.');
+        sleep(1);
+        $this->assertHTMLMatch('<ol><li>%1% <a href="https://www.squiz.net">https://www.squiz.net</a></li><li></li></ol>');
+
+    }//end testAddingListItemsToLinkedItem()
+
+
+
 }//end class
 
 ?>
