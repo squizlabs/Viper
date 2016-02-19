@@ -1261,7 +1261,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
 
 
     /**
-     * Test undo and redo for headings.
+     * Test that changing headings doesn't remove class and anchor.
      *
      * @return void
      */
