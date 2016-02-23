@@ -1269,23 +1269,27 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
     {
         $this->useTest(18);
 
-        $this->selectKeyword(1,2);
+        $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('headings');
         $this->clickTopToolbarButton('H1', NULL, TRUE);
 
+        // Apply class and anochor
         $this->clickTopToolbarButton('cssClass');
         $this->type('test-class');
         $this->sikuli->keyDown('Key.ENTER');
         $this->clickTopToolbarButton('anchorID');
         $this->type('test-anchor');
         $this->sikuli->keyDown('Key.ENTER');
-
         $this->assertHTMLMatch('<h1 class="test-class" id="test-anchor">%1% Test Heading %2%</h1><p>%3% Test content.</p>');
 
+        // Changing heading type
         $this->clickTopToolbarButton('headings', 'active');
         $this->clickTopToolbarButton('H2', NULL, TRUE);
-
         $this->assertHTMLMatch('<h2 class="test-class" id="test-anchor">%1% Test Heading %2%</h2><p>%3% Test content.</p>');
+
+        // Removing heading shouldn't remove class and anchor
+        $this->clickTopToolbarButton('H2', 'active', TRUE);
+        $this->assertHTMLMatch('<p class="test-class" id="test-anchor">%1% Test Heading %2%</p><p>%3% Test content.</p>');
 
     }//end testChangingHeadingTypeWithClassAndAnchor()
 
