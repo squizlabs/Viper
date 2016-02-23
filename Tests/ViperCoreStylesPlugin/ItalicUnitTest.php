@@ -780,35 +780,33 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
     {
         // Test adding content before italic content when cursor starts inside the italic content
         $this->useTest(9);
-        $this->clickKeyword(2);
+        $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.LEFT');
-        $this->type('new');
-        $this->assertHTMLMatch('<p>%1% new<em>%2%</em> %3%</p>');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('new ');
+        $this->assertHTMLMatch('<p>%1% <em>new a %2% b</em> %3%</p>');
 
         // Test adding content before italic content when cursor starts elsewhere in content
         $this->useTest(9);
-        $this->clickKeyword(1);
+        $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->type('new');
-        $this->assertHTMLMatch('<p>%1% new<em>%2%</em> %3%</p>');
+        $this->type('new ');
+        $this->assertHTMLMatch('<p>%1% <em>new a %2% b</em> %3%</p>');
 
         // Test adding content after italic content when cursor starts inside the italic content
         $this->useTest(9);
-        $this->clickKeyword(2);
+        $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
-        $this->type('new');
-        $this->assertHTMLMatch('<p>%1% <em>%2%new</em> %3%</p>');
+        $this->type(' new');
+        $this->assertHTMLMatch('<p>%1% <em>a %2% b new</em> %3%</p>');
 
         // Test adding content before italic content when cursor starts elsewhere in content
         $this->useTest(9);
-        $this->clickKeyword(3);
+        $this->moveToKeyword(3, 'left');
         $this->sikuli->keyDown('Key.LEFT');
-        $this->sikuli->keyDown('Key.LEFT');
-        $this->type('new');
-        $this->assertHTMLMatch('<p>%1% <em>%2%new</em> %3%</p>');
+        $this->type(' new');
+        $this->assertHTMLMatch('<p>%1% <em>a %2% b new</em> %3%</p>');
 
     }//end testAddingContentAroundItalicContent()
 
