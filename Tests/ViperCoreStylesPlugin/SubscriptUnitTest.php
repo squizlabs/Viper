@@ -301,34 +301,37 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
         $this->useTest(4);
 
         // Test adding content to the start of the subscript formatting
-        $this->moveToKeyword(2, 'left');
+        $this->clickKeyword(2);
+        $this->sikuli->keyDown('Key.LEFT');
         $this->type('test ');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sub>%1%</sub></p><p>Some more subscript <sub>test %2% %3%</sub> content to test</p>');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sub>%1%</sub></p><p>Some more subscript test <sub>%2% %3%</sub> content to test</p>');
 
         // Test adding content in the middle of subscript formatting
         $this->moveToKeyword(2, 'right');
         $this->type(' test');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sub>%1%</sub></p><p>Some more subscript <sub>test %2% test %3%</sub> content to test</p>');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sub>%1%</sub></p><p>Some more subscript test <sub>%2% test %3%</sub> content to test</p>');
 
         // Test adding content to the end of subscript formatting
-        $this->moveToKeyword(3, 'right');
+        $this->clickKeyword(3);
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
         $this->type(' %4%');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sub>%1%</sub></p><p>Some more subscript <sub>test %2% test %3% %4%</sub> content to test</p>');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sub>%1%</sub></p><p>Some more subscript test <sub>%2% test %3% %4%</sub> content to test</p>');
 
         // Test highlighting some content in the subscript tags and replacing it
         $this->selectKeyword(3);
         $this->type('abc');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sub>%1%</sub></p><p>Some more subscript <sub>test %2% test abc %4%</sub> content to test</p>');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sub>%1%</sub></p><p>Some more subscript test <sub>%2% test abc %4%</sub> content to test</p>');
 
         $this->selectKeyword(2);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('abc');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sub>%1%</sub></p><p>Some more subscript <sub>test abc test abc %4%</sub> content to test</p>');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sub>%1%</sub></p><p>Some more subscript test <sub>abc test abc %4%</sub> content to test</p>');
 
         $this->selectKeyword(4);
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('test');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sub>%1%</sub></p><p>Some more subscript <sub>test abc test abc test</sub> content to test</p>');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sub>%1%</sub></p><p>Some more subscript test <sub>abc test abc test</sub> content to test</p>');
 
     }//end testEditingSubscriptContent()
 
