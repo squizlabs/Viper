@@ -847,35 +847,33 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     {
         // Test adding content before bold content when cursor starts inside the bold content
         $this->useTest(9);
-        $this->clickKeyword(2);
+        $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.LEFT');
-        $this->type('new');
-        $this->assertHTMLMatch('<p>%1% new<strong>%2%</strong> %3%</p>');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('new ');
+        $this->assertHTMLMatch('<p>%1% <strong>new a %2% b</strong> %3%</p>');
 
         // Test adding content before bold content when cursor starts elsewhere in content
         $this->useTest(9);
-        $this->clickKeyword(1);
+        $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->type('new');
-        $this->assertHTMLMatch('<p>%1% new<strong>%2%</strong> %3%</p>');
+        $this->type('new ');
+        $this->assertHTMLMatch('<p>%1% <strong>new a %2% b</strong> %3%</p>');
 
         // Test adding content after bold content when cursor starts inside the bold content
         $this->useTest(9);
-        $this->clickKeyword(2);
+        $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
-        $this->type('new');
-        $this->assertHTMLMatch('<p>%1% <strong>%2%new</strong> %3%</p>');
+        $this->type(' new');
+        $this->assertHTMLMatch('<p>%1% <strong>a %2% b new</strong> %3%</p>');
 
         // Test adding content before bold content when cursor starts elsewhere in content
         $this->useTest(9);
-        $this->clickKeyword(3);
+        $this->moveToKeyword(3, 'left');
         $this->sikuli->keyDown('Key.LEFT');
-        $this->sikuli->keyDown('Key.LEFT');
-        $this->type('new');
-        $this->assertHTMLMatch('<p>%1% <strong>%2%new</strong> %3%</p>');
+        $this->type(' new');
+        $this->assertHTMLMatch('<p>%1% <strong>a %2% b new</strong> %3%</p>');
 
     }//end testAddingContentAroundBoldContent()
 
