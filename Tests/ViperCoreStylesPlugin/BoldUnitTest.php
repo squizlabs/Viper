@@ -894,12 +894,12 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test ');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test <strong>%2% %3%</strong> content to test</p>');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold <strong>test %2% %3%</strong> content to test</p>');
 
         // Test adding content in the middle of bold formatting
         $this->moveToKeyword(2, 'right');
         $this->type(' test');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test <strong>%2% test %3%</strong> content to test</p>');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold <strong>test %2% test %3%</strong> content to test</p>');
 
         // Test adding content to the end of bold formatting
         $this->moveToKeyword(3, 'left');
@@ -907,22 +907,22 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->type(' %4%');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test <strong>%2% test %3% %4%</strong> content to test</p>');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold <strong>test %2% test %3% %4%</strong> content to test</p>');
 
         // Test highlighting some content in the strong tags and replacing it
         $this->selectKeyword(3);
         $this->type('abc');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test <strong>%2% test abc %4%</strong> content to test</p>');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold <strong>test %2% test abc %4%</strong> content to test</p>');
 
         $this->selectKeyword(2);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('abc');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test <strong>abc test abc %4%</strong> content to test</p>');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold <strong>test abc test abc %4%</strong> content to test</p>');
 
         $this->selectKeyword(4);
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('test');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test <strong>abc test abc test</strong> content to test</p>');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold <strong>test abc test abc test</strong> content to test</p>');
 
     }//end testEditingBoldContent()
 
