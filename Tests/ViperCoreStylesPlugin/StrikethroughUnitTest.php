@@ -323,35 +323,33 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
     {
         // Test adding content before strikethrough content when cursor starts inside the strikethrough content
         $this->useTest(6);
-        $this->clickKeyword(2);
+        $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.LEFT');
-        $this->type('new');
-        $this->assertHTMLMatch('<p>%1% new<del>%2%</del> %3%</p>');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('new ');
+        $this->assertHTMLMatch('<p>%1% <del>new a %2% b</del> %3%</p>');
 
         // Test adding content before strikethrough content when cursor starts elsewhere in content
         $this->useTest(6);
-        $this->clickKeyword(1);
+        $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->type('new');
-        $this->assertHTMLMatch('<p>%1% new<del>%2%</del> %3%</p>');
+        $this->type('new ');
+        $this->assertHTMLMatch('<p>%1% <del>new a %2% b</del> %3%</p>');
 
         // Test adding content after strikethrough content when cursor starts inside the strikethrough content
         $this->useTest(6);
-        $this->clickKeyword(2);
+        $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
-        $this->type('new');
-        $this->assertHTMLMatch('<p>%1% <del>%2%new</del> %3%</p>');
+        $this->type(' new');
+        $this->assertHTMLMatch('<p>%1% <del>a %2% b new</del> %3%</p>');
 
         // Test adding content before strikethrough content when cursor starts elsewhere in content
         $this->useTest(6);
-        $this->clickKeyword(3);
+        $this->moveToKeyword(3, 'left');
         $this->sikuli->keyDown('Key.LEFT');
-        $this->sikuli->keyDown('Key.LEFT');
-        $this->type('new');
-        $this->assertHTMLMatch('<p>%1% <del>%2%new</del> %3%</p>');
+        $this->type(' new');
+        $this->assertHTMLMatch('<p>%1% <del>a %2% b new</del> %3%</p>');
 
     }//end testAddingContentAroundStrikethroughContent()
 
