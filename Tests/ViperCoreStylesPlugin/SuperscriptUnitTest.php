@@ -362,35 +362,33 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
     {
         // Test adding content before superscript content when cursor starts inside the superscript content
         $this->useTest(6);
-        $this->clickKeyword(2);
+        $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.LEFT');
-        $this->type('new');
-        $this->assertHTMLMatch('<p>%1% new<sup>%2%</sup> %3%</p>');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('new ');
+        $this->assertHTMLMatch('<p>%1% <sup>new a %2% b</sup> %3%</p>');
 
         // Test adding content before superscript content when cursor starts elsewhere in content
         $this->useTest(6);
-        $this->clickKeyword(1);
+        $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->type('new');
-        $this->assertHTMLMatch('<p>%1% new<sup>%2%</sup> %3%</p>');
+        $this->type('new ');
+        $this->assertHTMLMatch('<p>%1% <sup>new a %2% b</sup> %3%</p>');
 
         // Test adding content after superscript content when cursor starts inside the superscript content
         $this->useTest(6);
-        $this->clickKeyword(2);
+        $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
-        $this->type('new');
-        $this->assertHTMLMatch('<p>%1% <sup>%2%new</sup> %3%</p>');
+        $this->type(' new');
+        $this->assertHTMLMatch('<p>%1% <sup>a %2% b new</sup> %3%</p>');
 
         // Test adding content before superscript content when cursor starts elsewhere in content
         $this->useTest(6);
-        $this->clickKeyword(3);
+        $this->moveToKeyword(3, 'left');
         $this->sikuli->keyDown('Key.LEFT');
-        $this->sikuli->keyDown('Key.LEFT');
-        $this->type('new');
-        $this->assertHTMLMatch('<p>%1% <sup>%2%new</sup> %3%</p>');
+        $this->type(' new');
+        $this->assertHTMLMatch('<p>%1% <sup>a %2% b new</sup> %3%</p>');
 
     }//end testAddingContentAroundSuperscriptContent()
 
