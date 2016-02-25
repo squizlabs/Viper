@@ -926,6 +926,50 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
 
     }//end testEditingBoldContent()
 
+
+    /**
+     * Test splitting a bold section in content
+     *
+     * @return void
+     */
+    public function testSplittingBoldContent()
+    {
+        // Test pressing enter in the middle of bold content
+        $this->useTest(9);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>%1% <strong>a %2%</strong></p><p><strong>test b</strong> %3%</p>');
+
+        // Test pressing enter at the start of strong content
+        $this->useTest(9);
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('test ');
+        $this->assertHTMLMatch('<p>%1% </p><p><strong>test a %2% b</strong> %3%</p>');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>%1% test</p><p><strong>test a %2% b</strong> %3%</p>');
+
+        // Test pressing enter at the end of strong content
+        $this->useTest(9);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('test ');
+        $this->assertHTMLMatch('<p>%1% <strong>a %2% b</strong></p><p>test&nbsp;&nbsp;%3%</p>');
+
+    }//end testSplittingBoldContent()
+
+
 }//end class
 
 ?>

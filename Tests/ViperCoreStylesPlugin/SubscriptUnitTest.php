@@ -375,6 +375,49 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
 
     }//end testAddingContentAroundSubscriptContent()
 
+
+    /**
+     * Test splitting a subscript section in content
+     *
+     * @return void
+     */
+    public function testSplittingSubscriptContent()
+    {
+        // Test pressing enter in the middle of subscript content
+        $this->useTest(6);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>%1% <sub>a %2%</sub></p><p><sub>test b</sub> %3%</p>');
+
+        // Test pressing enter at the start of subscript content
+        $this->useTest(6);
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('test ');
+        $this->assertHTMLMatch('<p>%1% </p><p><sub>test a %2% b</sub> %3%</p>');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>%1% test</p><p><sub>test a %2% b</sub> %3%</p>');
+
+        // Test pressing enter at the end of subscript content
+        $this->useTest(6);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('test ');
+        $this->assertHTMLMatch('<p>%1% <sub>a %2% b</sub></p><p>test&nbsp;&nbsp;%3%</p>');
+
+    }//end testSplittingSubscriptContent()
+
 }//end class
 
 ?>

@@ -392,6 +392,49 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
 
     }//end testAddingContentAroundSuperscriptContent()
 
+
+    /**
+     * Test splitting a superscript section in content
+     *
+     * @return void
+     */
+    public function testSplittingSuperscriptContent()
+    {
+        // Test pressing enter in the middle of superscript content
+        $this->useTest(6);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>%1% <sup>a %2%</sup></p><p><sup>test b</sup> %3%</p>');
+
+        // Test pressing enter at the start of superscript content
+        $this->useTest(6);
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('test ');
+        $this->assertHTMLMatch('<p>%1% </p><p><sup>test a %2% b</sup> %3%</p>');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>%1% test</p><p><sup>test a %2% b</sup> %3%</p>');
+
+        // Test pressing enter at the end of superscript content
+        $this->useTest(6);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('test ');
+        $this->assertHTMLMatch('<p>%1% <sup>a %2% b</sup></p><p>test&nbsp;&nbsp;%3%</p>');
+
+    }//end testSplittingSuperscriptContent()
+
 }//end class
 
 ?>

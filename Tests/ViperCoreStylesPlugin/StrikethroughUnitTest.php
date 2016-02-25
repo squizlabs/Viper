@@ -354,6 +354,49 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
     }//end testAddingContentAroundStrikethroughContent()
 
 
+    /**
+     * Test splitting a strikethrough section in content
+     *
+     * @return void
+     */
+    public function testSplittingStrikethroughContent()
+    {
+        // Test pressing enter in the middle of strikethrough content
+        $this->useTest(6);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>%1% <del>a %2%</del></p><p><del>test b</del> %3%</p>');
+
+        // Test pressing enter at the start of strikethrough content
+        $this->useTest(6);
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('test ');
+        $this->assertHTMLMatch('<p>%1% </p><p><del>test a %2% b</del> %3%</p>');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>%1% test</p><p><del>test a %2% b</del> %3%</p>');
+
+        // Test pressing enter at the end of strikethrough content
+        $this->useTest(6);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('test ');
+        $this->assertHTMLMatch('<p>%1% <del>a %2% b</del></p><p>test&nbsp;&nbsp;%3%</p>');
+
+    }//end testSplittingStrikethroughContent()
+
+
 }//end class
 
 ?>

@@ -856,6 +856,49 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
 
     }//end testEditingItalicContent()
 
+
+    /**
+     * Test splitting a italic section in content
+     *
+     * @return void
+     */
+    public function testSplittingItalicContent()
+    {
+        // Test pressing enter in the middle of italic content
+        $this->useTest(9);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>%1% <em>a %2%</em></p><p><em>test b</em> %3%</p>');
+
+        // Test pressing enter at the start of italic content
+        $this->useTest(9);
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('test ');
+        $this->assertHTMLMatch('<p>%1% </p><p><em>test a %2% b</em> %3%</p>');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>%1% test</p><p><em>test a %2% b</em> %3%</p>');
+
+        // Test pressing enter at the end of italic content
+        $this->useTest(9);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('test ');
+        $this->assertHTMLMatch('<p>%1% <em>a %2% b</em></p><p>test&nbsp;&nbsp;%3%</p>');
+
+    }//end testSplittingItalicContent()
+
 }//end class
 
 ?>
