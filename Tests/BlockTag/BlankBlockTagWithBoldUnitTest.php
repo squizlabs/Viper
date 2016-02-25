@@ -269,7 +269,15 @@ class Viper_Tests_BlockTag_BlankBlockTagWithBoldUnitTest extends AbstractViperUn
         $this->moveToKeyword(1, 'left');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('Some bold <br />test <strong>%1% %2%</strong> content to test');
+        $this->assertHTMLMatch('Some bold <br /><strong>test %1% %2%</strong> content to test');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('test');
+        $this->assertHTMLMatch('Some bold test<br /><strong>test %1% %2%</strong> content to test');
 
         // Test pressing enter at the end of bold content
         $this->useTest(4);
