@@ -457,7 +457,7 @@ class Viper_Tests_ViperImagePlugin_DeleteImageUnitTest extends AbstractViperImag
 
         // Test arrow keys and backspace key
         $this->useTest(15);
-        $this->moveToKeyword(1, 'right');
+        $this->clickElement('img', 0);
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->assertHTMLMatch('<p>Test content. %1%</p>');
