@@ -866,7 +866,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
     {
         // Check deleting a word after the bold content
         $this->useTest(4);
-        $this->selectKeyword(1,2);
+        $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('ListOl', NULL);
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.BACKSPACE');
@@ -877,13 +877,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
 
         // Add content to check the position of the cursor
         $this->type('content');
-
-        if ($this->sikuli->getBrowserid() === 'safari') {
-            // It seems to be not possible to set the range after the strong tag when its the last element.
-            $this->assertHTMLMatch('<ol><li>%1% <strong>testcontent</strong></li></ol>');
-        } else {
-            $this->assertHTMLMatch('<ol><li>%1% <strong>test</strong>content</li></ol>');
-        }
+        $this->assertHTMLMatch('<ol><li>%1% <strong>testcontent</strong></li></ol>');
 
         // Check deleting from the end of the paragraph including bold content
         $this->useTest(4);
