@@ -800,13 +800,7 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
 
         // Add content to check the position of the cursor
         $this->type('content');
-
-        if ($this->sikuli->getBrowserid() === 'safari') {
-            // It seems to be not possible to set the range after the strong tag when its the last element.
-            $this->assertHTMLMatch('<ul><li>%1% <strong>testcontent</strong></li></ul>');
-        } else {
-            $this->assertHTMLMatch('<ul><li>%1% <strong>test</strong>content</li></ul>');
-        }
+        $this->assertHTMLMatch('<ul><li>%1% <strong>testcontent</strong></li></ul>');
 
         // Check deleting from the end of the paragraph including bold content
         $this->useTest(4);
