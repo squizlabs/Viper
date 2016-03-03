@@ -147,6 +147,27 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
 
         $this->assertHTMLMatch('<p>Test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test</p>');
 
+        // Test forward delete
+        $this->useTest(16);
+        $this->moveToKeyword(1, 'left');
+        sleep(1);
+
+        for ($i = 0; $i < 8; $i++) {
+            $this->sikuli->keyDown('Key.DELETE');
+        }
+
+        $this->assertHTMLMatch('<p>Test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test</p>');
+
+        // Test backspace
+        $this->useTest(16);
+        $this->moveToKeyword(2, 'right');
+
+        for ($i = 0; $i < 8; $i++) {
+            $this->sikuli->keyDown('Key.BACKSPACE');
+        }
+
+        $this->assertHTMLMatch('<p>Test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test</p>');
+
     }//end testDeletingAHeadingFromContent()
 
 

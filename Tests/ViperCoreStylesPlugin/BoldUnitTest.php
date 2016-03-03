@@ -796,6 +796,95 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     }//end testDeletingBoldContent()
 
 
+     /**
+     * Test deleting content including content with bold formatting
+     *
+     * @return void
+     */
+    public function testDeletingAndAddingNewContentWithBoldFormatting()
+    {
+         // Check deleting a word after the bold content
+        $this->useTest(9);
+        $this->moveToKeyword(3, 'right');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1% <strong>a %2% b</strong></p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>%1% <strong>a %2% b</strong> content</p>');
+
+        // Check deleting a word after the bold content up to the bold content
+        $this->useTest(9);
+        $this->moveToKeyword(3, 'right');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1% <strong>a %2% b</strong></p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>%1% <strong>a %2% bcontent</strong></p>');
+
+        // Check deleting from the end of the paragraph including bold content
+        $this->useTest(9);
+        $this->moveToKeyword(3, 'right');
+
+        for ($i = 0; $i < 11; $i++) {
+            $this->sikuli->keyDown('Key.BACKSPACE');
+        }
+
+        $this->assertHTMLMatch('<p>%1%</p>');
+        sleep(1);
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>%1% content</p>');
+
+        // Check deleting from the start of the paragraph
+        $this->useTest(9);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p><strong>a %2% b</strong> %3%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>content<strong>a %2% b</strong> %3%</p>');
+
+        // Check deleting from the start of the paragraph up to the bold content
+        $this->useTest(9);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p><strong>a %2% b</strong> %3%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p><strong>contenta %2% b</strong> %3%</p>');
+
+        // Check deleting from the start of the paragraph including bold content
+        $this->useTest(9);
+        $this->moveToKeyword(1, 'left');
+
+        for ($i = 0; $i < 11; $i++) {
+            $this->sikuli->keyDown('Key.DELETE');
+        }
+
+        $this->assertHTMLMatch('<p>%3%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>content %3%</p>');
+
+    }//end testDeletingAndAddingNewContentWithBoldFormatting()
+
+
     /**
      * Test that you can remove bold from two different sections of content at the same time.
      *

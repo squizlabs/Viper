@@ -232,6 +232,94 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
 
 
     /**
+     * Test deleting content including content with italic formatting
+     *
+     * @return void
+     */
+    public function testDeletingAndAddingContentWithItalicFormatting()
+    {
+         // Check deleting a word after the italic content
+        $this->useTest(9);
+        $this->moveToKeyword(3, 'right');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1% <em>a %2% b</em></p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>%1% <em>a %2% b</em> content</p>');
+
+        // Check deleting a word after the italic content up to the italic content
+        $this->useTest(9);
+        $this->moveToKeyword(3, 'right');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1% <em>a %2% b</em></p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>%1% <em>a %2% bcontent</em></p>');
+
+        // Check deleting from the end of the paragraph including italic content
+        $this->useTest(9);
+        $this->moveToKeyword(3, 'right');
+
+        for ($i = 0; $i < 11; $i++) {
+            $this->sikuli->keyDown('Key.BACKSPACE');
+        }
+
+        $this->assertHTMLMatch('<p>%1%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>%1% content</p>');
+
+        // Check deleting from the start of the paragraph
+        $this->useTest(9);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p><em>a %2% b</em> %3%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>content <em>a %2% b</em> %3%</p>');
+
+        // Check deleting from the start of the paragraph up to the italic content
+        $this->useTest(9);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p><em>a %2% b</em> %3%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p><em>contenta %2% b</em> %3%</p>');
+
+        // Check deleting from the start of the paragraph including italic content
+        $this->useTest(9);
+        $this->moveToKeyword(1, 'left');
+
+        for ($i = 0; $i < 11; $i++) {
+            $this->sikuli->keyDown('Key.DELETE');
+        }
+
+        $this->assertHTMLMatch('<p>%3%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>content %3%</p>');
+
+    }//end testDeletingAndAddingContentWithItalicFormatting()
+
+
+    /**
      * Test that the shortcut command works for Italics.
      *
      * @return void

@@ -291,6 +291,94 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
 
 
     /**
+     * Test deleting content including content with subscript formatting
+     *
+     * @return void
+     */
+    public function testDeletingAndAddingContentWithSubscriptFormatting()
+    {
+        // Check deleting a word after the subscript content
+        $this->useTest(6);
+        $this->moveToKeyword(3, 'right');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1% <sub>a %2% b</sub></p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>%1% <sub>a %2% b</sub> content</p>');
+
+        // Check deleting a word after the subscript content up to the subscript content
+        $this->useTest(6);
+        $this->moveToKeyword(3, 'right');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1% <sub>a %2% b</sub></p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>%1% <sub>a %2% bcontent</sub></p>');
+
+        // Check deleting from the end of the paragraph including subscript content
+        $this->useTest(6);
+        $this->moveToKeyword(3, 'right');
+
+        for ($i = 0; $i < 11; $i++) {
+            $this->sikuli->keyDown('Key.BACKSPACE');
+        }
+
+        $this->assertHTMLMatch('<p>%1%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>%1% content</p>');
+
+        // Check deleting from the start of the paragraph
+        $this->useTest(6);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p><sub>a %2% b</sub> %3%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>content <sub>a %2% b</sub> %3%</p>');
+
+        // Check deleting from the start of the paragraph up to the subscript content
+        $this->useTest(6);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p><sub>a %2% b</sub> %3%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p><sub>contenta %2% b</sub> %3%</p>');
+
+        // Check deleting from the start of the paragraph including subscript content
+        $this->useTest(6);
+        $this->moveToKeyword(1, 'left');
+
+        for ($i = 0; $i < 11; $i++) {
+            $this->sikuli->keyDown('Key.DELETE');
+        }
+
+        $this->assertHTMLMatch('<p>%3%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>content %3%</p>');
+
+    }//end testDeletingAndAddingContentWithSubscriptFormatting()
+
+
+    /**
      * Test editing subscript content
      *
      * @return void

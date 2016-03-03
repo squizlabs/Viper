@@ -269,6 +269,94 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
 
 
     /**
+     * Test deleting content including content with strikethrough formatting
+     *
+     * @return void
+     */
+    public function testDeletingAndAddingContentWithStrikethroughFormatting()
+    {
+         // Check deleting a word after the strikethrough content
+        $this->useTest(6);
+        $this->moveToKeyword(3, 'right');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1% <del>a %2% b</del></p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>%1% <del>a %2% b</del> content</p>');
+
+        // Check deleting a word after the strikethrough content up to the strikethrough content
+        $this->useTest(6);
+        $this->moveToKeyword(3, 'right');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1% <del>a %2% b</del></p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>%1% <del>a %2% bcontent</del></p>');
+
+        // Check deleting from the end of the paragraph including strikethrough content
+        $this->useTest(6);
+        $this->moveToKeyword(3, 'right');
+
+        for ($i = 0; $i < 11; $i++) {
+            $this->sikuli->keyDown('Key.BACKSPACE');
+        }
+
+        $this->assertHTMLMatch('<p>%1%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>%1% content</p>');
+
+        // Check deleting from the start of the paragraph
+        $this->useTest(6);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p><del>a %2% b</del> %3%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>content <del>a %2% b</del> %3%</p>');
+
+        // Check deleting from the start of the paragraph up to the strikethrough content
+        $this->useTest(6);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p><del>a %2% b</del> %3%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p><del>contenta %2% b</del> %3%</p>');
+
+        // Check deleting from the start of the paragraph including strikethrough content
+        $this->useTest(6);
+        $this->moveToKeyword(1, 'left');
+
+        for ($i = 0; $i < 11; $i++) {
+            $this->sikuli->keyDown('Key.DELETE');
+        }
+
+        $this->assertHTMLMatch('<p>%3%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>content %3%</p>');
+
+    }//end testDeletingAndAddingContentWithStrikethroughFormatting()
+
+
+    /**
      * Test editing strikethrough content
      *
      * @return void
