@@ -29968,14 +29968,26 @@ ViperAccessibilityPlugin_WCAG2 = {
             ) {
                 var prev = range.startContainer.parentNode;
             } else {
-                var prev = this.viper.getKeyboardHandler().splitAtRange(true, null);
-                if (ViperUtil.isTag(prev, 'br') === true && prev.nextSibling === null && prev.previousSibling === null) {
-                    prev = prev.parentNode;
-                    var prevElemSib = prev.previousElementSibling;
-                    if (ViperUtil.isTag(prevElemSib, ['ul', 'ol', 'table']) === true) {
-                        // Remove the blank paragraph if its after these tags.
-                        ViperUtil.remove(prev);
-                        prev = prevElemSib;
+                if (!range.startContainer.previousSibling
+                    && range.collapsed === true
+                    && range.startOffset === 0
+                    && ViperUtil.isBlockElement(range.startContainer.parentNode) === true
+                ) {
+                    // At the start of a block element. Insert the HR before the block parent.
+                    ViperUtil.insertBefore(range.startContainer.parentNode, hr);
+                    this.viper.HistoryManager.end();
+                    this.viper.fireSelectionChanged(range, true);
+                    return;
+                } else {
+                    var prev = this.viper.getKeyboardHandler().splitAtRange(true, null);
+                    if (ViperUtil.isTag(prev, 'br') === true && prev.nextSibling === null && prev.previousSibling === null) {
+                        prev = prev.parentNode;
+                        var prevElemSib = prev.previousElementSibling;
+                        if (ViperUtil.isTag(prevElemSib, ['ul', 'ol', 'table']) === true) {
+                            // Remove the blank paragraph if its after these tags.
+                            ViperUtil.remove(prev);
+                            prev = prevElemSib;
+                        }
                     }
                 }
             }
@@ -29994,7 +30006,7 @@ ViperAccessibilityPlugin_WCAG2 = {
                 ViperUtil.insertAfter(hr, p);
                 nextSibling = p;
             } else {
-                if (ViperUtil.trim(ViperUtil.getNodeTextContent(nextSibling)) === '') {
+                if (ViperUtil.trim(ViperUtil.getNodeTextContent(nextSibling)) === '' && ViperUtil.elementIsEmpty(nextSibling) === true) {
                     if (!nextSibling.nextElementSibling || ViperUtil.isBlockElement(nextSibling.nextElementSibling) === false) {
                         if (ViperUtil.isStubElement(nextSibling) !== true) {
                             ViperUtil.setHtml(nextSibling, '&nbsp;');
@@ -30030,7 +30042,17 @@ ViperAccessibilityPlugin_WCAG2 = {
             }//end if
 
             var range = this.viper.getViperRange();
-            range.setStart(range._getFirstSelectableChild(nextSibling), 0);
+            var selectable = range._getFirstSelectableChild(nextSibling);
+            if (!selectable) {
+                selectable = document.createTextNode('');
+                if (nextSibling.firstChild) {
+                    ViperUtil.insertBefore(nextSibling.firstChild, selectable);
+                } else {
+                    nextSibling.appendChild(selectable)
+                }
+            }
+
+            range.setStart(selectable, 0);
             range.collapse(true);
             ViperSelection.addRange(range);
 
@@ -30041,8 +30063,8 @@ ViperAccessibilityPlugin_WCAG2 = {
                 ViperUtil.remove(nextSibling.previousSibling);
             }
 
-            this.viper.contentChanged();
             this.viper.HistoryManager.end();
+            this.viper.fireSelectionChanged(range, true);
 
         },
 
@@ -71614,4 +71636,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = '87bc33c434058b7fbd1860ea18fc75259c2b8d95';
+Viper.build = true;Viper.version = 'a8a2288fd2cf335d94f8c302a393da182c045356';
