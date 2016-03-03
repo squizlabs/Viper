@@ -381,6 +381,138 @@ class Viper_Tests_ViperListPlugin_DeletingListAndListItemsUnitTest extends Abstr
     }//end testDeletingAnItemFromSubListUsingDeleteKey()
 
 
+    /**
+     * Test deleting a whole list item and a part of another list item at the same time in an unordered list.
+     *
+     * @return void
+     */
+    public function testDeletingAndReplacingWholeAndPartialItemsFromUnorderedList()
+    {
+        // Test deleting partial item before whole using delete key
+        // Select whole item first
+        $this->useTest(5);
+        $this->moveToKeyword(3, 'right');
+        for ($i = 0; $i < 43; $i++) {
+            $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        }
+        $this->sikuli->keyDown('Key.DELETE');
+        sleep(2);
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('Replacement item.');
+
+        $this->assertHTMLMatch('<ul><li>First test content item.</li><li>Second test content</li><li>Replacement item.</li><li>Fourth %4% test content item.</li><li>Fifth test content item.</li><li>Sixth test content item.</li></ul>');
+
+        // Select partial item first
+        $this->useTest(5);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.LEFT');
+        for ($i = 0; $i < 43; $i++) {
+            $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        }
+        $this->sikuli->keyDown('Key.DELETE');
+        sleep(2);
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('Replacement item.');
+
+        $this->assertHTMLMatch('<ul><li>First test content item.</li><li>Second test content</li><li>Replacement item.</li><li>Fourth %4% test content item.</li><li>Fifth test content item.</li><li>Sixth test content item.</li></ul>');
+
+        // Test deleting partial item before whole using backspace key
+        // Select whole item first
+        $this->useTest(5);
+        $this->moveToKeyword(3, 'right');
+        for ($i = 0; $i < 43; $i++) {
+            $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        }
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(2);
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('Replacement item.');
+
+        $this->assertHTMLMatch('<ul><li>First test content item.</li><li>Second test content</li><li>Replacement item.</li><li>Fourth %4% test content item.</li><li>Fifth test content item.</li><li>Sixth test content item.</li></ul>');
+
+        // Select partial item first
+        $this->useTest(5);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.LEFT');
+        for ($i = 0; $i < 43; $i++) {
+            $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        }
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(2);
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('Replacement item.');
+
+        $this->assertHTMLMatch('<ul><li>First test content item.</li><li>Second test content</li><li>Replacement item.</li><li>Fourth %4% test content item.</li><li>Fifth test content item.</li><li>Sixth test content item.</li></ul>');
+
+    }//end testDeletingAndReplacingWholeAndPartialItemsFromUnorderedList()
+
+
+    /**
+     * Test deleting a whole list item and a part of another list item at the same time in an ordered list.
+     *
+     * @return void
+     */
+    public function testDeletingAndReplacingWholeAndPartialItemsFromOrderedList()
+    {
+        // Test deleting partial item before whole using delete key
+        // Select whole item first
+        $this->useTest(6);
+        $this->moveToKeyword(3, 'right');
+        for ($i = 0; $i < 43; $i++) {
+            $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        }
+        $this->sikuli->keyDown('Key.DELETE');
+        sleep(2);
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('Replacement item.');
+
+        $this->assertHTMLMatch('<ol><li>First test content item.</li><li>Second test content</li><li>Replacement item.</li><li>Fourth %4% test content item.</li><li>Fifth test content item.</li><li>Sixth test content item.</li></ol>');
+
+        // Select partial item first
+        $this->useTest(6);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.LEFT');
+        for ($i = 0; $i < 43; $i++) {
+            $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        }
+        $this->sikuli->keyDown('Key.DELETE');
+        sleep(2);
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('Replacement item.');
+
+        $this->assertHTMLMatch('<ol><li>First test content item.</li><li>Second test content</li><li>Replacement item.</li><li>Fourth %4% test content item.</li><li>Fifth test content item.</li><li>Sixth test content item.</li></ol>');
+
+        // Test deleting partial item before whole using backspace key
+        // Select whole item first
+        $this->useTest(6);
+        $this->moveToKeyword(3, 'right');
+        for ($i = 0; $i < 43; $i++) {
+            $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        }
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(2);
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('Replacement item.');
+
+        $this->assertHTMLMatch('<ol><li>First test content item.</li><li>Second test content</li><li>Replacement item.</li><li>Fourth %4% test content item.</li><li>Fifth test content item.</li><li>Sixth test content item.</li></ol>');
+
+        // Select partial item first
+        $this->useTest(6);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.LEFT');
+        for ($i = 0; $i < 43; $i++) {
+            $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        }
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(2);
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('Replacement item.');
+
+        $this->assertHTMLMatch('<ol><li>First test content item.</li><li>Second test content</li><li>Replacement item.</li><li>Fourth %4% test content item.</li><li>Fifth test content item.</li><li>Sixth test content item.</li></ol>');
+
+    }//end testDeletingAndReplacingWholeAndPartialItemsFromOrderedList()
+
+
 }//end class
 
 ?>
