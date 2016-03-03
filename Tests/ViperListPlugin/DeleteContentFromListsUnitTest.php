@@ -97,7 +97,7 @@ class Viper_Tests_ViperListPlugin_DeleteContentFromListsUnitTest extends Abstrac
      *
      * @return void
      */
-    public function testDeletingContentWithinOrderedLists()
+    public function testDeletingContentAroundOrderedLists()
     {
         // Check deleting a paragraph after the list
         $this->useTest(2);
