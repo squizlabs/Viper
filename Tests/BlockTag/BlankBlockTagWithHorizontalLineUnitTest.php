@@ -6,7 +6,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithHorizontalLineUnitTest extends Abstr
 {
 
     /**
-     * Test horizontal rule when there is no default block tag.
+     * Test adding horizontal rule when there is no default block tag.
      *
      * @return void
      */
@@ -28,96 +28,112 @@ class Viper_Tests_BlockTag_BlankBlockTagWithHorizontalLineUnitTest extends Abstr
         $this->moveToKeyword(2, 'left');
         $this->clickTopToolbarButton('insertHr');
         $this->type('test ');
-        $this->assertHTMLMatch('<hr /><br />test %1% Test content <hr/ ><br />test %2% more test content. %3%');
+        $this->assertHTMLMatch('%1% Test content<br /><hr />test %2% more test content. %3%');
 
+        $this->useTest(2);
         $this->moveToKeyword(2, 'right');
         $this->clickTopToolbarButton('insertHr');
         $this->type('test ');
-        $this->assertHTMLMatch('<hr /><br />test %1% Test content <hr/ ><br />test %2%<hr /><br />test more test content. %3%');
+        $this->assertHTMLMatch('%1% Test content %2%<br /><hr />test&nbsp;&nbsp;more test content. %3%');
 
         // Test adding a horizontal rule at the end of the paragraph and add content
+        $this->useTest(2);
         $this->moveToKeyword(3, 'right');
         $this->clickTopToolbarButton('insertHr');
         $this->type('test');
-        $this->assertHTMLMatch('<hr /><br />test %1% Test content <hr/ ><br />test %2% more test content. %3%<hr /><br />test');
-
-        
+        $this->assertHTMLMatch('%1% Test content %2% more test content. %3%<hr /><br />test');
 
     }//end testAddingHorizontalRule()
 
 
     /**
-     * Test horizontal rule when there is no default block tag.
+     * Test deleting horizontal rule when there is no default block tag.
      *
      * @return void
      */
-    public function testHorizontalRule()
+    public function testDeletingHorizontalRule()
     {
+        $this->useTest(1);
+        $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
 
-        // Test deleting using delete key
-        $this->useTest(27);
-        sleep(2);
-        $this->moveToKeyword(1, 'right');
-        sleep(3);
+        // Using forward delete
+        $this->useTest(3);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.UP');
+        $this->sikuli->keyDown('Key.UP');
         $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('%1%Test content %2%<br /><hr /><br /><hr />%3% more test content.<br /><hr />%4%');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('%1% Test content');
 
-        // Test deleting using backspace key
-        sleep(1);
-        $this->moveToKeyword(3, 'left');
-        sleep(2);
+        $this->useTest(4);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('Test content %1%more test content');
+
+        $this->useTest(5);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('Test content more test content %1%');
+
+        // Using backspace
+        $this->useTest(3);
+        $this->moveToKeyword(1, 'left');
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('%1%Test content %2%<br /><hr /><br />%3% more test content.<br /><hr />%4%');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('%1% Test content');
 
-        // Test br tag
-        $this->useTest(28);
+        $this->useTest(4);
         $this->moveToKeyword(1, 'right');
-        $this->clickTopToolbarButton('insertHr');
-        $this->assertHTMLMatch('%1%<br /><hr /> Test content.%2%<br />%3% Test content.');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('Test content %1% more test content');
 
-        // Test applying before br tag
-        $this->useTest(28);
-        $this->moveToKeyword(2, 'right');
-        $this->clickTopToolbarButton('insertHr');
-        $this->assertHTMLMatch('%1% Test content.%2%<hr />%3% Test content.');
-
-        // Test applying after br tag
-        $this->useTest(28);
-        $this->moveToKeyword(3, 'left');
-        $this->clickTopToolbarButton('insertHr');
-        $this->assertHTMLMatch('%1% Test content.%2%<hr />%3% Test content.');
-
-        // Test for | placement with br tag
-        $this->useTest(29);
+        $this->useTest(5);
         $this->moveToKeyword(1, 'right');
-        $this->clickTopToolbarButton('insertHr');
-        $this->assertHTMLMatch('%1%<br /><hr />| Test content.%2%<br />%3% Test content.');
+        $this->sikuli->keyDown('Key.DOWN');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('Test content more test content %1%');
 
-        // Test undo adding hr tag using keyboard shortcuts
-        $this->useTest(26);
-        $this->moveToKeyword(1, 'right');
-        $this->clickTopToolbarButton('insertHr');
-        sleep(1);
-        $this->getOSAltShortcut('Undo');
-        $this->assertHTMLMatch('%1% Test content %2% %3% more test content. %4%');
+    }//end testDeletingHorizontalRule()
 
-        // Test redo adding hr tag using keyboard shortcuts
-        $this->getOSAltShortcut('Redo');
-        $this->assertHTMLMatch('%1%<br /><hr /> Test content %2% %3% more test content. %4%');
 
-        // Test undo adding hr tag using top toolbar
-        $this->useTest(26);
-        $this->moveToKeyword(1, 'right');
+    /**
+     * Test undo and redo.
+     *
+     * @return void
+     */
+    public function testUndoAndRedoWithHorizontalRule()
+    {
+        $this->useTest(1);
+        $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
+
+        // Test undo and redo using toolbar icons
+        $this->useTest(2);
+        $this->moveToKeyword(2, 'left');
         $this->clickTopToolbarButton('insertHr');
-        sleep(1);
+        $this->assertHTMLMatch('%1% Test content<br /><hr />%2% more test content. %3%');
+
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('%1% Test content %2% %3% more test content. %4%');
+        $this->assertHTMLMatch('%1% Test content %2% more test content. %3%');
 
-        // Test redo adding hr tag using top toolbar
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('%1%<br /><hr /> Test content %2% %3% more test content. %4%');
+        $this->assertHTMLMatch('%1% Test content<br /><hr />%2% more test content. %3%');
 
-    }//end testHorizontalRule()
+
+        // Test undo and redo using keyboard shortcuts
+        $this->useTest(2);
+        $this->moveToKeyword(2, 'left');
+        $this->clickTopToolbarButton('insertHr');
+        $this->assertHTMLMatch('%1% Test content<br /><hr />%2% more test content. %3%');
+
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('%1% Test content %2% more test content. %3%');
+
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('%1% Test content<br /><hr />%2% more test content. %3%');
+
+    }//end testAddingHorizontalRule()
 
 
 }//end class
