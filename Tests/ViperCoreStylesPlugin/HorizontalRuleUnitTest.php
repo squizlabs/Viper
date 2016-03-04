@@ -13,19 +13,37 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
      */
     public function testAddingAndDeletingAHorizontalRuleAtEndOfParagraph()
     {
+        // Add HR and delete using backspace
         $this->useTest(1);
-
-        // Add hr
         $this->moveToKeyword(3, 'right');
         $this->clickTopToolbarButton('insertHr');
         $this->type('%4% new line of content');
         $this->assertHTMLMatch('<p>%1% %2% dolor sit <em>amet</em> <strong>%3%</strong></p><hr /><p>%4% new line of content</p>');
 
-        // Delete hr
-        $this->selectKeyword(4);
-        $this->sikuli->keyDown('Key.LEFT');
+        $this->moveToKeyword(4, 'left');
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->assertHTMLMatch('<p>%1% %2% dolor sit <em>amet</em> <strong>%3%</strong></p><p>%4% new line of content</p>');
+
+        // Add HR and delete using delete
+        $this->useTest(1);
+        $this->moveToKeyword(3, 'right');
+        $this->clickTopToolbarButton('insertHr');
+        $this->type('%4% new line of content');
+        $this->assertHTMLMatch('<p>%1% %2% dolor sit <em>amet</em> <strong>%3%</strong></p><hr /><p>%4% new line of content</p>');
+
+        $this->moveToKeyword(3, 'right');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p>%1% %2% dolor sit <em>amet</em> <strong>%3%</strong></p><p>%4% new line of content</p>');
+
+         // Add HR and delete using delete, without adding content after the HR
+        $this->useTest(1);
+        $this->moveToKeyword(3, 'right');
+        $this->clickTopToolbarButton('insertHr');
+        $this->assertHTMLMatch('<p>%1% %2% dolor sit <em>amet</em> <strong>%3%</strong></p><hr />');
+
+        $this->moveToKeyword(3, 'right');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p>%1% %2% dolor sit <em>amet</em> <strong>%3%</strong></p>');
 
     }//end testAddingAndDeletingAHorizontalRuleAtEndOfParagraph()
 
@@ -37,29 +55,27 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
      */
     public function testAddingAndDeletingHorizontalRuleInMiddleOfParagraph()
     {
+        // Add HR and delete using backspace
         $this->useTest(1);
-
-        // Add hr
         $this->moveToKeyword(2, 'right');
         $this->clickTopToolbarButton('insertHr');
         $this->type('%4% new content');
+        $this->assertHTMLMatch('<p>%1% %2%</p><hr /><p>%4% new content dolor sit <em>amet</em> <strong>%3%</strong></p>');
 
-        if ($this->sikuli->getBrowserid() === 'safari') {
-            $this->assertHTMLMatch('<p>%1% %2%</p><hr /><p>%4% new contentdolor sit <em>amet</em> <strong>%3%</strong></p>');
-        } else {
-            $this->assertHTMLMatch('<p>%1% %2%</p><hr /><p>%4% new content dolor sit <em>amet</em> <strong>%3%</strong></p>');
-        }
-
-        // Delete hr
-        $this->selectKeyword(4);
-        $this->sikuli->keyDown('Key.LEFT');
+        $this->moveToKeyword(4, 'left');
         $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1% %2%</p><p>%4% new content dolor sit <em>amet</em> <strong>%3%</strong></p>');
 
-        if ($this->sikuli->getBrowserid() === 'safari') {
-            $this->assertHTMLMatch('<p>%1% %2%</p><p>%4% new contentdolor sit <em>amet</em> <strong>%3%</strong></p>');
-        } else {
-            $this->assertHTMLMatch('<p>%1% %2%</p><p>%4% new content dolor sit <em>amet</em> <strong>%3%</strong></p>');
-        }
+        // Add HR and delete using delete
+        $this->useTest(1);
+        $this->moveToKeyword(2, 'right');
+        $this->clickTopToolbarButton('insertHr');
+        $this->type('%4% new content');
+        $this->assertHTMLMatch('<p>%1% %2%</p><hr /><p>%4% new content dolor sit <em>amet</em> <strong>%3%</strong></p>');
+
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p>%1% %2%</p><p>%4% new content dolor sit <em>amet</em> <strong>%3%</strong></p>');
 
     }//end testAddingAndDeletingHorizontalRuleInMiddleOfParagraph()
 
@@ -71,20 +87,31 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
      */
     public function testAddingAndDeletingHorizontalRuleAtStartOfParagraph()
     {
+        // Add HR and delete using backspace
         $this->useTest(1);
-
-        // Add hr
         $this->moveToKeyword(1, 'left');
         sleep(2);
         $this->clickTopToolbarButton('insertHr');
         $this->type('%4% new content');
         $this->assertHTMLMatch('<hr /><p>%4% new content%1% %2% dolor sit <em>amet</em> <strong>%3%</strong></p>');
 
-        // Delete hr
         $this->moveToKeyword(4, 'left');
         sleep(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->assertHTMLMatch('<p>%4% new content%1% %2% dolor sit <em>amet</em> <strong>%3%</strong></p>');
+
+        // Add HR and delete using delete
+        $this->useTest(1);
+        $this->moveToKeyword(1, 'left');
+        sleep(2);
+        $this->clickTopToolbarButton('insertHr');
+        $this->assertHTMLMatch('<hr /><p>%1% %2% dolor sit <em>amet</em> <strong>%3%</strong></p>');
+
+        $this->moveToKeyword(1, 'left');
+        sleep(1);
+        $this->sikuli->keyDown('Key.UP');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p>%1% %2% dolor sit <em>amet</em> <strong>%3%</strong></p>');
 
     }//end testAddingHorizontalRuleAtStartOfParagraph()
 
