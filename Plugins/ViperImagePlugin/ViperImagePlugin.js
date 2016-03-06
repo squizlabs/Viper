@@ -918,6 +918,8 @@
                     ViperUtil.attr(image, 'height', image.naturalHeight + 'px');
                     _updateSize();
                     ViperUtil.preventDefault(e);
+                    self.viper.fireCallbacks('ViperImagePlugin:imageSizeReset', {image: image});
+
                 }
             );
 
@@ -987,6 +989,7 @@
                         ViperUtil.setStyle(swHandle, 'top', (rect.y2 + offset.y) + 'px');
 
                         _updateSize(rect);
+                        self.viper.fireCallbacks('ViperImagePlugin:imageResized', {image: image, size: rect});
 
                         ViperUtil.preventDefault(e);
                         return false;
@@ -995,7 +998,7 @@
                     // Remove mousemove event.
                     ViperUtil.addEvent(ViperUtil.getDocuments(), 'mouseup.ViperImageResize', function(e) {
                         ViperUtil.removeEvent(Viper.document, 'mousemove.ViperImageResize');
-                        ViperUtil.removeEvent(Viper.document, 'mouseup.ViperImageResize');
+                        ViperUtil.removeEvent(ViperUtil.getDocuments(), 'mouseup.ViperImageResize');
 
                         // If the style attribute is empty, remove it.
                         if (!image.getAttribute('style')) {
@@ -1010,7 +1013,6 @@
                         self._updateToolbars(image);
 
                         self._inlineToolbar.update(null, image);
-
                     });
 
                     ViperUtil.preventDefault(e);
