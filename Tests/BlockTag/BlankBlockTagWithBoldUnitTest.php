@@ -289,4 +289,35 @@ class Viper_Tests_BlockTag_BlankBlockTagWithBoldUnitTest extends AbstractViperUn
     }//end testSplittingBoldContent()
 
 
+    /**
+     * Test undo and redo with bold content
+     *
+     * @return void
+     */
+    public function testUndoAndRedoWithBoldContent()
+    {
+        $this->useTest(1);
+        $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
+
+        // Apply bold content
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('bold');
+        $this->assertHTMLMatch('This is <strong>%1%</strong> %2% some content');
+
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('This is %1% %2% some content');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('This is <strong>%1%</strong> %2% some content');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('This is %1% %2% some content');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('This is <strong>%1%</strong> %2% some content');        
+
+    }//end testUndoAndRedoWithBoldContent()
+
+
 }//end class
