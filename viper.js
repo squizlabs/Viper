@@ -27281,7 +27281,7 @@ ViperAccessibilityPlugin_WCAG2 = {
 
                     // Get the range from the mouse pointer (drop location).
                     var rangeObj  = document.caretRangeFromPoint(e.originalEvent.clientX, e.originalEvent.clientY);
-                    var range     = new ViperMozRange(rangeObj);
+                    var range     = new Viper.MozRange(rangeObj);
 
                     // Create the tmpNode that is used for pasting content.
                     self._tmpNode = document.createTextNode(' ');
@@ -34752,6 +34752,7 @@ ViperAccessibilityPlugin_WCAG2 = {
 
             this._resizeImage = image;
 
+            var self        = this;
             var windowWidth = ViperUtil.getWindowDimensions().width;
             var sizeDiv     = document.createElement('div');
             ViperUtil.addClass(sizeDiv, 'ViperImagePlugin-sizeDiv');
@@ -34764,6 +34765,7 @@ ViperAccessibilityPlugin_WCAG2 = {
                     // Reset size.
                     ViperUtil.attr(image, 'width', image.naturalWidth + 'px');
                     ViperUtil.attr(image, 'height', image.naturalHeight + 'px');
+                    self.resetImageSize(image);
                     _updateSize();
                     ViperUtil.preventDefault(e);
                     self.viper.fireCallbacks('ViperImagePlugin:imageSizeReset', {image: image});
@@ -34775,14 +34777,11 @@ ViperAccessibilityPlugin_WCAG2 = {
                 rect = rect || ViperUtil.getBoundingRectangle(image);
                 ViperUtil.setStyle(sizeDiv, 'right', windowWidth - (rect.x2) + 15 + 'px');
                 ViperUtil.setStyle(sizeDiv, 'top', (rect.y2) - 30 + 'px');
-                var sizeHtml = image.width + ' x ' + image.height;
-                sizeHtml    += ' <span class="ViperImagePlugin-origSize">(' + image.naturalWidth + ' x ' + image.naturalHeight + ')</span>';
-                sizeHtml    += ' <span class="ViperImagePlugin-reset">' + _('Reset') + '</span>';
+                var sizeHtml = self.getImageSizeDisplayHtml(image);
                 ViperUtil.setHtml(sizeDiv, sizeHtml);
             };
             _updateSize(rect);
 
-            var self = this;
             var _addMouseEvents = function(handle, rev) {
                 ViperUtil.addEvent(handle, 'mousedown', function(e) {
                     var width    = image.width;
@@ -34886,6 +34885,22 @@ ViperAccessibilityPlugin_WCAG2 = {
             }
 
             this._resizeImage = null;
+
+        },
+
+        resetImageSize: function(image)
+        {
+            ViperUtil.attr(image, 'width', image.naturalWidth + 'px');
+            ViperUtil.attr(image, 'height', image.naturalHeight + 'px');
+
+        },
+
+        getImageSizeDisplayHtml: function(image)
+        {
+            var sizeHtml = image.width + ' x ' + image.height;
+            sizeHtml    += ' <span class="ViperImagePlugin-origSize">(' + image.naturalWidth + ' x ' + image.naturalHeight + ')</span>';
+            sizeHtml    += ' <span class="ViperImagePlugin-reset">' + _('Reset') + '</span>';
+            return sizeHtml;
 
         }
 
@@ -71638,4 +71653,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = '25c0683ae20c028e0b3417ff83ced6bfe806f348';
+Viper.build = true;Viper.version = 'aeb869022dc546669974ddc93f063b6d9d891bb6';
