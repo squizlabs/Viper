@@ -577,60 +577,6 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
 
     /**
-     * Tests changing the defailt block tags and entering content.
-     *
-     * @return void
-     */
-    public function testDifferentDefaultBlockTags()
-    {
-        $this->useTest(2);
-        $this->selectKeyword(1, 2);
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be enabled');
-        $this->type('test123');
-        sleep(1);
-        $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><p>test123</p>');
-
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('123test');
-        sleep(1);
-        $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><p>test123</p><p>123test</p>');
-
-        $this->useTest(2);
-        $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "div")');
-
-        $this->selectKeyword(1, 2);
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be enabled');
-        $this->type('test123');
-        sleep(1);
-        $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><div>test123</div>');
-
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('123test');
-        sleep(1);
-        $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p><div>test123</div><div>123test</div>');
-
-        $this->useTest(2);
-        $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
-
-        $this->selectKeyword(1, 2);
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be enabled');
-        $this->type('test123');
-        sleep(1);
-        $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p>test123');
-
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('123test');
-        sleep(1);
-        $this->assertHTMLMatch('<p>test test1 test2</p><p>test3 test4 test5</p>test123<br />123test');
-
-
-    }//end testDifferentDefaultBlockTags()
-
-
-    /**
      * Tests that after joining paragraphs splitting them again works.
      *
      * @return void
@@ -689,70 +635,6 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<p><a href="#">Link %1%</a></p><p><a href="#">Link %2%</a></p>');
 
     }//end testSplittingTwoATags()
-
-
-    /**
-     * Test that inputting text, creating new paragraphs etc work when no base tag is set.
-     *
-     * @return void
-     */
-    public function testNoBaseTagInput()
-    {
-        $this->useTest(3);
-        $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
-
-        // Test that typing characters in a node with no block parent does not cause
-        // it to be wrapped with a block tag.
-        $this->useTest(3);
-        $this->moveToKeyword(1, 'right');
-        $this->type(' test');
-        $this->assertHTMLMatch('%1% test');
-
-        // Test that enter key inside a paragraph still splits the container.
-        $this->useTest(4);
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('test');
-        $this->assertHTMLMatch('<p>%1%</p><p>test %2%</p>test');
-
-        // Test that enter key creates a BR tag instead of creating block elements
-        // if the text has no wrapping block elements.
-        $this->useTest(5);
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('%1%<br /><br /> %2%');
-
-        // Test that removing whole content and typing does not wrap text in a block
-        // element.
-        $this->useTest(3);
-        $this->selectKeyword(1);
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->type('test');
-        $this->assertHTMLMatch('test');
-
-        // Test that removing whole content by selecting all and typing characters
-        // does not wrap text in a block element if there is no block element already.
-        $this->useTest(3);
-        $this->selectKeyword(1);
-        $this->type('test');
-        $this->assertHTMLMatch('test');
-
-        // Test that removing whole content by selecting all and typing characters
-        // uses the available block tag.
-        $this->useTest(6);
-        $this->selectKeyword(1);
-        $this->type('test');
-        sleep(1);
-        $this->assertHTMLMatch('<p>test</p>');
-
-        $this->useTest(6);
-        $this->selectKeyword(1);
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->type('test');
-        $this->assertHTMLMatch('test');
-
-    }//end testNoBaseTagInput()
 
 
     /**
