@@ -904,6 +904,7 @@
 
             this._resizeImage = image;
 
+            var self        = this;
             var windowWidth = ViperUtil.getWindowDimensions().width;
             var sizeDiv     = document.createElement('div');
             ViperUtil.addClass(sizeDiv, 'ViperImagePlugin-sizeDiv');
@@ -916,6 +917,7 @@
                     // Reset size.
                     ViperUtil.attr(image, 'width', image.naturalWidth + 'px');
                     ViperUtil.attr(image, 'height', image.naturalHeight + 'px');
+                    self.resetImageSize(image);
                     _updateSize();
                     ViperUtil.preventDefault(e);
                     self.viper.fireCallbacks('ViperImagePlugin:imageSizeReset', {image: image});
@@ -927,14 +929,11 @@
                 rect = rect || ViperUtil.getBoundingRectangle(image);
                 ViperUtil.setStyle(sizeDiv, 'right', windowWidth - (rect.x2) + 15 + 'px');
                 ViperUtil.setStyle(sizeDiv, 'top', (rect.y2) - 30 + 'px');
-                var sizeHtml = image.width + ' x ' + image.height;
-                sizeHtml    += ' <span class="ViperImagePlugin-origSize">(' + image.naturalWidth + ' x ' + image.naturalHeight + ')</span>';
-                sizeHtml    += ' <span class="ViperImagePlugin-reset">' + _('Reset') + '</span>';
+                var sizeHtml = self.getImageSizeDisplayHtml(image);
                 ViperUtil.setHtml(sizeDiv, sizeHtml);
             };
             _updateSize(rect);
 
-            var self = this;
             var _addMouseEvents = function(handle, rev) {
                 ViperUtil.addEvent(handle, 'mousedown', function(e) {
                     var width    = image.width;
@@ -1038,6 +1037,22 @@
             }
 
             this._resizeImage = null;
+
+        },
+
+        resetImageSize: function(image)
+        {
+            ViperUtil.attr(image, 'width', image.naturalWidth + 'px');
+            ViperUtil.attr(image, 'height', image.naturalHeight + 'px');
+
+        },
+
+        getImageSizeDisplayHtml: function(image)
+        {
+            var sizeHtml = image.width + ' x ' + image.height;
+            sizeHtml    += ' <span class="ViperImagePlugin-origSize">(' + image.naturalWidth + ' x ' + image.naturalHeight + ')</span>';
+            sizeHtml    += ' <span class="ViperImagePlugin-reset">' + _('Reset') + '</span>';
+            return sizeHtml;
 
         }
 
