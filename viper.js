@@ -41294,6 +41294,7 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
 
                 if (this._editor) {
                     // Set Ace editor content.
+                    this._ignoreUpdate = true;
                     this._editor.getSession().setValue(content);
 
                     // Scroll to the current caret position.
@@ -41662,6 +41663,8 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
                     self._ignoreSourceUpdate = true;
                     self.updatePageContents();
                 }
+
+                self.viper.fireCallbacks('ViperSourceViewPlugin:sourceChanged');
             });
 
             var popup = self.viper.Tools.getItem('VSVP:popup');
@@ -71653,4 +71656,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = 'aeb869022dc546669974ddc93f063b6d9d891bb6';
+Viper.build = true;Viper.version = '2e904fff13199ed0af8af835905a78ebcdfe0504';
