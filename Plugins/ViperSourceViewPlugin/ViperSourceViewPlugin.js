@@ -154,6 +154,7 @@
 
                 if (this._editor) {
                     // Set Ace editor content.
+                    this._ignoreUpdate = true;
                     this._editor.getSession().setValue(content);
 
                     // Scroll to the current caret position.
@@ -522,6 +523,8 @@
                     self._ignoreSourceUpdate = true;
                     self.updatePageContents();
                 }
+
+                self.viper.fireCallbacks('ViperSourceViewPlugin:sourceChanged');
             });
 
             var popup = self.viper.Tools.getItem('VSVP:popup');
