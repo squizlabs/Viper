@@ -357,6 +357,41 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
     }//end testAddingHorizontalRuleAfterRemovingListItem()
 
 
+    /**
+     * Test undoing and redoing horizontal rule.
+     *
+     * @return void
+     */
+    public function testUndoAndRedoHorizontalRule()
+    {
+        // Test using keyboard shortcuts
+        $this->useTest(1);
+        $this->moveToKeyword(1, 'right');
+        $this->clickTopToolbarButton('insertHr');
+
+        // Test undo
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>%1% %2% dolor sit<em>amet</em><strong>%3%</strong></p>');
+
+        // Test redo
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>%1%</p><hr /><p>%2% dolor sit<em>amet</em><strong>%3%</strong></p>');
+
+        // Test using top toolbar
+        $this->useTest(1);
+        $this->moveToKeyword(1, 'right');
+        $this->clickTopToolbarButton('insertHr');
+
+        // Test undo
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1% %2% dolor sit<em>amet</em><strong>%3%</strong></p>');
+
+        // Test redo
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>%1%</p><hr /><p>%2% dolor sit<em>amet</em><strong>%3%</strong></p>');
+
+    }//end testUndoAndRedoHorizontalRule()
+
 }//end class
 
 
