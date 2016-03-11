@@ -602,6 +602,14 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->type(' %3%');
         $this->assertHTMLMatch('<p>test content <span id="test">%1% %3%</span> %2%</p>');
 
+        // Test editing anchor name in inline toolbar
+        $this->selectKeyword(1,3);
+        $this->clickInlineToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->type('modified-title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content <span id="modified-title">%1% %3%</span> %2%</p>');
+
         //Check that anchor field can be created and modified with top toolbar
         $this->useTest(6);
         $this->selectKeyword(1);
@@ -611,6 +619,14 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->moveToKeyword(1, 'right');
         $this->type(' %3%');
         $this->assertHTMLMatch('<p>test content <span id="test">%1% %3%</span> %2%</p>');
+
+        // Test editing anchor name in top toolbar
+        $this->selectKeyword(1,3);
+        $this->clickTopToolbarButton('anchorID', 'active');
+        $this->clearFieldValue('ID');
+        $this->type('modified-title');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content <span id="modified-title">%1% %3%</span> %2%</p>');
         
     }//end testAnchorFieldCanBeModified()
 
