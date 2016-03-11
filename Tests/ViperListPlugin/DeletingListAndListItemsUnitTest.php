@@ -673,6 +673,116 @@ class Viper_Tests_ViperListPlugin_DeletingListAndListItemsUnitTest extends Abstr
     }//end testDeletingAndReplacingPartialThenWholeItemsFromOrderedList()
 
 
+    /**
+     * Test deleting a whole sublist item then part of parent list item at the same time in an unordered list.
+     *
+     * @return void
+     */
+    public function testDeletingSublistThenPartialParentListItemInAnUnorderedList()
+    {
+        // Test selecting sublist first
+        // Test using delete key
+        $this->useTest(7);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.SHIFT + Key.UP');
+        for ($i = 0; $i < 5; $i++) {
+            $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        }
+        $this->sikuli->keyDown('Key.DELETE');
+
+        $this->assertHTMLMatch('<ul><li>first %1%<ul><li>sub list item 2</li><li>%3% sub list item 3</li></ul></li><li>second %4% item</li><li>third item</li></ul>');
+
+        // Test using backspace key
+        $this->useTest(7);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.SHIFT + Key.UP');
+        for ($i = 0; $i < 5; $i++) {
+            $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        }
+        $this->sikuli->keyDown('Key.BACKSPACE');
+
+        $this->assertHTMLMatch('<ul><li>first %1%<ul><li>sub list item 2</li><li>%3% sub list item 3</li></ul></li><li>second %4% item</li><li>third item</li></ul>');
+
+        // Test selecting parent first
+        // Test using delete key
+        $this->useTest(7);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.SHIFT + Key.DOWN');
+        for ($i = 0; $i < 13; $i++) {
+            $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        }
+        $this->sikuli->keyDown('Key.DELETE');
+
+        $this->assertHTMLMatch('<ul><li>first %1%<ul><li>sub list item 2</li><li>%3% sub list item 3</li></ul></li><li>second %4% item</li><li>third item</li></ul>');
+
+        // Test using backspace key
+        $this->useTest(7);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.SHIFT + Key.DOWN');
+        for ($i = 0; $i < 13; $i++) {
+            $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        }
+        $this->sikuli->keyDown('Key.BACKSPACE');
+
+        $this->assertHTMLMatch('<ul><li>first %1%<ul><li>sub list item 2</li><li>%3% sub list item 3</li></ul></li><li>second %4% item</li><li>third item</li></ul>');
+
+    }//end testDeletingSublistThenPartialParentListItemInAnUnorderedList()
+
+
+    /**
+     * Test deleting a whole sublist item then part of parent list item at the same time in an ordered list.
+     *
+     * @return void
+     */
+    public function testDeletingSublistThenPartialParentListItemInAnOrderedList()
+    {
+        // Test using delete key
+        $this->useTest(8);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.SHIFT + Key.UP');
+        for ($i = 0; $i < 5; $i++) {
+            $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        }
+        $this->sikuli->keyDown('Key.DELETE');
+
+        $this->assertHTMLMatch('<ol><li>first %1%<ol><li>sub list item 2</li><li>%3% sub list item 3</li></ol></li><li>second %4% item</li><li>third item</li></ol>');
+
+        // Test using backspace key
+        $this->useTest(8);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.SHIFT + Key.UP');
+        for ($i = 0; $i < 5; $i++) {
+            $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        }
+        $this->sikuli->keyDown('Key.BACKSPACE');
+
+        $this->assertHTMLMatch('<ol><li>first %1%<ol><li>sub list item 2</li><li>%3% sub list item 3</li></ol></li><li>second %4% item</li><li>third item</li></ol>');
+
+        // Test selecting parent first
+        // Test using delete key
+        $this->useTest(8);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.SHIFT + Key.DOWN');
+        for ($i = 0; $i < 13; $i++) {
+            $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        }
+        $this->sikuli->keyDown('Key.DELETE');
+
+        $this->assertHTMLMatch('<ol><li>first %1%<ol><li>sub list item 2</li><li>%3% sub list item 3</li></ol></li><li>second %4% item</li><li>third item</li></ol>');
+
+        // Test using backspace key
+        $this->useTest(8);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.SHIFT + Key.DOWN');
+        for ($i = 0; $i < 13; $i++) {
+            $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        }
+        $this->sikuli->keyDown('Key.BACKSPACE');
+
+        $this->assertHTMLMatch('<ol><li>first %1%<ol><li>sub list item 2</li><li>%3% sub list item 3</li></ol></li><li>second %4% item</li><li>third item</li></ol>');
+
+    }//end testDeletingSublistThenPartialParentListItemInAnOrderedList()
+
 }//end class
 
 ?>
