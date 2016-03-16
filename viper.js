@@ -39391,8 +39391,6 @@ ViperAccessibilityPlugin_WCAG2 = {
         this._searchPattern       = null;
         this._replacementsCallback = null;
 
-        this._cache = {};
-
     }
 
     Viper.PluginManager.addPlugin('ViperReplacementPlugin', ViperReplacementPlugin);
@@ -39932,7 +39930,8 @@ ViperAccessibilityPlugin_WCAG2 = {
             element = element || this.viper.getViperElement();
 
             // Get all the keywords in the element.
-            var keywords = this.scanKeywords(element);
+            var cache    = {};
+            var keywords = this.scanKeywords(element, cache);
             if (!keywords || ViperUtil.isEmpty(keywords) === true) {
                 if (callback) {
                     callback.call(self);
@@ -39947,11 +39946,11 @@ ViperAccessibilityPlugin_WCAG2 = {
                 keywords,
                 function(replacements) {
                     // Convert the keywords inside the text nodes.
-                    self._convertContentKeywords(replacements);
+                    self._convertContentKeywords(replacements, cache);
 
                     // Convert the keywords inside the attributes.
                     var content = ViperUtil.getHtml(element);
-                    content     = self._convertAttributeKeywords(content, replacements);
+                    content     = self._convertAttributeKeywords(content, replacements, cache);
                     ViperUtil.setHtml(element, content);
 
                     if (callback) {
@@ -39964,7 +39963,8 @@ ViperAccessibilityPlugin_WCAG2 = {
 
         showAttributeReplacements: function(content, callback) {
             var keywords = {};
-            this._scanAttributeKeywords(content, keywords);
+            var cache    = {};
+            this._scanAttributeKeywords(content, keywords, cache);
 
             // Get the keyword replacements.
             var self = this;
@@ -39972,7 +39972,7 @@ ViperAccessibilityPlugin_WCAG2 = {
                 keywords,
                 function(replacements) {
                     // Convert the keywords inside the attributes.
-                    content = self._convertAttributeKeywords(content, replacements);
+                    content = self._convertAttributeKeywords(content, replacements, cache);
 
                     if (callback) {
                         callback.call(self, content);
@@ -40072,7 +40072,7 @@ ViperAccessibilityPlugin_WCAG2 = {
         },
 
         
-        scanKeywords: function (parentElem) {
+        scanKeywords: function (parentElem, cache) {
             if (!this.getReplacementRegex()) {
                 return;
             }
@@ -40081,14 +40081,14 @@ ViperAccessibilityPlugin_WCAG2 = {
             parentElem   = parentElem || this.viper.getViperElement();
             var content  = ViperUtil.getHtml(parentElem);
 
-            this._scanAttributeKeywords(content, keywords);
-            this._scanContentKeywords(parentElem, keywords);
+            this._scanAttributeKeywords(content, keywords, cache);
+            this._scanContentKeywords(parentElem, keywords, cache);
 
             return keywords;
 
         },
 
-        _scanAttributeKeywords: function(content, keywords) {
+        _scanAttributeKeywords: function(content, keywords, cache) {
             var self = this;
 
             // Regex to get list of HTML tags.
@@ -40107,7 +40107,7 @@ ViperAccessibilityPlugin_WCAG2 = {
             // Find all elements.
             regex = new RegExp(regex, 'gi');
 
-            this._cache.attributes = {};
+            cache.attributes = {};
 
             content = content.replace(/__viper_attr_/g, '');
 
@@ -40117,13 +40117,13 @@ ViperAccessibilityPlugin_WCAG2 = {
                     attrName = attrName.toLowerCase();
                     var res  = ' ' + attrName + '=' + attrValue + '';
 
-                    if (!self._cache.attributes[res]) {
+                    if (!cache.attributes[res]) {
                         var matches = attrValue.match(regex);
                         if (matches !== null) {
-                            self._cache.attributes[res] = [];
+                            cache.attributes[res] = [];
                             var match  = null;
                             while (match = matches.pop()) {
-                                self._cache.attributes[res].push(match);
+                                cache.attributes[res].push(match);
                                 keywords[match] = '';
                             }
                         }
@@ -40138,7 +40138,7 @@ ViperAccessibilityPlugin_WCAG2 = {
             return keywords;
         },
 
-        _scanContentKeywords: function (parentElem, keywords) {
+        _scanContentKeywords: function (parentElem, keywords, cache) {
             parentElem = parentElem || this.viper.getViperElement();
 
             var regex = this.getReplacementRegex();
@@ -40148,7 +40148,7 @@ ViperAccessibilityPlugin_WCAG2 = {
 
             regex = new RegExp(regex, 'gi');
 
-            this._cache.textNodes = [];
+            cache.textNodes = [];
 
             var textNodes = ViperUtil.getTextNodes(parentElem);
             var ln        = textNodes.length;
@@ -40166,7 +40166,7 @@ ViperAccessibilityPlugin_WCAG2 = {
                                 keywords: []
                             };
 
-                            this._cache.textNodes.push(nodeData);
+                            cache.textNodes.push(nodeData);
                         }
 
                         if (ViperUtil.isset(keywords[match]) === false) {
@@ -40184,14 +40184,14 @@ ViperAccessibilityPlugin_WCAG2 = {
         },
 
         
-        _convertContentKeywords: function (replacements) {
-            var ln = this._cache.textNodes.length;
+        _convertContentKeywords: function (replacements, cache) {
+            var ln = cache.textNodes.length;
             for (var i = 0; i < ln; i++) {
                 // For each element replcace its keywords from end to beginning.
-                var kc = this._cache.textNodes[i].keywords.length;
+                var kc = cache.textNodes[i].keywords.length;
                 for (var j = (kc - 1); j >= 0; j--) {
-                    var textNode = this._cache.textNodes[i].elem;
-                    var keyword  = this._cache.textNodes[i].keywords[j];
+                    var textNode = cache.textNodes[i].elem;
+                    var keyword  = cache.textNodes[i].keywords[j];
 
                     if (textNode.data === keyword && ViperUtil.isTag(textNode.parentNode, 'span') === true) {
                         // No need to create a new element.
@@ -40263,17 +40263,17 @@ ViperAccessibilityPlugin_WCAG2 = {
 
         },
 
-        _convertAttributeKeywords: function (content, replacements) {
+        _convertAttributeKeywords: function (content, replacements, cache) {
             if (typeof content !== 'string') {
                 content = ViperUtil.getHtml(content);
             }
 
             content = content.replace(/__viper_attr_/g, '');
 
-            for (var attr in this._cache.attributes) {
+            for (var attr in cache.attributes) {
                 var attrRep = attr;
-                for (var i = 0; i < this._cache.attributes[attr].length; i++) {
-                    var keyword = this._cache.attributes[attr][i];
+                for (var i = 0; i < cache.attributes[attr].length; i++) {
+                    var keyword = cache.attributes[attr][i];
                     attrRep     = attrRep.replace(keyword, replacements[keyword]) + ' data-viper-' + ViperUtil.ltrim(attr);
                 }
 
@@ -71656,4 +71656,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = '2e904fff13199ed0af8af835905a78ebcdfe0504';
+Viper.build = true;Viper.version = 'e5fae7b6b53350dc9d844019e86f97fa5ce68e7f';
