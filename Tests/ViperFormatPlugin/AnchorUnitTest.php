@@ -596,37 +596,61 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickInlineToolbarButton('anchorID');
-        $this->type('test');
+        $this->type('test_title');
         $this->sikuli->KeyDown('Key.ENTER');
         $this->moveToKeyword(1, 'right');
         $this->type(' %3%');
-        $this->assertHTMLMatch('<p>test content <span id="test">%1% %3%</span> %2%</p>');
+        $this->assertHTMLMatch('<p>test content <span id="test_title">%1% %3%</span> %2%</p>');
 
-        // Test editing anchor name in inline toolbar
+        // Test editing beginning of anchor name in inline toolbar
         $this->selectKeyword(1,3);
         $this->clickInlineToolbarButton('anchorID', 'active');
-        $this->clearFieldValue('ID');
-        $this->type('modified-title');
+        $this->clickField('ID');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('modified-');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>test content <span id="modified-title">%1% %3%</span> %2%</p>');
+        $this->assertHTMLMatch('<p>test content <span id="modified-test_title">%1% %3%</span> %2%</p>');
+
+        //Test editing end of an anchor name in inline toolbar
+        $this->selectKeyword(1,3);
+        $this->clickInlineToolbarButton('anchorID', 'active');
+        $this->clickField('ID');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->type('-modified');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content <span id="modified-test_title-modified">%1% %3%</span> %2%</p>');
 
         //Check that anchor field can be created and modified with top toolbar
         $this->useTest(6);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('anchorID');
-        $this->type('test');
+        $this->type('test_title');
         $this->sikuli->KeyDown('Key.ENTER');
         $this->moveToKeyword(1, 'right');
         $this->type(' %3%');
-        $this->assertHTMLMatch('<p>test content <span id="test">%1% %3%</span> %2%</p>');
+        $this->assertHTMLMatch('<p>test content <span id="test_title">%1% %3%</span> %2%</p>');
 
-        // Test editing anchor name in top toolbar
+        // Test editing beginning of anchor name in top toolbar
         $this->selectKeyword(1,3);
         $this->clickTopToolbarButton('anchorID', 'active');
-        $this->clearFieldValue('ID');
-        $this->type('modified-title');
+        $this->clickField('ID');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('modified-');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>test content <span id="modified-title">%1% %3%</span> %2%</p>');
+        $this->assertHTMLMatch('<p>test content <span id="modified-test_title">%1% %3%</span> %2%</p>');
+
+        //Test editing end of an anchor name in top toolbar
+        $this->selectKeyword(1,3);
+        $this->clickTopToolbarButton('anchorID', 'active');
+        $this->clickField('ID');
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->type('-modified');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>test content <span id="modified-test_title-modified">%1% %3%</span> %2%</p>');;
         
     }//end testAnchorFieldCanBeModified()
 
