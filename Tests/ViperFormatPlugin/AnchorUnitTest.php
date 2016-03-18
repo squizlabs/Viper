@@ -598,6 +598,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('anchorID');
         $this->type('test_title');
         $this->sikuli->KeyDown('Key.ENTER');
+        sleep(2);
         $this->moveToKeyword(1, 'right');
         $this->type(' %3%');
         $this->assertHTMLMatch('<p>test content <span id="test_title">%1% %3%</span> %2%</p>');
@@ -628,6 +629,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('anchorID');
         $this->type('test_title');
         $this->sikuli->KeyDown('Key.ENTER');
+        sleep(2);
         $this->moveToKeyword(1, 'right');
         $this->type(' %3%');
         $this->assertHTMLMatch('<p>test content <span id="test_title">%1% %3%</span> %2%</p>');

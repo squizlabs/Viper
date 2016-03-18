@@ -275,7 +275,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithClassesUnitTest extends AbstractVipe
      */
     public function testUndoAndRedoWithClass()
     {
-    	// Test using top toolbar
+    	// Test using keyboard shortcuts
     	$this->useTest(1);
     	$this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
 
@@ -287,21 +287,22 @@ class Viper_Tests_BlockTag_BlankBlockTagWithClassesUnitTest extends AbstractVipe
     	$this->assertHTMLMatch('This is<span class="test_class">%1% %2%</span> some content');
 
     	// Test undo
-    	$this->clickTopToolbarButton('HistoryUndo');
-    	$this->assertHTMLMatch('This is %1% %2% some content');
-
-    	// Test redo
-    	$this->clickTopToolbarButton('HistoryRedo');
-    	$this->assertHTMLMatch('This is<span class="test_class">%1% %2%</span> some content');
-
-    	// Test using keyboard shortcuts
-    	// Test undo
+    	$this->selectKeyword(2);
     	$this->sikuli->keyDown('Key.CMD + z');
     	$this->assertHTMLMatch('This is %1% %2% some content');
 
     	// Test redo
     	$this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
     	$this->assertHTMLMatch('This is<span class="test_class">%1% %2%</span> some content');
+		
+		// Test using top toolbar
+    	// Test undo
+    	$this->clickTopToolbarButton('HistoryUndo');
+    	$this->assertHTMLMatch('This is %1% %2% some content');
+
+    	// Test redo
+    	$this->clickTopToolbarButton('HistoryRedo');
+    	$this->assertHTMLMatch('This is<span class="test_class">%1% %2%</span> some content');    	
 
     }//end testUndoAndRedoWithClass()
 
