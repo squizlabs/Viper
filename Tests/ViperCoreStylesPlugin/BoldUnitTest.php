@@ -1059,6 +1059,30 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     }//end testSplittingBoldContent()
 
 
+    /**
+     * Test undo and redo applying bold to content
+     *
+     * @return void
+     */
+    public function testUndoAndRedoBoldContent()
+    {
+        // Test using keyboard shortcuts
+        // Test undo
+        $this->useTest(11);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('%2% Less test content. %3%');
+        $this->selectKeyword(2,3);
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>Test content.</p><p>More test content. %1%</p><p>%2% Less test content. %3%</p>');
+
+        // Test redo
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>Test content.</p><p>More test content. %1%</p><p><strong>%2% Less test content. %3%</strong></p>');
+    }//end testUndoAndRedoBoldContent()
+
+
 }//end class
 
 ?>
