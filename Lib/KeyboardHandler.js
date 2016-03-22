@@ -1445,7 +1445,7 @@
                 // Handle: <p>test<strong>test*</strong>test</p>.
                 // When enter is pressed make sure the new paragraph does not start with the tag.
                 var parent = startNode.parentNode;
-                var surroundingParents = ViperUtil.getSurroundingParents(parent);
+                var surroundingParents = ViperUtil.getSurroundingParents(parent, null, 'inline');
                 if (surroundingParents.length > 0) {
                     parent = surroundingParents.pop();
                 }
