@@ -34827,6 +34827,7 @@ ViperAccessibilityPlugin_WCAG2 = {
 
                         image.setAttribute('width', width);
                         var widthStyle = parseInt(ViperUtil.getStyle(image, 'width').replace('px', ''));
+                        var naturalDim = self.getImageNaturalDimensions(image);
                         if (widthStyle !== width) {
                             image.setAttribute('width', widthStyle);
                             if (both !== true) {
@@ -34835,10 +34836,10 @@ ViperAccessibilityPlugin_WCAG2 = {
 
                             _updateSize();
                             return;
-                        } else if (widthStyle > image.naturalWidth) {
-                            image.setAttribute('width', image.naturalWidth);
+                        } else if (widthStyle > naturalDim.width) {
+                            image.setAttribute('width', naturalDim.width);
                             if (both !== true) {
-                                image.setAttribute('height', image.naturalHeight);
+                                image.setAttribute('height', naturalDim.height);
                             }
 
                             _updateSize();
@@ -34903,6 +34904,17 @@ ViperAccessibilityPlugin_WCAG2 = {
 
         },
 
+        getImageNaturalDimensions: function(image)
+        {
+            var dim = {
+                width: image.naturalWidth,
+                height: image.naturalHeight
+            };
+
+            return dim;
+
+        },
+
         hideImageResizeHandles: function(noUpdate)
         {
             if (this._resizeHandles) {
@@ -34921,13 +34933,14 @@ ViperAccessibilityPlugin_WCAG2 = {
 
         resetImageSize: function(image)
         {
-            var height = image.naturalHeight;
-            ViperUtil.attr(image, 'width', image.naturalWidth + 'px');
+            var dim    = this.getImageNaturalDimensions(image);
+            var height = dim.height;
+            ViperUtil.attr(image, 'width', dim.width + 'px');
             var widthStyle = parseInt(ViperUtil.getStyle(image, 'width').replace('px', ''));
 
-            if (widthStyle !== image.naturalWidth) {
+            if (widthStyle !== dim.width) {
                 ViperUtil.attr(image, 'width', widthStyle + 'px');
-                height = Math.round(widthStyle * (image.naturalHeight / image.naturalWidth));
+                height = Math.round(widthStyle * (dim.height / dim.width));
             }
 
             ViperUtil.attr(image, 'height', height + 'px');
@@ -39934,9 +39947,7 @@ ViperAccessibilityPlugin_WCAG2 = {
             var viperElement = this.viper.getViperElement();
             while (elem.parentNode && elem.parentNode !== viperElement) {
                 elem = elem.parentNode;
-                if (ViperUtil.hasAttribute(elem, 'data-viper-keyword') === true
-                    || ViperUtil.attr(elem, 'data-viper-attribite-keywords') === 'true'
-                ) {
+                if (ViperUtil.hasAttribute(elem, 'data-viper-keyword') === true) {
                     return elem;
                 }
             }
@@ -71695,4 +71706,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = '45d3ad63026edfa0f06acf36718af81afd90f5df';
+Viper.build = true;Viper.version = 'd97e7455599d49be0b67cdddd83870c60e11fda4';
