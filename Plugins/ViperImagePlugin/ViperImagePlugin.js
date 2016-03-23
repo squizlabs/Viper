@@ -964,6 +964,7 @@
 
                         image.setAttribute('width', width);
                         var widthStyle = parseInt(ViperUtil.getStyle(image, 'width').replace('px', ''));
+                        var naturalDim = self.getImageNaturalDimensions(image);
                         if (widthStyle !== width) {
                             image.setAttribute('width', widthStyle);
                             if (both !== true) {
@@ -972,10 +973,10 @@
 
                             _updateSize();
                             return;
-                        } else if (widthStyle > image.naturalWidth) {
-                            image.setAttribute('width', image.naturalWidth);
+                        } else if (widthStyle > naturalDim.width) {
+                            image.setAttribute('width', naturalDim.width);
                             if (both !== true) {
-                                image.setAttribute('height', image.naturalHeight);
+                                image.setAttribute('height', naturalDim.height);
                             }
 
                             _updateSize();
@@ -1040,6 +1041,17 @@
 
         },
 
+        getImageNaturalDimensions: function(image)
+        {
+            var dim = {
+                width: image.naturalWidth,
+                height: image.naturalHeight
+            };
+
+            return dim;
+
+        },
+
         hideImageResizeHandles: function(noUpdate)
         {
             if (this._resizeHandles) {
@@ -1058,13 +1070,14 @@
 
         resetImageSize: function(image)
         {
-            var height = image.naturalHeight;
-            ViperUtil.attr(image, 'width', image.naturalWidth + 'px');
+            var dim    = this.getImageNaturalDimensions(image);
+            var height = dim.height;
+            ViperUtil.attr(image, 'width', dim.width + 'px');
             var widthStyle = parseInt(ViperUtil.getStyle(image, 'width').replace('px', ''));
 
-            if (widthStyle !== image.naturalWidth) {
+            if (widthStyle !== dim.width) {
                 ViperUtil.attr(image, 'width', widthStyle + 'px');
-                height = Math.round(widthStyle * (image.naturalHeight / image.naturalWidth));
+                height = Math.round(widthStyle * (dim.height / dim.width));
             }
 
             ViperUtil.attr(image, 'height', height + 'px');
