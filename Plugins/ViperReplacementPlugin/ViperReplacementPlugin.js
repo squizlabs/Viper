@@ -522,9 +522,7 @@
             var viperElement = this.viper.getViperElement();
             while (elem.parentNode && elem.parentNode !== viperElement) {
                 elem = elem.parentNode;
-                if (ViperUtil.hasAttribute(elem, 'data-viper-keyword') === true
-                    || ViperUtil.attr(elem, 'data-viper-attribite-keywords') === 'true'
-                ) {
+                if (ViperUtil.hasAttribute(elem, 'data-viper-keyword') === true) {
                     return elem;
                 }
             }
