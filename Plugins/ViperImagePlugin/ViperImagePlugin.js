@@ -915,8 +915,6 @@
                 'mousedown',
                 function (e) {
                     // Reset size.
-                    ViperUtil.attr(image, 'width', image.naturalWidth + 'px');
-                    ViperUtil.attr(image, 'height', image.naturalHeight + 'px');
                     self.resetImageSize(image);
                     _updateSize();
                     ViperUtil.preventDefault(e);
@@ -965,6 +963,24 @@
                         }
 
                         image.setAttribute('width', width);
+                        var widthStyle = parseInt(ViperUtil.getStyle(image, 'width').replace('px', ''));
+                        if (widthStyle !== width) {
+                            image.setAttribute('width', widthStyle);
+                            if (both !== true) {
+                                image.setAttribute('height', parseInt(widthStyle * ratio));
+                            }
+
+                            _updateSize();
+                            return;
+                        } else if (widthStyle > image.naturalWidth) {
+                            image.setAttribute('width', image.naturalWidth);
+                            if (both !== true) {
+                                image.setAttribute('height', image.naturalHeight);
+                            }
+
+                            _updateSize();
+                            return;
+                        }
 
                         if (both === true) {
                             height += hDiff;
@@ -1042,8 +1058,16 @@
 
         resetImageSize: function(image)
         {
+            var height = image.naturalHeight;
             ViperUtil.attr(image, 'width', image.naturalWidth + 'px');
-            ViperUtil.attr(image, 'height', image.naturalHeight + 'px');
+            var widthStyle = parseInt(ViperUtil.getStyle(image, 'width').replace('px', ''));
+
+            if (widthStyle !== image.naturalWidth) {
+                ViperUtil.attr(image, 'width', widthStyle + 'px');
+                height = Math.round(widthStyle * (image.naturalHeight / image.naturalWidth));
+            }
+
+            ViperUtil.attr(image, 'height', height + 'px');
 
         },
 
