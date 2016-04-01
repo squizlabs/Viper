@@ -54,23 +54,20 @@ class Viper_Tests_BlockTag_BlankBlockTagWithTablesUnitTest extends AbstractViper
         // Test editing first cell
         $this->useTest(4);
         $this->clickCell(0);
-        $this->sikuli->keyDown('Key.CMD + Key.LEFT');
-        $this->type('modified ');
-        $this->assertHTMLMatchNoHeaders('This is %1%<br /><table border="1" style="width:100%;"><tbody><tr><td>modified test cell-1</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>test cell-2</td><td></td></tr><tr><td></td><td></td><td></td><td>test cell-3</td></tr></tbody></table> %2% some content');
+        $this->type(' modified');
+        $this->assertHTMLMatchNoHeaders('This is %1%<br /><table border="1" style="width:100%;"><tbody><tr><td>test cell-1 modified</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>test cell-2</td><td></td></tr><tr><td></td><td></td><td></td><td>test cell-3</td></tr></tbody></table> %2% some content');
 
         // Test editing a middle cell
         $this->useTest(4);
         $this->clickCell(6);
-        $this->sikuli->keyDown('Key.CMD + Key.LEFT');
-        $this->type('modified ');
-        $this->assertHTMLMatchNoHeaders('This is %1%<br /><table border="1" style="width:100%;"><tbody><tr><td>test cell-1</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>modified test cell-2</td><td></td></tr><tr><td></td><td></td><td></td><td>test cell-3</td></tr></tbody></table> %2% some content');
+        $this->type(' modified');
+        $this->assertHTMLMatchNoHeaders('This is %1%<br /><table border="1" style="width:100%;"><tbody><tr><td>test cell-1</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>test cell-2 modified</td><td></td></tr><tr><td></td><td></td><td></td><td>test cell-3</td></tr></tbody></table> %2% some content');
 
         // Test editing last cell
         $this->useTest(4);
         $this->clickCell(11);
-        $this->sikuli->keyDown('Key.CMD + Key.LEFT');
-        $this->type('modified ');
-        $this->assertHTMLMatchNoHeaders('This is %1%<br /><table border="1" style="width:100%;"><tbody><tr><td>test cell-1</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>test cell-2</td><td></td></tr><tr><td></td><td></td><td></td><td>modified test cell-3</td></tr></tbody></table> %2% some content');
+        $this->type(' modified');
+        $this->assertHTMLMatchNoHeaders('This is %1%<br /><table border="1" style="width:100%;"><tbody><tr><td>test cell-1</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>test cell-2</td><td></td></tr><tr><td></td><td></td><td></td><td>test cell-3 modified</td></tr></tbody></table> %2% some content');
 
     }//end testEditingATableCellInsideBlankBlockTag()
 
