@@ -216,4 +216,32 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         $this->assertRawHTMLMatch('<p>%1%&nbsp;&nbsp;%2%</p><p>%3%</p><p>%4%</p><p>Test content.</p>');
 
     }//end testAddingAndDeletingLinkedKeywordsUsingTopToolbar()
+
+
+    /**
+     * Test that content with a keyword url can be edited.
+     *
+     * @return void
+     */
+    public function testEditingKeywordLinkedContent()
+    {
+        // Test that content can be edited without changing the url
+        $this->useTest(3);
+        $this->moveToKeyword(1, 'left');
+        $this->type('additional content ');
+        $this->assertHTMLMatch('<p><a href="((lookup:url:1))">Test content additional content %1%</a></p><p>%2% More test %3% content. %4%</p>');
+
+        // Test that url can be applied to another piece of content
+        $this->selectKeyword(2, 4);
+        $this->clickInlineToolbarButton('link');
+        $this->type('((lookup:url:1))');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p><a href="((lookup:url:1))">Test content additional content %1%</a></p><p><a href="((lookup:url:1))">%2% More test %3% content. %4%</a></p>');
+
+        // Test that second content can also be edited without chaging url
+        $this->moveToKeyword(3, 'left');
+        $this->type('more content ');
+        $this->assertHTMLMatch('<p><a href="((lookup:url:1))">Test content additional content %1%</a></p><p><a href="((lookup:url:1))">%2% More test more content %3% content. %4%</a></p>');
+
+    }//end testEditingKeywordLinkedContent()
 }
