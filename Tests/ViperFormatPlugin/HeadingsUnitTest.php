@@ -147,6 +147,27 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
 
         $this->assertHTMLMatch('<p>Test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test</p>');
 
+        // Test forward delete
+        $this->useTest(16);
+        $this->moveToKeyword(1, 'left');
+        sleep(1);
+
+        for ($i = 0; $i < 8; $i++) {
+            $this->sikuli->keyDown('Key.DELETE');
+        }
+
+        $this->assertHTMLMatch('<p>Test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test</p>');
+
+        // Test backspace
+        $this->useTest(16);
+        $this->moveToKeyword(2, 'right');
+
+        for ($i = 0; $i < 8; $i++) {
+            $this->sikuli->keyDown('Key.BACKSPACE');
+        }
+
+        $this->assertHTMLMatch('<p>Test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test</p>');
+
     }//end testDeletingAHeadingFromContent()
 
 
@@ -1258,6 +1279,40 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         $this->assertHTMLMatch('<h2>Heading %1%</h2>');
 
     }//end testUndoAndRedoForHeadings()
+
+
+    /**
+     * Test that changing headings doesn't remove class and anchor.
+     *
+     * @return void
+     */
+    public function testChangingHeadingTypeWithClassAndAnchor()
+    {
+        $this->useTest(18);
+
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('headings');
+        $this->clickTopToolbarButton('H1', NULL, TRUE);
+
+        // Apply class and anochor
+        $this->clickTopToolbarButton('cssClass');
+        $this->type('test-class');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test-anchor');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<h1 class="test-class" id="test-anchor">%1% Test Heading %2%</h1><p>%3% Test content.</p>');
+
+        // Changing heading type
+        $this->clickTopToolbarButton('headings', 'active');
+        $this->clickTopToolbarButton('H2', NULL, TRUE);
+        $this->assertHTMLMatch('<h2 class="test-class" id="test-anchor">%1% Test Heading %2%</h2><p>%3% Test content.</p>');
+
+        // Removing heading shouldn't remove class and anchor
+        $this->clickTopToolbarButton('H2', 'active', TRUE);
+        $this->assertHTMLMatch('<p class="test-class" id="test-anchor">%1% Test Heading %2%</p><p>%3% Test content.</p>');
+
+    }//end testChangingHeadingTypeWithClassAndAnchor()
 
 
 }//end class

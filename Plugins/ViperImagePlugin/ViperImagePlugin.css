@@ -28,3 +28,27 @@
     margin-left: -10px;
     margin-top: -10px;
 }
+
+.ViperImagePlugin-sizeDiv {
+    position: absolute;
+    background-color: rgba(224,222,222,0.7);
+    color: #000;
+    padding: 3px 6px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    z-index: 9999;
+    cursor: pointer;
+}
+
+.ViperImagePlugin-reset {
+    padding-left: 15px;
+    color: #36A2F0;
+}
+
+.ViperImagePlugin-origSize {
+    display: none;
+}
+
+.ViperImagePlugin-sizeDiv:hover .ViperImagePlugin-origSize {
+    display: inline;
+}

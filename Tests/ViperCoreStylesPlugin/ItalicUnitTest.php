@@ -232,6 +232,94 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
 
 
     /**
+     * Test deleting content including content with italic formatting
+     *
+     * @return void
+     */
+    public function testDeletingAndAddingContentWithItalicFormatting()
+    {
+         // Check deleting a word after the italic content
+        $this->useTest(9);
+        $this->moveToKeyword(3, 'right');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1% <em>a %2% b</em></p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>%1% <em>a %2% b</em> content</p>');
+
+        // Check deleting a word after the italic content up to the italic content
+        $this->useTest(9);
+        $this->moveToKeyword(3, 'right');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1% <em>a %2% b</em></p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>%1% <em>a %2% bcontent</em></p>');
+
+        // Check deleting from the end of the paragraph including italic content
+        $this->useTest(9);
+        $this->moveToKeyword(3, 'right');
+
+        for ($i = 0; $i < 11; $i++) {
+            $this->sikuli->keyDown('Key.BACKSPACE');
+        }
+
+        $this->assertHTMLMatch('<p>%1%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>%1% content</p>');
+
+        // Check deleting from the start of the paragraph
+        $this->useTest(9);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p><em>a %2% b</em> %3%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>content <em>a %2% b</em> %3%</p>');
+
+        // Check deleting from the start of the paragraph up to the italic content
+        $this->useTest(9);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p><em>a %2% b</em> %3%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p><em>contenta %2% b</em> %3%</p>');
+
+        // Check deleting from the start of the paragraph including italic content
+        $this->useTest(9);
+        $this->moveToKeyword(1, 'left');
+
+        for ($i = 0; $i < 11; $i++) {
+            $this->sikuli->keyDown('Key.DELETE');
+        }
+
+        $this->assertHTMLMatch('<p>%3%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>content %3%</p>');
+
+    }//end testDeletingAndAddingContentWithItalicFormatting()
+
+
+    /**
      * Test that the shortcut command works for Italics.
      *
      * @return void
@@ -780,35 +868,33 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
     {
         // Test adding content before italic content when cursor starts inside the italic content
         $this->useTest(9);
-        $this->clickKeyword(2);
+        $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.LEFT');
-        $this->type('new');
-        $this->assertHTMLMatch('<p>%1% new<em>%2%</em> %3%</p>');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('new ');
+        $this->assertHTMLMatch('<p>%1% <em>new a %2% b</em> %3%</p>');
 
         // Test adding content before italic content when cursor starts elsewhere in content
         $this->useTest(9);
-        $this->clickKeyword(1);
+        $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->type('new');
-        $this->assertHTMLMatch('<p>%1% new<em>%2%</em> %3%</p>');
+        $this->type('new ');
+        $this->assertHTMLMatch('<p>%1% <em>new a %2% b</em> %3%</p>');
 
         // Test adding content after italic content when cursor starts inside the italic content
         $this->useTest(9);
-        $this->clickKeyword(2);
+        $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
-        $this->type('new');
-        $this->assertHTMLMatch('<p>%1% <em>%2%new</em> %3%</p>');
+        $this->type(' new');
+        $this->assertHTMLMatch('<p>%1% <em>a %2% b new</em> %3%</p>');
 
         // Test adding content before italic content when cursor starts elsewhere in content
         $this->useTest(9);
-        $this->clickKeyword(3);
+        $this->moveToKeyword(3, 'left');
         $this->sikuli->keyDown('Key.LEFT');
-        $this->sikuli->keyDown('Key.LEFT');
-        $this->type('new');
-        $this->assertHTMLMatch('<p>%1% <em>%2%new</em> %3%</p>');
+        $this->type(' new');
+        $this->assertHTMLMatch('<p>%1% <em>a %2% b new</em> %3%</p>');
 
     }//end testAddingContentAroundItalicContent()
 
@@ -857,6 +943,49 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic test <em>abc test abc test</em> content to test</p>');
 
     }//end testEditingItalicContent()
+
+
+    /**
+     * Test splitting a italic section in content
+     *
+     * @return void
+     */
+    public function testSplittingItalicContent()
+    {
+        // Test pressing enter in the middle of italic content
+        $this->useTest(9);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>%1% <em>a %2%</em></p><p><em>test b</em> %3%</p>');
+
+        // Test pressing enter at the start of italic content
+        $this->useTest(9);
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('test ');
+        $this->assertHTMLMatch('<p>%1% </p><p><em>test a %2% b</em> %3%</p>');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>%1% test</p><p><em>test a %2% b</em> %3%</p>');
+
+        // Test pressing enter at the end of italic content
+        $this->useTest(9);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('test ');
+        $this->assertHTMLMatch('<p>%1% <em>a %2% b</em></p><p>test&nbsp;&nbsp;%3%</p>');
+
+    }//end testSplittingItalicContent()
 
 }//end class
 

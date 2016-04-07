@@ -13,6 +13,8 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldInListsUnitTest extends AbstractVipe
      */
     public function testAddAndRemoveBoldToWordInListItem()
     {
+        $this->useTest(1);
+
         // Apply bold using inline toolbar
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('bold');
@@ -101,6 +103,8 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldInListsUnitTest extends AbstractVipe
      */
     public function testAddAndRemoveBoldToListItem()
     {
+        $this->useTest(1);
+
         // Apply bold using inline toolbar
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
@@ -205,6 +209,8 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldInListsUnitTest extends AbstractVipe
      */
     public function testAddAndRemoveBoldToList()
     {
+        $this->useTest(1);
+
         // Apply bold using top toolbar
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
@@ -270,6 +276,134 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldInListsUnitTest extends AbstractVipe
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
 
     }//end testAddAndRemoveBoldToListItem()
+
+
+    /**
+     * Test deleting content from unordered lists including bold formating
+     *
+     * @return void
+     */
+    public function testDeletingBoldContentFromUnorderedLists()
+    {
+        // Check deleting a word after the bold content in a list item
+        $this->useTest(2);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% <strong>test</strong></li></ul>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% <strong>testcontent</strong></li></ul>');
+
+        // Check deleting from the end of the paragraph including bold content
+        $this->useTest(2);
+        $this->moveToKeyword(2, 'right');
+
+        for ($i = 0; $i < 8; $i++) {
+            $this->sikuli->keyDown('Key.BACKSPACE');
+        }
+
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1%</li></ul>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% content</li></ul>');
+
+        // Check deleting from the start of the list item
+        $this->useTest(2);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li><strong>test</strong> %2%</li></ul>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li><strong>contenttest</strong> %2%</li></ul>');
+
+        // Check deleting from the start of the list item including bold content
+        $this->useTest(2);
+        $this->moveToKeyword(1, 'left');
+
+        for ($i = 0; $i < 8; $i++) {
+            $this->sikuli->keyDown('Key.DELETE');
+        }
+
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%2%</li></ul>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>content %2%</li></ul>');
+
+    }//end testDeletingBoldContentFromUnorderedLists()
+
+
+     /**
+     * Test deleting content from ordered lists including bold formating
+     *
+     * @return void
+     */
+    public function testDeletingBoldContentFromOrderedLists()
+    {
+        // Check deleting a word after the bold content in a list item
+        $this->useTest(3);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% <strong>test</strong></li></ol>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% <strong>testcontent</strong></li></ol>');
+
+        // Check deleting from the end of the list item including bold content
+        $this->useTest(3);
+        $this->moveToKeyword(2, 'right');
+
+        for ($i = 0; $i < 8; $i++) {
+            $this->sikuli->keyDown('Key.BACKSPACE');
+        }
+
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1%</li></ol>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% content</li></ol>');
+
+        // Check deleting from the start of the list item
+        $this->useTest(3);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li><strong>test</strong> %2%</li></ol>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li><strong>contenttest</strong> %2%</li></ol>');
+
+        // Check deleting from the start of the paragraph including bold content
+        $this->useTest(3);
+        $this->moveToKeyword(1, 'left');
+
+        for ($i = 0; $i < 8; $i++) {
+            $this->sikuli->keyDown('Key.DELETE');
+        }
+
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%2%</li></ol>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>content %2%</li></ol>');
+
+    }//end testDeletingBoldContentFromOrderedLists()
 
 }//end class
 

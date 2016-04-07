@@ -109,7 +109,9 @@ class Viper_Tests_ViperReplacementPlugin_CutAndPasteKeywordUnitTest extends Abst
 
         // End of paragraph using keyboard shortcuts
         $this->moveToKeyword(3, 'right');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + v');
+        sleep(1);
 
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com.au">((prop:productName))</a>%1%</p><p>%2%<a href="http://www.squizlabs.com.au">((prop:productName))</a> %3%<a href="http://www.squizlabs.com.au">((prop:productName))</a></p><p>%4%<a href="http://www.squizlabs.com.au">((prop:productName))</a></p><p>%5% %6%</p>');
         $this->assertRawHTMLMatch('<p><a href="http://www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a>%1%</p><p>%2%<a href="http://www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a> %3%<a href="http://www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a></p><p>%4%<a href="http://www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a></p><p>%5% %6%</p>');

@@ -249,7 +249,15 @@ class Viper_Tests_BlockTag_BlankBlockTagWithItalicsUnitTest extends AbstractVipe
         $this->moveToKeyword(1, 'left');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('Some italic <br />test <em>%1% %2%</em> content to test');
+        $this->assertHTMLMatch('Some italic <br /><em>test %1% %2%</em> content to test');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('test');
+        $this->assertHTMLMatch('Some italic test<br /><em>test %1% %2%</em> content to test');
 
         // Test pressing enter at the end of italic content
         $this->useTest(4);
@@ -259,6 +267,37 @@ class Viper_Tests_BlockTag_BlankBlockTagWithItalicsUnitTest extends AbstractVipe
         $this->assertHTMLMatch('Some italic <em>%1% %2%</em><br />test&nbsp;&nbsp;content to test');
 
     }//end testSplittingItalicContent()
+
+
+    /**
+     * Test undo and redo with Italic content
+     *
+     * @return void
+     */
+    public function testUndoAndRedoWithItalicContent()
+    {
+        $this->useTest(1);
+        $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
+
+        // Apply italics content
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('italic');
+        $this->assertHTMLMatch('This is <em>%1%</em> %2% some content');
+
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('This is %1% %2% some content');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('This is <em>%1%</em> %2% some content');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('This is %1% %2% some content');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('This is <em>%1%</em> %2% some content');        
+
+    }//end testUndoAndRedoWithItalicContent()
 
 
 }//end class
