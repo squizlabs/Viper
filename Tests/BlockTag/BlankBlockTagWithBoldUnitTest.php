@@ -150,37 +150,40 @@ class Viper_Tests_BlockTag_BlankBlockTagWithBoldUnitTest extends AbstractViperUn
 
         // Test adding content to the start of the bold formatting
         $this->useTest(4);
-        $this->clickKeyword(1);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test ');
-        $this->assertHTMLMatch('Some bold test <strong>%1% %2%</strong> content to test');
+        $this->assertHTMLMatch('Some bold <strong>test %1% %2%</strong> content to test');
 
         // Test adding content in the middle of bold formatting
         $this->moveToKeyword(1, 'right');
         $this->type(' test');
-        $this->assertHTMLMatch('Some bold test <strong>%1% test %2%</strong> content to test');
+        $this->assertHTMLMatch('Some bold <strong>test %1% test %2%</strong> content to test');
 
         // Test adding content to the end of bold formatting
-        $this->clickKeyword(2);
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->type(' %3%');
-        $this->assertHTMLMatch('Some bold test <strong>%1% test %2% %3%</strong> content to test');
+        $this->assertHTMLMatch('Some bold <strong>test %1% test %2% %3%</strong> content to test');
 
         // Test highlighting some content in the strong tags and replacing it
         $this->selectKeyword(2);
         $this->type('abc');
-        $this->assertHTMLMatch('Some bold test <strong>%1% test abc %3%</strong> content to test');
+        $this->assertHTMLMatch('Some bold <strong>test %1% test abc %3%</strong> content to test');
 
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('abc');
-        $this->assertHTMLMatch('Some bold test <strong>abc test abc %3%</strong> content to test');
+        $this->assertHTMLMatch('Some bold <strong>test abc test abc %3%</strong> content to test');
 
         $this->selectKeyword(3);
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('test');
-        $this->assertHTMLMatch('Some bold test <strong>abc test abc test</strong> content to test');
+        $this->assertHTMLMatch('Some bold <strong>test abc test abc test</strong> content to test');
 
     }//end testEditingBoldContent()
 
@@ -266,7 +269,15 @@ class Viper_Tests_BlockTag_BlankBlockTagWithBoldUnitTest extends AbstractViperUn
         $this->moveToKeyword(1, 'left');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('Some bold <br />test <strong>%1% %2%</strong> content to test');
+        $this->assertHTMLMatch('Some bold <br /><strong>test %1% %2%</strong> content to test');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('test');
+        $this->assertHTMLMatch('Some bold test<br /><strong>test %1% %2%</strong> content to test');
 
         // Test pressing enter at the end of bold content
         $this->useTest(4);
@@ -276,6 +287,37 @@ class Viper_Tests_BlockTag_BlankBlockTagWithBoldUnitTest extends AbstractViperUn
         $this->assertHTMLMatch('Some bold <strong>%1% %2%</strong><br />test&nbsp;&nbsp;content to test');
 
     }//end testSplittingBoldContent()
+
+
+    /**
+     * Test undo and redo with bold content
+     *
+     * @return void
+     */
+    public function testUndoAndRedoWithBoldContent()
+    {
+        $this->useTest(1);
+        $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
+
+        // Apply bold content
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('bold');
+        $this->assertHTMLMatch('This is <strong>%1%</strong> %2% some content');
+
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('This is %1% %2% some content');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('This is <strong>%1%</strong> %2% some content');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('This is %1% %2% some content');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('This is <strong>%1%</strong> %2% some content'); 
+
+    }//end testUndoAndRedoWithBoldContent()
 
 
 }//end class

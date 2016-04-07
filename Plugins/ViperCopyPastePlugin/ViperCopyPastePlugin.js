@@ -526,7 +526,7 @@
 
                     // Get the range from the mouse pointer (drop location).
                     var rangeObj  = document.caretRangeFromPoint(e.originalEvent.clientX, e.originalEvent.clientY);
-                    var range     = new ViperMozRange(rangeObj);
+                    var range     = new Viper.MozRange(rangeObj);
 
                     // Create the tmpNode that is used for pasting content.
                     self._tmpNode = document.createTextNode(' ');
@@ -2688,7 +2688,7 @@
         _updateSelection: function()
         {
             try {
-                if (this._tmpNode !== null) {
+                if (this._tmpNode !== null && ViperUtil.isPartOfDOM(this._tmpNode) === true) {
                     var range = this.viper.getCurrentRange();
                     range.setEnd(this._tmpNode, this._tmpNodeOffset);
                     range.setStart(this._tmpNode, this._tmpNodeOffset);

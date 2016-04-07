@@ -931,9 +931,9 @@
                             this.splitList(firstBlock);
                             this._viper.contentChanged();
                             return false;
-                        } else if (ViperUtil.isBrowser('chrome') === true 
-                            || ViperUtil.isBrowser('safari') === true 
-                            || ViperUtil.isBrowser('msie') === true 
+                        } else if (ViperUtil.isBrowser('chrome') === true
+                            || ViperUtil.isBrowser('safari') === true
+                            || ViperUtil.isBrowser('msie') === true
                             || ViperUtil.isBrowser('edge') === true
                         ) {
                             handleEnter = true;
@@ -1445,7 +1445,7 @@
                 // Handle: <p>test<strong>test*</strong>test</p>.
                 // When enter is pressed make sure the new paragraph does not start with the tag.
                 var parent = startNode.parentNode;
-                var surroundingParents = ViperUtil.getSurroundingParents(parent);
+                var surroundingParents = ViperUtil.getSurroundingParents(parent, null, 'inline');
                 if (surroundingParents.length > 0) {
                     parent = surroundingParents.pop();
                 }
@@ -2782,8 +2782,9 @@
                         this._viper.contentChanged();
                         return false;
                     } else if (ViperUtil.isStubElement(startNode.nextSibling) === true
-                        && ViperUtil.isTag(startNode.nextSibling, 'br') === false
+                        && (ViperUtil.isTag(startNode.nextSibling, 'br') === false || startNode.nextSibling.nextSibling)
                     ) {
+                        // If the next sibling is a BR but its not the last node then remove.
                         ViperUtil.remove(startNode.nextSibling);
                         this._viper.contentChanged();
                         return false;
@@ -2896,10 +2897,6 @@
                     if (textNode) {
                         range.setStart(textNode, 0);
                     }
-                } else if (startNodeIsStub === true) {
-                    this._viper.moveCaretAway(startNodeIsStub);
-                    var surroundingParents = ViperUtil.getSurroundingParents(startNodeIsStub);
-                    ViperUtil.remove(surroundingParents.pop() || startNode);
                 } else if (ViperUtil.isTag(startNode, 'br') === true
                     && startNode.parentNode
                     && (ViperUtil.isBrowser('firefox') === true || ViperUtil.isBrowser('msie') === true || ViperUtil.isBrowser('edge') === true)
@@ -2941,6 +2938,18 @@
                         this._viper.contentChanged();
                         return false;
                     }
+                } else if (startNodeIsStub === true) {
+                    if (!startNode.nextSibling && ViperUtil.isTag(startNode, 'br') === true) {
+                        var nextSelectable = range.getNextContainer(startNode, null, true, true);
+                        if (!nextSelectable || this._viper.isOutOfBounds(nextSelectable) === true) {
+                            // Most likely the last content. Do nothing.
+                            return false;
+                        }
+                    }
+
+                    this._viper.moveCaretAway(startNodeIsStub);
+                    var surroundingParents = ViperUtil.getSurroundingParents(startNodeIsStub);
+                    ViperUtil.remove(surroundingParents.pop() || startNode);
                 }
             }//end if
 
@@ -3019,6 +3028,12 @@
                 if (currentParent !== nextParent && this._viper.isOutOfBounds(nextSelectable) === false) {
                     if (ViperUtil.isTag(currentParent, 'td') === true || ViperUtil.isTag(currentParent, 'th') === true) {
                         // At the end of a cell.. Do nothing.
+                        return false;
+                    }
+
+                    if (currentParent.nextSibling !== nextParent && ViperUtil.isStubElement(currentParent.nextSibling) === true) {
+                        ViperUtil.remove(currentParent.nextSibling);
+                        this._viper.contentChanged(true);
                         return false;
                     }
 

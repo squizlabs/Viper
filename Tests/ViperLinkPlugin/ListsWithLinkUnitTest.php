@@ -552,6 +552,63 @@ class Viper_Tests_ViperLinkPlugin_ListsWithLinkUnitTest extends AbstractViperUni
     }//end testFormatIconForLinkedListItems()
 
 
+    /**
+     * Test removing a link for a list item.
+     *
+     * @return void
+     */
+    public function testAddingListItemsToLinkedItem()
+    {
+        // Test ordered list
+        // Test after linked item
+        $this->useTest(7);
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->clickTopToolbarButton('listOl');
+        $this->moveToKeyword(1, 'right');
+
+        for ($i = 0; $i < 22; $i++) {
+            $this->sikuli->keyDown('Key.RIGHT');
+        }
+
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('Test content');
+        sleep(1);
+        $this->assertHTMLMatch('<ol><li>%1% <a href="https://www.squiz.net">https://www.squiz.net</a></li><li>Test content</li></ol>');
+
+        // Test before linked item
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('Test content');
+        $this->assertHTMLMatch('<ol><li>Test content</li><li>%1% <a href="https://www.squiz.net">https://www.squiz.net</a></li><li>Test content</li></ol>');
+
+        // Test unordered list
+        // Test after linked item
+        $this->useTest(7);
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->clickTopToolbarButton('listUl');
+        $this->moveToKeyword(1, 'right');
+
+        for ($i = 0; $i < 22; $i++) {
+            $this->sikuli->keyDown('Key.RIGHT');
+        }
+
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('Test content');
+        sleep(1);
+        $this->assertHTMLMatch('<ul><li>%1% <a href="https://www.squiz.net">https://www.squiz.net</a></li><li>Test content</li></ul>');
+
+        // Test before linked item
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('Test content');
+        $this->assertHTMLMatch('<ul><li>Test content</li><li>%1% <a href="https://www.squiz.net">https://www.squiz.net</a></li><li>Test content</li></ul>');
+
+    }//end testAddingListItemsToLinkedItem()
+
+
+
 }//end class
 
 ?>

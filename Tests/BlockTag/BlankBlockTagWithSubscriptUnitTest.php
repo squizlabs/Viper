@@ -185,7 +185,15 @@ class Viper_Tests_BlockTag_BlankBlockTagWithSubscriptUnitTest extends AbstractVi
         $this->moveToKeyword(1, 'left');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('Some subscript <br />test <sub>%1% %2%</sub> content to test');
+        $this->assertHTMLMatch('Some subscript <br /><sub>test %1% %2%</sub> content to test');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('test');
+        $this->assertHTMLMatch('Some subscript test<br /><sub>test %1% %2%</sub> content to test');
 
         // Test pressing enter at the end of subscript content
         $this->useTest(4);
@@ -195,6 +203,37 @@ class Viper_Tests_BlockTag_BlankBlockTagWithSubscriptUnitTest extends AbstractVi
         $this->assertHTMLMatch('Some subscript <sub>%1% %2%</sub><br />test&nbsp;&nbsp;content to test');
 
     }//end testSplittingSubscriptContent()
+
+
+    /**
+     * Test undo and redo with subscript content
+     *
+     * @return void
+     */
+    public function testUndoAndRedoWithSubscriptContent()
+    {
+        $this->useTest(1);
+        $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
+
+        // Apply subscript content
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('subscript');
+        $this->assertHTMLMatch('This is <sub>%1%</sub> %2% some content');
+
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('This is %1% %2% some content');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('This is <sub>%1%</sub> %2% some content');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('This is %1% %2% some content');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('This is <sub>%1%</sub> %2% some content');        
+
+    }//end testUndoAndRedoWithSubscriptContent()
 
 
 }//end class

@@ -185,7 +185,15 @@ class Viper_Tests_BlockTag_BlankBlockTagWithStrikethroughUnitTest extends Abstra
         $this->moveToKeyword(1, 'left');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('Some strikethrough <br />test <del>%1% %2%</del> content to test');
+        $this->assertHTMLMatch('Some strikethrough <br /><del>test %1% %2%</del> content to test');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('test');
+        $this->assertHTMLMatch('Some strikethrough test<br /><del>test %1% %2%</del> content to test');
 
         // Test pressing enter at the end of strikethrough content
         $this->useTest(4);
@@ -195,6 +203,37 @@ class Viper_Tests_BlockTag_BlankBlockTagWithStrikethroughUnitTest extends Abstra
         $this->assertHTMLMatch('Some strikethrough <del>%1% %2%</del><br />test&nbsp;&nbsp;content to test');
 
     }//end testSplittingStrikethroughContent()
+
+
+    /**
+     * Test undo and redo with strikethrough content
+     *
+     * @return void
+     */
+    public function testUndoAndRedoWithStrikethroughContent()
+    {
+        $this->useTest(1);
+        $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
+
+        // Apply strikethrough content
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('strikethrough');
+        $this->assertHTMLMatch('This is <del>%1%</del> %2% some content');
+
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('This is %1% %2% some content');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('This is <del>%1%</del> %2% some content');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('This is %1% %2% some content');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('This is <del>%1%</del> %2% some content');        
+
+    }//end testUndoAndRedoWithStrikethroughContent()
 
 
 }//end class

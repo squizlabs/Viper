@@ -904,7 +904,34 @@
 
             this._resizeImage = image;
 
-            var self = this;
+            var self        = this;
+            var windowWidth = ViperUtil.getWindowDimensions().width;
+            var sizeDiv     = document.createElement('div');
+            ViperUtil.addClass(sizeDiv, 'ViperImagePlugin-sizeDiv');
+            this.viper.addElement(sizeDiv);
+            this._resizeHandles.push(sizeDiv);
+            ViperUtil.addEvent(
+                sizeDiv,
+                'mousedown',
+                function (e) {
+                    // Reset size.
+                    self.resetImageSize(image);
+                    _updateSize();
+                    ViperUtil.preventDefault(e);
+                    self.viper.fireCallbacks('ViperImagePlugin:imageSizeReset', {image: image});
+
+                }
+            );
+
+            var _updateSize = function (rect) {
+                rect = rect || ViperUtil.getBoundingRectangle(image);
+                ViperUtil.setStyle(sizeDiv, 'right', windowWidth - (rect.x2) + 15 + 'px');
+                ViperUtil.setStyle(sizeDiv, 'top', (rect.y2) - 30 + 'px');
+                var sizeHtml = self.getImageSizeDisplayHtml(image);
+                ViperUtil.setHtml(sizeDiv, sizeHtml);
+            };
+            _updateSize(rect);
+
             var _addMouseEvents = function(handle, rev) {
                 ViperUtil.addEvent(handle, 'mousedown', function(e) {
                     var width    = image.width;
@@ -936,6 +963,25 @@
                         }
 
                         image.setAttribute('width', width);
+                        var widthStyle = parseInt(ViperUtil.getStyle(image, 'width').replace('px', ''));
+                        var naturalDim = self.getImageNaturalDimensions(image);
+                        if (widthStyle !== width) {
+                            image.setAttribute('width', widthStyle);
+                            if (both !== true) {
+                                image.setAttribute('height', parseInt(widthStyle * ratio));
+                            }
+
+                            _updateSize();
+                            return;
+                        } else if (widthStyle > naturalDim.width) {
+                            image.setAttribute('width', naturalDim.width);
+                            if (both !== true) {
+                                image.setAttribute('height', naturalDim.height);
+                            }
+
+                            _updateSize();
+                            return;
+                        }
 
                         if (both === true) {
                             height += hDiff;
@@ -958,6 +1004,9 @@
                         ViperUtil.setStyle(swHandle, 'left', (rect.x1 + offset.x) + 'px');
                         ViperUtil.setStyle(swHandle, 'top', (rect.y2 + offset.y) + 'px');
 
+                        _updateSize(rect);
+                        self.viper.fireCallbacks('ViperImagePlugin:imageResized', {image: image, size: rect});
+
                         ViperUtil.preventDefault(e);
                         return false;
                     });
@@ -965,7 +1014,7 @@
                     // Remove mousemove event.
                     ViperUtil.addEvent(ViperUtil.getDocuments(), 'mouseup.ViperImageResize', function(e) {
                         ViperUtil.removeEvent(Viper.document, 'mousemove.ViperImageResize');
-                        ViperUtil.removeEvent(Viper.document, 'mouseup.ViperImageResize');
+                        ViperUtil.removeEvent(ViperUtil.getDocuments(), 'mouseup.ViperImageResize');
 
                         // If the style attribute is empty, remove it.
                         if (!image.getAttribute('style')) {
@@ -980,7 +1029,6 @@
                         self._updateToolbars(image);
 
                         self._inlineToolbar.update(null, image);
-
                     });
 
                     ViperUtil.preventDefault(e);
@@ -990,6 +1038,17 @@
 
             _addMouseEvents(seHandle);
             _addMouseEvents(swHandle, true);
+
+        },
+
+        getImageNaturalDimensions: function(image)
+        {
+            var dim = {
+                width: image.naturalWidth,
+                height: image.naturalHeight
+            };
+
+            return dim;
 
         },
 
@@ -1006,6 +1065,31 @@
             }
 
             this._resizeImage = null;
+
+        },
+
+        resetImageSize: function(image)
+        {
+            var dim    = this.getImageNaturalDimensions(image);
+            var height = dim.height;
+            ViperUtil.attr(image, 'width', dim.width + 'px');
+            var widthStyle = parseInt(ViperUtil.getStyle(image, 'width').replace('px', ''));
+
+            if (widthStyle !== dim.width) {
+                ViperUtil.attr(image, 'width', widthStyle + 'px');
+                height = Math.round(widthStyle * (dim.height / dim.width));
+            }
+
+            ViperUtil.attr(image, 'height', height + 'px');
+
+        },
+
+        getImageSizeDisplayHtml: function(image)
+        {
+            var sizeHtml = image.width + ' x ' + image.height;
+            sizeHtml    += ' <span class="ViperImagePlugin-origSize">(' + image.naturalWidth + ' x ' + image.naturalHeight + ')</span>';
+            sizeHtml    += ' <span class="ViperImagePlugin-reset">' + _('Reset') + '</span>';
+            return sizeHtml;
 
         }
 
