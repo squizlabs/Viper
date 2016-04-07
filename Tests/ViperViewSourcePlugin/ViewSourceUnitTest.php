@@ -412,6 +412,37 @@ class Viper_Tests_ViperViewSourcePlugin_ViewSourceUnitTest extends AbstractViper
 
     }//end testAddingCodeWithBrTags()
 
+
+    /**
+     * Test that after you view the source that you can select all content and delete it
+     *
+     * @return void
+     */
+    public function testSelectingAllContentAfterViewingSourcCode()
+    {
+        $this->useTest(1);
+        $this->clickKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('Test %1%');
+        sleep(1);
+
+        $this->clickTopToolbarButton('sourceView');
+
+        try {
+            $closeIcon = $this->findImage('closePopupIcon', '.Viper-popup-closeIcon');
+            $this->sikuli->click($closeIcon);
+        } catch (Exception $e) {
+            $this->fail('Source editor does not have a close icon');
+        }
+
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('Test again');
+        $this->assertHTMLMatch('<p>Test again</p>');
+
+    }//end testSelectingAllContentAfterViewingSourcCode()
+
 }//end class
 
 ?>

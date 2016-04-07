@@ -796,6 +796,95 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     }//end testDeletingBoldContent()
 
 
+     /**
+     * Test deleting content including content with bold formatting
+     *
+     * @return void
+     */
+    public function testDeletingAndAddingNewContentWithBoldFormatting()
+    {
+         // Check deleting a word after the bold content
+        $this->useTest(9);
+        $this->moveToKeyword(3, 'right');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1% <strong>a %2% b</strong></p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>%1% <strong>a %2% b</strong> content</p>');
+
+        // Check deleting a word after the bold content up to the bold content
+        $this->useTest(9);
+        $this->moveToKeyword(3, 'right');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1% <strong>a %2% b</strong></p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>%1% <strong>a %2% bcontent</strong></p>');
+
+        // Check deleting from the end of the paragraph including bold content
+        $this->useTest(9);
+        $this->moveToKeyword(3, 'right');
+
+        for ($i = 0; $i < 11; $i++) {
+            $this->sikuli->keyDown('Key.BACKSPACE');
+        }
+
+        $this->assertHTMLMatch('<p>%1%</p>');
+        sleep(1);
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>%1% content</p>');
+
+        // Check deleting from the start of the paragraph
+        $this->useTest(9);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p><strong>a %2% b</strong> %3%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>content<strong>a %2% b</strong> %3%</p>');
+
+        // Check deleting from the start of the paragraph up to the bold content
+        $this->useTest(9);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p><strong>a %2% b</strong> %3%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p><strong>contenta %2% b</strong> %3%</p>');
+
+        // Check deleting from the start of the paragraph including bold content
+        $this->useTest(9);
+        $this->moveToKeyword(1, 'left');
+
+        for ($i = 0; $i < 11; $i++) {
+            $this->sikuli->keyDown('Key.DELETE');
+        }
+
+        $this->assertHTMLMatch('<p>%3%</p>');
+
+        // Add content to check the position of the cursor
+        $this->type('content');
+        $this->assertHTMLMatch('<p>content %3%</p>');
+
+    }//end testDeletingAndAddingNewContentWithBoldFormatting()
+
+
     /**
      * Test that you can remove bold from two different sections of content at the same time.
      *
@@ -847,35 +936,33 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
     {
         // Test adding content before bold content when cursor starts inside the bold content
         $this->useTest(9);
-        $this->clickKeyword(2);
+        $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.LEFT');
-        $this->type('new');
-        $this->assertHTMLMatch('<p>%1% new<strong>%2%</strong> %3%</p>');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('new ');
+        $this->assertHTMLMatch('<p>%1% <strong>new a %2% b</strong> %3%</p>');
 
         // Test adding content before bold content when cursor starts elsewhere in content
         $this->useTest(9);
-        $this->clickKeyword(1);
+        $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->type('new');
-        $this->assertHTMLMatch('<p>%1% new<strong>%2%</strong> %3%</p>');
+        $this->type('new ');
+        $this->assertHTMLMatch('<p>%1% <strong>new a %2% b</strong> %3%</p>');
 
         // Test adding content after bold content when cursor starts inside the bold content
         $this->useTest(9);
-        $this->clickKeyword(2);
+        $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
-        $this->type('new');
-        $this->assertHTMLMatch('<p>%1% <strong>%2%new</strong> %3%</p>');
+        $this->type(' new');
+        $this->assertHTMLMatch('<p>%1% <strong>a %2% b new</strong> %3%</p>');
 
         // Test adding content before bold content when cursor starts elsewhere in content
         $this->useTest(9);
-        $this->clickKeyword(3);
+        $this->moveToKeyword(3, 'left');
         $this->sikuli->keyDown('Key.LEFT');
-        $this->sikuli->keyDown('Key.LEFT');
-        $this->type('new');
-        $this->assertHTMLMatch('<p>%1% <strong>%2%new</strong> %3%</p>');
+        $this->type(' new');
+        $this->assertHTMLMatch('<p>%1% <strong>a %2% b new</strong> %3%</p>');
 
     }//end testAddingContentAroundBoldContent()
 
@@ -896,12 +983,12 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test ');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test <strong>%2% %3%</strong> content to test</p>');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold <strong>test %2% %3%</strong> content to test</p>');
 
         // Test adding content in the middle of bold formatting
         $this->moveToKeyword(2, 'right');
         $this->type(' test');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test <strong>%2% test %3%</strong> content to test</p>');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold <strong>test %2% test %3%</strong> content to test</p>');
 
         // Test adding content to the end of bold formatting
         $this->moveToKeyword(3, 'left');
@@ -909,24 +996,92 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->type(' %4%');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test <strong>%2% test %3% %4%</strong> content to test</p>');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold <strong>test %2% test %3% %4%</strong> content to test</p>');
 
         // Test highlighting some content in the strong tags and replacing it
         $this->selectKeyword(3);
         $this->type('abc');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test <strong>%2% test abc %4%</strong> content to test</p>');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold <strong>test %2% test abc %4%</strong> content to test</p>');
 
         $this->selectKeyword(2);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('abc');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test <strong>abc test abc %4%</strong> content to test</p>');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold <strong>test abc test abc %4%</strong> content to test</p>');
 
         $this->selectKeyword(4);
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('test');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test <strong>abc test abc test</strong> content to test</p>');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold <strong>test abc test abc test</strong> content to test</p>');
 
     }//end testEditingBoldContent()
+
+
+    /**
+     * Test splitting a bold section in content
+     *
+     * @return void
+     */
+    public function testSplittingBoldContent()
+    {
+        // Test pressing enter in the middle of bold content
+        $this->useTest(9);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>%1% <strong>a %2%</strong></p><p><strong>test b</strong> %3%</p>');
+
+        // Test pressing enter at the start of strong content
+        $this->useTest(9);
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('test ');
+        $this->assertHTMLMatch('<p>%1% </p><p><strong>test a %2% b</strong> %3%</p>');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>%1% test</p><p><strong>test a %2% b</strong> %3%</p>');
+
+        // Test pressing enter at the end of strong content
+        $this->useTest(9);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('test ');
+        $this->assertHTMLMatch('<p>%1% <strong>a %2% b</strong></p><p>test&nbsp;&nbsp;%3%</p>');
+
+    }//end testSplittingBoldContent()
+
+
+    /**
+     * Test undo and redo applying bold to content
+     *
+     * @return void
+     */
+    public function testUndoAndRedoBoldContent()
+    {
+        // Test using keyboard shortcuts
+        // Test undo
+        $this->useTest(11);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('%2% Less test content. %3%');
+        $this->selectKeyword(2,3);
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>Test content.</p><p>More test content. %1%</p><p>%2% Less test content. %3%</p>');
+
+        // Test redo
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>Test content.</p><p>More test content. %1%</p><p><strong>%2% Less test content. %3%</strong></p>');
+    }//end testUndoAndRedoBoldContent()
+
 
 }//end class
 

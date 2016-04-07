@@ -469,5 +469,39 @@ class Viper_Tests_BlockTag_BlankBlockTagWithLinksUnitTest extends AbstractViperU
 
     }// end testLinksWithSuperscriptFormatting()
 
+    /**
+     * Test undo and redo with link.
+     *
+     * @return void
+     */
+    public function testUndoAndRedoWithLinks()
+    {
+        $this->useTest(1);
+        $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
+
+        // Apply link
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('link', NULL);
+        sleep(1);
+        $this->clickField('URL', TRUE);
+        $this->type('test-link');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<a href="test-link">%1%</a> test content');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->clickKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('%1% test content');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<a href="test-link">%1%</a> test content');  
+
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('%1% test content');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<a href="test-link">%1%</a> test content');
+
+    }// end testUndoAndRedoWithLinks()
 
 }//end class
