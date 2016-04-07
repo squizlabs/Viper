@@ -2688,7 +2688,7 @@
         _updateSelection: function()
         {
             try {
-                if (this._tmpNode !== null) {
+                if (this._tmpNode !== null && ViperUtil.isPartOfDOM(this._tmpNode) === true) {
                     var range = this.viper.getCurrentRange();
                     range.setEnd(this._tmpNode, this._tmpNodeOffset);
                     range.setStart(this._tmpNode, this._tmpNodeOffset);
