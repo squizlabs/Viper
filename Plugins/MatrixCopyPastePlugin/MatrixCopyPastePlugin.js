@@ -82,15 +82,6 @@
                 preview_img.setAttribute('data-filename', '');
                 preview_img.setAttribute('data-id', newLength - 1);
 
-                // when click on this special preview image, just popup the inline image plugin
-                $(preview_img).mousedown(function(event) {
-                    if(preview_img.dataset.imagepaste && preview_img.dataset.imagepaste == 'true') {
-                        setTimeout(function(){ 
-                            $('#' + self.viper.getId() + '-vitpImage').mousedown(); 
-                        }, 250);
-                        
-                    }
-                })
 
                 // insert a preview
                 var range = self.viper.getViperRange();

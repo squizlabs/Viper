@@ -111,7 +111,7 @@
             });
 
             // when you click on a pasted image, pop up the upload menu directly
-            this.viper.registerCallback('Viper:mouseDown', 'MatrixImagePlugin', function(e) {
+            this.viper.registerCallback('Viper:mouseUp', 'MatrixImagePlugin', function(e) {
                 var target = ViperUtil.getMouseEventTarget(e);
                 self._ieImageResize = null;
 
