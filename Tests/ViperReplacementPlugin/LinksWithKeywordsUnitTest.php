@@ -219,6 +219,136 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
 
 
     /**
+     * Test that basic content can have a keyword url added.
+     *
+     * @return void
+     */
+    public function testAddingKeywordLinksToBasicContent()
+    {
+        // Test using top toolbar
+        // Test beginning of a paragraph
+        $this->useTest(4);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('link');
+        $this->type('((lookup:url:1))');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p><a href="((lookup:url:1))">%1%</a> %2% %3%</p>');
+
+        // Test middle of paragraph
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('link');
+        $this->type('((lookup:url:2))');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p><a href="((lookup:url:1))">%1%</a> <a href="((lookup:url:2))">%2%</a> %3%</p>');
+
+        // Test end of paragraph
+        $this->selectKeyword(3);
+        $this->clickTopToolbarButton('link');
+        $this->type('((lookup:url:3))');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p><a href="((lookup:url:1))">%1%</a> <a href="((lookup:url:2))">%2%</a> <a href="((lookup:url:3))">%3%</a></p>');
+
+        // Test using inline toolbar
+        // Test beginning of a paragraph
+        $this->useTest(4);
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('link');
+        $this->type('((lookup:url:1))');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p><a href="((lookup:url:1))">%1%</a> %2% %3%</p>');
+
+        // Test middle of paragraph
+        $this->selectKeyword(2);
+        $this->clickInlineToolbarButton('link');
+        $this->type('((lookup:url:2))');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p><a href="((lookup:url:1))">%1%</a> <a href="((lookup:url:2))">%2%</a> %3%</p>');
+
+        // Test end of paragraph
+        $this->selectKeyword(3);
+        $this->clickInlineToolbarButton('link');
+        $this->type('((lookup:url:3))');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p><a href="((lookup:url:1))">%1%</a> <a href="((lookup:url:2))">%2%</a> <a href="((lookup:url:3))">%3%</a></p>');
+
+    }//end testAddingKeywordLinksToBasicContent()
+
+
+    /**
+     * Test that keyword content can have a keyword url added.
+     *
+     * @return void
+     */
+    public function testAddingKeywordLinksToKeywordContent()
+    {
+        // Test using top toolbar
+        // Test beginning of a paragraph
+        $this->useTest(5);
+        $this->clickKeyword(1);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->clickTopToolbarButton('link');
+        $this->type('((lookup:url:1))');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->assertHTMLMatch('<p><a href="((lookup:url:1))">((prop:productName))</a> %1% ((prop:productName)) %2% ((prop:productName))</p><p>((prop:productName)) %3% ((prop:productName)) %4% ((prop:productName))</p>');
+
+        // Test middle of paragraph
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->clickTopToolbarButton('link');
+        $this->type('((lookup:url:2))');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->assertHTMLMatch('<p><a href="((lookup:url:1))">((prop:productName))</a> %1%<a href="((lookup:url:2))">((prop:productName))</a> %2% ((prop:productName))</p><p>((prop:productName)) %3% ((prop:productName)) %4% ((prop:productName))</p>');
+
+        // Test end of paragraph
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->clickTopToolbarButton('link');
+        $this->type('((lookup:url:3))');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->assertHTMLMatch('<p><a href="((lookup:url:1))">((prop:productName))</a> %1%<a href="((lookup:url:2))">((prop:productName))</a> %2% <a href="((lookup:url:3))">((prop:productName))</a></p><p>((prop:productName)) %3% ((prop:productName)) %4% ((prop:productName))</p>');
+
+        // Test using inline toolbar
+        // Test beginning of a paragraph
+        $this->moveToKeyword(3, 'left');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->clickInlineToolbarButton('link');
+        $this->type('((lookup:url:4))');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->assertHTMLMatch('<p><a href="((lookup:url:1))">((prop:productName))</a> %1%<a href="((lookup:url:2))">((prop:productName))</a> %2%<a href="((lookup:url:3))">((prop:productName))</a></p><p><a href="((lookup:url:4))">((prop:productName))</a> %3% ((prop:productName)) %4% ((prop:productName))</p>');
+
+        // Test middle of paragraph
+        $this->moveToKeyword(4, 'left');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->clickInlineToolbarButton('link');
+        $this->type('((lookup:url:5))');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->assertHTMLMatch('<p><a href="((lookup:url:1))">((prop:productName))</a> %1%<a href="((lookup:url:2))">((prop:productName))</a> %2%<a href="((lookup:url:3))">((prop:productName))</a></p><p><a href="((lookup:url:4))">((prop:productName))</a> %3% <a href="((lookup:url:5))">((prop:productName))</a> %4% ((prop:productName))</p>');
+
+        // Test end of paragraph
+        $this->moveToKeyword(4, 'right');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->clickInlineToolbarButton('link');
+        $this->type('((lookup:url:6))');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->assertHTMLMatch('<p><a href="((lookup:url:1))">((prop:productName))</a> %1%<a href="((lookup:url:2))">((prop:productName))</a> %2%<a href="((lookup:url:3))">((prop:productName))</a></p><p><a href="((lookup:url:4))">((prop:productName))</a> %3% <a href="((lookup:url:5))">((prop:productName))</a> %4% <a href="((lookup:url:6))">((prop:productName))</a></p>');
+
+    }//end testAddingKeywordLinksToBasicContent()
+
+
+    /**
      * Test that content with a keyword url can be edited.
      *
      * @return void
