@@ -232,6 +232,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         $this->clickTopToolbarButton('link');
         $this->type('((lookup:url:1))');
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->assertHTMLMatch('<p><a href="((lookup:url:1))">%1%</a> %2% %3%</p>');
 
         // Test middle of paragraph
@@ -239,6 +240,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         $this->clickTopToolbarButton('link');
         $this->type('((lookup:url:2))');
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->assertHTMLMatch('<p><a href="((lookup:url:1))">%1%</a> <a href="((lookup:url:2))">%2%</a> %3%</p>');
 
         // Test end of paragraph
@@ -246,6 +248,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         $this->clickTopToolbarButton('link');
         $this->type('((lookup:url:3))');
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->assertHTMLMatch('<p><a href="((lookup:url:1))">%1%</a> <a href="((lookup:url:2))">%2%</a> <a href="((lookup:url:3))">%3%</a></p>');
 
         // Test using inline toolbar
@@ -255,6 +258,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         $this->clickInlineToolbarButton('link');
         $this->type('((lookup:url:1))');
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->assertHTMLMatch('<p><a href="((lookup:url:1))">%1%</a> %2% %3%</p>');
 
         // Test middle of paragraph
@@ -262,6 +266,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         $this->clickInlineToolbarButton('link');
         $this->type('((lookup:url:2))');
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->assertHTMLMatch('<p><a href="((lookup:url:1))">%1%</a> <a href="((lookup:url:2))">%2%</a> %3%</p>');
 
         // Test end of paragraph
@@ -269,6 +274,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         $this->clickInlineToolbarButton('link');
         $this->type('((lookup:url:3))');
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
         $this->assertHTMLMatch('<p><a href="((lookup:url:1))">%1%</a> <a href="((lookup:url:2))">%2%</a> <a href="((lookup:url:3))">%3%</a></p>');
 
     }//end testAddingKeywordLinksToBasicContent()
