@@ -229,7 +229,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         // Test beginning of a paragraph
         $this->useTest(4);
         $this->selectKeyword(1);
-        $this->clickTopToolbarButton('link');
+        $this->clickTopToolbarButton('link', NULL);
         $this->type('((lookup:url:1))');
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
@@ -237,7 +237,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
 
         // Test middle of paragraph
         $this->selectKeyword(2);
-        $this->clickTopToolbarButton('link');
+        $this->clickTopToolbarButton('link', NULL);
         $this->type('((lookup:url:2))');
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
@@ -245,7 +245,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
 
         // Test end of paragraph
         $this->selectKeyword(3);
-        $this->clickTopToolbarButton('link');
+        $this->clickTopToolbarButton('link', NULL);
         $this->type('((lookup:url:3))');
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
@@ -255,7 +255,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         // Test beginning of a paragraph
         $this->useTest(4);
         $this->selectKeyword(1);
-        $this->clickInlineToolbarButton('link');
+        $this->clickInlineToolbarButton('link', NULL);
         $this->type('((lookup:url:1))');
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
@@ -263,7 +263,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
 
         // Test middle of paragraph
         $this->selectKeyword(2);
-        $this->clickInlineToolbarButton('link');
+        $this->clickInlineToolbarButton('link', NULL);
         $this->type('((lookup:url:2))');
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
@@ -271,7 +271,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
 
         // Test end of paragraph
         $this->selectKeyword(3);
-        $this->clickInlineToolbarButton('link');
+        $this->clickInlineToolbarButton('link', NULL);
         $this->type('((lookup:url:3))');
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
@@ -294,7 +294,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         $this->moveToKeyword(1, 'left');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->clickTopToolbarButton('link');
+        $this->clickTopToolbarButton('link', NULL);
         $this->type('((lookup:url:1))');
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
@@ -304,7 +304,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->clickTopToolbarButton('link');
+        $this->clickTopToolbarButton('link', NULL);
         $this->type('((lookup:url:2))');
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
@@ -314,7 +314,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->clickTopToolbarButton('link');
+        $this->clickTopToolbarButton('link', NULL);
         $this->type('((lookup:url:3))');
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
@@ -325,7 +325,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         $this->moveToKeyword(3, 'left');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->clickInlineToolbarButton('link');
+        $this->clickInlineToolbarButton('link', NULL);
         $this->type('((lookup:url:4))');
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
@@ -335,7 +335,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         $this->moveToKeyword(4, 'left');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->clickInlineToolbarButton('link');
+        $this->clickInlineToolbarButton('link', NULL);
         $this->type('((lookup:url:5))');
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
@@ -345,7 +345,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         $this->moveToKeyword(4, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->clickInlineToolbarButton('link');
+        $this->clickInlineToolbarButton('link', NULL);
         $this->type('((lookup:url:6))');
         $this->sikuli->keyDown('Key.ENTER');
         sleep(1);
@@ -369,7 +369,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
 
         // Test that url can be applied to another piece of content
         $this->selectKeyword(2, 4);
-        $this->clickInlineToolbarButton('link');
+        $this->clickInlineToolbarButton('link', NULL);
         $this->type('((lookup:url:1))');
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p><a href="((lookup:url:1))">Test content additional content %1%</a></p><p><a href="((lookup:url:1))">%2% More test %3% content. %4%</a></p>');
