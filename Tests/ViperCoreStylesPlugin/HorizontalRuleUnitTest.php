@@ -2,7 +2,7 @@
 
 require_once 'AbstractViperUnitTest.php';
 
-class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractViperUnitTest
+class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractViperTableEditorPluginUnitTest
 {
 
 
@@ -391,6 +391,32 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->assertHTMLMatch('<p>%1%</p><hr /><p>%2% dolor sit<em>amet</em><strong>%3%</strong></p>');
 
     }//end testUndoAndRedoHorizontalRule()
+
+
+    /**
+     * Test adding a horizontal rule before and after a table.
+     *
+     * @return void
+     */
+    public function testAddingHorizontalRuleAroundATable()
+    {
+        // Test before table
+        $this->useTest(5);
+        $this->moveToKeyword(1, 'right');
+        $this->insertTable(1, 0);
+        $this->moveToKeyword(1, 'right');
+        $this->clickTopToolbarButton('insertHr');
+        $this->assertHTMLMatchNoHeaders('<p>Test content %1%</p><hr /><table border="1" style="width:100%;"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>%2%</p>');
+
+        // Test after table
+        $this->useTest(5);
+        $this->moveToKeyword(1, 'right');
+        $this->insertTable(1, 0);
+        $this->moveToKeyword(2, 'left');
+        $this->clickTopToolbarButton('insertHr');
+        $this->assertHTMLMatchNoHeaders('<p>Test content %1%</p><table border="1" style="width:100%;"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><hr /><p>%2%</p>');
+        
+    }//end testAddingHorizontalRuleAroundATable()
 
 }//end class
 
