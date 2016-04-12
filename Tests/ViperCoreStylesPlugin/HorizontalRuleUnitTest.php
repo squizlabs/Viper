@@ -2,7 +2,7 @@
 
 require_once 'AbstractViperUnitTest.php';
 
-class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractViperUnitTest
+class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractViperTableEditorPluginUnitTest
 {
 
 
@@ -391,6 +391,70 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->assertHTMLMatch('<p>%1%</p><hr /><p>%2% dolor sit<em>amet</em><strong>%3%</strong></p>');
 
     }//end testUndoAndRedoHorizontalRule()
+
+
+    /**
+     * Test adding a horizontal rule before and after a table.
+     *
+     * @return void
+     */
+    public function testAddingHorizontalRuleAroundATable()
+    {
+        // Test before table
+        $this->useTest(5);
+        $this->moveToKeyword(1, 'right');
+        $this->insertTable(1, 0);
+        $this->moveToKeyword(1, 'right');
+        $this->clickTopToolbarButton('insertHr');
+        $this->assertHTMLMatchNoHeaders('<p>Test content %1%</p><hr /><table border="1" style="width:100%;"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>%2%</p>');
+
+        // Test after table
+        $this->useTest(5);
+        $this->moveToKeyword(1, 'right');
+        $this->insertTable(1, 0);
+        $this->moveToKeyword(2, 'left');
+        $this->clickTopToolbarButton('insertHr');
+        $this->assertHTMLMatchNoHeaders('<p>Test content %1%</p><table border="1" style="width:100%;"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><hr /><p>%2%</p>');
+
+    }//end testAddingHorizontalRuleAroundATable()
+
+
+    /**
+     * Test adding a horizontal rule before and after an image.
+     *
+     * @return void
+     */
+    public function testAddingHorizontalRuleAroundAnImage()
+    {
+        // Test before image
+        $this->useTest(5);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.SPACE');
+        $this->clickTopToolbarButton('image');
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/editing.png'));
+        $this->clickField('Alt', TRUE);
+        $this->type('test-alt');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('image', 'active-selected');
+        $this->clickKeyword(2);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->clickTopToolbarButton('insertHr');
+        $this->assertHTMLMatch('<p>Test content %1%</p><hr /><p><img alt="test-alt" src="%url%/ViperImagePlugin/Images/editing.png" /> %2%</p>');
+
+        // Test after image
+        $this->useTest(5);
+        $this->moveToKeyword(1, 'right');
+        $this->clickTopToolbarButton('image');
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/editing.png'));
+        $this->clickField('Alt', TRUE);
+        $this->type('test-alt');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->moveToKeyword(2, 'left');
+        $this->clickTopToolbarButton('insertHr');
+        $this->assertHTMLMatch('<p>Test content %1%<img alt="test-alt" src="%url%/ViperImagePlugin/Images/editing.png" /></p><hr /><p>%2%</p>');
+
+    }//end testAddingHorizontalRuleAroundAnImage()
 
 }//end class
 
