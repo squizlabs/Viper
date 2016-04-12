@@ -134,6 +134,86 @@ class Viper_Tests_ViperLinkPlugin_EditingLinkUnitTest extends AbstractViperUnitT
 
     }//end testEditingTheTitleAndNewWindowOfLink()
 
+
+    /**
+     * Test that you can edit the title and new window value for a link
+     *
+     * @return void
+     */
+    public function testEditingOfPartOfLinkURL()
+    {
+        // Test using inline toolbar
+        $this->useTest(2);
+        $this->selectKeyword(1, 2);
+        $this->clickInlineToolbarButton('link', 'active');
+        $this->clickField('URL');
+
+        for ($i = 0; $i < 8; $i++) {
+            $this->sikuli->keyDown('Key.LEFT');
+        }
+
+        $this->type(' modified');
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+
+        $this->assertHTMLMatch('<p>Linked<a href="test link modified content" title="test-title">%1% test content %2%</a> for testing</p>');
+
+        // Test using top toolbar
+        $this->useTest(2);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('link', 'active');
+        $this->clickField('URL');
+
+        for ($i = 0; $i < 8; $i++) {
+            $this->sikuli->keyDown('Key.LEFT');
+        }
+
+        $this->type(' modified');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+
+        $this->assertHTMLMatch('<p>Linked<a href="test link modified content" title="test-title">%1% test content %2%</a> for testing</p>');
+
+    }//end testEditingOfPartOfLinkURL()
+
+
+    /**
+     * Test that you can edit the title and new window value for a link
+     *
+     * @return void
+     */
+    public function testEditingOfPartOfLinkTitle()
+    {
+        // Test using inline toolbar
+        $this->useTest(2);
+        $this->selectKeyword(1, 2);
+        $this->clickInlineToolbarButton('link', 'active');
+        $this->clickField('Title');
+
+        for ($i = 0; $i < 5; $i++) {
+            $this->sikuli->keyDown('Key.LEFT');
+        }
+
+        $this->type('modified-');
+        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+
+        $this->assertHTMLMatch('<p>Linked<a href="test link content" title="test-modified-title">%1% test content %2%</a> for testing</p>');
+
+        // Test using top toolbar
+        $this->useTest(2);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('link', 'active');
+        $this->clickField('Title');
+
+        for ($i = 0; $i < 5; $i++) {
+            $this->sikuli->keyDown('Key.LEFT');
+        }
+
+        $this->type('modified-');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+
+        $this->assertHTMLMatch('<p>Linked<a href="test link content" title="test-modified-title">%1% test content %2%</a> for testing</p>');
+
+    }//end testEditingOfPartOfLinkTitle()
+
 }//end class
 
 ?>
