@@ -953,6 +953,24 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
 
 
     /**
+     * Tests using delete and backspace in the last cell of the table
+     *
+     * @return void
+     */
+    public function testCreatingParagraphAfterTable()
+    {
+        $this->useTest(9);
+        $this->clickCell(11);
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('More test content.');
+        
+        $this->assertHTMLMatchNoHeaders('<p>Some test content. %1%</p><table style="width:100%;"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p>More test content.</p>');
+
+    }//end testCreatingParagraphAfterTable()
+
+
+    /**
      * Asserts that the highlight is in correct position.
      *
      * @param integer $actual   The highlight position.
