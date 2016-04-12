@@ -4375,7 +4375,10 @@
             if (Viper.Util.isBlockElement(elem) === true) {
                 var range    = this.getViperRange(elem);
                 var lastElem = range._getLastSelectableChild(elem);
-                if (lastElem && lastElem.nodeType === Viper.Util.TEXT_NODE) {
+                if (lastElem
+                    && lastElem.nodeType === Viper.Util.TEXT_NODE
+                    && (!lastElem.nextSibling || Viper.Util.isTag(lastElem.nextSibling, 'br') === true)
+                ) {
                     lastElem.data = Viper.Util.rtrim(lastElem.data.replace(/(&nbsp;)*$/, ''));
                 }
             }
