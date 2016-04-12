@@ -934,6 +934,7 @@
             var tmp     = Viper.document.createElement('div');
             var content = this.getContents(elem);
             content     = this._closeStubTags(content);
+            content     = this.removeInvalidCharacters(content);
             Viper.Util.setHtml(tmp, content);
 
             if ((Viper.Util.trim(Viper.Util.getNodeTextContent(tmp)).length === 0 || Viper.Util.getHtml(tmp) === '&nbsp;')
@@ -4134,6 +4135,7 @@
             html = html.replace(/<\/:object/ig, '</object');
 
             html = html.replace(/__viper_attr_/g, '');
+            html = this.removeInvalidCharacters(html);
 
             // Revert to original settings.
             this.setSettings(originalSettings, true);
@@ -4234,6 +4236,7 @@
          */
         setHtml: function(contents, callback)
         {
+            contents = this.removeInvalidCharacters(contents);
             var self = this;
             this.fireCallbacks('Viper:setHtmlContent', contents, function(data, newContents) {
                 self._setHTML(newContents, callback);
@@ -4687,7 +4690,16 @@
                 }
             }
 
+        },
+
+        removeInvalidCharacters: function(content)
+        {
+            // Remove all control chars.
+            content = content.replace(/[\x00-\x1F]/g, '');
+            return content;
+
         }
+
     };
 
     // Add Viper to global namespace.
