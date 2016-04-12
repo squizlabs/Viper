@@ -415,8 +415,46 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->moveToKeyword(2, 'left');
         $this->clickTopToolbarButton('insertHr');
         $this->assertHTMLMatchNoHeaders('<p>Test content %1%</p><table border="1" style="width:100%;"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><hr /><p>%2%</p>');
-        
+
     }//end testAddingHorizontalRuleAroundATable()
+
+
+    /**
+     * Test adding a horizontal rule before and after an image.
+     *
+     * @return void
+     */
+    public function testAddingHorizontalRuleAroundAnImage()
+    {
+        // Test before image
+        $this->useTest(5);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.SPACE');
+        $this->clickTopToolbarButton('image');
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/editing.png'));
+        $this->clickField('Alt', TRUE);
+        $this->type('test-alt');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('image', 'active-selected');
+        $this->clickKeyword(2);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->clickTopToolbarButton('insertHr');
+        $this->assertHTMLMatch('<p>Test content %1%</p><hr /><p><img alt="test-alt" src="%url%/ViperImagePlugin/Images/editing.png" /> %2%</p>');
+
+        // Test after image
+        $this->useTest(5);
+        $this->moveToKeyword(1, 'right');
+        $this->clickTopToolbarButton('image');
+        $this->type($this->getTestURL('/ViperImagePlugin/Images/editing.png'));
+        $this->clickField('Alt', TRUE);
+        $this->type('test-alt');
+        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->moveToKeyword(2, 'left');
+        $this->clickTopToolbarButton('insertHr');
+        $this->assertHTMLMatch('<p>Test content %1%<img alt="test-alt" src="%url%/ViperImagePlugin/Images/editing.png" /></p><hr /><p>%2%</p>');
+
+    }//end testAddingHorizontalRuleAroundAnImage()
 
 }//end class
 
