@@ -4286,7 +4286,7 @@
 
         _closeStubTags: function (content)
         {
-            var re  = /<(area|base|basefont|br|hr|input|img|link|meta|embed|viper:param|param)((\s+[_-\w]+(\s*=\s*(?:"[^">]*"|\'[^\'>]+\'))?)+)?\s*>/ig;
+            var re  = /<(area|base|basefont|br|hr|input|img|link|meta|embed|viper:param|param)((\s+[_\-\w]+(\s*=\s*(?:"[^">]*"|\'[^\'>]+\'))?)+)?\s*>/ig;
             content = content.replace(re, "<$1$2 />");
             return content;
 
@@ -4375,7 +4375,10 @@
             if (Viper.Util.isBlockElement(elem) === true) {
                 var range    = this.getViperRange(elem);
                 var lastElem = range._getLastSelectableChild(elem);
-                if (lastElem && lastElem.nodeType === Viper.Util.TEXT_NODE) {
+                if (lastElem
+                    && lastElem.nodeType === Viper.Util.TEXT_NODE
+                    && (!lastElem.nextSibling || Viper.Util.isTag(lastElem.nextSibling, 'br') === true)
+                ) {
                     lastElem.data = Viper.Util.rtrim(lastElem.data.replace(/(&nbsp;)*$/, ''));
                 }
             }
