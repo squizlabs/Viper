@@ -340,6 +340,28 @@ class Viper_Tests_ViperListPlugin_CreateListUnitTest extends AbstractViperListPl
 
     }//end testCreatingNewListAfterDeletingAllContent()
 
+
+    /**
+     * Tests creating a new list item after an item with anchored content
+     *
+     * @return void
+     */
+    public function testCreatingNewListItemAfterAnAnchoredItem()
+    {
+        // Test unordered list
+        $this->useTest(6);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<ul><li>Item 1</li><li>Item 2</li><li>Test<span id="test-anchor">content</span> %1%</li><li>Item 3</li><li>Item 4</li></ul>');
+
+        // Test ordered list
+        $this->useTest(7);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<ol><li>Item 1</li><li>Item 2</li><li>Test<span id="test-anchor">content</span> %1%</li><li>Item 3</li><li>Item 4</li></ol>');
+
+    }//end testCreatingNewListItemAfterAnAnchoredItem()
+
 }//end class
 
 ?>

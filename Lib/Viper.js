@@ -29,13 +29,12 @@
         this._settings = {};
 
         this._viperElementHolder = null;
-        this._subElementActive   = false;
-        this._mainElem           = null;
         this._registeredElements = [];
         this._attributeGetModifiers = [];
         this._attributeSetModifiers = [];
         this._mouseDownEvent        = null;
         this._retrievingValues      = 0;
+        this._memberElements        = [];
 
         // This var is used to store the range of Viper before it loses focus. Any plugins
         // that steal focus from Viper element can use getPreviousRange.
@@ -694,7 +693,7 @@
                                 blockElement.appendChild(document.createTextNode(' '));
                             }
 
-                            editableChild = range._getFirstSelectableChild(this.element);
+                            editableChild = range._getFirstSelectableChild(this.element, true);
                         } else {
                             var tagName = this.getDefaultBlockTag();
                             if (!tagName) {
@@ -706,6 +705,14 @@
                                 editableChild = range._getFirstSelectableChild(this.element);
                             }
                         }//end if
+
+                        var self = this;
+                        setTimeout(function() {
+                            self.element.focus();
+                            range.setStart(editableChild, 0);
+                            range.collapse(true);
+                            Viper.Selection.addRange(range);
+                        }, 10);
                     }//end if
                 } else if (Viper.Util.isBrowser('firefox') === true) {
                     range.setStart(editableChild, 0);
@@ -810,8 +817,6 @@
                 this.element.setAttribute('contentEditable', false);
                 Viper.Util.setStyle(this.element, 'outline', 'invert');
             }
-
-            this.setSubElementState(null, false);
 
             this.setEnabled(false);
             this.element = elem;
@@ -1035,6 +1040,25 @@
 
         },
 
+        setMemberElements: function(elements)
+        {
+            this._memberElements = elements;
+
+        },
+
+        addMemberElements: function(elements)
+        {
+            this._memberElements.concat(elements);
+
+        },
+
+        isMemberElement: function(element)
+        {
+            var isMember = Viper.Util.inArray(element, this._memberElements);
+            return isMember;
+
+        },
+
         resetPlugins: function()
         {
             this._useDefaultPlugins();
@@ -1063,41 +1087,8 @@
 
         },
 
-        setSubElementState: function(elem, active)
-        {
-            if (active === true) {
-                if (this._subElementActive === true && this.element !== elem) {
-                    this.setSubElementState(this.element, false);
-                }
-
-                if (this._subElementActive !== true) {
-                    this._mainElem         = this.element;
-                    this.element           = elem;
-                    this._subElementActive = true;
-                    this.element.setAttribute('contentEditable', true);
-                    Viper.Util.setStyle(this.element, 'outline', 'none');
-                    this._addEvents();
-                    this.fireCallbacks('subElementEnabled', elem);
-                }
-            } else if (this.element && this._subElementActive === true) {
-                this.element.setAttribute('contentEditable', false);
-                Viper.Util.setStyle(this.element, 'outline', 'invert');
-                this._removeEvents();
-                var pelem    = this.element;
-                this.element = this._mainElem;
-                this._subElementActive = false;
-                this._mainElem         = null;
-                this.fireCallbacks('subElementDisabled', pelem);
-            }//end if
-
-        },
-
         getViperElement: function()
         {
-            if (this._subElementActive === true) {
-                return this._mainElem;
-            }
-
             return this.element;
 
         },
@@ -1105,16 +1096,6 @@
         getViperElementDocument: function()
         {
             return this.element.ownerDocument;
-
-        },
-
-        getViperSubElement: function()
-        {
-            if (this._subElementActive === true) {
-                return this.element;
-            }
-
-            return null;
 
         },
 
@@ -1517,8 +1498,6 @@
         isOutOfBounds: function(element)
         {
             if (element === this.element || Viper.Util.isChildOf(element, this.element) === true) {
-                return false;
-            } else if (this._subElementActive === true && (element === this._mainElem || Viper.Util.isChildOf(element, this._mainElem) === true)) {
                 return false;
             }
 
@@ -3602,7 +3581,7 @@
             var target = Viper.Util.getMouseEventTarget(e);
             var inside = true;
 
-            if (this.element !== target && Viper.Util.isChildOfElems(target, [this.element]) !== true) {
+            if (this.element !== target && Viper.Util.isChildOfElems(target, [this.element]) !== true && this.isMemberElement(target) !== true) {
                 inside = false;
 
                 // Ask plugins if its one of their element.
@@ -4307,7 +4286,7 @@
 
         _closeStubTags: function (content)
         {
-            var re  = /<(area|base|basefont|br|hr|input|img|link|meta|embed|viper:param|param)((\s+[_-\w]+(\s*=\s*(?:"[^">]*"|\'[^\'>]+\'))?)+)?\s*>/ig;
+            var re  = /<(area|base|basefont|br|hr|input|img|link|meta|embed|viper:param|param)((\s+[_\-\w]+(\s*=\s*(?:"[^">]*"|\'[^\'>]+\'))?)+)?\s*>/ig;
             content = content.replace(re, "<$1$2 />");
             return content;
 
@@ -4396,7 +4375,10 @@
             if (Viper.Util.isBlockElement(elem) === true) {
                 var range    = this.getViperRange(elem);
                 var lastElem = range._getLastSelectableChild(elem);
-                if (lastElem && lastElem.nodeType === Viper.Util.TEXT_NODE) {
+                if (lastElem
+                    && lastElem.nodeType === Viper.Util.TEXT_NODE
+                    && (!lastElem.nextSibling || Viper.Util.isTag(lastElem.nextSibling, 'br') === true)
+                ) {
                     lastElem.data = Viper.Util.rtrim(lastElem.data.replace(/(&nbsp;)*$/, ''));
                 }
             }
