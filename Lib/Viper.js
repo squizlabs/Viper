@@ -693,7 +693,7 @@
                                 blockElement.appendChild(document.createTextNode(' '));
                             }
 
-                            editableChild = range._getFirstSelectableChild(this.element);
+                            editableChild = range._getFirstSelectableChild(this.element, true);
                         } else {
                             var tagName = this.getDefaultBlockTag();
                             if (!tagName) {
@@ -703,15 +703,16 @@
                                 Viper.Util.setHtml(blockElement, '&nbsp;');
                                 this.element.appendChild(blockElement);
                                 editableChild = range._getFirstSelectableChild(this.element);
-                                var self      = this;
-                                setTimeout(function() {
-                                    self.element.focus();
-                                    range.setStart(editableChild, 0);
-                                    range.collapse(true);
-                                    Viper.Selection.addRange(range);
-                                }, 10);
                             }
                         }//end if
+
+                        var self = this;
+                        setTimeout(function() {
+                            self.element.focus();
+                            range.setStart(editableChild, 0);
+                            range.collapse(true);
+                            Viper.Selection.addRange(range);
+                        }, 10);
                     }//end if
                 } else if (Viper.Util.isBrowser('firefox') === true) {
                     range.setStart(editableChild, 0);
