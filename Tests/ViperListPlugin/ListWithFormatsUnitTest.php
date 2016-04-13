@@ -625,14 +625,18 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
         $this->clickTopToolbarButton('bold');
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>%1% item 2 %2%</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>%1% item 2 %2%</strong></li><li><strong>new item</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
 
         // Test ordered list
         $this->selectKeyword(3, 4);
         $this->clickTopToolbarButton('bold');
         $this->moveToKeyword(4, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>%1% item 2 %2%</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><strong>%3% item 2 %4%</strong></li><li>item 3</li></ol>');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>%1% item 2 %2%</strong></li><li><strong>new item</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><strong>%3% item 2 %4%</strong></li><li><strong>new item</strong></li><li>item 3</li></ol>');
 
         // Test using inline toolbar
         // Test unordered list
@@ -641,14 +645,18 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
         $this->clickInlineToolbarButton('bold');
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>%1% item 2 %2%</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>%1% item 2 %2%</strong></li><li><strong>new item</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
 
         // Test ordered list
         $this->selectKeyword(3, 4);
         $this->clickInlineToolbarButton('bold');
         $this->moveToKeyword(4, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>%1% item 2 %2%</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><strong>%3% item 2 %4%</strong></li><li>item 3</li></ol>');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>%1% item 2 %2%</strong></li><li><strong>new item</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><strong>%3% item 2 %4%</strong></li><li><strong>new item</strong></li><li>item 3</li></ol>');
 
         // Test using keyboard shortcuts
         // Test unordered list
@@ -658,7 +666,9 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
         $this->sikuli->keyDown('Key.CMD + b');
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>%1% item 2 %2%</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>%1% item 2 %2%</strong></li><li><strong>new item</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
 
         // Test ordered list
         $this->selectKeyword(3, 4);
@@ -666,7 +676,9 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
         $this->sikuli->keyDown('Key.CMD + b');
         $this->moveToKeyword(4, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>%1% item 2 %2%</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><strong>%3% item 2 %4%</strong></li><li>item 3</li></ol>');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>%1% item 2 %2%</strong></li><li><strong>new item</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><strong>%3% item 2 %4%</strong></li><li><strong>new item</strong></li><li>item 3</li></ol>');
 
     }//end testCreatingNewListItemAfterABoldItem()
 
@@ -685,14 +697,18 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
         $this->clickTopToolbarButton('italic');
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><em>%1% item 2 %2%</em></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
+        sleep(1);
+$this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><em>%1% item 2 %2%</em></li><li><em>new item</em></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
 
         // Test ordered list
         $this->selectKeyword(3, 4);
         $this->clickTopToolbarButton('italic');
         $this->moveToKeyword(4, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><em>%1% item 2 %2%</em></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><em>%3% item 2 %4%</em></li><li>item 3</li></ol>');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><em>%1% item 2 %2%</em></li><li><em>new item</em></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><em>%3% item 2 %4%</em></li><li><em>new item</em></li><li>item 3</li></ol>');
 
         // Test using inline toolbar
         // Test unordered list
@@ -701,14 +717,18 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
         $this->clickInlineToolbarButton('italic');
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><em>%1% item 2 %2%</em></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><em>%1% item 2 %2%</em></li><li><em>new item</em></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
 
         // Test ordered list
         $this->selectKeyword(3, 4);
         $this->clickInlineToolbarButton('italic');
         $this->moveToKeyword(4, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><em>%1% item 2 %2%</em></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><em>%3% item 2 %4%</em></li><li>item 3</li></ol>');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><em>%1% item 2 %2%</em></li><li><em>new item</em></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><em>%3% item 2 %4%</em></li><li><em>new item</em></li><li>item 3</li></ol>');
 
         // Test using keyboard shortcuts
         // Test unordered list
@@ -718,7 +738,9 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
         $this->sikuli->keyDown('Key.CMD + i');
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><em>%1% item 2 %2%</em></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><em>%1% item 2 %2%</em></li><li><em>new item</em></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
 
         // Test ordered list
         $this->selectKeyword(3, 4);
@@ -726,7 +748,9 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
         $this->sikuli->keyDown('Key.CMD + i');
         $this->moveToKeyword(4, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><em>%1% item 2 %2%</em></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><em>%3% item 2 %4%</em></li><li>item 3</li></ol>');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><em>%1% item 2 %2%</em></li><li><em>new item</em></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><em>%3% item 2 %4%</em></li><li><em>new item</em></li><li>item 3</li></ol>');
 
     }//end testCreatingNewListItemAfterAnItalicItem()
 
@@ -745,14 +769,18 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
         $this->clickTopToolbarButton('superscript');
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><sup>%1% item 2 %2%</sup></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><sup>%1% item 2 %2%</sup></li><li><sup>new item</sup></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
 
         // Test ordered list
         $this->selectKeyword(3, 4);
         $this->clickTopToolbarButton('superscript');
         $this->moveToKeyword(4, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><sup>%1% item 2 %2%</sup></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><sup>%3% item 2 %4%</sup></li><li>item 3</li></ol>');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><sup>%1% item 2 %2%</sup></li><li><sup>new item</sup></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><sup>%3% item 2 %4%</sup></li><li><sup>new item</sup></li><li>item 3</li></ol>');
 
     }//end testCreatingNewListItemAfterASuperscriptItem()
 
@@ -771,14 +799,18 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
         $this->clickTopToolbarButton('subscript');
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><sub>%1% item 2 %2%</sub></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><sub>%1% item 2 %2%</sub></li><li><sub>new item</sub></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
 
         // Test ordered list
         $this->selectKeyword(3, 4);
         $this->clickTopToolbarButton('subscript');
         $this->moveToKeyword(4, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><sub>%1% item 2 %2%</sub></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><sub>%3% item 2 %4%</sub></li><li>item 3</li></ol>');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><sub>%1% item 2 %2%</sub></li><li><sub>new item</sub></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><sub>%3% item 2 %4%</sub></li><li><sub>new item</sub></li><li>item 3</li></ol>');
 
     }//end testCreatingNewListItemAfterASubscriptItem()
 
@@ -797,14 +829,18 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
         $this->clickTopToolbarButton('strikethrough');
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><del>%1% item 2 %2%</del></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><del>%1% item 2 %2%</del></li><li><del>new item</del></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
 
         // Test ordered list
         $this->selectKeyword(3, 4);
         $this->clickTopToolbarButton('strikethrough');
         $this->moveToKeyword(4, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><del>%1% item 2 %2%</del></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><del>%3% item 2 %4%</del></li><li>item 3</li></ol>');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><del>%1% item 2 %2%</del></li><li><del>new item</del></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><del>%3% item 2 %4%</del></li><li><del>new item</del></li><li>item 3</li></ol>');
 
     }//end testCreatingNewListItemAfterAStrikethroughItem()
 

@@ -230,7 +230,8 @@ class Viper_Tests_ViperFormatPlugin_AnchorInListsUnitTest extends AbstractViperU
         $this->sikuli->keyDown('Key.ENTER');
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item<span id="test-anchor-1">2</span> %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item<span id="test-anchor-1">2</span> %1%</li><li>new item</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
 
         // Test ordered list
         $this->moveToKeyword(2, 'left');
@@ -241,7 +242,8 @@ class Viper_Tests_ViperFormatPlugin_AnchorInListsUnitTest extends AbstractViperU
         $this->sikuli->keyDown('Key.ENTER');
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item<span id="test-anchor-1">2</span> %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item<span id="test-anchor-2">2</span> %2%</li><li>item 3</li></ol>');
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item<span id="test-anchor-1">2</span> %1%</li><li>new item</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item<span id="test-anchor-2">2</span> %2%</li><li>new item</li><li>item 3</li></ol>');
 
         // Test using inline toolbar
         // Test unordered list
@@ -254,7 +256,8 @@ class Viper_Tests_ViperFormatPlugin_AnchorInListsUnitTest extends AbstractViperU
         $this->sikuli->keyDown('Key.ENTER');
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item<span id="test-anchor-1">2</span> %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item<span id="test-anchor-1">2</span> %1%</li><li>new item</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
 
         // Test ordered list
         $this->moveToKeyword(2, 'left');
@@ -265,7 +268,8 @@ class Viper_Tests_ViperFormatPlugin_AnchorInListsUnitTest extends AbstractViperU
         $this->sikuli->keyDown('Key.ENTER');
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item<span id="test-anchor-1">2</span> %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item<span id="test-anchor-2">2</span> %2%</li><li>item 3</li></ol>');
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item<span id="test-anchor-1">2</span> %1%</li><li>new item</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item<span id="test-anchor-2">2</span> %2%</li><li>new item</li><li>item 3</li></ol>');
 
     }//end testCreatingNewListItemAfterAnAnchoredItem()
 
