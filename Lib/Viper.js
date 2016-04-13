@@ -4259,7 +4259,10 @@
 
             var range          = this.getCurrentRange();
             var lastSelectable = range._getLastSelectableChild(clone);
-            if (lastSelectable && lastSelectable.nodeType === Viper.Util.TEXT_NODE) {
+            if (lastSelectable
+                && lastSelectable.nodeType === Viper.Util.TEXT_NODE
+                && (!lastSelectable.nextSibling || Viper.Util.isTag(lastSelectable.nextSibling, 'br') === true)
+            ) {
                 lastSelectable.data = Viper.Util.rtrim(lastSelectable.data);
             }
 
@@ -4598,7 +4601,6 @@
 
                         // Remove extra spaces from the node.
                         node.data = node.data.replace(/^\s+/g, ' ');
-                        node.data = node.data.replace(/\s+$/g, ' ');
                         node.data = node.data.replace(/\s*\n\s*/g, ' ');
 
                         // TODO: We should normalise these text nodes before calling this method. This way there is no
