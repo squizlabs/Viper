@@ -1315,6 +1315,76 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
     }//end testChangingHeadingTypeWithClassAndAnchor()
 
 
+    /**
+     * Test that adding additional content to heading tags doesn't effect the tags.
+     *
+     * @return void
+     */
+    public function testAddingToHeadingContent()
+    {
+        // Test h1 tag
+        $this->useTest(19);
+        $this->selectKeyword(1, 4);
+        $this->clickTopToolbarButton('headings', NULL);
+        $this->clickTopToolbarButton('H1', NULL, TRUE);
+        $this->moveToKeyword(2, 'right');
+        $this->type(' additional content ');
+        sleep(1);
+        $this->assertHTMLMatch('<h1>%1% Test heading %2% additional content %3% content. %4%</h1>');
+
+        // Test h2 tag
+        $this->useTest(19);
+        $this->selectKeyword(1, 4);
+        $this->clickTopToolbarButton('headings', NULL);
+        $this->clickTopToolbarButton('H2', NULL, TRUE);
+        $this->moveToKeyword(2, 'right');
+        $this->type(' additional content ');
+        sleep(1);
+        $this->assertHTMLMatch('<h2>%1% Test heading %2% additional content %3% content. %4%</h2>');
+
+        // Test h3 tag
+        $this->useTest(19);
+        $this->selectKeyword(1, 4);
+        $this->clickTopToolbarButton('headings', 'active');
+        $this->clickTopToolbarButton('H3', NULL, TRUE);
+        $this->moveToKeyword(2, 'right');
+        $this->type(' additional content ');
+        sleep(1);
+        $this->assertHTMLMatch('<h3>%1% Test heading %2% additional content %3% content. %4%</h3>');
+
+        // Test h4 tag
+        $this->useTest(19);
+        $this->selectKeyword(1, 4);
+        $this->clickTopToolbarButton('headings', NULL);
+        $this->clickTopToolbarButton('H4', NULL, TRUE);
+        $this->moveToKeyword(2, 'right');
+        $this->type(' additional content ');
+        sleep(1);
+        $this->assertHTMLMatch('<h4>%1% Test heading %2% additional content %3% content. %4%</h4>');
+
+        // Test h5 tag
+        $this->useTest(19);
+        $this->selectKeyword(1, 4);
+        $this->clickTopToolbarButton('headings', NULL);
+        $this->clickTopToolbarButton('H5', NULL, TRUE);
+        $this->moveToKeyword(2, 'right');
+        $this->type(' additional content ');
+        sleep(1);
+        $this->assertHTMLMatch('<h5>%1% Test heading %2% additional content %3% content. %4%</h5>');
+
+        // Test h6 tag
+        $this->useTest(19);
+        $this->selectKeyword(1, 4);
+        $this->clickTopToolbarButton('headings', NULL);
+        $this->clickTopToolbarButton('H6', NULL, TRUE);
+        $this->moveToKeyword(2, 'right');
+        $this->type(' additional content ');
+        sleep(1);
+        $this->assertHTMLMatch('<h6>%1% Test heading %2% additional content %3% content. %4%</h6>');
+
+    }//end testAddingToHeadingContent()
+
+
 }//end class
 
 ?>
