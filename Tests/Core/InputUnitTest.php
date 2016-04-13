@@ -948,4 +948,19 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
     }//end testSplittingAndRejoiningStrikethroughParagraphs()
 
+
+    /**
+     * Test splitting a single p tag in to three and then merging back to one with strikethrough formatting.
+     *
+     * @return void
+     */
+    public function testReplacingTwoParagraphSelections()
+    {
+        $this->useTest(1);
+        $this->selectKeyword(1, 2);
+        $this->type('Replacement content.');
+        $this->assertHTMLMatch('<p>Replacement content.</p>');
+
+    }//end testReplacingTwoParagraphSelections()
+
 }//end class
