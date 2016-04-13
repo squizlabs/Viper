@@ -610,4 +610,238 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
 
     }//end testListToolsNotAvailableForPreSectionsInsideDivSection()
 
+
+    /**
+     * Test that creating new list items after a bold formatted list item functions correctly.
+     *
+     * @return void
+     */
+    public function testCreatingNewListItemAfterABoldItem()
+    {
+        // Test using top toolbar
+        // Test unordered list
+        $this->useTest(9);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('bold');
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>%1% item 2 %2%</strong></li><li><strong>new item</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
+
+        // Test ordered list
+        $this->selectKeyword(3, 4);
+        $this->clickTopToolbarButton('bold');
+        $this->moveToKeyword(4, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>%1% item 2 %2%</strong></li><li><strong>new item</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><strong>%3% item 2 %4%</strong></li><li><strong>new item</strong></li><li>item 3</li></ol>');
+
+        // Test using inline toolbar
+        // Test unordered list
+        $this->useTest(9);
+        $this->selectKeyword(1, 2);
+        $this->clickInlineToolbarButton('bold');
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>%1% item 2 %2%</strong></li><li><strong>new item</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
+
+        // Test ordered list
+        $this->selectKeyword(3, 4);
+        $this->clickInlineToolbarButton('bold');
+        $this->moveToKeyword(4, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>%1% item 2 %2%</strong></li><li><strong>new item</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><strong>%3% item 2 %4%</strong></li><li><strong>new item</strong></li><li>item 3</li></ol>');
+
+        // Test using keyboard shortcuts
+        // Test unordered list
+        $this->useTest(9);
+        $this->selectKeyword(1, 2);
+        sleep(1);
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>%1% item 2 %2%</strong></li><li><strong>new item</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
+
+        // Test ordered list
+        $this->selectKeyword(3, 4);
+        sleep(1);
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->moveToKeyword(4, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>%1% item 2 %2%</strong></li><li><strong>new item</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><strong>%3% item 2 %4%</strong></li><li><strong>new item</strong></li><li>item 3</li></ol>');
+
+    }//end testCreatingNewListItemAfterABoldItem()
+
+
+    /**
+     * Test that creating new list items after an italic formatted list item functions correctly.
+     *
+     * @return void
+     */
+    public function testCreatingNewListItemAfterAnItalicItem()
+    {
+        // Test using top toolbar
+        // Test unordered list
+        $this->useTest(9);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('italic');
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+$this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><em>%1% item 2 %2%</em></li><li><em>new item</em></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
+
+        // Test ordered list
+        $this->selectKeyword(3, 4);
+        $this->clickTopToolbarButton('italic');
+        $this->moveToKeyword(4, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><em>%1% item 2 %2%</em></li><li><em>new item</em></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><em>%3% item 2 %4%</em></li><li><em>new item</em></li><li>item 3</li></ol>');
+
+        // Test using inline toolbar
+        // Test unordered list
+        $this->useTest(9);
+        $this->selectKeyword(1, 2);
+        $this->clickInlineToolbarButton('italic');
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><em>%1% item 2 %2%</em></li><li><em>new item</em></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
+
+        // Test ordered list
+        $this->selectKeyword(3, 4);
+        $this->clickInlineToolbarButton('italic');
+        $this->moveToKeyword(4, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><em>%1% item 2 %2%</em></li><li><em>new item</em></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><em>%3% item 2 %4%</em></li><li><em>new item</em></li><li>item 3</li></ol>');
+
+        // Test using keyboard shortcuts
+        // Test unordered list
+        $this->useTest(9);
+        $this->selectKeyword(1, 2);
+        sleep(1);
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><em>%1% item 2 %2%</em></li><li><em>new item</em></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
+
+        // Test ordered list
+        $this->selectKeyword(3, 4);
+        sleep(1);
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->moveToKeyword(4, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><em>%1% item 2 %2%</em></li><li><em>new item</em></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><em>%3% item 2 %4%</em></li><li><em>new item</em></li><li>item 3</li></ol>');
+
+    }//end testCreatingNewListItemAfterAnItalicItem()
+
+
+    /**
+     * Test that creating new list items after a superscript formatted list item functions correctly.
+     *
+     * @return void
+     */
+    public function testCreatingNewListItemAfterASuperscriptItem()
+    {
+        // Test using top toolbar
+        // Test unordered list
+        $this->useTest(9);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('superscript');
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><sup>%1% item 2 %2%</sup></li><li><sup>new item</sup></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
+
+        // Test ordered list
+        $this->selectKeyword(3, 4);
+        $this->clickTopToolbarButton('superscript');
+        $this->moveToKeyword(4, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><sup>%1% item 2 %2%</sup></li><li><sup>new item</sup></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><sup>%3% item 2 %4%</sup></li><li><sup>new item</sup></li><li>item 3</li></ol>');
+
+    }//end testCreatingNewListItemAfterASuperscriptItem()
+
+
+    /**
+     * Test that creating new list items after a subscript formatted list item functions correctly.
+     *
+     * @return void
+     */
+    public function testCreatingNewListItemAfterASubscriptItem()
+    {
+        // Test using top toolbar
+        // Test unordered list
+        $this->useTest(9);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('subscript');
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><sub>%1% item 2 %2%</sub></li><li><sub>new item</sub></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
+
+        // Test ordered list
+        $this->selectKeyword(3, 4);
+        $this->clickTopToolbarButton('subscript');
+        $this->moveToKeyword(4, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><sub>%1% item 2 %2%</sub></li><li><sub>new item</sub></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><sub>%3% item 2 %4%</sub></li><li><sub>new item</sub></li><li>item 3</li></ol>');
+
+    }//end testCreatingNewListItemAfterASubscriptItem()
+
+
+    /**
+     * Test that creating new list items after a strikethrough formatted list item functions correctly.
+     *
+     * @return void
+     */
+    public function testCreatingNewListItemAfterAStrikethroughItem()
+    {
+        // Test using top toolbar
+        // Test unordered list
+        $this->useTest(9);
+        $this->selectKeyword(1, 2);
+        $this->clickTopToolbarButton('strikethrough');
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><del>%1% item 2 %2%</del></li><li><del>new item</del></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
+
+        // Test ordered list
+        $this->selectKeyword(3, 4);
+        $this->clickTopToolbarButton('strikethrough');
+        $this->moveToKeyword(4, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><del>%1% item 2 %2%</del></li><li><del>new item</del></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><del>%3% item 2 %4%</del></li><li><del>new item</del></li><li>item 3</li></ol>');
+
+    }//end testCreatingNewListItemAfterAStrikethroughItem()
+
 }
