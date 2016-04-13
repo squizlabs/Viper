@@ -1345,7 +1345,7 @@ class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTe
         // Test h3 tag
         $this->useTest(19);
         $this->selectKeyword(1, 4);
-        $this->clickTopToolbarButton('headings', 'active');
+        $this->clickTopToolbarButton('headings', NULL);
         $this->clickTopToolbarButton('H3', NULL, TRUE);
         $this->moveToKeyword(2, 'right');
         $this->type(' additional content ');
