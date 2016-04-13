@@ -13,6 +13,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInListsUnitTest extends AbstractViperU
     {
 
         // Apply anchor using the inline toolbar
+        $this->useTest(1);
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('anchorID');
         $this->type('test1');
@@ -76,6 +77,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInListsUnitTest extends AbstractViperU
     {
 
         // Apply anchor using the inline toolbar
+        $this->useTest(1);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickInlineToolbarButton('anchorID');
@@ -147,6 +149,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorInListsUnitTest extends AbstractViperU
     {
 
         // Apply anchor using the inline toolbar
+        $this->useTest(1);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickInlineToolbarButton('anchorID');
@@ -207,6 +210,68 @@ class Viper_Tests_ViperFormatPlugin_AnchorInListsUnitTest extends AbstractViperU
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
 
     }//end testApplyAndRemoveAnchorToWordInListItem()
+
+
+    /**
+     * Tests creating a new list item after an item with anchored content
+     *
+     * @return void
+     */
+    public function testCreatingNewListItemAfterAnAnchoredItem()
+    {
+        // Test using top toolbar
+        // Test unordered list
+        $this->useTest(1);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test-anchor-1');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item<span id="test-anchor-1">2</span> %1%</li><li>new item</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
+
+        // Test ordered list
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test-anchor-2');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item<span id="test-anchor-1">2</span> %1%</li><li>new item</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item<span id="test-anchor-2">2</span> %2%</li><li>new item</li><li>item 3</li></ol>');
+
+        // Test using inline toolbar
+        // Test unordered list
+        $this->useTest(1);
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test-anchor-1');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item<span id="test-anchor-1">2</span> %1%</li><li>new item</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
+
+        // Test ordered list
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test-anchor-2');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->type('new item');
+        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item<span id="test-anchor-1">2</span> %1%</li><li>new item</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item<span id="test-anchor-2">2</span> %2%</li><li>new item</li><li>item 3</li></ol>');
+
+    }//end testCreatingNewListItemAfterAnAnchoredItem()
 
 }//end class
 
