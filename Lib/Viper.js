@@ -709,9 +709,12 @@
                         var self = this;
                         setTimeout(function() {
                             self.element.focus();
-                            range.setStart(editableChild, 0);
-                            range.collapse(true);
-                            Viper.Selection.addRange(range);
+
+                            if (editableChild) {
+                                range.setStart(editableChild, 0);
+                                range.collapse(true);
+                                Viper.Selection.addRange(range);
+                            }
                         }, 10);
                     }//end if
                 } else if (Viper.Util.isBrowser('firefox') === true) {
