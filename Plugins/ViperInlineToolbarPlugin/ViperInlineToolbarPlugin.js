@@ -493,6 +493,8 @@
 
             ViperSelection.addRange(range);
 
+            this.viper.fireCallbacks('ViperInlineToolbarPlugin:lineageItemSelected', node);
+
             this._toolbarWidget.closeActiveSubsection(true);
             this._toolbarWidget.setVerticalUpdateOnly(true);
             this.viper.fireSelectionChanged(range, true);
