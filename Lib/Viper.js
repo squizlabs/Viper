@@ -4021,13 +4021,13 @@
                 }
             }
 
-            return this._fireCallbacks(callbackList, data, doneCallback);
+            return this._fireCallbacks(callbackList, data, doneCallback, null, type);
 
         },
 
-        _fireCallbacks: function(callbacks, data, doneCallback, retVal)
+        _fireCallbacks: function(callbacks, data, doneCallback, retVal, type)
         {
-            if (callbacks.length === 0 || retVal === false) {
+            if (callbacks.length === 0) {
                 if (doneCallback) {
                     doneCallback.call(this, data, retVal);
                 }
@@ -4039,19 +4039,26 @@
             if (callback) {
                 var self = this;
                 try {
-                    var retVal = callback.call(this, data, function(retVal) {
-                        self._fireCallbacks(callbacks, data, doneCallback, retVal);
+                    var returnValue = callback.call(this, data, function(returnValue) {
+                        if (retVal === false) {
+                            returnValue = false;
+                        }
+
+                        self._fireCallbacks(callbacks, data, doneCallback, returnValue, type);
                     });
 
-                    // TODO: need a better way to handle callback only events.
-                    if (Viper.Util.isFn(retVal) === true) {
+                    if (retVal === false) {
+                        returnValue = false;
+                    }
+
+                    if (Viper.Util.isFn(returnValue) === true) {
                         return;
                     }
+
+                    return this._fireCallbacks(callbacks, data, doneCallback, returnValue, type);
                 } catch (e) {
                     console.error(e, callback, e.stack);
                 }
-
-                return this._fireCallbacks(callbacks, data, doneCallback, retVal);
             }
 
         },
