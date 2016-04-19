@@ -4047,12 +4047,12 @@
                         self._fireCallbacks(callbacks, data, doneCallback, returnValue, type);
                     });
 
-                    if (retVal === false) {
-                        returnValue = false;
-                    }
-
                     if (Viper.Util.isFn(returnValue) === true) {
                         return;
+                    }
+
+                    if (retVal === false) {
+                        returnValue = false;
                     }
 
                     return this._fireCallbacks(callbacks, data, doneCallback, returnValue, type);
