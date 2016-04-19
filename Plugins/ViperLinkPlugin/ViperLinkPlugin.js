@@ -144,10 +144,17 @@
             return regExStr.test(email);
         },
 
+        getURL: function(idPrefix)
+        {
+            var url = ViperUtil.trim(this.viper.Tools.getItem(idPrefix + ':url').getValue());
+            return url;
+
+        },
+
         updateLinkAttributes: function(link, idPrefix)
         {
              // Get the current values.
-            var url       = ViperUtil.trim(this.viper.Tools.getItem(idPrefix + ':url').getValue());
+            var url       = this.getURL(idPrefix);
             var title     = this.viper.Tools.getItem(idPrefix + ':title').getValue();
             var newWindow = this.viper.Tools.getItem(idPrefix + ':newWindow').getValue();
 
@@ -182,6 +189,11 @@
                 link.removeAttribute('target');
             }
 
+            var range = this.viper.getViperRange();
+            range.selectNode(link);
+            ViperSelection.addRange(range);
+            this.viper.contentChanged(false, range);
+
         },
 
         updateLink: function(idPrefix)
@@ -199,11 +211,6 @@
             } else {
                 this.updateLinkAttributes(node, idPrefix);
             }
-
-            range.selectNode(node);
-            ViperSelection.addRange(range);
-
-            this.viper.contentChanged(false, range);
 
         },
 
@@ -290,11 +297,6 @@
                 a = this.viper.surroundContents('a', null, range);
                 this.updateLinkAttributes(a, idPrefix);
             }
-
-            range.selectNode(a);
-            ViperSelection.addRange(range);
-
-            this.viper.contentChanged(false, range);
 
             return a;
 
