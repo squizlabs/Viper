@@ -20,13 +20,12 @@
         this._settings = {};
 
         this._viperElementHolder = null;
-        this._subElementActive   = false;
-        this._mainElem           = null;
         this._registeredElements = [];
         this._attributeGetModifiers = [];
         this._attributeSetModifiers = [];
         this._mouseDownEvent        = null;
         this._retrievingValues      = 0;
+        this._memberElements        = [];
 
         // This var is used to store the range of Viper before it loses focus. Any plugins
         // that steal focus from Viper element can use getPreviousRange.
@@ -633,7 +632,7 @@
                                 blockElement.appendChild(document.createTextNode(' '));
                             }
 
-                            editableChild = range._getFirstSelectableChild(this.element);
+                            editableChild = range._getFirstSelectableChild(this.element, true);
                         } else {
                             var tagName = this.getDefaultBlockTag();
                             if (!tagName) {
@@ -645,6 +644,17 @@
                                 editableChild = range._getFirstSelectableChild(this.element);
                             }
                         }//end if
+
+                        var self = this;
+                        setTimeout(function() {
+                            self.element.focus();
+
+                            if (editableChild) {
+                                range.setStart(editableChild, 0);
+                                range.collapse(true);
+                                Viper.Selection.addRange(range);
+                            }
+                        }, 10);
                     }//end if
                 } else if (Viper.Util.isBrowser('firefox') === true) {
                     range.setStart(editableChild, 0);
@@ -733,8 +743,6 @@
                 this.element.setAttribute('contentEditable', false);
                 Viper.Util.setStyle(this.element, 'outline', 'invert');
             }
-
-            this.setSubElementState(null, false);
 
             this.setEnabled(false);
             this.element = elem;
@@ -852,6 +860,7 @@
             var tmp     = Viper.document.createElement('div');
             var content = this.getContents(elem);
             content     = this._closeStubTags(content);
+            content     = this.removeInvalidCharacters(content);
             Viper.Util.setHtml(tmp, content);
 
             if ((Viper.Util.trim(Viper.Util.getNodeTextContent(tmp)).length === 0 || Viper.Util.getHtml(tmp) === '&nbsp;')
@@ -958,6 +967,25 @@
 
         },
 
+        setMemberElements: function(elements)
+        {
+            this._memberElements = elements;
+
+        },
+
+        addMemberElements: function(elements)
+        {
+            this._memberElements.concat(elements);
+
+        },
+
+        isMemberElement: function(element)
+        {
+            var isMember = Viper.Util.inArray(element, this._memberElements);
+            return isMember;
+
+        },
+
         resetPlugins: function()
         {
             this._useDefaultPlugins();
@@ -986,41 +1014,8 @@
 
         },
 
-        setSubElementState: function(elem, active)
-        {
-            if (active === true) {
-                if (this._subElementActive === true && this.element !== elem) {
-                    this.setSubElementState(this.element, false);
-                }
-
-                if (this._subElementActive !== true) {
-                    this._mainElem         = this.element;
-                    this.element           = elem;
-                    this._subElementActive = true;
-                    this.element.setAttribute('contentEditable', true);
-                    Viper.Util.setStyle(this.element, 'outline', 'none');
-                    this._addEvents();
-                    this.fireCallbacks('subElementEnabled', elem);
-                }
-            } else if (this.element && this._subElementActive === true) {
-                this.element.setAttribute('contentEditable', false);
-                Viper.Util.setStyle(this.element, 'outline', 'invert');
-                this._removeEvents();
-                var pelem    = this.element;
-                this.element = this._mainElem;
-                this._subElementActive = false;
-                this._mainElem         = null;
-                this.fireCallbacks('subElementDisabled', pelem);
-            }//end if
-
-        },
-
         getViperElement: function()
         {
-            if (this._subElementActive === true) {
-                return this._mainElem;
-            }
-
             return this.element;
 
         },
@@ -1028,16 +1023,6 @@
         getViperElementDocument: function()
         {
             return this.element.ownerDocument;
-
-        },
-
-        getViperSubElement: function()
-        {
-            if (this._subElementActive === true) {
-                return this.element;
-            }
-
-            return null;
 
         },
 
@@ -1368,8 +1353,6 @@
         isOutOfBounds: function(element)
         {
             if (element === this.element || Viper.Util.isChildOf(element, this.element) === true) {
-                return false;
-            } else if (this._subElementActive === true && (element === this._mainElem || Viper.Util.isChildOf(element, this._mainElem) === true)) {
                 return false;
             }
 
@@ -3337,7 +3320,7 @@
             var target = Viper.Util.getMouseEventTarget(e);
             var inside = true;
 
-            if (this.element !== target && Viper.Util.isChildOfElems(target, [this.element]) !== true) {
+            if (this.element !== target && Viper.Util.isChildOfElems(target, [this.element]) !== true && this.isMemberElement(target) !== true) {
                 inside = false;
 
                 // Ask plugins if its one of their element.
@@ -3767,13 +3750,13 @@
                 }
             }
 
-            return this._fireCallbacks(callbackList, data, doneCallback);
+            return this._fireCallbacks(callbackList, data, doneCallback, null, type);
 
         },
 
-        _fireCallbacks: function(callbacks, data, doneCallback, retVal)
+        _fireCallbacks: function(callbacks, data, doneCallback, retVal, type)
         {
-            if (callbacks.length === 0 || retVal === false) {
+            if (callbacks.length === 0) {
                 if (doneCallback) {
                     doneCallback.call(this, data, retVal);
                 }
@@ -3785,19 +3768,26 @@
             if (callback) {
                 var self = this;
                 try {
-                    var retVal = callback.call(this, data, function(retVal) {
-                        self._fireCallbacks(callbacks, data, doneCallback, retVal);
+                    var returnValue = callback.call(this, data, function(returnValue) {
+                        if (retVal === false) {
+                            returnValue = false;
+                        }
+
+                        self._fireCallbacks(callbacks, data, doneCallback, returnValue, type);
                     });
 
-                    // TODO: need a better way to handle callback only events.
-                    if (Viper.Util.isFn(retVal) === true) {
+                    if (Viper.Util.isFn(returnValue) === true) {
                         return;
                     }
+
+                    if (retVal === false) {
+                        returnValue = false;
+                    }
+
+                    return this._fireCallbacks(callbacks, data, doneCallback, returnValue, type);
                 } catch (e) {
                     console.error(e, callback, e.stack);
                 }
-
-                return this._fireCallbacks(callbacks, data, doneCallback, retVal);
             }
 
         },
@@ -3880,6 +3870,7 @@
             html = html.replace(/<\/:object/ig, '</object');
 
             html = html.replace(/__viper_attr_/g, '');
+            html = this.removeInvalidCharacters(html);
 
             // Revert to original settings.
             this.setSettings(originalSettings, true);
@@ -3971,6 +3962,7 @@
         
         setHtml: function(contents, callback)
         {
+            contents = this.removeInvalidCharacters(contents);
             var self = this;
             this.fireCallbacks('Viper:setHtmlContent', contents, function(data, newContents) {
                 self._setHTML(newContents, callback);
@@ -3993,7 +3985,10 @@
 
             var range          = this.getCurrentRange();
             var lastSelectable = range._getLastSelectableChild(clone);
-            if (lastSelectable && lastSelectable.nodeType === Viper.Util.TEXT_NODE) {
+            if (lastSelectable
+                && lastSelectable.nodeType === Viper.Util.TEXT_NODE
+                && (!lastSelectable.nextSibling || Viper.Util.isTag(lastSelectable.nextSibling, 'br') === true)
+            ) {
                 lastSelectable.data = Viper.Util.rtrim(lastSelectable.data);
             }
 
@@ -4023,7 +4018,7 @@
 
         _closeStubTags: function (content)
         {
-            var re  = /<(area|base|basefont|br|hr|input|img|link|meta|embed|viper:param|param)((\s+[_-\w]+(\s*=\s*(?:"[^">]*"|\'[^\'>]+\'))?)+)?\s*>/ig;
+            var re  = /<(area|base|basefont|br|hr|input|img|link|meta|embed|viper:param|param)((\s+[_\-\w]+(\s*=\s*(?:"[^">]*"|\'[^\'>]+\'))?)+)?\s*>/ig;
             content = content.replace(re, "<$1$2 />");
             return content;
 
@@ -4105,7 +4100,10 @@
             if (Viper.Util.isBlockElement(elem) === true) {
                 var range    = this.getViperRange(elem);
                 var lastElem = range._getLastSelectableChild(elem);
-                if (lastElem && lastElem.nodeType === Viper.Util.TEXT_NODE) {
+                if (lastElem
+                    && lastElem.nodeType === Viper.Util.TEXT_NODE
+                    && (!lastElem.nextSibling || Viper.Util.isTag(lastElem.nextSibling, 'br') === true)
+                ) {
                     lastElem.data = Viper.Util.rtrim(lastElem.data.replace(/(&nbsp;)*$/, ''));
                 }
             }
@@ -4316,7 +4314,6 @@
 
                         // Remove extra spaces from the node.
                         node.data = node.data.replace(/^\s+/g, ' ');
-                        node.data = node.data.replace(/\s+$/g, ' ');
                         node.data = node.data.replace(/\s*\n\s*/g, ' ');
 
                         // TODO: We should normalise these text nodes before calling this method. This way there is no
@@ -4408,7 +4405,16 @@
                 }
             }
 
+        },
+
+        removeInvalidCharacters: function(content)
+        {
+            // Remove all control chars.
+            content = content.replace(/[\x00-\x1F]/g, '');
+            return content;
+
         }
+
     };
 
     // Add Viper to global namespace.
@@ -29458,7 +29464,7 @@ ViperAccessibilityPlugin_WCAG2 = {
         _updateSelection: function()
         {
             try {
-                if (this._tmpNode !== null) {
+                if (this._tmpNode !== null && ViperUtil.isPartOfDOM(this._tmpNode) === true) {
                     var range = this.viper.getCurrentRange();
                     range.setEnd(this._tmpNode, this._tmpNodeOffset);
                     range.setStart(this._tmpNode, this._tmpNodeOffset);
@@ -35416,6 +35422,8 @@ ViperAccessibilityPlugin_WCAG2 = {
 
             ViperSelection.addRange(range);
 
+            this.viper.fireCallbacks('ViperInlineToolbarPlugin:lineageItemSelected', node);
+
             this._toolbarWidget.closeActiveSubsection(true);
             this._toolbarWidget.setVerticalUpdateOnly(true);
             this.viper.fireSelectionChanged(range, true);
@@ -36440,10 +36448,17 @@ ViperAccessibilityPlugin_WCAG2 = {
             return regExStr.test(email);
         },
 
+        getURL: function(idPrefix)
+        {
+            var url = ViperUtil.trim(this.viper.Tools.getItem(idPrefix + ':url').getValue());
+            return url;
+
+        },
+
         updateLinkAttributes: function(link, idPrefix)
         {
              // Get the current values.
-            var url       = ViperUtil.trim(this.viper.Tools.getItem(idPrefix + ':url').getValue());
+            var url       = this.getURL(idPrefix);
             var title     = this.viper.Tools.getItem(idPrefix + ':title').getValue();
             var newWindow = this.viper.Tools.getItem(idPrefix + ':newWindow').getValue();
 
@@ -36478,6 +36493,11 @@ ViperAccessibilityPlugin_WCAG2 = {
                 link.removeAttribute('target');
             }
 
+            var range = this.viper.getViperRange();
+            range.selectNode(link);
+            ViperSelection.addRange(range);
+            this.viper.contentChanged(false, range);
+
         },
 
         updateLink: function(idPrefix)
@@ -36495,11 +36515,6 @@ ViperAccessibilityPlugin_WCAG2 = {
             } else {
                 this.updateLinkAttributes(node, idPrefix);
             }
-
-            range.selectNode(node);
-            ViperSelection.addRange(range);
-
-            this.viper.contentChanged(false, range);
 
         },
 
@@ -36586,11 +36601,6 @@ ViperAccessibilityPlugin_WCAG2 = {
                 a = this.viper.surroundContents('a', null, range);
                 this.updateLinkAttributes(a, idPrefix);
             }
-
-            range.selectNode(a);
-            ViperSelection.addRange(range);
-
-            this.viper.contentChanged(false, range);
 
             return a;
 
@@ -39766,6 +39776,10 @@ ViperAccessibilityPlugin_WCAG2 = {
                     ViperSelection.addRange(range);
                 }
 
+            });
+
+            this.viper.registerCallback('ViperInlineToolbarPlugin:lineageItemSelected', 'ViperReplacementPlugin', function(node) {
+                ignoreSelectionChange = true;
             });
 
             this.viper.registerCallback('Viper:attributeRemoved', 'ViperReplacementPlugin', function(data) {
@@ -71706,4 +71720,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = 'd97e7455599d49be0b67cdddd83870c60e11fda4';
+Viper.build = true;Viper.version = '4e942025d286500cb7ef2a4016fd058e56a39be3';
