@@ -227,12 +227,25 @@
          *
          * For example: strong -> Bold, u -> Underline.
          *
-         * @param {string} tagName The tag name of a DOMElement.
+         * @param {string}  tagName The tag name of a DOMElement.
+         * @param {DOMNode} tag     The source tag.
          *
          * @return {string} The readable name.
          */
-        getReadableTagName: function(tagName)
+        getReadableTagName: function(tagName, tag)
         {
+            var readableTagName = this.viper.fireCallbacks(
+                'ViperInlineToolbarPlugin:getReadableTagName',
+                {
+                    tagName: tagName,
+                    tag: tag
+                }
+            );
+
+            if (readableTagName) {
+                return readableTagName;
+            }
+
             switch (tagName) {
                 case 'strong':
                     tagName = _('Bold');
@@ -386,7 +399,7 @@
                     ViperUtil.addClass(parent, 'Viper-selected');
                 }
 
-                ViperUtil.setHtml(parent, this.getReadableTagName(tagName));
+                ViperUtil.setHtml(parent, this.getReadableTagName(tagName, lineage[i]));
                 this._lineage.appendChild(parent);
                 linElems.push(parent);
 

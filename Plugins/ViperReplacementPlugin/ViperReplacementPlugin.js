@@ -399,6 +399,18 @@
                 }
             );
 
+            this.viper.registerCallback(
+                'ViperInlineToolbarPlugin:getReadableTagName',
+                'ViperReplacementPlugin',
+                function(data) {
+                    if (data.tag && ViperUtil.hasAttribute(data.tag, 'data-viper-keyword') === true) {
+                        return _('Keyword');
+                    }
+
+                    return null;
+                }
+            );
+
         },
 
         replaceKeywords: function (string, callback)
