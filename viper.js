@@ -35168,8 +35168,20 @@ ViperAccessibilityPlugin_WCAG2 = {
         },
 
         
-        getReadableTagName: function(tagName)
+        getReadableTagName: function(tagName, tag)
         {
+            var readableTagName = this.viper.fireCallbacks(
+                'ViperInlineToolbarPlugin:getReadableTagName',
+                {
+                    tagName: tagName,
+                    tag: tag
+                }
+            );
+
+            if (readableTagName) {
+                return readableTagName;
+            }
+
             switch (tagName) {
                 case 'strong':
                     tagName = _('Bold');
@@ -35315,7 +35327,7 @@ ViperAccessibilityPlugin_WCAG2 = {
                     ViperUtil.addClass(parent, 'Viper-selected');
                 }
 
-                ViperUtil.setHtml(parent, this.getReadableTagName(tagName));
+                ViperUtil.setHtml(parent, this.getReadableTagName(tagName, lineage[i]));
                 this._lineage.appendChild(parent);
                 linElems.push(parent);
 
@@ -39831,6 +39843,18 @@ ViperAccessibilityPlugin_WCAG2 = {
                     }
 
                     return value;
+                }
+            );
+
+            this.viper.registerCallback(
+                'ViperInlineToolbarPlugin:getReadableTagName',
+                'ViperReplacementPlugin',
+                function(data) {
+                    if (data.tag && ViperUtil.hasAttribute(data.tag, 'data-viper-keyword') === true) {
+                        return _('Keyword');
+                    }
+
+                    return null;
                 }
             );
 
@@ -71720,4 +71744,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = '4e942025d286500cb7ef2a4016fd058e56a39be3';
+Viper.build = true;Viper.version = '1301abfd96cf4aceb21869fb964582a22d99a00c';
