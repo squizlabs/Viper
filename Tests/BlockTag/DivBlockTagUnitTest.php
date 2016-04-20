@@ -62,20 +62,24 @@ class Viper_Tests_BlockTag_DivBlockTagUnitTest extends AbstractViperUnitTest
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('%3% test more content');
+        sleep(2);
         $this->assertHTMLMatch('<div>%1% Test content %2%</div><div>%3% test more content</div>');
 
         // Join the sections back up with forward delete
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.DELETE');
+        sleep(2);
         $this->assertHTMLMatch('<div>%1% Test content %2%%3% test more content</div>');
 
         // Split content again
         $this->moveToKeyword(3, 'left');
         $this->sikuli->keyDown('Key.ENTER');
+        sleep(2);
         $this->assertHTMLMatch('<div>%1% Test content %2%</div><div>%3% test more content</div>');
 
         // Join the sections back up with backspace
         $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(2);
         $this->assertHTMLMatch('<div>%1% Test content %2%%3% test more content</div>');
 
     }//end testDivBlockTagSplittingAndJoingContent()
