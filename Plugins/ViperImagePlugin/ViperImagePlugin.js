@@ -714,8 +714,7 @@
 
             if (nodeSelection && ViperUtil.isTag(nodeSelection, 'img') === true) {
                 this._resizeImage = nodeSelection;
-                data.toolbar.showButton('vitpImage');
-                data.toolbar.showButton('vitpImageMove');
+                this.showInlineToolbarButtons(data);
                 nodeSelection.onload = function() {
                     self.showImageResizeHandles(nodeSelection);
                     self._inlineToolbar.update(null, nodeSelection);
@@ -735,6 +734,13 @@
                     50
                 );
             }
+
+        },
+
+        showInlineToolbarButtons: function(data)
+        {
+            data.toolbar.showButton('vitpImage');
+            data.toolbar.showButton('vitpImageMove');
 
         },
 
@@ -1088,7 +1094,11 @@
         {
             var sizeHtml = image.width + ' x ' + image.height;
             sizeHtml    += ' <span class="ViperImagePlugin-origSize">(' + image.naturalWidth + ' x ' + image.naturalHeight + ')</span>';
-            sizeHtml    += ' <span class="ViperImagePlugin-reset">' + _('Reset') + '</span>';
+
+            if (ViperUtil.hasAttribute(image, 'width') === true || ViperUtil.hasAttribute(image, 'height')) {
+                sizeHtml += ' <span class="ViperImagePlugin-reset">' + _('Reset') + '</span>';
+            }
+
             return sizeHtml;
 
         }
