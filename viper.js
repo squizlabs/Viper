@@ -34583,8 +34583,7 @@ ViperAccessibilityPlugin_WCAG2 = {
 
             if (nodeSelection && ViperUtil.isTag(nodeSelection, 'img') === true) {
                 this._resizeImage = nodeSelection;
-                data.toolbar.showButton('vitpImage');
-                data.toolbar.showButton('vitpImageMove');
+                this.showInlineToolbarButtons(data);
                 nodeSelection.onload = function() {
                     self.showImageResizeHandles(nodeSelection);
                     self._inlineToolbar.update(null, nodeSelection);
@@ -34604,6 +34603,13 @@ ViperAccessibilityPlugin_WCAG2 = {
                     50
                 );
             }
+
+        },
+
+        showInlineToolbarButtons: function(data)
+        {
+            data.toolbar.showButton('vitpImage');
+            data.toolbar.showButton('vitpImageMove');
 
         },
 
@@ -34957,7 +34963,11 @@ ViperAccessibilityPlugin_WCAG2 = {
         {
             var sizeHtml = image.width + ' x ' + image.height;
             sizeHtml    += ' <span class="ViperImagePlugin-origSize">(' + image.naturalWidth + ' x ' + image.naturalHeight + ')</span>';
-            sizeHtml    += ' <span class="ViperImagePlugin-reset">' + _('Reset') + '</span>';
+
+            if (ViperUtil.hasAttribute(image, 'width') === true || ViperUtil.hasAttribute(image, 'height')) {
+                sizeHtml += ' <span class="ViperImagePlugin-reset">' + _('Reset') + '</span>';
+            }
+
             return sizeHtml;
 
         }
@@ -71744,4 +71754,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = '1301abfd96cf4aceb21869fb964582a22d99a00c';
+Viper.build = true;Viper.version = 'bc4e04aa5f742448987ffe16779cb6d04e1bb89a';
