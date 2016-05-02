@@ -1076,17 +1076,8 @@
 
         resetImageSize: function(image)
         {
-            var dim    = this.getImageNaturalDimensions(image);
-            var height = dim.height;
-            ViperUtil.attr(image, 'width', dim.width + 'px');
-            var widthStyle = parseInt(ViperUtil.getStyle(image, 'width').replace('px', ''));
-
-            if (widthStyle !== dim.width) {
-                ViperUtil.attr(image, 'width', widthStyle + 'px');
-                height = Math.round(widthStyle * (dim.height / dim.width));
-            }
-
-            ViperUtil.attr(image, 'height', height + 'px');
+            ViperUtil.removeAttr(image, 'width');
+            ViperUtil.removeAttr(image, 'height');
 
         },
 
