@@ -34945,17 +34945,8 @@ ViperAccessibilityPlugin_WCAG2 = {
 
         resetImageSize: function(image)
         {
-            var dim    = this.getImageNaturalDimensions(image);
-            var height = dim.height;
-            ViperUtil.attr(image, 'width', dim.width + 'px');
-            var widthStyle = parseInt(ViperUtil.getStyle(image, 'width').replace('px', ''));
-
-            if (widthStyle !== dim.width) {
-                ViperUtil.attr(image, 'width', widthStyle + 'px');
-                height = Math.round(widthStyle * (dim.height / dim.width));
-            }
-
-            ViperUtil.attr(image, 'height', height + 'px');
+            ViperUtil.removeAttr(image, 'width');
+            ViperUtil.removeAttr(image, 'height');
 
         },
 
@@ -71754,4 +71745,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = 'bc4e04aa5f742448987ffe16779cb6d04e1bb89a';
+Viper.build = true;Viper.version = '2df227b6fb9ff6423bd0308078296b3847698240';
