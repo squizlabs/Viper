@@ -879,6 +879,7 @@
             var swHandle = document.createElement('div');
             ViperUtil.addClass(swHandle, 'Viper-image-handle Viper-image-handle-sw');
 
+            var self   = this;
             var rect   = ViperUtil.getBoundingRectangle(image);
             var offset = ViperUtil.getDocumentOffset();
             rect.x1 += offset.x;
@@ -894,156 +895,184 @@
                 rect.y2 -= scrollCoords.y;
             }
 
-            // Set the position of handles.
-            ViperUtil.setStyle(swHandle, 'left', rect.x1 + 'px');
-            ViperUtil.setStyle(swHandle, 'top', (rect.y2) + 'px');
-
-            ViperUtil.setStyle(seHandle, 'left', (rect.x2) + 'px');
-            ViperUtil.setStyle(seHandle, 'top', (rect.y2) + 'px');
-
-            this.viper.addElement(seHandle);
-            this.viper.addElement(swHandle);
-
-            this._resizeHandles = [];
-            this._resizeHandles.push(seHandle);
-            this._resizeHandles.push(swHandle);
-
             this._resizeImage = image;
 
-            var self        = this;
-            var windowWidth = ViperUtil.getWindowDimensions().width;
-            var sizeDiv     = document.createElement('div');
-            ViperUtil.addClass(sizeDiv, 'ViperImagePlugin-sizeDiv');
-            this.viper.addElement(sizeDiv);
-            this._resizeHandles.push(sizeDiv);
-            ViperUtil.addEvent(
-                sizeDiv,
-                'mousedown',
-                function (e) {
-                    // Reset size.
-                    self.resetImageSize(image);
-                    _updateSize();
-                    ViperUtil.preventDefault(e);
-                    self.viper.fireCallbacks('ViperImagePlugin:imageSizeReset', {image: image});
+            // Create the resize box.
+            if (!this._resizeBox) {
+                // Determine if the image can be resized (e.g. percentage width).
+                // TODO: To be safe should the parent be cloned, incase hiding parent cause page jump etc.
+                ViperUtil.setStyle(image.parentNode, 'display', 'none');
+                var widthStyle = ViperUtil.getStyle(image, 'width');
+                Viper.Util.setStyle(image.parentNode, 'display', '');
 
+                if (widthStyle && widthStyle.indexOf('%') !== -1) {
+                    // Prevent resizing.
+                    return;
                 }
-            );
 
-            var _updateSize = function (rect) {
-                rect = rect || ViperUtil.getBoundingRectangle(image);
-                ViperUtil.setStyle(sizeDiv, 'right', windowWidth - (rect.x2) + 15 + 'px');
-                ViperUtil.setStyle(sizeDiv, 'top', (rect.y2) - 30 + 'px');
-                var sizeHtml = self.getImageSizeDisplayHtml(image);
-                ViperUtil.setHtml(sizeDiv, sizeHtml);
-            };
-            _updateSize(rect);
+                var resizeBox   = document.createElement('div');
+                this._resizeBox = resizeBox;
 
-            var _addMouseEvents = function(handle, rev) {
-                ViperUtil.addEvent(handle, 'mousedown', function(e) {
-                    var width    = image.width;
-                    var height   = image.height;
-                    var prevPosX = e.clientX - offset.x;
-                    var prevPosY = e.clientY - offset.y;
-                    var resized  = false;
-                    var both     = e.shiftKey;
-                    var ratio    = (height / width);
-
-                    image.setAttribute('width', width);
-                    image.setAttribute('height', height);
-                    ViperUtil.setStyle(image, 'width', '');
-                    ViperUtil.setStyle(image, 'height', '');
-
-                    self._inlineToolbar.hide();
-
-                    ViperUtil.addEvent(Viper.document, 'mousemove.ViperImageResize', function(e) {
-                        var wDiff = (e.clientX - prevPosX);
-                        var hDiff = (e.clientY - prevPosY);
-                        prevPosX  = e.clientX;
-                        prevPosY  = e.clientY;
-                        resized   = true;
-
-                        if (rev !== true) {
-                            width += wDiff;
-                        } else {
-                            width -= wDiff;
-                        }
-
-                        image.setAttribute('width', width);
-                        var widthStyle = parseInt(ViperUtil.getStyle(image, 'width').replace('px', ''));
-                        var naturalDim = self.getImageNaturalDimensions(image);
-                        if (widthStyle !== width) {
-                            image.setAttribute('width', widthStyle);
-                            if (both !== true) {
-                                image.setAttribute('height', parseInt(widthStyle * ratio));
-                            }
-
-                            _updateSize();
-                            return;
-                        } else if (widthStyle > naturalDim.width) {
-                            image.setAttribute('width', naturalDim.width);
-                            if (both !== true) {
-                                image.setAttribute('height', naturalDim.height);
-                            }
-
-                            _updateSize();
-                            return;
-                        }
-
-                        if (both === true) {
-                            height += hDiff;
-                            image.setAttribute('height', parseInt(height));
-                        } else {
-                            image.setAttribute('height', parseInt(width * ratio));
-                        }
-
-                        var rect = ViperUtil.getBoundingRectangle(image);
-                        if (document !== image.ownerDocument) {
-                            rect.x1 -= scrollCoords.x;
-                            rect.x2 -= scrollCoords.x;
-                            rect.y1 -= scrollCoords.y;
-                            rect.y2 -= scrollCoords.y;
-                        }
-
-                        ViperUtil.setStyle(seHandle, 'left', (rect.x2 + offset.x) + 'px');
-                        ViperUtil.setStyle(seHandle, 'top', (rect.y2 + offset.y) + 'px');
-
-                        ViperUtil.setStyle(swHandle, 'left', (rect.x1 + offset.x) + 'px');
-                        ViperUtil.setStyle(swHandle, 'top', (rect.y2 + offset.y) + 'px');
-
-                        _updateSize(rect);
-                        self.viper.fireCallbacks('ViperImagePlugin:imageResized', {image: image, size: rect});
-
+                var windowWidth = ViperUtil.getWindowDimensions().width;
+                var sizeDiv     = document.createElement('div');
+                ViperUtil.addClass(sizeDiv, 'ViperImagePlugin-sizeDiv');
+                ViperUtil.addEvent(
+                    sizeDiv,
+                    'mousedown',
+                    function (e) {
+                        // Reset size.
+                        self.resetImageSize(image);
+                        _updateSize();
                         ViperUtil.preventDefault(e);
-                        return false;
-                    });
+                        self.viper.fireCallbacks('ViperImagePlugin:imageSizeReset', {image: image});
 
-                    // Remove mousemove event.
-                    ViperUtil.addEvent(ViperUtil.getDocuments(), 'mouseup.ViperImageResize', function(e) {
-                        ViperUtil.removeEvent(Viper.document, 'mousemove.ViperImageResize');
-                        ViperUtil.removeEvent(ViperUtil.getDocuments(), 'mouseup.ViperImageResize');
+                    }
+                );
+                resizeBox.appendChild(sizeDiv);
 
-                        // If the style attribute is empty, remove it.
-                        if (!image.getAttribute('style')) {
-                            image.removeAttribute('style');
+                var _updateSize = function (rect) {
+                    rect = rect || ViperUtil.getBoundingRectangle(image);
+                    var sizeHtml = self.getImageSizeDisplayHtml(image);
+                    ViperUtil.setHtml(sizeDiv, sizeHtml);
+                };
+                _updateSize(rect);
+
+                ViperUtil.addClass(resizeBox, 'ViperImagePlugin-resizeBox');
+
+                // Set the position of the box.
+                ViperUtil.setStyle(resizeBox, 'left', rect.x1 - 5 + 'px');
+                ViperUtil.setStyle(resizeBox, 'top', rect.y1 - 5 + 'px');
+                ViperUtil.setStyle(resizeBox, 'width', rect.x2 - rect.x1 + 10 + 'px');
+                ViperUtil.setStyle(resizeBox, 'height', rect.y2 - rect.y1 + 10 + 'px');
+
+                // Create the handles for each corner.
+                var _createHandle = function(className) {
+                    var handle = document.createElement('div');
+                    ViperUtil.addClass(handle, 'ViperImagePlugin-resizeBox-handle ViperImagePlugin-resizeBox-handle-' + className);
+                    resizeBox.appendChild(handle);
+
+                    ViperUtil.addEvent(
+                        handle,
+                        'mousedown.ViperImagePlugin-resize',
+                        function (e) {
+                            ViperUtil.preventDefault(e);
+
+                            var posx       = e.pageX;
+                            var posy       = e.pageY;
+                            var ratio      = (image.height / image.width);
+                            var width      = image.width;
+                            var height     = image.height;
+                            var naturalDim = self.getImageNaturalDimensions(image);
+                            var both       = e.shiftKey;
+                            var resized    = false;
+
+                            image.setAttribute('width', width);
+                            image.setAttribute('height', height);
+                            ViperUtil.setStyle(image, 'width', '');
+                            ViperUtil.setStyle(image, 'height', '');
+
+                            self._inlineToolbar.hide();
+
+                            ViperUtil.addEvent(
+                                e.target.ownerDocument,
+                                'mousemove.ViperImagePlugin-resize',
+                                function (e) {
+                                    var diffx = e.pageX - posx;
+                                    var diffy = e.pageY - posy;
+                                    posx      = e.pageX;
+                                    posy      = e.pageY;
+                                    replace   = true;
+
+                                    if (ViperUtil.hasClass(handle, 'ViperImagePlugin-resizeBox-handle-bottomLeft') === true
+                                        || ViperUtil.hasClass(handle, 'ViperImagePlugin-resizeBox-handle-topLeft') === true
+                                    ) {
+                                        width = image.width - diffx;
+                                    } else {
+                                        width = image.width + diffx;
+                                    }
+
+                                    image.setAttribute('width', width);
+                                    var widthStyle = parseInt(ViperUtil.getStyle(image, 'width').replace('px', ''));
+                                    if (widthStyle !== width) {
+                                        image.setAttribute('width', widthStyle);
+                                        if (both !== true) {
+                                            image.setAttribute('height', parseInt(widthStyle * ratio));
+                                        }
+
+                                        _updateSize();
+                                        return;
+                                    } else if (widthStyle > naturalDim.width) {
+                                        image.setAttribute('width', naturalDim.width);
+                                        if (both !== true) {
+                                            image.setAttribute('height', naturalDim.height);
+                                        }
+
+                                        _updateSize();
+                                        return;
+                                    }
+
+                                    if (both === true) {
+                                        height += diffy;
+                                        image.setAttribute('height', parseInt(height));
+                                    } else {
+                                        image.setAttribute('height', parseInt(width * ratio));
+                                    }
+
+                                    _updateSize(rect);
+                                    self.viper.fireCallbacks('ViperImagePlugin:imageResized', {image: image, size: rect});
+
+                                    // Need to set the pos and size of resize box incase the image moves around.
+                                    var rect = ViperUtil.getBoundingRectangle(image);
+                                    if (document !== image.ownerDocument) {
+                                        rect.x1 -= scrollCoords.x;
+                                        rect.x2 -= scrollCoords.x;
+                                        rect.y1 -= scrollCoords.y;
+                                        rect.y2 -= scrollCoords.y;
+                                    }
+
+                                    ViperUtil.setStyle(resizeBox, 'left', rect.x1 - 5 + 'px');
+                                    ViperUtil.setStyle(resizeBox, 'top', rect.y1 - 5 + 'px');
+                                    ViperUtil.setStyle(resizeBox, 'width', rect.x2 - rect.x1 + 10 + 'px');
+                                    ViperUtil.setStyle(resizeBox, 'height', rect.y2 - rect.y1 + 10 + 'px');
+                                }
+                            );
+
+                            ViperUtil.addEvent(
+                                ViperUtil.getDocuments(),
+                                'mouseup.ViperImagePlugin-resize',
+                                function (e) {
+                                    ViperUtil.removeEvent(e.target.ownerDocument, 'mousemove.ViperImagePlugin-resize');
+                                    ViperUtil.removeEvent(ViperUtil.getDocuments(), 'mouseup.ViperImagePlugin-resize');
+
+                                    // If the style attribute is empty, remove it.
+                                    if (!image.getAttribute('style')) {
+                                        image.removeAttribute('style');
+                                    }
+
+                                    if (resized === true) {
+                                        self.viper.contentChanged(true);
+                                    }
+
+                                    // Show the image toolbar.
+                                    self._updateToolbars(image);
+
+                                    self._inlineToolbar.update(null, image);
+                                }
+                            );
                         }
+                    );
 
-                        if (resized === true) {
-                            self.viper.contentChanged(true);
-                        }
+                    return handle;
+                };
 
-                        // Show the image toolbar.
-                        self._updateToolbars(image);
+                var handles         = {};
+                handles.topLeft     = _createHandle('topLeft');
+                handles.topRight    = _createHandle('topRight');
+                handles.bottomLeft  = _createHandle('bottomLeft');
+                handles.bottomRight = _createHandle('bottomRight');
 
-                        self._inlineToolbar.update(null, image);
-                    });
-
-                    ViperUtil.preventDefault(e);
-                    return false;
-                });
-            };
-
-            _addMouseEvents(seHandle);
-            _addMouseEvents(swHandle, true);
+                this.viper.addElement(resizeBox);
+            }
 
         },
 
@@ -1060,16 +1089,8 @@
 
         hideImageResizeHandles: function(noUpdate)
         {
-            if (this._resizeHandles) {
-                ViperUtil.remove(this._resizeHandles);
-                this._resizeHandles = null;
-
-                if (noUpdate !== true) {
-                    this._inlineToolbar.hide();
-                    this._updateToolbars();
-                }
-            }
-
+            ViperUtil.remove(this._resizeBox);
+            this._resizeBox   = null;
             this._resizeImage = null;
 
         },

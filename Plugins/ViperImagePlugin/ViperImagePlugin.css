@@ -31,13 +31,16 @@
 
 .ViperImagePlugin-sizeDiv {
     position: absolute;
-    background-color: rgba(224,222,222,0.7);
+    background-color: rgba(255,255,255,0.9);
     color: #000;
     padding: 3px 6px;
-    border-radius: 5px;
+    border-radius: 3px;
     font-size: 0.9em;
     z-index: 9999;
+    box-shadow: 0 0 2px 0px #222;
     cursor: pointer;
+    bottom: 10px;
+    right: 10px;
 }
 
 .ViperImagePlugin-reset {
@@ -51,4 +54,43 @@
 
 .ViperImagePlugin-sizeDiv:hover .ViperImagePlugin-origSize {
     display: inline;
+}
+
+/* Resize Box */
+.ViperImagePlugin-resizeBox {
+    position: absolute;
+    border: 2px solid #000;
+}
+
+.ViperImagePlugin-resizeBox-handle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    z-index: 101;
+    background-color: #F00;
+}
+
+.ViperImagePlugin-resizeBox-handle-topLeft {
+    top: -6px;
+    left: -6px;
+    cursor: se-resize;
+    cursor: nwse-resize;
+}
+
+.ViperImagePlugin-resizeBox-handle-topRight {
+    top: -6px;
+    right: -6px;
+    cursor: nesw-resize;
+}
+
+.ViperImagePlugin-resizeBox-handle-bottomLeft {
+    bottom: -6px;
+    left: -6px;
+    cursor: nesw-resize;
+}
+
+.ViperImagePlugin-resizeBox-handle-bottomRight {
+    bottom: -6px;
+    right: -6px;
+    cursor: nwse-resize;
 }
