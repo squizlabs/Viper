@@ -22,8 +22,9 @@
 }
 
 img::selection {
-  background: transparent;
+    background: transparent;
 }
+
 img::-moz-selection {
-  background: transparent;
+    background: transparent;
 }

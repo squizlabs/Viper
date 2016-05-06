@@ -477,8 +477,13 @@
                      ViperUtil.setStyle(self._previewBox, 'display', 'none');
                      tools.setFieldErrors(prefix + ':urlInput', []);
                 } else {
+                    if (url === '- Dropped Image -') {
+                        url = self._base64ImgSRC;
+                    }
+
                     // After a time period update the image preview.
                     inputTimeout = setTimeout(function() {
+                        self._lastPreviewURL = null;
                         self.updateImagePreview(url);
                     }, 1000);
                 }
@@ -517,6 +522,10 @@
             var alt   = tools.getItem(prefix + ':altInput').getValue();
             var title = tools.getItem(prefix + ':titleInput').getValue();
             var pres  = tools.getItem(prefix + ':isDecorative').getValue();
+
+            if (url === '- Dropped Image -') {
+                url = this._base64ImgSRC;
+            }
 
             if (pres === true) {
                 title = null;
@@ -584,7 +593,6 @@
                 }
 
                 // Update preview pane.
-                ViperUtil.empty(this._previewBox);
                 this.updateImagePreview(src);
             } else {
                 tools.enableButton('image');
@@ -597,6 +605,7 @@
                 tools.setFieldErrors(toolbarPrefix + ':urlInput', []);
 
                 // Update preview pane.
+                this._lastPreviewURL = null;
                 ViperUtil.empty(this._previewBox);
                 ViperUtil.setStyle(this._previewBox, 'display', 'none');
             }//end if
@@ -759,6 +768,11 @@
 
         setUrlFieldValue: function(url)
         {
+            if (url.indexOf('data:image') === 0) {
+                this._base64ImgSRC = url;
+                url = '- Dropped Image -';
+            }
+
             this.viper.Tools.getItem('ViperImagePlugin:urlInput').setValue(url);
             this.viper.Tools.getItem('vitpImagePlugin:urlInput').setValue(url);
 
@@ -772,6 +786,13 @@
 
         updateImagePreview: function(url)
         {
+            if (this._lastPreviewURL === url) {
+                return;
+            }
+
+            this._lastPreviewURL = url;
+            ViperUtil.empty(this._previewBox);
+
             var self = this;
             this.setPreviewContent(false, true);
             this.loadImage(url, function(img) {
@@ -792,7 +813,7 @@
             };
 
             var replacementPlugin = this.viper.getPluginManager().getPlugin('ViperReplacementPlugin');
-            if (replacementPlugin) {
+            if (replacementPlugin && url.indexOf('data:image') === -1) {
                 // Replace the url keyword.
                 var self = this;
                 replacementPlugin.replaceKeywords(
@@ -873,12 +894,6 @@
         {
             this.hideImageResizeHandles(true);
 
-            var seHandle = document.createElement('div');
-            ViperUtil.addClass(seHandle, 'Viper-image-handle Viper-image-handle-se');
-
-            var swHandle = document.createElement('div');
-            ViperUtil.addClass(swHandle, 'Viper-image-handle Viper-image-handle-sw');
-
             var self   = this;
             var rect   = ViperUtil.getBoundingRectangle(image);
             var offset = ViperUtil.getDocumentOffset();
@@ -901,15 +916,18 @@
             if (!this._resizeBox) {
                 // Determine if the image can be resized (e.g. percentage width).
                 // TODO: To be safe should the parent be cloned, incase hiding parent cause page jump etc.
-                ViperUtil.setStyle(image.parentNode, 'display', 'none');
-                var widthStyle = ViperUtil.getStyle(image, 'width');
-                Viper.Util.setStyle(image.parentNode, 'display', '');
+                // ViperUtil.setStyle(image.parentNode, 'display', 'none');
+                // var widthStyle = ViperUtil.getStyle(image, 'width');
+                // Viper.Util.setStyle(image.parentNode, 'display', '');
 
                 var canResize = true;
-                if (widthStyle && widthStyle.indexOf('%') !== -1) {
-                    // Prevent resizing.
+                if (image.naturalWidth === 0 || image.naturalHeight === 0) {
                     canResize = false;
                 }
+                // if (widthStyle && widthStyle.indexOf('%') !== -1) {
+                //     // Prevent resizing.
+                //     canResize = false;
+                // }
 
                 var resizeBox   = document.createElement('div');
                 this._resizeBox = resizeBox;
@@ -953,6 +971,8 @@
                 ViperUtil.setStyle(resizeBox, 'height', rect.y2 - rect.y1 + 10 + 'px');
 
                 if (canResize === true) {
+                    ViperUtil.addClass(resizeBox, 'canResize');
+
                     // Create the handles for each corner.
                     var _createHandle = function(className) {
                         var handle = document.createElement('div');
@@ -982,7 +1002,7 @@
                                 self._inlineToolbar.hide();
 
                                 ViperUtil.addEvent(
-                                    e.target.ownerDocument,
+                                    ViperUtil.getDocuments(),
                                     'mousemove.ViperImagePlugin-resize',
                                     function (e) {
                                         var diffx = e.pageX - posx;
@@ -1042,6 +1062,9 @@
                                         ViperUtil.setStyle(resizeBox, 'top', rect.y1 - 5 + 'px');
                                         ViperUtil.setStyle(resizeBox, 'width', rect.x2 - rect.x1 + 10 + 'px');
                                         ViperUtil.setStyle(resizeBox, 'height', rect.y2 - rect.y1 + 10 + 'px');
+
+                                        ViperUtil.preventDefault(e);
+                                        return false;
                                     }
                                 );
 
@@ -1049,7 +1072,7 @@
                                     ViperUtil.getDocuments(),
                                     'mouseup.ViperImagePlugin-resize',
                                     function (e) {
-                                        ViperUtil.removeEvent(e.target.ownerDocument, 'mousemove.ViperImagePlugin-resize');
+                                        ViperUtil.removeEvent(ViperUtil.getDocuments(), 'mousemove.ViperImagePlugin-resize');
                                         ViperUtil.removeEvent(ViperUtil.getDocuments(), 'mouseup.ViperImagePlugin-resize');
 
                                         // If the style attribute is empty, remove it.
@@ -1067,6 +1090,9 @@
                                         self._inlineToolbar.update(null, image);
                                     }
                                 );
+
+                                ViperUtil.preventDefault(e);
+                                return false;
                             }
                         );
 

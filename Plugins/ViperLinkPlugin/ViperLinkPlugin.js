@@ -467,7 +467,7 @@
             }
 
             var nodeSelection = range.getNodeSelection();
-            if (nodeSelection && ViperUtil.isTag(nodeSelection, 'a') === true) {
+            if (nodeSelection) {
                 // Let the getLinkFromRange handle this.
                 return false;
             }

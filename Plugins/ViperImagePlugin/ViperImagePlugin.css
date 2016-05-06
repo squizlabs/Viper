@@ -3,6 +3,7 @@
     position: absolute;
     border: 2px solid #000;
     border-radius: 5px;
+    pointer-events: none;
 }
 
 .ViperImagePlugin-resizeBox-handle {
@@ -11,6 +12,7 @@
     height: 10px;
     z-index: 101;
     background-color: #F00;
+    pointer-events: all;
 }
 
 .ViperImagePlugin-resizeBox-handle-topLeft {
@@ -53,7 +55,9 @@
     right: 10px;
     min-width: 70px;
     display: none;
-    min-height: 15px;
+    min-height: 20px;
+    font-size: 12px;
+    pointer-events: all;
 }
 
 .ViperImagePlugin-sizeDiv.visible {
@@ -77,11 +81,11 @@
     color: #000;
 }
 
-.ViperImagePlugin-sizeDiv:hover .ViperImagePlugin-reset {
+ViperImagePlugin-resizeBox.canResize .ViperImagePlugin-sizeDiv:hover .ViperImagePlugin-reset {
     opacity: 1;
 }
 
-.ViperImagePlugin-sizeDiv:hover .ViperImagePlugin-size {
+ViperImagePlugin-resizeBox.canResize .ViperImagePlugin-sizeDiv:hover .ViperImagePlugin-size {
     opacity: 0;
 }
 
