@@ -81,11 +81,11 @@
     color: #000;
 }
 
-ViperImagePlugin-resizeBox.canResize .ViperImagePlugin-sizeDiv:hover .ViperImagePlugin-reset {
+.ViperImagePlugin-sizeDiv:hover .ViperImagePlugin-reset {
     opacity: 1;
 }
 
-ViperImagePlugin-resizeBox.canResize .ViperImagePlugin-sizeDiv:hover .ViperImagePlugin-size {
+.ViperImagePlugin-sizeDiv:hover .ViperImagePlugin-size {
     opacity: 0;
 }
 
