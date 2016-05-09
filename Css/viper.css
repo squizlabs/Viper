@@ -21,10 +21,10 @@
     display: none;
 }
 
-img::selection {
+[contenteditable="true"] img::selection {
     background: transparent;
 }
 
-img::-moz-selection {
+[contenteditable="true"] img::-moz-selection {
     background: transparent;
 }

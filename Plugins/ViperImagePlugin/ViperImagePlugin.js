@@ -951,8 +951,8 @@
                 );
                 resizeBox.appendChild(sizeDiv);
 
-                var _updateSize = function () {
-                    if (ViperUtil.hasAttribute(image, 'width') === true || ViperUtil.hasAttribute(image, 'height') === true) {
+                var _updateSize = function (force) {
+                    if (force === true || ViperUtil.hasAttribute(image, 'width') === true || ViperUtil.hasAttribute(image, 'height') === true) {
                         var sizeHtml = self.getImageSizeDisplayHtml(image);
                         ViperUtil.setHtml(sizeDiv, sizeHtml);
                         ViperUtil.addClass(sizeDiv, 'visible');
@@ -994,12 +994,11 @@
                                 var both       = e.shiftKey;
                                 var resized    = false;
 
-                                image.setAttribute('width', width);
-                                image.setAttribute('height', height);
                                 ViperUtil.setStyle(image, 'width', '');
                                 ViperUtil.setStyle(image, 'height', '');
 
                                 self._inlineToolbar.hide();
+                                _updateSize(true);
 
                                 ViperUtil.addEvent(
                                     ViperUtil.getDocuments(),
@@ -1075,6 +1074,15 @@
                                         ViperUtil.removeEvent(ViperUtil.getDocuments(), 'mousemove.ViperImagePlugin-resize');
                                         ViperUtil.removeEvent(ViperUtil.getDocuments(), 'mouseup.ViperImagePlugin-resize');
 
+                                        // If the image width/height is max then remove them.
+                                        if (image.width === image.naturalWidth) {
+                                            ViperUtil.removeAttr(image, 'width');
+                                        }
+
+                                        if (image.height === image.naturalHeight) {
+                                            ViperUtil.removeAttr(image, 'height');
+                                        }
+
                                         // If the style attribute is empty, remove it.
                                         if (!image.getAttribute('style')) {
                                             image.removeAttribute('style');
@@ -1139,8 +1147,14 @@
 
         getImageSizeDisplayHtml: function(image)
         {
-            var sizeHtml = ' <div class="ViperImagePlugin-size">' + image.width + ' x ' + image.height + '</div>';
-            sizeHtml    += ' <div class="ViperImagePlugin-reset">' + _('Reset Size') + '</div>';
+            var sizeHtml = '<div class="ViperImagePlugin-size';
+            if (image.width === image.naturalWidth || image.height === image.naturalHeight) {
+                sizeHtml += ' maximumSize">' + _('Maximum');
+            } else {
+                sizeHtml += '">' + image.width + ' x ' + image.height;
+            }
+
+            sizeHtml += '</div><div class="ViperImagePlugin-reset">' + _('Reset Size') + '</div>';
 
             return sizeHtml;
 
