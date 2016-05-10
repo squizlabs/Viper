@@ -151,7 +151,7 @@
 
         },
 
-        updateLinkAttributes: function(link, idPrefix)
+        updateLinkAttributes: function(link, idPrefix, ignoreChange)
         {
              // Get the current values.
             var url       = this.getURL(idPrefix);
@@ -192,7 +192,10 @@
             var range = this.viper.getViperRange();
             range.selectNode(link);
             ViperSelection.addRange(range);
-            this.viper.contentChanged(false, range);
+
+            if (ignoreChange !== true) {
+                this.viper.contentChanged(false, range);
+            }
 
         },
 
