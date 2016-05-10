@@ -696,4 +696,271 @@ class Viper_Tests_Core_InputUnitTest extends AbstractViperUnitTest
 
     }//end testEnteringContentBeforeBrTag()
 
+
+    /**
+     * Test splitting a single p tag in to three and then merging back to one.
+     *
+     * @return void
+     */
+    public function testSplittingAndRejoiningParagraphs()
+    {
+        // Test rejoining using backspace key
+        $this->useTest(10);
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->assertHTMLMatch('<p>%1%Test content</p><p>%2% paragraph.%3%</p>');
+
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(1);
+        $this->assertHTMLMatch('<p>%1%Test content %2% paragraph.%3%</p>');
+
+        // Test rejoing with delete key
+        $this->useTest(10);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->assertHTMLMatch('<p>%1%Test content %2%</p><p> paragraph.%3%</p>');
+
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        sleep(1);
+        $this->assertHTMLMatch('<p>%1%Test content %2% paragraph.%3%</p>');
+
+    }//end testSplittingAndRejoiningParagraphs()
+
+    
+    /**
+     * Test splitting a single p tag in to three and then merging back to one with bold formatting.
+     *
+     * @return void
+     */
+    public function testSplittingAndRejoiningBoldParagraphs()
+    {
+        // Test rejoining using backspace key
+        $this->useTest(10);
+        $this->selectKeyword(1, 3);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->assertHTMLMatch('<p><strong>%1%Test content</strong></p><p><strong>%2% paragraph.%3%</strong></p>');
+
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(1);
+        $this->assertHTMLMatch('<p><strong>%1%Test content %2% paragraph.%3%</strong></p>');
+
+        // Test rejoing with delete key
+        $this->useTest(10);
+        $this->selectKeyword(1, 3);
+        $this->clickTopToolbarButton('bold', NULL);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->assertHTMLMatch('<p><strong>%1%Test content %2%</strong></p><p><strong> paragraph.%3%</strong></p>');
+
+        $this->clickKeyword(1);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        sleep(1);
+        $this->assertHTMLMatch('<p><strong>%1%Test content %2% paragraph.%3%</strong></p>');
+
+    }//end testSplittingAndRejoiningBoldParagraphs()
+
+
+    /**
+     * Test splitting a single p tag in to three and then merging back to one with italic formatting.
+     *
+     * @return void
+     */
+    public function testSplittingAndRejoiningItalicParagraphs()
+    {
+        // Test rejoining using backspace key
+        $this->useTest(10);
+        $this->selectKeyword(1, 3);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->assertHTMLMatch('<p><em>%1%Test content</em></p><p><em>%2% paragraph.%3%</em></p>');
+
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(1);
+        $this->assertHTMLMatch('<p><em>%1%Test content %2% paragraph.%3%</em></p>');
+
+        // Test rejoing with delete key
+        $this->useTest(10);
+        $this->selectKeyword(1, 3);
+        $this->clickTopToolbarButton('italic', NULL);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->assertHTMLMatch('<p><em>%1%Test content %2%</em></p><p><em> paragraph.%3%</em></p>');
+
+        $this->clickKeyword(1);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        sleep(1);
+        $this->assertHTMLMatch('<p><em>%1%Test content %2% paragraph.%3%</em></p>');
+
+        }//end testSplittingAndRejoiningItalicParagraphs()
+
+    /**
+     * Test splitting a single p tag in to three and then merging back to one with superscript formatting.
+     *
+     * @return void
+     */
+    public function testSplittingAndRejoiningSuperscriptParagraphs()
+    {
+        // Test rejoining using backspace key
+        $this->useTest(10);
+        $this->selectKeyword(1, 3);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->assertHTMLMatch('<p><sup>%1%Test content</sup></p><p><sup>%2% paragraph.%3%</sup></p>');
+
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(1);
+        $this->assertHTMLMatch('<p><sup>%1%Test content %2% paragraph.%3%</sup></p>');
+
+        // Test rejoing with delete key
+        $this->useTest(10);
+        $this->selectKeyword(1, 3);
+        $this->clickTopToolbarButton('superscript', NULL);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->assertHTMLMatch('<p><sup>%1%Test content %2%</sup></p><p><sup> paragraph.%3%</sup></p>');
+
+        $this->clickKeyword(1);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        sleep(1);
+        $this->assertHTMLMatch('<p><sup>%1%Test content %2% paragraph.%3%</sup></p>');
+
+    }//end testSplittingAndRejoiningSuperscriptParagraphs()
+
+
+    /**
+     * Test splitting a single p tag in to three and then merging back to one with subscript formatting.
+     *
+     * @return void
+     */
+    public function testSplittingAndRejoiningSubscriptParagraphs()
+    {
+        // Test rejoining using backspace key
+        $this->useTest(10);
+        $this->selectKeyword(1, 3);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->assertHTMLMatch('<p><sub>%1%Test content</sub></p><p><sub>%2% paragraph.%3%</sub></p>');
+
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(1);
+        $this->assertHTMLMatch('<p><sub>%1%Test content %2% paragraph.%3%</sub></p>');
+
+        // Test rejoing with delete key
+        $this->useTest(10);
+        $this->selectKeyword(1, 3);
+        $this->clickTopToolbarButton('subscript', NULL);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->assertHTMLMatch('<p><sub>%1%Test content %2%</sub></p><p><sub> paragraph.%3%</sub></p>');
+
+        $this->clickKeyword(1);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        sleep(1);
+        $this->assertHTMLMatch('<p><sub>%1%Test content %2% paragraph.%3%</sub></p>');
+
+    }//end testSplittingAndRejoiningSubscriptParagraphs()
+
+
+    /**
+     * Test splitting a single p tag in to three and then merging back to one with strikethrough formatting.
+     *
+     * @return void
+     */
+    public function testSplittingAndRejoiningStrikethroughParagraphs()
+    {
+        // Test rejoining using backspace key
+        $this->useTest(10);
+        $this->selectKeyword(1, 3);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->assertHTMLMatch('<p><del>%1%Test content</del></p><p><del>%2% paragraph.%3%</del></p>');
+
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(1);
+        $this->assertHTMLMatch('<p><del>%1%Test content %2% paragraph.%3%</del></p>');
+
+        // Test rejoing with delete key
+        $this->useTest(10);
+        $this->selectKeyword(1, 3);
+        $this->clickTopToolbarButton('strikethrough', NULL);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.ENTER');
+        sleep(1);
+        $this->assertHTMLMatch('<p><del>%1%Test content %2%</del></p><p><del> paragraph.%3%</del></p>');
+
+        $this->clickKeyword(1);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->sikuli->keyDown('Key.DELETE');
+        sleep(1);
+        $this->assertHTMLMatch('<p><del>%1%Test content %2% paragraph.%3%</del></p>');
+
+    }//end testSplittingAndRejoiningStrikethroughParagraphs()
+
+
+    /**
+     * Test splitting a single p tag in to three and then merging back to one with strikethrough formatting.
+     *
+     * @return void
+     */
+    public function testReplacingTwoParagraphSelections()
+    {
+        $this->useTest(1);
+        $this->selectKeyword(1, 2);
+        $this->type('Replacement content.');
+        $this->assertHTMLMatch('<p>Replacement content.</p>');
+
+    }//end testReplacingTwoParagraphSelections()
+
 }//end class

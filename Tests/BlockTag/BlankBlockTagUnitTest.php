@@ -11,7 +11,7 @@ class Viper_Tests_BlockTag_BlankBlockTagUnitTest extends AbstractViperUnitTest
      *
      * @return void
      */
-    public function testAddingContent()
+    public function testBlankBlockTagAddingContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
@@ -21,7 +21,6 @@ class Viper_Tests_BlockTag_BlankBlockTagUnitTest extends AbstractViperUnitTest
         $this->moveToKeyword(1, 'left');
         $this->type('test ');
         $this->assertHTMLMatch('test %1% Test content %2%');
-
         // Test adding content to the middle of a section
         $this->useTest(2);
         $this->moveToKeyword(1, 'right');
@@ -40,11 +39,11 @@ class Viper_Tests_BlockTag_BlankBlockTagUnitTest extends AbstractViperUnitTest
         // Test adding a new section of content
         $this->useTest(2);
         $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.SHIFT + Key.ENTER');
         $this->type('test more content');
         $this->assertHTMLMatch('%1% Test content %2%<br />test more content');
 
-    }//end testAddingContent()
+    }//end testBlankBlockTagAddingContent()
 
 
     /**
@@ -52,7 +51,7 @@ class Viper_Tests_BlockTag_BlankBlockTagUnitTest extends AbstractViperUnitTest
      *
      * @return void
      */
-    public function testSplittingAndJoingContent()
+    public function testBlankBlockTagSplittingAndJoingContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
@@ -60,7 +59,7 @@ class Viper_Tests_BlockTag_BlankBlockTagUnitTest extends AbstractViperUnitTest
         // Add a new section of content
         $this->useTest(2);
         $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.SHIFT + Key.ENTER');
         $this->type('%3% test more content');
         $this->assertHTMLMatch('%1% Test content %2%<br />%3% test more content');
 
@@ -70,14 +69,14 @@ class Viper_Tests_BlockTag_BlankBlockTagUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('%1% Test content %2%%3% test more content');
 
         // Split content again
-        $this->sikuli->keyDown('Key.ENTER');
+        $this->sikuli->keyDown('Key.SHIFT + Key.ENTER');
         $this->assertHTMLMatch('%1% Test content %2%<br />%3% test more content');
 
         // Join the sections back up with backspace
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->assertHTMLMatch('%1% Test content %2%%3% test more content');
 
-    }//end testSplittingAndJoingContent()
+    }//end testBlankBlockTagSplittingAndJoingContent()
 
 
     /**
@@ -85,7 +84,7 @@ class Viper_Tests_BlockTag_BlankBlockTagUnitTest extends AbstractViperUnitTest
      *
      * @return void
      */
-    public function testMultipleSpacesInContent()
+    public function testBlankBlockTagMultipleSpacesInContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
@@ -100,7 +99,7 @@ class Viper_Tests_BlockTag_BlankBlockTagUnitTest extends AbstractViperUnitTest
         $this->type('   ');
         $this->assertHTMLMatch('%1%&nbsp;&nbsp; multiple&nbsp;&nbsp;&nbsp;&nbsp;spaces between words&nbsp;&nbsp;&nbsp;&nbsp; Test content %2%');
 
-    }//end testMultipleSpacesInContent()
+    }//end testBlankBlockTagMultipleSpacesInContent()
 
 
      /**
@@ -108,7 +107,7 @@ class Viper_Tests_BlockTag_BlankBlockTagUnitTest extends AbstractViperUnitTest
      *
      * @return void
      */
-    public function testHighlightAndReplaceContent()
+    public function testBlankBlockTagHighlightAndReplaceContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
@@ -126,7 +125,7 @@ class Viper_Tests_BlockTag_BlankBlockTagUnitTest extends AbstractViperUnitTest
         $this->type('test content');
         $this->assertHTMLMatch('test content');
 
-    }//end testHighlightAndReplaceContent()
+    }//end testBlankBlockTagHighlightAndReplaceContent()
 
 
     /**
@@ -134,7 +133,7 @@ class Viper_Tests_BlockTag_BlankBlockTagUnitTest extends AbstractViperUnitTest
      *
      * @return void
      */
-    public function testToolbarIconStatus()
+    public function testBlankBlockTagToolbarIconStatus()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
@@ -200,7 +199,7 @@ class Viper_Tests_BlockTag_BlankBlockTagUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('langtools', NULL));
         $this->assertTrue($this->topToolbarButtonExists('charmap', NULL));
         
-    }//end testToolbarIconStatus()
+    }//end testBlankBlockTagToolbarIconStatus()
 
 
     /**
@@ -208,7 +207,7 @@ class Viper_Tests_BlockTag_BlankBlockTagUnitTest extends AbstractViperUnitTest
      *
      * @return void
      */
-    public function testDeletingPartOfContent()
+    public function testBlankBlockTagDeletingPartOfContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
@@ -249,7 +248,7 @@ class Viper_Tests_BlockTag_BlankBlockTagUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         $this->assertHTMLMatch('%1% Test content'); 
 
-    }//end testDeletingPartOfContent()
+    }//end testBlankBlockTagDeletingPartOfContent()
 
 
     /**
@@ -257,7 +256,7 @@ class Viper_Tests_BlockTag_BlankBlockTagUnitTest extends AbstractViperUnitTest
      *
      * @return void
      */
-    public function testDeletingAllContent()
+    public function testBlankBlockTagDeletingAllContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
@@ -310,7 +309,7 @@ class Viper_Tests_BlockTag_BlankBlockTagUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         $this->assertHTMLMatch('test delete'); 
 
-    }//end testDeletingAllContent()
+    }//end testBlankBlockTagDeletingAllContent()
 
 
     /**
@@ -349,6 +348,6 @@ class Viper_Tests_BlockTag_BlankBlockTagUnitTest extends AbstractViperUnitTest
         $this->type('test');
         $this->assertHTMLMatch('test');
 
-    }//end testNoBaseTagInput()
+    }//end testBlankBlockTagWithParagraphs()
 
 }//end class
