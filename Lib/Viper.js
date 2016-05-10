@@ -4697,7 +4697,7 @@
         removeInvalidCharacters: function(content)
         {
             // Remove all control chars.
-            content = content.replace(/[\x00-\x1F]/g, '');
+            content = content.replace(/[\x00-\x09]/g, '');
             return content;
 
         }
