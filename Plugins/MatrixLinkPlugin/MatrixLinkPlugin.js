@@ -128,7 +128,7 @@
 
         updateLinkAttributes: function(link, idPrefix)
         {
-            this._parent.prototype.updateLinkAttributes.call(this, link, idPrefix);
+            this._parent.prototype.updateLinkAttributes.call(this, link, idPrefix, true);
 
             var href = link.getAttribute('href');
 
@@ -175,6 +175,7 @@
                 link.appendChild(document.createTextNode(' %asset_summary_' + assetid + '%'));
             }
 
+            this.viper.contentChanged(false, range);
 
         },
 
