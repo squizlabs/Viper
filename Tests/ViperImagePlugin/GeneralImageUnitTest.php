@@ -271,6 +271,108 @@ class Viper_Tests_ViperImagePlugin_GeneralImageUnitTest extends AbstractViperIma
 
     }//end testRemovingContentAroundImages()
 
+
+    /**
+     * Test required fields when modifying an image.
+     *
+     * @return void
+     */
+    public function testUnchangedSourceForImagesAndLinksInUnorderedLists()
+    {
+        // Test linked images
+        $this->useTest(3);
+        $this->clickElement('img', 0);
+        $this->clicktopToolbarButton('link', NULL);
+        $this->type('test-url');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->type('test-title');
+        $this->sikuli->keyDown('Key.ENTER');
+
+        $this->clicktopToolbarButton('sourceView');
+        sleep(2);
+        $this->clickButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<ul><li><a href="test-url" title="test-title"><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></a></li><li>%1% Test content %2%</li><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li>%3% Test content %4%</li><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li></ul>');
+
+        // Test linked content
+        $this->useTest(3);
+        $this->selectKeyword(1, 2);
+        $this->clicktopToolbarButton('link', NULL);
+        $this->type('test-url');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->type('test-title');
+        $this->sikuli->keyDown('Key.ENTER');
+
+        $this->clicktopToolbarButton('sourceView');
+        sleep(2);
+        $this->clickButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<ul><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li><a href="test-url" title="test-title">%1% Test content %2%</a></li><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li>%3% Test content %4%</li><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li></ul>');
+
+        $this->useTest(3);
+        $this->selectKeyword(3, 4);
+        $this->clicktopToolbarButton('link', NULL);
+        $this->type('test-url');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->type('test-title');
+        $this->sikuli->keyDown('Key.ENTER');
+
+        $this->clicktopToolbarButton('sourceView');
+        sleep(2);
+        $this->clickButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<ul><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li>%1% Test content %2%</li><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li><a href="test-url" title="test-title">%3% Test content %4%</a></li><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li></ul>');
+
+    }//end testUnchangedSourceForImagesAndLinksInUnorderedLists()
+
+
+    /**
+     * Test required fields when modifying an image.
+     *
+     * @return void
+     */
+    public function testUnchangedSourceForImagesAndLinksInOrderedLists()
+    {
+        // Test linked images
+        $this->useTest(4);
+        $this->clickElement('img', 0);
+        $this->clicktopToolbarButton('link', NULL);
+        $this->type('test-url');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->type('test-title');
+        $this->sikuli->keyDown('Key.ENTER');
+
+        $this->clicktopToolbarButton('sourceView');
+        sleep(2);
+        $this->clickButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<ol><li><a href="test-url" title="test-title"><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></a></li><li>%1% Test content %2%</li><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li>%3% Test content %4%</li><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li></ol>');
+
+        // Test linked content
+        $this->useTest(4);
+        $this->selectKeyword(1, 2);
+        $this->clicktopToolbarButton('link', NULL);
+        $this->type('test-url');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->type('test-title');
+        $this->sikuli->keyDown('Key.ENTER');
+
+        $this->clicktopToolbarButton('sourceView');
+        sleep(2);
+        $this->clickButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<ol><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li><a href="test-url" title="test-title">%1% Test content %2%</a></li><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li>%3% Test content %4%</li><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li></ol>');
+
+        $this->useTest(4);
+        $this->selectKeyword(3, 4);
+        $this->clicktopToolbarButton('link', NULL);
+        $this->type('test-url');
+        $this->sikuli->keyDown('Key.TAB');
+        $this->type('test-title');
+        $this->sikuli->keyDown('Key.ENTER');
+
+        $this->clicktopToolbarButton('sourceView');
+        sleep(2);
+        $this->clickButton('Apply Changes', NULL, TRUE);
+        $this->assertHTMLMatch('<ol><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li>%1% Test content %2%</li><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li><a href="test-url" title="test-title">%3% Test content %4%</a></li><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li></ol>');
+    
+    }//end testUnchangedSourceForImagesAndLinksInOrderedLists()
+
 }//end class
 
 ?>

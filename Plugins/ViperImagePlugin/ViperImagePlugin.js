@@ -714,8 +714,7 @@
 
             if (nodeSelection && ViperUtil.isTag(nodeSelection, 'img') === true) {
                 this._resizeImage = nodeSelection;
-                data.toolbar.showButton('vitpImage');
-                data.toolbar.showButton('vitpImageMove');
+                this.showInlineToolbarButtons(data);
                 nodeSelection.onload = function() {
                     self.showImageResizeHandles(nodeSelection);
                     self._inlineToolbar.update(null, nodeSelection);
@@ -735,6 +734,13 @@
                     50
                 );
             }
+
+        },
+
+        showInlineToolbarButtons: function(data)
+        {
+            data.toolbar.showButton('vitpImage');
+            data.toolbar.showButton('vitpImageMove');
 
         },
 
@@ -1070,17 +1076,8 @@
 
         resetImageSize: function(image)
         {
-            var dim    = this.getImageNaturalDimensions(image);
-            var height = dim.height;
-            ViperUtil.attr(image, 'width', dim.width + 'px');
-            var widthStyle = parseInt(ViperUtil.getStyle(image, 'width').replace('px', ''));
-
-            if (widthStyle !== dim.width) {
-                ViperUtil.attr(image, 'width', widthStyle + 'px');
-                height = Math.round(widthStyle * (dim.height / dim.width));
-            }
-
-            ViperUtil.attr(image, 'height', height + 'px');
+            ViperUtil.removeAttr(image, 'width');
+            ViperUtil.removeAttr(image, 'height');
 
         },
 
@@ -1088,7 +1085,11 @@
         {
             var sizeHtml = image.width + ' x ' + image.height;
             sizeHtml    += ' <span class="ViperImagePlugin-origSize">(' + image.naturalWidth + ' x ' + image.naturalHeight + ')</span>';
-            sizeHtml    += ' <span class="ViperImagePlugin-reset">' + _('Reset') + '</span>';
+
+            if (ViperUtil.hasAttribute(image, 'width') === true || ViperUtil.hasAttribute(image, 'height')) {
+                sizeHtml += ' <span class="ViperImagePlugin-reset">' + _('Reset') + '</span>';
+            }
+
             return sizeHtml;
 
         }
