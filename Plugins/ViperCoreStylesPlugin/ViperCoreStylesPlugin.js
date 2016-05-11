@@ -1056,8 +1056,6 @@
 
             tools.addButtonToGroup('vitpBold', 'ViperCoreStylesPlugin:vitp:btnGroup');
             tools.addButtonToGroup('vitpItalic', 'ViperCoreStylesPlugin:vitp:btnGroup');
-            tools.getItem('vitpBold').setButtonShortcut('CTRL+B');
-            tools.getItem('vitpItalic').setButtonShortcut('CTRL+I');
 
             toolbar.addButton(buttonGroup);
 

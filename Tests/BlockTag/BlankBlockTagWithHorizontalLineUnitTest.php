@@ -10,7 +10,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithHorizontalLineUnitTest extends Abstr
      *
      * @return void
      */
-    public function testAddingHorizontalRule()
+    public function testAddingHorizontalRuleM()
     {
 
         $this->useTest(1);
@@ -40,8 +40,9 @@ class Viper_Tests_BlockTag_BlankBlockTagWithHorizontalLineUnitTest extends Abstr
         $this->useTest(2);
         $this->moveToKeyword(3, 'right');
         $this->clickTopToolbarButton('insertHr');
+        $this->sikuli->keyDown('Key.DOWN');
         $this->type('test');
-        $this->assertHTMLMatch('%1% Test content %2% more test content. %3%<hr /><br />test');
+        $this->assertHTMLMatch('%1% Test content %2% more test content. %3%<hr />test');
 
     }//end testAddingHorizontalRule()
 

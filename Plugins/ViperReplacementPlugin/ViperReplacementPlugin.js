@@ -343,6 +343,10 @@
 
             });
 
+            this.viper.registerCallback('ViperInlineToolbarPlugin:lineageItemSelected', 'ViperReplacementPlugin', function(node) {
+                ignoreSelectionChange = true;
+            });
+
             this.viper.registerCallback('Viper:attributeRemoved', 'ViperReplacementPlugin', function(data) {
                 // If the removed attribute has a replacement backup attribute remove that too.
                 var cloneName = 'data-viper-' + data.attribute;
@@ -392,6 +396,18 @@
                     }
 
                     return value;
+                }
+            );
+
+            this.viper.registerCallback(
+                'ViperInlineToolbarPlugin:getReadableTagName',
+                'ViperReplacementPlugin',
+                function(data) {
+                    if (data.tag && ViperUtil.hasAttribute(data.tag, 'data-viper-keyword') === true) {
+                        return _('Keyword');
+                    }
+
+                    return null;
                 }
             );
 
