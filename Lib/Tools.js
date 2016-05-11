@@ -1787,7 +1787,7 @@
                                 try {
                                     action.call(this);
                                 } catch (e) {
-                                    console.error('Sub Section Action threw exception:' + e.message);
+                                    console.error('Sub Section Action threw exception:' + e.message, e.stack);
                                 }
                             } else {
                                 // IE needs this timeout so focus works <3..
@@ -1796,7 +1796,7 @@
                                         try {
                                             action.call(this);
                                         } catch (e) {
-                                            console.error('Sub Section Action threw exception:' + e.message);
+                                            console.error('Sub Section Action threw exception:' + e.message, e.stack);
                                         }
                                     },
                                     2
