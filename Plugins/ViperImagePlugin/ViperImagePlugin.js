@@ -973,10 +973,10 @@
                 ViperUtil.addClass(resizeBox, 'ViperImagePlugin-resizeBox');
 
                 // Set the position of the box.
-                ViperUtil.setStyle(resizeBox, 'left', rect.x1 - 5 + 'px');
-                ViperUtil.setStyle(resizeBox, 'top', rect.y1 - 5 + 'px');
-                ViperUtil.setStyle(resizeBox, 'width', rect.x2 - rect.x1 + 10 + 'px');
-                ViperUtil.setStyle(resizeBox, 'height', rect.y2 - rect.y1 + 10 + 'px');
+                ViperUtil.setStyle(resizeBox, 'left', rect.x1 + 'px');
+                ViperUtil.setStyle(resizeBox, 'top', rect.y1 + 'px');
+                ViperUtil.setStyle(resizeBox, 'width', rect.x2 - rect.x1 + 'px');
+                ViperUtil.setStyle(resizeBox, 'height', rect.y2 - rect.y1 + 'px');
 
                 if (canResize === true) {
                     ViperUtil.addClass(resizeBox, 'canResize');
@@ -1065,10 +1065,10 @@
                                             rect.y2 -= scrollCoords.y;
                                         }
 
-                                        ViperUtil.setStyle(resizeBox, 'left', rect.x1 - 5 + 'px');
-                                        ViperUtil.setStyle(resizeBox, 'top', rect.y1 - 5 + 'px');
-                                        ViperUtil.setStyle(resizeBox, 'width', rect.x2 - rect.x1 + 10 + 'px');
-                                        ViperUtil.setStyle(resizeBox, 'height', rect.y2 - rect.y1 + 10 + 'px');
+                                        ViperUtil.setStyle(resizeBox, 'left', rect.x1 + 'px');
+                                        ViperUtil.setStyle(resizeBox, 'top', rect.y1 + 'px');
+                                        ViperUtil.setStyle(resizeBox, 'width', rect.x2 - rect.x1 + 'px');
+                                        ViperUtil.setStyle(resizeBox, 'height', rect.y2 - rect.y1 + 'px');
 
                                         ViperUtil.preventDefault(e);
                                         return false;
