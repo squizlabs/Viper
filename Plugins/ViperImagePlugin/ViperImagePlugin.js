@@ -1147,8 +1147,9 @@
 
         getImageSizeDisplayHtml: function(image)
         {
+            var naturalDim = this.getImageNaturalDimensions(image);
             var sizeHtml = '<div class="ViperImagePlugin-size';
-            if (image.width === image.naturalWidth || image.height === image.naturalHeight) {
+            if (image.width === naturalDim.width || image.height === naturalDim.height) {
                 sizeHtml += ' maximumSize">' + _('Maximum');
             } else {
                 sizeHtml += '">' + image.width + ' x ' + image.height;
