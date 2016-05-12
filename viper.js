@@ -35014,8 +35014,9 @@ ViperAccessibilityPlugin_WCAG2 = {
 
         getImageSizeDisplayHtml: function(image)
         {
+            var naturalDim = this.getImageNaturalDimensions(image);
             var sizeHtml = '<div class="ViperImagePlugin-size';
-            if (image.width === image.naturalWidth || image.height === image.naturalHeight) {
+            if (image.width === naturalDim.width || image.height === naturalDim.height) {
                 sizeHtml += ' maximumSize">' + _('Maximum');
             } else {
                 sizeHtml += '">' + image.width + ' x ' + image.height;
@@ -71829,4 +71830,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = '4d4dd1d6a931e523e25e64a62a7afe830480be90';
+Viper.build = true;Viper.version = '4c37aedc538782213d9adb0c0ade5851544902bf';
