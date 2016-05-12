@@ -173,8 +173,16 @@
 
                 var bookmark = self.viper.createBookmark(range, null, 'imageDrop');
 
+                // TODO: For some reason dropping image between two elements sometimes causes bookmark elements to move
+                // to the end of the Viper element. Adding this tmp element before it and then re adding the bookmark
+                // back to its position seems to resolve this issue.
+                var _tmpElem = document.createElement('span');
+                ViperUtil.insertBefore(bookmark.start, _tmpElem);
+
                 for (var i = 0; i < data.dataTransfer.files.length; i++) {
                     self.readDroppedImage(data.dataTransfer.files[i], function(image, file) {
+                        ViperUtil.insertBefore(_tmpElem, bookmark.start);
+                        ViperUtil.insertBefore(_tmpElem, bookmark.end);
                         self.insertDroppedImage(image, range, file);
                         noImage = false;
                     });
