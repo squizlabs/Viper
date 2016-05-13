@@ -6338,6 +6338,17 @@
 
         },
 
+        getTopDocument: function()
+        {
+            var doc = document;
+            while (doc.defaultView.frameElement) {
+                doc = doc.defaultView.frameElement.ownerDocument;
+            }
+
+            return doc;
+
+        },
+
         
         getIFrameDocument: function(iframe)
         {
@@ -34878,6 +34889,7 @@ ViperAccessibilityPlugin_WCAG2 = {
                                 var naturalDim = self.getImageNaturalDimensions(image);
                                 var both       = e.shiftKey;
                                 var resized    = false;
+                                var docs       = ViperUtil.getDocuments(true, ViperUtil.getTopDocument());
 
                                 ViperUtil.setStyle(image, 'width', '');
                                 ViperUtil.setStyle(image, 'height', '');
@@ -34886,7 +34898,7 @@ ViperAccessibilityPlugin_WCAG2 = {
                                 _updateSize(true);
 
                                 ViperUtil.addEvent(
-                                    ViperUtil.getDocuments(),
+                                    docs,
                                     'mousemove.ViperImagePlugin-resize',
                                     function (e) {
                                         var diffx = e.pageX - posx;
@@ -34953,11 +34965,11 @@ ViperAccessibilityPlugin_WCAG2 = {
                                 );
 
                                 ViperUtil.addEvent(
-                                    ViperUtil.getDocuments(),
+                                    docs,
                                     'mouseup.ViperImagePlugin-resize',
                                     function (e) {
-                                        ViperUtil.removeEvent(ViperUtil.getDocuments(), 'mousemove.ViperImagePlugin-resize');
-                                        ViperUtil.removeEvent(ViperUtil.getDocuments(), 'mouseup.ViperImagePlugin-resize');
+                                        ViperUtil.removeEvent(docs, 'mousemove.ViperImagePlugin-resize');
+                                        ViperUtil.removeEvent(docs, 'mouseup.ViperImagePlugin-resize');
 
                                         // If the image width/height is max then remove them.
                                         if (image.width === image.naturalWidth) {
@@ -71848,4 +71860,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = '3763aa64785e2fbae0b60ec4d943211a0adbb6b1';
+Viper.build = true;Viper.version = '8f3150ffd3b431e233daff3096b1118b5f27c02c';
