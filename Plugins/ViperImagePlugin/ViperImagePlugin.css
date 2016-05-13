@@ -7,6 +7,9 @@
         pointer-events: none;
         box-shadow: 0 0 0 1px rgba(255,255,255,0.35);
         font-family: Arial, sans-serif;
+        box-sizing: content-box;
+        padding: 4px;
+        margin: -6px 0 0 -5px;
     }
 
 /* Resize handles */
