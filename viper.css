@@ -3073,97 +3073,130 @@ table.VCMP-table tr td:nth-of-type(7) {
 .ViperFormatPlugin-styleListItem-remove.Viper-textbox-action:hover {
     opacity: 1;
 }
-/* Resize Box */
-.ViperImagePlugin-resizeBox {
-    position: absolute;
-    border: 2px solid #000;
-    border-radius: 5px;
-    pointer-events: none;
-}
+/* Image selection outline */
 
-.ViperImagePlugin-resizeBox-handle {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    z-index: 101;
-    background-color: #F00;
-    pointer-events: all;
-}
+    .ViperImagePlugin-resizeBox {
+        position: absolute;
+        border: 2px solid rgba(0,0,0,0.4);
+        border-radius: 5px;
+        pointer-events: none;
+        box-shadow: 0 0 0 1px rgba(255,255,255,0.35);
+        font-family: Arial, sans-serif;
+        box-sizing: content-box;
+        padding: 4px;
+        margin: -6px 0 0 -5px;
+    }
 
-.ViperImagePlugin-resizeBox-handle-topLeft {
-    top: -6px;
-    left: -6px;
-    cursor: se-resize;
-    cursor: nwse-resize;
-}
+/* Resize handles */
 
-.ViperImagePlugin-resizeBox-handle-topRight {
-    top: -6px;
-    right: -6px;
-    cursor: nesw-resize;
-}
+    .ViperImagePlugin-resizeBox-handle {
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        z-index: 101;
+        background: transparent url(./Images/16.svg) 0 0 no-repeat;
+        pointer-events: all;
+    }
 
-.ViperImagePlugin-resizeBox-handle-bottomLeft {
-    bottom: -6px;
-    left: -6px;
-    cursor: nesw-resize;
-}
+    /* PNG fallback for older trowsers */
 
-.ViperImagePlugin-resizeBox-handle-bottomRight {
-    bottom: -6px;
-    right: -6px;
-    cursor: nwse-resize;
-}
+        .Viper-browserVer-msie8 .ViperImagePlugin-resizeBox-handle {
+            background-image: url(./Images/17.png);
+        }
 
-/* Resize size display */
-.ViperImagePlugin-sizeDiv {
-    position: absolute;
-    background-color: rgba(255,255,255,0.9);
-    color: #000;
-    padding: 3px 6px;
-    border-radius: 3px;
-    font-size: 0.9em;
-    z-index: 9999;
-    box-shadow: 0 0 2px 0px #222;
-    cursor: pointer;
-    bottom: 10px;
-    right: 10px;
-    min-width: 70px;
-    display: none;
-    min-height: 20px;
-    font-size: 12px;
-    pointer-events: all;
-}
+    .ViperImagePlugin-resizeBox-handle-topLeft {
+        top: -5px;
+        left: -5px;
+        cursor: se-resize;
+        cursor: nwse-resize;
+    }
 
-.ViperImagePlugin-sizeDiv.visible {
-    display: block;
-}
+    .ViperImagePlugin-resizeBox-handle-topRight {
+        top: -5px;
+        right: -5px;
+        cursor: nesw-resize;
+        transform: rotate(90deg);
+    }
 
-.ViperImagePlugin-sizeDiv .ViperImagePlugin-reset,
-.ViperImagePlugin-sizeDiv .ViperImagePlugin-size {
-    position: absolute;
-    color: #36A2F0;
-    opacity: 0;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    font-weight: bold;
-    transition: opacity .15s ease-in;
-}
+    .ViperImagePlugin-resizeBox-handle-bottomLeft {
+        bottom: -5px;
+        left: -5px;
+        transform: rotate(270deg);
+        cursor: nesw-resize;
+    }
 
-.ViperImagePlugin-sizeDiv .ViperImagePlugin-size {
-    opacity: 1;
-    color: #000;
-}
+    .ViperImagePlugin-resizeBox-handle-bottomRight {
+        bottom: -5px;
+        right: -5px;
+        transform: rotate(180deg);
+        cursor: nwse-resize;
+    }
 
-.ViperImagePlugin-sizeDiv:hover .ViperImagePlugin-reset {
-    opacity: 1;
-}
+/* Resized image dimensions */
 
-.ViperImagePlugin-sizeDiv:hover .ViperImagePlugin-size {
-    opacity: 0;
-}
+    .ViperImagePlugin-sizeDiv {
+        position: absolute;
+        box-sizing: content-box;
+        background-color: rgba(255, 255, 255, 0.8);
+        color: #2b2b2b;
+        padding: 3px 6px;
+        border-radius: 3px;
+        font-size: 0.9em;
+        z-index: 9999;
+        box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        bottom: 10px;
+        right: 10px;
+        min-width: 70px;
+        opacity: 0;
+        min-height: 15px;
+        font-size: 12px;
+        pointer-events: all;
+        transition: opacity 0.1s ease;
+    }
 
+    .ViperImagePlugin-sizeDiv.visible {
+        opacity: 1;
+    }
+
+    .ViperImagePlugin-sizeDiv.visible:hover {
+        background-color: #FFF;
+    }
+
+    /* Dimension text */
+
+        .ViperImagePlugin-sizeDiv .ViperImagePlugin-reset,
+        .ViperImagePlugin-sizeDiv .ViperImagePlugin-size {
+            position: absolute;
+            color: #2b7ce0;
+            opacity: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+            transition: opacity 0.15s ease;
+        }
+
+        .ViperImagePlugin-sizeDiv .ViperImagePlugin-size {
+            opacity: 1;
+            color: #2b2b2b;
+        }
+
+        /* Hover to show reset text */
+
+            .ViperImagePlugin-sizeDiv:hover .ViperImagePlugin-reset {
+                opacity: 1;
+            }
+
+            .ViperImagePlugin-sizeDiv:hover .ViperImagePlugin-size {
+                opacity: 0;
+            }
+
+        /* Maximum size */
+
+        .ViperImagePlugin-sizeDiv .ViperImagePlugin-size.maximumSize {
+            color: #E33030;
+        }
 /* Main Bubble */
 
     /* Bubble Config */
@@ -3558,7 +3591,7 @@ table.VCMP-table tr td:nth-of-type(7) {
     font-size: 1.1em;
     font-weight: bold;
     text-align: left;
-    background: #646468 url(./Images/16.gif) 3px 0.25em no-repeat;
+    background: #646468 url(./Images/18.gif) 3px 0.25em no-repeat;
 }
 
 .ViperITP-msgBox img {
@@ -3574,19 +3607,19 @@ table.VCMP-table tr td:nth-of-type(7) {
     background-color: #54874b;
     border-color: #6aaa60;
     color: #c7e7c2;
-    background-image: url(./Images/17.png);
+    background-image: url(./Images/19.png);
 }
 .ViperITP-msgBox.Viper-fail {
     background-color: #952424;
     border-color: #ad4c4c;
     color: #f8d6d6;
-    background-image: url(./Images/18.png);
+    background-image: url(./Images/20.png);
 }
 .ViperITP-msgBox.Viper-failAccessibility {
     background-color: #4faadf;
     border-color: #87cef6;
     color: #dbecf6;
-    background-image: url(./Images/19.png);
+    background-image: url(./Images/21.png);
 }
 .Viper-failAccessibility a,
 .Viper-failAccessibility a:visited {
@@ -4279,7 +4312,7 @@ span.VICP {
 }
 
 .ViperTP-bar .Viper-logo {
-    background: transparent url(./Images/20.png) no-repeat;
+    background: transparent url(./Images/22.png) no-repeat;
     width: 23px;
     height: 20px;
     position: absolute;

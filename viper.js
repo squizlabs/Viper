@@ -34179,8 +34179,18 @@ ViperAccessibilityPlugin_WCAG2 = {
                     }
 
                     if (!parent) {
-                        ViperUtil.insertBefore(bookmark.start, img);
+                        if (bookmark.start.parentNode === img) {
+                            this.viper.removeBookmark(bookmark, true);
+                            this._cancelMove();
+                            return;
+                        } else {
+                            ViperUtil.insertBefore(bookmark.start, img);
+                        }
                     }
+                } else if (bookmark.start.parentNode === img) {
+                    this.viper.removeBookmark(bookmark, true);
+                    this._cancelMove();
+                    return;
                 } else {
                     ViperUtil.insertBefore(bookmark.start, img);
                 }
@@ -34840,10 +34850,10 @@ ViperAccessibilityPlugin_WCAG2 = {
                 ViperUtil.addClass(resizeBox, 'ViperImagePlugin-resizeBox');
 
                 // Set the position of the box.
-                ViperUtil.setStyle(resizeBox, 'left', rect.x1 - 5 + 'px');
-                ViperUtil.setStyle(resizeBox, 'top', rect.y1 - 5 + 'px');
-                ViperUtil.setStyle(resizeBox, 'width', rect.x2 - rect.x1 + 10 + 'px');
-                ViperUtil.setStyle(resizeBox, 'height', rect.y2 - rect.y1 + 10 + 'px');
+                ViperUtil.setStyle(resizeBox, 'left', rect.x1 + 'px');
+                ViperUtil.setStyle(resizeBox, 'top', rect.y1 + 'px');
+                ViperUtil.setStyle(resizeBox, 'width', rect.x2 - rect.x1 + 'px');
+                ViperUtil.setStyle(resizeBox, 'height', rect.y2 - rect.y1 + 'px');
 
                 if (canResize === true) {
                     ViperUtil.addClass(resizeBox, 'canResize');
@@ -34932,10 +34942,10 @@ ViperAccessibilityPlugin_WCAG2 = {
                                             rect.y2 -= scrollCoords.y;
                                         }
 
-                                        ViperUtil.setStyle(resizeBox, 'left', rect.x1 - 5 + 'px');
-                                        ViperUtil.setStyle(resizeBox, 'top', rect.y1 - 5 + 'px');
-                                        ViperUtil.setStyle(resizeBox, 'width', rect.x2 - rect.x1 + 10 + 'px');
-                                        ViperUtil.setStyle(resizeBox, 'height', rect.y2 - rect.y1 + 10 + 'px');
+                                        ViperUtil.setStyle(resizeBox, 'left', rect.x1 + 'px');
+                                        ViperUtil.setStyle(resizeBox, 'top', rect.y1 + 'px');
+                                        ViperUtil.setStyle(resizeBox, 'width', rect.x2 - rect.x1 + 'px');
+                                        ViperUtil.setStyle(resizeBox, 'height', rect.y2 - rect.y1 + 'px');
 
                                         ViperUtil.preventDefault(e);
                                         return false;
@@ -71838,4 +71848,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = 'ce533a637dac7d6356dfd6086a5b1ecef079a9db';
+Viper.build = true;Viper.version = '3763aa64785e2fbae0b60ec4d943211a0adbb6b1';
