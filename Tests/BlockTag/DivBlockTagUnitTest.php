@@ -52,7 +52,7 @@ class Viper_Tests_BlockTag_DivBlockTagUnitTest extends AbstractViperUnitTest
      *
      * @return void
      */
-    public function testDivBlockTagSplittingAndJoingContent()
+    public function testDivBlockTagSplittingAndJoiningContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -82,7 +82,7 @@ class Viper_Tests_BlockTag_DivBlockTagUnitTest extends AbstractViperUnitTest
         sleep(2);
         $this->assertHTMLMatch('<div>%1% Test content %2%%3% test more content</div>');
 
-    }//end testDivBlockTagSplittingAndJoingContent()
+    }//end testDivBlockTagSplittingAndJoiningContent()
 
 
     /**
@@ -287,7 +287,7 @@ class Viper_Tests_BlockTag_DivBlockTagUnitTest extends AbstractViperUnitTest
         // Test undo and redo with keyboard shortcuts
         $this->sikuli->keyDown('Key.CMD + z');
         $this->sikuli->keyDown('Key.CMD + z');
-//        $this->assertHTMLMatch('<div>%1% Test content %2%</div>');
+        $this->assertHTMLMatch('<div>%1% Test content %2%</div>');
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         $this->assertHTMLMatch('<div>test delete</div>');
@@ -303,7 +303,7 @@ class Viper_Tests_BlockTag_DivBlockTagUnitTest extends AbstractViperUnitTest
         // Test undo and redo with top toolbar icons
         $this->clickTopToolbarButton('historyUndo');
         $this->clickTopToolbarButton('historyUndo');
-//        $this->assertHTMLMatch('<div>%1% Test content %2%</div>');
+        $this->assertHTMLMatch('<div>%1% Test content %2%</div>');
         $this->clickTopToolbarButton('historyRedo');
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<div>test delete</div>');
@@ -311,7 +311,7 @@ class Viper_Tests_BlockTag_DivBlockTagUnitTest extends AbstractViperUnitTest
         // Test undo and redo with keyboard shortcuts
         $this->sikuli->keyDown('Key.CMD + z');
         $this->sikuli->keyDown('Key.CMD + z');
-//        $this->assertHTMLMatch('<div>%1% Test content %2%</div>');
+        $this->assertHTMLMatch('<div>%1% Test content %2%</div>');
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         $this->assertHTMLMatch('<div>test delete</div>'); 
