@@ -1011,6 +1011,7 @@
                                 var naturalDim = self.getImageNaturalDimensions(image);
                                 var both       = e.shiftKey;
                                 var resized    = false;
+                                var docs       = ViperUtil.getDocuments(true, ViperUtil.getTopDocument());
 
                                 ViperUtil.setStyle(image, 'width', '');
                                 ViperUtil.setStyle(image, 'height', '');
@@ -1019,7 +1020,7 @@
                                 _updateSize(true);
 
                                 ViperUtil.addEvent(
-                                    ViperUtil.getDocuments(),
+                                    docs,
                                     'mousemove.ViperImagePlugin-resize',
                                     function (e) {
                                         var diffx = e.pageX - posx;
@@ -1086,11 +1087,11 @@
                                 );
 
                                 ViperUtil.addEvent(
-                                    ViperUtil.getDocuments(),
+                                    docs,
                                     'mouseup.ViperImagePlugin-resize',
                                     function (e) {
-                                        ViperUtil.removeEvent(ViperUtil.getDocuments(), 'mousemove.ViperImagePlugin-resize');
-                                        ViperUtil.removeEvent(ViperUtil.getDocuments(), 'mouseup.ViperImagePlugin-resize');
+                                        ViperUtil.removeEvent(docs, 'mousemove.ViperImagePlugin-resize');
+                                        ViperUtil.removeEvent(docs, 'mouseup.ViperImagePlugin-resize');
 
                                         // If the image width/height is max then remove them.
                                         if (image.width === image.naturalWidth) {

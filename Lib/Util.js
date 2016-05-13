@@ -2301,6 +2301,17 @@
 
         },
 
+        getTopDocument: function()
+        {
+            var doc = document;
+            while (doc.defaultView.frameElement) {
+                doc = doc.defaultView.frameElement.ownerDocument;
+            }
+
+            return doc;
+
+        },
+
         /**
          * Returns the document element for the specified iframe.
          *
