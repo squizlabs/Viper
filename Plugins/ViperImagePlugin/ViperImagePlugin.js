@@ -312,8 +312,18 @@
                     }
 
                     if (!parent) {
-                        ViperUtil.insertBefore(bookmark.start, img);
+                        if (bookmark.start.parentNode === img) {
+                            this.viper.removeBookmark(bookmark, true);
+                            this._cancelMove();
+                            return;
+                        } else {
+                            ViperUtil.insertBefore(bookmark.start, img);
+                        }
                     }
+                } else if (bookmark.start.parentNode === img) {
+                    this.viper.removeBookmark(bookmark, true);
+                    this._cancelMove();
+                    return;
                 } else {
                     ViperUtil.insertBefore(bookmark.start, img);
                 }
