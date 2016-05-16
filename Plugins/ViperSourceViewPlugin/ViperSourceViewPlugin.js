@@ -33,6 +33,7 @@
         this._containerid          = null;
         this._toolbarButtonToggles = false;
         this._aceTheme             = 'ace/theme/viper';
+        this._base64Images         = {};
     }
 
     Viper.PluginManager.addPlugin('ViperSourceViewPlugin', ViperSourceViewPlugin);
@@ -92,6 +93,7 @@
 
             this.viper.registerCallback('Viper:getHtml', 'ViperSourceViewPlugin', function(data) {
                 self._removeScrollAttribute(data.element);
+                self._convertBase64ImagesToKeywords(data.element);
             });
 
         },
@@ -254,6 +256,9 @@
             if (this._originalSource === value) {
                 return;
             }
+
+            value = this._convertBase64KeywordsToBase64SRC(value);
+            this._base64Images = {};
 
             this.viper.setHtml(value);
             this.viper.fireSelectionChanged(null, true);
@@ -817,6 +822,34 @@
             for (var i = 0; i < elems.length; i++) {
                 ViperUtil.removeAttr(elems[i], '__viper_scrollpos');
             }
+
+        },
+
+        _convertBase64ImagesToKeywords: function (elem) {
+            this._base64Images = {};
+            var tags  = ViperUtil.find(elem, '[src^="data:image/"]');
+            var count = 1;
+            for (var i = 0; i < tags.length; i++) {
+                var alt = tags[i].alt;
+                if (alt) {
+                    key = tags[i].alt + '.base64';
+                } else {
+                    key = 'base64_image_' + (i + 1);
+                }
+
+
+                this._base64Images[key] = tags[i].src;
+                tags[i].src = key;
+            }
+
+        },
+
+        _convertBase64KeywordsToBase64SRC: function(content) {
+            for (var key in this._base64Images) {
+                content = content.replace(new RegExp(key, 'g'), this._base64Images[key]);
+            }
+
+            return content;
 
         }
 
