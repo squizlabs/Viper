@@ -8169,6 +8169,9 @@
                         }
 
                         this.required = required;
+                    },
+                    setLabel: function (newLabel) {
+                        ViperUtil.setHtml(ViperUtil.getClass('Viper-textbox-title', labelEl)[0], newLabel)
                     }
                 }
             );
@@ -41377,6 +41380,7 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
         this._containerid          = null;
         this._toolbarButtonToggles = false;
         this._aceTheme             = 'ace/theme/viper';
+        this._base64Images         = {};
     }
 
     Viper.PluginManager.addPlugin('ViperSourceViewPlugin', ViperSourceViewPlugin);
@@ -41436,6 +41440,7 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
 
             this.viper.registerCallback('Viper:getHtml', 'ViperSourceViewPlugin', function(data) {
                 self._removeScrollAttribute(data.element);
+                self._convertBase64ImagesToKeywords(data.element);
             });
 
         },
@@ -41598,6 +41603,9 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
             if (this._originalSource === value) {
                 return;
             }
+
+            value = this._convertBase64KeywordsToBase64SRC(value);
+            this._base64Images = {};
 
             this.viper.setHtml(value);
             this.viper.fireSelectionChanged(null, true);
@@ -42156,6 +42164,34 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
             for (var i = 0; i < elems.length; i++) {
                 ViperUtil.removeAttr(elems[i], '__viper_scrollpos');
             }
+
+        },
+
+        _convertBase64ImagesToKeywords: function (elem) {
+            this._base64Images = {};
+            var tags  = ViperUtil.find(elem, '[src^="data:image/"]');
+            var count = 1;
+            for (var i = 0; i < tags.length; i++) {
+                var alt = tags[i].alt;
+                if (alt) {
+                    key = tags[i].alt + '.base64';
+                } else {
+                    key = 'base64_image_' + (i + 1);
+                }
+
+
+                this._base64Images[key] = tags[i].src;
+                tags[i].src = key;
+            }
+
+        },
+
+        _convertBase64KeywordsToBase64SRC: function(content) {
+            for (var key in this._base64Images) {
+                content = content.replace(new RegExp(key, 'g'), this._base64Images[key]);
+            }
+
+            return content;
 
         }
 
@@ -71860,4 +71896,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = '8f3150ffd3b431e233daff3096b1118b5f27c02c';
+Viper.build = true;Viper.version = '17504637a81946b11c48392e5fd0e5249de98e71';
