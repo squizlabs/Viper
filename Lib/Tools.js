@@ -726,6 +726,9 @@
                         }
 
                         this.required = required;
+                    },
+                    setLabel: function (newLabel) {
+                        ViperUtil.setHtml(ViperUtil.getClass('Viper-textbox-title', labelEl)[0], newLabel)
                     }
                 }
             );
