@@ -91,6 +91,15 @@
             });
 
             this.viper.registerCallback(['Viper:keyDown', 'Viper:beforeDelete'], 'ViperImagePlugin', function(e) {
+                if (self._resizeImage
+                    && ViperUtil.isInputKey(e)
+                    && e.which !== 20
+                    && e.which !== 16
+                    && e.which !== 9
+                ) {
+                    self.hideImageResizeHandles();
+                }
+
                 if (e.which === 8 || e.which === 46) {
                     var range = self.viper.getViperRange();
                     if (range.getHTMLContentsObj().childNodes.length > 1) {
