@@ -33972,6 +33972,15 @@ ViperAccessibilityPlugin_WCAG2 = {
             });
 
             this.viper.registerCallback(['Viper:keyDown', 'Viper:beforeDelete'], 'ViperImagePlugin', function(e) {
+                if (self._resizeImage
+                    && ViperUtil.isInputKey(e)
+                    && e.which !== 20
+                    && e.which !== 16
+                    && e.which !== 9
+                ) {
+                    self.hideImageResizeHandles();
+                }
+
                 if (e.which === 8 || e.which === 46) {
                     var range = self.viper.getViperRange();
                     if (range.getHTMLContentsObj().childNodes.length > 1) {
@@ -71896,4 +71905,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = '17504637a81946b11c48392e5fd0e5249de98e71';
+Viper.build = true;Viper.version = 'ed4641ddde58ffec5079d59980de1aa7e228cd58';
