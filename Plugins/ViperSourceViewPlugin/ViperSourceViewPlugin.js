@@ -93,7 +93,6 @@
 
             this.viper.registerCallback('Viper:getHtml', 'ViperSourceViewPlugin', function(data) {
                 self._removeScrollAttribute(data.element);
-                self._convertBase64ImagesToKeywords(data.element);
             });
 
         },
@@ -747,6 +746,10 @@
             }
 
             var html = this.viper.getHtml(null, {emptyTableCellContent:''});
+            var el   = document.createElement('div');
+            ViperUtil.setHtml(el, html);
+            this._convertBase64ImagesToKeywords(el);
+            html = ViperUtil.getHtml(el);
             if (window.StyleHTML) {
                 html = StyleHTML(html);
             }
