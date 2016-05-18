@@ -41449,7 +41449,6 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
 
             this.viper.registerCallback('Viper:getHtml', 'ViperSourceViewPlugin', function(data) {
                 self._removeScrollAttribute(data.element);
-                self._convertBase64ImagesToKeywords(data.element);
             });
 
         },
@@ -42103,6 +42102,10 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
             }
 
             var html = this.viper.getHtml(null, {emptyTableCellContent:''});
+            var el   = document.createElement('div');
+            ViperUtil.setHtml(el, html);
+            this._convertBase64ImagesToKeywords(el);
+            html = ViperUtil.getHtml(el);
             if (window.StyleHTML) {
                 html = StyleHTML(html);
             }
@@ -71905,4 +71908,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = 'ed4641ddde58ffec5079d59980de1aa7e228cd58';
+Viper.build = true;Viper.version = '1e65eb37093743607daab373aebb7fbf2970da38';
