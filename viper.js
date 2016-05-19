@@ -9224,6 +9224,10 @@
                                     'ViperTools:changed:' + widgetid,
                                     'ViperToolbarPlugin:' + id,
                                     function() {
+                                        if (self._subSectionActionDisabled[subSectionid] === true) {
+                                            return;
+                                        }
+
                                         var subSectionWidgets = self._subSectionActionWidgets[subSectionid];
                                         var c      = subSectionWidgets.length;
                                         var enable = true;
@@ -9244,6 +9248,24 @@
                                 );
                             }) (widgetids[i]);
                         }//end for
+                    },
+
+                    disableSubsectionAction: function (subsectionid, keepButtonState) {
+                        if (keepButtonState !== true) {
+                            tools.disableButton(subsectionid + '-applyButton');
+                        }
+
+                        this._subSectionActionDisabled[subsectionid] = true;
+
+                    },
+
+                    enableSubsectionAction: function (subsectionid, keepButtonState) {
+                        if (keepButtonState !== true) {
+                            tools.enableButton(subsectionid + '-applyButton');
+                        }
+
+                        delete this._subSectionActionDisabled[subsectionid];
+
                     },
 
                     getActiveSection: function() {
@@ -9315,6 +9337,7 @@
                     _activeSection: null,
                     _subSectionButtons: {},
                     _subSectionActionWidgets: {},
+                    _subSectionActionDisabled: {},
                     _buttonShown: false,
                     _subSectionShown: false,
                     _verticalPosUpdateOnly: false,
@@ -71908,4 +71931,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = '1e65eb37093743607daab373aebb7fbf2970da38';
+Viper.build = true;Viper.version = 'fc4c990de1efa1329ec93dd7a300147b0dba7aba';
