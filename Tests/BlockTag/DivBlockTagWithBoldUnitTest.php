@@ -82,41 +82,41 @@ class Viper_Tests_BlockTag_DivBlockTagWithBoldUnitTest extends AbstractViperUnit
         $this->useTest(3);
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('bold', 'active');
-//        $this->assertHTMLMatch('<div>This is %1% some content</div>');
+        $this->assertHTMLMatch('<div>This is %1% some content</div>');
 
         // Test removing bold formatting from one word using the top toolbar
         $this->useTest(3);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('bold', 'active');
         sleep(3);
-//        $this->assertHTMLMatch('<div>This is %1% some content</div>');
+        $this->assertHTMLMatch('<div>This is %1% some content</div>');
 
         // Test removing bold formatting from one word using the keyboard shortcut
         $this->useTest(3);
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + b');
-//        $this->assertHTMLMatch('<div>This is %1% some content</div>');
+        $this->assertHTMLMatch('<div>This is %1% some content</div>');
 
         // Test removing bold formatting from multiple words using the inline toolbar
         $this->useTest(4);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickInlineToolbarButton('bold', 'active');
-//        $this->assertHTMLMatch('<div>Some bold %1% %2% content to test</div>');
+        $this->assertHTMLMatch('<div>Some bold %1% %2% content to test</div>');
 
         // Test removing bold formatting from multiple words using the top toolbar
         $this->useTest(4);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('bold', 'active');
-//        $this->assertHTMLMatch('<div>Some bold %1% %2% content to test</div>');
+        $this->assertHTMLMatch('<div>Some bold %1% %2% content to test</div>');
 
         // Test removing bold formatting from multiple words using the keyboard shortcut
         $this->useTest(4);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + b');
-//        $this->assertHTMLMatch('<div>Some bold %1% %2% content to test</div>');
+        $this->assertHTMLMatch('<div>Some bold %1% %2% content to test</div>');
 
         // Test removing bold formatting from all content using inline toolbar
         $this->useTest(5);
@@ -137,7 +137,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithBoldUnitTest extends AbstractViperUnit
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + b');
-//        $this->assertHTMLMatch('<div>Bold %1% content</div>');
+        $this->assertHTMLMatch('<div>Bold %1% content</div>');
 
     }//end testDivBlockTagRemovingBoldFormatting()
 
@@ -270,7 +270,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithBoldUnitTest extends AbstractViperUnit
         sleep(5);
         $this->type('test');
         sleep(5);
-//        $this->assertHTMLMatch('<div>Some bold<strong>%1%</strong></div><div><strong>test %2%</strong>content to test</div>');
+        $this->assertHTMLMatch('<div>Some bold<strong>%1%</strong></div><div><strong>test %2%</strong>content to test</div>');
 
         // Test pressing enter at the start of bold content
         $this->useTest(4);
@@ -318,13 +318,13 @@ class Viper_Tests_BlockTag_DivBlockTagWithBoldUnitTest extends AbstractViperUnit
 
         // Test undo and redo with top toolbar icons
         $this->clickTopToolbarButton('historyUndo');
-        //$this->assertHTMLMatch('<div>This is %1% %2% some content</div>');
+        $this->assertHTMLMatch('<div>This is %1% %2% some content</div>');
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<div>This is <strong>%1%</strong> %2% some content</div>');
 
         // Test undo and redo with keyboard shortcuts
         $this->sikuli->keyDown('Key.CMD + z');
-        //$this->assertHTMLMatch('<div>This is %1% %2% some content</div>');
+        $this->assertHTMLMatch('<div>This is %1% %2% some content</div>');
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         $this->assertHTMLMatch('<div>This is <strong>%1%</strong> %2% some content</div>'); 
 

@@ -30,7 +30,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithItalicsUnitTest extends AbstractVipe
         $this->useTest(2);
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + i');
-//        $this->assertHTMLMatch('This is <em>%1%</em> %2% some content');
+        $this->assertHTMLMatch('This is <em>%1%</em> %2% some content');
 
         // Test applying italic formatting to multiple words using the inline toolbar
         $this->useTest(2);
@@ -48,7 +48,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithItalicsUnitTest extends AbstractVipe
         $this->useTest(2);
         $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.CMD + i');
-//        $this->assertHTMLMatch('This is <em>%1% %2%</em> some content');
+        $this->assertHTMLMatch('This is <em>%1% %2%</em> some content');
 
     }//end testAddingItalicFormattingToContent()
 
@@ -79,7 +79,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithItalicsUnitTest extends AbstractVipe
         $this->useTest(3);
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + i');
-//        $this->assertHTMLMatch('This is %1% some content');
+        $this->assertHTMLMatch('This is %1% some content');
 
         // Test removing italic formatting from multiple words using the inline toolbar
         $this->useTest(4);
@@ -100,7 +100,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithItalicsUnitTest extends AbstractVipe
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + i');
-//        $this->assertHTMLMatch('Some italic %1% %2% content to test');
+        $this->assertHTMLMatch('Some italic %1% %2% content to test');
 
         // Test removing italic formatting from all content using inline toolbar
         $this->useTest(5);
@@ -121,7 +121,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithItalicsUnitTest extends AbstractVipe
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + i');
-//        $this->assertHTMLMatch('Italic %1% content');
+        $this->assertHTMLMatch('Italic %1% content');
 
     }//end testRemovingItalicFormatting()
 
@@ -249,7 +249,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithItalicsUnitTest extends AbstractVipe
         $this->moveToKeyword(1, 'left');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-//        $this->assertHTMLMatch('Some italic <br /><em>test %1% %2%</em> content to test');
+        $this->assertHTMLMatch('Some italic <br /><em>test %1% %2%</em> content to test');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
@@ -257,7 +257,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithItalicsUnitTest extends AbstractVipe
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test');
-//        $this->assertHTMLMatch('Some italic test<br /><em>test %1% %2%</em> content to test');
+        $this->assertHTMLMatch('Some italic test<br /><em>test %1% %2%</em> content to test');
 
         // Test pressing enter at the end of italic content
         $this->useTest(4);

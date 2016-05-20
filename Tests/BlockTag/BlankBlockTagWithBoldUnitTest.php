@@ -33,7 +33,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithBoldUnitTest extends AbstractViperUn
         sleep(1);
         $this->sikuli->keyDown('Key.CMD + b');
         sleep(1);
-//        $this->assertHTMLMatch('This is <strong>%1%</strong> %2% some content');
+        $this->assertHTMLMatch('This is <strong>%1%</strong> %2% some content');
 
         // Test applying bold formatting to multiple words using the inline toolbar
         $this->useTest(2);
@@ -60,7 +60,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithBoldUnitTest extends AbstractViperUn
         sleep(1);
         $this->sikuli->keyDown('Key.CMD + b');
         sleep(1);
-//        $this->assertHTMLMatch('This is <strong>%1% %2%</strong> some content');
+        $this->assertHTMLMatch('This is <strong>%1% %2%</strong> some content');
 
     }//end testAddingBoldFormattingToContent()
 
@@ -91,7 +91,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithBoldUnitTest extends AbstractViperUn
         $this->useTest(3);
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + b');
-//        $this->assertHTMLMatch('This is %1% some content');
+        $this->assertHTMLMatch('This is %1% some content');
 
         // Test removing bold formatting from multiple words using the inline toolbar
         $this->useTest(4);
@@ -112,7 +112,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithBoldUnitTest extends AbstractViperUn
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + b');
-//        $this->assertHTMLMatch('Some bold %1% %2% content to test');
+        $this->assertHTMLMatch('Some bold %1% %2% content to test');
 
         // Test removing bold formatting from all content using inline toolbar
         $this->useTest(5);
@@ -133,7 +133,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithBoldUnitTest extends AbstractViperUn
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.CMD + b');
-//        $this->assertHTMLMatch('Bold %1% content');
+        $this->assertHTMLMatch('Bold %1% content');
 
     }//end testRemovingBoldFormatting()
 
@@ -269,7 +269,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithBoldUnitTest extends AbstractViperUn
         $this->moveToKeyword(1, 'left');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-//        $this->assertHTMLMatch('Some bold <br /><strong>test %1% %2%</strong> content to test');
+        $this->assertHTMLMatch('Some bold <br /><strong>test %1% %2%</strong> content to test');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
@@ -277,7 +277,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithBoldUnitTest extends AbstractViperUn
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test');
-//        $this->assertHTMLMatch('Some bold test<br /><strong>test %1% %2%</strong> content to test');
+        $this->assertHTMLMatch('Some bold test<br /><strong>test %1% %2%</strong> content to test');
 
         // Test pressing enter at the end of bold content
         $this->useTest(4);

@@ -289,13 +289,14 @@ class Viper_Tests_BlockTag_DivBlockTagWithAnchorsUnitTest extends AbstractViperU
         // Test undo and redo with keyboard shortcuts
         $this->clickKeyword(2);
         $this->sikuli->keyDown('Key.CMD + z');
-        //$this->assertHTMLMatch('<div>This is %1% %2% some content</div>');
+        $this->assertHTMLMatch('<div>This is %1% %2% some content</div>');
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        sleep(3);
         $this->assertHTMLMatch('<div>This is <span id="test1">%1%</span> %2% some content</div>');
 
          // Test undo and redo with top toolbar icons
         $this->clickTopToolbarButton('historyUndo');
-        //$this->assertHTMLMatch('<div>This is %1% %2% some content</div>');
+        $this->assertHTMLMatch('<div>This is %1% %2% some content</div>');
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<div>This is <span id="test1">%1%</span> %2% some content</div>');
 

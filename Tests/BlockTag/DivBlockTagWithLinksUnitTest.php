@@ -134,14 +134,14 @@ class Viper_Tests_BlockTag_DivBlockTagWithLinksUnitTest extends AbstractViperUni
         $this->clickField('Title');
         $this->type('test-title');
         $this->sikuli->keyDown('Key.ENTER');
-//        $this->assertHTMLMatch('<div>test <a href="test-link" title="test-title">%1%</a> content</div>');
+        $this->assertHTMLMatch('<div>test <a href="test-link" title="test-title">%1%</a> content</div>');
 
         // Test removing title
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('link', 'active');
         $this->clearFieldValue('Title');
         $this->sikuli->keyDown('Key.ENTER');
-//        $this->assertHTMLMatch('<div>test <a href="test-link">%1%</a> content</div>');
+        $this->assertHTMLMatch('<div>test <a href="test-link">%1%</a> content</div>');
 
         // Test editing is open in a new window using inline toolbar
         $this->useTest(3);
@@ -150,7 +150,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithLinksUnitTest extends AbstractViperUni
         $this->clickField('Open a New Window');
         sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
-//        $this->assertHTMLMatch('<div>test <a href="test-link" target="_blank">%1%</a> content</div>');
+        $this->assertHTMLMatch('<div>test <a href="test-link" target="_blank">%1%</a> content</div>');
 
         // Test changing it back
         $this->selectKeyword(1);
@@ -158,7 +158,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithLinksUnitTest extends AbstractViperUni
         $this->clickField('Open a New Window');
         sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
-//        $this->assertHTMLMatch('<div>test <a href="test-link">%1%</a> content</div>');
+        $this->assertHTMLMatch('<div>test <a href="test-link">%1%</a> content</div>');
 
         // Test adding title using top toolbar
         $this->useTest(3);
@@ -167,14 +167,14 @@ class Viper_Tests_BlockTag_DivBlockTagWithLinksUnitTest extends AbstractViperUni
         $this->clickField('Title');
         $this->type('test-title');
         $this->sikuli->keyDown('Key.ENTER');
-//        $this->assertHTMLMatch('<div>test <a href="test-link" title="test-title">%1%</a> content</div>');
+        $this->assertHTMLMatch('<div>test <a href="test-link" title="test-title">%1%</a> content</div>');
 
         // Test removing title
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('link', 'active');
         $this->clearFieldValue('Title');
         $this->sikuli->keyDown('Key.ENTER');
-//        $this->assertHTMLMatch('<div>test <a href="test-link">%1%</a> content</div>');
+        $this->assertHTMLMatch('<div>test <a href="test-link">%1%</a> content</div>');
 
         // Test editing is open in a new window using top toolbar
         $this->useTest(3);
@@ -183,7 +183,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithLinksUnitTest extends AbstractViperUni
         $this->clickField('Open a New Window');
         sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
-//        $this->assertHTMLMatch('<div>test <a href="test-link" target="_blank">%1%</a> content</div>');
+        $this->assertHTMLMatch('<div>test <a href="test-link" target="_blank">%1%</a> content</div>');
 
         // Test changing it back
         $this->selectKeyword(1);
@@ -191,7 +191,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithLinksUnitTest extends AbstractViperUni
         $this->clickField('Open a New Window');
         sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
-//        $this->assertHTMLMatch('<div>test <a href="test-link">%1%</a> content</div>');
+        $this->assertHTMLMatch('<div>test <a href="test-link">%1%</a> content</div>');
 
     }// end testDivBlockTagEditingLinks()
 

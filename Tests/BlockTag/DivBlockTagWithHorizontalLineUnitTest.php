@@ -42,7 +42,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithHorizontalLineUnitTest extends Abstrac
         $this->clickTopToolbarButton('insertHr');
         $this->sikuli->keyDown('Key.DOWN');
         $this->type('test');
-//        $this->assertHTMLMatch('<div>%1% Test content %2% more test content. %3%</div><hr /><div>test</div>');
+        $this->assertHTMLMatch('<div>%1% Test content %2% more test content. %3%</div><hr /><div>test</div>');
 
     }//end testDivBlockTagAddingHorizontalRule()
 
@@ -64,12 +64,12 @@ class Viper_Tests_BlockTag_DivBlockTagWithHorizontalLineUnitTest extends Abstrac
         $this->sikuli->keyDown('Key.UP');
         $this->sikuli->keyDown('Key.DELETE');
         $this->sikuli->keyDown('Key.DELETE');
-//        $this->assertHTMLMatch('<div>%1% Test content</div>');
+        $this->assertHTMLMatch('<div>%1% Test content</div>');
 
         $this->useTest(4);
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.DELETE');
-//        $this->assertHTMLMatch('<div>Test content %1%more test content</div>');
+        $this->assertHTMLMatch('<div>Test content %1%more test content</div>');
 
         $this->useTest(5);
         $this->moveToKeyword(1, 'right');
@@ -88,7 +88,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithHorizontalLineUnitTest extends Abstrac
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->sikuli->keyDown('Key.BACKSPACE');
-//        $this->assertHTMLMatch('<div>Test content %1% more test content</div>');
+        $this->assertHTMLMatch('<div>Test content %1% more test content</div>');
 
         $this->useTest(5);
         $this->moveToKeyword(1, 'right');
@@ -116,7 +116,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithHorizontalLineUnitTest extends Abstrac
         $this->assertHTMLMatch('<div>%1% Test content</div><hr /><div>%2% more test content. %3%</div>');
 
         $this->clickTopToolbarButton('historyUndo');
-//        $this->assertHTMLMatch('<div>%1% Test content %2% more test content. %3%</div>');
+        $this->assertHTMLMatch('<div>%1% Test content %2% more test content. %3%</div>');
 
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<div>%1% Test content</div><hr /><div>%2% more test content. %3%</div>');
@@ -129,7 +129,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithHorizontalLineUnitTest extends Abstrac
         $this->assertHTMLMatch('<div>%1% Test content</div><hr /><div>%2% more test content. %3%</div>');
 
         $this->sikuli->keyDown('Key.CMD + z');
-//        $this->assertHTMLMatch('<div>%1% Test content %2% more test content. %3%</div>');
+        $this->assertHTMLMatch('<div>%1% Test content %2% more test content. %3%</div>');
 
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         $this->assertHTMLMatch('<div>%1% Test content</div><hr /><div>%2% more test content. %3%</div>');

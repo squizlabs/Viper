@@ -18,7 +18,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithItalicsUnitTest extends AbstractViperU
         $this->useTest(2);
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('italic');
-//        $this->assertHTMLMatch('<div>This is <em>%1%</em> %2% some content</div>');
+        $this->assertHTMLMatch('<div>This is <em>%1%</em> %2% some content</div>');
 
         // Test applying italic formatting to one word using the top toolbar
         $this->useTest(2);
@@ -30,7 +30,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithItalicsUnitTest extends AbstractViperU
         $this->useTest(2);
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + i');
-//        $this->assertHTMLMatch('<div>This is <em>%1%</em> %2% some content</div>');
+        $this->assertHTMLMatch('<div>This is <em>%1%</em> %2% some content</div>');
 
         // Test applying italic formatting to multiple words using the inline toolbar
         $this->useTest(2);
@@ -48,7 +48,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithItalicsUnitTest extends AbstractViperU
         $this->useTest(2);
         $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.CMD + i');
-//        $this->assertHTMLMatch('<div>This is <em>%1% %2%</em> some content</div>');
+        $this->assertHTMLMatch('<div>This is <em>%1% %2%</em> some content</div>');
 
     }//end testDivBlockTagAddingItalicFormattingToContent()
 
@@ -67,40 +67,40 @@ class Viper_Tests_BlockTag_DivBlockTagWithItalicsUnitTest extends AbstractViperU
         $this->useTest(3);
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('italic', 'active');
-//        $this->assertHTMLMatch('<div>This is %1% some content</div>');
+        $this->assertHTMLMatch('<div>This is %1% some content</div>');
 
         // Test removing italic formatting from one word using the top toolbar
         $this->useTest(3);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('italic', 'active');
-//        $this->assertHTMLMatch('<div>This is %1% some content</div>');
+        $this->assertHTMLMatch('<div>This is %1% some content</div>');
 
         // Test removing italic formatting from one word using the keyboard shortcut
         $this->useTest(3);
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + i');
-//        $this->assertHTMLMatch('<div>This is %1% some content</div>');
+        $this->assertHTMLMatch('<div>This is %1% some content</div>');
 
         // Test removing italic formatting from multiple words using the inline toolbar
         $this->useTest(4);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickInlineToolbarButton('italic', 'active');
-//        $this->assertHTMLMatch('<div>Some italic %1% %2% content to test</div>');
+        $this->assertHTMLMatch('<div>Some italic %1% %2% content to test</div>');
 
         // Test removing italic formatting from multiple words using the top toolbar
         $this->useTest(4);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('italic', 'active');
-//        $this->assertHTMLMatch('<div>Some italic %1% %2% content to test</div>');
+        $this->assertHTMLMatch('<div>Some italic %1% %2% content to test</div>');
 
         // Test removing italic formatting from multiple words using the keyboard shortcut
         $this->useTest(4);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->sikuli->keyDown('Key.CMD + i');
-//        $this->assertHTMLMatch('<div>Some italic %1% %2% content to test</div>');
+        $this->assertHTMLMatch('<div>Some italic %1% %2% content to test</div>');
 
         // Test removing italic formatting from all content using inline toolbar
         $this->useTest(5);
@@ -121,7 +121,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithItalicsUnitTest extends AbstractViperU
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->sikuli->keyDown('Key.CMD + i');
-//        $this->assertHTMLMatch('<div>Italic %1% content</div>');
+        $this->assertHTMLMatch('<div>Italic %1% content</div>');
 
     }//end testDivBlockTagRemovingItalicFormatting()
 
@@ -141,29 +141,29 @@ class Viper_Tests_BlockTag_DivBlockTagWithItalicsUnitTest extends AbstractViperU
         $this->clickKeyword(1);
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test ');
-//        $this->assertHTMLMatch('<div>Some italic <em>test %1% %2%</em> content to test</div>');
+        $this->assertHTMLMatch('<div>Some italic <em>test %1% %2%</em> content to test</div>');
 
         // Test adding content in the middle of italic formatting
         $this->moveToKeyword(1, 'right');
         $this->type(' test');
-//        $this->assertHTMLMatch('<div>Some italic <em>test %1% test %2%</em> content to test</div>');
+        $this->assertHTMLMatch('<div>Some italic <em>test %1% test %2%</em> content to test</div>');
 
         // Test adding content to the end of italic formatting
         $this->clickKeyword(2);
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->type(' test');
-//        $this->assertHTMLMatch('<div>Some italic <em>test %1% test %2% test</em> content to test</div>');
+        $this->assertHTMLMatch('<div>Some italic <em>test %1% test %2% test</em> content to test</div>');
 
         // Test highlighting some content in the em tags and replacing it
         $this->selectKeyword(2);
         $this->type('abc');
-//        $this->assertHTMLMatch('<div>Some italic <em>test %1% test abc test</em> content to test</div>');
+        $this->assertHTMLMatch('<div>Some italic <em>test %1% test abc test</em> content to test</div>');
 
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('abc');
-//        $this->assertHTMLMatch('<div>Some italic <em>test abc test abc test</em> content to test</div>');
+        $this->assertHTMLMatch('<div>Some italic <em>test abc test abc test</em> content to test</div>');
 
     }//end testDivBlockTagEditingItalicContent()
 
@@ -182,40 +182,40 @@ class Viper_Tests_BlockTag_DivBlockTagWithItalicsUnitTest extends AbstractViperU
         $this->useTest(4);
         $this->selectKeyword(1, 2);
         $this->type('test');
-//        $this->assertHTMLMatch('<div>Some italic <em>test</em> content to test</div>');
+        $this->assertHTMLMatch('<div>Some italic <em>test</em> content to test</div>');
 
         $this->useTest(4);
         $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('test');
-//        $this->assertHTMLMatch('<div>Some italic test content to test</div>');
+        $this->assertHTMLMatch('<div>Some italic test content to test</div>');
 
         $this->useTest(4);
         $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('test');
-//        $this->assertHTMLMatch('<div>Some italic test content to test</div>');
+        $this->assertHTMLMatch('<div>Some italic test content to test</div>');
 
         // Test replacing italic content with new content when selecting one keyword and using the lineage
         $this->useTest(4);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->type('test');
-//        $this->assertHTMLMatch('<div>Some italic <em>test</em> content to test</div>');
+        $this->assertHTMLMatch('<div>Some italic <em>test</em> content to test</div>');
 
         $this->useTest(4);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('test');
-//        $this->assertHTMLMatch('<div>Some italic test content to test</div>');
+        $this->assertHTMLMatch('<div>Some italic test content to test</div>');
 
         $this->useTest(4);
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('test');
-//        $this->assertHTMLMatch('<div>Some italic test content to test</div>');
+        $this->assertHTMLMatch('<div>Some italic test content to test</div>');
 
         // Test replacing all content
         $this->useTest(5);
@@ -242,14 +242,14 @@ class Viper_Tests_BlockTag_DivBlockTagWithItalicsUnitTest extends AbstractViperU
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test');
-//        $this->assertHTMLMatch('<div>Some italic <em>%1%</em></div><div><em>test %2%</em> content to test</div>');
+        $this->assertHTMLMatch('<div>Some italic <em>%1%</em></div><div><em>test %2%</em> content to test</div>');
 
         // Test pressing enter at the start of italic content
         $this->useTest(4);
         $this->moveToKeyword(1, 'left');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-//        $this->assertHTMLMatch('<div>Some italic </div><div><em>test %1% %2%</em> content to test</div>');
+        $this->assertHTMLMatch('<div>Some italic </div><div><em>test %1% %2%</em> content to test</div>');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
@@ -257,7 +257,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithItalicsUnitTest extends AbstractViperU
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test');
-//        $this->assertHTMLMatch('<div>Some italic test</div><div><em>test %1% %2%</em> content to test</div>');
+        $this->assertHTMLMatch('<div>Some italic test</div><div><em>test %1% %2%</em> content to test</div>');
 
         // Test pressing enter at the end of italic content
         $this->useTest(4);
@@ -287,13 +287,13 @@ class Viper_Tests_BlockTag_DivBlockTagWithItalicsUnitTest extends AbstractViperU
 
         // Test undo and redo with top toolbar icons
         $this->clickTopToolbarButton('historyUndo');
-//        $this->assertHTMLMatch('<div>This is %1% %2% some content</div>');
+        $this->assertHTMLMatch('<div>This is %1% %2% some content</div>');
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<div>This is <em>%1%</em> %2% some content</div>');
 
         // Test undo and redo with keyboard shortcuts
         $this->sikuli->keyDown('Key.CMD + z');
-//        $this->assertHTMLMatch('<div>This is %1% %2% some content</div>');
+        $this->assertHTMLMatch('<div>This is %1% %2% some content</div>');
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         $this->assertHTMLMatch('<div>This is <em>%1%</em> %2% some content</div>');        
 

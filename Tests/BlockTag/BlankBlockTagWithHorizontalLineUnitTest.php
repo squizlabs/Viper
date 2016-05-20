@@ -10,12 +10,12 @@ class Viper_Tests_BlockTag_BlankBlockTagWithHorizontalLineUnitTest extends Abstr
      *
      * @return void
      */
-    public function testAddingHorizontalRuleM()
+    public function testAddingHorizontalRule()
     {
 
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
-/*
+
         // Test adding a horizontal rule at start of page and add content
         $this->useTest(2);
         $this->moveToKeyword(1, 'left');
@@ -25,7 +25,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithHorizontalLineUnitTest extends Abstr
         $this->moveToKeyword(1, 'left');
         $this->type('test ');
         $this->assertHTMLMatch('<hr /><br />test %1% Test content %2% more test content. %3%');
-*/
+
         // Test adding a horizontal rule in the middle of the paragraph and add content
         $this->useTest(2);
         $this->moveToKeyword(2, 'left');
@@ -61,7 +61,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithHorizontalLineUnitTest extends Abstr
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
-/*
+
         // Using forward delete
         $this->useTest(3);
         $this->moveToKeyword(1, 'left');
@@ -72,7 +72,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithHorizontalLineUnitTest extends Abstr
         $this->sikuli->keyDown('Key.DELETE');
         $this->sikuli->keyDown('Key.DELETE');
         $this->assertHTMLMatch('%1% Test content');
-*/
+
         $this->useTest(4);
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.DELETE');

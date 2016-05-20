@@ -68,7 +68,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithClassesUnitTest extends AbstractVipe
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test2');
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-//        $this->assertHTMLMatch('<span class="test1">This is %1% %2% some content</span>');
+        $this->assertHTMLMatch('<span class="test1">This is %1% %2% some content</span>');
 
         // Test applying class using top toolbar
         $this->useTest(3);
@@ -83,7 +83,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithClassesUnitTest extends AbstractVipe
         $this->clickTopToolbarButton('cssClass');
         $this->type('test2');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-//        $this->assertHTMLMatch('<span class="test1">This is %1% %2% some content</span>');
+        $this->assertHTMLMatch('<span class="test1">This is %1% %2% some content</span>');
 
     }//end testAddingClassToAllContent()
 

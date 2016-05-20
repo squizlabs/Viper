@@ -52,7 +52,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithAnchorsUnitTest extends AbstractVipe
      */
     public function testAddingAnchorToAllContent()
     {
-/*        $this->useTest(1);
+        $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
 
         // Test applying anchor using inline toolbar
@@ -84,7 +84,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithAnchorsUnitTest extends AbstractVipe
         $this->type('test2');
         $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<span id="test1">This is %1% %2% some content</span>');
-*/
+
     }//end testAddingAnchorToAllContent()
 
 
