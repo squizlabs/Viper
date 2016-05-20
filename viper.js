@@ -41413,6 +41413,8 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
         this._toolbarButtonToggles = false;
         this._aceTheme             = 'ace/theme/viper';
         this._base64Images         = {};
+
+        this._aceMarkers = [];
     }
 
     Viper.PluginManager.addPlugin('ViperSourceViewPlugin', ViperSourceViewPlugin);
@@ -41564,6 +41566,8 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
                         self._editor.resize();
                         self._editor.focus();
                         self._isVisible = true;
+                        self._setKeywordsReadonly();
+
                     }, 50);
                 } else {
                     this._textEditor.value = content;
@@ -41577,6 +41581,32 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
                     callback.call(this);
                 }
             }//end if
+
+        },
+
+        _setKeywordsReadonly: function () {
+
+            var editor = this._editor;
+
+            for (var keyword in this._base64Images) {
+                editor.$search.setOptions({needle: keyword});
+                ranges = editor.$search.findAll(editor.session);
+                this._createAnchorsForRanges(ranges);
+            }
+
+        },
+
+        _createAnchorsForRanges: function (ranges) {
+            var editor       = this._editor;
+            this._aceMarkers = [];
+
+            for (var i = 0; i < ranges.length; i++) {
+                var range = ranges[i];
+                editor.session.addMarker(range, 'ViperSourceViewPlugin-ace-keyword');
+                range.start = editor.session.doc.createAnchor(range.start);
+                range.end   = editor.session.doc.createAnchor(range.end);
+                this._aceMarkers.push(range);
+            }
 
         },
 
@@ -41898,7 +41928,7 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
         initEditorEvents: function(editor)
         {
             var self = this;
-            editor.getSession().addEventListener("change", function() {
+            editor.on("change", function() {
                 if (self._ignoreUpdate === true) {
                     self._ignoreUpdate = false;
                     return;
@@ -41907,16 +41937,59 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
                     self.updatePageContents();
                 }
 
+                self._setKeywordsReadonly();
+
                 self.viper.fireCallbacks('ViperSourceViewPlugin:sourceChanged');
             });
+
+            editor.addEventListener("paste", function(e) {
+                for (var i= 0; i < self._aceMarkers.length; i++) {
+                    var range = self._aceMarkers[i];
+
+                    if (editor.getSelectionRange().intersects(range) === true
+                        && editor.getSelectionRange().containsRange(range) === false
+                    ) {
+                        // TODO: How to prevent default paste event??
+                        setTimeout(
+                            function () {
+                                // Undo this event.
+                                editor.undo();
+                            },
+                            10
+                        );
+
+                        return {
+                            command: 'null',
+                            passEvent: false
+                        };
+                    }
+                }
+
+            }, true);
 
             var popup = self.viper.Tools.getItem('VSVP:popup');
 
             // If the ESC key is pressed close the popup.
             editor.keyBinding.addKeyboardHandler({
-                handleKeyboard: function(data, hashId, keyString, n, e) {
+                handleKeyboard: function(data, hashId, keyString, keyCode, e) {
                     if (!e) {
                         return;
+                    }
+
+                    if (keyCode < 37 || keyCode > 40) {
+                        // Check if typing is done inside a read only zone.
+                        for (var i= 0; i < self._aceMarkers.length; i++) {
+                            var range = self._aceMarkers[i];
+
+                            if (editor.getSelectionRange().intersects(range) === true
+                                && editor.getSelectionRange().containsRange(range) === false
+                            ) {
+                                return {
+                                    command: 'null',
+                                    passEvent: false
+                                };
+                            }
+                        }
                     }
 
                     if (!self._containerid) {
@@ -71931,4 +72004,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = 'fc4c990de1efa1329ec93dd7a300147b0dba7aba';
+Viper.build = true;Viper.version = '607d96ffee4250e521a407d1a551a439ccd35897';
