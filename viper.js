@@ -34093,22 +34093,20 @@ ViperAccessibilityPlugin_WCAG2 = {
                 }
 
                 var bookmark = self.viper.createBookmark(range, null, 'imageDrop');
+                if (ViperUtil.isTag(bookmark.start.nextSibling, 'img') === true
+                    && bookmark.start.nextSibling.nextSibling === bookmark.end
+                ) {
+                    // Dropped on an image, insert it after.
+                    ViperUtil.insertAfter(bookmark.end, bookmark.start.nextSibling);
+                }
 
                 // TODO: For some reason dropping image between two elements sometimes causes bookmark elements to move
                 // to the end of the Viper element. Adding this tmp element before it and then re adding the bookmark
                 // back to its position seems to resolve this issue.
-                var _tmpStartElem = document.createElement('span');
-                var _tmpEndElem = document.createElement('span');
-                ViperUtil.insertBefore(bookmark.start, _tmpStartElem);
-                ViperUtil.insertAfter(bookmark.end, _tmpEndElem);
 
                 for (var i = 0; i < data.dataTransfer.files.length; i++) {
                     self.readDroppedImage(data.dataTransfer.files[i], function(image, file) {
-                        ViperUtil.insertBefore(_tmpStartElem, bookmark.start);
-                        ViperUtil.insertAfter(_tmpEndElem, bookmark.end);
                         self.insertDroppedImage(image, range, file);
-                        ViperUtil.remove(_tmpStartElem);
-                        ViperUtil.remove(_tmpEndElem);
                         noImage = false;
                     });
                 }
@@ -34198,9 +34196,9 @@ ViperAccessibilityPlugin_WCAG2 = {
             range = range || this.viper.getViperRange();
             var selectedNode = range.getNodeSelection();
 
-            if (ViperUtil.isStubElement(selectedNode) === true) {
-                ViperUtil.remove(selectedNode);
-            } else if (ViperUtil.isBlockElement(selectedNode) === true) {
+            if (ViperUtil.isBlockElement(selectedNode) === true
+                && ViperUtil.isStubElement(selectedNode) === false
+            ) {
                 ViperUtil.setHtml(selectedNode, '&nbsp');
                 range.setStart(selectedNode.firstChild, 0);
                 range.collapse(true);
@@ -34213,8 +34211,11 @@ ViperAccessibilityPlugin_WCAG2 = {
 
             var bookmark = this.viper.getBookmarkById('imageDrop') || this.viper.createBookmark(range);
             var elems    = ViperUtil.getElementsBetween(bookmark.start, bookmark.end);
-            for (var i = 0; i < elems.length; i++) {
-                ViperUtil.remove(elems[i]);
+            if (elems.length === 1 && ViperUtil.isTag(elems[0], 'img') === true) {
+                // Move outside of bookmark.
+                ViperUtil.insertAfter(bookmark.end, elems[0]);
+            } else {
+                ViperUtil.remove(elems);
             }
 
             var newImage = false;
@@ -72039,4 +72040,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = 'c73607aa98395a64e598e31db02f5b20fdbb83e1';
+Viper.build = true;Viper.version = '8c9e0b4211acce950ec39454f9b331752c4523f8';
