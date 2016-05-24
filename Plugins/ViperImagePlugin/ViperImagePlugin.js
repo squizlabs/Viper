@@ -174,6 +174,8 @@
                     return;
                 }
 
+                self.hideImageResizeHandles();
+
                 var range    = data.range;
                 if (data.e.target && ViperUtil.isTag(data.e.target, 'img') === true) {
                     // Image dropped on top of another image. Replace.
@@ -185,14 +187,18 @@
                 // TODO: For some reason dropping image between two elements sometimes causes bookmark elements to move
                 // to the end of the Viper element. Adding this tmp element before it and then re adding the bookmark
                 // back to its position seems to resolve this issue.
-                var _tmpElem = document.createElement('span');
-                ViperUtil.insertBefore(bookmark.start, _tmpElem);
+                var _tmpStartElem = document.createElement('span');
+                var _tmpEndElem = document.createElement('span');
+                ViperUtil.insertBefore(bookmark.start, _tmpStartElem);
+                ViperUtil.insertAfter(bookmark.end, _tmpEndElem);
 
                 for (var i = 0; i < data.dataTransfer.files.length; i++) {
                     self.readDroppedImage(data.dataTransfer.files[i], function(image, file) {
-                        ViperUtil.insertBefore(_tmpElem, bookmark.start);
-                        ViperUtil.insertBefore(_tmpElem, bookmark.end);
+                        ViperUtil.insertBefore(_tmpStartElem, bookmark.start);
+                        ViperUtil.insertAfter(_tmpEndElem, bookmark.end);
                         self.insertDroppedImage(image, range, file);
+                        ViperUtil.remove(_tmpStartElem);
+                        ViperUtil.remove(_tmpEndElem);
                         noImage = false;
                     });
                 }
@@ -242,7 +248,15 @@
         {
             fileInfo    = fileInfo || {};
             range       = range || this.viper.getViperRange();
-            image.alt   = fileInfo.name || '';
+
+            var alt = fileInfo.name || '';
+            if (alt.length > 0) {
+                // Friendly name
+                alt = alt.replace(/\.\w+$/, '').replace(/[^a-z0-9]/gi, ' ').replace(/\s+/g, ' ');
+                alt = ViperUtil.ucFirst(ViperUtil.trim(alt));
+            }
+
+            image.alt = alt;
 
             this._rangeToImage(range, image);
 
@@ -274,7 +288,9 @@
             range = range || this.viper.getViperRange();
             var selectedNode = range.getNodeSelection();
 
-            if (ViperUtil.isBlockElement(selectedNode) === true) {
+            if (ViperUtil.isStubElement(selectedNode) === true) {
+                ViperUtil.remove(selectedNode);
+            } else if (ViperUtil.isBlockElement(selectedNode) === true) {
                 ViperUtil.setHtml(selectedNode, '&nbsp');
                 range.setStart(selectedNode.firstChild, 0);
                 range.collapse(true);
@@ -286,8 +302,7 @@
             }
 
             var bookmark = this.viper.getBookmarkById('imageDrop') || this.viper.createBookmark(range);
-
-            var elems = ViperUtil.getElementsBetween(bookmark.start, bookmark.end);
+            var elems    = ViperUtil.getElementsBetween(bookmark.start, bookmark.end);
             for (var i = 0; i < elems.length; i++) {
                 ViperUtil.remove(elems[i]);
             }
@@ -619,9 +634,15 @@
                     tools.getItem(toolbarPrefix + ':isDecorative').setValue(false);
                 }
 
+                // Hide URL field.
+                this.hideURLField(toolbarPrefix);
+
                 // Update preview pane.
                 this.updateImagePreview(src);
             } else {
+                // Image is being inserted, show the URL field.
+                this.showURLField(toolbarPrefix);
+
                 tools.enableButton('image');
                 tools.setButtonInactive('image');
 
@@ -637,6 +658,14 @@
                 ViperUtil.setStyle(this._previewBox, 'display', 'none');
             }//end if
 
+        },
+
+        hideURLField: function (toolbarPrefix) {
+            this.viper.Tools.getItem(toolbarPrefix + ':urlInput').hide();
+        },
+
+        showURLField: function (toolbarPrefix) {
+            this.viper.Tools.getItem(toolbarPrefix + ':urlInput').show();
         },
 
 

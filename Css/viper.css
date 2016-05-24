@@ -28,3 +28,7 @@
 [contenteditable="true"] img::-moz-selection {
     background: transparent;
 }
+
+.Viper-hidden {
+    display: none;
+}

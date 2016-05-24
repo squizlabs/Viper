@@ -729,6 +729,12 @@
                     },
                     setLabel: function (newLabel) {
                         ViperUtil.setHtml(ViperUtil.getClass('Viper-textbox-title', labelEl)[0], newLabel)
+                    },
+                    hide: function() {
+                        ViperUtil.addClass(textBox, 'Viper-hidden');
+                    },
+                    show: function() {
+                        ViperUtil.removeClass(textBox, 'Viper-hidden');
                     }
                 }
             );
