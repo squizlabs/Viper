@@ -27,6 +27,10 @@
 
 [contenteditable="true"] img::-moz-selection {
     background: transparent;
+}
+
+.Viper-hidden {
+    display: none;
 }._viper-CTNode {
     -moz-border-radius: 5px;
 }
@@ -720,7 +724,6 @@
   -moz-transition-duration: 0.3s;
   -webkit-transition-property: color, background;
   -webkit-transition-duration: 0.3s;
-  color: #5A8BD0;
 }
 .Viper-textbox.Viper-active .Viper-textbox-label {
   background: #205caf;

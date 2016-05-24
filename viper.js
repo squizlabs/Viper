@@ -8172,6 +8172,12 @@
                     },
                     setLabel: function (newLabel) {
                         ViperUtil.setHtml(ViperUtil.getClass('Viper-textbox-title', labelEl)[0], newLabel)
+                    },
+                    hide: function() {
+                        ViperUtil.addClass(textBox, 'Viper-hidden');
+                    },
+                    show: function() {
+                        ViperUtil.removeClass(textBox, 'Viper-hidden');
                     }
                 }
             );
@@ -34078,6 +34084,8 @@ ViperAccessibilityPlugin_WCAG2 = {
                     return;
                 }
 
+                self.hideImageResizeHandles();
+
                 var range    = data.range;
                 if (data.e.target && ViperUtil.isTag(data.e.target, 'img') === true) {
                     // Image dropped on top of another image. Replace.
@@ -34089,14 +34097,18 @@ ViperAccessibilityPlugin_WCAG2 = {
                 // TODO: For some reason dropping image between two elements sometimes causes bookmark elements to move
                 // to the end of the Viper element. Adding this tmp element before it and then re adding the bookmark
                 // back to its position seems to resolve this issue.
-                var _tmpElem = document.createElement('span');
-                ViperUtil.insertBefore(bookmark.start, _tmpElem);
+                var _tmpStartElem = document.createElement('span');
+                var _tmpEndElem = document.createElement('span');
+                ViperUtil.insertBefore(bookmark.start, _tmpStartElem);
+                ViperUtil.insertAfter(bookmark.end, _tmpEndElem);
 
                 for (var i = 0; i < data.dataTransfer.files.length; i++) {
                     self.readDroppedImage(data.dataTransfer.files[i], function(image, file) {
-                        ViperUtil.insertBefore(_tmpElem, bookmark.start);
-                        ViperUtil.insertBefore(_tmpElem, bookmark.end);
+                        ViperUtil.insertBefore(_tmpStartElem, bookmark.start);
+                        ViperUtil.insertAfter(_tmpEndElem, bookmark.end);
                         self.insertDroppedImage(image, range, file);
+                        ViperUtil.remove(_tmpStartElem);
+                        ViperUtil.remove(_tmpEndElem);
                         noImage = false;
                     });
                 }
@@ -34146,7 +34158,15 @@ ViperAccessibilityPlugin_WCAG2 = {
         {
             fileInfo    = fileInfo || {};
             range       = range || this.viper.getViperRange();
-            image.alt   = fileInfo.name || '';
+
+            var alt = fileInfo.name || '';
+            if (alt.length > 0) {
+                // Friendly name
+                alt = alt.replace(/\.\w+$/, '').replace(/[^a-z0-9]/gi, ' ').replace(/\s+/g, ' ');
+                alt = ViperUtil.ucFirst(ViperUtil.trim(alt));
+            }
+
+            image.alt = alt;
 
             this._rangeToImage(range, image);
 
@@ -34178,7 +34198,9 @@ ViperAccessibilityPlugin_WCAG2 = {
             range = range || this.viper.getViperRange();
             var selectedNode = range.getNodeSelection();
 
-            if (ViperUtil.isBlockElement(selectedNode) === true) {
+            if (ViperUtil.isStubElement(selectedNode) === true) {
+                ViperUtil.remove(selectedNode);
+            } else if (ViperUtil.isBlockElement(selectedNode) === true) {
                 ViperUtil.setHtml(selectedNode, '&nbsp');
                 range.setStart(selectedNode.firstChild, 0);
                 range.collapse(true);
@@ -34190,8 +34212,7 @@ ViperAccessibilityPlugin_WCAG2 = {
             }
 
             var bookmark = this.viper.getBookmarkById('imageDrop') || this.viper.createBookmark(range);
-
-            var elems = ViperUtil.getElementsBetween(bookmark.start, bookmark.end);
+            var elems    = ViperUtil.getElementsBetween(bookmark.start, bookmark.end);
             for (var i = 0; i < elems.length; i++) {
                 ViperUtil.remove(elems[i]);
             }
@@ -34523,9 +34544,15 @@ ViperAccessibilityPlugin_WCAG2 = {
                     tools.getItem(toolbarPrefix + ':isDecorative').setValue(false);
                 }
 
+                // Hide URL field.
+                this.hideURLField(toolbarPrefix);
+
                 // Update preview pane.
                 this.updateImagePreview(src);
             } else {
+                // Image is being inserted, show the URL field.
+                this.showURLField(toolbarPrefix);
+
                 tools.enableButton('image');
                 tools.setButtonInactive('image');
 
@@ -34541,6 +34568,14 @@ ViperAccessibilityPlugin_WCAG2 = {
                 ViperUtil.setStyle(this._previewBox, 'display', 'none');
             }//end if
 
+        },
+
+        hideURLField: function (toolbarPrefix) {
+            this.viper.Tools.getItem(toolbarPrefix + ':urlInput').hide();
+        },
+
+        showURLField: function (toolbarPrefix) {
+            this.viper.Tools.getItem(toolbarPrefix + ':urlInput').show();
         },
 
 
@@ -72004,4 +72039,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = '607d96ffee4250e521a407d1a551a439ccd35897';
+Viper.build = true;Viper.version = 'c73607aa98395a64e598e31db02f5b20fdbb83e1';
