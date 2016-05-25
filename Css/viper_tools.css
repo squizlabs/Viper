@@ -185,6 +185,7 @@
   margin-left: -13px;
   background-image: url("../Images/buttonIcons.svg");
   /* PNG fallback for older trowsers */
+
 }
 .Viper-browserVer-msie8 .Viper-buttonIcon {
   background-image: url("../Images/buttonIcons.png");
@@ -829,6 +830,7 @@
   top: 50%;
   margin-top: -9px;
   /* PNG fallback for older trowsers */
+
 }
 .Viper-browserVer-msie8 .Viper-textbox-action,
 .Viper-browserVer-msie8 .Viper-textbox.Viper-required .Viper-textbox-main:after {
@@ -947,6 +949,7 @@
   -moz-transition: 0.2s opacity ease-in;
   -webkit-transition: 0.2s opacity ease-in;
   /* PNG fallback for older trowsers */
+
 }
 .Viper-browserVer-msie8 .Viper-checkbox-switch:before {
   filter: alpha(opacity = 0);
@@ -1138,6 +1141,9 @@
   cursor: pointer;
   position: relative;
   transition: background-color 0.1s ease-out;
+}
+.Viper-selectionList li:last-child {
+  border-bottom: none;
 }
 .Viper-selectionList li:before {
   content: "";
