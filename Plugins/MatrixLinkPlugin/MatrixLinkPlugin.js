@@ -175,7 +175,7 @@
                 link.appendChild(document.createTextNode(' %asset_summary_' + assetid + '%'));
             }
 
-            this.viper.contentChanged(false, range);
+            this.viper.contentChanged(false, this.viper.getViperRange());
 
         },
 
