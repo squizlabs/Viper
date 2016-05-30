@@ -6,84 +6,53 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
 {
 
     /**
-     * Test editing the URL of the image.
+     * Test that you cannot edit the URL of the image once it has been inserted.
      *
      * @return void
      */
-    public function testEditingTheURLForAnImage()
+    public function testURLFieldCannotBeEdited()
     {
         // Using the inline toolbar
 
-        // Change URL for an image that has no alt and title tag
+        // Cannot change URL for an image that has no alt and title tag
         $this->useTest(1);
         $this->clickElement('img', 0);
         $this->clickInlineToolbarButton('image', 'active');
-        $this->clearFieldValue('URL');
-        $this->type($this->getTestURL('/ViperImagePlugin/Images/hero-shot.jpg'));
-        $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
-        $this->clickInlineToolbarButton('image', 'active-selected');
-        $this->assertHTMLMatch('<p>Image without alt or title %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt=""/></p><p>LABS is ORSM</p>');
+        $this->assertFalse($this->fieldExists('URL'));
 
-        // Change URL for an image that has alt and no title tag
+        // Cannot change URL for an image that has alt and no title tag
         $this->useTest(2);
         $this->clickElement('img', 0);
         $this->clickInlineToolbarButton('image', 'active');
-        $this->clearFieldValue('URL');
-        $this->type($this->getTestURL('/ViperImagePlugin/Images/hero-shot.jpg'));
-        $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
-        $this->clickInlineToolbarButton('image', 'active-selected');
-        $this->assertHTMLMatch('<p>Image with alt no title %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="testalt"/></p><p>LABS is ORSM</p>');
+        $this->assertFalse($this->fieldExists('URL'));
 
-        // Change URL for an image that has alt and title tag
+        // Cannot change URL for an image that has alt and title tag
         $this->useTest(3);
         $this->clickElement('img', 0);
         $this->clickInlineToolbarButton('image', 'active');
-        $this->clearFieldValue('URL');
-        $this->type($this->getTestURL('/ViperImagePlugin/Images/hero-shot.jpg'));
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->clickInlineToolbarButton('image', 'active-selected');
-        $this->assertHTMLMatch('<p>Image with alt and title %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="testalt" title="testtitle"/></p><p>LABS is ORSM</p>');
+        $this->assertFalse($this->fieldExists('URL'));
 
         // Using the top toolbar
 
-        // Change URL for an image that has no alt and title tag
+        // Cannot change URL for an image that has no alt and title tag
         $this->useTest(1);
         $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
-        $this->clearFieldValue('URL');
-        $this->type($this->getTestURL('/ViperImagePlugin/Images/hero-shot.jpg'));
-        $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
-        $this->checkPreviewImageSize();
-        $this->clickTopToolbarButton('image', 'active-selected');
-        $this->assertHTMLMatch('<p>Image without alt or title %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt=""/></p><p>LABS is ORSM</p>');
+        $this->assertFalse($this->fieldExists('URL'));
 
-        // Change URL for an image that has alt and no title tag
+        // Cannot change URL for an image that has alt and no title tag
         $this->useTest(2);
         $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
-        $this->clearFieldValue('URL');
-        $this->type($this->getTestURL('/ViperImagePlugin/Images/hero-shot.jpg'));
-        $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
-        $this->checkPreviewImageSize();
-        $this->clickTopToolbarButton('image', 'active-selected');
-        $this->assertHTMLMatch('<p>Image with alt no title %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="testalt"/></p><p>LABS is ORSM</p>');
+        $this->assertFalse($this->fieldExists('URL'));
 
-        // Change URL for an image that has alt and title tag
+        // Cannot change URL for an image that has alt and title tag
         $this->useTest(3);
         $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
-        $this->clearFieldValue('URL');
-        $this->type($this->getTestURL('/ViperImagePlugin/Images/hero-shot.jpg'));
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-        $this->checkPreviewImageSize();
-        $this->clickTopToolbarButton('image', 'active-selected');
-        $this->assertHTMLMatch('<p>Image with alt and title %1%</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="testalt" title="testtitle"/></p><p>LABS is ORSM</p>');
+        $this->assertFalse($this->fieldExists('URL'));
 
-    }//end testEditingTheURLForAnImage()
+    }//end testURLFieldCannotBeEdited()
 
 
     /**
@@ -193,7 +162,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->useTest(2);
         $this->clickElement('img', 0);
         $this->clickInlineToolbarButton('image', 'active');
-        $this->sikuli->keyDown('Key.TAB');
+        $this->clickField('Alt');
 
         // use backspace to delete the content for IE and Firefox
         for ($i = 1; $i <= 7; $i++) {
@@ -208,7 +177,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->useTest(2);
         $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
-        $this->sikuli->keyDown('Key.TAB');
+        $this->clickField('Alt');
 
         // use backspace to delete the content for IE and Firefox
         for ($i = 1; $i <= 7; $i++) {
@@ -303,8 +272,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->useTest(3);
         $this->clickElement('img', 0);
         $this->clickInlineToolbarButton('image', 'active');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->sikuli->keyDown('Key.TAB');
+        $this->clickField('Title');
 
         // use backspace to delete the content for IE and Firefox
         for ($i = 1; $i <= 9; $i++) {
@@ -319,8 +287,7 @@ class Viper_Tests_ViperImagePlugin_EditingImageUnitTest extends AbstractViperIma
         $this->useTest(3);
         $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->sikuli->keyDown('Key.TAB');
+        $this->clickField('Title');
 
         // use backspace to delete the content for IE and Firefox
         for ($i = 1; $i <= 9; $i++) {
