@@ -803,6 +803,9 @@
 
             this._selectedNode = selectedNode;
 
+            tools.getItem('ViperFormatPlugin:vitp:anchor:subSection').setActionButtonTitle(_('Insert Anchor'));
+            tools.getItem('ViperFormatPlugin:vitp:class:subSection').setActionButtonTitle(_('Apply Styles'));
+
             // Anchor and Class.
             if (selectedNode
                 && (selectedNode.nodeType === ViperUtil.ELEMENT_NODE
@@ -811,11 +814,13 @@
                 var attrId = this._getAttributeValue('id', selectedNode);
                 if (attrId) {
                     tools.setButtonActive('vitpAnchor');
+                    tools.getItem('ViperFormatPlugin:vitp:anchor:subSection').setActionButtonTitle(_('Update Anchor'));
                 }
 
                 var attrClass = this._getAttributeValue('class', selectedNode);
                 if (attrClass) {
                     tools.setButtonActive('vitpClass');
+                   tools.getItem('ViperFormatPlugin:vitp:class:subSection').setActionButtonTitle(_('Apply Styles'));
                 }
 
                 attrClass = this._getClassInitialValue(attrClass, selectedNode);
@@ -980,6 +985,9 @@
                     nodeSelection = formatElement;
                 }
 
+                tools.getItem('ViperFormatPlugin:vtp:anchorBubbleSubSection').setActionButtonTitle(_('Insert Anchor'));
+                tools.getItem('ViperFormatPlugin:vtp:classBubbleSubSection').setActionButtonTitle(_('Apply Styles'));
+
                 if (nodeSelection
                     || (range.collapsed === false
                     || (ViperUtil.isTag(startNode, 'br') === false
@@ -999,6 +1007,7 @@
                         tools.getItem(prefix + 'anchor:input').setValue(attrId);
                         if (attrId) {
                             tools.setButtonActive('anchor');
+                            tools.getItem('ViperFormatPlugin:vtp:anchorBubbleSubSection').setActionButtonTitle(_('Update Anchor'));
                         } else {
                             tools.setButtonInactive('anchor');
                         }
@@ -1009,6 +1018,7 @@
                         tools.getItem(prefix + 'class:input').setValue(attrClass);
                         if (originalAttrClass) {
                             tools.setButtonActive('class');
+                            tools.getItem('ViperFormatPlugin:vtp:classBubbleSubSection').setActionButtonTitle(_('Apply Styles'));
                         } else {
                             tools.setButtonInactive('class');
                         }

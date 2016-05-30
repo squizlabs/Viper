@@ -514,6 +514,10 @@
                 tools.setButtonInactive('ViperLangToolsPlugin:acronymButton');
                 tools.setButtonInactive('ViperLangToolsPlugin:langButton');
 
+                tools.getItem('VLTP:abbreviationSubSection').setActionButtonTitle(_('Add Abbreviation'));
+                tools.getItem('VLTP:acronymSubSection').setActionButtonTitle(_('Add Acronym'));
+                tools.getItem('VLTP:langSubSection').setActionButtonTitle(_('Add Language'));
+
                 for (var i = 0; i < c; i++) {
                     var element = self.getTagFromRange(range, tags[i]);
                     if (element) {
@@ -526,16 +530,18 @@
                             // Abbreviation.
                             tools.setButtonActive('ViperLangToolsPlugin:abbrButton');
                             self.viper.Tools.getItem('VLTP:abbrInput').setValue(element.getAttribute('title'));
+                            tools.getItem('VLTP:abbreviationSubSection').setActionButtonTitle(_('Update Abbreviation'));
                         } else if (ViperUtil.isTag(element, 'acronym') === true) {
-                            // Acronym.
                             tools.setButtonActive('ViperLangToolsPlugin:acronymButton');
                             self.viper.Tools.getItem('VLTP:acronymInput').setValue(element.getAttribute('title'));
+                            tools.getItem('VLTP:acronymSubSection').setActionButtonTitle(_('Update Acronym'));
                         }
 
                         if (ViperUtil.hasAttribute(element, 'lang') === true) {
                             // Lang.
                             tools.setButtonActive('ViperLangToolsPlugin:langButton');
                             self.viper.Tools.getItem('VLTP:langInput').setValue(element.getAttribute('lang'));
+                            tools.getItem('VLTP:langSubSection').setActionButtonTitle(_('Update Language'));
                         }
                     }//end if
                 }//end for
