@@ -54,11 +54,11 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
 
 
     /**
-     * Test inserting and then changing the URL for an image.
+     * Test that you cannot edit the URL for an image once it has been inserted.
      *
      * @return void
      */
-    public function testInsertingAndEditingTheUrlForAnImage()
+    public function testCannotEditUrlForAnImage()
     {
         $this->moveToKeyword(1, 'right');
 
@@ -70,17 +70,18 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
 
         $this->assertHTMLMatchNoHeaders('<table border="0" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1%<img src="%url%/ViperImagePlugin/Images/editing.png" alt="" /> FoX %2%</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%3%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        // Check inline toolbar
+        $this->clickElement('img', 0);
+        sleep(1);
+        $this->clickInlineToolbarButton('image', 'active');
+        $this->assertFalse($this->fieldExists('URL'));
+
+        // Check top toolbar
         $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
-        $this->clearFieldValue('URL');
-        $this->type('%url%/ViperImagePlugin/Images/editing.png');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton('image', 'active-selected');
-        $this->clickKeyword(3);
+        $this->assertFalse($this->fieldExists('URL'));
 
-        $this->assertHTMLMatchNoHeaders('<table border="0" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1%<img src="%url%/ViperImagePlugin/Images/editing.png" alt="" /> FoX %2%</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%3%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
-
-    }//end testInsertingAndEditingTheUrlForAnImage()
+    }//end testCannotEditUrlForAnImage()
 
 
     /**
@@ -159,7 +160,7 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
 
         $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
-        $this->sikuli->keyDown('Key.TAB');
+        $this->clickField('Alt');
 
         // use backspace to delete the content for IE and Firefox
         for ($i = 1; $i <= 7; $i++) {
