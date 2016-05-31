@@ -192,8 +192,8 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
         $this->sikuli->keyDown('Key.ENTER');
         $this->clickElement('img', 0);
 
-        $this->findImage('ImageHandle-sw', '.Viper-image-handle-sw', 0, true);
-        $this->findImage('ImageHandle-se', '.Viper-image-handle-se', 0, true);
+        $this->findImage('ImageHandle-bottomLeft', '.ViperImagePlugin-resizeBox-handle-bottomLeft', 0, true);
+        $this->findImage('ImageHandle-bottomRight', '.ViperImagePlugin-resizeBox-handle-bottomRight', 0, true);
 
     }//end testImageResizeHandles()
 
@@ -334,7 +334,7 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
         $this->sikuli->keyDown('Key.ENTER');
 
         $this->clickElement('img', 0);
-        sleep(1);  
+        sleep(1);
         $this->clickInlineToolbarButton('image', 'active');
         $this->clickField('Image is decorative');
         $this->sikuli->keyDown('Key.ENTER');
