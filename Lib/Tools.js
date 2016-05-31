@@ -1716,18 +1716,27 @@
                             var subSection    = this._subSections[this._activeSection];
                             var inputElements = ViperUtil.getTag('input[type=text], textarea', subSection);
                             if (inputElements.length > 0) {
-                                inputElements[0].focus();
-                                ViperUtil.removeClass(inputElements[0].parentNode.parentNode.parentNode, 'Viper-active');
+                                for (var i = 0; i < inputElements.length; i++) {
+                                    if (ViperUtil.getElementWidth(inputElements[i]) === 0) {
+                                        // Element is hidden.
+                                        continue;
+                                    }
 
-                                if (ViperUtil.isBrowser('msie') === false) {
-                                    tools.viper.highlightSelection();
-                                } else {
-                                    setTimeout(
-                                        function() {
-                                            inputElements[0].focus();
-                                        },
-                                        10
-                                    );
+                                    inputElements[i].focus();
+                                    ViperUtil.removeClass(inputElements[i].parentNode.parentNode.parentNode, 'Viper-active');
+
+                                    if (ViperUtil.isBrowser('msie') === false) {
+                                        tools.viper.highlightSelection();
+                                    } else {
+                                        setTimeout(
+                                            function() {
+                                                inputElements[i].focus();
+                                            },
+                                            10
+                                        );
+                                    }
+
+                                    break;
                                 }
                             }
                         } catch (e) {

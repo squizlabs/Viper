@@ -397,10 +397,12 @@
                             setTimeout(function() {
                                 // Give focus back to the form field.
                                 var inputElements = ViperUtil.getTag('input[type=text], textarea', subSection.form);
-                                if (inputElements.length > 0) {
-                                    try {
-                                        inputElements[0].focus();
-                                    } catch(e) {}
+                                for (var i = 0; i < inputElements.length; i++) {
+                                    if (ViperUtil.getElementWidth(inputElements[i]) !== 0) {
+                                        try {
+                                            inputElements[i].focus();
+                                        } catch(e) {}
+                                    }
                                 }
                             }, 50);
                         } else {
@@ -652,12 +654,16 @@
             this._activeBubble = bubbleid;
 
             var inputElements = ViperUtil.getTag('input[type=text], textarea', bubbleElem);
-            if (inputElements.length > 0) {
-                try {
-                    setTimeout(function() {
-                        inputElements[0].focus();
-                    }, 10);
-                } catch(e) {}
+            for (var i = 0; i < inputElements.length; i++) {
+                if (ViperUtil.getElementWidth(inputElements[i]) !== 0) {
+                    try {
+                        setTimeout(function() {
+                            inputElements[i].focus();
+                        }, 10);
+                    } catch(e) {}
+
+                    break;
+                }
             }
 
             var inlineToolbarPlugin = this.viper.getPluginManager().getPlugin('ViperInlineToolbarPlugin');
