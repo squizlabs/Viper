@@ -1,9 +1,18 @@
 <?php
+require_once 'AbstractViperLinkPluginUnitTest.php';
 
-require_once 'AbstractViperUnitTest.php';
-
-class Viper_Tests_ViperLinkPlugin_CreateLinkUnitTest extends AbstractViperUnitTest
+class Viper_Tests_ViperLinkPlugin_CreateLinkUnitTest extends AbstractViperLinkPluginUnitTest
 {
+
+    private function _getApplyButton($update=false)
+    {
+        if ($update === true) {
+            return 'Update Link';
+        }
+
+        return 'Insert Link';
+
+    }//end _getButton()
 
 
     /**
@@ -26,7 +35,7 @@ class Viper_Tests_ViperLinkPlugin_CreateLinkUnitTest extends AbstractViperUnitTe
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->applyChanges('inline', 'insert');
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test test <a href="http://www.squizlabs.com">%2%</a></p>');
 
         // Using the inline toolbar with complicated link
@@ -42,7 +51,7 @@ class Viper_Tests_ViperLinkPlugin_CreateLinkUnitTest extends AbstractViperUnitTe
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('link');
         $this->type('workspace%3A%2F%2FSpacesStore%2F861ae017%2D59a7%2D4cef%2D989d%2D279cfe6a2949');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->applyChanges('inline', 'insert');
         $this->assertHTMLMatch('<p><a href="workspace%3A%2F%2FSpacesStore%2F861ae017%2D59a7%2D4cef%2D989d%2D279cfe6a2949">%1%</a> link test test <a href="workspace%3A%2F%2FSpacesStore%2F861ae017%2D59a7%2D4cef%2D989d%2D279cfe6a2949">%2%</a></p>');
 
         // Using the top toolbar
@@ -58,7 +67,7 @@ class Viper_Tests_ViperLinkPlugin_CreateLinkUnitTest extends AbstractViperUnitTe
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->applyChanges('top', 'insert');
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com">%1%</a> link test test <a href="http://www.squizlabs.com">%2%</a></p>');
 
         // Using the top toolbar with complicated link
@@ -74,7 +83,7 @@ class Viper_Tests_ViperLinkPlugin_CreateLinkUnitTest extends AbstractViperUnitTe
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('link');
         $this->type('workspace%3A%2F%2FSpacesStore%2F861ae017%2D59a7%2D4cef%2D989d%2D279cfe6a2949');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->applyChanges('top', 'insert');
         $this->assertHTMLMatch('<p><a href="workspace%3A%2F%2FSpacesStore%2F861ae017%2D59a7%2D4cef%2D989d%2D279cfe6a2949">%1%</a> link test test <a href="workspace%3A%2F%2FSpacesStore%2F861ae017%2D59a7%2D4cef%2D989d%2D279cfe6a2949">%2%</a></p>');
 
     }//end testCreateLink()

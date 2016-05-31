@@ -1,8 +1,8 @@
 <?php
 
-require_once 'AbstractViperUnitTest.php';
+require_once 'AbstractViperLinkPluginUnitTest.php';
 
-class Viper_Tests_ViperLinkPlugin_MailToLinkUnitTest extends AbstractViperUnitTest
+class Viper_Tests_ViperLinkPlugin_MailToLinkUnitTest extends AbstractViperLinkPluginUnitTest
 {
     /**
      * Test creating a mail to link without a subject.
@@ -17,7 +17,7 @@ class Viper_Tests_ViperLinkPlugin_MailToLinkUnitTest extends AbstractViperUnitTe
         $this->clickInlineToolbarButton('link');
         $this->assertTrue($this->inlineToolbarButtonExists('link', 'selected'), 'Toolbar button icon is not correct');
         $this->type('labs@squiz.com.au');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->applyChanges('inline', 'insert');
         $this->assertHTMLMatch('<p>Content for mailto link test <a href="mailto:labs@squiz.com.au">%1%</a> more content %2%</p>');
 
          // Using the top toolbar
@@ -26,7 +26,7 @@ class Viper_Tests_ViperLinkPlugin_MailToLinkUnitTest extends AbstractViperUnitTe
         $this->clickTopToolbarButton('link');
         $this->assertTrue($this->topToolbarButtonExists('link', 'selected'), 'Toolbar button icon is not correct');
         $this->type('labs@squiz.com.au');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->applyChanges('top', 'insert');
         $this->assertHTMLMatch('<p>Content for mailto link test <a href="mailto:labs@squiz.com.au">%1%</a> more content %2%</p>');
 
     }//end testCreatingAMailToLink()
@@ -193,7 +193,7 @@ class Viper_Tests_ViperLinkPlugin_MailToLinkUnitTest extends AbstractViperUnitTe
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('linkRemove');
         $this->assertHTMLMatch('<p>Content with a mailto link %1%</p>');
-        
+
         // When you have the link fields open in the inline toolbar
         $this->useTest(3);
         $this->selectKeyword(1);
