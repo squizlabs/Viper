@@ -1,8 +1,8 @@
 <?php
 
-require_once 'AbstractViperUnitTest.php';
+require_once 'AbstractFormatsUnitTest.php';
 
-class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperUnitTest
+class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractFormatsUnitTest
 {
 
 
@@ -684,7 +684,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
 
         // Using the top toolbar
         $this->useTest(1);
-        
+
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('cssClass');

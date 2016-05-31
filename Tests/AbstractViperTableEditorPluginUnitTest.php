@@ -9,6 +9,34 @@ abstract class AbstractViperTableEditorPluginUnitTest extends AbstractViperUnitT
 {
 
     /**
+     * Returns the Apply Changes button text.
+     *
+     * @return array
+     */
+    protected function getButtonText($name, $toolbar=null)
+    {
+        switch ($name) {
+            case 'insertStyle':
+            case 'updateStyle':
+                $name = 'Apply Styles';
+            break;
+
+            case 'insertAnchor':
+                $name = 'Insert Anchor';
+            break;
+
+            case 'updateAnchor':
+                $name = 'Update Anchor';
+            break;
+
+        }
+
+        return $name;
+
+    }//end getButtonText()
+
+
+    /**
      * Creates a blank table with the default (top) headers.
      *
      * @param integer $keyword      The keyword to select in the content.
