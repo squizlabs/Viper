@@ -279,6 +279,9 @@
                     isActive: function() {
                         return ViperUtil.hasClass(button, 'Viper-active');
                     },
+                    setContent: function (content) {
+                        ViperUtil.setHtml(button, content);
+                    },
                     _disabled: disabled
                 }
             );
@@ -1585,7 +1588,10 @@
                                 element: subSection,
                                 form: form,
                                 _onOpenCallback: onOpenCallback,
-                                _onCloseCallback: onCloseCallback
+                                _onCloseCallback: onCloseCallback,
+                                setActionButtonTitle: function (title) {
+                                    self.viper.Tools.getItem(id + '-applyButton').setContent(title);
+                                }
                             }
                         );
 

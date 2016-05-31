@@ -1,8 +1,8 @@
 <?php
 
-require_once 'AbstractViperUnitTest.php';
+require_once 'AbstractFormatsUnitTest.php';
 
-class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractViperUnitTest
+class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractFormatsUnitTest
 {
 
 
@@ -21,7 +21,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li style="text-align: left;">item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
-        
+
         // Remove left justify for unordered list item
         $this->moveToKeyword(1);
         sleep(1);
@@ -40,7 +40,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         sleep(1);
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li style="text-align: left;">item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
-        
+
         // Remove left justify for ordered list item
         $this->moveToKeyword(2);
         sleep(1);
@@ -59,7 +59,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         sleep(1);
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li style="text-align: center;">item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Active center justify icon does not appear in the top toolbar');
-        
+
         // Remove center justify for unordered list item
         $this->moveToKeyword(1);
         sleep(1);
@@ -78,7 +78,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         sleep(1);
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li style="text-align: center;">item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Active center justify icon does not appear in the top toolbar');
-        
+
         // Remove center justify for ordered list item
         $this->moveToKeyword(2);
         sleep(1);
@@ -97,7 +97,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         sleep(1);
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li style="text-align: right;">item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Active right justify icon does not appear in the top toolbar');
-        
+
         // Remove right justify for unordered list item
         $this->moveToKeyword(1);
         sleep(1);
@@ -116,7 +116,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         sleep(1);
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li style="text-align: right;">item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Active right justify icon does not appear in the top toolbar');
-        
+
         // Remove center justify for ordered list item
         $this->moveToKeyword(2);
         sleep(1);
@@ -135,7 +135,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         sleep(1);
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li style="text-align: justify;">item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Active block justify icon does not appear in the top toolbar');
-        
+
         // Remove block justify for unordered list item
         $this->moveToKeyword(1);
         sleep(1);
@@ -154,7 +154,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         sleep(1);
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li style="text-align: justify;">item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Active right justify icon does not appear in the top toolbar');
-        
+
         // Remove block justify for ordered list item
         $this->moveToKeyword(2);
         sleep(1);
@@ -183,7 +183,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li style="text-align: left;">item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
-        
+
         // Remove left justify for unordered list item
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
@@ -198,7 +198,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li style="text-align: left;">item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
-        
+
         // Remove left justify for ordered list item
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
@@ -213,7 +213,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         $this->clickTopToolbarButton('justifyCenter');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li style="text-align: center;">item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Active center justify icon does not appear in the top toolbar');
-        
+
         // Remove center justify for unordered list item
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
@@ -228,7 +228,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         $this->clickTopToolbarButton('justifyCenter');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li style="text-align: center;">item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Active center justify icon does not appear in the top toolbar');
-        
+
         // Remove center justify for ordered list item
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
@@ -243,7 +243,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         $this->clickTopToolbarButton('justifyRight');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li style="text-align: right;">item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Active right justify icon does not appear in the top toolbar');
-        
+
         // Remove right justify for unordered list item
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
@@ -258,7 +258,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         $this->clickTopToolbarButton('justifyRight');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li style="text-align: right;">item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Active right justify icon does not appear in the top toolbar');
-        
+
         // Remove center justify for ordered list item
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
@@ -273,7 +273,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         $this->clickTopToolbarButton('justifyBlock');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li style="text-align: justify;">item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Active block justify icon does not appear in the top toolbar');
-        
+
         // Remove block justify for unordered list item
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(1);
@@ -288,7 +288,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         $this->clickTopToolbarButton('justifyBlock');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li style="text-align: justify;">item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Active right justify icon does not appear in the top toolbar');
-        
+
         // Remove block justify for ordered list item
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(1);
@@ -315,7 +315,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul style="text-align: left;"><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
-        
+
         // Remove left justify for unordered list
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
@@ -330,7 +330,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol style="text-align: left;"><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
-        
+
         // Remove left justify for ordered list
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
@@ -345,7 +345,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         $this->clickTopToolbarButton('justifyCenter');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul style="text-align: center;"><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Active center justify icon does not appear in the top toolbar');
-        
+
         // Remove center justify for unordered list
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
@@ -360,7 +360,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         $this->clickTopToolbarButton('justifyCenter');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol style="text-align: center;"><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Active center justify icon does not appear in the top toolbar');
-        
+
         // Remove center justify for ordered list
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
@@ -375,7 +375,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         $this->clickTopToolbarButton('justifyRight');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul style="text-align: right;"><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Active right justify icon does not appear in the top toolbar');
-        
+
         // Remove right justify for unordered list
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
@@ -390,7 +390,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         $this->clickTopToolbarButton('justifyRight');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol style="text-align: right;"><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Active right justify icon does not appear in the top toolbar');
-        
+
         // Remove center justify for ordered list
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
@@ -405,7 +405,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         $this->clickTopToolbarButton('justifyBlock');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul style="text-align: justify;"><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Active block justify icon does not appear in the top toolbar');
-        
+
         // Remove block justify for unordered list
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
@@ -420,7 +420,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         $this->clickTopToolbarButton('justifyBlock');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol style="text-align: justify;"><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Active right justify icon does not appear in the top toolbar');
-        
+
         // Remove block justify for ordered list
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
@@ -447,7 +447,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul style="text-align: left;"><li>item 1</li><li style="text-align: left;">item 2 %1%</li><li style="text-align: center;">item 3</li><li style="text-align: right;">item 4</li><li style="text-align: justify;">item 5</li></ul><p>Ordered list:</p><ol><li>item 1</li><li style="text-align: left;">item 2 %2%</li><li style="text-align: center;">item 3</li><li style="text-align: right;">item 4</li><li style="text-align: justify;">item 5</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
-        
+
         // Remove left justify for unordered list
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
@@ -462,7 +462,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         $this->clickTopToolbarButton('justifyLeft');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li style="text-align: left;">item 2 %1%</li><li style="text-align: center;">item 3</li><li style="text-align: right;">item 4</li><li style="text-align: justify;">item 5</li></ul><p>Ordered list:</p><ol style="text-align: left;"><li>item 1</li><li style="text-align: left;">item 2 %2%</li><li style="text-align: center;">item 3</li><li style="text-align: right;">item 4</li><li style="text-align: justify;">item 5</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyLeft', 'active'), 'Active left justify icon does not appear in the top toolbar');
-        
+
         // Remove left justify for ordered list
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
@@ -477,7 +477,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         $this->clickTopToolbarButton('justifyCenter');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul style="text-align: center;"><li>item 1</li><li style="text-align: left;">item 2 %1%</li><li style="text-align: center;">item 3</li><li style="text-align: right;">item 4</li><li style="text-align: justify;">item 5</li></ul><p>Ordered list:</p><ol><li>item 1</li><li style="text-align: left;">item 2 %2%</li><li style="text-align: center;">item 3</li><li style="text-align: right;">item 4</li><li style="text-align: justify;">item 5</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Active center justify icon does not appear in the top toolbar');
-        
+
         // Remove center justify for unordered list
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
@@ -492,7 +492,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         $this->clickTopToolbarButton('justifyCenter');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li style="text-align: left;">item 2 %1%</li><li style="text-align: center;">item 3</li><li style="text-align: right;">item 4</li><li style="text-align: justify;">item 5</li></ul><p>Ordered list:</p><ol style="text-align: center;"><li>item 1</li><li style="text-align: left;">item 2 %2%</li><li style="text-align: center;">item 3</li><li style="text-align: right;">item 4</li><li style="text-align: justify;">item 5</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyCenter', 'active'), 'Active center justify icon does not appear in the top toolbar');
-        
+
         // Remove center justify for ordered list
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
@@ -507,7 +507,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         $this->clickTopToolbarButton('justifyRight');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul style="text-align: right;"><li>item 1</li><li style="text-align: left;">item 2 %1%</li><li style="text-align: center;">item 3</li><li style="text-align: right;">item 4</li><li style="text-align: justify;">item 5</li></ul><p>Ordered list:</p><ol><li>item 1</li><li style="text-align: left;">item 2 %2%</li><li style="text-align: center;">item 3</li><li style="text-align: right;">item 4</li><li style="text-align: justify;">item 5</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Active right justify icon does not appear in the top toolbar');
-        
+
         // Remove right justify for unordered list
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
@@ -522,7 +522,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         $this->clickTopToolbarButton('justifyRight');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li style="text-align: left;">item 2 %1%</li><li style="text-align: center;">item 3</li><li style="text-align: right;">item 4</li><li style="text-align: justify;">item 5</li></ul><p>Ordered list:</p><ol style="text-align: right;"><li>item 1</li><li style="text-align: left;">item 2 %2%</li><li style="text-align: center;">item 3</li><li style="text-align: right;">item 4</li><li style="text-align: justify;">item 5</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyRight', 'active'), 'Active right justify icon does not appear in the top toolbar');
-        
+
         // Remove right justify for ordered list
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
@@ -537,7 +537,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         $this->clickTopToolbarButton('justifyBlock');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul style="text-align: justify;"><li>item 1</li><li style="text-align: left;">item 2 %1%</li><li style="text-align: center;">item 3</li><li style="text-align: right;">item 4</li><li style="text-align: justify;">item 5</li></ul><p>Ordered list:</p><ol><li>item 1</li><li style="text-align: left;">item 2 %2%</li><li style="text-align: center;">item 3</li><li style="text-align: right;">item 4</li><li style="text-align: justify;">item 5</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Active block justify icon does not appear in the top toolbar');
-        
+
         // Remove block justify for unordered list
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(0);
@@ -552,7 +552,7 @@ class Viper_Tests_ViperFormatPlugin_AlignmentInListsUnitTest extends AbstractVip
         $this->clickTopToolbarButton('justifyBlock');
         $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li style="text-align: left;">item 2 %1%</li><li style="text-align: center;">item 3</li><li style="text-align: right;">item 4</li><li style="text-align: justify;">item 5</li></ul><p>Ordered list:</p><ol style="text-align: justify;"><li>item 1</li><li style="text-align: left;">item 2 %2%</li><li style="text-align: center;">item 3</li><li style="text-align: right;">item 4</li><li style="text-align: justify;">item 5</li></ol>');
         $this->assertTrue($this->topToolbarButtonExists('justifyBlock', 'active'), 'Active right justify icon does not appear in the top toolbar');
-        
+
         // Remove block justify for ordered list
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);

@@ -288,7 +288,10 @@
                     self.viper.Tools.addItem(id, {
                         type: 'VTPSubSection',
                         element: wrapper,
-                        form: form
+                        form: form,
+                        setActionButtonTitle: function (title) {
+                            self.viper.Tools.getItem(id + '-applyButton').setContent(title);
+                        }
                     });
 
                     return element;

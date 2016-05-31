@@ -818,6 +818,7 @@
             var subject     = '';
             var newWindow   = false;
             var isEmailLink = false;
+            var tools       = this.viper.Tools;
 
             if (link) {
                 href  = this.viper.getAttribute(link, 'href');
@@ -839,6 +840,10 @@
                         href = href.replace(/\s*mailto:\s*/i, '');
                     }
                 }
+
+                tools.getItem('ViperLinkPlugin:vtp:linkSubSection').setActionButtonTitle(_('Update Link'));
+            } else {
+                tools.getItem('ViperLinkPlugin:vtp:linkSubSection').setActionButtonTitle(_('Insert Link'));
             }
 
             var main = this.viper.Tools.getItem('ViperLinkPlugin:vtp:link').element;
@@ -850,7 +855,6 @@
                 ViperUtil.removeClass(main, 'Viper-emailLink');
             }
 
-            var tools = this.viper.Tools;
             tools.getItem('ViperLinkPlugin:vtp:url').setValue(href || '');
             tools.getItem('ViperLinkPlugin:vtp:title').setValue(title || '');
             tools.getItem('ViperLinkPlugin:vtp:subject').setValue(decodeURIComponent(subject) || '');
@@ -864,6 +868,7 @@
             var subject     = '';
             var newWindow   = false;
             var isEmailLink = false;
+            var tools       = this.viper.Tools;
 
             if (link) {
                 href  = this.viper.getAttribute(link, 'href');
@@ -885,6 +890,10 @@
                         href = href.replace(/\s*mailto:\s*/i, '');
                     }
                 }
+
+                tools.getItem('ViperLinkPlugin:vitp:link').setActionButtonTitle(_('Update Link'));
+            } else {
+                tools.getItem('ViperLinkPlugin:vitp:link').setActionButtonTitle(_('Insert Link'));
             }
 
             var main = this.viper.Tools.getItem('ViperLinkPlugin:vitp:link').element;
@@ -896,7 +905,6 @@
                 ViperUtil.removeClass(main, 'Viper-emailLink');
             }
 
-            var tools = this.viper.Tools;
             tools.getItem('ViperLinkPlugin:vitp:url').setValue(href || '');
             tools.getItem('ViperLinkPlugin:vitp:title').setValue(title || '');
             tools.getItem('ViperLinkPlugin:vitp:subject').setValue(decodeURIComponent(subject) || '');

@@ -1,8 +1,8 @@
 <?php
 
-require_once 'AbstractViperUnitTest.php';
+require_once 'AbstractFormatsUnitTest.php';
 
-class Viper_Tests_ViperFormatPlugin_AnchorInListsUnitTest extends AbstractViperUnitTest
+class Viper_Tests_ViperFormatPlugin_AnchorInListsUnitTest extends AbstractFormatsUnitTest
 {
     /**
      * Test that applying and removing an anchor to a word in a list item.

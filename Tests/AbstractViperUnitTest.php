@@ -1416,6 +1416,70 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
 
     /**
+     * Clicks the specified apply changes button in given toolbar.
+     *
+     * @param string $toolbar The id of the toolbar.
+     * @param string $button  The button to click.
+     *
+     * @return void
+     */
+    protected function applyChanges($toolbar, $button)
+    {
+        switch ($toolbar) {
+            case 'inline':
+                $this->clickInlineToolbarButton($this->getButtonText($button, $toolbar), NULL, TRUE);
+            break;
+
+            case 'top':
+            default:
+                $this->clickTopToolbarButton($this->getButtonText($button, $toolbar), NULL, TRUE);
+            break;
+        }
+
+    }//end applyChanges()
+
+
+    /**
+     * Returns TRUE if the specified apply button exists in given toolbar.
+     *
+     * @param string $toolbar The id of the toolbar.
+     * @param string $button  The button to click.
+     *
+     * @return boolean
+     */
+    protected function applyButtonExists($toolbar, $button, $state=NULL)
+    {
+        $exists = FALSE;
+        switch ($toolbar) {
+            case 'inline':
+                $exists = $this->inlineToolbarButtonExists($this->getButtonText($button, $toolbar), $state, TRUE);
+            break;
+
+            case 'top':
+            default:
+                $exists = $this->topToolbarButtonExists($this->getButtonText($button, $toolbar), $state, TRUE);
+            break;
+        }
+
+        return $exists;
+
+    }//end applyButtonExists()
+
+
+    /**
+     * Returns the Apply Changes button text.
+     *
+     * @return array
+     */
+    protected function getButtonText($name, $toolbar=null)
+    {
+        $name = 'Apply Changes';
+        return $name;
+
+    }//end getButtonText()
+
+
+    /**
      * Clicks the specified button icon in the Inline Toolbar.
      *
      * @param string  $buttonIcon The name of the button.
@@ -1510,7 +1574,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 } else {
                     // Its harder for Sikuli to match a text button so use lower similarity.
                     try {
-                        $match = $this->sikuli->find($buttonObj, $region, 0.7);
+                        $match = $this->sikuli->find($buttonObj, $region, 0.9);
                     } catch (Exception $e) {
                         // Try to find it again without the image.
                         $rect  = $this->_getTextButtonRectangle($buttonIcon, $state, $location);

@@ -1,8 +1,8 @@
 <?php
 
-require_once 'AbstractViperUnitTest.php';
+require_once 'AbstractViperLinkPluginUnitTest.php';
 
-class Viper_Tests_ViperLinkPlugin_EditingLinkUnitTest extends AbstractViperUnitTest
+class Viper_Tests_ViperLinkPlugin_EditingLinkUnitTest extends AbstractViperLinkPluginUnitTest
 {
 
     /**
@@ -18,7 +18,7 @@ class Viper_Tests_ViperLinkPlugin_EditingLinkUnitTest extends AbstractViperUnitT
         $this->clickInlineToolbarButton('link', 'active');
         $this->clearFieldValue('URL');
         $this->type('http://www.google.com');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->applyChanges('inline', 'insert');
         $this->assertHTMLMatch('<p>Link in the content <a href="http://www.google.com">%1%</a> for testing</p>');
 
         // Using the top toolbar
@@ -27,7 +27,7 @@ class Viper_Tests_ViperLinkPlugin_EditingLinkUnitTest extends AbstractViperUnitT
         $this->clickTopToolbarButton('link', 'active');
         $this->clearFieldValue('URL');
         $this->type('http://www.google.com');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->applyChanges('inline', 'update');
         $this->assertHTMLMatch('<p>Link in the content <a href="http://www.google.com">%1%</a> for testing</p>');
 
     }//end testEditingTheURLOfTheLink()
@@ -53,7 +53,7 @@ class Viper_Tests_ViperLinkPlugin_EditingLinkUnitTest extends AbstractViperUnitT
         $this->clickInlineToolbarButton('link', 'active');
         $this->clickField('Title');
         $this->type('abc');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->applyChanges('inline', 'update');
         $this->assertHTMLMatch('<p>Link in the content <a href="http://www.squizlabs.com" title="titleabc">%1%</a> for testing</p>');
 
         // Using the top toolbar
@@ -69,7 +69,7 @@ class Viper_Tests_ViperLinkPlugin_EditingLinkUnitTest extends AbstractViperUnitT
         $this->clickTopToolbarButton('link', 'active');
         $this->clickField('Title');
         $this->type('abc');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->applyChanges('top', 'update');
         $this->assertHTMLMatch('<p>Link in the content <a href="http://www.squizlabs.com" title="titleabc">%1%</a> for testing</p>');
 
     }//end testAddingAndEditingTheTitleOfLink()
@@ -153,8 +153,8 @@ class Viper_Tests_ViperLinkPlugin_EditingLinkUnitTest extends AbstractViperUnitT
         }
 
         $this->type(' modified');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-
+        $this->applyChanges('inline', 'update');
+return;
         $this->assertHTMLMatch('<p>Linked<a href="test link modified content" title="test-title">%1% test content %2%</a> for testing</p>');
 
         // Test using top toolbar
@@ -168,7 +168,7 @@ class Viper_Tests_ViperLinkPlugin_EditingLinkUnitTest extends AbstractViperUnitT
         }
 
         $this->type(' modified');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->applyChanges('top', 'update');
 
         $this->assertHTMLMatch('<p>Linked<a href="test link modified content" title="test-title">%1% test content %2%</a> for testing</p>');
 

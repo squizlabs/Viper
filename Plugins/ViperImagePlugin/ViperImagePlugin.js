@@ -638,11 +638,15 @@
                 // Hide URL field.
                 this.hideURLField(toolbarPrefix);
 
+                tools.getItem(toolbarPrefix + ':bubbleSubSection').setActionButtonTitle(_('Update Image'));
+
                 // Update preview pane.
                 this.updateImagePreview(src);
             } else {
                 // Image is being inserted, show the URL field.
                 this.showURLField(toolbarPrefix);
+
+                tools.getItem(toolbarPrefix + ':bubbleSubSection').setActionButtonTitle(_('Insert Image'));
 
                 tools.enableButton('image');
                 tools.setButtonInactive('image');
@@ -698,10 +702,10 @@
 
             // Image Details.
             var subContent = this._getToolbarContents(idPrefix);
-            toolbar.makeSubSection(idPrefix + '-infoSubsection', subContent);
+            toolbar.makeSubSection(idPrefix + ':bubbleSubSection', subContent);
             var imageButton = tools.createButton('vitpImage', '', _('Toggle Image Options'), 'Viper-image', null);
-            toolbar.setSubSectionButton('vitpImage', idPrefix + '-infoSubsection');
-            toolbar.setSubSectionAction(idPrefix + '-infoSubsection', function() {
+            toolbar.setSubSectionButton('vitpImage', idPrefix + ':bubbleSubSection');
+            toolbar.setSubSectionAction(idPrefix + ':bubbleSubSection', function() {
                 self._setImageAttributes(idPrefix);
             }, [idPrefix + ':urlInput', idPrefix + ':altInput', idPrefix + ':titleInput', idPrefix + ':isDecorative']);
 

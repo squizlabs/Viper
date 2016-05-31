@@ -1,8 +1,8 @@
 <?php
 
-require_once 'AbstractViperUnitTest.php';
+require_once 'AbstractViperLinkPluginUnitTest.php';
 
-class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitTest
+class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperLinkPluginUnitTest
 {
 
 
@@ -609,7 +609,7 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperUnitT
      */
     public function testRemovingLinksAndClickIntoTable()
     {
-        
+
         // Test remove link using inline toolbar
         $this->useTest(1);
         $this->selectKeyword(1);

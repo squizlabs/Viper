@@ -1,8 +1,8 @@
 <?php
 
-require_once 'AbstractViperUnitTest.php';
+require_once 'AbstractFormatsUnitTest.php';
 
-class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
+class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractFormatsUnitTest
 {
     /**
      * Test that applying and removing an anchor to a word.
@@ -258,7 +258,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<p>test content %1% more test content %2%</p>');
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<p id="test">test content %1% more test content %2%</p>');
-       
+
     }//end testUndoAndRedoForAnchors()
 
 
@@ -387,7 +387,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.CMD + v');
-        
+
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'), 'Class icon should be disabled in the top toolbar.');
 
     }//end testAnchorIconDisabledWhenCopyParagraph()
@@ -653,7 +653,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->type('-modified');
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>test content <span id="modified-test_title-modified">%1% %3%</span> %2%</p>');;
-        
+
     }//end testAnchorFieldCanBeModified()
 
 
