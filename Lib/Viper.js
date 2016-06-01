@@ -1194,6 +1194,10 @@
             range = range || this.getViperRange();
 
             var nodeSelection = range.getNodeSelection();
+            if (nodeSelection === this.getViperElement()) {
+                nodeSelection = null;
+            }
+
             var node          = this.fireCallbacks('Viper:getNodeSelection', {range: range});
 
             if (node) {
