@@ -2045,15 +2045,9 @@
                             this._viper.contentChanged();
                             return false;
                         } else if (ViperUtil.isStubElement(lastChild) === true) {
+                            this._viper.moveCaretAway(lastChild, true);
                             // For stub elements get the previous container.
-                            textNode = range.getPreviousContainer(lastChild);
                             ViperUtil.remove(lastChild);
-                            if (textNode) {
-                                range.setStart(textNode, textNode.data.length);
-                                range.collapse(true);
-                                ViperSelection.addRange(range);
-                            }
-
                             this._viper.contentChanged();
                             return false;
                         } else if (lastChild.nodeType === ViperUtil.ELEMENT_NODE) {
@@ -2784,6 +2778,14 @@
                     } else if (ViperUtil.isStubElement(startNode.nextSibling) === true
                         && (ViperUtil.isTag(startNode.nextSibling, 'br') === false || startNode.nextSibling.nextSibling)
                     ) {
+                        if (this._viper.getDefaultBlockTag() === '') {
+                            // Check if the next next element is stub, if yes remove it..
+                            if (ViperUtil.isStubElement(startNode.nextSibling.nextSibling) === true) {
+                                ViperUtil.remove(startNode.nextSibling.nextSibling);
+                                this._viper.contentChanged();console.info(11);
+                                return false;
+                            }
+                        }
                         // If the next sibling is a BR but its not the last node then remove.
                         ViperUtil.remove(startNode.nextSibling);
                         this._viper.contentChanged();

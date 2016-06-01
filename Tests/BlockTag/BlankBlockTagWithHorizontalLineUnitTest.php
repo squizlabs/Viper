@@ -76,7 +76,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithHorizontalLineUnitTest extends Abstr
         $this->useTest(4);
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('Test content %1% more test content');
+        $this->assertHTMLMatch('Test content %1%<br/> more test content');
 
         $this->useTest(5);
         $this->moveToKeyword(1, 'right');
@@ -94,7 +94,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithHorizontalLineUnitTest extends Abstr
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('Test content %1% more test content');
+        $this->assertHTMLMatch('Test content %1%<br /> more test content');
 
         $this->useTest(5);
         $this->moveToKeyword(1, 'right');
