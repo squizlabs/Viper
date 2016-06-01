@@ -233,6 +233,7 @@
                         if (range.startContainer.nextSibling
                             && ViperUtil.isText(range.startContainer.nextSibling) === false
                             && ViperUtil.isStubElement(range.startContainer.nextSibling) === false
+                            && ViperUtil.isBlockElement(range.startContainer.nextSibling) === false
                         ) {
                             // At the end of a text node with element sibling.. Insert the text to the start of the
                             // next sibling.
