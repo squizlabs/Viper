@@ -514,9 +514,9 @@
                 tools.setButtonInactive('ViperLangToolsPlugin:acronymButton');
                 tools.setButtonInactive('ViperLangToolsPlugin:langButton');
 
-                tools.getItem('VLTP:abbreviationSubSection').setActionButtonTitle(_('Add Abbreviation'));
-                tools.getItem('VLTP:acronymSubSection').setActionButtonTitle(_('Add Acronym'));
-                tools.getItem('VLTP:langSubSection').setActionButtonTitle(_('Add Language'));
+                tools.getItem('VLTP:abbreviationSubSection').setActionButtonTitle(_('Insert Abbreviation'));
+                tools.getItem('VLTP:acronymSubSection').setActionButtonTitle(_('Insert Acronym'));
+                tools.getItem('VLTP:langSubSection').setActionButtonTitle(_('Insert Language'));
 
                 for (var i = 0; i < c; i++) {
                     var element = self.getTagFromRange(range, tags[i]);
