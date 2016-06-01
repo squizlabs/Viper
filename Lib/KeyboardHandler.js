@@ -97,6 +97,7 @@
 
                 var resetContent = false;
                 var range        = this._viper.getCurrentRange();
+
                 if (range.startOffset === 0
                     && range.endContainer === viperElement
                     && range.endOffset === (viperElement.childNodes.length - 1)
@@ -423,6 +424,7 @@
                                 if (ViperUtil.isText(parent.previousSibling) === true) {
                                     if (parent.previousSibling.data.length === 0
                                         && ViperUtil.isBrowser('safari') === true
+                                        && char === ' '
                                     ) {
                                         parent.previousSibling.data = char;
                                         range.setStart(parent.previousSibling, 1);
@@ -3733,6 +3735,16 @@
             // then add a space to it.
             if (ViperUtil.isBlockElement(parent) === true && ViperUtil.trim(ViperUtil.getHtml(parent)) === '') {
                 ViperUtil.setHtml(parent, '&nbsp;');
+            } else {
+                // Check if a br needs to be added.
+                var lastSelectable = range._getLastSelectableChild(parent);
+                if (ViperUtil.isText(lastSelectable) === true
+                    && lastSelectable.nextSibling === null
+                    && ViperUtil.isBlockElement(lastSelectable.parentNode) === true
+                ) {
+                    // Add a br for caret positioning incase there is a space at the end.
+                    ViperUtil.insertAfter(lastSelectable, document.createElement('br'));
+                }
             }
 
             if (returnFirstBlock === true) {
