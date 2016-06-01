@@ -97,6 +97,8 @@
 
                 var resetContent = false;
                 var range        = this._viper.getCurrentRange();
+                var startNode    = range.getStartNode();
+                var endNode      = range.getEndNode();
 
                 if (range.startOffset === 0
                     && range.endContainer === viperElement
@@ -212,15 +214,14 @@
                         ViperSelection.addRange(range);
                         this._viper.fireNodesChanged([textNode]);
                         return false;
-                    } else if (range.startContainer === range.endContainer
-                        && ViperUtil.isTag(range.startContainer, 'br') === true
+                    } else if (startNode === endNode
+                        && ViperUtil.isTag(startNode, 'br') === true
                         && range.collapsed === true
-                        && range.startOffset === 0
                     ) {
                         // IE text insert when BR tag is selected.
                         var textNode = document.createTextNode(String.fromCharCode(e.which));
-                        ViperUtil.insertBefore(range.startContainer, textNode);
-                        ViperUtil.remove(range.startContainer);
+                        ViperUtil.insertBefore(startNode, textNode);
+                        ViperUtil.remove(startNode);
                         range.setStart(textNode, 1);
                         range.collapse(true);
                         ViperSelection.addRange(range);
