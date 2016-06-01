@@ -1442,6 +1442,7 @@
                 && range.collapsed === true
                 && startNode.nextSibling === null
                 && ViperUtil.isBlockElement(startNode.parentNode) === false
+                && ViperUtil.isTag(ViperUtil.getFirstBlockParent(startNode.parentNode), 'li') === false
             ) {
                 // Handle: <p>test<strong>test*</strong>test</p>.
                 // When enter is pressed make sure the new paragraph does not start with the tag.
