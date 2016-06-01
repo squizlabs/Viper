@@ -3508,6 +3508,19 @@
 
         },
 
+        /**
+         * Returns true if the given element is the current editable element.
+         */
+        isEditableElement: function(element)
+        {
+            if (element === this.getViperElement()) {
+                return true;
+            }
+
+            return false;
+
+        },
+
         isSpecialElement: function(element)
         {
             var isSpecialElem = false;

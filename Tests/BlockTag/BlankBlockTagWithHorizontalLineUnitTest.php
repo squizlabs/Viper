@@ -24,7 +24,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithHorizontalLineUnitTest extends Abstr
         sleep(5);
         $this->moveToKeyword(1, 'left');
         $this->type('test ');
-        $this->assertHTMLMatch('<hr /><br />test %1% Test content %2% more test content. %3%');
+        $this->assertHTMLMatch('<hr />test %1% Test content %2% more test content. %3%');
 
         // Test adding a horizontal rule in the middle of the paragraph and add content
         $this->useTest(2);
