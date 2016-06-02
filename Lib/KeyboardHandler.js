@@ -382,9 +382,8 @@
                             if (textContainer.previousSibling
                                 && ViperUtil.isStubElement(textContainer.previousSibling) === false
                                 && ViperUtil.isText(textContainer.previousSibling) === false
-                                && ViperUtil.isBrowser('firefox') === true
                             ) {
-                                // Firefox needs to insert the character to the previous sibling.
+                                // Need to insert the character to the previous sibling.
                                 // <p>text<strong>insert text here</strong>* more text</p> ->
                                 // <p>text<strong>insert text hereNEW*</strong> more text</p>.
                                 var prevCont = range._getLastSelectableChild(textContainer.previousSibling);
