@@ -990,6 +990,33 @@
 
         },
 
+        /**
+         * Returns the parent element where the specified element is the last deepest child.
+         * E.g. <p>This is an <strong><em>example <sub>text</sub></em>..</strong></p>.
+         * Given "text" "em" will be returned.
+         */
+        getTopEndParent: function (element, includeBlockElements, stopElem) {
+            if (!element) {
+                return null;
+            }
+
+            stopElem   = stopElem || this._viperElement;
+            var parent = element.parentNode;
+            if (includeBlockElements !== true && ViperUtil.isBlockElement(parent) === true) {
+                return null;
+            }
+
+            while (!parent.nextSibling && (includeBlockElements === true || ViperUtil.isBlockElement(parent) === false)) {
+                if (parent === stopElem) {
+                    break;
+                }
+
+                parent = parent.parentNode;
+            }
+
+            return parent;
+        },
+
         elementIsEmpty: function(elem)
         {
             if (this.isBlank(this.getNodeTextContent(elem)) === true) {

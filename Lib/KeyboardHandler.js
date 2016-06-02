@@ -154,7 +154,9 @@
 
                     range.collapse(true);
                     ViperSelection.addRange(range);
-                } else {
+                } else if (e.which >= 32 && e.which <= 126) {
+                    var char = String.fromCharCode(e.which);
+
                     if (nodeSelection && ViperUtil.isBlockElement(nodeSelection) === true && String.fromCharCode(e.which) !== '') {
                         switch (ViperUtil.getTagName(nodeSelection)) {
                             case 'table':
@@ -232,24 +234,6 @@
                         && range.collapsed === true
                         && range.startOffset === range.startContainer.data.length
                     ) {
-                        if (range.startContainer.nextSibling
-                            && ViperUtil.isText(range.startContainer.nextSibling) === false
-                            && ViperUtil.isStubElement(range.startContainer.nextSibling) === false
-                            && ViperUtil.isBlockElement(range.startContainer.nextSibling) === false
-                        ) {
-                            // At the end of a text node with element sibling.. Insert the text to the start of the
-                            // next sibling.
-                            var textNode = range._getFirstSelectableChild(range.startContainer.nextSibling);
-                            if (ViperUtil.isText(textNode) === true) {
-                                textNode.data = String.fromCharCode(e.which) + textNode.data;
-                                range.setStart(textNode, 1);
-                                range.collapse(true);
-                                ViperSelection.addRange(range);
-                                this._viper.contentChanged();
-                                return false;
-                            }
-                        }
-
                         if (range.startContainer.data.charAt(range.startOffset - 1) === ' ') {
                             // Inserting text at the end of a text node that ends with a space to prevent browser removing the
                             // space.
@@ -257,7 +241,7 @@
                                 range.startContainer.data = range.startContainer.data.substr(0, range.startOffset - 1);
                                 range.startContainer.data += String.fromCharCode(160) + String.fromCharCode(160);
                             } else {
-                                range.startContainer.data += String.fromCharCode(e.which);
+                                range.startContainer.data += char;
                             }
 
                             range.setStart(range.startContainer, range.startContainer.data.length);
@@ -271,7 +255,7 @@
                             ) {
                                 var prevSib = range.startContainer.previousSibling;
                                 if (prevSib.data.charAt(prevSib.data.length - 1) === ' ') {
-                                    prevSib.data += String.fromCharCode(e.which);
+                                    prevSib.data += char;
                                     range.setStart(prevSib, prevSib.data.length);
                                     range.collapse(true);
                                     ViperSelection.addRange(range);
@@ -289,7 +273,7 @@
                                     && parentPrevSib.data.charAt(parentPrevSib.data.length - 1) === ' '
                                 ) {
                                     // Parent's previous sibling has white space at the end.
-                                    parentPrevSib.data += String.fromCharCode(e.which);
+                                    parentPrevSib.data += char;
                                     range.setStart(parentPrevSib, parentPrevSib.data.length);
                                     range.collapse(true);
                                     ViperSelection.addRange(range);
@@ -297,10 +281,38 @@
                                     return false;
                                 }
                             }
+                        } else {
+                            var endParent       = ViperUtil.getTopEndParent(range.startContainer);
+                            var firstSelectable = null;
+                            if (endParent) {
+                                firstSelectable = range._getFirstSelectableChild(endParent.nextSibling);
+                            }
+
+                            if (char == ' ') {
+                                if (firstSelectable) {
+                                    // If this node starts with space then we need to insert nbsp.
+                                    if (firstSelectable.data.charAt(0) == ' ') {
+                                        char = String.fromCharCode(160);
+                                    }
+                                } else {
+                                    var blockParent = ViperUtil.getFirstBlockParent(range.startContainer);
+                                    if (blockParent.lastChild === range.startContainer) {
+                                        // If space is being inserted at the end of a textnode which is the last child of
+                                        // a block element add a BR tag after it to make sure caret moves with the inserted space.
+                                        blockParent.appendChild(document.createElement('br'));
+                                    }
+                                }
+                            }
+
+                            range.startContainer.data += char;
+                            range.setStart(range.startContainer, range.startContainer.data.length);
+                            range.collapse(true);
+                            ViperSelection.addRange(range);
+                            this._viper.fireNodesChanged([range.startContainer]);
+                            return false;
                         }
                     }
 
-                    var char = String.fromCharCode(e.which);
                     if (range.collapsed === true
                         && char !== ' '
                         && range.startContainer.nodeType === ViperUtil.TEXT_NODE
@@ -364,7 +376,7 @@
                     if (e.which !== 0
                         && range.startContainer === range.endContainer
                         && range.collapsed === true
-                        && (range.startOffset === 0 || (ViperUtil.isBrowser('safari') === true && range.startOffset === 1 && ViperUtil.isText(range.startContainer) === true && range.startContainer.data.charAt(0) === ' '))
+                        && range.startOffset === 0
                     ) {
                         var textContainer = null;
                         if (range.startContainer.nodeType === ViperUtil.ELEMENT_NODE) {
@@ -398,8 +410,7 @@
 
                             }
 
-                            // At the start of a text node with an element sibling. Make sure character is inserted in this
-                            // text node.
+                            // At the start of a text node with an element sibling. Make sure character is inserted in previous text container.
                             // Also make sure that there is no non breaking space at the start text node followed by a non
                             // space character.
                             if (textContainer.data.length > 1
@@ -422,17 +433,16 @@
                                 }
 
                                 if (ViperUtil.isText(parent.previousSibling) === true) {
-                                    if (parent.previousSibling.data.length === 0
-                                        && ViperUtil.isBrowser('safari') === true
-                                        && char === ' '
-                                    ) {
-                                        parent.previousSibling.data = char;
-                                        range.setStart(parent.previousSibling, 1);
-                                        range.collapse(true);
-                                        ViperSelection.addRange(range);
-                                        this._viper.fireNodesChanged([textContainer]);
-                                        return false;
+                                    if (char === ' ' && parent.previousSibling.data.charAt(parent.previousSibling.data.length - 1) == ' ') {
+                                        char = String.fromCharCode(160);
                                     }
+
+                                    parent.previousSibling.data += char;
+                                    range.setStart(parent.previousSibling, parent.previousSibling.data.length);
+                                    range.collapse(true);
+                                    ViperSelection.addRange(range);
+                                    this._viper.fireNodesChanged([parent.previousSibling]);
+                                    return false;
                                 } else if (char === ' ') {
                                     char = String.fromCharCode(160);
                                 }
