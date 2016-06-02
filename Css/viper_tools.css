@@ -1142,7 +1142,7 @@
   position: relative;
   transition: background-color 0.1s ease-out;
 }
-.Viper-selectionList li:last-child {
+.Viper-selectionList li.lastVisibleItem {
   border-bottom: none;
 }
 .Viper-selectionList li:before {

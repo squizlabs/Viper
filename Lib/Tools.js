@@ -2240,12 +2240,31 @@
                         }
                     },
                     hideItem: function(itemid) {
-                        var item = this._getItem(itemid);
-                        ViperUtil.setStyle(item, 'display', 'none');
+                        var items = ViperUtil.getTag('li', list);
+                        var item  = this._getItem(itemid);
+                        ViperUtil.addClass(item, 'Viper-hidden');
+
+                        ViperUtil.removeClass(ViperUtil.getClass('lastVisibleItem', list), 'lastVisibleItem');
+                        for (var i = (items.length - 1); i >= 0; i--) {
+                            if (ViperUtil.hasClass(items[i], 'Viper-hidden') === false) {
+                                ViperUtil.addClass(items[i], 'lastVisibleItem');
+                                break;
+                            }
+                        }
+
                     },
                     showItem: function(itemid) {
-                        var item = this._getItem(itemid);
-                        ViperUtil.setStyle(item, 'display', 'block');
+                        var items = ViperUtil.getTag('li', list);
+                        var item  = this._getItem(itemid);
+                        ViperUtil.removeClass(item, 'Viper-hidden');
+
+                        ViperUtil.removeClass(ViperUtil.getClass('lastVisibleItem', list), 'lastVisibleItem');
+                        for (var i = (items.length - 1); i >= 0; i--) {
+                            if (ViperUtil.hasClass(items[i], 'Viper-hidden') === false) {
+                                ViperUtil.addClass(items[i], 'lastVisibleItem');
+                                break;
+                            }
+                        }
                     },
                     _getItem: function(itemid) {
                         return ViperUtil.find(list, '[data-id="' + itemid + '"]')[0];
