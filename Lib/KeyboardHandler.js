@@ -1544,6 +1544,48 @@
                 ViperSelection.addRange(range);
                 this._viper.contentChanged();
                 return false;
+            } else if (range.collapsed === true) {
+                // Range is collapsed.
+                if (ViperUtil.isText(range.startContainer) === true) {
+                    // Text node.
+                    if (range.startOffset === range.startContainer.data.length) {
+                        // Range is at the end of text node.
+                        if (range.startContainer.nextSibling === null) {
+                            // THere is no next sibling.
+                            var firstBlockParent = ViperUtil.getFirstBlockParent(range.startContainer);
+                            if (firstBlockParent) {
+                                if (range._getLastSelectableChild(firstBlockParent) === range.startContainer) {
+                                    // Last selectable text node in block parent.
+                                    // Checks by block parent.
+                                    if (ViperUtil.isTag(firstBlockParent, 'li') === true) {
+                                        // List item. Preserve styling, if there is any and create the new list item.
+                                        var parents = ViperUtil.getParents(range.startContainer, null, firstBlockParent);
+                                        if (parents.length > 0) {
+                                            var li     = document.createElement('li');
+                                            var parent = li;
+                                            for (var i = (parents.length - 1); i >= 0; i--) {
+                                                var node = document.createElement(ViperUtil.getTagName(parents[i]));
+                                                parent.appendChild(node);
+                                                parent = node;
+                                            }
+
+                                            if (parent) {
+                                                // Insert the new list item after the current one.
+                                                ViperUtil.insertAfter(firstBlockParent, li);
+                                                parent.appendChild(document.createElement('br'));
+                                                range.setStart(parent.firstChild, 0);
+                                                range.collapse(true);
+                                                ViperSelection.addRange(range);
+                                                this._viper.contentChanged();
+                                                return false;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }//end if
 
 
