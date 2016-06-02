@@ -63,16 +63,6 @@ class Viper_Tests_BlockTag_BlankBlockTagWithHorizontalLineUnitTest extends Abstr
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
 
         // Using forward delete
-        $this->useTest(3);
-        $this->moveToKeyword(1, 'left');
-        sleep(5);
-        $this->sikuli->keyDown('Key.LEFT');
-        sleep(5);
-        $this->sikuli->keyDown('Key.UP');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('%1% Test content');
-
         $this->useTest(4);
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.DELETE');

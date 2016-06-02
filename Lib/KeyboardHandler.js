@@ -2784,7 +2784,7 @@
                             // Check if the next next element is stub, if yes remove it..
                             if (ViperUtil.isStubElement(startNode.nextSibling.nextSibling) === true) {
                                 ViperUtil.remove(startNode.nextSibling.nextSibling);
-                                this._viper.contentChanged();console.info(11);
+                                this._viper.contentChanged();
                                 return false;
                             }
                         }
@@ -3377,6 +3377,14 @@
                                  return false;
                             }
                         }
+                    } else {
+                        var startNode = range.getStartNode();
+                        var endNode   = range.getEndNode();
+                        if (ViperUtil.isStubElement(startNode) === true) {
+                            ViperUtil.remove(startNode);
+                            this._viper.fireNodesChanged();
+                            return false;
+                        }
                     }//end if
                 }//end if
             } else {
@@ -3415,6 +3423,17 @@
                                     ViperUtil.remove(nextSelectable.parentNode);
                                     this._viper.contentChanged(true);
                                     return false;
+                                }
+                            } else {
+                                if (this._viper.getDefaultBlockTag() === '') {
+                                    if (ViperUtil.isTag(range.startContainer.nextSibling, 'br') === true) {
+                                        // Check if the next next element is stub, if yes remove it..
+                                        if (ViperUtil.isStubElement(range.startContainer.nextSibling.nextSibling) === true) {
+                                            ViperUtil.remove(range.startContainer.nextSibling.nextSibling);
+                                            this._viper.contentChanged();
+                                            return false;
+                                        }
+                                    }
                                 }
                             }
                         } else if (range.startOffset - 1 === ViperUtil.rtrim(startContainer.data).length
