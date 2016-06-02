@@ -1437,9 +1437,7 @@
                 // Pressing enter changes the content to: <p>XAX</p>*XBX<br>XCX.
                 // By adding an extra BR we keep it in the content.
                 ViperUtil.insertAfter(startNode, document.createElement('br'));
-            } else if ((ViperUtil.isBrowser('msie') === true
-                || ViperUtil.isBrowser('firefox') === true)
-                && startNode.nodeType === ViperUtil.TEXT_NODE
+            } else if (startNode.nodeType === ViperUtil.TEXT_NODE
                 && range.endOffset === startNode.data.length
                 && startNode.data.length !== 0
                 && range.collapsed === true
