@@ -3218,7 +3218,7 @@
             ) {
                 // This is a selection on different text nodes. Check to see
                 // if these nodes are part of two different block elements.
-                var nodeSelection = range.getNodeSelection();
+                var nodeSelection = range.cloneRange().getNodeSelection();
                 if (nodeSelection) {
                     if (nodeSelection === this._viper.getViperElement()) {
                         var defaultTagName = this._viper.getDefaultBlockTag();
@@ -3261,7 +3261,9 @@
                         this._viper.contentChanged(true);
                         return;
                     } else {
-                        this._deleteFromDifferentBlockParents(range);
+                        if (this._deleteFromDifferentBlockParents(range) === false) {
+                            return false;
+                        }
                     }
                 }//end if
 
