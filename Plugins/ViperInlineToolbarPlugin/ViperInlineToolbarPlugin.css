@@ -62,6 +62,7 @@
             z-index: 2;
             margin: -21px 0 0 -12px;
             border: 12px solid transparent;
+            pointer-events: none;
 
             /* Colours */
                 border-bottom-color: #FFF;
