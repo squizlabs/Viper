@@ -2728,7 +2728,7 @@
                         && range.endContainer.nodeType === ViperUtil.TEXT_NODE
                         && range.endOffset === range.endContainer.data.length
                     ) {
-                        if (ViperUtil.isBrowser('edge') === true) {
+                        if (ViperUtil.isBrowser('edge') === true || ViperUtil.isBrowser('msie') === true) {
                             var startParent = ViperUtil.getFirstBlockParent(range.startContainer, null, true);
                             var endParent   = ViperUtil.getFirstBlockParent(range.endContainer, null, true);
                             if (startParent !== endParent) {
