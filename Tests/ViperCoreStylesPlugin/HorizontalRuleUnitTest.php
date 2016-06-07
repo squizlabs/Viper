@@ -100,19 +100,6 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->assertHTMLMatch('<p>%4% new content%1% %2% dolor sit <em>amet</em> <strong>%3%</strong></p>');
 
-        // Add HR and delete using delete
-        $this->useTest(1);
-        $this->moveToKeyword(1, 'left');
-        sleep(2);
-        $this->clickTopToolbarButton('insertHr');
-        $this->assertHTMLMatch('<hr /><p>%1% %2% dolor sit <em>amet</em> <strong>%3%</strong></p>');
-
-        $this->moveToKeyword(1, 'left');
-        sleep(1);
-        $this->sikuli->keyDown('Key.UP');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>%1% %2% dolor sit <em>amet</em> <strong>%3%</strong></p>');
-
     }//end testAddingHorizontalRuleAtStartOfParagraph()
 
 
