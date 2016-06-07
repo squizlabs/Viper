@@ -1612,6 +1612,17 @@
             }//end if
 
             setTimeout(function() {
+                var prevSelectable = range.getPreviousContainer(range.startContainer);
+                if (ViperUtil.isText(prevSelectable) === true) {
+                    // If the last character is non breaking space then convert it to normal space.
+                    if (prevSelectable.data.length > 1
+                        && prevSelectable.data[prevSelectable.data.length - 1] === String.fromCharCode(160)
+                        && prevSelectable.data[prevSelectable.data.length - 2] != ' '
+                    ) {
+                        prevSelectable.data = prevSelectable.data.substr(0, prevSelectable.data.length - 1) + ' ';
+                    }
+                }
+
                 // Fire selection changed here for enter events after a delay so that
                 // range object is pointing to the new location. For example,
                 // if enter was pressed at the end of a list and a new paragraph is
@@ -1908,7 +1919,12 @@
                                 if (firstChild.nodeType === ViperUtil.TEXT_NODE) {
                                     range.setEnd(firstChild, 0);
                                 } else {
-                                    range.selectNode(firstChild);
+                                    var firstSelectable = range._getFirstSelectableChild(firstChild);
+                                    if (firstSelectable) {
+                                        range.setEnd(firstSelectable, 0);
+                                    } else {
+                                        range.selectNode(firstChild);
+                                    }
                                 }
                             } else {
                                 range.selectNode(prevSelectable);
