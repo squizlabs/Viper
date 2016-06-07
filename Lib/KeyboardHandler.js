@@ -2728,6 +2728,17 @@
                         && range.endContainer.nodeType === ViperUtil.TEXT_NODE
                         && range.endOffset === range.endContainer.data.length
                     ) {
+                        if (ViperUtil.isBrowser('edge') === true) {
+                            var startParent = ViperUtil.getFirstBlockParent(range.startContainer, null, true);
+                            var endParent   = ViperUtil.getFirstBlockParent(range.endContainer, null, true);
+                            if (startParent !== endParent) {
+                                if (this._deleteFromDifferentBlockParents(range) === false) {console.info(1);
+                                    // Delete op was handled.
+                                    return false;
+                                }
+                            }
+                        }
+
                         // Handle Firefox case: <p>text [text <strong>more text]</strong> more text</p> was resulting in
                         // <p>text <strong>*</strong> more text</p> it should be <p>text * more text</p>.
                         var self = this;
