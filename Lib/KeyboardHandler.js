@@ -2732,7 +2732,7 @@
                             var startParent = ViperUtil.getFirstBlockParent(range.startContainer, null, true);
                             var endParent   = ViperUtil.getFirstBlockParent(range.endContainer, null, true);
                             if (startParent !== endParent) {
-                                if (this._deleteFromDifferentBlockParents(range) === false) {console.info(1);
+                                if (this._deleteFromDifferentBlockParents(range) === false) {
                                     // Delete op was handled.
                                     return false;
                                 }
@@ -3079,6 +3079,9 @@
                 return false;
             }
 
+            var startNode = range.getStartNode();
+            var endNode   = range.getEndNode();
+
             // This block of code is a workaround for the delete bug in Chrome.
             // See http://goo.gl/QPB0v
             if (e.keyCode === 46
@@ -3155,9 +3158,10 @@
                 return false;
             } else if (e.keyCode === 8
                 && range.collapsed === true
-                && range.startContainer.nodeType === ViperUtil.TEXT_NODE
+                && (range.startContainer.nodeType === ViperUtil.TEXT_NODE
                 && (range.startOffset === 0 || (range.startOffset === 1 && range.startContainer.data.charAt(0) === ' '))
-                && (!range.startContainer.previousSibling || ViperUtil.isTag(range.startContainer.previousSibling, 'br') === true)
+                && ((ViperUtil.isFirstNonEmptyTextNode(range.startContainer) === true || ViperUtil.isTag(range.startContainer.previousSibling, 'br') === true)))
+                || (ViperUtil.isText(startNode) === false && range.startOffset === 0)
             ) {
                 // At the start of an element. Check to see if the previous
                 // element is a part of another block element. If it is then
@@ -3165,6 +3169,10 @@
                 var prevSelectable = range.getPreviousContainer(range.startContainer, null, true, true);
                 var currentParent  = ViperUtil.getFirstBlockParent(range.startContainer);
                 var prevParent     = ViperUtil.getFirstBlockParent(prevSelectable);
+
+                if (!currentParent) {
+                    currentParent = range.startContainer;
+                }
 
                 if (currentParent
                     && range._getFirstSelectableChild(currentParent) === range.startContainer
@@ -3206,6 +3214,14 @@
 
                         if (prevSelectable.nodeType === ViperUtil.TEXT_NODE) {
                             range.setStart(prevSelectable, prevSelectable.data.length);
+                        } else if (ViperUtil.isTag(prevSelectable, 'br') === true) {
+                            if (ViperUtil.isText(prevSelectable.nextSibling) === true) {
+                                range.setStart(prevSelectable.nextSibling, 0);
+                            } else {
+                                range.setStartAfter(prevSelectable);
+                            }
+
+                            ViperUtil.remove(prevSelectable);
                         } else {
                             range.setStartAfter(prevSelectable);
                         }

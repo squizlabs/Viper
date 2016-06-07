@@ -487,6 +487,23 @@
 
         },
 
+        isFirstNonEmptyTextNode: function(node) {
+            if (this.isText(node) === false) {
+                return false;
+            }
+
+            while (node.previousSibling && this.isText(node.previousSibling) === true) {
+                if (this.trim(node.previousSibling.data) !== '') {
+                    return false;
+                }
+
+                node = node.previousSibling;
+            }
+
+            return true;
+
+        },
+
         /**
          * returns a left trimmed string.
          *
