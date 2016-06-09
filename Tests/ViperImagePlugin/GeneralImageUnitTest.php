@@ -254,7 +254,7 @@ class Viper_Tests_ViperImagePlugin_GeneralImageUnitTest extends AbstractViperIma
 
 
     /**
-     * Test required fields when modifying an image.
+     * Test that images retain same qualities after viewing source without making changes.
      *
      * @return void
      */
@@ -305,7 +305,7 @@ class Viper_Tests_ViperImagePlugin_GeneralImageUnitTest extends AbstractViperIma
 
 
     /**
-     * Test required fields when modifying an image.
+     * Test that images retain same qualities after viewing source without making changes.
      *
      * @return void
      */
