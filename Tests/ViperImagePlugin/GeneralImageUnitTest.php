@@ -130,7 +130,7 @@ class Viper_Tests_ViperImagePlugin_GeneralImageUnitTest extends AbstractViperIma
         $this->clickField('Alt', true);
         $this->type('test');
         sleep(1);
-        $this->clicktopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clicktopToolbarButton('Insert Image', NULL, TRUE);
         $this->assertHTMLMatch('<h1>Viper Image Test</h1><p><img alt="test" src="%url%/ViperImagePlugin/Images/hero-shot.jpg"  />%1% XuT</p><p><img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></p><p>LABS is ORSM %2%</p>');
 
     }//end testRequiredFieldsWhenModifiyingAnImage()
@@ -152,7 +152,7 @@ class Viper_Tests_ViperImagePlugin_GeneralImageUnitTest extends AbstractViperIma
         $this->clickField('Image is decorative');
         $this->clickField('Alt', true);
         $this->type('test');
-        $this->clickButton('Apply Changes', NULL, TRUE);
+        $this->clickButton('Update Image', NULL, TRUE);
         $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="test" width="369" height="167" /></p><p>LABS is ORSM %2%</p>');
 
         // Test Alt field in top toolbar
@@ -161,7 +161,7 @@ class Viper_Tests_ViperImagePlugin_GeneralImageUnitTest extends AbstractViperIma
         $this->clearFieldValue('Alt');
         $this->clickField('Alt', true);
         $this->type('TEST');
-        $this->clickButton('Apply Changes', NULL, TRUE);
+        $this->clickButton('Update Image', NULL, TRUE);
         $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="TEST" width="369" height="167" /></p><p>LABS is ORSM %2%</p>');
 
     }//end testRequiredFieldsWhenModifiyingAnImage()
@@ -232,7 +232,7 @@ class Viper_Tests_ViperImagePlugin_GeneralImageUnitTest extends AbstractViperIma
             $this->sikuli->keyDown('Key.DELETE');
         }
 
-        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>XuT %3%</p><p>%1% test<img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" />  %2%</p><p>%4%LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>XuT %3%</p><p>%1% test<img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" /> %2%</p><p>%4%LABS is ORSM</p>');
 
         // Test paragraph before image
         $this->useTest(2);
