@@ -281,7 +281,7 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperLinkP
         $this->type('test');
         $this->clickField('URL', true);
         $this->type('http://www.squizlabs.com');
-        $this->clickinlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickinlineToolbarButton('Update Link', NULL, TRUE);
         $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs.com" title="test">%1%</a> test</p>');
 
         // Test using top toolbar
@@ -295,7 +295,7 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperLinkP
         $this->type('test');
         $this->clickField('URL', true);
         $this->type('http://www.squizlabs.com');
-        $this->clicktopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clicktopToolbarButton('Update Link', NULL, TRUE);
         $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs.com" title="test">%1%</a> test</p>');
 
     }//end testRequiredFieldsWhenModifyingALink()

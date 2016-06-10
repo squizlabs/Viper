@@ -164,7 +164,7 @@ class Viper_Tests_ViperLinkPlugin_CreateLinkUnitTest extends AbstractViperLinkPl
         $this->type('Squiz Labs');
         $this->clickField('Open a New Window');
         sleep(1);
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Insert Link', NULL, TRUE);
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%1%</a> link test test <a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%2%</a></p>');
 
         // Using top toolbar
@@ -187,7 +187,7 @@ class Viper_Tests_ViperLinkPlugin_CreateLinkUnitTest extends AbstractViperLinkPl
         $this->type('Squiz Labs');
         $this->clickField('Open a New Window');
         sleep(1);
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Insert Link', NULL, TRUE);
         $this->assertHTMLMatch('<p><a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%1%</a> link test test <a href="http://www.squizlabs.com" title="Squiz Labs" target="_blank">%2%</a></p>');
 
     }//end testCreateLinkThatOpensInNewWindow()
@@ -421,7 +421,7 @@ class Viper_Tests_ViperLinkPlugin_CreateLinkUnitTest extends AbstractViperLinkPl
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Insert Link', NULL, TRUE);
         $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>Praesent quam nulla, porta nec nunc <a href="http://www.squizlabs.com">%1%</a>, scelerisque sodales sem. <a href="http://www.squizlabs.com">%2%</a> tincidunt ligula vel leo gravida consectetur.<br /><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167"/></p><p>LABS is ORSM</p>');
 
         // Using the top toolbar
@@ -437,7 +437,7 @@ class Viper_Tests_ViperLinkPlugin_CreateLinkUnitTest extends AbstractViperLinkPl
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('link');
         $this->type('http://www.squizlabs.com');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Insert Link', NULL, TRUE);
         $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>Praesent quam nulla, porta nec nunc <a href="http://www.squizlabs.com">%1%</a>, scelerisque sodales sem. <a href="http://www.squizlabs.com">%2%</a> tincidunt ligula vel leo gravida consectetur.<br /><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167"/></p><p>LABS is ORSM</p>');
 
     }//end testCreateLinkInContentWithImage()

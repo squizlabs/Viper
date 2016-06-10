@@ -193,7 +193,7 @@ return;
         }
 
         $this->type('modified-');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Update Link', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>Linked<a href="test link content" title="test-modified-title">%1% test content %2%</a> for testing</p>');
 
@@ -208,7 +208,7 @@ return;
         }
 
         $this->type('modified-');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Update Link', NULL, TRUE);
 
         $this->assertHTMLMatch('<p>Linked<a href="test link content" title="test-modified-title">%1% test content %2%</a> for testing</p>');
 
