@@ -470,6 +470,12 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             unlink($path);
         }
 
+        // Get coverage data.
+        $coverage = self::$_sikuli->execJS('getCodeCoverage()');
+        if (empty($coverage) === FALSE) {
+            file_put_contents(dirname(__FILE__).'/tmp/coverage.json', $coverage);
+        }
+
     }//end tearDownAfterClass()
 
 

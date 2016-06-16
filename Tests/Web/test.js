@@ -31,6 +31,17 @@ function sendResult(result)
 
 }
 
+function getCodeCoverage()
+{
+    var coverage = '';
+    if (window['jscoverage_serializeCoverageToJSON']) {
+        coverage = jscoverage_serializeCoverageToJSON();
+    }
+
+    return coverage;
+
+}
+
 
 /**
  * Returns the HTML contents of the specified element.
