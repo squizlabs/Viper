@@ -846,12 +846,9 @@
                             self._comments[containerId][i]['comments'].push(commentData);
                             // set comment mark counter
                             $commentMark.find('.Matrix-Viper-commentmark-number-count').html(self._comments[containerId][i]['comments'].length);
-                        }
-                    }
 
-                    // enable edit+ save button
-                    if(typeof EasyEditComponentsToolbar != 'undefined') {
-                        EasyEditComponentsToolbar.enableSaveButton();
+                            self.viper.fireCallbacks('MatrixCommentsPlugin:commentsUpdated', {comment: commentData, updateType: 'new'});
+                        }
                     }
 
                     // re-open the dialog to show the reply interface
@@ -1085,9 +1082,11 @@
 
                                 var commentIndex = ViperUtil.$(this).data('comment-index');
                                 var commentId = ViperUtil.$(this).data('comment-id');
+								var actionedComment = null;
 
                                 for(var y = 0; y < self._comments[containerId].length; y++) {
                                     if(self._comments[containerId][y]['id'] == commentId) {
+										actionedComment = self._comments[containerId][y];
                                         if(commentIndex == 0) {
                                             $commentMark = ViperUtil.$('#Matrix-Viper-commentmark-' + containerId + '-' + self._comments[containerId][y]['id']);
                                             if(self._comments[containerId][y]['deletion']) {
@@ -1129,9 +1128,8 @@
                                         }
                                     }
                                 }
-                                // enable edit+ save button
-                                if(typeof EasyEditComponentsToolbar != 'undefined') {
-                                    EasyEditComponentsToolbar.enableSaveButton();
+                                if (actionedComment !== null) {
+                                    self.viper.fireCallbacks('MatrixCommentsPlugin:commentsUpdated', {comment: actionedComment, updateType: 'delete'});
                                 }
                             });
 
@@ -1156,14 +1154,12 @@
 
                                             ViperUtil.$('.Matrix-Viper-commentdialog-mainArea-replycomment').hide();
                                             ViperUtil.$('.Matrix-Viper-commentdialog-buttonArea-replycomment').hide();
+
+                                            self.viper.fireCallbacks('MatrixCommentsPlugin:commentsUpdated', {comment: self._comments[containerId][y], updateType: 'edit'});
                                         }
                                     }
                                 }
                                 ViperUtil.$('.Matrix-Viper-commentdialog-comment-action').remove();
-                                // enable edit+ save button
-                                if(typeof EasyEditComponentsToolbar != 'undefined') {
-                                    EasyEditComponentsToolbar.enableSaveButton();
-                                }
                                 ViperUtil.preventDefault(e);
                             });
                         })
@@ -1255,12 +1251,10 @@
                                                 $commentDiv.find('.Matrix-Viper-commentdialog-editButtonArea').show();
                                                 ViperUtil.$('.Matrix-Viper-commentdialog-mainArea-replycomment').hide();
                                                 ViperUtil.$('.Matrix-Viper-commentdialog-buttonArea-replycomment').hide();
+
+                                                self.viper.fireCallbacks('MatrixCommentsPlugin:commentsUpdated', {comment: self._comments[containerId], updateType: 'edit'});
                                             }
                                         }
-                                    }
-                                    // enable edit+ save button
-                                    if(typeof EasyEditComponentsToolbar != 'undefined') {
-                                        EasyEditComponentsToolbar.enableSaveButton();
                                     }
                                 }
                         });
@@ -1317,14 +1311,10 @@
                             self._comments[containerId][i]['comments'].push(commentData);
                             // set comment mark counter
                             ViperUtil.$(commentMark).find('div').html(self._comments[containerId][i]['comments'].length);
+
+                            self.viper.fireCallbacks('MatrixCommentsPlugin:commentsUpdated', {comment: self._comments[containerId][i], updateType: 'reply'});
                         }
                     }
-
-                    // enable edit+ save button
-                    if(typeof EasyEditComponentsToolbar != 'undefined') {
-                        EasyEditComponentsToolbar.enableSaveButton();
-                    }
-
 
                     // re-open the dialog to show the reply interface
                     $commentDialog.remove();
@@ -1382,12 +1372,9 @@
                             // insert the system comment  
                             var commentData = {'userid' : self._currentUserId, 'userFirstName' : self._currentUserFirstName, 'userLastName' : self._currentUserLastName, 'timestamp' : ViperUtil.$.now(), 'content' : JSON.stringify(commentContent), 'color' : self._commentColor, 'systemComment' : true};
                             self._comments[containerId][i]['comments'].push(commentData);
-                        }
-                    }
 
-                    // enable edit+ save button
-                    if(typeof EasyEditComponentsToolbar != 'undefined') {
-                        EasyEditComponentsToolbar.enableSaveButton();
+                            self.viper.fireCallbacks('MatrixCommentsPlugin:commentsUpdated', {comment: self._comments[containerId][i], updateType: 'status'});
+                        }
                     }
 
                     // re-open the dialog to show the reply interface
