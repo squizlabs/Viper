@@ -249,7 +249,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithItalicsUnitTest extends AbstractVipe
         $this->moveToKeyword(1, 'left');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('Some italic <br /><em>test %1% %2%</em> content to test');
+        $this->assertHTMLMatch('Some italic <br />test <em>%1% %2%</em> content to test');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
@@ -257,7 +257,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithItalicsUnitTest extends AbstractVipe
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test');
-        $this->assertHTMLMatch('Some italic test<br /><em>test %1% %2%</em> content to test');
+        $this->assertHTMLMatch('Some italic test<br />test <em>%1% %2%</em> content to test');
 
         // Test pressing enter at the end of italic content
         $this->useTest(4);
