@@ -25,7 +25,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test2');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Styles', NULL, TRUE);
         $this->assertHTMLMatch('<div>This is <span class="test1">%1%</span> <span class="test2">%2%</span> some content</div>');
 
          // Test applying class using top toolbar
@@ -39,7 +39,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('cssClass');
         $this->type('test2');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
         $this->assertHTMLMatch('<div>This is <span class="test1">%1%</span> <span class="test2">%2%</span> some content</div>');
 
     }//end testDivBlockTagAddingClassToAWordInContent()
@@ -67,7 +67,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
         $this->selectKeyword(1, 2);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test2');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Styles', NULL, TRUE);
         $this->assertHTMLMatch('<div class="test2">%1% This is some content %2%</div>');
 
         // Test applying class using top toolbar
@@ -82,7 +82,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('cssClass');
         $this->type('test2');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
         $this->assertHTMLMatch('<div class="test2">%1% This is some content %2%</div>');
 
     }//end testDivBlockTagAddingClassToAllContent()
@@ -112,7 +112,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clickField('Class');
         $this->type(' edit');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Styles', NULL, TRUE);
         $this->assertHTMLMatch('<div>This is <span class="test_class edit">%1%</span> some content</div>');
 
         // Test editing class using top toolbar
@@ -129,7 +129,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->clickField('Class');
         $this->type(' edit');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
         $this->assertHTMLMatch('<div>This is <span class="test_class edit">%1%</span> some content</div>');
 
     }//end testDivBlockTagEditingClassAppliedToWordInContent()
@@ -160,7 +160,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clickField('Class');
         $this->type(' edit');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Styles', NULL, TRUE);
         $this->assertHTMLMatch('<div class="test_class edit">%1% This is some content %2%</div>');
 
         // Test editing class using top toolbar
@@ -177,7 +177,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->clickField('Class');
         $this->type(' edit');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
         $this->assertHTMLMatch('<div class="test_class edit">%1% This is some content %2%</div>');
 
     }//end testDivBlockTagEditingClassAppliedToAllContent()
@@ -205,7 +205,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Styles', NULL, TRUE);
 //        $this->assertHTMLMatch('<div>This is %1% some content</div>');
 
         // Test remove an anchor using the top toolbar
@@ -220,7 +220,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
 //        $this->assertHTMLMatch('<div>This is %1% some content</div>');
 
     }//end testDivBlockTagRemoveClassAppliedToWordInContent()
@@ -248,7 +248,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
         $this->selectKeyword(1, 2);
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Styles', NULL, TRUE);
         $this->assertHTMLMatch('<div>%1% This is some content %2%</div>');
 
         // Test editing anchor using top toolbar
@@ -263,7 +263,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
         $this->assertHTMLMatch('<div>%1% This is some content %2%</div>');
 
     }//end testDivBlockTagRemoveClassAppliedToAllContent()
