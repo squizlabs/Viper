@@ -1037,7 +1037,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('<p>%1% </p><p><strong>test a %2% b</strong> %3%</p>');
+        $this->assertHTMLMatch('<p>%1% </p><p>test <strong>a %2% b</strong> %3%</p>');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
@@ -1045,7 +1045,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test');
-        $this->assertHTMLMatch('<p>%1% test</p><p><strong>test a %2% b</strong> %3%</p>');
+        $this->assertHTMLMatch('<p>%1% test</p><p>test <strong>a %2% b</strong> %3%</p>');
 
         // Test pressing enter at the end of strong content
         $this->useTest(9);

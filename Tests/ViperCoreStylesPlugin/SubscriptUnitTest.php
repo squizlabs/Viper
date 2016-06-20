@@ -485,7 +485,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('<p>%1% </p><p><sub>test a %2% b</sub> %3%</p>');
+        $this->assertHTMLMatch('<p>%1% </p><p>test <sub>a %2% b</sub> %3%</p>');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
@@ -493,7 +493,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test');
-        $this->assertHTMLMatch('<p>%1% test</p><p><sub>test a %2% b</sub> %3%</p>');
+        $this->assertHTMLMatch('<p>%1% test</p><p>test <sub>a %2% b</sub> %3%</p>');
 
         // Test pressing enter at the end of subscript content
         $this->useTest(6);
