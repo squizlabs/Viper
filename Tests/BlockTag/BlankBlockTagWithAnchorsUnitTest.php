@@ -25,7 +25,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithAnchorsUnitTest extends AbstractVipe
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('anchorID');
         $this->type('test2');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Insert Anchor', NULL, TRUE);
         $this->assertHTMLMatch('This is <span id="test1">%1%</span> <span id="test2">%2%</span> some content');
 
          // Test applying anchor using top toolbar
@@ -39,7 +39,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithAnchorsUnitTest extends AbstractVipe
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('anchorID');
         $this->type('test2');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Insert Anchor', NULL, TRUE);
         $this->assertHTMLMatch('This is <span id="test1">%1%</span> <span id="test2">%2%</span> some content');
 
     }//end testAddingAnchorToAWordInContent()
@@ -67,7 +67,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithAnchorsUnitTest extends AbstractVipe
         $this->selectKeyword(1, 2);
         $this->clickInlineToolbarButton('anchorID');
         $this->type('test2');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Insert Anchor', NULL, TRUE);
         $this->assertHTMLMatch('<span id="test1">This is %1% %2% some content</span>');
 
         // Test applying anchor using top toolbar
@@ -82,7 +82,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithAnchorsUnitTest extends AbstractVipe
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('anchorID');
         $this->type('test2');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Insert Anchor', NULL, TRUE);
         $this->assertHTMLMatch('<span id="test1">This is %1% %2% some content</span>');
 
     }//end testAddingAnchorToAllContent()
@@ -112,7 +112,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithAnchorsUnitTest extends AbstractVipe
         $this->clickInlineToolbarButton('anchorID', 'active');
         $this->clickField('ID');
         $this->type(' edit');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Update Anchor', NULL, TRUE);
         $this->assertHTMLMatch('This is <span id="test edit">%1%</span> some content');
 
         // Test editing anchor using top toolbar
@@ -129,7 +129,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithAnchorsUnitTest extends AbstractVipe
         $this->clickTopToolbarButton('anchorID', 'active');
         $this->clickField('ID');
         $this->type(' edit');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Update Anchor', NULL, TRUE);
         $this->assertHTMLMatch('This is <span id="test edit">%1%</span> some content');
 
     }//end testEditingAnchorAppliedToWordInContent()
@@ -159,7 +159,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithAnchorsUnitTest extends AbstractVipe
         $this->clickInlineToolbarButton('anchorID', 'active');
         $this->clickField('ID');
         $this->type(' edit');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Update Anchor', NULL, TRUE);
         $this->assertHTMLMatch('<span id="test edit">%1% This is some content %2%</span>');
 
         // Test editing anchor using top toolbar
@@ -176,7 +176,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithAnchorsUnitTest extends AbstractVipe
         $this->clickTopToolbarButton('anchorID', 'active');
         $this->clickField('ID');
         $this->type(' edit');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Update Anchor', NULL, TRUE);
         $this->assertHTMLMatch('<span id="test edit">%1% This is some content %2%</span>');
 
     }//end testEditingAnchorAppliedToAllContent()
@@ -204,7 +204,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithAnchorsUnitTest extends AbstractVipe
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('anchorID', 'active');
         $this->clearFieldValue('ID');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Update Anchor', NULL, TRUE);
         $this->assertHTMLMatch('This is %1% some content');
 
         // Test remove an anchor using the top toolbar
@@ -219,7 +219,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithAnchorsUnitTest extends AbstractVipe
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('anchorID', 'active');
         $this->clearFieldValue('ID');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Update Anchor', NULL, TRUE);
         $this->assertHTMLMatch('This is %1% some content');
 
     }//end testRemoveAnchorAppliedToWordInContent()
@@ -247,7 +247,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithAnchorsUnitTest extends AbstractVipe
         $this->selectKeyword(1, 2);
         $this->clickInlineToolbarButton('anchorID', 'active');
         $this->clearFieldValue('ID');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Update Anchor', NULL, TRUE);
         $this->assertHTMLMatch('%1% This is some content %2%');
 
         // Test editing anchor using top toolbar
@@ -262,7 +262,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithAnchorsUnitTest extends AbstractVipe
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('anchorID', 'active');
         $this->clearFieldValue('ID');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Update Anchor', NULL, TRUE);
         $this->assertHTMLMatch('%1% This is some content %2%');
 
     }//end testRemoveAnchorAppliedToAllContent()
