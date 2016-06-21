@@ -206,7 +206,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithBoldUnitTest extends AbstractViperUnit
         $this->useTest(4);
         $this->selectKeyword(1, 2);
         $this->type('test');
-        $this->assertHTMLMatch('<div>Some bold <strong>test</strong>content to test</div>');
+        $this->assertHTMLMatch('<div>Some bold <strong>test</strong> content to test</div>');
 
         $this->useTest(4);
         $this->selectKeyword(1, 2);
@@ -223,20 +223,20 @@ class Viper_Tests_BlockTag_DivBlockTagWithBoldUnitTest extends AbstractViperUnit
         // Test replacing bold content with new content when selecting one keyword and using the lineage
         $this->useTest(4);
         $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
+        $this->selectInlineToolbarLineageItem(1);
         $this->type('test');
-        $this->assertHTMLMatch('<div>Some bold <strong>test</strong>content to test</div>');
+        $this->assertHTMLMatch('<div>Some bold <strong>test</strong> content to test</div>');
 
         $this->useTest(4);
         $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
+        $this->selectInlineToolbarLineageItem(1);
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('test');
         $this->assertHTMLMatch('<div>Some bold test content to test</div>');
 
         $this->useTest(4);
         $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
+        $this->selectInlineToolbarLineageItem(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('test');
         $this->assertHTMLMatch('<div>Some bold test content to test</div>');
