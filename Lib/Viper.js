@@ -1011,10 +1011,6 @@
                             Viper.Util.insertBefore(child, p);
                         }
 
-                        if (child.nodeType === Viper.Util.TEXT_NODE) {
-                            child.data = Viper.Util.trim(child.data);
-                        }
-
                         p.appendChild(child);
                     }//end for
 

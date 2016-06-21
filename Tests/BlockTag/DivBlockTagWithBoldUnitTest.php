@@ -159,12 +159,12 @@ class Viper_Tests_BlockTag_DivBlockTagWithBoldUnitTest extends AbstractViperUnit
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test ');
-        $this->assertHTMLMatch('<div>Some bold <strong>test %1% %2%</strong>content to test</div>');
+        $this->assertHTMLMatch('<div>Some bold test <strong>%1% %2%</strong> content to test</div>');
 
         // Test adding content in the middle of bold formatting
         $this->moveToKeyword(1, 'right');
         $this->type(' test');
-        $this->assertHTMLMatch('<div>Some bold <strong>test %1% test %2%</strong>content to test</div>');
+        $this->assertHTMLMatch('<div>Some bold test <strong>%1% test %2%</strong> content to test</div>');
 
         // Test adding content to the end of bold formatting
         $this->moveToKeyword(2, 'left');
@@ -172,22 +172,22 @@ class Viper_Tests_BlockTag_DivBlockTagWithBoldUnitTest extends AbstractViperUnit
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->type(' %3%');
-        $this->assertHTMLMatch('<div>Some bold <strong>test %1% test %2% %3%</strong>content to test</div>');
+        $this->assertHTMLMatch('<div>Some bold test <strong>%1% test %2% %3%</strong> content to test</div>');
 
         // Test highlighting some content in the strong tags and replacing it
         $this->selectKeyword(2);
         $this->type('abc');
-        $this->assertHTMLMatch('<div>Some bold <strong>test %1% test abc %3%</strong>content to test</div>');
+        $this->assertHTMLMatch('<div>Some bold test <strong>%1% test abc %3%</strong> content to test</div>');
 
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('abc');
-        $this->assertHTMLMatch('<div>Some bold <strong>test abc test abc %3%</strong>content to test</div>');
+        $this->assertHTMLMatch('<div>Some bold test abc<strong> test abc %3%</strong> content to test</div>');
 
         $this->selectKeyword(3);
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('test');
-        $this->assertHTMLMatch('<div>Some bold <strong>test abc test abc test</strong>content to test</div>');
+        $this->assertHTMLMatch('<div>Some bold test abc<strong> test abc test</strong> content to test</div>');
 
     }//end testDivBlockTagEditingBoldContent()
 
@@ -326,7 +326,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithBoldUnitTest extends AbstractViperUnit
         $this->sikuli->keyDown('Key.CMD + z');
         $this->assertHTMLMatch('<div>This is %1% %2% some content</div>');
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        $this->assertHTMLMatch('<div>This is <strong>%1%</strong> %2% some content</div>'); 
+        $this->assertHTMLMatch('<div>This is <strong>%1%</strong> %2% some content</div>');
 
     }//end testDivBlockTagUndoAndRedoWithBoldContent()
 
