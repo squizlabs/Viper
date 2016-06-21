@@ -3814,7 +3814,7 @@
             if (elem === null || (elem.tagName && elem.tagName.toLowerCase() !== 'li' && ViperUtil.isBlockElement(elem) === false)) {
                 // If the newly created element is not a block element then
                 // create a P tag and make it the elem's parent.
-                var newTag = 'p';
+                var newTag = this._viper.getDefaultBlockTag();
 
                 // If element is in a list block then create a new list item instead of a paragraph.
                 if (tag === 'li') {
