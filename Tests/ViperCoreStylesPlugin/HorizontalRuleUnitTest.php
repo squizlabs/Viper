@@ -421,7 +421,7 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->type($this->getTestURL('/ViperImagePlugin/Images/editing.png'));
         $this->clickField('Alt', TRUE);
         $this->type('test-alt');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Insert Image', NULL, TRUE);
         $this->clickTopToolbarButton('image', 'active-selected');
         $this->clickKeyword(2);
         $this->moveToKeyword(1, 'right');
@@ -436,7 +436,7 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->type($this->getTestURL('/ViperImagePlugin/Images/editing.png'));
         $this->clickField('Alt', TRUE);
         $this->type('test-alt');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Insert Image', NULL, TRUE);
         $this->moveToKeyword(2, 'left');
         $this->clickTopToolbarButton('insertHr');
         $this->assertHTMLMatch('<p>Test content %1%<img alt="test-alt" src="%url%/ViperImagePlugin/Images/editing.png" /></p><hr /><p>%2%</p>');
