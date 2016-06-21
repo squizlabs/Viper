@@ -2313,7 +2313,8 @@
 
             var rangeCoords  = null;
             var selectedNode = selectedNode || range.getNodeSelection(range);
-            if (selectedNode !== null) {
+
+            if (selectedNode !== null && selectedNode !== tools.viper.getViperElement()) {
                 rangeCoords = getElementCoords(selectedNode);
             } else {
                 rangeCoords = range.rangeObj.getBoundingClientRect();

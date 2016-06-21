@@ -178,12 +178,12 @@ class Viper_Tests_BlockTag_BlankBlockTagWithBoldUnitTest extends AbstractViperUn
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('abc');
-        $this->assertHTMLMatch('Some bold test <strong>abc test abc %3%</strong> content to test');
+        $this->assertHTMLMatch('Some bold test abc<strong> test abc %3%</strong> content to test');
 
         $this->selectKeyword(3);
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('test');
-        $this->assertHTMLMatch('Some bold test <strong>abc test abc test</strong> content to test');
+        $this->assertHTMLMatch('Some bold test abc<strong> test abc test</strong> content to test');
 
     }//end testEditingBoldContent()
 
@@ -315,7 +315,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithBoldUnitTest extends AbstractViperUn
         $this->sikuli->keyDown('Key.CMD + z');
         $this->assertHTMLMatch('This is %1% %2% some content');
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        $this->assertHTMLMatch('This is <strong>%1%</strong> %2% some content'); 
+        $this->assertHTMLMatch('This is <strong>%1%</strong> %2% some content');
 
     }//end testUndoAndRedoWithBoldContent()
 
