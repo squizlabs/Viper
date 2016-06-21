@@ -462,9 +462,6 @@ function useTest(id)
         viper.element.blur();
     }
 
-    viper.getHistoryManager().clear();
-    viper.getHistoryManager().add();
-
     Viper.Selection.removeAllRanges();
 
     if (Viper.Util.isBrowser('msie') === true) {
@@ -476,6 +473,9 @@ function useTest(id)
     }
 
     viper.cleanDOM(contentElement);
+
+    viper.getHistoryManager().clear();
+    viper.getHistoryManager().add();
 
 }
 
