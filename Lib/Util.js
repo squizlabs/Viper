@@ -504,6 +504,57 @@
 
         },
 
+        endsWithSpace: function(node, nonBreaking) {
+            if (this.isText(node) === false) {
+                return false;
+            }
+
+            if (nonBreaking === true) {
+                if (node.data.charCodeAt(node.data.length - 1) === 160) {
+                    return true;
+                }
+            } else if (node.data.charAt(node.data.length - 1) === ' ') {
+                return true;
+            }
+
+            return false;
+
+        },
+
+        startsWithSpace: function(node) {
+            if (this.isText(node) === false) {
+                return false;
+            }
+
+            if (node.data.charAt(0) === ' ') {
+                return true;
+            }
+
+            return false;
+
+        },
+
+        replaceCharAt: function(textNode, pos, replacement)
+        {
+            if (this.isText(textNode) === false) {
+                return false;
+            }
+
+            switch (pos) {
+                case 'last':
+                    pos =  (textNode.data.length - 1);
+                break;
+
+                case 'first':
+                    pos = 0;
+                break;
+            }
+
+            textNode.data = textNode.data.substr(0, pos) + replacement + textNode.data.substr(pos + 1);
+            return true;
+
+        },
+
         /**
          * returns a left trimmed string.
          *

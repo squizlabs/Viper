@@ -141,29 +141,29 @@ class Viper_Tests_BlockTag_BlankBlockTagWithItalicsUnitTest extends AbstractVipe
         $this->clickKeyword(1);
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test ');
-        $this->assertHTMLMatch('Some italic <em>test %1% %2%</em> content to test');
+        $this->assertHTMLMatch('Some italic test <em>%1% %2%</em> content to test');
 
         // Test adding content in the middle of italic formatting
         $this->moveToKeyword(1, 'right');
         $this->type(' test');
-        $this->assertHTMLMatch('Some italic <em>test %1% test %2%</em> content to test');
+        $this->assertHTMLMatch('Some italic test <em>%1% test %2%</em> content to test');
 
         // Test adding content to the end of italic formatting
         $this->clickKeyword(2);
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->type(' test');
-        $this->assertHTMLMatch('Some italic <em>test %1% test %2% test</em> content to test');
+        $this->assertHTMLMatch('Some italic test <em>%1% test %2% test</em> content to test');
 
         // Test highlighting some content in the em tags and replacing it
         $this->selectKeyword(2);
         $this->type('abc');
-        $this->assertHTMLMatch('Some italic <em>test %1% test abc test</em> content to test');
+        $this->assertHTMLMatch('Some italic test <em>%1% test abc test</em> content to test');
 
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('abc');
-        $this->assertHTMLMatch('Some italic <em>test abc test abc test</em> content to test');
+        $this->assertHTMLMatch('Some italic test <em>abc test abc test</em> content to test');
 
     }//end testEditingItalicContent()
 
@@ -295,7 +295,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithItalicsUnitTest extends AbstractVipe
         $this->sikuli->keyDown('Key.CMD + z');
         $this->assertHTMLMatch('This is %1% %2% some content');
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        $this->assertHTMLMatch('This is <em>%1%</em> %2% some content');        
+        $this->assertHTMLMatch('This is <em>%1%</em> %2% some content');
 
     }//end testUndoAndRedoWithItalicContent()
 

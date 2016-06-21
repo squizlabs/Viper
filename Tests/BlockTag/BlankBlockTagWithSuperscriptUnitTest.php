@@ -77,29 +77,29 @@ class Viper_Tests_BlockTag_BlankBlockTagWithSuperscriptUnitTest extends Abstract
         $this->clickKeyword(1);
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test ');
-        $this->assertHTMLMatch('Some superscript <sup>test %1% %2%</sup> content to test');
+        $this->assertHTMLMatch('Some superscript test <sup>%1% %2%</sup> content to test');
 
         // Test adding content in the middle of superscript formatting
         $this->moveToKeyword(1, 'right');
         $this->type(' test');
-        $this->assertHTMLMatch('Some superscript <sup>test %1% test %2%</sup> content to test');
+        $this->assertHTMLMatch('Some superscript test <sup>%1% test %2%</sup> content to test');
 
         // Test adding content to the end of superscript formatting
         $this->clickKeyword(2);
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->type(' test');
-        $this->assertHTMLMatch('Some superscript <sup>test %1% test %2% test</sup> content to test');
+        $this->assertHTMLMatch('Some superscript test <sup>%1% test %2% test</sup> content to test');
 
         // Test highlighting some content in the sup[] tags and replacing it
         $this->selectKeyword(2);
         $this->type('abc');
-        $this->assertHTMLMatch('Some superscript <sup>test %1% test abc test</sup> content to test');
+        $this->assertHTMLMatch('Some superscript test <sup>%1% test abc test</sup> content to test');
 
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('abc');
-        $this->assertHTMLMatch('Some superscript <sup>test abc test abc test</sup> content to test');
+        $this->assertHTMLMatch('Some superscript test <sup>abc test abc test</sup> content to test');
 
     }//end testEditingSuperscriptContent()
 
@@ -231,7 +231,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithSuperscriptUnitTest extends Abstract
         $this->sikuli->keyDown('Key.CMD + z');
         $this->assertHTMLMatch('This is %1% %2% some content');
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        $this->assertHTMLMatch('This is <sup>%1%</sup> %2% some content');        
+        $this->assertHTMLMatch('This is <sup>%1%</sup> %2% some content');
 
     }//end testUndoAndRedoWithSuperscriptContent()
 

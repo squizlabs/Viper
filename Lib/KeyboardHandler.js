@@ -296,12 +296,16 @@
                                     }
                                 } else {
                                     var blockParent = ViperUtil.getFirstBlockParent(range.startContainer);
-                                    if (blockParent.lastChild === range.startContainer) {
+                                    if (blockParent && blockParent.lastChild === range.startContainer) {
                                         // If space is being inserted at the end of a textnode which is the last child of
                                         // a block element add a BR tag after it to make sure caret moves with the inserted space.
                                         blockParent.appendChild(document.createElement('br'));
                                     }
                                 }
+                            } else if (ViperUtil.endsWithSpace(range.startContainer, true) === true) {
+                                // Text node ends with non breaking space but we are inserting a character. Replace the
+                                // non breaking space with normal space.
+                                ViperUtil.replaceCharAt(range.startContainer, 'last', ' ');
                             }
 
                             range.startContainer.data += char;
