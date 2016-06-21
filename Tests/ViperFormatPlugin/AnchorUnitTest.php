@@ -521,14 +521,14 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractFormatsUnitTe
         // Check to make sure the HTML did not change.
         $this->assertHTMLMatch('<p>test content <span id="test1">%1%</span> more test content %2%</p>');
 
-        // Select the anchor again and make sure the Insert Anchor button is inactive
+        // Select the anchor again and make sure the Update Anchor button is inactive
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('anchorID', 'active');
-        $this->assertTrue($this->inlineToolbarButtonExists('Insert Anchor', 'disabled', TRUE));
+        $this->assertTrue($this->inlineToolbarButtonExists('Update Anchor', 'disabled', TRUE));
 
-        // Edit the anchor and make sure the Insert Anchor button still works.
+        // Edit the anchor and make sure the Upddate Anchor button still works.
         $this->type('234');
-        $this->clickInlineToolbarButton('Insert Anchor', NULL, TRUE);
+        $this->clickInlineToolbarButton('Update Anchor', NULL, TRUE);
         $this->assertHTMLMatch('<p>test content <span id="test1234">%1%</span> more test content %2%</p>');
 
         // Using the top toolbar
@@ -543,14 +543,14 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractFormatsUnitTe
         // Check to make sure the HTML did not change.
         $this->assertHTMLMatch('<p>test content <span id="test1">%1%</span> more test content %2%</p>');
 
-        // Select the anchor again and make sure the Insert Anchor button is inactive
+        // Select the anchor again and make sure the Update Anchor button is inactive
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('anchorID', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('Insert Anchor', 'disabled', TRUE));
+        $this->assertTrue($this->topToolbarButtonExists('Update Anchor', 'disabled', TRUE));
 
-        // Edit the anchor and make sure the Insert Anchor button still works.
+        // Edit the anchor and make sure the Update Anchor button still works.
         $this->type('234');
-        $this->clickTopToolbarButton('Insert Anchor', NULL, TRUE);
+        $this->clickTopToolbarButton('Update Anchor', NULL, TRUE);
         $this->assertHTMLMatch('<p>test content <span id="test1234">%1%</span> more test content %2%</p>');
 
     }//end testApplyChangesButtonIsDisabledAfterCancellingChangesToALink()
