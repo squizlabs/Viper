@@ -99,7 +99,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithStrikethroughUnitTest extends Abstra
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('abc');
-        $this->assertHTMLMatch('Some strikethrough test <del>abc test abc test</del> content to test');
+        $this->assertHTMLMatch('Some strikethrough test abc<del> test abc test</del> content to test');
 
     }//end testEditingStrikethroughContent()
 

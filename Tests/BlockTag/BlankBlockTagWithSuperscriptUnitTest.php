@@ -99,7 +99,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithSuperscriptUnitTest extends Abstract
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('abc');
-        $this->assertHTMLMatch('Some superscript test <sup>abc test abc test</sup> content to test');
+        $this->assertHTMLMatch('Some superscript test abc<sup> test abc test</sup> content to test');
 
     }//end testEditingSuperscriptContent()
 

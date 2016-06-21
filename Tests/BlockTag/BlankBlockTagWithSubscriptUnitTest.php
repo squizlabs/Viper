@@ -99,7 +99,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithSubscriptUnitTest extends AbstractVi
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('abc');
-        $this->assertHTMLMatch('Some subscript test <sub>abc test abc test</sub> content to test');
+        $this->assertHTMLMatch('Some subscript test abc<sub> test abc test</sub> content to test');
 
     }//end testEditingSubscriptContent()
 

@@ -417,16 +417,7 @@
                             // At the start of a text node with an element sibling. Make sure character is inserted in previous text container.
                             // Also make sure that there is no non breaking space at the start text node followed by a non
                             // space character.
-                            if (textContainer.data.length > 1
-                                && (textContainer.data.charCodeAt(0) === 160 || textContainer.data.charCodeAt(0) === 32)
-                                && textContainer.data[1] !== ' '
-                            ) {
-                                if (char === ' ') {
-                                    char = String.fromCharCode(160);
-                                } else {
-                                    textContainer.data = ' ' + textContainer.data.substr(1);
-                                }
-                            } else if (!textContainer.previousSibling) {
+                            if (!textContainer.previousSibling) {
                                 var parent = textContainer.parentNode;
                                 while (!parent.previousSibling && ViperUtil.isBlockElement(parent) === false) {
                                     if (parent === viperElement) {
@@ -437,8 +428,10 @@
                                 }
 
                                 if (ViperUtil.isText(parent.previousSibling) === true) {
-                                    if (char === ' ' && parent.previousSibling.data.charAt(parent.previousSibling.data.length - 1) == ' ') {
+                                    if (char === ' ' && ViperUtil.endsWithSpace(parent.previousSibling) === true) {
                                         char = String.fromCharCode(160);
+                                    } else if (char !== ' ' && ViperUtil.endsWithSpace(parent.previousSibling, true) === true) {
+                                        ViperUtil.replaceCharAt(parent.previousSibling, 'last', ' ');
                                     }
 
                                     parent.previousSibling.data += char;
@@ -449,6 +442,15 @@
                                     return false;
                                 } else if (char === ' ') {
                                     char = String.fromCharCode(160);
+                                }
+                            } else if (textContainer.data.length > 1
+                                && (textContainer.data.charCodeAt(0) === 160 || textContainer.data.charCodeAt(0) === 32)
+                                && textContainer.data[1] !== ' '
+                            ) {
+                                if (char === ' ') {
+                                    char = String.fromCharCode(160);
+                                } else {
+                                    textContainer.data = ' ' + textContainer.data.substr(1);
                                 }
                             }
 
