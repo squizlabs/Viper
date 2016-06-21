@@ -61,14 +61,14 @@ class Viper_Tests_BlockTag_BlankBlockTagWithAnchorsUnitTest extends AbstractVipe
         $this->clickInlineToolbarButton('anchorID');
         $this->type('test1');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<span id="test1">This is %1% %2% some content</span>');
+        $this->assertHTMLMatch('<span id="test1">%1% This is some content %2%</span>');
 
         $this->useTest(3);
         $this->selectKeyword(1, 2);
         $this->clickInlineToolbarButton('anchorID');
         $this->type('test2');
         $this->clickInlineToolbarButton('Insert Anchor', NULL, TRUE);
-        $this->assertHTMLMatch('<span id="test1">This is %1% %2% some content</span>');
+        $this->assertHTMLMatch('<span id="test2">%1% This is some content %2%</span>');
 
         // Test applying anchor using top toolbar
         $this->useTest(3);
@@ -76,14 +76,14 @@ class Viper_Tests_BlockTag_BlankBlockTagWithAnchorsUnitTest extends AbstractVipe
         $this->clickTopToolbarButton('anchorID');
         $this->type('test1');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<span id="test1">This is %1% %2% some content</span>');
+        $this->assertHTMLMatch('<span id="test1">%1% This is some content %2%</span>');
 
         $this->useTest(3);
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('anchorID');
         $this->type('test2');
         $this->clickTopToolbarButton('Insert Anchor', NULL, TRUE);
-        $this->assertHTMLMatch('<span id="test1">This is %1% %2% some content</span>');
+        $this->assertHTMLMatch('<span id="test2">%1% This is some content %2%</span>');
 
     }//end testAddingAnchorToAllContent()
 
