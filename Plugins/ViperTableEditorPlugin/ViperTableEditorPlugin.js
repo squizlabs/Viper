@@ -1358,12 +1358,22 @@
             this._tools.createButton('VTEP:colProps:moveLeft', '', _('Move Left'), 'Viper-mergeLeft', function() {
                 var cell = self.getActiveCell();
                 self._buttonClicked = true;
-                self.updateToolbar(self.moveColLeft(cell), 'col');
+                setTimeout(
+                    function () {
+                        self.updateToolbar(self.moveColLeft(cell), 'col');
+                    },
+                    100
+                );
             });
             this._tools.createButton('VTEP:colProps:moveRight', '', _('Move Right'), 'Viper-mergeRight', function() {
                 var cell = self.getActiveCell();
                 self._buttonClicked = true;
-                self.updateToolbar(self.moveColRight(cell), 'col');
+                setTimeout(
+                    function () {
+                        self.updateToolbar(self.moveColRight(cell), 'col');
+                    },
+                    100
+                );
             });
 
             btnGroup = this._tools.createButtonGroup('VTEP:moveColButtons');
