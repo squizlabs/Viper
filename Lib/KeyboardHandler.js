@@ -442,6 +442,8 @@
                                     return false;
                                 } else if (char === ' ') {
                                     char = String.fromCharCode(160);
+                                } else if (ViperUtil.startsWithSpace(textContainer, true) === true) {
+                                    ViperUtil.replaceCharAt(textContainer, 0, ' ');
                                 }
                             } else if (textContainer.data.length > 1
                                 && (textContainer.data.charCodeAt(0) === 160 || textContainer.data.charCodeAt(0) === 32)

@@ -521,12 +521,16 @@
 
         },
 
-        startsWithSpace: function(node) {
+        startsWithSpace: function(node, nonBreaking) {
             if (this.isText(node) === false) {
                 return false;
             }
 
-            if (node.data.charAt(0) === ' ') {
+            if (nonBreaking === true) {
+                if (node.data.charCodeAt(0) === 160) {
+                    return true;
+                }
+            } else if (node.data.charAt(0) === ' ') {
                 return true;
             }
 
