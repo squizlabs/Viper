@@ -471,6 +471,10 @@
 
             var nodeSelection = range.getNodeSelection();
             if (nodeSelection) {
+                if (ViperUtil.getTag('a', nodeSelection).length > 0) {
+                    return true;
+                }
+
                 // Let the getLinkFromRange handle this.
                 return false;
             }
