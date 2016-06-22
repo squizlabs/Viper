@@ -10,19 +10,712 @@
         this._droppedImageToUpload = [];
         this._uploadId = 0;
 
+        this._currentImageData = null;
+
+        this._vitpPreviewBox = null;
+
     }
+
 
     Viper.PluginManager.addPlugin('MatrixImagePlugin', MatrixImagePlugin, 'ViperImagePlugin');
 
     MatrixImagePlugin.prototype = {
 
+        _isEditPlus: function()
+        {
+          return (typeof EasyEdit !== 'undefined');
+        },
+
         _isInternalLink: function(url)
         {
-            return /^\d+[^@]*$/.test(url);
+            return /^(\.\/\?a=)?\d+[^@]*$/.test(url);
 
         },
 
+        createCustomInterface: function(prefix)
+        {
+            var tools = this.viper.Tools;
+            var self  = this;
+
+            buttonPrefix = 'image';
+            if(prefix == 'vitpImagePlugin') {
+                buttonPrefix = 'vitpImage';
+            }
+            var urlField    = tools.getItem(prefix + ':urlInput').element;
+            var tabSwitch = tools.createRow(prefix + 'tabSwitch', 'Viper-imageTabSwitch');
+            var $assetTab = ViperUtil.$('<a href="#" id="' + prefix + 'tabAsset" class="selected" title="' + _('Choose Image from Matrix Asset') + '">' + _('Asset') + '</a>');
+            var $uploadTab = ViperUtil.$('<a href="#" id="' + prefix + 'tabUpload" class="" title="' + _('Upload an Image') + '">' + _('Upload') + '</a>');
+            var $urlTab = ViperUtil.$('<a href="#" id="' + prefix + 'tabURL" class="" title="' + _('Image from an URL') + '">' + _('URL') + '</a>');
+            tabSwitch.appendChild($assetTab.get(0));
+            tabSwitch.appendChild($uploadTab.get(0));
+            tabSwitch.appendChild($urlTab.get(0));
+
+            ViperUtil.insertBefore(urlField, tabSwitch);
+
+            // customise url field, add the status and file name indicator
+            ViperUtil.$(urlField).find('label').append('<div class="Viper-image-status"><span class="Viper-image-status-indicator"></span><span class="Viper-image-filename-indicator"></span></div>');
+
+
+            // append asset selector row
+            var urlRow = tools.createRow(prefix + ':urlRow', 'Viper-chooseAssetRow');
+            var assetPicker = tools.createButton(prefix + ':assetPicker', '', 'Pick Asset', 'Viper-assetSelector-button', function() {
+                self.pickAsset(prefix, false);
+            });
+            ViperUtil.insertAfter(urlField, urlRow);
+            urlRow.appendChild(urlField);
+            urlRow.appendChild(assetPicker);
+
+            // append image cropper button
+            if(self._isEditPlus()) {
+                var imageEditor = tools.createButton(prefix + ':imageEditor', '', 'Edit Image', 'Viper-imageEditor-button', function() {
+                    var urlField = tools.getItem(prefix + ':urlInput');
+                    var value = urlField.getValue();
+                    if(value) {
+                        // actions to perform after image editing
+                        var rawassetid = value.replace(/:v[0-9]+/g, '');
+                        var saveCallbackFunc = function() {
+                            urlField.setValue(value,false);
+                            self.setPreviewContent(false, true, prefix);
+                            self.retrieveAssetDetails(value, function(data) {
+                                // update interface with asset's variety data and status
+                                self.enableAssetStatusIndicator(data);
+                                self.enableVarietyChooser(data);
+                                // apply the changes straigh because we have already modified the image itself
+                                var button = null;
+                                if(prefix == 'ViperImagePlugin') {
+                                    button = self.viper.Tools.getItem('ViperImagePlugin:bubbleSubSection-applyButton');
+                                }
+                                else {
+                                    button = self.viper.Tools.getItem('vitpImagePlugin-infoSubsection-applyButton');
+                                }
+                                ViperUtil.$(button.element).mousedown();
+                            });
+                        };
+                        // show the overlay of image editing
+                        EasyEditOverlay.showOverlay('imageDetails',{assetid: rawassetid, initAssetid: value, saveCallback: saveCallbackFunc});
+                    }
+                });
+                urlRow.appendChild(imageEditor);
+            }
+
+            // append the File row
+            var fileRow = this.createFileRow(prefix);
+            ViperUtil.insertAfter(urlRow, fileRow);
+
+            // append error message div
+            var $errorMessage = ViperUtil.$('<div class="Viper-image-error-message"></div>');
+            ViperUtil.insertAfter(fileRow, $errorMessage.get(0));
+
+
+            // append preview box
+            if(prefix == 'vitpImagePlugin') {
+                // for inline vitp, we need to create a preview box for it, the main toolbar one already created in parent class
+                var vitpPreviewBox = document.createElement('div');
+                ViperUtil.addClass(vitpPreviewBox, 'ViperITP-msgBox ViperImagePlugin-previewPanel');
+                ViperUtil.setHtml(vitpPreviewBox, 'Loading preview');
+                ViperUtil.setStyle(vitpPreviewBox, 'display', 'none');
+                this._vitpPreviewBox = vitpPreviewBox;
+                ViperUtil.insertAfter($errorMessage.get(0), this._vitpPreviewBox);
+            }
+            else {
+                // move the preview box right under the picker
+                ViperUtil.insertAfter($errorMessage.get(0), this._previewBox);
+            }
+
+
+
+
+            // add the variety chooser
+            var $varietyChooser = ViperUtil.$('<div class="Viper-varietyChooser"><div class="Viper-varietyChooserButton"><span class="Viper-varietyChooser-name">' + _('Original Image') + '</span> : <span class="Viper-varietyChooser-size" /><span class="Viper-varietyChooser-right-arrow"></span></div><div class="Viper-varietyChooser-menu"></div></div>');
+            ViperUtil.insertAfter(prefix == 'vitpImagePlugin' ? this._vitpPreviewBox : this._previewBox, $varietyChooser.get(0));
+
+        
+
+            // append the hidden file upload form
+            var form = this.createUploadImageForm(prefix);
+            ViperUtil.insertAfter($varietyChooser.get(0), form);
+
+            // append the file upload area
+            var $fileUploadArea = ViperUtil.$('<div id="' + prefix + 'fileUploadArea" class="Viper-imageUploadArea" ><div class="Viper-imageUploadArea-text">' + _('Drop image here or') + '</div><div id="Viper-imageUpload-button" class="Viper-button">' + _('Choose File') + '</div></div>');
+            ViperUtil.insertAfter($varietyChooser.get(0), $fileUploadArea.get(0));
+
+            // append the choose location fields for image upload
+            var locationFields = this.createChooseLocationFields(prefix);
+            ViperUtil.insertAfter($fileUploadArea.get(0), locationFields);
+
+            // append the image upload progress bar
+            var imageUploadProgressBar = this.createImageUploadProgressBar(prefix);
+            ViperUtil.insertAfter(prefix == 'vitpImagePlugin' ? this._vitpPreviewBox : this._previewBox, imageUploadProgressBar);
+
+
+            var $devidingLine = ViperUtil.$('<hr class="Viper-image-hr" />');
+            ViperUtil.insertAfter(locationFields, $devidingLine.get(0));
+
+            $assetTab.click(function(e) {
+                ViperUtil.preventDefault(e);
+                ViperUtil.$(this).parent().show();
+                ViperUtil.$(this).parent().find('a').removeClass('selected');
+                $assetTab.addClass('selected');
+
+                ViperUtil.$(this).parent().parent().find('.Viper-chooseAssetRow .Viper-textbox .Viper-textbox-title').html('ID');
+
+                // if it's a file upload base64, just clean it up
+                var value = ViperUtil.$(this).parent().parent().find('.Viper-chooseAssetRow input.Viper-textbox-input').val();
+                if(value.indexOf('filepath://') == 0) {
+                    ViperUtil.$(this).parent().parent().find('.Viper-chooseAssetRow input.Viper-textbox-input').val('');
+                    value = '';
+                }
+                var src = value.replace(/^\.\/\?a=/, '');
+
+                // Update preview pane.
+                self.updateImagePreview(src, prefix);
+
+                var $imageEditorIcon = ViperUtil.$(this).parent().parent().find('.Viper-imageEditor-button');
+                if(self._isInternalLink(value)){
+                    self.retrieveAssetDetails(src, function(data) {
+                        // update interface with asset's variety data and status
+                        self.enableAssetStatusIndicator(data);
+                        self.enableVarietyChooser(data);
+                    });
+                    $imageEditorIcon.show();
+                }
+                else {
+                    $imageEditorIcon.hide();
+                }
+                
+                var $assetPickerIcon = ViperUtil.$(this).parent().parent().find('.Viper-assetSelector-button');
+                $assetPickerIcon.show();
+
+                ViperUtil.$(this).parent().parent().find('.Viper-chooseAssetRow').show();
+                ViperUtil.$(this).parent().parent().find('.Viper-imageUploadArea').hide();
+                if(ViperUtil.$(this).parent().parent().find('.ViperImagePlugin-previewPanel').contents().length != 0) {
+                    ViperUtil.$(this).parent().parent().find('.ViperImagePlugin-previewPanel').show();
+                }
+
+                ViperUtil.$(this).parent().parent().find('.Viper-imageUploadFileRow').hide();
+                ViperUtil.$('.Viper-image-error-message').html('').hide();
+                // hide choose location fields
+                ViperUtil.$('.' + prefix + '-chooseLocationFields').hide();
+            })
+            $uploadTab.click(function(e) {
+                ViperUtil.preventDefault(e);
+                ViperUtil.$(this).parent().show();
+                ViperUtil.$(this).parent().find('a').removeClass('selected');
+                $uploadTab.addClass('selected');
+
+                // disable variety chooser etc
+                self.disableAssetStatusIndicator(tools.getItem(prefix + ':urlInput').element);
+                self.disableVarietyChooser(tools.getItem(prefix + ':urlInput').element);
+
+                ViperUtil.$(this).parent().parent().find('.Viper-chooseAssetRow').hide();
+                ViperUtil.$(this).parent().parent().find('.Viper-imageUploadArea').show();
+                ViperUtil.$(this).parent().parent().find('.ViperImagePlugin-previewPanel').hide();
+
+                ViperUtil.$(this).parent().parent().find('.Viper-imageUploadFileRow').hide();
+                ViperUtil.$('.Viper-image-error-message').html('').hide();
+            })
+            $urlTab.click(function(e) {
+                ViperUtil.preventDefault(e);
+                ViperUtil.$(this).parent().show();
+                ViperUtil.$(this).parent().find('a').removeClass('selected');
+                $urlTab.addClass('selected');
+
+                ViperUtil.$(this).parent().parent().find('.Viper-chooseAssetRow .Viper-textbox .Viper-textbox-title').html('URL');
+
+                // if it's a file upload base64, just clean it up
+                var value = ViperUtil.$(this).parent().parent().find('.Viper-chooseAssetRow input.Viper-textbox-input').val();
+                if(value.indexOf('filepath://') == 0) {
+                    ViperUtil.$(this).parent().parent().find('.Viper-chooseAssetRow input.Viper-textbox-input').val('');
+                    value = '';
+                }
+                var src = value.replace(/^\.\/\?a=/, '');
+
+                // Update preview pane.
+                self.updateImagePreview(src, prefix);
+
+                //disable icons
+                var $imageEditorIcon = ViperUtil.$(this).parent().parent().find('.Viper-imageEditor-button');
+                $imageEditorIcon.hide();
+                var $assetPickerIcon = ViperUtil.$(this).parent().parent().find('.Viper-assetSelector-button');
+                $assetPickerIcon.hide();
+
+                // disable variety chooser etc
+                self.disableAssetStatusIndicator(tools.getItem(prefix + ':urlInput').element);
+                self.disableVarietyChooser(tools.getItem(prefix + ':urlInput').element);
+
+
+                ViperUtil.$(this).parent().parent().find('.Viper-chooseAssetRow').show();
+                ViperUtil.$(this).parent().parent().find('.Viper-imageUploadArea').hide();
+                if(ViperUtil.$(this).parent().parent().find('.ViperImagePlugin-previewPanel').contents().length != 0) {
+                    ViperUtil.$(this).parent().parent().find('.ViperImagePlugin-previewPanel').show();
+                }
+
+                ViperUtil.$(this).parent().parent().find('.Viper-imageUploadFileRow').hide();
+                ViperUtil.$('.Viper-image-error-message').html('').hide();
+                // hide choose location fields
+                ViperUtil.$('.' + prefix + '-chooseLocationFields').hide();
+
+            });
+
+            $fileUploadArea.click(function(e) {
+                ViperUtil.$(this).parent().parent().find('input[name=create_image_upload]').click();
+            });
+                  
+        },
+
+        _updateToolbar: function(image, toolbarPrefix)
+        {
+            var toolbar = this.viper.PluginManager.getPlugin('ViperToolbarPlugin');
+            var self = this;
+            if (!toolbar) {
+                return;
+            }
+
+            var tools = this.viper.Tools;
+            var urlInput = tools.getItem(toolbarPrefix + ':urlInput');
+            var $dialog = ViperUtil.$(urlInput.element).parent().parent().parent();
+
+            self._uploadForm.get(0).reset();
+            self._inlineUploadForm.get(0).reset();
+
+            if (image && ViperUtil.isTag(image, 'img') === true) {
+                tools.setButtonActive('image');
+
+                var src = this.viper.getAttribute(image, 'src');
+
+                // get rid of the trailing timestamp
+                if(this._isInternalLink(src)) {
+                    src = src.replace(/(\?|&)v=[0-9]+/g, '');
+                }
+
+                this.setUrlFieldValue(src);
+                tools.getItem(toolbarPrefix + ':altInput').setValue(this.viper.getAttribute(image, 'alt') || '');
+                tools.getItem(toolbarPrefix + ':titleInput').setValue(this.viper.getAttribute(image, 'title') || '');
+
+                if (!image.getAttribute('alt')) {
+                    tools.getItem(toolbarPrefix + ':isDecorative').setValue(true);
+                } else {
+                    tools.getItem(toolbarPrefix + ':isDecorative').setValue(false);
+                }
+
+
+                // which tab to open
+                if(this._isInternalLink(src)) {
+                    $dialog.find('#' + toolbarPrefix + 'tabAsset').click();
+                }
+                else if (src.indexOf('filepath://') == 0) {
+                    $dialog.find('#' + toolbarPrefix + 'tabUpload').click();
+                }
+                else {
+                    $dialog.find('#' + toolbarPrefix + 'tabURL').click();
+                }
+
+                // if it's a "droped in content" image upload, we need to prepare ourself
+                self._prepareDropppedImageUpload(toolbarPrefix);
+
+            } else {
+                tools.enableButton('image');
+                tools.setButtonInactive('image');
+
+                tools.getItem(toolbarPrefix + ':isDecorative').setValue(true);
+                tools.getItem(toolbarPrefix + ':urlInput').setValue('');
+                tools.getItem(toolbarPrefix + ':altInput').setValue('');
+                tools.getItem(toolbarPrefix + ':titleInput').setValue('');
+                tools.setFieldErrors(toolbarPrefix + ':urlInput', []);
+
+                // Update preview pane.
+                ViperUtil.empty(toolbarPrefix == 'vitpImagePlugin' ? this._vitpPreviewBox : this._previewBox);
+                ViperUtil.setStyle(toolbarPrefix == 'vitpImagePlugin' ? this._vitpPreviewBox : this._previewBox, 'display', 'none');
+
+                // open asset tab by default
+                $dialog.find('#' + toolbarPrefix + 'tabAsset').click();
+
+
+                self.disableAssetStatusIndicator(tools.getItem(toolbarPrefix + ':urlInput').element);
+                self.disableVarietyChooser(tools.getItem(toolbarPrefix + ':urlInput').element);
+
+            }//end if
+
+        },
+
+        retrieveAssetDetails: function(assetid, callback)
+        {
+            assetid = assetid.replace(/(\?|&).*/g, '');
+            var exp = /(.*):(v[0-9]+)/g;
+            var result = exp.exec(assetid);
+            var varietyId = null;
+            if(result) {
+                assetid = result[1];
+                varietyId = result[2];
+            }
+            if(this._isEditPlus()) {
+                EasyEditAssetManager.getAsset(assetid, function(asset){
+                    var data = {'assetid' : assetid, 'varietyid' : varietyId, 'attributes' : asset.attr};
+                    self._currentImageData = data;
+                    callback.call(this, data);
+                });
+            }
+            else {
+                var jsMap = parent.frames.sq_sidenav.JS_Asset_Map;
+                jsMap.doRequest({
+                    _attributes: {
+                        action: 'get attributes'
+                    },
+                    asset: [
+                        {
+                            _attributes: {
+                                assetid: assetid
+                            }
+                        }
+                    ]
+                }, function(response) {
+                    var data = {'assetid' : assetid, 'varietyid' : varietyId, 'attributes' : response['asset'][0]['_attributes']};
+
+                    var name = '';
+                    switch(data.attributes.status) {
+                        case "1":
+                            name = 'Archived';
+                        break;
+                        case "2":
+                            name = 'Under Construction';
+                        break;
+                        case "4":
+                            name = 'Pending Approval';
+                        break;
+                        case "8":
+                            name = 'Approved To Go Live';
+                        break;
+                        case "16":
+                            name = 'Live';
+                        break;
+                        case "32":
+                            name = 'Up For Review';
+                        break;
+                        case "64":
+                            name = 'Safe Editing';
+                        break;
+                        case "128":
+                            name = 'Safe Editing Pending Approval';
+                        break;
+                        case "256":
+                            name = 'Safe Edit Approved To Go Live';
+                        break;
+                    }
+                    data.attributes.status = name;
+
+                    self._currentImageData = data;
+                    callback.call(this, data);
+                });
+            }
+        },
+
+        enableAssetStatusIndicator: function(data)
+        {
+
+            var urlInputs = [this.viper.Tools.getItem('ViperImagePlugin:urlInput'), this.viper.Tools.getItem('vitpImagePlugin:urlInput')];
+            for (var i in urlInputs) {
+                var urlInput = urlInputs[i];
+                var $urlInput = ViperUtil.$(urlInput.element);
+                $urlInput.find('div.Viper-textbox-main').hide();
+                $urlInput.find('div.Viper-image-status').show();
+                $urlInput.find('span.Viper-image-filename-indicator').html(data.attributes.title);
+                var className = '';
+                var self = this;
+                className = data.attributes.status.replace(/\s/g, '').toLowerCase();
+                // set status color
+                $urlInput.find('span.Viper-image-status-indicator').attr('class', 'Viper-image-status-indicator ' + className);
+                // click on this div, make it disappear
+                $urlInput.find('div.Viper-image-status').click(function() {
+                    self.disableAssetStatusIndicator(ViperUtil.$(this).parent().parent());
+                    ViperUtil.$(this).parent().find('input.Viper-textbox-input').focus().click();
+                })
+            }
+
+        },
+
+        disableAssetStatusIndicator: function(urlInput)
+        {
+            ViperUtil.$(urlInput).find('div.Viper-textbox-main').show();
+            ViperUtil.$(urlInput).find('div.Viper-image-status').hide();
+        },
+
+        enableVarietyChooser: function(data)
+        {
+            var urlInputs = {'ViperImagePlugin' : this.viper.Tools.getItem('ViperImagePlugin:urlInput'), 'vitpImagePlugin' : this.viper.Tools.getItem('vitpImagePlugin:urlInput')};
+            var self = this;
+            var varietyData = data.attributes.varieties;
+            if(typeof varietyData == 'string') {
+                varietyData = JSON.parse(varietyData);
+            }
+            varietyData = varietyData.data;
+
+            for (var i in urlInputs) {
+                var urlInput = urlInputs[i];
+                var $parentDiv = ViperUtil.$(urlInput.element).parent().parent();
+                if(urlInput.getValue() != '') {
+                    $parentDiv.find('.Viper-varietyChooser').show();
+                    $parentDiv.find('.Viper-varietyChooser-menu').hide();
+                    $chooser = $parentDiv.find('.Viper-varietyChooserButton');
+                    $text = $parentDiv.find('.Viper-varietyChooserButton .Viper-varietyChooser-size');
+                    $name = $parentDiv.find('.Viper-varietyChooserButton .Viper-varietyChooser-name');
+                    $chooser.attr('data-prefix', i);
+
+                    // if current image is a variety
+                    if(data.varietyid && varietyData[data.varietyid])
+                    {   
+                        // add the chooser's text
+                        $text.html(varietyData[data.varietyid].variety_width + ' x ' + varietyData[data.varietyid].variety_height + ' (' + self._readablizeBytes(varietyData[data.varietyid].variety_size) + ')');
+                        $name.html(varietyData[data.varietyid].name);
+                        // set it as data attr
+                        $chooser.attr('data-varietyid', data.varietyid);
+                    }
+                    else {
+                        var originalImageSize = data.attributes.width + ' x ' + data.attributes.height + ' (' + self._readablizeBytes(data.attributes.size) + ')';
+                        $text.html(originalImageSize);
+                        $name.html(_('Original Image'));
+                        // remove the current variety attr
+                        $chooser.removeAttr('data-varietyid');
+                    }
+
+                    $chooser.unbind( "click" );
+                    $chooser.on('click', function() {
+                        var $menu = ViperUtil.$(this).parent().find('.Viper-varietyChooser-menu');
+                        var currentVarietyId = ViperUtil.$(this).attr('data-varietyid');
+
+                        $menu.empty();
+
+                        $menuList = ViperUtil.$('<ul></ul>');
+                        $menu.append($menuList);
+                        $originalImageMenuItem = ViperUtil.$('<li><span class="varietyMenuName">' + _('Original Image') + '</span><span class="varietyMenuSize">' + originalImageSize + '</span><span class="varietyMenuChecked"/></li>');
+                        $menuList.append($originalImageMenuItem);
+
+                        // if it's image not a variety
+                        if(!currentVarietyId) {
+                            $originalImageMenuItem.addClass('selected');
+                        }
+
+                        var varietyCount = 0;
+                        for (var varietyIndex in varietyData) {
+                            varietyCount++;
+                            var varietySize = varietyData[varietyIndex].variety_width + ' x ' + varietyData[varietyIndex].variety_height + ' (' + self._readablizeBytes(varietyData[varietyIndex].variety_size) + ')';
+                            $varietyMenuItem  = ViperUtil.$('<li><span class="varietyMenuName">' + varietyData[varietyIndex].name + '</span><span class="varietyMenuSize">' + varietySize + '</span><span class="varietyMenuChecked"/></li>');
+                            $menuList.append($varietyMenuItem);
+                            if(varietyIndex == currentVarietyId) {
+                                $varietyMenuItem.addClass('selected');
+                            }
+                            // click on menu item, set the current varietyid
+                            $varietyMenuItem.attr('data-id', varietyIndex);
+                            $varietyMenuItem.click(function() {
+                                $menu.hide();
+                                data.varietyid = ViperUtil.$(this).data('id');
+                                self.enableVarietyChooser(data);
+                                var prefix = ViperUtil.$(this).parent().parent().parent().find('.Viper-varietyChooserButton').attr('data-prefix');
+                                var urlInputToUpdate = self.viper.Tools.getItem( prefix + ':urlInput');
+                                urlInputToUpdate.setValue(data.assetid + ':' + data.varietyid,false);
+                                self.setPreviewContent(false, true, prefix);
+                            });
+                        }
+                        $originalImageMenuItem.click(function() {
+                            $menu.hide();
+                            data.varietyid = null;
+                            self.enableVarietyChooser(data);
+                            var prefix = ViperUtil.$(this).parent().parent().parent().find('.Viper-varietyChooserButton').attr('data-prefix');
+                            var urlInputToUpdate = self.viper.Tools.getItem(prefix + ':urlInput');
+                            urlInputToUpdate.setValue(data.assetid,false);
+                            self.setPreviewContent(false, true, prefix);
+                        });
+
+                        // work out the position and size of the menu list
+                        $menu.toggle();
+                        var position = -20 * (varietyCount + 1);
+                        var height = -2.05 * position;
+                        $menu.css('height', height);
+                        // -12 is for position of the left arrow
+                        $menu.css('top', position - 12);
+                    });
+                }
+            }
+
+        },
+
+        disableVarietyChooser: function(urlInput)
+        {
+            var $parentDiv = ViperUtil.$(urlInput).parent().parent();
+            $parentDiv.find('.Viper-varietyChooser').hide();
+        },
+
+        setPreviewContent: function(img, loading, prefix)
+        {
+                var previewBox = prefix == 'ViperImagePlugin' ? this._previewBox : this._vitpPreviewBox;
+                ViperUtil.setStyle(previewBox, 'display', 'block');
+
+                if (loading === true) {
+                    ViperUtil.$(previewBox).append('<div class="loadingPreviewMessage">' + _('Loading preview') + '</div>');
+                    ViperUtil.$('.Viper-image-error-message').html('').hide();
+                } else if (!img) {
+                    // Failed to load image.
+                    ViperUtil.removeClass(previewBox, 'Viper-info');
+                    ViperUtil.setStyle(previewBox, 'display', 'none');
+                    ViperUtil.$('.Viper-image-error-message').html(_('Could not load preview')).show();
+                } else {
+
+                    this.viper.Tools.setFieldErrors('ViperImagePlugin:urlInput', []);
+                    ViperUtil.$('.Viper-image-error-message').html('').hide();
+                    ViperUtil.addClass(previewBox, 'Viper-info');
+
+                    var tmp = document.createElement('div');
+                    ViperUtil.setStyle(tmp, 'visibility', 'hidden');
+                    ViperUtil.setStyle(tmp, 'left', '-9999px');
+                    ViperUtil.setStyle(tmp, 'top', '-9999px');
+                    ViperUtil.setStyle(tmp, 'position', 'absolute');
+                    tmp.appendChild(img);
+                    this.viper.addElement(tmp);
+
+                    ViperUtil.setStyle(img, 'width', '');
+                    ViperUtil.setStyle(img, 'height', '');
+
+                    var width  = ViperUtil.getElementWidth(img);
+                    var height = ViperUtil.getElementHeight(img);
+                    ViperUtil.remove(tmp);
+
+                    img.removeAttribute('height');
+                    img.removeAttribute('width');
+
+                    var maxWidth  = 320;
+                    var maxHeight = 320;
+                    if (height > maxHeight && width > maxWidth) {
+                        if (height > width) {
+                            ViperUtil.setStyle(img, 'height', 'auto');
+                            ViperUtil.setStyle(img, 'width', maxWidth + 'px');
+                        } else {
+                            ViperUtil.setStyle(img, 'width', maxWidth + 'px');
+                            ViperUtil.setStyle(img, 'height', 'auto');
+                        }
+                    } else if (width > maxWidth) {
+                        ViperUtil.setStyle(img, 'width', maxWidth + 'px');
+                        ViperUtil.setStyle(img, 'height', 'auto');
+                    } else if (height > maxHeight) {
+                        ViperUtil.setStyle(img, 'height', maxHeight + 'px');
+                        ViperUtil.setStyle(img, 'width', 'auto');
+                    }
+
+
+                    ViperUtil.empty(previewBox);
+                   
+                    // if it's a very short image (small height value)
+                    // we will add a span padding, so that the preview box would have a mininum height, and image would sit in the vertical center
+                    if(height < 150) {
+                        // the span has a height of 150px
+                        var span = document.createElement('span');
+                        previewBox.appendChild(span);
+                    }
+
+                    previewBox.appendChild(img);
+
+                }//end if
+        },
+
         initTopToolbar: function()
+        {
+            // Call the parent method.
+            var contents = this._parent.prototype.initTopToolbar.call(this);
+
+            var self  = this;
+            var tools = this.viper.Tools;
+            var prefix = 'ViperImagePlugin';
+
+            self.createCustomInterface(prefix);
+
+            // register event to get rid of the trailing timestamp of v=xx  on all images
+            this.viper.registerCallback('Viper:getHtml', 'MatrixImagePlugin', function(data) {
+                var imgs = ViperUtil.getTag('img', data.element);
+                for (var i = 0; i < imgs.length; i++) {
+                    var imageTag = imgs[i];
+                    var src = imageTag.getAttribute('src');
+                    src = src.replace(/(\?|&)v=[0-9]+$/g, '');
+                    imageTag.setAttribute('src', src);
+                }
+            });
+
+
+            return contents;
+        },
+
+
+        createInlineToolbar: function(toolbar)
+        {
+            // Call the parent method.
+            this._parent.prototype.createInlineToolbar.call(this, toolbar);
+
+            var self  = this;
+            var tools = this.viper.Tools;
+            var prefix = 'vitpImagePlugin';
+
+            self.createCustomInterface(prefix);
+
+        },
+
+
+        _getToolbarContents: function(prefix)
+        {
+            var self  = this;
+            var tools = this.viper.Tools;
+
+            // Create Image button and popup.
+            var createImageSubContent = document.createElement('div');
+
+            // URL text box.
+            var urlTextbox = null;
+            var url = tools.createTextbox(prefix + ':urlInput', _('URL'), '', null, true);
+            createImageSubContent.appendChild(url);
+            urlTextbox = (ViperUtil.getTag('input', createImageSubContent)[0]);
+
+            // Test URL.
+            var inputTimeout = null;
+            this.viper.registerCallback('ViperTools:changed:' + prefix + ':urlInput', 'ViperImagePlugin', function() {
+                clearTimeout(inputTimeout);
+
+                var url = ViperUtil.trim(tools.getItem(prefix + ':urlInput').getValue());
+                if (!url) {
+
+                     ViperUtil.setStyle(prefix == 'vitpImagePlugin' ? this._vitpPreviewBox : this._previewBox, 'display', 'none');
+                     tools.setFieldErrors(prefix + ':urlInput', []);
+                } else {
+                    // After a time period update the image preview.
+                    inputTimeout = setTimeout(function() {
+                        self.updateImagePreview(url, prefix);
+                    }, 500);
+                }
+            });
+
+            // Decorative checkbox.
+            var decorative = tools.createCheckbox(prefix + ':isDecorative', _('Image is decorative'), false, function(presVal) {
+                if (presVal === true) {
+                    tools.getItem(prefix + ':altInput').disable();
+                    tools.getItem(prefix + ':titleInput').disable();
+                    tools.getItem(prefix + ':altInput').setRequired(false);
+                } else {
+                    tools.getItem(prefix + ':altInput').setRequired(true);
+                    tools.getItem(prefix + ':altInput').enable();
+                    tools.getItem(prefix + ':titleInput').enable();
+                }
+            });
+            createImageSubContent.appendChild(decorative);
+
+            // Alt text box.
+            var alt = tools.createTextbox(prefix + ':altInput', _('Alt'), '', null, true);
+            createImageSubContent.appendChild(alt);
+
+            // Title text box.
+            var title = tools.createTextbox(prefix + ':titleInput', _('Title'));
+            createImageSubContent.appendChild(title);
+
+            return createImageSubContent;
+
+        },
+
+
+        initTopToolbarX: function()
         {
             // Call the parent method.
             var contents = this._parent.prototype.initTopToolbar.call(this);
@@ -129,7 +822,7 @@
 
         },
 
-        createInlineToolbar: function(toolbar)
+        createInlineToolbarX: function(toolbar)
         {
             // Call the parent method.
             this._parent.prototype.createInlineToolbar.call(this, toolbar);
@@ -277,6 +970,7 @@
             // update preview from uploaded image
             $form.find('#'+ prefix + 'uploadImageButton').change(function(){
                 var fileName = this.value;
+                var prefix = this.id.replace(/uploadImageButton/, '');
 
                 if(typeof fileName !== 'undefined' && fileName) {
 
@@ -302,10 +996,14 @@
                     // if there is previous image preview specific settings, remove them
                     self._resetDroppedImageUpload();
 
+                    // set the file name
+                    ViperUtil.$('.Viper-imageUploadFileRow').show();
+                    self.viper.Tools.getItem(prefix + ':fileInput').setValue(cleanFileName);
+
                     // if File API is supported, load preview
                     if (window.File && window.FileReader && this.files && this.files[0]) {
                         var reader = new FileReader();
-                        self.setPreviewContent(false, true);
+                        self.setPreviewContent(false, true, prefix);
                         reader.readAsDataURL(this.files[0]);
                         var fileName = this.value;
                         reader.onload = function (e) {
@@ -313,13 +1011,16 @@
                                 img.src = e.target.result;
                                 img.onload = function(){
                                     // image  has been loaded, set it to preview (only works for File API supported browser, not ie8)
-                                    self.setPreviewContent(img, false);
+                                    self.setPreviewContent(img, false, prefix);
                             };
                         }
                     }
 
+                    // hide the upload area
+                    ViperUtil.$('#' + prefix + 'fileUploadArea').hide();
+
                     // show choose location fields
-                    ViperUtil.$('.' + prefix + '-chooseLocationFields').css('display', 'block');       
+                    ViperUtil.$('.' + prefix + '-chooseLocationFields').css('display', 'block');
 
                     // if the editable area does not belong to an asset, disable the choose current location option
                     var editableElement = self.viper.getEditableElement();
@@ -364,13 +1065,12 @@
             $progressIndicator = ViperUtil.$('<div id="' + prefix + '-progressIndicator" class="uploadImage-progressIndicator"></div>');
             $progressIndicator.append('<div class="uploadImage-progress-status"></div>');
             $progressIndicator.append('<div class="uploadImage-progress"><div class="uploadImage-progress-bar"><span class="uploadImage-progress-bar-inner" style="width: 0%;"></span></div></div>');
-            $progressIndicator.append('<div class="uploadImage-progress-message"></div>');
+
             var self = this;
 
             var $bar = $progressIndicator.find('.progress-bar-inner');
             var $progress = $progressIndicator.find('.progress');
             var $status = $progressIndicator.find('.progress-status');
-            var $message = $progressIndicator.find('.progress-message');
 
             // the progress bar is hidden initially
             $progressIndicator.hide();
@@ -398,7 +1098,7 @@
                     ViperUtil.$('.uploadImage-progress-bar-inner').hide();
                   }
                   ViperUtil.$('.uploadImage-progress-status').html(_('Uploading image...'));
-                  ViperUtil.$('.uploadImage-progress-message').hide();
+                  ViperUtil.$('.Viper-image-error-message').hide();
                   var percentVal = '2%';
                   ViperUtil.$('.uploadImage-progress-bar-inner').width(percentVal);
               },
@@ -419,19 +1119,15 @@
                         ViperUtil.$('.uploadImage-progress-status').hide();
                         ViperUtil.$('.uploadImage-progress').hide();
                         ViperUtil.$('.uploadImage-progress-bar-inner').width('0%');
-                        ViperUtil.$('.uploadImage-progress-message').html(response.error).show();
+                        ViperUtil.$('.Viper-image-error-message').html(response.error).show();
 
                         //reset the upload form
-                        uploadForm.get(0).reset();
+                        //uploadForm.get(0).reset();
 
                        
                         // if it's a image preview, we have to locate the preview image and replace it
                         if(response.image_preview_id && response.upload_id) {
                             self._setDroppedImageErrorStatus(response.image_preview_id, response.error, response.upload_id);
-                        }
-                        else {
-                            // no need to reset url field if it's a image preview to upload, user can just change file name in the url to try again
-                            self.setUrlFieldValue('');
                         }
 
                     }
@@ -495,6 +1191,7 @@
             var content = document.createElement('div');
 
             ViperUtil.addClass(content, prefix + '-chooseLocationFields');
+            ViperUtil.addClass(content, 'Viper-imageUpload-chooseLocationFields');
             ViperUtil.setStyle(content, 'display', 'none');
 
             // use current location checkbox
@@ -548,14 +1245,11 @@
         },
 
 
-        updateImagePreview: function(url)
+        updateImagePreview: function(url, prefix)
         {
 
-            if (url.match(/^\.\/\?a=/)) {
-                url = url.replace(/^\.\/\?a=/, '');
-            }
-
             if (this._isInternalLink(url) === true) {
+                url = url.replace(/^\.\/\?a=/, '');
                 var currentUrl = ViperUtil.baseUrl(window.location.href);
                 currentUrl     = currentUrl.replace('/_edit', '');
                 currentUrl += '?a=' + url;
@@ -564,14 +1258,19 @@
             }
 
             // if it's a inline file upload, don't worry about it, it's already handled elsewhere
-            if(url.indexOf("filepath://") === 0) {
+            if(url.indexOf("filepath://") === 0 || url.indexOf("data:") === 0 || url.length === 0) {
                 return;
             }
 
-            this.setPreviewContent(false, true);
             var self = this;
+
+            // bust browser cache with a time stamp appended to the image url
+            url = url.replace(/(\?|&)v=[0-9]+$/g, '');
+            var symbol = url.match(/\?/g) ? '&' : '?';
+            url = url + symbol + 'v=' + new Date().getTime();
+
             this._getImage(url, function(img) {
-                self.setPreviewContent(img);
+                self.setPreviewContent(img, false, prefix);
             });
         },
 
@@ -618,17 +1317,14 @@
             var url   = tools.getItem(prefix + ':urlInput').getValue();
             
             if(url == null) return;
-            var matrixPrefix = null;
             var self = this;
             var uploadForm = null;
             if(prefix.indexOf('vitp') > -1) {
                 uploadForm = this._inlineUploadForm;
-                matrixPrefix = 'vitpMatrixImagePlugin';
 
             }
             else {
                 uploadForm = this._uploadForm;
-                matrixPrefix = 'MatrixImagePlugin';
 
             }
 
@@ -640,7 +1336,7 @@
 
             // if we are not uploading a image preview
             // remove the css class so it won't be a preview anymore
-            if(!uploadForm.find('input[name=base64]').val()) {
+            if(uploadForm && !uploadForm.find('input[name=base64]').val()) {
                 this._removeDroppedImageStatus();
             }
 
@@ -648,7 +1344,7 @@
             if (url.indexOf("filepath://") === 0) {
 
                 //let's just set the file name from what user inputs
-                var fileName   = tools.getItem(matrixPrefix + ':fileInput').getValue();
+                var fileName   = tools.getItem(prefix + ':fileInput').getValue();
                 uploadForm.find('input[name=file_name]').val(fileName);
 
 
@@ -663,9 +1359,9 @@
 
 
                 // set the selected parent root node location
-                var selectedRootNode = tools.getItem(matrixPrefix + ':parentRootNode').getValue();
-                var useCurrentLocation = tools.getItem(matrixPrefix + ':useCurrentLocation').getValue();
-                var showInMenu = tools.getItem(matrixPrefix + ':showInMenu').getValue();
+                var selectedRootNode = tools.getItem(prefix + ':parentRootNode').getValue();
+                var useCurrentLocation = tools.getItem(prefix + ':useCurrentLocation').getValue();
+                var showInMenu = tools.getItem(prefix + ':showInMenu').getValue();
                 var currentAssetid = null;
                 var editableElement = this.viper.getEditableElement();
                 var idString = ViperUtil.$(editableElement).attr('id');
@@ -685,7 +1381,7 @@
                     }
                     else {
                         // nothing selected? fall back to current location
-                        tools.getItem(matrixPrefix + ':useCurrentLocation').setValue(true);
+                        tools.getItem(prefix + ':useCurrentLocation').setValue(true);
                         uploadForm.find('input[name=create_root_node]').val(currentAssetid);
                     }
                 }
@@ -785,7 +1481,14 @@
                     else {
                         urlField.setValue(data.assetid,false);
                         altField.setValue(data.attributes.alt,false);
+                        self.setPreviewContent(false, true, 'ViperImagePlugin');
+                        self.setPreviewContent(false, true, 'vitpImagePlugin');
                         self._resetDroppedImageUpload();
+                        self.retrieveAssetDetails(data.assetid, function(data) {
+                            // update interface with asset's variety data and status
+                            self.enableAssetStatusIndicator(data);
+                            self.enableVarietyChooser(data);
+                        });
 
                     }
                 }
@@ -858,7 +1561,16 @@
                     else {
                         urlField.setValue(selectedAsset.id,false);
                         altField.setValue(altText,false);
+                        self.setPreviewContent(false, true, 'ViperImagePlugin');
+                        self.setPreviewContent(false, true, 'vitpImagePlugin');
+
                         self._resetDroppedImageUpload();
+
+                        self.retrieveAssetDetails(selectedAsset.id, function(data) {
+                            // update interface with asset's variety data and status
+                            self.enableAssetStatusIndicator(data);
+                            self.enableVarietyChooser(data);
+                        });
                     }
                 }
             });
@@ -871,9 +1583,13 @@
         isPluginElement: function(element)
         {
             var assetFinderOverlay = ViperUtil.getid('ees_assetFinderOverlay');
+            var assetDetailsOverlay = ViperUtil.getid('ees_imageDetailsOverlay');
+            var assetEditorOverlay = ViperUtil.getid('ees_imageEditorOverlay');
             if (element !== this._toolbar
                 && ViperUtil.isChildOf(element, this._toolbar) === false
                 && ViperUtil.isChildOf(element, assetFinderOverlay) === false
+                && ViperUtil.isChildOf(element, assetDetailsOverlay) === false
+                && ViperUtil.isChildOf(element, assetEditorOverlay) === false
             ) {
                 return false;
             }
@@ -893,8 +1609,24 @@
                 callback.call(this, false);
             };
         
-            img.src = url;
+            this.viper.setAttribute(img, 'src', url);
         
+        },
+
+
+        setImageURL: function(image, url)
+        {
+            if (!image) {
+                return;
+            }
+
+            // bust browser cache with a time stamp appended to the image url
+            url = url.replace(/(\?|&)v=[0-9]+$/g, '');
+            var symbol = url.match(/\?/g) ? '&' : '?';
+            url = url + symbol + 'v=' + new Date().getTime();
+
+            this.viper.setAttribute(image, 'src', url);
+
         },
 
         /* below functions handle the dropped image to upload */
@@ -1004,16 +1736,16 @@
                         ViperUtil.$('.uploadImage-progressIndicator').show();
                         ViperUtil.$('.uploadImage-progress-status').hide();
                         ViperUtil.$('.uploadImage-progress').hide();
-                        ViperUtil.$('.uploadImage-progress-message').html(errorMessage).show();
+                        ViperUtil.$('.Viper-image-error-message').html(errorMessage).show();
                     }
 
                     // display the warning message to ask user to create asset
                     ViperUtil.$('<div />', {
                         "class": 'VipperDroppedImage-msgBox'
-                        }).html(_('Low resolution preview.') + '<br/>' + _('Upload the image to use it in the content.')).insertBefore('.Viper-imageUploadRow');              
+                        }).html(_('Low resolution preview.') + '<br/>' + _('Upload the image to use it in the content.')).insertBefore('.Viper-chooseAssetRow');              
 
                     // hide the URL row and display the file row
-                    ViperUtil.$('.Viper-imageUploadRow').hide();
+                    ViperUtil.$('.Viper-chooseAssetRow').hide();
                     ViperUtil.$('.Viper-imageUploadFileRow').show();
                     
 
@@ -1041,6 +1773,7 @@
 
 
         _resetDroppedImageUpload: function() {
+                return;
                     // chaneg the apply button text  back to 'Apply Changes'
                     var applyButton1 = this.viper.Tools.getItem('ViperImagePlugin:bubbleSubSection-applyButton');
                     var applyButton2 = this.viper.Tools.getItem('vitpImagePlugin-infoSubsection-applyButton');
@@ -1055,6 +1788,10 @@
                     // hide the file row and display the url row
                     ViperUtil.$('.Viper-imageUploadRow').show();
                     ViperUtil.$('.Viper-imageUploadFileRow').hide();
+
+                    // remove file name
+                    tools.getItem('vitpImagePlugin:fileInput').setValue('');
+                    tools.getItem('ViperImagePlugin:fileInput').setValue('');
         },
 
         _replacePreviewWithOriginal: function(previewId, assetId, alt, title, uploadId) {
@@ -1107,7 +1844,23 @@
                     ViperUtil.$(image).removeAttr('data-imagepaste-status');
                     ViperUtil.$(image).removeAttr('data-upload-id');
             }
-        }
+        },
+
+
+        _readablizeBytes: function(bytes) {
+
+            var s = [
+                _('bytes'),
+                _('kb'),
+                _('MB'),
+                _('GB'),
+                _('TB'),
+                _('PB')
+            ];
+            var e = Math.floor(Math.log(bytes)/Math.log(1024));
+            return (bytes/Math.pow(1024, Math.floor(e))).toFixed(2)+" "+s[e];
+
+        }, //  End readablizeBytes.
 
 
     };
