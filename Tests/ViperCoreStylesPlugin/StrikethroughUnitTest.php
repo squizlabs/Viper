@@ -392,12 +392,12 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
         $this->selectKeyword(2);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('abc');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <del>%1%</del></p><p>Some more strikethrough test <del>abc test abc %4%</del> content to test</p>');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <del>%1%</del></p><p>Some more strikethrough test abc<del> test abc %4%</del> content to test</p>');
 
         $this->selectKeyword(4);
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('test');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <del>%1%</del></p><p>Some more strikethrough test <del>abc test abc test</del> content to test</p>');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <del>%1%</del></p><p>Some more strikethrough test abc<del> test abc test</del> content to test</p>');
 
     }//end testEditingStrikethroughContent()
 
@@ -415,14 +415,14 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('new ');
-        $this->assertHTMLMatch('<p>%1% <del>new a %2% b</del> %3%</p>');
+        $this->assertHTMLMatch('<p>%1% new <del>a %2% b</del> %3%</p>');
 
         // Test adding content before strikethrough content when cursor starts elsewhere in content
         $this->useTest(6);
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->type('new ');
-        $this->assertHTMLMatch('<p>%1% <del>new a %2% b</del> %3%</p>');
+        $this->assertHTMLMatch('<p>%1% new <del>a %2% b</del> %3%</p>');
 
         // Test adding content after strikethrough content when cursor starts inside the strikethrough content
         $this->useTest(6);
