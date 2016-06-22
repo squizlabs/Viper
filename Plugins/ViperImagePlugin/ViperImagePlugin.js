@@ -666,11 +666,22 @@
         },
 
         hideURLField: function (toolbarPrefix) {
-            this.viper.Tools.getItem(toolbarPrefix + ':urlInput').hide();
+            if (ViperUtil.isBrowser('chrome') === true) {
+                // Strange Chrome v50 bug. If the textbox is hidden then the decorative checkbox only works when double
+                // clicked. So put the element off screen.
+                ViperUtil.addClass(this.viper.Tools.getItem(toolbarPrefix + ':urlInput').element, 'Viper-offScreen');
+            } else {
+                this.viper.Tools.getItem(toolbarPrefix + ':urlInput').hide();
+            }
+
         },
 
         showURLField: function (toolbarPrefix) {
-            this.viper.Tools.getItem(toolbarPrefix + ':urlInput').show();
+            if (ViperUtil.isBrowser('chrome') === true) {
+                ViperUtil.removeClass(this.viper.Tools.getItem(toolbarPrefix + ':urlInput').element, 'Viper-offScreen');
+            } else {
+                this.viper.Tools.getItem(toolbarPrefix + ':urlInput').show();
+            }
         },
 
 

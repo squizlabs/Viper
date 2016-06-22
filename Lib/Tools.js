@@ -1723,7 +1723,7 @@
                             var inputElements = ViperUtil.getTag('input[type=text], textarea', subSection);
                             if (inputElements.length > 0) {
                                 for (var i = 0; i < inputElements.length; i++) {
-                                    if (ViperUtil.getElementWidth(inputElements[i]) === 0) {
+                                    if (ViperUtil.getElementWidth(inputElements[i]) === 0 || inputElements[i].disabled) {
                                         // Element is hidden.
                                         continue;
                                     }

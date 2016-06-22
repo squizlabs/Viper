@@ -32,3 +32,8 @@
 .Viper-hidden {
     display: none;
 }
+
+.Viper-offScreen {
+    position: absolute;
+    left: -9999px;
+}
