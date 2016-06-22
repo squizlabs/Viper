@@ -954,6 +954,10 @@
                     tools.enableButton('class');
                 }
 
+                if (nodeSelection === self.viper.getViperElement()) {
+                    nodeSelection = null;
+                }
+
                 if (!startNode
                     && !endNode
                     && range.startContainer === range.endContainer
