@@ -1254,13 +1254,25 @@
             var mergeLeft = this._tools.createButton('VTEP:cellProps:mergeLeft', '', _('Merge Left'), 'Viper-mergeLeft', function() {
                 var cell = self.getActiveCell();
                 self._buttonClicked = true;
-                self.updateToolbar(self.mergeLeft(cell), 'cell', 'merge');
+                setTimeout(
+                    function () {
+                        self.updateToolbar(self.mergeLeft(cell), 'cell', 'merge');
+                    },
+                    100
+                )
+
             });
 
             var mergeRight = this._tools.createButton('VTEP:cellProps:mergeRight', '', _('Merge Right'), 'Viper-mergeRight', function() {
                 var cell = self.getActiveCell();
                 self._buttonClicked = true;
-                self.updateToolbar(self.mergeRight(cell), 'cell', 'merge');
+                setTimeout(
+                    function () {
+                        self.updateToolbar(self.mergeRight(cell), 'cell', 'merge');
+                    },
+                    100
+                )
+
             });
 
             var mergeBtnGroup = this._tools.createButtonGroup('VTEP:cellProps:mergeButtons');
