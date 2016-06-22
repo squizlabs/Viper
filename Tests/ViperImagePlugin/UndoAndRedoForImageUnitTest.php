@@ -109,7 +109,7 @@ class Viper_Tests_ViperImagePlugin_UndoAndRedoForImageUnitTest extends AbstractV
 
 
     /**
-     * Test editing the URL of the image and clicking undo.
+     * Test editing the URL of the image in source code and clicking undo.
      *
      * @return void
      */
@@ -117,12 +117,13 @@ class Viper_Tests_ViperImagePlugin_UndoAndRedoForImageUnitTest extends AbstractV
     {
         $this->useTest(2);
 
-        // Change URL for an image
-        $this->clickElement('img', 0);
-        $this->clickInlineToolbarButton('image', 'active');
-        $this->clearFieldValue('URL');
-        $this->type($this->getTestURL('/ViperImagePlugin/Images/hero-shot.jpg'));
-        $this->sikuli->keyDown('Key.ENTER');
+        $this->moveToKeyword(1);
+        $this->clickTopToolbarButton('sourceView');
+        sleep(2);
+        $this->sikuli->keyDown('Key.CMD + a');
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt=""/></p><p>LABS is ORSM</p>');
+        $this->clickButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt=""/></p><p>LABS is ORSM</p>');
 
         // Click undo
@@ -132,7 +133,6 @@ class Viper_Tests_ViperImagePlugin_UndoAndRedoForImageUnitTest extends AbstractV
         // Click redo
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt=""/></p><p>LABS is ORSM</p>');
-        $this->checkResizeHandles('img');
 
     }//end testUndoEditUrlOfImage()
 
@@ -151,11 +151,12 @@ class Viper_Tests_ViperImagePlugin_UndoAndRedoForImageUnitTest extends AbstractV
         sleep(1);
         $this->clickInlineToolbarButton('image', 'active');
         $this->clickField('Image is decorative');
-        $this->sikuli->keyDown('Key.TAB');
+        sleep(1);
+        $this->clickField('Alt');
         $this->type('Alt tag');
-        $this->sikuli->keyDown('Key.TAB');
+        $this->clickField('Title');
         $this->type('Title tag');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Update Image', NULL, TRUE);
         $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="Alt tag" src="%url%/ViperImagePlugin/Images/editing.png" title="Title tag" /></p><p>LABS is ORSM</p>');
 
         // Click undo
@@ -180,14 +181,14 @@ class Viper_Tests_ViperImagePlugin_UndoAndRedoForImageUnitTest extends AbstractV
         $this->useTest(2);
 
         $this->clickElement('img', 0);
-        $this->resizeImage(300);
-        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" height="270" src="%url%/ViperImagePlugin/Images/editing.png" width="300" /></p><p>LABS is ORSM</p>');
+        $this->resizeImage(50);
+        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" height="45" src="%url%/ViperImagePlugin/Images/editing.png" width="50" /></p><p>LABS is ORSM</p>');
 
         $this->clickTopToolbarButton('historyUndo');
         $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/editing.png" alt=""/></p><p>LABS is ORSM</p>');
 
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" height="270" src="%url%/ViperImagePlugin/Images/editing.png" width="300" /></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" height="45" src="%url%/ViperImagePlugin/Images/editing.png" width="50" /></p><p>LABS is ORSM</p>');
         $this->checkResizeHandles('img');
 
     }//end testUndoResizeOfImage()
@@ -205,20 +206,54 @@ class Viper_Tests_ViperImagePlugin_UndoAndRedoForImageUnitTest extends AbstractV
         // Resize the image
         $this->clickElement('img', 0);
         sleep(2);
-        $this->resizeImage(300);
+        $this->resizeImage(50);
         sleep(2);
-        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" height="270" src="%url%/ViperImagePlugin/Images/editing.png" width="300" /></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" height="45" src="%url%/ViperImagePlugin/Images/editing.png" width="50" /></p><p>LABS is ORSM</p>');
 
         // Delete the image
+        $this->clickKeyword(1);
         $this->clickElement('img', 0);
         sleep(2);
         $this->sikuli->keyDown('Key.DELETE');
 
         // Undo and check that the resized image was inserted into the content
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" height="270" src="%url%/ViperImagePlugin/Images/editing.png" width="300" /></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" height="45" src="%url%/ViperImagePlugin/Images/editing.png" width="50" /></p><p>LABS is ORSM</p>');
 
     }//end testResizeImageDeleteItAndClickUndo()
+
+
+    /**
+     * Test resizing an image, deleting it and then clicking undo.
+     *
+     * @return void
+     */
+    public function testMaximumSizeResizeOfImage()
+    {
+        $this->useTest(2);
+
+        // Test that you cannot resize the image past the maximum values.
+        $this->clickElement('img', 0);
+        sleep(2);
+        $this->resizeImage(300);
+        sleep(2);
+        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" src="%url%/ViperImagePlugin/Images/editing.png" /></p><p>LABS is ORSM</p>');
+
+        // Test that you can resize the image smaller than the original.
+        $this->clickElement('img', 0);
+        sleep(2);
+        $this->resizeImage(50);
+        sleep(2);
+        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" height="45" src="%url%/ViperImagePlugin/Images/editing.png" width="50" /></p><p>LABS is ORSM</p>');
+
+        // Test that you can resize the image back past the maximum.
+        $this->clickElement('img', 0);
+        sleep(2);
+        $this->resizeImage(300);
+        sleep(2);
+        $this->assertHTMLMatch('<h1>Image without alt or title</h1><p>%1% XuT</p><p><img alt="" src="%url%/ViperImagePlugin/Images/editing.png" /></p><p>LABS is ORSM</p>');
+
+    }//end testMaximumSizeResizeOfImage()
 
 
      /**
