@@ -53,14 +53,18 @@ class Viper_Tests_ViperImagePlugin_ResizeImageUnitTest extends AbstractViperImag
         $this->resizeImage(200);
         $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="200" height="90"/></p><p>LABS is ORSM</p>');
         $this->checkResizeHandles('img');
+        $this->clickKeyword(1);
         $this->clickElement('img', 0);
         $this->clickInlineToolbarButton('image', 'active');
         $this->clickField('Image is decorative');
+        $this->clickField('Alt');
         $this->type('Alt tag');
-        $this->sikuli->keyDown('Key.TAB');
+        sleep(1);
+        $this->clickField('Title');
         $this->type('Title tag');
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="Alt tag" title="Title tag" width="100" height="45"/></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="Alt tag" title="Title tag" width="200" height="90"/></p><p>LABS is ORSM</p>');
 
          // Using top toolbar
         $this->useTest(1);
@@ -68,14 +72,16 @@ class Viper_Tests_ViperImagePlugin_ResizeImageUnitTest extends AbstractViperImag
         $this->resizeImage(200);
         $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="200" height="90"/></p><p>LABS is ORSM</p>');
         $this->checkResizeHandles('img');
+        $this->clickKeyword(1);
         $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
         $this->clickField('Image is decorative');
+        $this->clickField('Alt');
         $this->type('Alt tag');
-        $this->sikuli->keyDown('Key.TAB');
+        $this->clickField('Title');
         $this->type('Title tag');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="Alt tag" title="Title tag" width="100" height="45"/></p><p>LABS is ORSM</p>');
+        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="Alt tag" title="Title tag" width="200" height="90"/></p><p>LABS is ORSM</p>');
 
     }//end testResizingAnImageAndEditingIt()
 
