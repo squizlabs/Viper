@@ -13,6 +13,10 @@
     font-size: 12px;
     margin-bottom: 10px;
 }
+.Viper-imageUploadArea.is-dragover
+{
+    background-color: #FFF;
+}
 .Viper-imageUploadArea-text {
     margin: 10px 20px;
 }
@@ -78,9 +82,10 @@
 .Viper-imageUploadFileRow {
     display: none;
     min-width:300px;
+    margin-bottom: 0.6em;
 }
 
-/* Image Treatments for Dropped Image */
+/* Image Treatments for Dropped in content Image */
 
 [data-imagepaste="true"] {
     /* Styles */
@@ -169,13 +174,7 @@ to { -moz-transform: rotateZ(0deg)}
 }
 
 
-/* custom new interface */
-/* tabs */
-
-label {
-    margin: 0px;
-}
-
+/* Matrix Image interface */
 
 .Viper-imageTabSwitch {
     width: 320px;
@@ -245,7 +244,7 @@ label {
 
 
 
-/* customised url field */
+/* override url field */
 .Viper-textbox-label {
     height: 19px;
     line-height: 1;
@@ -488,7 +487,7 @@ div.Viper-image-status {
     padding: 0;
 }
 
-/* image editor */
+/* image editor icon */
 .Viper-button.Viper-imageEditor-button
 {
     position: absolute;

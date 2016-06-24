@@ -32,15 +32,12 @@
 
         },
 
+        /* this function creates the custom Matrix image plugin interface */
         createCustomInterface: function(prefix)
         {
             var tools = this.viper.Tools;
             var self  = this;
 
-            buttonPrefix = 'image';
-            if(prefix == 'vitpImagePlugin') {
-                buttonPrefix = 'vitpImage';
-            }
             var urlField    = tools.getItem(prefix + ':urlInput').element;
             var tabSwitch = tools.createRow(prefix + 'tabSwitch', 'Viper-imageTabSwitch');
             var $assetTab = ViperUtil.$('<a href="#" id="' + prefix + 'tabAsset" class="selected" title="' + _('Choose Image from Matrix Asset') + '">' + _('Asset') + '</a>');
@@ -124,7 +121,6 @@
 
 
 
-
             // add the variety chooser
             var $varietyChooser = ViperUtil.$('<div class="Viper-varietyChooser"><div class="Viper-varietyChooserButton"><span class="Viper-varietyChooser-name">' + _('Original Image') + '</span> : <span class="Viper-varietyChooser-size" /><span class="Viper-varietyChooser-right-arrow"></span></div><div class="Viper-varietyChooser-menu"></div></div>');
             ViperUtil.insertAfter(prefix == 'vitpImagePlugin' ? this._vitpPreviewBox : this._previewBox, $varietyChooser.get(0));
@@ -136,7 +132,18 @@
             ViperUtil.insertAfter($varietyChooser.get(0), form);
 
             // append the file upload area
-            var $fileUploadArea = ViperUtil.$('<div id="' + prefix + 'fileUploadArea" class="Viper-imageUploadArea" ><div class="Viper-imageUploadArea-text">' + _('Drop image here or') + '</div><div id="Viper-imageUpload-button" class="Viper-button">' + _('Choose File') + '</div></div>');
+            var $fileUploadButton = ViperUtil.$('<div id="Viper-imageUpload-button" class="Viper-button">' + _('Choose File') + '</div>');
+            var $fileDropText = ViperUtil.$('<div class="Viper-imageUploadArea-text">' + _('Drop image here or') + '</div>');
+            var $fileUploadArea = ViperUtil.$('<div id="' + prefix + 'fileUploadArea" class="Viper-imageUploadArea" ></div>');
+            var isAdvancedUpload = function() {
+              // drop image support is for those latest browsers
+              var div = document.createElement('div');
+              return (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) && 'FormData' in window && 'FileReader' in window;
+            }();
+            if(isAdvancedUpload) {
+                $fileUploadArea.append($fileDropText);
+            }
+            $fileUploadArea.append($fileUploadButton);
             ViperUtil.insertAfter($varietyChooser.get(0), $fileUploadArea.get(0));
 
             // append the choose location fields for image upload
@@ -147,10 +154,11 @@
             var imageUploadProgressBar = this.createImageUploadProgressBar(prefix);
             ViperUtil.insertAfter(prefix == 'vitpImagePlugin' ? this._vitpPreviewBox : this._previewBox, imageUploadProgressBar);
 
-
+            // the dividing line
             var $devidingLine = ViperUtil.$('<hr class="Viper-image-hr" />');
             ViperUtil.insertAfter(locationFields, $devidingLine.get(0));
 
+            // handle actions clicking on tabs
             $assetTab.click(function(e) {
                 ViperUtil.preventDefault(e);
                 ViperUtil.$(this).parent().show();
@@ -188,9 +196,7 @@
 
                 ViperUtil.$(this).parent().parent().find('.Viper-chooseAssetRow').show();
                 ViperUtil.$(this).parent().parent().find('.Viper-imageUploadArea').hide();
-                if(ViperUtil.$(this).parent().parent().find('.ViperImagePlugin-previewPanel').contents().length != 0) {
-                    ViperUtil.$(this).parent().parent().find('.ViperImagePlugin-previewPanel').show();
-                }
+
 
                 ViperUtil.$(this).parent().parent().find('.Viper-imageUploadFileRow').hide();
                 ViperUtil.$('.Viper-image-error-message').html('').hide();
@@ -202,6 +208,11 @@
                 ViperUtil.$(this).parent().show();
                 ViperUtil.$(this).parent().find('a').removeClass('selected');
                 $uploadTab.addClass('selected');
+
+
+                // reset the base64 file content from previous uploads
+                self._inlineUploadForm.find('input[name=base64]').val('');
+                self._uploadForm.find('input[name=base64]').val('');
 
                 // disable variety chooser etc
                 self.disableAssetStatusIndicator(tools.getItem(prefix + ':urlInput').element);
@@ -246,9 +257,7 @@
 
                 ViperUtil.$(this).parent().parent().find('.Viper-chooseAssetRow').show();
                 ViperUtil.$(this).parent().parent().find('.Viper-imageUploadArea').hide();
-                if(ViperUtil.$(this).parent().parent().find('.ViperImagePlugin-previewPanel').contents().length != 0) {
-                    ViperUtil.$(this).parent().parent().find('.ViperImagePlugin-previewPanel').show();
-                }
+
 
                 ViperUtil.$(this).parent().parent().find('.Viper-imageUploadFileRow').hide();
                 ViperUtil.$('.Viper-image-error-message').html('').hide();
@@ -257,12 +266,87 @@
 
             });
 
-            $fileUploadArea.click(function(e) {
+            $fileUploadButton.click(function(e) {
+                // click upload button
                 ViperUtil.$(this).parent().parent().find('input[name=create_image_upload]').click();
             });
+
+            // drop file to the file upload area to upload
+            $fileUploadArea.on('drag dragstart dragend dragover dragenter dragleave drop', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+              })
+            .on('dragover dragenter', function() {
+                $fileUploadArea.addClass('is-dragover');
+              })
+            .on('dragleave dragend drop', function() {
+                $fileUploadArea.removeClass('is-dragover');
+              })
+            .on('drop', function(e) {
+                droppedFiles = e.originalEvent.dataTransfer.files;
+                 if (!droppedFiles || !droppedFiles[0]) {
+                    return;
+                }
+                self.readDroppedImage(droppedFiles[0], function(image, file) {
+                    self._inlineUploadForm.find('input[name=base64]').val(image.src);
+                    self._uploadForm.find('input[name=base64]').val(image.src);
+                    // set file name
+                    self._inlineUploadForm.find('input[name=file_name]').val(file.name);
+                    self._uploadForm.find('input[name=file_name]').val(file.name);
+
+                    self.viper.Tools.getItem('vitpImagePlugin:urlInput').setValue('filepath://' + file.name);
+                    self.viper.Tools.getItem('ViperImagePlugin:urlInput').setValue('filepath://' + file.name);
+                    // show choose upload location fields
+                    ViperUtil.$('.' + prefix + '-chooseLocationFields').css('display', 'block');
+                    // change the apply button text to 'upload image'
+                    var applyButton1 = this.viper.Tools.getItem('ViperImagePlugin:bubbleSubSection-applyButton');
+                    var applyButton2 = this.viper.Tools.getItem('vitpImagePlugin-infoSubsection-applyButton');
+                    ViperUtil.$(applyButton1.element).html(_('Upload Image'));
+                    ViperUtil.$(applyButton2.element).html(_('Upload Image'));
+
+                    // enable the apply button (only if we are not in uploading status)
+                    this.viper.Tools.enableButton('ViperImagePlugin:bubbleSubSection-applyButton');
+                    this.viper.Tools.enableButton('vitpImagePlugin-infoSubsection-applyButton');
+                    // hide the URL row and display the file row
+                    ViperUtil.$('.Viper-chooseAssetRow').hide();
+                    ViperUtil.$('.Viper-imageUploadFileRow').show();
+
+                    // enable the location selector
+                    self.viper.Tools.getItem(prefix + ':parentRootNode').disable();
+                    // reset the use current location checkbox
+                    self.viper.Tools.getItem(prefix + ':useCurrentLocation').setValue(true);
+
+                    // prefill the file name field
+                    var fileName = file.name;
+                    // if file name is empty, make a random name with correct file extension
+                    if(fileName == '') {
+                        var imageSrc = image.src;
+                        var subString = imageSrc.substring(0, imageSrc.indexOf(";"))
+                        var subStringArray = subString.split('/');
+                        var fileExt = subStringArray[1];
+                        if(fileExt) {
+                            var randomName = Math.floor(Math.random() * 1000000);
+                            fileName = randomName.toString() + '.' + fileExt;
+                        }
+                    }
+                    this.viper.Tools.getItem(prefix + ':fileInput').setValue(fileName);
+
+                    // update the preview
+                    self.setPreviewContent(image, false, prefix);
+
+
+                    // hide the upload area
+                    ViperUtil.$('#' + prefix + 'fileUploadArea').hide();
+
+                });
+            });
+
                   
         },
 
+        /* this function gets called when you click anywhere in viper content, 
+        it's used to update the plugin interface 
+        */
         _updateToolbar: function(image, toolbarPrefix)
         {
             var toolbar = this.viper.PluginManager.getPlugin('ViperToolbarPlugin');
@@ -338,6 +422,9 @@
 
         },
 
+        /*
+         get the asset details
+        */
         retrieveAssetDetails: function(assetid, callback)
         {
             assetid = assetid.replace(/(\?|&).*/g, '');
@@ -670,7 +757,7 @@
             createImageSubContent.appendChild(url);
             urlTextbox = (ViperUtil.getTag('input', createImageSubContent)[0]);
 
-            // Test URL.
+            // if the URL field is changed, update preview.
             var inputTimeout = null;
             this.viper.registerCallback('ViperTools:changed:' + prefix + ':urlInput', 'ViperImagePlugin', function() {
                 clearTimeout(inputTimeout);
@@ -711,215 +798,6 @@
             createImageSubContent.appendChild(title);
 
             return createImageSubContent;
-
-        },
-
-
-        initTopToolbarX: function()
-        {
-            // Call the parent method.
-            var contents = this._parent.prototype.initTopToolbar.call(this);
-
-            var self  = this;
-            var tools = this.viper.Tools;
-            var prefix = 'MatrixImagePlugin';
-
-            var urlRow = tools.createRow('MatrixImagePlugin:urlRow', 'Viper-imageUploadRow');
-
-            // Insert asset picker icon next to url field.
-            // Insert anchor row after URL field.
-            var urlField    = tools.getItem('ViperImagePlugin:urlInput').element;
-            var assetPicker = tools.createButton('MatrixImagePlugin:assetPicker', '', 'Pick Asset', 'Viper-assetSelector-button', function() {
-                self.pickAsset('ViperImagePlugin', false);
-            });
-            // image upload button
-            var imageUploader = tools.createButton('MatrixImagePlugin:imageUploader', '', 'Upload Image', 'Viper-uploadImage-button', function() {            
-                if(ViperUtil.isBrowser('msie', '<10') === true) {
-                    // old IE has to display the native upload input
-                    if(self._uploadForm.css('display') !== 'none') {
-                        self._uploadForm.css('display', 'none');
-                    }
-                    else {
-                        self._uploadForm.css('display', 'block');
-                    }
-                }
-                else if(ViperUtil.isBrowser('msie', '10') === true) {
-                    ViperUtil.$('#'+ prefix + 'uploadImageButton').click();
-                }
-                else {
-                    // the label tag should automatically trigger the click event
-                }
-            });
-
-            // append the hidden file upload form
-            var form = this.createUploadImageForm(prefix);
-
-            var imageUploaderLabel = ViperUtil.$('<label for="'+ prefix + 'uploadImageButton"></label>').get(0);
-            imageUploaderLabel.appendChild(imageUploader);
-            ViperUtil.insertAfter(urlField, urlRow);
-            urlRow.appendChild(urlField);
-            urlRow.appendChild(assetPicker);
-            urlRow.appendChild(imageUploaderLabel);
-            urlRow.appendChild(form);
-
-            // append the choose location fields for image upload
-            var locationFields = this.createChooseLocationFields(prefix);
-            ViperUtil.insertAfter(urlRow, locationFields);
-
-
-            // append the image upload progress bar
-            var imageUploadProgressBar = this.createImageUploadProgressBar(prefix);
-            ViperUtil.insertAfter(this._previewBox, imageUploadProgressBar);
-
-
-            // append the File row
-            var fileRow = this.createFileRow(prefix);
-            ViperUtil.insertAfter(urlRow, fileRow);
-
-            // if the plugin bubble is shown
-            ViperUtil.addEvent(ViperUtil.$('#' + this.viper.getId() + '-image').get(0), 'mousedown', function(e) {
-                // reset upload forms   
-                self._uploadForm.get(0).reset();
-                self._inlineUploadForm.get(0).reset();
-                self._uploadForm.css('display', 'none');
-                self._inlineUploadForm.css('display', 'none');
-
-                // hide choose location fields
-                ViperUtil.$('.' + prefix + '-chooseLocationFields').css('display', 'none');     
-                ViperUtil.$('.uploadImage-progressIndicator').hide();
-
-                // disable the location selector
-                self.viper.Tools.getItem(prefix + ':parentRootNode').enable();
-                // enable the use current location checkbox
-                self.viper.Tools.getItem(prefix + ':useCurrentLocation').setValue(true);
-
-                self._uploading = false;
-
-                // if we click on a preview image, have to prepare uploading preview interface
-                self._prepareDropppedImageUpload(prefix);
-
-                // focus back on the input field (we lost focus from above interface mods)
-                ViperUtil.$('.Viper-imageUploadFileRow input').focus();
-
-            });
-
-            // when you click on a pasted image, pop up the upload menu directly
-            this.viper.registerCallback('Viper:mouseUp', 'MatrixImagePlugin', function(e) {
-                var target = ViperUtil.getMouseEventTarget(e);
-                self._ieImageResize = null;
-
-                if (ViperUtil.isTag(target, 'img') === true) {
-                    if(target && target.dataset && target.dataset.imagepaste && target.dataset.imagepaste == 'true') {
-                        setTimeout(function(){ 
-                            ViperUtil.$('#' + self.viper.getId() + '-vitpImage').mousedown(); 
-                        }, 250);
-                        
-                    }
-                }
-            });
-
-            return contents;
-
-        },
-
-        createInlineToolbarX: function(toolbar)
-        {
-            // Call the parent method.
-            this._parent.prototype.createInlineToolbar.call(this, toolbar);
-
-            var self  = this;
-            var tools = this.viper.Tools;
-            var prefix = 'vitpMatrixImagePlugin';
-
-            var urlRow = tools.createRow('MatrixImagePlugin:urlRow-vitp', 'Viper-imageUploadRow');
-
-            // Insert asset picker icon next to url field.
-            // Insert anchor row after URL field.
-            var urlField    = tools.getItem('vitpImagePlugin:urlInput').element;
-
-            var assetPicker = tools.createButton('MatrixImagePlugin:assetPicker-vitp', '', 'Pick Asset', 'Viper-assetSelector-button', function() {
-                self.pickAsset('vitpImagePlugin', false);
-            });
-            // image upload button
-            var imageUploader = tools.createButton('vitpMatrixImagePlugin:imageUploader', '', 'Upload Image', 'Viper-uploadImage-button', function() {       
-                if(ViperUtil.isBrowser('msie', '<10') === true) {
-                    // old IE has to display the native upload input
-                    if(self._inlineUploadForm.css('display') !== 'none') {
-                        self._inlineUploadForm.css('display', 'none');
-                    }
-                    else {
-                        self._inlineUploadForm.css('display', 'block');
-                    }
-                }
-                else if(ViperUtil.isBrowser('msie', '10') === true) {
-                    ViperUtil.$('#'+ prefix + 'uploadImageButton').click();
-                }
-                else {
-                    // the label tag should automatically trigger the click event
-                }
-
-            });
-
-            var imageUploaderLabel = ViperUtil.$('<label for="'+ prefix + 'uploadImageButton"></label>').get(0);
-            imageUploaderLabel.appendChild(imageUploader);
-
-            // append the hidden file upload form
-            var form = this.createUploadImageForm(prefix);
-
-            ViperUtil.insertAfter(urlField, urlRow);
-            urlRow.appendChild(urlField);
-            urlRow.appendChild(assetPicker);
-            urlRow.appendChild(imageUploaderLabel);
-
-            urlRow.appendChild(form);
-
-
-
-            // append the choose location fields for image upload
-            var locationFields = this.createChooseLocationFields(prefix);
-            ViperUtil.insertAfter(urlRow, locationFields);
-
-            
-            // append the image upload progress bar
-            var imageUploadProgressBar = this.createImageUploadProgressBar(prefix);
-            var titleField = tools.getItem('vitpImagePlugin:titleInput').element;
-            ViperUtil.insertAfter(titleField, imageUploadProgressBar);
-            
-
-
-
-            // append the File row
-            var fileRow = this.createFileRow(prefix);
-            ViperUtil.insertAfter(urlRow, fileRow);
-
-
-            // reset progress bar and upload form when the plugin is displayed
-            ViperUtil.addEvent(ViperUtil.$('#' + this.viper.getId() + '-vitpImage').get(0), 'mousedown', function(e) {
-                // reset upload forms   
-                self._uploadForm.get(0).reset();
-                self._inlineUploadForm.get(0).reset();
-                self._uploadForm.css('display', 'none');
-                self._inlineUploadForm.css('display', 'none');
-
-                // hide choose location fields
-                ViperUtil.$('.' + prefix + '-chooseLocationFields').css('display', 'none');     
-                ViperUtil.$('.uploadImage-progressIndicator').hide();
-                
-                // disable the location selector
-                self.viper.Tools.getItem(prefix + ':parentRootNode').enable();
-                // enable the use current location checkbox
-                self.viper.Tools.getItem(prefix + ':useCurrentLocation').setValue(true);
-
-                self._uploading = false;
-
-                // if we click on a preview image, have to prepare uploading preview interface
-                self._prepareDropppedImageUpload(prefix);
-
-
-                // focus back on the input field (we lost focus from above interface mods)
-                ViperUtil.$('.Viper-imageUploadFileRow input').focus();
-
-            });
 
         },
 
@@ -1247,7 +1125,7 @@
 
         updateImagePreview: function(url, prefix)
         {
-
+            var self = this;
             if (this._isInternalLink(url) === true) {
                 url = url.replace(/^\.\/\?a=/, '');
                 var currentUrl = ViperUtil.baseUrl(window.location.href);
@@ -1259,10 +1137,11 @@
 
             // if it's a inline file upload, don't worry about it, it's already handled elsewhere
             if(url.indexOf("filepath://") === 0 || url.indexOf("data:") === 0 || url.length === 0) {
+                ViperUtil.$('.ViperImagePlugin-previewPanel').hide();
                 return;
             }
 
-            var self = this;
+         
 
             // bust browser cache with a time stamp appended to the image url
             url = url.replace(/(\?|&)v=[0-9]+$/g, '');
@@ -1438,7 +1317,7 @@
        
             
         // if in Matrix backend mode
-        if(typeof EasyEditAssetManager === 'undefined') {
+        if(!this._isEditPlus()) {
             var jsMap = parent.frames.sq_sidenav.JS_Asset_Map;
             var name =idPrefix;
             var safeName = idPrefix;
@@ -1579,7 +1458,7 @@
 
         },
 
-        
+        /* this function tells viper click on those overlays are OK, part of the viper plugin */
         isPluginElement: function(element)
         {
             var assetFinderOverlay = ViperUtil.getid('ees_assetFinderOverlay');
@@ -1717,7 +1596,7 @@
                 
                     // show choose upload location fields
                     ViperUtil.$('.' + prefix + '-chooseLocationFields').css('display', 'block');
-                    // chaneg the apply button text to 'upload image'
+                    // change the apply button text to 'upload image'
                     var applyButton1 = this.viper.Tools.getItem('ViperImagePlugin:bubbleSubSection-applyButton');
                     var applyButton2 = this.viper.Tools.getItem('vitpImagePlugin-infoSubsection-applyButton');
                     ViperUtil.$(applyButton1.element).html(_('Upload Image'));
@@ -1747,6 +1626,12 @@
                     // hide the URL row and display the file row
                     ViperUtil.$('.Viper-chooseAssetRow').hide();
                     ViperUtil.$('.Viper-imageUploadFileRow').show();
+
+
+                    // enable the location selector
+                    this.viper.Tools.getItem(prefix + ':parentRootNode').disable();
+                    // reset the use current location checkbox
+                    this.viper.Tools.getItem(prefix + ':useCurrentLocation').setValue(true);
                     
 
                     // prefill the file name field
