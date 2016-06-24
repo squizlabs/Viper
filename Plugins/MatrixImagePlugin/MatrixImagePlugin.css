@@ -215,19 +215,21 @@ to { -moz-transform: rotateZ(0deg)}
 
 
 /* override preview box */
-.ViperITP-msgBox {
+.ViperITP-msgBox.ViperImagePlugin-previewPanel {
     border:none;
     position: relative;
+    min-height: 150px;
+    background: #646468;
 }
-.ViperITP-msgBox img {
+.ViperITP-msgBox.ViperImagePlugin-previewPanel img {
     margin: 0;
     vertical-align: middle;
 }
-.ViperITP-msgBox.Viper-info {
+.ViperITP-msgBox.ViperImagePlugin-previewPanel.Viper-info {
     padding: 0;
     overflow: hidden;
 }
-.ViperITP-msgBox .loadingPreviewMessage
+.ViperITP-msgBox.ViperImagePlugin-previewPanel .loadingPreviewMessage
 {
     position: absolute;
     top: 45%;
@@ -235,7 +237,7 @@ to { -moz-transform: rotateZ(0deg)}
     background: #646468 url(./Images/12.gif) 3px 0.25em no-repeat;
     padding: 1px 4px 1px 15px;
 }
-.ViperITP-msgBox span
+.ViperITP-msgBox.ViperImagePlugin-previewPanel span
 {
     height: 150px;
     display: inline-block;

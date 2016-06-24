@@ -645,7 +645,6 @@
                     ViperUtil.setStyle(previewBox, 'display', 'none');
                     ViperUtil.$('.Viper-image-error-message').html(_('Could not load preview')).show();
                 } else {
-
                     this.viper.Tools.setFieldErrors('ViperImagePlugin:urlInput', []);
                     ViperUtil.$('.Viper-image-error-message').html('').hide();
                     ViperUtil.addClass(previewBox, 'Viper-info');
