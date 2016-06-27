@@ -105,7 +105,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithAnchorsUnitTest extends AbstractViperU
         $this->clickField('ID');
         $this->type(' edit');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<div>This is <span id="test edit">%1%</span>some content</div>');
+        $this->assertHTMLMatch('<div>This is <span id="test edit">%1%</span> some content</div>');
 
         $this->useTest(4);
         $this->selectKeyword(1);
@@ -113,7 +113,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithAnchorsUnitTest extends AbstractViperU
         $this->clickField('ID');
         $this->type(' edit');
         $this->clickInlineToolbarButton('Update Anchor', NULL, TRUE);
-        $this->assertHTMLMatch('<div>This is <span id="test edit">%1%</span>some content</div>');
+        $this->assertHTMLMatch('<div>This is <span id="test edit">%1%</span> some content</div>');
 
         // Test editing anchor using top toolbar
         $this->useTest(4);
@@ -122,7 +122,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithAnchorsUnitTest extends AbstractViperU
         $this->clickField('ID');
         $this->type(' edit');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<div>This is <span id="test edit">%1%</span>some content</div>');
+        $this->assertHTMLMatch('<div>This is <span id="test edit">%1%</span> some content</div>');
 
         $this->useTest(4);
         $this->selectKeyword(1);
@@ -130,7 +130,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithAnchorsUnitTest extends AbstractViperU
         $this->clickField('ID');
         $this->type(' edit');
         $this->clickTopToolbarButton('Update Anchor', NULL, TRUE);
-        $this->assertHTMLMatch('<div>This is <span id="test edit">%1%</span>some content</div>');
+        $this->assertHTMLMatch('<div>This is <span id="test edit">%1%</span> some content</div>');
 
     }//end testDivBlockTagEditingAnchorAppliedToWordInContent()
 
