@@ -114,7 +114,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithBoldUnitTest extends AbstractViperUnit
         // Test removing bold formatting from multiple words using the keyboard shortcut
         $this->useTest(4);
         $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
+        $this->selectInlineToolbarLineageItem(1);
         $this->sikuli->keyDown('Key.CMD + b');
         $this->assertHTMLMatch('<div>Some bold %1% %2% content to test</div>');
 
@@ -265,12 +265,12 @@ class Viper_Tests_BlockTag_DivBlockTagWithBoldUnitTest extends AbstractViperUnit
         // Test pressing enter in the middle of bold content
         $this->useTest(4);
         $this->moveToKeyword(1, 'right');
-        sleep(5);
+        sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
-        sleep(5);
+        sleep(1);
         $this->type('test');
-        sleep(5);
-        $this->assertHTMLMatch('<div>Some bold<strong>%1%</strong></div><div><strong>test %2%</strong>content to test</div>');
+        sleep(1);
+         $this->assertHTMLMatch('<div>Some bold<strong>%1%</strong></div><div><strong>test %2%</strong>content to test</div>');
 
         // Test pressing enter at the start of bold content
         $this->useTest(4);
