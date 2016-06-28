@@ -9,7 +9,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithBoldUnitTest extends AbstractViperUnit
      *
      * @return void
      */
-    public function testDivBlockTagAddingBoldFormattingToContent()
+    public function testAddingBoldFormattingToContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -65,7 +65,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithBoldUnitTest extends AbstractViperUnit
         sleep(1);
         $this->assertHTMLMatch('<div>This is <strong>%1% %2%</strong> some content</div>');
 
-    }//end testDivBlockTagAddingBoldFormattingToContent()
+    }//end testAddingBoldFormattingToContent()
 
 
     /**
@@ -73,7 +73,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithBoldUnitTest extends AbstractViperUnit
      *
      * @return void
      */
-    public function testDivBlockTagRemovingBoldFormatting()
+    public function testRemovingBoldFormatting()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -139,7 +139,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithBoldUnitTest extends AbstractViperUnit
         $this->sikuli->keyDown('Key.CMD + b');
         $this->assertHTMLMatch('<div>Bold %1% content</div>');
 
-    }//end testDivBlockTagRemovingBoldFormatting()
+    }//end testRemovingBoldFormatting()
 
 
     /**
@@ -147,7 +147,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithBoldUnitTest extends AbstractViperUnit
      *
      * @return void
      */
-    public function testDivBlockTagEditingBoldContent()
+    public function testEditingBoldContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -206,7 +206,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithBoldUnitTest extends AbstractViperUnit
         $this->type('abc');
         $this->assertHTMLMatch('<div>Some bold test abc<strong> test abc abc</strong> content to test</div>');
 
-    }//end testDivBlockTagEditingBoldContent()
+    }//end testEditingBoldContent()
 
 
     /**
@@ -214,7 +214,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithBoldUnitTest extends AbstractViperUnit
      *
      * @return void
      */
-    public function testDivBlockTagDeletingBoldContent()
+    public function testDeletingBoldContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -265,7 +265,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithBoldUnitTest extends AbstractViperUnit
         $this->type('test');
         $this->assertHTMLMatch('<div>test</div>');
 
-    }//end testDivBlockTagDeletingBoldContent()
+    }//end testDeletingBoldContent()
 
 
     /**
@@ -273,7 +273,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithBoldUnitTest extends AbstractViperUnit
      *
      * @return void
      */
-    public function testDivBlockTagSplittingBoldContent()
+    public function testSplittingBoldContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -314,7 +314,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithBoldUnitTest extends AbstractViperUnit
         $this->type('test ');
         $this->assertHTMLMatch('<div>Some bold <strong>%1% %2%</strong></div><div>test content to test</div>');
 
-    }//end testDivBlockTagSplittingBoldContent()
+    }//end testSplittingBoldContent()
 
 
     /**
@@ -322,7 +322,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithBoldUnitTest extends AbstractViperUnit
      *
      * @return void
      */
-    public function testDivBlockTagUndoAndRedoWithBoldContent()
+    public function testUndoAndRedoWithBoldContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -345,7 +345,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithBoldUnitTest extends AbstractViperUnit
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         $this->assertHTMLMatch('<div>This is <strong>%1%</strong> %2% some content</div>');
 
-    }//end testDivBlockTagUndoAndRedoWithBoldContent()
+    }//end testUndoAndRedoWithBoldContent()
 
 
 }//end class

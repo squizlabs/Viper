@@ -6,11 +6,11 @@ class Viper_Tests_BlockTag_DivBlockTagWithHorizontalLineUnitTest extends Abstrac
 {
 
     /**
-     * Test adding horizontal rule when there is no default block tag.
+     * Test adding horizontal rule when tdefault block tag is div.
      *
      * @return void
      */
-    public function testDivBlockTagAddingHorizontalRule()
+    public function testAddingHorizontalRule()
     {
 
         $this->useTest(1);
@@ -44,15 +44,15 @@ class Viper_Tests_BlockTag_DivBlockTagWithHorizontalLineUnitTest extends Abstrac
         $this->type('test');
         $this->assertHTMLMatch('<div>%1% Test content %2% more test content. %3%</div><hr /><div>test</div>');
 
-    }//end testDivBlockTagAddingHorizontalRule()
+    }//end testAddingHorizontalRule()
 
 
     /**
-     * Test deleting horizontal rule when there is no default block tag.
+     * Test deleting horizontal rule when default block tag is div.
      *
      * @return void
      */
-    public function testDivBlockTagDeletingHorizontalRule()
+    public function testDeletingHorizontalRule()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -97,7 +97,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithHorizontalLineUnitTest extends Abstrac
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->assertHTMLMatch('<div>Test content more test content %1%</div>');
 
-    }//end testDivBlockTagDeletingHorizontalRule()
+    }//end testDeletingHorizontalRule()
 
 
     /**
@@ -105,7 +105,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithHorizontalLineUnitTest extends Abstrac
      *
      * @return void
      */
-    public function testDivBlockTagUndoAndRedoWithHorizontalRule()
+    public function testUndoAndRedoWithHorizontalRule()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -135,7 +135,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithHorizontalLineUnitTest extends Abstrac
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         $this->assertHTMLMatch('<div>%1% Test content</div><hr /><div>%2% more test content. %3%</div>');
 
-    }//end testDivBlockTagAddingHorizontalRule()
+    }//end testUndoAndRedoWithHorizontalRule()
 
 
 }//end class

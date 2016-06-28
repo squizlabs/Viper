@@ -11,7 +11,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithListsUnitTest extends AbstractViperUni
      *
      * @return void
      */
-    public function testDivBlockTagAddingItemsToList()
+    public function testAddingItemsToList()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -44,7 +44,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithListsUnitTest extends AbstractViperUni
         $this->type('test');
         $this->assertHTMLMatch('<ol><li>test</li><li>%1% Test content</li><li>%2% Test content</li><li>%3%</li><li>test</li></ol>');
 
-    }//end testDivBlockTagAddingItemsToList()
+    }//end testAddingItemsToList()
 
 
     /**
@@ -52,7 +52,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithListsUnitTest extends AbstractViperUni
      *
      * @return void
      */
-    public function testDivBlockTagAddingContentAfterList()
+    public function testAddingContentAfterList()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -73,7 +73,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithListsUnitTest extends AbstractViperUni
         $this->type('test');
         $this->assertHTMLMatch('<ol><li>%1% Test content</li><li>%2% Test content</li><li>%3%</li></ol><div>test</div>');
 
-    }//end testDivBlockTagAddingContentAfterList()
+    }//end testAddingContentAfterList()
 
 
     /**
@@ -81,7 +81,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithListsUnitTest extends AbstractViperUni
      *
      * @return void
      */
-    public function testDivBlockTagAddingContentBeforeList()
+    public function testAddingContentBeforeList()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -105,7 +105,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithListsUnitTest extends AbstractViperUni
         $this->type('test');
         $this->assertHTMLMatch('<div>test</div><ol><li>%1% Test content</li><li>%2% Test content</li><li>%3%</li></ol>');
 
-    }//end testDivBlockTagAddingContentBeforeList()
+    }//end testAddingContentBeforeList()
 
 
     /**
@@ -113,7 +113,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithListsUnitTest extends AbstractViperUni
      *
      * @return void
      */
-    public function testDivBlockTagRemovingItemsFromList()
+    public function testRemovingItemsFromList()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -154,7 +154,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithListsUnitTest extends AbstractViperUni
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->assertHTMLMatch('<ul><li>%1% Test content</li><li>%2% Test content</li></ul><div>%3%</div>');
 
-    }//end testDivBlockTagRemovingItemsFromList()
+    }//end testRemovingItemsFromList()
 
 
     /**
@@ -162,7 +162,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithListsUnitTest extends AbstractViperUni
      *
      * @return void
      */
-    public function testDivBlockTagUndoAndRedoWithLists()
+    public function testUndoAndRedoWithLists()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -205,6 +205,6 @@ class Viper_Tests_BlockTag_DivBlockTagWithListsUnitTest extends AbstractViperUni
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         $this->assertHTMLMatch('<ol><li>%1% Test content</li><li>%2% Test content</li><li>%3%</li><li>test</li></ol>');
 
-    }//end testDivBlockTagUndoAndRedoWithLists()
+    }//end testUndoAndRedoWithLists()
 
 }//end class

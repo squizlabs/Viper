@@ -9,7 +9,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
      *
      * @return void
      */
-    public function testDivBlockTagAddingClassToAWordInContent()
+    public function testAddingClassToAWordInContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -42,7 +42,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
         $this->assertHTMLMatch('<div>This is <span class="test1">%1%</span> <span class="test2">%2%</span> some content</div>');
 
-    }//end testDivBlockTagAddingClassToAWordInContent()
+    }//end testAddingClassToAWordInContent()
 
 
      /**
@@ -50,7 +50,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
      *
      * @return void
      */
-    public function testDivBlockTagAddingClassToAllContent()
+    public function testAddingClassToAllContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -85,7 +85,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
         $this->assertHTMLMatch('<div class="test2">%1% This is some content %2%</div>');
 
-    }//end testDivBlockTagAddingClassToAllContent()
+    }//end testAddingClassToAllContent()
 
 
 	/**
@@ -93,7 +93,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
      *
      * @return void
      */
-    public function testDivBlockTagEditingClassAppliedToWordInContent()
+    public function testEditingClassAppliedToWordInContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -132,7 +132,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
         $this->assertHTMLMatch('<div>This is <span class="test_class edit">%1%</span> some content</div>');
 
-    }//end testDivBlockTagEditingClassAppliedToWordInContent()
+    }//end testEditingClassAppliedToWordInContent()
 
 
     /**
@@ -140,7 +140,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
      *
      * @return void
      */
-    public function testDivBlockTagEditingClassAppliedToAllContent()
+    public function testEditingClassAppliedToAllContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -180,7 +180,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
         $this->assertHTMLMatch('<div class="test_class edit">%1% This is some content %2%</div>');
 
-    }//end testDivBlockTagEditingClassAppliedToAllContent()
+    }//end testEditingClassAppliedToAllContent()
 
 
 	/**
@@ -188,7 +188,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
      *
      * @return void
      */
-    public function testDivBlockTagRemoveClassAppliedToWordInContent()
+    public function testRemoveClassAppliedToWordInContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -199,14 +199,14 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
         $this->sikuli->keyDown('Key.ENTER');
-//        $this->assertHTMLMatch('<div>This is %1% some content</div>');
+        $this->assertHTMLMatch('<div>This is %1% some content</div>');
 
         $this->useTest(4);
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
         $this->clickInlineToolbarButton('Apply Styles', NULL, TRUE);
-//        $this->assertHTMLMatch('<div>This is %1% some content</div>');
+        $this->assertHTMLMatch('<div>This is %1% some content</div>');
 
         // Test remove an anchor using the top toolbar
         $this->useTest(4);
@@ -214,16 +214,16 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
         $this->sikuli->keyDown('Key.ENTER');
-//        $this->assertHTMLMatch('<div>This is %1% some content</div>');
+        $this->assertHTMLMatch('<div>This is %1% some content</div>');
 
         $this->useTest(4);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
         $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
-//        $this->assertHTMLMatch('<div>This is %1% some content</div>');
+        $this->assertHTMLMatch('<div>This is %1% some content</div>');
 
-    }//end testDivBlockTagRemoveClassAppliedToWordInContent()
+    }//end testRemoveClassAppliedToWordInContent()
 
 
      /**
@@ -231,7 +231,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
      *
      * @return void
      */
-    public function testDivBlockTagRemoveClassAppliedToAllContent()
+    public function testRemoveClassAppliedToAllContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -266,7 +266,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
         $this->assertHTMLMatch('<div>%1% This is some content %2%</div>');
 
-    }//end testDivBlockTagRemoveClassAppliedToAllContent()
+    }//end testRemoveClassAppliedToAllContent()
 
 
 	/**
@@ -274,7 +274,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
      *
      * @return void
      */
-    public function testDivBlockTagUndoAndRedoWithClass()
+    public function testUndoAndRedoWithClass()
     {
     	// Test using keyboard shortcuts
     	$this->useTest(1);
@@ -290,7 +290,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
     	// Test undo
     	$this->selectKeyword(2);
     	$this->sikuli->keyDown('Key.CMD + z');
-//    	$this->assertHTMLMatch('<div>This is %1% %2% some content</div>');
+    	$this->assertHTMLMatch('<div>This is %1% %2% some content</div>');
 
     	// Test redo
     	$this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
@@ -299,12 +299,12 @@ class Viper_Tests_BlockTag_DivBlockTagWithClassesUnitTest extends AbstractViperU
 		// Test using top toolbar
     	// Test undo
     	$this->clickTopToolbarButton('HistoryUndo');
-//    	$this->assertHTMLMatch('<div>This is %1% %2% some content</div>');
+    	$this->assertHTMLMatch('<div>This is %1% %2% some content</div>');
 
     	// Test redo
     	$this->clickTopToolbarButton('HistoryRedo');
     	$this->assertHTMLMatch('<div>This is<span class="test_class">%1% %2%</span> some content</div>');    	
 
-    }//end testDivBlockTagUndoAndRedoWithClass()
+    }//end testUndoAndRedoWithClass()
 
 }//end class

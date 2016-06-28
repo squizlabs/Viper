@@ -10,7 +10,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithImagesUnitTest extends AbstractViperUn
      *
      * @return void
      */
-    public function testAddingImageWithAltInDivBlockTag()
+    public function testAddingImageWithAlt()
     {
     	$this->useTest(1);
     	$this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -26,7 +26,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithImagesUnitTest extends AbstractViperUn
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<div>This is %1%<img alt="test_Alt" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" /> %2% some content</div>');
 
-    }//end testAddingImageInDivBlockTag()
+    }//end testAddingImageWithAlt()
 
 
     /**
@@ -34,7 +34,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithImagesUnitTest extends AbstractViperUn
      *
      * @return void
      */
-    public function testAddingImageWithAltAndTitleInDivBlockTag()
+    public function testAddingImageWithAltAndTitle()
     {
     	$this->useTest(1);
     	$this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -53,7 +53,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithImagesUnitTest extends AbstractViperUn
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<div>This is %1%<img alt="test_Alt" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" title="test_Title" /> %2% some content</div>');
 
-    }//end testAddingImageWithAltAndTitleInDivBlockTag()
+    }//end testAddingImageWithAltAndTitle()
 
 
     /**
@@ -61,7 +61,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithImagesUnitTest extends AbstractViperUn
      *
      * @return void
      */
-    public function testAddingImageWithoutAltAndTitleInDivBlockTag()
+    public function testAddingImageWithoutAltAndTitle()
     {
     	$this->useTest(1);
     	$this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -76,7 +76,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithImagesUnitTest extends AbstractViperUn
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<div>This is %1%<img alt="" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" /> %2% some content</div>');
 
-    }//end testAddingImageWithoutAltAndTitleInDivBlockTag()
+    }//end testAddingImageWithoutAltAndTitle()
 
 
     /**
@@ -84,7 +84,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithImagesUnitTest extends AbstractViperUn
      *
      * @return void
      */
-    public function testDeletingImageInDivBlockTag()
+    public function testDeletingImage()
     {
     	$this->useTest(1);
     	$this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -102,7 +102,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithImagesUnitTest extends AbstractViperUn
     	$this->sikuli->keyDown('Key.DELETE');
     	$this->assertHTMLMatch('<div>This is %1% %2% some content</div>');
 
-    }//end testDeletingImageInDivBlockTag()
+    }//end testDeletingImage()
 
 
     /**
@@ -110,7 +110,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithImagesUnitTest extends AbstractViperUn
      *
      * @return void
      */
-    public function testApplyingAndRemovingLinkOnImageInDivBlockTag()
+    public function testApplyingAndRemovingLinkOnImage()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -143,7 +143,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithImagesUnitTest extends AbstractViperUn
         $this->clickInlineToolbarButton('linkRemove');
         $this->assertHTMLMatch('<div>This is %1%<img alt="test_Alt" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" /> %2% some content</div>');
 
-    }//end testApplyingAndRemovingLinkOnImageInDivBlockTag()
+    }//end testApplyingAndRemovingLinkOnImage()
 
 
     /**
@@ -151,7 +151,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithImagesUnitTest extends AbstractViperUn
      *
      * @return void
      */
-    public function testEditingImageAltInDivBlockTag()
+    public function testEditingImageAlt()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -180,7 +180,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithImagesUnitTest extends AbstractViperUn
 
         $this->assertHTMLMatch('<div>This is %1%<img alt="modified-test_Alt" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" /> %2% some content</div>');
 
-    }//end testEditingImageAltInDivBlockTag()
+    }//end testEditingImageAlt()
 
 
     /**
@@ -188,7 +188,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithImagesUnitTest extends AbstractViperUn
      *
      * @return void
      */
-    public function testEditingImageTitleInDivBlockTag()
+    public function testEditingImageTitle()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -217,6 +217,6 @@ class Viper_Tests_BlockTag_DivBlockTagWithImagesUnitTest extends AbstractViperUn
 
         $this->assertHTMLMatch('<div>This is %1%<img alt="test_Alt" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" title="modified-test_Title" /> %2% some content</div>');
 
-    }//end testEditingImageTitleInDivBlockTag()
+    }//end testEditingImageTitle()
 
 }//end class

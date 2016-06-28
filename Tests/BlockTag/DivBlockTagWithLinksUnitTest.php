@@ -6,11 +6,11 @@ class Viper_Tests_BlockTag_DivBlockTagWithLinksUnitTest extends AbstractViperUni
 {
 
     /**
-     * Test adding and removing links when base tag is blank.
+     * Test adding and removing links when base tag is div.
      *
      * @return void
      */
-    public function testDivBlockTagAddingAndRemovingLinks()
+    public function testAddingAndRemovingLinks()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -114,15 +114,15 @@ class Viper_Tests_BlockTag_DivBlockTagWithLinksUnitTest extends AbstractViperUni
         $this->clickTopToolbarButton('linkRemove');
         $this->assertHTMLMatch('<div>%1% test content</div>');
 
-    }// end testDivBlockTagAddingAndRemovingLinks()
+    }// end testAddingAndRemovingLinks()
 
 
     /**
-     * Test editing links when base tag is set to blank.
+     * Test editing links when base tag is set to div.
      *
      * @return void
      */
-    public function testDivBlockTagEditingLinks()
+    public function testEditingLinks()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -193,15 +193,15 @@ class Viper_Tests_BlockTag_DivBlockTagWithLinksUnitTest extends AbstractViperUni
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<div>test <a href="test-link">%1%</a> content</div>');
 
-    }// end testDivBlockTagEditingLinks()
+    }// end testEditingLinks()
 
 
     /**
-     * Test how having no base tag effects bold and link formatting.
+     * Test link and bold formatting when block tag set to div
      *
      * @return void
      */
-    public function testDivBlockTagLinksWithBoldFormatting()
+    public function testLinksWithBoldFormatting()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -254,15 +254,15 @@ class Viper_Tests_BlockTag_DivBlockTagWithLinksUnitTest extends AbstractViperUni
         $this->clickTopToolbarButton('bold', 'active');
         $this->assertHTMLMatch('<div><a href="test-link">%1%</a> test content</div>');
 
-    }// end testDivBlockTagLinksWithBoldFormatting()
+    }// end testLinksWithBoldFormatting()
 
 
     /**
-     * Test how having no base tag effects italic and link formatting.
+     * Test italic and link formatting when block tag is set to div.
      *
      * @return void
      */
-    public function testDivBlockTagLinksWithItalicFormatting()
+    public function testLinksWithItalicFormatting()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -315,15 +315,15 @@ class Viper_Tests_BlockTag_DivBlockTagWithLinksUnitTest extends AbstractViperUni
         $this->clickTopToolbarButton('italic', 'active');
         $this->assertHTMLMatch('<div><a href="test-link">%1%</a> test content</div>');
 
-    }// end testDivBlockTagLinksWithItalicFormatting()
+    }// end testLinksWithItalicFormatting()
 
 
     /**
-     * Test how having no base tag effects strikethrough and link formatting.
+     * Test strikethrough and link formatting when block tag set to div.
      *
      * @return void
      */
-    public function testDivBlockTagLinksWithStrikethroughFormatting()
+    public function testLinksWithStrikethroughFormatting()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -365,15 +365,15 @@ class Viper_Tests_BlockTag_DivBlockTagWithLinksUnitTest extends AbstractViperUni
         $this->clickTopToolbarButton('strikethrough', 'active');
         $this->assertHTMLMatch('<div><a href="test-link">%1%</a> test content</div>');
 
-    }// end testDivBlockTagLinksWithStrikethroughFormatting()
+    }// end testLinksWithStrikethroughFormatting()
 
 
     /**
-     * Test how having no base tag effects subscript and link formatting.
+     * Test subscript and link formatting when block tag set to div.
      *
      * @return void
      */
-    public function testDivBlockTagLinksWithSubscriptFormatting()
+    public function testLinksWithSubscriptFormatting()
     {
 
         $this->useTest(1);
@@ -416,15 +416,15 @@ class Viper_Tests_BlockTag_DivBlockTagWithLinksUnitTest extends AbstractViperUni
         $this->clickTopToolbarButton('subscript', 'active');
         $this->assertHTMLMatch('<div><a href="test-link">%1%</a> test content</div>');
 
-    }// end testDivBlockTagLinksWithSubscriptFormatting()
+    }// end testLinksWithSubscriptFormatting()
 
 
     /**
-     * Test how having no base tag effects superscript and link formatting.
+     * Test superscript and link formatting when block tag set to div.
      *
      * @return void
      */
-    public function testDivBlockTagLinksWithSuperscriptFormatting()
+    public function testLinksWithSuperscriptFormatting()
     {
 
         $this->useTest(1);
@@ -467,14 +467,14 @@ class Viper_Tests_BlockTag_DivBlockTagWithLinksUnitTest extends AbstractViperUni
         $this->clickTopToolbarButton('superscript', 'active');
         $this->assertHTMLMatch('<div><a href="test-link">%1%</a> test content</div>');
 
-    }// end testDivBlockTagLinksWithSuperscriptFormatting()
+    }// end testLinksWithSuperscriptFormatting()
 
     /**
      * Test undo and redo with link.
      *
      * @return void
      */
-    public function testDivBlockTagUndoAndRedoWithLinks()
+    public function testUndoAndRedoWithLinks()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -502,6 +502,6 @@ class Viper_Tests_BlockTag_DivBlockTagWithLinksUnitTest extends AbstractViperUni
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<div><a href="test-link">%1%</a> test content</div>');
 
-    }// end testDivBlockTagUndoAndRedoWithLinks()
+    }// end testUndoAndRedoWithLinks()
 
 }//end class

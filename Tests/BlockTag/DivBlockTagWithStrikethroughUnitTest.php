@@ -2,14 +2,14 @@
 
 require_once 'AbstractViperUnitTest.php';
 
-class Viper_Tests_BlockTag_DivBlockTagWithStrikethroughUnitTest extends AbstractViperUnitTest
+class Viper_Tests_BlockTag_DivBlockTagWithStrikethroughUnitTest::testEditingStrikethroughContent extends AbstractViperUnitTest
 {
     /**
      * Test adding strikethrough formatting to content
      *
      * @return void
      */
-    public function testDivBlockTagAddingStrikethroughFormattingToContent()
+    public function testAddingStrikethroughFormattingToContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -26,7 +26,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithStrikethroughUnitTest extends Abstract
         $this->clickTopToolbarButton('strikethrough');
         $this->assertHTMLMatch('<div>This is <del>%1% %2%</del> some content</div>');
 
-    }//end testDivBlockTagAddingStrikethroughFormattingToContent()
+    }//end testAddingStrikethroughFormattingToContent()
 
 
     /**
@@ -34,7 +34,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithStrikethroughUnitTest extends Abstract
      *
      * @return void
      */
-    public function testDivBlockTagRemovingStrikethroughFormatting()
+    public function testRemovingStrikethroughFormatting()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -59,7 +59,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithStrikethroughUnitTest extends Abstract
         $this->clickTopToolbarButton('strikethrough', 'active');
         $this->assertHTMLMatch('<div>Strikethrough %1% content</div>');
 
-    }//end testDivBlockTagRemovingStrikethroughFormatting()
+    }//end testRemovingStrikethroughFormatting()
 
 
     /**
@@ -67,7 +67,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithStrikethroughUnitTest extends Abstract
      *
      * @return void
      */
-    public function testDivBlockTagEditingStrikethroughContent()
+    public function testEditingStrikethroughContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -126,7 +126,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithStrikethroughUnitTest extends Abstract
         $this->type('abc');
         $this->assertHTMLMatch('<div>Some strikethrough test abc<del> test abc abc</del> content to test</div>');
 
-    }//end testDivBlockTagEditingStrikethroughContent()
+    }//end testEditingStrikethroughContent()
 
 
     /**
@@ -134,7 +134,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithStrikethroughUnitTest extends Abstract
      *
      * @return void
      */
-    public function testDivBlockTagDeletingStrikethroughContent()
+    public function testDeletingStrikethroughContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -181,7 +181,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithStrikethroughUnitTest extends Abstract
         $this->type('test');
         $this->assertHTMLMatch('<div>test</div>');
 
-    }//end testDivBlockTagDeletingStrikethroughContent()
+    }//end testDeletingStrikethroughContent()
 
 
     /**
@@ -189,7 +189,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithStrikethroughUnitTest extends Abstract
      *
      * @return void
      */
-    public function testDivBlockTagSplittingStrikethroughContent()
+    public function testSplittingStrikethroughContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -223,7 +223,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithStrikethroughUnitTest extends Abstract
         $this->type('test ');
         $this->assertHTMLMatch('<div>Some strikethrough <del>%1% %2%</del></div><div>test&nbsp;&nbsp;content to test</div>');
 
-    }//end testDivBlockTagSplittingStrikethroughContent()
+    }//end testSplittingStrikethroughContent()
 
 
     /**
@@ -231,7 +231,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithStrikethroughUnitTest extends Abstract
      *
      * @return void
      */
-    public function testDivBlockTagUndoAndRedoWithStrikethroughContent()
+    public function testUndoAndRedoWithStrikethroughContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -254,7 +254,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithStrikethroughUnitTest extends Abstract
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         $this->assertHTMLMatch('<div>This is <del>%1%</del> %2% some content</div>');        
 
-    }//end testDivBlockTagUndoAndRedoWithStrikethroughContent()
+    }//end testUndoAndRedoWithStrikethroughContent()
 
 
 }//end class

@@ -9,7 +9,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSuperscriptUnitTest extends AbstractVi
      *
      * @return void
      */
-    public function testDivBlockTagAddingSuperscriptFormattingToContent()
+    public function testAddingSuperscriptFormattingToContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -26,7 +26,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSuperscriptUnitTest extends AbstractVi
         $this->clickTopToolbarButton('superscript');
         $this->assertHTMLMatch('<div>This is <sup>%1% %2%</sup> some content</div>');
 
-    }//end testDivBlockTagAddingSuperscriptFormattingToContent()
+    }//end testAddingSuperscriptFormattingToContent()
 
 
     /**
@@ -34,7 +34,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSuperscriptUnitTest extends AbstractVi
      *
      * @return void
      */
-    public function testDivBlockTagRemovingSuperscriptFormatting()
+    public function testRemovingSuperscriptFormatting()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -59,7 +59,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSuperscriptUnitTest extends AbstractVi
         $this->clickTopToolbarButton('superscript', 'active');
         $this->assertHTMLMatch('<div>Superscript %1% content</div>');
 
-    }//end testDivBlockTagRemovingSuperscriptFormatting()
+    }//end testRemovingSuperscriptFormatting()
 
 
     /**
@@ -67,7 +67,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSuperscriptUnitTest extends AbstractVi
      *
      * @return void
      */
-    public function testDivBlockTagEditingSuperscriptContent()
+    public function testEditingSuperscriptContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -126,7 +126,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSuperscriptUnitTest extends AbstractVi
         $this->type('abc');
         $this->assertHTMLMatch('<div>Some superscript test abc<sup> test abc abc</sup> content to test</div>');
 
-    }//end testDivBlockTagEditingSuperscriptContent()
+    }//end testEditingSuperscriptContent()
 
 
     /**
@@ -134,7 +134,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSuperscriptUnitTest extends AbstractVi
      *
      * @return void
      */
-    public function testDivBlockTagDeletingSuperscriptContent()
+    public function testDeletingSuperscriptContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -185,7 +185,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSuperscriptUnitTest extends AbstractVi
         $this->type('test');
         $this->assertHTMLMatch('<div>test</div>');
 
-    }//end testDivBlockTagDeletingSuperscriptContent()
+    }//end testDeletingSuperscriptContent()
 
 
     /**
@@ -193,7 +193,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSuperscriptUnitTest extends AbstractVi
      *
      * @return void
      */
-    public function testDivBlockTagSplittingSuperscriptContent()
+    public function testSplittingSuperscriptContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -227,7 +227,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSuperscriptUnitTest extends AbstractVi
         $this->type('test ');
         $this->assertHTMLMatch('<div>Some superscript <sup>%1% %2%</sup></div><div>test&nbsp;&nbsp;content to test</div>');
 
-    }//end testDivBlockTagSplittingSuperscriptContent()
+    }//end testSplittingSuperscriptContent()
 
 
     /**
@@ -235,7 +235,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSuperscriptUnitTest extends AbstractVi
      *
      * @return void
      */
-    public function testDivBlockTagUndoAndRedoWithSuperscriptContent()
+    public function testUndoAndRedoWithSuperscriptContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -258,7 +258,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSuperscriptUnitTest extends AbstractVi
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         $this->assertHTMLMatch('<div>This is <sup>%1%</sup> %2% some content</div>');        
 
-    }//end testDivBlockTagUndoAndRedoWithSuperscriptContent()
+    }//end testUndoAndRedoWithSuperscriptContent()
 
 
 }//end class

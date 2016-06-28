@@ -9,7 +9,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithAnchorsUnitTest extends AbstractViperU
      *
      * @return void
      */
-    public function testDivBlockTagAddingAnchorToAWordInContent()
+    public function testAddingAnchorToAWordInContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -42,7 +42,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithAnchorsUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('Insert Anchor', NULL, TRUE);
         $this->assertHTMLMatch('<div>This is <span id="test1">%1%</span> <span id="test2">%2%</span> some content</div>');
 
-    }//end testDivBlockTagAddingAnchorToAWordInContent()
+    }//end testAddingAnchorToAWordInContent()
 
 
      /**
@@ -50,7 +50,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithAnchorsUnitTest extends AbstractViperU
      *
      * @return void
      */
-    public function testDivBlockTagAddingAnchorToAllContent()
+    public function testAddingAnchorToAllContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -85,7 +85,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithAnchorsUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('Insert Anchor', NULL, TRUE);
         $this->assertHTMLMatch('<div id="test2">%1% This is some content %2%</div>');
 
-    }//end testDivBlockTagAddingAnchorToAllContent()
+    }//end testAddingAnchorToAllContent()
 
 
     /**
@@ -93,7 +93,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithAnchorsUnitTest extends AbstractViperU
      *
      * @return void
      */
-    public function testDivBlockTagEditingAnchorAppliedToWordInContent()
+    public function testEditingAnchorAppliedToWordInContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -132,7 +132,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithAnchorsUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('Update Anchor', NULL, TRUE);
         $this->assertHTMLMatch('<div>This is <span id="test edit">%1%</span> some content</div>');
 
-    }//end testDivBlockTagEditingAnchorAppliedToWordInContent()
+    }//end testEditingAnchorAppliedToWordInContent()
 
 
     /**
@@ -140,7 +140,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithAnchorsUnitTest extends AbstractViperU
      *
      * @return void
      */
-    public function testDivBlockTagEditingAnchorAppliedToAllContent()
+    public function testEditingAnchorAppliedToAllContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -179,7 +179,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithAnchorsUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('Update Anchor', NULL, TRUE);
         $this->assertHTMLMatch('<div><span id="test edit">%1% This is some content %2%</span></div>');
 
-    }//end testDivBlockTagEditingAnchorAppliedToAllContent()
+    }//end testEditingAnchorAppliedToAllContent()
 
 
     /**
@@ -187,7 +187,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithAnchorsUnitTest extends AbstractViperU
      *
      * @return void
      */
-    public function testDivBlockTagRemoveAnchorAppliedToWordInContent()
+    public function testRemoveAnchorAppliedToWordInContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -222,7 +222,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithAnchorsUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('Update Anchor', NULL, TRUE);
         $this->assertHTMLMatch('<div>This is %1% some content</div>');
 
-    }//end testDivBlockTagRemoveAnchorAppliedToWordInContent()
+    }//end testRemoveAnchorAppliedToWordInContent()
 
 
      /**
@@ -230,7 +230,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithAnchorsUnitTest extends AbstractViperU
      *
      * @return void
      */
-    public function testDivBlockTagRemoveAnchorAppliedToAllContent()
+    public function testRemoveAnchorAppliedToAllContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -265,7 +265,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithAnchorsUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('Update Anchor', NULL, TRUE);
         $this->assertHTMLMatch('<div>%1% This is some content %2%</div>');
 
-    }//end testDivBlockTagRemoveAnchorAppliedToAllContent()
+    }//end testRemoveAnchorAppliedToAllContent()
 
 
     /**
@@ -273,7 +273,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithAnchorsUnitTest extends AbstractViperU
      *
      * @return void
      */
-    public function testDivBlockTagUndoAndRedoWithAnchors()
+    public function testUndoAndRedoWithAnchors()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -300,7 +300,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithAnchorsUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<div>This is <span id="test1">%1%</span> %2% some content</div>');
 
-    }//end testDivBlockTagUndoAndRedoWithAnchors()
+    }//end testUndoAndRedoWithAnchors()
 
 
 }//end class

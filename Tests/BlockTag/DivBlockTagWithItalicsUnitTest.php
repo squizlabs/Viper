@@ -9,7 +9,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithItalicsUnitTest extends AbstractViperU
      *
      * @return void
      */
-    public function testDivBlockTagAddingItalicFormattingToContent()
+    public function testAddingItalicFormattingToContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -50,7 +50,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithItalicsUnitTest extends AbstractViperU
         $this->sikuli->keyDown('Key.CMD + i');
         $this->assertHTMLMatch('<div>This is <em>%1% %2%</em> some content</div>');
 
-    }//end testDivBlockTagAddingItalicFormattingToContent()
+    }//end testAddingItalicFormattingToContent()
 
 
     /**
@@ -58,7 +58,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithItalicsUnitTest extends AbstractViperU
      *
      * @return void
      */
-    public function testDivBlockTagRemovingItalicFormatting()
+    public function testRemovingItalicFormatting()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -123,7 +123,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithItalicsUnitTest extends AbstractViperU
         $this->sikuli->keyDown('Key.CMD + i');
         $this->assertHTMLMatch('<div>Italic %1% content</div>');
 
-    }//end testDivBlockTagRemovingItalicFormatting()
+    }//end testRemovingItalicFormatting()
 
 
     /**
@@ -131,7 +131,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithItalicsUnitTest extends AbstractViperU
      *
      * @return void
      */
-    public function testDivBlockTagEditingItalicContent()
+    public function testEditingItalicContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -190,7 +190,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithItalicsUnitTest extends AbstractViperU
         $this->type('abc');
         $this->assertHTMLMatch('<div>Some italic test abc<em> test abc abc</em> content to test</div>');
 
-    }//end testDivBlockTagEditingItalicContent()
+    }//end testEditingItalicContent()
 
 
     /**
@@ -198,7 +198,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithItalicsUnitTest extends AbstractViperU
      *
      * @return void
      */
-    public function testDivBlockTagDeletingItalicContent()
+    public function testDeletingItalicContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -249,7 +249,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithItalicsUnitTest extends AbstractViperU
         $this->type('test');
         $this->assertHTMLMatch('<div>test</div>');
 
-    }//end testDivBlockTagDeletingItalicContent()
+    }//end testDeletingItalicContent()
 
 
     /**
@@ -257,7 +257,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithItalicsUnitTest extends AbstractViperU
      *
      * @return void
      */
-    public function testDivBlockTagSplittingItalicContent()
+    public function testSplittingItalicContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -291,7 +291,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithItalicsUnitTest extends AbstractViperU
         $this->type('test ');
         $this->assertHTMLMatch('<div>Some italic <em>%1% %2%</em></div><div>test content to test</div>');
 
-    }//end testDivBlockTagSplittingItalicContent()
+    }//end testSplittingItalicContent()
 
 
     /**
@@ -299,7 +299,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithItalicsUnitTest extends AbstractViperU
      *
      * @return void
      */
-    public function testDivBlockTagUndoAndRedoWithItalicContent()
+    public function testUndoAndRedoWithItalicContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -322,7 +322,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithItalicsUnitTest extends AbstractViperU
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         $this->assertHTMLMatch('<div>This is <em>%1%</em> %2% some content</div>');        
 
-    }//end testDivBlockTagUndoAndRedoWithItalicContent()
+    }//end testUndoAndRedoWithItalicContent()
 
 
 }//end class

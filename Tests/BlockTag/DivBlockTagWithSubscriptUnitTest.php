@@ -9,7 +9,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSubscriptUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testDivBlockTagAddingSubscriptFormattingToContent()
+    public function testAddingSubscriptFormattingToContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -26,7 +26,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSubscriptUnitTest extends AbstractVipe
         $this->clickTopToolbarButton('subscript');
         $this->assertHTMLMatch('<div>This is <sub>%1% %2%</sub> some content</div>');
 
-    }//end testDivBlockTagAddingSubscriptFormattingToContent()
+    }//end testAddingSubscriptFormattingToContent()
 
 
     /**
@@ -34,7 +34,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSubscriptUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testDivBlockTagRemovingSubscriptFormatting()
+    public function testRemovingSubscriptFormatting()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -59,7 +59,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSubscriptUnitTest extends AbstractVipe
         $this->clickTopToolbarButton('subscript', 'active');
         $this->assertHTMLMatch('<div>Subscript %1% content</div>');
 
-    }//end testDivBlockTagRemovingSubscriptFormatting()
+    }//end testRemovingSubscriptFormatting()
 
 
     /**
@@ -67,7 +67,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSubscriptUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testDivBlockTagEditingSubscriptContent()
+    public function testEditingSubscriptContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -126,7 +126,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSubscriptUnitTest extends AbstractVipe
         $this->type('abc');
         $this->assertHTMLMatch('<div>Some subscript test abc<sub> test abc abc</sub> content to test</div>');
 
-    }//end testDivBlockTagEditingSubscriptContent()
+    }//end testEditingSubscriptContent()
 
 
     /**
@@ -134,7 +134,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSubscriptUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testDivBlockTagDeletingSubscriptContent()
+    public function testDeletingSubscriptContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -185,7 +185,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSubscriptUnitTest extends AbstractVipe
         $this->type('test');
         $this->assertHTMLMatch('<div>test</div>');
 
-    }//end testDivBlockTagDeletingSubscriptContent()
+    }//end testDeletingSubscriptContent()
 
 
     /**
@@ -193,7 +193,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSubscriptUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testDivBlockTagSplittingSubscriptContent()
+    public function testSplittingSubscriptContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -227,7 +227,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSubscriptUnitTest extends AbstractVipe
         $this->type('test ');
         $this->assertHTMLMatch('<div>Some subscript <sub>%1% %2%</sub></div><div>test&nbsp;&nbsp;content to test</div>');
 
-    }//end testDivBlockTagSplittingSubscriptContent()
+    }//end testSplittingSubscriptContent()
 
 
     /**
@@ -235,7 +235,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSubscriptUnitTest extends AbstractVipe
      *
      * @return void
      */
-    public function testDivBlockTagUndoAndRedoWithSubscriptContent()
+    public function testUndoAndRedoWithSubscriptContent()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
@@ -258,7 +258,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSubscriptUnitTest extends AbstractVipe
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         $this->assertHTMLMatch('<div>This is <sub>%1%</sub> %2% some content</div>');        
 
-    }//end testDivBlockTagUndoAndRedoWithSubscriptContent()
+    }//end testUndoAndRedoWithSubscriptContent()
 
 
 }//end class
