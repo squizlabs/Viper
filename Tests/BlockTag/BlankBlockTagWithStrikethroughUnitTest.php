@@ -69,12 +69,14 @@ class Viper_Tests_BlockTag_BlankBlockTagWithStrikethroughUnitTest extends Abstra
      */
     public function testEditingStrikethroughContent()
     {
-        $this->useTest(1);
+       $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
 
         // Test adding content to the start of the strikethrough formatting
         $this->useTest(4);
-        $this->clickKeyword(1);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test ');
         $this->assertHTMLMatch('Some strikethrough test <del>%1% %2%</del> content to test');
@@ -85,21 +87,44 @@ class Viper_Tests_BlockTag_BlankBlockTagWithStrikethroughUnitTest extends Abstra
         $this->assertHTMLMatch('Some strikethrough test <del>%1% test %2%</del> content to test');
 
         // Test adding content to the end of strikethrough formatting
-        $this->clickKeyword(2);
+        $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
-        $this->type(' test');
-        $this->assertHTMLMatch('Some strikethrough test <del>%1% test %2% test</del> content to test');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->type(' %3%');
+        $this->assertHTMLMatch('Some strikethrough test <del>%1% test %2% %3%</del> content to test');
 
         // Test highlighting some content in the del tags and replacing it
         $this->selectKeyword(2);
         $this->type('abc');
-        $this->assertHTMLMatch('Some strikethrough test <del>%1% test abc test</del> content to test');
+        $this->assertHTMLMatch('Some strikethrough test <del>%1% test abc %3%</del> content to test');
+
+        $this->selectKeyword(1);
+        $this->type('%1%');
+        $this->assertHTMLMatch('Some strikethrough test <del>%1% test abc %3%</del> content to test');
+
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('abc');
+        $this->assertHTMLMatch('Some strikethrough test abc<del> test abc %3%</del> content to test');
+
+        /*// Undo so we can test backspace
+        $this->sikuli->keyDown('Key.CMD + z');
 
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('abc');
-        $this->assertHTMLMatch('Some strikethrough test abc<del> test abc test</del> content to test');
+        $this->assertHTMLMatch('Some strikethrough test abc<del> test abc %3%</del> content to test');*/
+
+        $this->selectKeyword(3);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('%1%');
+        $this->assertHTMLMatch('Some strikethrough test abc<del> test abc %1%</del> content to test');
+
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('abc');
+        $this->assertHTMLMatch('Some strikethrough test abc<del> test abc abc</del> content to test');
 
     }//end testEditingStrikethroughContent()
 

@@ -176,14 +176,31 @@ class Viper_Tests_BlockTag_BlankBlockTagWithBoldUnitTest extends AbstractViperUn
         $this->assertHTMLMatch('Some bold test <strong>%1% test abc %3%</strong> content to test');
 
         $this->selectKeyword(1);
+        $this->type('%1%');
+        $this->assertHTMLMatch('Some bold test <strong>%1% test abc %3%</strong> content to test');
+
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('abc');
+        $this->assertHTMLMatch('Some bold test abc<strong> test abc %3%</strong> content to test');
+
+        // Undo so we can test backspace
+        $this->sikuli->keyDown('Key.CMD + z');
+
+        $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('abc');
         $this->assertHTMLMatch('Some bold test abc<strong> test abc %3%</strong> content to test');
 
         $this->selectKeyword(3);
         $this->sikuli->keyDown('Key.DELETE');
-        $this->type('test');
-        $this->assertHTMLMatch('Some bold test abc<strong> test abc test</strong> content to test');
+        $this->type('%1%');
+        $this->assertHTMLMatch('Some bold test abc<strong> test abc %1%</strong> content to test');
+
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('abc');
+        $this->assertHTMLMatch('Some bold test abc<strong> test abc abc</strong> content to test');
 
     }//end testEditingBoldContent()
 

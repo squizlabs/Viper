@@ -74,32 +74,57 @@ class Viper_Tests_BlockTag_DivBlockTagWithSubscriptUnitTest extends AbstractVipe
 
         // Test adding content to the start of the subscript formatting
         $this->useTest(4);
-        $this->clickKeyword(1);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test ');
-        $this->assertHTMLMatch('<div>Some subscript <sub>test %1% %2%</sub> content to test</div>');
+        $this->assertHTMLMatch('<div>Some subscript test <sub>%1% %2%</sub> content to test</div>');
 
         // Test adding content in the middle of subscript formatting
         $this->moveToKeyword(1, 'right');
         $this->type(' test');
-        $this->assertHTMLMatch('<div>Some subscript <sub>test %1% test %2%</sub> content to test</div>');
+        $this->assertHTMLMatch('<div>Some subscript test <sub>%1% test %2%</sub> content to test</div>');
 
         // Test adding content to the end of subscript formatting
-        $this->clickKeyword(2);
+        $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
-        $this->type(' test');
-        $this->assertHTMLMatch('<div>Some subscript <sub>test %1% test %2% test</sub> content to test</div>');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->type(' %3%');
+        $this->assertHTMLMatch('<div>Some subscript test <sub>%1% test %2% %3%</sub> content to test</div>');
 
         // Test highlighting some content in the sub tags and replacing it
         $this->selectKeyword(2);
         $this->type('abc');
-        $this->assertHTMLMatch('<div>Some subscript <sub>test %1% test abc test</sub> content to test</div>');
+        $this->assertHTMLMatch('<div>Some subscript test <sub>%1% test abc %3%</sub> content to test</div>');
+
+        $this->selectKeyword(1);
+        $this->type('%1%');
+        $this->assertHTMLMatch('<div>Some subscript test <sub>%1% test abc %3%</sub> content to test</div>');
+
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('abc');
+        $this->assertHTMLMatch('<div>Some subscript test abc<sub> test abc %3%</sub> content to test</div>');
+
+        // Undo so we can test backspace
+        $this->sikuli->keyDown('Key.CMD + z');
 
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('abc');
-        $this->assertHTMLMatch('<div>Some subscript <sub>test abc test abc test</sub> content to test</div>');
+        $this->assertHTMLMatch('<div>Some subscript test abc<sub> test abc %3%</sub> content to test</div>');
+
+        $this->selectKeyword(3);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('%1%');
+        $this->assertHTMLMatch('<div>Some subscript test abc<sub> test abc %1%</sub> content to test</div>');
+
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('abc');
+        $this->assertHTMLMatch('<div>Some subscript test abc<sub> test abc abc</sub> content to test</div>');
 
     }//end testDivBlockTagEditingSubscriptContent()
 
@@ -135,7 +160,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSubscriptUnitTest extends AbstractVipe
         // Test replacing subscript content with new content when selecting one keyword and using the lineage
         $this->useTest(4);
         $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
+        $this->selectInlineToolbarLineageItem(1);
         $this->type('test');
         $this->assertHTMLMatch('<div>Some subscript <sub>test</sub> content to test</div>');
 
