@@ -94,7 +94,7 @@
             var node    = this.viper.getNodeSelection();
             var element = null;
 
-            if (node && node.nodeType === ViperUtil.ELEMENT_NODE) {
+            if (ViperUtil.isElement(node) === true) {
                 var children = ViperUtil.getSurroundedChildren(node);
                 if (children.length > 0) {
                     // Most inner child.
@@ -107,6 +107,8 @@
                 node.setAttribute('lang', langAttribute);
                 element = node;
             } else if (range.collapsed === true) {
+                // TODO: #coverage Range should not be collapsed at this point..
+                // When the language toolbar is opened it should be selecting the parent element.
                 var node = range.getStartNode();
                 if (!node) {
                     node = range.getEndNode();
@@ -115,7 +117,7 @@
                     }
                 }
 
-                if (node.nodeType === ViperUtil.TEXT_NODE) {
+                if (ViperUtil.isText(node) === true) {
                     node = node.parentNode;
                 }
 

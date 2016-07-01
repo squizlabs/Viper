@@ -718,12 +718,6 @@
 
         },
 
-        getCurrentViewType: function()
-        {
-            return this._type;
-
-        },
-
         /**
          * Upudates the toolbar.
          *

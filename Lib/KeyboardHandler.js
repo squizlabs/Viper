@@ -665,7 +665,7 @@
                 return false;
             }
 
-            if ((e.ctrlKey === false && e.which === 17)
+            if ((e.ctrlKey === false && e.which !== 17)
                 && (e.altKey === false && e.which !== 18)
                 && (e.shiftKey === false && e.which !== 16)
                 && (e.metaKey === false && e.which !== 224)
@@ -1329,6 +1329,7 @@
                     ViperSelection.addRange(range);
                     return false;
                 } else if (ViperUtil.isBrowser('chrome') === true) {
+                    // TODO: #coverage This case is handled above.
                     // Latest Chrome is creating DIV element with span tag when
                     // exiting a top level list (hitting enter in an empty top level list item).
                     // Create the default tag instead.
@@ -1782,14 +1783,7 @@
                 }
             }
 
-            if (this._isWholeViperElementSelected(range) === true) {
-                // The whole Viper element is selected, remove all of its content
-                // and then initialise the Viper element.
-                ViperUtil.setHtml(viperElement, '');
-                this._viper.initEditableElement();
-                this._viper.contentChanged();
-                return false;
-            } else if (ViperUtil.isBrowser('msie') === true) {
+            if (ViperUtil.isBrowser('msie') === true) {
                 var rangeClone = range.cloneRange();
 
                 if (ViperUtil.isBrowser('msie', '>=11') === true) {
@@ -2682,16 +2676,7 @@
         _handleDeleteFromRight: function(e, range)
         {
             if (range.collapsed !== true) {
-                // If range is not collapsed then everything in the selection should be removed which is handled by
-                // the browser unless its the whole Viper element selection.
-                if (this._isWholeViperElementSelected(range) === true) {
-                    // The whole Viper element is selected, remove all of its content
-                    // and then initialise the Viper element.
-                    ViperUtil.setHtml(this._viper.getViperElement(), '');
-                    this._viper.initEditableElement();
-                    this._viper.contentChanged();
-                    return false;
-                } else if (this._isStartToEndOfMultiContainerSelection(range) === true) {
+                if (this._isStartToEndOfMultiContainerSelection(range) === true) {
                     return this._removeContentFromStartToEndOfContainers(range);
                 } else {
                     var nodeSelection = range.getNodeSelection();
@@ -3271,37 +3256,26 @@
                 // if these nodes are part of two different block elements.
                 var nodeSelection = range.cloneRange().getNodeSelection();
                 if (nodeSelection) {
-                    if (nodeSelection === this._viper.getViperElement()) {
-                        var defaultTagName = this._viper.getDefaultBlockTag();
-                        if (defaultTagName !== '') {
-                            ViperUtil.setHtml(nodeSelection, '');
-                            this._viper.initEditableElement();
-                            range = this._viper.getCurrentRange();
-                        } else {
-                            ViperUtil.setHtml(nodeSelection, '<br />');
+                    var nextSelectable = range.getNextContainer(nodeSelection, null, true);
+                    if (ViperUtil.inArray(ViperUtil.getTagName(nodeSelection), this._keepContainerList) === true) {
+                        // Remove only the contents when a whole element is selected but the element cannot be
+                        // removed (e.g. TD, as it would break the layout).
+                        ViperUtil.setHtml(nodeSelection, '<br/>');
+                        range.setStart(nodeSelection, 0);
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+                        this._viper.contentChanged(true);
+                        return false;
+                    } else if (this._viper.isOutOfBounds(nextSelectable) === true) {
+                        nextSelectable = range.getPreviousContainer(range.startContainer, null, true);
+                        if (nextSelectable) {
+                            range.setStart(nextSelectable, nextSelectable.data.length);
                         }
                     } else {
-                        var nextSelectable = range.getNextContainer(nodeSelection, null, true);
-                        if (ViperUtil.inArray(ViperUtil.getTagName(nodeSelection), this._keepContainerList) === true) {
-                            // Remove only the contents when a whole element is selected but the element cannot be
-                            // removed (e.g. TD, as it would break the layout).
-                            ViperUtil.setHtml(nodeSelection, '<br/>');
-                            range.setStart(nodeSelection, 0);
-                            range.collapse(true);
-                            ViperSelection.addRange(range);
-                            this._viper.contentChanged(true);
-                            return false;
-                        } else if (this._viper.isOutOfBounds(nextSelectable) === true) {
-                            nextSelectable = range.getPreviousContainer(range.startContainer, null, true);
-                            if (nextSelectable) {
-                                range.setStart(nextSelectable, nextSelectable.data.length);
-                            }
-                        } else {
-                            range.setStart(nextSelectable, 0);
-                        }
+                        range.setStart(nextSelectable, 0);
+                    }
 
-                        ViperUtil.remove(nodeSelection);
-                    }//end if
+                    ViperUtil.remove(nodeSelection);
                 } else if (this._isStartToEndOfMultiContainerSelection(range) === true) {
                     return this._removeContentFromStartToEndOfContainers(range);
                 } else {
@@ -3320,13 +3294,6 @@
 
                 range.collapse(true);
                 ViperSelection.addRange(range);
-                this._viper.contentChanged();
-                return false;
-            } else if (this._isWholeViperElementSelected(range) === true) {
-                // The whole Viper element is selected, remove all of its content
-                // and then initialise the Viper element.
-                ViperUtil.setHtml(this._viper.getViperElement(), '');
-                this._viper.initEditableElement();
                 this._viper.contentChanged();
                 return false;
             } else if (range.startContainer.nodeType === ViperUtil.ELEMENT_NODE
@@ -3706,6 +3673,7 @@
 
             // If the parent is not part of the editable element then we need to
             // create two new P tags.
+            // TODO: #coverage Don't think this section is needed.
             if (ViperUtil.isChildOf(parent, this._viper.element) === false) {
                 // Find the next non block sibling.
                 var node = range.endContainer;
@@ -3906,7 +3874,7 @@
                 this._viper.insertAfter(node.previousSibling, this._viper.createSpaceNode());
             } else if (!node.nextSibling && ViperUtil.isBlockElement(node.parentNode) === false) {
                 ViperUtil.insertAfter(node.parentNode, node);
-            } else if (!node.previousSibling && node.nextSibling && node.nextSibling.nodeType === ViperUtil.TEXT_NODE) {
+            } else if (!node.previousSibling && ViperUtil.isText(node.nextSibling) === true) {
                 ViperUtil.insertBefore(node.parentNode, node);
             }
 

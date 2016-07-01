@@ -487,6 +487,14 @@
 
         },
 
+        isElement: function (node) {
+            if (node && node.nodeType === this.ELEMENT_NODE) {
+                return true;
+            }
+
+            return false;
+        },
+
         isFirstNonEmptyTextNode: function(node) {
             if (this.isText(node) === false) {
                 return false;

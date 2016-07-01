@@ -209,6 +209,8 @@
                 if (!node) {
                     return this.rangeToLink(idPrefix);
                 } else {
+                    // TODO: #coverage. This should not happen, when the insert link tool is opened the whole link
+                    // is selected.
                     this.updateLinkAttributes(node, idPrefix);
                 }
             } else {
@@ -254,7 +256,7 @@
                 }
             }
 
-            if (node && node.nodeType === ViperUtil.ELEMENT_NODE) {
+            if (ViperUtil.isElement(node) === true) {
                 if (ViperUtil.isStubElement(node) === true
                     || ViperUtil.isTag(node, 'ul') === true
                     || ViperUtil.isTag(node, 'ol') === true
