@@ -21,7 +21,7 @@ abstract class AbstractViperImagePluginUnitTest extends AbstractViperUnitTest
     {
         $selector = 'img';
         $imageRect   = $this->getBoundingRectangle($selector, $imageIndex);
-        $rightHandle = $this->findImage('ImageHandle-se', '.Viper-image-handle-se', 0, true);
+        $rightHandle = $this->findImage('ImageHandle-bottomRight', '.ViperImagePlugin-resizeBox-handle-bottomRight', 0, true);
         $width = ($imageRect['x2'] - $imageRect['x1']);
         $diff  = ($size - $width);
         $newX  = ($this->sikuli->getX($rightHandle) + $diff + 7);
@@ -46,12 +46,12 @@ abstract class AbstractViperImagePluginUnitTest extends AbstractViperUnitTest
         // Get the image rectangle.
         $image = $this->getBoundingRectangle($selector, $index);
         // Get both of the resize handles rectangles.
-        $leftHandle  = $this->getBoundingRectangle('.Viper-image-handle-sw');
-        $rightHandle = $this->getBoundingRectangle('.Viper-image-handle-se');
-        $this->assertEquals(($image['x1'] - 10), $leftHandle['x1']);
-        $this->assertEquals(($image['y2'] - 10), $leftHandle['y1']);
-        $this->assertEquals(($image['x2'] - 10), $rightHandle['x1']);
-        $this->assertEquals(($image['y2'] - 10), $rightHandle['y1']);
+        $leftHandle  = $this->getBoundingRectangle('.ViperImagePlugin-resizeBox-handle-bottomLeft');
+        $rightHandle = $this->getBoundingRectangle('.ViperImagePlugin-resizeBox-handle-bottomRight');
+        $this->assertEquals(($image['x1'] - 8), $leftHandle['x1']);
+        $this->assertEquals(($image['y2'] - 5), $leftHandle['y1']);
+        $this->assertEquals(($image['x2'] - 4), $rightHandle['x1']);
+        $this->assertEquals(($image['y2'] - 5), $rightHandle['y1']);
     }//end checkResizeHandles()
     /**
      * Checks that the preview image size is correct.

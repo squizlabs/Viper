@@ -49,6 +49,8 @@
                 }, true);
                 tools.createButton('indentList', '', _('Indent List'), 'Viper-listIndent', function() {
                     if (self.tabRange(null, false, true) === false) {
+                        // This should not happen as the button should be disabled when the range cannot be converted
+                        // to a list.
                         self.convertRangeToList();
                     } else {
                         self.tabRange();
@@ -114,6 +116,7 @@
                             || ((startNode.nodeType === ViperUtil.TEXT_NODE || ViperUtil.isStubElement(startNode) === true) && ViperUtil.isTag(ViperUtil.getFirstBlockParent(startNode), 'p') === true)
                         ) {
                             if (ViperUtil.getParents(startNode, 'td,th,blockquote', self.viper.getViperElement()).length === 0) {
+                                // Do not allow tab to create list when in table, blockquote.
                                 self.convertRangeToList(range);
                                 ViperUtil.preventDefault(e);
                                 return false;
@@ -220,22 +223,6 @@
                 data.toolbar.showButton('vitpIndentList', !statuses.increaseIndent);
                 data.toolbar.showButton('vitpOutdentList', !statuses.decreaseIndent);
             }
-
-        },
-
-        unoderedList: function()
-        {
-            this.makeList(false);
-            this.viper.contentChanged(false);
-            this.viper.element.focus();
-
-        },
-
-        oderedList: function()
-        {
-            this.makeList(true);
-            this.viper.contentChanged(false);
-            this.viper.element.focus();
 
         },
 
@@ -1290,31 +1277,6 @@
 
         },
 
-        toggleListType: function(list)
-        {
-            var newListType = null;
-            if (ViperUtil.isTag(list, 'ol') === true) {
-                newListType = 'ul';
-            } else if (ViperUtil.isTag(list, 'ul') === true) {
-                newListType = 'ol';
-            }
-
-            if (!newListType) {
-                return false;
-            }
-
-            var newList = document.createElement(newListType);
-            while (list.firstChild) {
-                newList.appendChild(list.firstChild);
-            }
-
-            ViperUtil.insertBefore(list, newList);
-            ViperUtil.remove(list);
-
-            return newList;
-
-        },
-
         changeListType: function(newType, range)
         {
             range = range || this.viper.getViperRange();
@@ -1632,12 +1594,7 @@
 
             if (makeList === true) {
                 if (ViperUtil.isTag(firstBlock, 'li') === true) {
-                    if (ViperUtil.isTag(startNode, 'ul') === true || ViperUtil.isTag(startNode, 'ol') === true) {
-                        list = startNode;
-                    } else {
-
-                        list = this._getListElement(startNode);
-                    }
+                    list = this._getListElement(startNode, true);
                 }
 
                 if (!list && this.convertRangeToList(range, true) === true) {
@@ -2022,51 +1979,6 @@
 
         },
 
-        _getList: function(element)
-        {
-            return this._isListElement(element, null, true);
-
-        },
-
-        _isListElement: function(element, type, returnNode)
-        {
-            while (element && element !== this.viper.element) {
-                if (element.nodeType === ViperUtil.ELEMENT_NODE) {
-                    var tagName = element.tagName.toLowerCase();
-                    if (type) {
-                        if (tagName === type) {
-                            if (returnNode === true) {
-                                return element;
-                            }
-
-                            return true;
-                        }
-                    } else if (tagName === 'ul' || tagName === 'ol' || tagName === 'li') {
-                        if (returnNode === true) {
-                            return element;
-                        }
-
-                        return true;
-                    }
-                }
-
-                element = element.parentNode;
-            }//end while
-
-            return false;
-
-        },
-
-        isListNode: function(node)
-        {
-            if (ViperUtil.isTag(node, 'ul') === true || ViperUtil.isTag(node, 'ol') === true) {
-                return true;
-            }
-
-            return false;
-
-        },
-
         /**
          * Given an element it will return its list item (li) node.
          */
@@ -2084,8 +1996,12 @@
 
         },
 
-        _getListElement: function(element)
+        _getListElement: function(element, incElement)
         {
+            if (incElement === true && ViperUtil.isTag(element, ['ul', 'ol']) === true) {
+                return element;
+            }
+
             element = element.parentNode;
             while (element && element !== this.viper.element) {
                 if (element.tagName) {
@@ -2174,74 +2090,6 @@
             }
 
             return false;
-
-        },
-
-        /*
-            This method will be called from ViperKeyboardEditPlugin.
-        */
-        handleEnter: function(li)
-        {
-            var content = ViperUtil.getNodeTextContent(li);
-            if (ViperUtil.trim(content).length === 0 || ViperUtil.getHtml(li) === '&nbsp;') {
-                // End the list.
-                var parents = ViperUtil.getParents(li, 'ul,ol');
-                if (parents.length > 0) {
-                    var listEl = parents[0];
-
-                    if (parents.length > 1) {
-                        // If this is a nested list then move this item to one level up.
-                        // List element should be inside an li tag.
-                        var parentLi = parents[(parents.length - 1)].parentNode;
-                        while (parentLi && ViperUtil.isTag(parentLi, 'li') === false) {
-                            parentLi = parentLi.parentNode;
-                        }
-
-                        if (parentLi) {
-                            ViperUtil.insertAfter(parentLi, li);
-                            var range = this.viper.getCurrentRange();
-                            range.setStart(li.firstChild, 0);
-                            range.collapse(true);
-                            return false;
-                        }
-                    }
-
-                    // Insert a new paragrap after the list.
-                    var p = document.createElement('p');
-                    ViperUtil.setHtml(p, '&nbsp;');
-
-                    // Clone the list elem.
-                    var listClone = listEl.cloneNode(false);
-                    ViperUtil.removeAttr(listClone, 'id');
-
-                    // Move all elements after current li to the new one.
-                    var c  = 0;
-                    var el = li.nextSibling;
-                    while (el) {
-                        var elem = el;
-                        el       = el.nextSibling;
-                        c++;
-                        ViperUtil.remove(elem);
-                        listClone.appendChild(elem);
-                    }
-
-                    ViperUtil.remove(li);
-
-                    ViperUtil.insertAfter(listEl, p);
-
-                    if (c > 0) {
-                        ViperUtil.insertAfter(p, listClone);
-                    }
-
-                    var range = this.viper.getCurrentRange();
-                    range.setStart(p.firstChild, 0);
-                    range.collapse(true);
-
-                    return false;
-                }//end if
-            }//end if
-
-            return true;
 
         },
 

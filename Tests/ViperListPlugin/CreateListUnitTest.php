@@ -189,14 +189,14 @@ class Viper_Tests_ViperListPlugin_CreateListUnitTest extends AbstractViperListPl
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('item 2');
-        $this->assertHTMLMatch('<p>Create list test %1%</p><ul><li>item 1 %2%</li><li>item 2<br /><ul><li>sub list %3%</li></ul></li></ul>');
+        $this->assertHTMLMatch('<p>Create list test %1%</p><ul><li>item 1 %2%</li><li>item 2<ul><li>sub list %3%</li></ul></li></ul>');
 
         //Test ordered list
         $this->useTest(3);
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('item 2');
-        $this->assertHTMLMatch('<p>Create list test %1%</p><ol><li>item 1 %2%</li><li>item 2<br /><ol><li>sub list %3%</li></ol></li></ol>');
+        $this->assertHTMLMatch('<p>Create list test %1%</p><ol><li>item 1 %2%</li><li>item 2<ol><li>sub list %3%</li></ol></li></ol>');
 
     }//end testCreatingNewListItemBeforeASubList()
 

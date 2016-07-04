@@ -93,6 +93,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithListsUnitTest extends AbstractViperU
         $this->sikuli->keyDown('Key.UP');
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->type('test');
+        sleep(1);
         $this->assertHTMLMatch('test<ul><li>%1% Test content</li><li>%2% Test content</li><li>%3%</li></ul>');
 
         // Test adding content before an ordered list
@@ -102,6 +103,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithListsUnitTest extends AbstractViperU
         $this->sikuli->keyDown('Key.UP');
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->type('test');
+        sleep(1);
         $this->assertHTMLMatch('test<ol><li>%1% Test content</li><li>%2% Test content</li><li>%3%</li></ol>');
 
     }//end testAddingContentBeforeList()

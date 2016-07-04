@@ -1,8 +1,8 @@
 <?php
 
-require_once 'AbstractViperUnitTest.php';
+require_once 'AbstractViperLinkPluginUnitTest.php';
 
-class Viper_Tests_ViperLinkPlugin_UndoAndRedoWithLinkUnitTest extends AbstractViperUnitTest
+class Viper_Tests_ViperLinkPlugin_UndoAndRedoWithLinkUnitTest extends AbstractViperLinkPluginUnitTest
 {
 
     /**

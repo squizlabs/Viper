@@ -153,3 +153,9 @@
     background-color: #505050;
     border-radius: 0.4em;
 }
+
+.Viper-buttonIcon.Viper-tableRow.Viper-hidden,
+.Viper-buttonIcon.Viper-tableCol.Viper-hidden,
+.Viper-buttonIcon.Viper-tableCell.Viper-hidden {
+    display: block;
+}

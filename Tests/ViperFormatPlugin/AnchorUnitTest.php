@@ -1,8 +1,8 @@
 <?php
 
-require_once 'AbstractViperUnitTest.php';
+require_once 'AbstractFormatsUnitTest.php';
 
-class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
+class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractFormatsUnitTest
 {
     /**
      * Test that applying and removing an anchor to a word.
@@ -27,16 +27,16 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>test content %1% more test content %2%</p>');
 
-        // Apply anchor using the inline toolbar and pressing Apply Changes
+        // Apply anchor using the inline toolbar and pressing Insert Anchor
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('anchorID');
         $this->type('test2');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Insert Anchor', NULL, TRUE);
         $this->assertHTMLMatch('<p>test content %1% more test content <span id="test2">%2%</span></p>');
 
-        // Remove anchor using inline toolbar and pressing Apply Changes, without re-selecting the word
+        // Remove anchor using inline toolbar and pressing Update Anchor, without re-selecting the word
         $this->clearFieldValue('ID');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Update Anchor', NULL, TRUE);
         $this->assertHTMLMatch('<p>test content %1% more test content %2%</p>');
 
         // Check that the P icon is not active in the top toolbar. This was reported as a bug.
@@ -56,16 +56,16 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>test content %1% more test content %2%</p>');
 
-        // Apply anchor using the top toolbar and pressing Apply Changes
+        // Apply anchor using the top toolbar and pressing Insert Anchor
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('anchorID');
         $this->type('test2');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Insert Anchor', NULL, TRUE);
         $this->assertHTMLMatch('<p>test content %1% more test content <span id="test2">%2%</span></p>');
 
-        // Remove anchor using top toolbar and pressing Apply Changes, without re-selecting the word
+        // Remove anchor using top toolbar and pressing Update Anchor, without re-selecting the word
         $this->clearFieldValue('ID');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Update Anchor', NULL, TRUE);
         $this->assertHTMLMatch('<p>test content %1% more test content %2%</p>');
 
         // Check that the P icon is not active in the top toolbar. This was reported as a bug.
@@ -258,7 +258,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<p>test content %1% more test content %2%</p>');
         $this->clickTopToolbarButton('historyRedo');
         $this->assertHTMLMatch('<p id="test">test content %1% more test content %2%</p>');
-       
+
     }//end testUndoAndRedoForAnchors()
 
 
@@ -387,18 +387,18 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.CMD + v');
-        
+
         $this->assertTrue($this->topToolbarButtonExists('anchorID', 'disabled'), 'Class icon should be disabled in the top toolbar.');
 
     }//end testAnchorIconDisabledWhenCopyParagraph()
 
 
     /**
-     * Test that the Apply Changes button is inactive for a new selection after you click away from a previous selection.
+     * Test that the Insert Anchor button is inactive for a new selection after you click away from a previous selection.
      *
      * @return void
      */
-    public function testApplyChangesButtonWhenClickingAwayFromAnchorPopUp()
+    public function testInsertAnchorButtonWhenClickingAwayFromAnchorPopUp()
     {
         // Using the inline toolbar
         $this->useTest(1);
@@ -417,9 +417,9 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('anchorID');
 
         // Check apply change button
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE));
+        $this->assertTrue($this->inlineToolbarButtonExists('Insert Anchor', 'disabled', TRUE));
         $this->type('test');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Insert Anchor', NULL, TRUE);
         $this->assertHTMLMatch('<p>test content %1% more test content <span id="test">%2%</span></p>');
 
         // Using the top toolbar
@@ -437,21 +437,21 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<p>test content %1% more test content %2%</p>');
         $this->clickTopToolbarButton('anchorID');
 
-        // Check apply change button
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE));
+        // Check Insert Anchor button
+        $this->assertTrue($this->inlineToolbarButtonExists('Insert Anchor', 'disabled', TRUE));
         $this->type('test');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Insert Anchor', NULL, TRUE);
         $this->assertHTMLMatch('<p>test content %1% more test content <span id="test">%2%</span></p>');
 
     }//end testApplyChangesButtonWhenClickingAwayFromAnchorPopUp()
 
 
     /**
-     * Test that the Apply Changes button is inactive for a new selection after you close the anchor pop without saving the changes.
+     * Test that the Insert Anchor button is inactive for a new selection after you close the anchor pop without saving the changes.
      *
      * @return void
      */
-    public function testApplyChangesButtonWhenClosingTheAnchorPopUp()
+    public function testInsertAnchorButtonWhenClosingTheAnchorPopUp()
     {
         // Using the inline toolbar
         $this->useTest(1);
@@ -471,9 +471,9 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->clickInlineToolbarButton('anchorID');
 
         // Check icons
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE));
+        $this->assertTrue($this->inlineToolbarButtonExists('Insert Anchor', 'disabled', TRUE));
         $this->type('test');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Insert Anchor', NULL, TRUE);
         $this->assertHTMLMatch('<p>test content %1% more test content <span id="test">%2%</span></p>');
 
         // Using the top toolbar
@@ -493,16 +493,16 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('anchorID');
 
         // Check icons
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE));
+        $this->assertTrue($this->topToolbarButtonExists('Insert Anchor', 'disabled', TRUE));
         $this->type('test');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Insert Anchor', NULL, TRUE);
         $this->assertHTMLMatch('<p>test content %1% more test content <span id="test">%2%</span></p>');
 
     }//end testApplyChangesButtonWhenClosingTheAnchorPopUp()
 
 
     /**
-     * Test that the Apply Changes button is inactive after you cancel changes to a anchor.
+     * Test that the Insert Anchor button is inactive after you cancel changes to a anchor.
      *
      * @return void
      */
@@ -521,14 +521,14 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         // Check to make sure the HTML did not change.
         $this->assertHTMLMatch('<p>test content <span id="test1">%1%</span> more test content %2%</p>');
 
-        // Select the anchor again and make sure the Apply Changes button is inactive
+        // Select the anchor again and make sure the Update Anchor button is inactive
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('anchorID', 'active');
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE));
+        $this->assertTrue($this->inlineToolbarButtonExists('Update Anchor', 'disabled', TRUE));
 
-        // Edit the anchor and make sure the Apply Changes button still works.
+        // Edit the anchor and make sure the Upddate Anchor button still works.
         $this->type('234');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Update Anchor', NULL, TRUE);
         $this->assertHTMLMatch('<p>test content <span id="test1234">%1%</span> more test content %2%</p>');
 
         // Using the top toolbar
@@ -543,14 +543,14 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         // Check to make sure the HTML did not change.
         $this->assertHTMLMatch('<p>test content <span id="test1">%1%</span> more test content %2%</p>');
 
-        // Select the anchor again and make sure the Apply Changes button is inactive
+        // Select the anchor again and make sure the Update Anchor button is inactive
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('anchorID', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE));
+        $this->assertTrue($this->topToolbarButtonExists('Update Anchor', 'disabled', TRUE));
 
-        // Edit the anchor and make sure the Apply Changes button still works.
+        // Edit the anchor and make sure the Update Anchor button still works.
         $this->type('234');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Update Anchor', NULL, TRUE);
         $this->assertHTMLMatch('<p>test content <span id="test1234">%1%</span> more test content %2%</p>');
 
     }//end testApplyChangesButtonIsDisabledAfterCancellingChangesToALink()
@@ -653,7 +653,7 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractViperUnitTest
         $this->type('-modified');
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>test content <span id="modified-test_title-modified">%1% %3%</span> %2%</p>');;
-        
+
     }//end testAnchorFieldCanBeModified()
 
 

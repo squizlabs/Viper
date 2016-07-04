@@ -515,8 +515,14 @@
                     && range.startOffset === 0
                     && ViperUtil.isBlockElement(range.startContainer.parentNode) === true
                 ) {
-                    // At the start of a block element. Insert the HR before the block parent.
-                    ViperUtil.insertBefore(range.startContainer.parentNode, hr);
+                    // At the start of a block element. Insert the HR before the block parent. Unless the parent element
+                    // is the Viper element.
+                    if (this.viper.isEditableElement(range.startContainer.parentNode) === true) {
+                        ViperUtil.insertBefore(range.startContainer, hr);
+                    } else {
+                        ViperUtil.insertBefore(range.startContainer.parentNode, hr);
+                    }
+
                     this.viper.HistoryManager.end();
                     this.viper.fireSelectionChanged(range, true);
                     return;
@@ -543,10 +549,15 @@
                 ViperUtil.remove(nextSibling);
                 nextSibling = prev.nextSibling.nextSibling;
             } else if (!nextSibling || (ViperUtil.isBlockElement(nextSibling) === false && blockTag !== '')) {
-                var p = document.createElement(blockTag);
-                ViperUtil.setHtml(p, '&nbsp;');
-                ViperUtil.insertAfter(hr, p);
-                nextSibling = p;
+                if (blockTag !== '') {
+                    var p = document.createElement(blockTag);
+                    ViperUtil.setHtml(p, '&nbsp;');
+                    ViperUtil.insertAfter(hr, p);
+                    nextSibling = p;
+                } else {
+                    nextSibling = document.createTextNode('');
+                    ViperUtil.insertAfter(hr, nextSibling);
+                }
             } else {
                 if (ViperUtil.trim(ViperUtil.getNodeTextContent(nextSibling)) === '' && ViperUtil.elementIsEmpty(nextSibling) === true) {
                     if (!nextSibling.nextElementSibling || ViperUtil.isBlockElement(nextSibling.nextElementSibling) === false) {

@@ -160,7 +160,7 @@
             toolbar.addButton(searchBtn);
             toolbar.setBubbleButton('ViperSearchPlugin:bubble', 'searchReplace');
 
-            tools.getItem('ViperSearchPlugin:bubble').setSubSectionAction('ViperSearchPlugin:bubbleSubSection', function() {
+            tools.getItem('ViperSearchPlugin:bubble').setSubSectionAction('ViperSearchPlugin:bubbleSubSection', function() {console.info(111);
                 return _findNext();
             }, ['ViperSearchPlugin:searchInput'], 'ViperSearchPlugin:findNext', true);
 

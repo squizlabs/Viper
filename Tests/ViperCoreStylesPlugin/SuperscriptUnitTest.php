@@ -431,12 +431,12 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
         $this->selectKeyword(2);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('abc');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript test <sup>abc test abc %4%</sup> content to test</p>');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript test abc<sup> test abc %4%</sup> content to test</p>');
 
         $this->selectKeyword(4);
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('test');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript test <sup>abc test abc test</sup> content to test</p>');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript test abc<sup> test abc test</sup> content to test</p>');
 
     }//end testEditingSuperscriptContent()
 
@@ -454,14 +454,14 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('new ');
-        $this->assertHTMLMatch('<p>%1% <sup>new a %2% b</sup> %3%</p>');
+        $this->assertHTMLMatch('<p>%1% new <sup>a %2% b</sup> %3%</p>');
 
         // Test adding content before superscript content when cursor starts elsewhere in content
         $this->useTest(6);
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->type('new ');
-        $this->assertHTMLMatch('<p>%1% <sup>new a %2% b</sup> %3%</p>');
+        $this->assertHTMLMatch('<p>%1% new <sup>a %2% b</sup> %3%</p>');
 
         // Test adding content after superscript content when cursor starts inside the superscript content
         $this->useTest(6);
@@ -502,7 +502,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('<p>%1% </p><p><sup>test a %2% b</sup> %3%</p>');
+        $this->assertHTMLMatch('<p>%1% </p><p>test <sup>a %2% b</sup> %3%</p>');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
@@ -510,7 +510,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test');
-        $this->assertHTMLMatch('<p>%1% test</p><p><sup>test a %2% b</sup> %3%</p>');
+        $this->assertHTMLMatch('<p>%1% test</p><p>test <sup>a %2% b</sup> %3%</p>');
 
         // Test pressing enter at the end of superscript content
         $this->useTest(6);

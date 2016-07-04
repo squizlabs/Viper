@@ -487,6 +487,86 @@
 
         },
 
+        isElement: function (node) {
+            if (node && node.nodeType === this.ELEMENT_NODE) {
+                return true;
+            }
+
+            return false;
+        },
+
+        isFirstNonEmptyTextNode: function(node) {
+            if (this.isText(node) === false) {
+                return false;
+            }
+
+            while (node.previousSibling && this.isText(node.previousSibling) === true) {
+                if (this.trim(node.previousSibling.data) !== '') {
+                    return false;
+                }
+
+                node = node.previousSibling;
+            }
+
+            return true;
+
+        },
+
+        endsWithSpace: function(node, nonBreaking) {
+            if (this.isText(node) === false) {
+                return false;
+            }
+
+            if (nonBreaking === true) {
+                if (node.data.charCodeAt(node.data.length - 1) === 160) {
+                    return true;
+                }
+            } else if (node.data.charAt(node.data.length - 1) === ' ') {
+                return true;
+            }
+
+            return false;
+
+        },
+
+        startsWithSpace: function(node, nonBreaking) {
+            if (this.isText(node) === false) {
+                return false;
+            }
+
+            if (nonBreaking === true) {
+                if (node.data.charCodeAt(0) === 160) {
+                    return true;
+                }
+            } else if (node.data.charAt(0) === ' ') {
+                return true;
+            }
+
+            return false;
+
+        },
+
+        replaceCharAt: function(textNode, pos, replacement)
+        {
+            if (this.isText(textNode) === false) {
+                return false;
+            }
+
+            switch (pos) {
+                case 'last':
+                    pos =  (textNode.data.length - 1);
+                break;
+
+                case 'first':
+                    pos = 0;
+                break;
+            }
+
+            textNode.data = textNode.data.substr(0, pos) + replacement + textNode.data.substr(pos + 1);
+            return true;
+
+        },
+
         /**
          * returns a left trimmed string.
          *
@@ -988,6 +1068,33 @@
 
             return false;
 
+        },
+
+        /**
+         * Returns the parent element where the specified element is the last deepest child.
+         * E.g. <p>This is an <strong><em>example <sub>text</sub></em>..</strong></p>.
+         * Given "text" "em" will be returned.
+         */
+        getTopEndParent: function (element, includeBlockElements, stopElem) {
+            if (!element) {
+                return null;
+            }
+
+            stopElem   = stopElem || this._viperElement;
+            var parent = element.parentNode;
+            if (includeBlockElements !== true && ViperUtil.isBlockElement(parent) === true) {
+                return null;
+            }
+
+            while (!parent.nextSibling && (includeBlockElements === true || ViperUtil.isBlockElement(parent) === false)) {
+                if (parent === stopElem) {
+                    break;
+                }
+
+                parent = parent.parentNode;
+            }
+
+            return parent;
         },
 
         elementIsEmpty: function(elem)
@@ -2298,6 +2405,17 @@
              }
 
              return docs;
+
+        },
+
+        getTopDocument: function()
+        {
+            var doc = document;
+            while (doc.defaultView.frameElement) {
+                doc = doc.defaultView.frameElement.ownerDocument;
+            }
+
+            return doc;
 
         },
 

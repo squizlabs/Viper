@@ -242,11 +242,19 @@ class Viper_Tests_Core_DeleteContentUnitTest extends AbstractViperUnitTest
         $this->moveToKeyword(1, 'right');
         $this->type(' Some test content. %2% ');
         $this->sikuli->keyDown('Key.SHIFT + Key.ENTER');
-        $this->type('More test content.');
+        $this->type('%3% More test content.');
+        $this->assertHTMLMatch('<p>%1% Some test content. %2% <br />%3% More test content.</p>');
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>%1% Some test content. %2% More test content.</p>');
+        $this->assertHTMLMatch('<p>%1% Some test content. %2% %3% More test content.</p>');
+
+        // Undo a use backspace to delete the br
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>%1% Some test content. %2% <br />%3% More test content.</p>');
+        $this->moveToKeyword(3, 'left');
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->assertHTMLMatch('<p>%1% Some test content. %2% %3% More test content.</p>');
 
     }//end testDeletingContentBeforeBRTag()
 

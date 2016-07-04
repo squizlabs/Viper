@@ -20,3 +20,20 @@
 .Viper-textbox-input::-ms-clear {
     display: none;
 }
+
+[contenteditable="true"] img::selection {
+    background: transparent;
+}
+
+[contenteditable="true"] img::-moz-selection {
+    background: transparent;
+}
+
+.Viper-hidden {
+    display: none;
+}
+
+.Viper-offScreen {
+    position: absolute;
+    left: -9999px;
+}
