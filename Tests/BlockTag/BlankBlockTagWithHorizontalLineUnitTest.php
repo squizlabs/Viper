@@ -70,20 +70,28 @@ class Viper_Tests_BlockTag_BlankBlockTagWithHorizontalLineUnitTest extends Abstr
 
         $this->useTest(5);
         $this->moveToKeyword(1, 'right');
+        sleep(1);
         $this->sikuli->keyDown('Key.DELETE');
+        sleep(1);
         $this->assertHTMLMatch('Test content more test content %1%');
 
         // Using backspace
         $this->useTest(3);
         $this->moveToKeyword(1, 'left');
+        sleep(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(1);
         $this->assertHTMLMatch('%1% Test content');
 
         $this->useTest(4);
         $this->moveToKeyword(1, 'right');
+        sleep(1);
         $this->sikuli->keyDown('Key.RIGHT');
+        sleep(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(1);
         $this->assertHTMLMatch('Test content %1%<br /> more test content');
 
         $this->useTest(5);
