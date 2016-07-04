@@ -36,8 +36,8 @@ class Viper_Tests_BlockTag_BlankBlockTagWithHorizontalLineUnitTest extends Abstr
         $this->useTest(2);
         $this->moveToKeyword(2, 'right');
         $this->clickTopToolbarButton('insertHr');
-        $this->type('test ');
-        $this->assertHTMLMatch('%1% Test content %2%<br /><hr />test&nbsp;&nbsp;more test content. %3%');
+        $this->type('test');
+        $this->assertHTMLMatch('%1% Test content %2%<br /><hr />test more test content. %3%');
 
         // Test adding a horizontal rule at the end of the paragraph and add content
         $this->useTest(2);
@@ -130,7 +130,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithHorizontalLineUnitTest extends Abstr
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         $this->assertHTMLMatch('%1% Test content<br /><hr />%2% more test content. %3%');
 
-    }//end testAddingHorizontalRule()
+    }//end testUndoAndRedoWithHorizontalRule()
 
 
 }//end class

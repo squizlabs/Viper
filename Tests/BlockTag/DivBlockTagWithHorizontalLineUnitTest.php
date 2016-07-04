@@ -33,8 +33,8 @@ class Viper_Tests_BlockTag_DivBlockTagWithHorizontalLineUnitTest extends Abstrac
         $this->useTest(2);
         $this->moveToKeyword(2, 'right');
         $this->clickTopToolbarButton('insertHr');
-        $this->type('test ');
-        $this->assertHTMLMatch('<div>%1% Test content %2%</div><hr /><div>test&nbsp;&nbsp;more test content. %3%</div>');
+        $this->type('test');
+        $this->assertHTMLMatch('<div>%1% Test content %2%</div><hr /><div>test more test content. %3%</div>');
 
         // Test adding a horizontal rule at the end of the paragraph and add content
         $this->useTest(2);
