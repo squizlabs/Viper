@@ -74,7 +74,9 @@ class Viper_Tests_BlockTag_BlankBlockTagWithSuperscriptUnitTest extends Abstract
 
         // Test adding content to the start of the superscript formatting
         $this->useTest(4);
-        $this->clickKeyword(1);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test ');
         $this->assertHTMLMatch('Some superscript test <sup>%1% %2%</sup> content to test');
@@ -85,21 +87,44 @@ class Viper_Tests_BlockTag_BlankBlockTagWithSuperscriptUnitTest extends Abstract
         $this->assertHTMLMatch('Some superscript test <sup>%1% test %2%</sup> content to test');
 
         // Test adding content to the end of superscript formatting
-        $this->clickKeyword(2);
+        $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
-        $this->type(' test');
-        $this->assertHTMLMatch('Some superscript test <sup>%1% test %2% test</sup> content to test');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->type(' %3%');
+        $this->assertHTMLMatch('Some superscript test <sup>%1% test %2% %3%</sup> content to test');
 
-        // Test highlighting some content in the sup[] tags and replacing it
+        // Test highlighting some content in the sup tags and replacing it
         $this->selectKeyword(2);
         $this->type('abc');
-        $this->assertHTMLMatch('Some superscript test <sup>%1% test abc test</sup> content to test');
+        $this->assertHTMLMatch('Some superscript test <sup>%1% test abc %3%</sup> content to test');
+
+        $this->selectKeyword(1);
+        $this->type('%1%');
+        $this->assertHTMLMatch('Some superscript test <sup>%1% test abc %3%</sup> content to test');
+
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('abc');
+        $this->assertHTMLMatch('Some superscript test abc<sup> test abc %3%</sup> content to test');
+
+        // Undo so we can test backspace
+        $this->sikuli->keyDown('Key.CMD + z');
 
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('abc');
-        $this->assertHTMLMatch('Some superscript test <sup>abc test abc test</sup> content to test');
+        $this->assertHTMLMatch('Some superscript test abc<sup> test abc %3%</sup> content to test');
+
+        $this->selectKeyword(3);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('%1%');
+        $this->assertHTMLMatch('Some superscript test abc<sup> test abc %1%</sup> content to test');
+
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('abc');
+        $this->assertHTMLMatch('Some superscript test abc<sup> test abc abc</sup> content to test');
 
     }//end testEditingSuperscriptContent()
 
@@ -185,7 +210,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithSuperscriptUnitTest extends Abstract
         $this->moveToKeyword(1, 'left');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('Some superscript <br /><sup>test %1% %2%</sup> content to test');
+        $this->assertHTMLMatch('Some superscript <br />test <sup>%1% %2%</sup> content to test');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
@@ -193,7 +218,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithSuperscriptUnitTest extends Abstract
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test');
-        $this->assertHTMLMatch('Some superscript test<br /><sup>test %1% %2%</sup> content to test');
+        $this->assertHTMLMatch('Some superscript test<br />test <sup>%1% %2%</sup> content to test');
 
         // Test pressing enter at the end of superscript content
         $this->useTest(4);
@@ -231,7 +256,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithSuperscriptUnitTest extends Abstract
         $this->sikuli->keyDown('Key.CMD + z');
         $this->assertHTMLMatch('This is %1% %2% some content');
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        $this->assertHTMLMatch('This is <sup>%1%</sup> %2% some content');        
+        $this->assertHTMLMatch('This is <sup>%1%</sup> %2% some content');
 
     }//end testUndoAndRedoWithSuperscriptContent()
 

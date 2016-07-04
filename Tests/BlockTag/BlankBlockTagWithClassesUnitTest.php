@@ -25,7 +25,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithClassesUnitTest extends AbstractVipe
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test2');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Styles', NULL, TRUE);
         $this->assertHTMLMatch('This is <span class="test1">%1%</span> <span class="test2">%2%</span> some content');
 
          // Test applying class using top toolbar
@@ -39,7 +39,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithClassesUnitTest extends AbstractVipe
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('cssClass');
         $this->type('test2');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
         $this->assertHTMLMatch('This is <span class="test1">%1%</span> <span class="test2">%2%</span> some content');
 
     }//end testAddingClassToAWordInContent()
@@ -61,14 +61,14 @@ class Viper_Tests_BlockTag_BlankBlockTagWithClassesUnitTest extends AbstractVipe
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test1');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<span class="test1">This is %1% %2% some content</span>');
+        $this->assertHTMLMatch('<span class="test1">%1% This is some content %2%</span>');
 
         $this->useTest(3);
         $this->selectKeyword(1, 2);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test2');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<span class="test1">This is %1% %2% some content</span>');
+        $this->clickInlineToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertHTMLMatch('<span class="test2">%1% This is some content %2%</span>');
 
         // Test applying class using top toolbar
         $this->useTest(3);
@@ -76,14 +76,14 @@ class Viper_Tests_BlockTag_BlankBlockTagWithClassesUnitTest extends AbstractVipe
         $this->clickTopToolbarButton('cssClass');
         $this->type('test1');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('<span class="test1">This is %1% %2% some content</span>');
+        $this->assertHTMLMatch('<span class="test1">%1% This is some content %2%</span>');
 
         $this->useTest(3);
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('cssClass');
         $this->type('test2');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<span class="test1">This is %1% %2% some content</span>');
+        $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertHTMLMatch('<span class="test2">%1% This is some content %2%</span>');
 
     }//end testAddingClassToAllContent()
 
@@ -112,7 +112,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithClassesUnitTest extends AbstractVipe
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clickField('Class');
         $this->type(' edit');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Styles', NULL, TRUE);
         $this->assertHTMLMatch('This is <span class="test_class edit">%1%</span> some content');
 
         // Test editing class using top toolbar
@@ -129,7 +129,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithClassesUnitTest extends AbstractVipe
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->clickField('Class');
         $this->type(' edit');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
         $this->assertHTMLMatch('This is <span class="test_class edit">%1%</span> some content');
 
     }//end testEditingClassAppliedToWordInContent()
@@ -159,7 +159,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithClassesUnitTest extends AbstractVipe
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clickField('Class');
         $this->type(' edit');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Styles', NULL, TRUE);
         $this->assertHTMLMatch('<span class="test_class edit">%1% This is some content %2%</span>');
 
         // Test editing class using top toolbar
@@ -176,7 +176,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithClassesUnitTest extends AbstractVipe
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->clickField('Class');
         $this->type(' edit');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
         $this->assertHTMLMatch('<span class="test_class edit">%1% This is some content %2%</span>');
 
     }//end testEditingClassAppliedToAllContent()
@@ -204,7 +204,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithClassesUnitTest extends AbstractVipe
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Styles', NULL, TRUE);
         $this->assertHTMLMatch('This is %1% some content');
 
         // Test remove an anchor using the top toolbar
@@ -219,7 +219,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithClassesUnitTest extends AbstractVipe
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
         $this->assertHTMLMatch('This is %1% some content');
 
     }//end testRemoveClassAppliedToWordInContent()
@@ -247,7 +247,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithClassesUnitTest extends AbstractVipe
         $this->selectKeyword(1, 2);
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Apply Styles', NULL, TRUE);
         $this->assertHTMLMatch('%1% This is some content %2%');
 
         // Test editing anchor using top toolbar
@@ -262,7 +262,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithClassesUnitTest extends AbstractVipe
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
         $this->assertHTMLMatch('%1% This is some content %2%');
 
     }//end testRemoveClassAppliedToAllContent()
@@ -294,7 +294,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithClassesUnitTest extends AbstractVipe
     	// Test redo
     	$this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
     	$this->assertHTMLMatch('This is<span class="test_class">%1% %2%</span> some content');
-		
+
 		// Test using top toolbar
     	// Test undo
     	$this->clickTopToolbarButton('HistoryUndo');
@@ -302,7 +302,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithClassesUnitTest extends AbstractVipe
 
     	// Test redo
     	$this->clickTopToolbarButton('HistoryRedo');
-    	$this->assertHTMLMatch('This is<span class="test_class">%1% %2%</span> some content');    	
+    	$this->assertHTMLMatch('This is<span class="test_class">%1% %2%</span> some content');
 
     }//end testUndoAndRedoWithClass()
 

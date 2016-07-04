@@ -4,7 +4,7 @@ require_once 'AbstractViperUnitTest.php';
 
 class Viper_Tests_BlockTag_BlankBlockTagWithImagesUnitTest extends AbstractViperUnitTest
 {
-	
+
 	/**
      * Test adding an image to content with a blank block tag
      *
@@ -24,7 +24,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithImagesUnitTest extends AbstractViper
         $this->clickField('Alt', true);
         $this->type('test_Alt');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('This is %1%<img alt="test_Alt" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" /> %2% some content');
+        $this->assertHTMLMatch('This is %1%<img alt="test_Alt" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" /> %2% some content');
 
     }//end testAddingImageInBlankBlockTag()
 
@@ -51,7 +51,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithImagesUnitTest extends AbstractViper
         $this->clickField('Title');
         $this->type('test_Title');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('This is %1%<img alt="test_Alt" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" title="test_Title" /> %2% some content');
+        $this->assertHTMLMatch('This is %1%<img alt="test_Alt" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" title="test_Title" /> %2% some content');
 
     }//end testAddingImageWithAltAndTitleInBlankBlockTag()
 
@@ -74,7 +74,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithImagesUnitTest extends AbstractViper
         sleep(1);
         $this->clickField('Image is decorative');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('This is %1%<img alt="" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" /> %2% some content');
+        $this->assertHTMLMatch('This is %1%<img alt="" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" /> %2% some content');
 
     }//end testAddingImageWithoutAltAndTitleInBlankBlockTag()
 
@@ -122,12 +122,12 @@ class Viper_Tests_BlockTag_BlankBlockTagWithImagesUnitTest extends AbstractViper
         $this->clicktopToolbarButton('link');
         $this->type('http://www.squizlabs.com');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('This is %1%<a href="http://www.squizlabs.com"><img alt="test_Alt" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" /></a> %2% some content');
+        $this->assertHTMLMatch('This is %1%<a href="http://www.squizlabs.com"><img alt="test_Alt" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" /></a> %2% some content');
 
         // Test removing link
         $this->clickElement('img', 0);
         $this->clicktopToolbarButton('linkRemove');
-        $this->assertHTMLMatch('This is %1%<img alt="test_Alt" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" /> %2% some content');
+        $this->assertHTMLMatch('This is %1%<img alt="test_Alt" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" /> %2% some content');
 
         // Test using inline toolbar
         // Test applying link
@@ -136,12 +136,12 @@ class Viper_Tests_BlockTag_BlankBlockTagWithImagesUnitTest extends AbstractViper
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertHTMLMatch('This is %1%<a href="http://www.squizlabs.com"><img alt="test_Alt" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" /></a> %2% some content');
+        $this->assertHTMLMatch('This is %1%<a href="http://www.squizlabs.com"><img alt="test_Alt" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" /></a> %2% some content');
 
         // Test removing link
         $this->clickElement('img', 0);
         $this->clickInlineToolbarButton('linkRemove');
-        $this->assertHTMLMatch('This is %1%<img alt="test_Alt" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" /> %2% some content');
+        $this->assertHTMLMatch('This is %1%<img alt="test_Alt" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" /> %2% some content');
 
     }//end testApplyingAndRemovingLinkOnImageInBlankBlockTag()
 
@@ -166,7 +166,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithImagesUnitTest extends AbstractViper
         $this->type('modified-');
         $this->sikuli->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('This is %1%<img alt="modified-test_Alt" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" /> %2% some content');
+        $this->assertHTMLMatch('This is %1%<img alt="modified-test_Alt" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" /> %2% some content');
 
         // Test using top toolbar
         $this->useTest(3);
@@ -178,7 +178,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithImagesUnitTest extends AbstractViper
         $this->type('modified-');
         $this->sikuli->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('This is %1%<img alt="modified-test_Alt" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" /> %2% some content');
+        $this->assertHTMLMatch('This is %1%<img alt="modified-test_Alt" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" /> %2% some content');
 
     }//end testEditingImageAltInBlankBlockTag()
 
@@ -203,7 +203,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithImagesUnitTest extends AbstractViper
         $this->type('modified-');
         $this->sikuli->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('This is %1%<img alt="test_Alt" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" title="modified-test_Title" /> %2% some content');
+        $this->assertHTMLMatch('This is %1%<img alt="test_Alt" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" title="modified-test_Title" /> %2% some content');
 
         // Test using top toolbar
         $this->useTest(4);
@@ -215,7 +215,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithImagesUnitTest extends AbstractViper
         $this->type('modified-');
         $this->sikuli->keyDown('Key.ENTER');
 
-        $this->assertHTMLMatch('This is %1%<img alt="test_Alt" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" title="modified-test_Title" /> %2% some content');
+        $this->assertHTMLMatch('This is %1%<img alt="test_Alt" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" title="modified-test_Title" /> %2% some content');
 
     }//end testEditingImageTitleInBlankBlockTag()
 

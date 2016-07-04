@@ -279,6 +279,9 @@
                     isActive: function() {
                         return ViperUtil.hasClass(button, 'Viper-active');
                     },
+                    setContent: function (content) {
+                        ViperUtil.setHtml(button, content);
+                    },
                     _disabled: disabled
                 }
             );
@@ -726,6 +729,15 @@
                         }
 
                         this.required = required;
+                    },
+                    setLabel: function (newLabel) {
+                        ViperUtil.setHtml(ViperUtil.getClass('Viper-textbox-title', labelEl)[0], newLabel)
+                    },
+                    hide: function() {
+                        ViperUtil.addClass(textBox, 'Viper-hidden');
+                    },
+                    show: function() {
+                        ViperUtil.removeClass(textBox, 'Viper-hidden');
                     }
                 }
             );
@@ -1576,7 +1588,10 @@
                                 element: subSection,
                                 form: form,
                                 _onOpenCallback: onOpenCallback,
-                                _onCloseCallback: onCloseCallback
+                                _onCloseCallback: onCloseCallback,
+                                setActionButtonTitle: function (title) {
+                                    self.viper.Tools.getItem(id + '-applyButton').setContent(title);
+                                }
                             }
                         );
 
@@ -1707,18 +1722,27 @@
                             var subSection    = this._subSections[this._activeSection];
                             var inputElements = ViperUtil.getTag('input[type=text], textarea', subSection);
                             if (inputElements.length > 0) {
-                                inputElements[0].focus();
-                                ViperUtil.removeClass(inputElements[0].parentNode.parentNode.parentNode, 'Viper-active');
+                                for (var i = 0; i < inputElements.length; i++) {
+                                    if (ViperUtil.getElementWidth(inputElements[i]) === 0 || inputElements[i].disabled) {
+                                        // Element is hidden.
+                                        continue;
+                                    }
 
-                                if (ViperUtil.isBrowser('msie') === false) {
-                                    tools.viper.highlightSelection();
-                                } else {
-                                    setTimeout(
-                                        function() {
-                                            inputElements[0].focus();
-                                        },
-                                        10
-                                    );
+                                    inputElements[i].focus();
+                                    ViperUtil.removeClass(inputElements[i].parentNode.parentNode.parentNode, 'Viper-active');
+
+                                    if (ViperUtil.isBrowser('msie') === false) {
+                                        tools.viper.highlightSelection();
+                                    } else {
+                                        setTimeout(
+                                            function() {
+                                                inputElements[i].focus();
+                                            },
+                                            10
+                                        );
+                                    }
+
+                                    break;
                                 }
                             }
                         } catch (e) {
@@ -1787,7 +1811,7 @@
                                 try {
                                     action.call(this);
                                 } catch (e) {
-                                    console.error('Sub Section Action threw exception:' + e.message);
+                                    console.error('Sub Section Action threw exception:' + e.message, e.stack);
                                 }
                             } else {
                                 // IE needs this timeout so focus works <3..
@@ -1796,7 +1820,7 @@
                                         try {
                                             action.call(this);
                                         } catch (e) {
-                                            console.error('Sub Section Action threw exception:' + e.message);
+                                            console.error('Sub Section Action threw exception:' + e.message, e.stack);
                                         }
                                     },
                                     2
@@ -1828,6 +1852,10 @@
                                     'ViperTools:changed:' + widgetid,
                                     'ViperToolbarPlugin:' + id,
                                     function() {
+                                        if (self._subSectionActionDisabled[subSectionid] === true) {
+                                            return;
+                                        }
+
                                         var subSectionWidgets = self._subSectionActionWidgets[subSectionid];
                                         var c      = subSectionWidgets.length;
                                         var enable = true;
@@ -1848,6 +1876,24 @@
                                 );
                             }) (widgetids[i]);
                         }//end for
+                    },
+
+                    disableSubsectionAction: function (subsectionid, keepButtonState) {
+                        if (keepButtonState !== true) {
+                            tools.disableButton(subsectionid + '-applyButton');
+                        }
+
+                        this._subSectionActionDisabled[subsectionid] = true;
+
+                    },
+
+                    enableSubsectionAction: function (subsectionid, keepButtonState) {
+                        if (keepButtonState !== true) {
+                            tools.enableButton(subsectionid + '-applyButton');
+                        }
+
+                        delete this._subSectionActionDisabled[subsectionid];
+
                     },
 
                     getActiveSection: function() {
@@ -1919,6 +1965,7 @@
                     _activeSection: null,
                     _subSectionButtons: {},
                     _subSectionActionWidgets: {},
+                    _subSectionActionDisabled: {},
                     _buttonShown: false,
                     _subSectionShown: false,
                     _verticalPosUpdateOnly: false,
@@ -2193,12 +2240,31 @@
                         }
                     },
                     hideItem: function(itemid) {
-                        var item = this._getItem(itemid);
-                        ViperUtil.setStyle(item, 'display', 'none');
+                        var items = ViperUtil.getTag('li', list);
+                        var item  = this._getItem(itemid);
+                        ViperUtil.addClass(item, 'Viper-hidden');
+
+                        ViperUtil.removeClass(ViperUtil.getClass('lastVisibleItem', list), 'lastVisibleItem');
+                        for (var i = (items.length - 1); i >= 0; i--) {
+                            if (ViperUtil.hasClass(items[i], 'Viper-hidden') === false) {
+                                ViperUtil.addClass(items[i], 'lastVisibleItem');
+                                break;
+                            }
+                        }
+
                     },
                     showItem: function(itemid) {
-                        var item = this._getItem(itemid);
-                        ViperUtil.setStyle(item, 'display', 'block');
+                        var items = ViperUtil.getTag('li', list);
+                        var item  = this._getItem(itemid);
+                        ViperUtil.removeClass(item, 'Viper-hidden');
+
+                        ViperUtil.removeClass(ViperUtil.getClass('lastVisibleItem', list), 'lastVisibleItem');
+                        for (var i = (items.length - 1); i >= 0; i--) {
+                            if (ViperUtil.hasClass(items[i], 'Viper-hidden') === false) {
+                                ViperUtil.addClass(items[i], 'lastVisibleItem');
+                                break;
+                            }
+                        }
                     },
                     _getItem: function(itemid) {
                         return ViperUtil.find(list, '[data-id="' + itemid + '"]')[0];
@@ -2247,7 +2313,8 @@
 
             var rangeCoords  = null;
             var selectedNode = selectedNode || range.getNodeSelection(range);
-            if (selectedNode !== null) {
+
+            if (selectedNode !== null && selectedNode !== tools.viper.getViperElement()) {
                 rangeCoords = getElementCoords(selectedNode);
             } else {
                 rangeCoords = range.rangeObj.getBoundingClientRect();

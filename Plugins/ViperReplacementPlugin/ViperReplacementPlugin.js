@@ -365,6 +365,10 @@
 
             this.viper.addAttributeSetModifier(
                 function (element, attribute, value, callback) {
+                    if (self._canIgnoreAttribute(attribute, value) === true) {
+                        return value;
+                    }
+
                     // If the value has keyword it needs to be handled.
                     var regex = new RegExp(self.getReplacementRegex(), 'gi');
                     var matches = value.match(regex);
@@ -940,6 +944,10 @@
         },
 
         _replaceAttributeKeyword: function(element, attribute, keyword, replacement, value, forceUpdate) {
+            if (this._canIgnoreAttribute(attribute, value) === true) {
+                return value;
+            }
+
             // Copy the real attribute into a new data attribute so that it can be recovered.
             var cloneName = 'data-viper-' + attribute;
             if (forceUpdate === true || ViperUtil.hasAttribute(element, cloneName) === false) {
@@ -955,6 +963,15 @@
 
             return realValue;
 
+        },
+
+        _canIgnoreAttribute: function(attribute, value) {
+            if (attribute === 'src' && value.indexOf('data:image') === 0) {
+                // Base64 images dont need replacement.
+                return true;
+            }
+
+            return false;
         }
 
     };

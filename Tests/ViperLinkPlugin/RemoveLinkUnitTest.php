@@ -1,8 +1,8 @@
 <?php
 
-require_once 'AbstractViperUnitTest.php';
+require_once 'AbstractViperLinkPluginUnitTest.php';
 
-class Viper_Tests_ViperLinkPlugin_RemoveLinkUnitTest extends AbstractViperUnitTest
+class Viper_Tests_ViperLinkPlugin_RemoveLinkUnitTest extends AbstractViperLinkPluginUnitTest
 {
 
      /**
@@ -29,7 +29,7 @@ class Viper_Tests_ViperLinkPlugin_RemoveLinkUnitTest extends AbstractViperUnitTe
         $this->assertHTMLMatch('<p>Content with a link <a href="http://www.squizlabs.com">%1%</a></p>');
 
     }//end testCannotRemoveLinkWhenClearingURLField()
-    
+
 
     /**
      * Test that a link can be removed when you select the text.

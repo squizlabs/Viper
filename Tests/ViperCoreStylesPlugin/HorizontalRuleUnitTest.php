@@ -100,19 +100,6 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->assertHTMLMatch('<p>%4% new content%1% %2% dolor sit <em>amet</em> <strong>%3%</strong></p>');
 
-        // Add HR and delete using delete
-        $this->useTest(1);
-        $this->moveToKeyword(1, 'left');
-        sleep(2);
-        $this->clickTopToolbarButton('insertHr');
-        $this->assertHTMLMatch('<hr /><p>%1% %2% dolor sit <em>amet</em> <strong>%3%</strong></p>');
-
-        $this->moveToKeyword(1, 'left');
-        sleep(1);
-        $this->sikuli->keyDown('Key.UP');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>%1% %2% dolor sit <em>amet</em> <strong>%3%</strong></p>');
-
     }//end testAddingHorizontalRuleAtStartOfParagraph()
 
 
@@ -434,7 +421,7 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->type($this->getTestURL('/ViperImagePlugin/Images/editing.png'));
         $this->clickField('Alt', TRUE);
         $this->type('test-alt');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Insert Image', NULL, TRUE);
         $this->clickTopToolbarButton('image', 'active-selected');
         $this->clickKeyword(2);
         $this->moveToKeyword(1, 'right');
@@ -449,7 +436,7 @@ class Viper_Tests_ViperCoreStylesPlugin_HorizontalRuleUnitTest extends AbstractV
         $this->type($this->getTestURL('/ViperImagePlugin/Images/editing.png'));
         $this->clickField('Alt', TRUE);
         $this->type('test-alt');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Insert Image', NULL, TRUE);
         $this->moveToKeyword(2, 'left');
         $this->clickTopToolbarButton('insertHr');
         $this->assertHTMLMatch('<p>Test content %1%<img alt="test-alt" src="%url%/ViperImagePlugin/Images/editing.png" /></p><hr /><p>%2%</p>');

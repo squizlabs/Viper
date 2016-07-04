@@ -9,7 +9,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithTablesUnitTest extends AbstractViper
      *
      * @return void
      */
-    public function testAddingATableInsideBlankBlockTag()
+    public function testAddingATable()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
@@ -19,7 +19,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithTablesUnitTest extends AbstractViper
         $this->insertTable(1, 0);
         $this->assertHTMLMatchNoHeaders('This is %1%<br /><table style="width: 100%;" border="1"><tbody><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table> %2% some content');
 
-    }//end testAddingATableInsideBlankBlockTag()
+    }//end testAddingATable()
 
 
     /**
@@ -27,7 +27,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithTablesUnitTest extends AbstractViper
      *
      * @return void
      */
-    public function testDeletingATableInsideBlankBlockTag()
+    public function testDeletingATable()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
@@ -38,7 +38,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithTablesUnitTest extends AbstractViper
         $this->clickInlineToolbarButton('delete');
         $this->assertHTMLMatchNoHeaders('This is %1%<br /> %2% some content');
 
-    }//end testDeletingATableInsideBlankBlockTag()
+    }//end testDeletingATable()
 
 
     /**
@@ -46,7 +46,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithTablesUnitTest extends AbstractViper
      *
      * @return void
      */
-    public function testEditingATableCellInsideBlankBlockTag()
+    public function testEditingATableCell()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
@@ -69,7 +69,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithTablesUnitTest extends AbstractViper
         $this->type(' modified');
         $this->assertHTMLMatchNoHeaders('This is %1%<br /><table border="1" style="width:100%;"><tbody><tr><td>test cell-1</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>test cell-2</td><td></td></tr><tr><td></td><td></td><td></td><td>test cell-3 modified</td></tr></tbody></table> %2% some content');
 
-    }//end testEditingATableCellInsideBlankBlockTag()
+    }//end testEditingATableCell()
 
 
     /**
@@ -77,7 +77,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithTablesUnitTest extends AbstractViper
      *
      * @return void
      */
-    public function testAddingTableColumnsInsideBlankBlockTag()
+    public function testAddingTableColumns()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
@@ -121,7 +121,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithTablesUnitTest extends AbstractViper
         $this->clickInlineToolbarButton('addRight');
         $this->assertHTMLMatchNoHeaders('This is %1%<br /><table border="1" style="width:100%;"><tbody><tr><td>test cell-1</td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>test cell-2</td><td></td><td></td></tr><tr><td></td><td></td><td></td><td>test cell-3</td><td></td></tr></tbody></table> %2% some content');
 
-    }//end testAddingTableColumnsInsideBlankBlockTag()
+    }//end testAddingTableColumns()
 
 
     /**
@@ -129,7 +129,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithTablesUnitTest extends AbstractViper
      *
      * @return void
      */
-    public function testAddingTableRowsInsideBlankBlockTag()
+    public function testAddingTableRows()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
@@ -173,7 +173,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithTablesUnitTest extends AbstractViper
         $this->clickInlineToolbarButton('addBelow');
         $this->assertHTMLMatchNoHeaders('This is %1%<br /><table border="1" style="width:100%;"><tbody><tr><td>test cell-1</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>test cell-2</td><td></td></tr><tr><td></td><td></td><td></td><td>test cell-3</td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table> %2% some content');
         
-    }//end testAddingTableRowsInsideBlankBlockTag()
+    }//end testAddingTableRows()
 
 
     /**
@@ -181,7 +181,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithTablesUnitTest extends AbstractViper
      *
      * @return void
      */
-    public function testDeletingTableElementsInsideBlankBlockTag()
+    public function testDeletingTableElements()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
@@ -224,7 +224,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithTablesUnitTest extends AbstractViper
         $this->clickInlineToolbarButton('delete');
         $this->assertHTMLMatchNoHeaders('This is %1%<br /><table border="1" style="width:100%;"><tbody><tr><td>test cell-1</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>test cell-2</td><td></td></tr></tbody></table> %2% some content');
 
-    }//end testDeletingTableElementsInsideBlankBlockTag()
+    }//end testDeletingTableElements()
 
 
     /**
@@ -232,7 +232,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithTablesUnitTest extends AbstractViper
      *
      * @return void
      */
-    public function testEditingTableColumnsInsideBlankBlockTag()
+    public function testEditingTableColumns()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
@@ -291,7 +291,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithTablesUnitTest extends AbstractViper
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('This is %1%<br /><table border="1" style="width:100%;"><tbody><tr><td>test cell-1</td><td></td><td></td><th></th></tr><tr><td></td><td></td><td>test cell-2</td><th></th></tr><tr><td></td><td></td><td></td><th>test cell-3</th></tr></tbody></table> %2% some content');
 
-    }//end testEditingTableColumnsInsideBlankBlockTag()
+    }//end testEditingTableColumns()
 
 
     /**
@@ -299,7 +299,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithTablesUnitTest extends AbstractViper
      *
      * @return void
      */
-    public function testEditingTableRowsInsideBlankBlockTag()
+    public function testEditingTableRows()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
@@ -358,7 +358,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithTablesUnitTest extends AbstractViper
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('This is %1%<br /><table border="1" style="width:100%;"><tbody><tr><td>test cell-1</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>test cell-2</td><td></td></tr><tr><th></th><th></th><th></th><th>test cell-3</th></tr></tbody></table> %2% some content');
 
-    }//end testEditingTableRowsInsideBlankBlockTag()
+    }//end testEditingTableRows()
 
 
     /**
@@ -366,7 +366,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithTablesUnitTest extends AbstractViper
      *
      * @return void
      */
-    public function testEditingTableColumnWidthInsideBlankBlockTag()
+    public function testEditingTableColumnWidth()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
@@ -395,7 +395,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithTablesUnitTest extends AbstractViper
         $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
         $this->assertHTMLMatchNoHeaders('This is %1%<br /><table border="1" style="width:100%;"><tbody><tr><td>test cell-1</td><td></td><td></td><td style="width:50px;"></td></tr><tr><td></td><td></td><td>test cell-2</td><td></td></tr><tr><td></td><td></td><td></td><td>test cell-3</td></tr></tbody></table> %2% some content');
 
-    }//end testEditingTableColumnWidthInsideBlankBlockTag()
+    }//end testEditingTableColumnWidth()
 
 
     /**
@@ -403,7 +403,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithTablesUnitTest extends AbstractViper
      *
      * @return void
      */
-    public function testAddingClassesToTablesInsideBlankBlockTag()
+    public function testAddingClassesToTables()
     {
         $this->useTest(1);
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
@@ -432,6 +432,6 @@ class Viper_Tests_BlockTag_BlankBlockTagWithTablesUnitTest extends AbstractViper
         $this->sikuli->keyDown('Key.ENTER');
         $this->assertHTMLMatchNoHeaders('This is %1%<br /><table border="1" class="table test-class" style="width:100%;"><tbody><tr><td>test cell-1</td><td></td><td></td><td></td></tr><tr><td></td><td></td><td>test cell-2</td><td></td></tr><tr><td></td><td></td><td></td><td>test cell-3</td></tr></tbody></table> %2% some content');
 
-    }//end testAddingClassesToTablesInsideBlankBlockTag()
+    }//end testAddingClassesToTables()
 
 }//end class

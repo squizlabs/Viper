@@ -209,6 +209,8 @@
                 if (!node) {
                     return this.rangeToLink(idPrefix);
                 } else {
+                    // TODO: #coverage. This should not happen, when the insert link tool is opened the whole link
+                    // is selected.
                     this.updateLinkAttributes(node, idPrefix);
                 }
             } else {
@@ -254,7 +256,7 @@
                 }
             }
 
-            if (node && node.nodeType === ViperUtil.ELEMENT_NODE) {
+            if (ViperUtil.isElement(node) === true) {
                 if (ViperUtil.isStubElement(node) === true
                     || ViperUtil.isTag(node, 'ul') === true
                     || ViperUtil.isTag(node, 'ol') === true
@@ -470,7 +472,11 @@
             }
 
             var nodeSelection = range.getNodeSelection();
-            if (nodeSelection && ViperUtil.isTag(nodeSelection, 'a') === true) {
+            if (nodeSelection) {
+                if (ViperUtil.getTag('a', nodeSelection).length > 0) {
+                    return true;
+                }
+
                 // Let the getLinkFromRange handle this.
                 return false;
             }
@@ -818,6 +824,7 @@
             var subject     = '';
             var newWindow   = false;
             var isEmailLink = false;
+            var tools       = this.viper.Tools;
 
             if (link) {
                 href  = this.viper.getAttribute(link, 'href');
@@ -839,6 +846,10 @@
                         href = href.replace(/\s*mailto:\s*/i, '');
                     }
                 }
+
+                tools.getItem('ViperLinkPlugin:vtp:linkSubSection').setActionButtonTitle(_('Update Link'));
+            } else {
+                tools.getItem('ViperLinkPlugin:vtp:linkSubSection').setActionButtonTitle(_('Insert Link'));
             }
 
             var main = this.viper.Tools.getItem('ViperLinkPlugin:vtp:link').element;
@@ -850,7 +861,6 @@
                 ViperUtil.removeClass(main, 'Viper-emailLink');
             }
 
-            var tools = this.viper.Tools;
             tools.getItem('ViperLinkPlugin:vtp:url').setValue(href || '');
             tools.getItem('ViperLinkPlugin:vtp:title').setValue(title || '');
             tools.getItem('ViperLinkPlugin:vtp:subject').setValue(decodeURIComponent(subject) || '');
@@ -864,6 +874,7 @@
             var subject     = '';
             var newWindow   = false;
             var isEmailLink = false;
+            var tools       = this.viper.Tools;
 
             if (link) {
                 href  = this.viper.getAttribute(link, 'href');
@@ -885,6 +896,10 @@
                         href = href.replace(/\s*mailto:\s*/i, '');
                     }
                 }
+
+                tools.getItem('ViperLinkPlugin:vitp:link').setActionButtonTitle(_('Update Link'));
+            } else {
+                tools.getItem('ViperLinkPlugin:vitp:link').setActionButtonTitle(_('Insert Link'));
             }
 
             var main = this.viper.Tools.getItem('ViperLinkPlugin:vitp:link').element;
@@ -896,7 +911,6 @@
                 ViperUtil.removeClass(main, 'Viper-emailLink');
             }
 
-            var tools = this.viper.Tools;
             tools.getItem('ViperLinkPlugin:vitp:url').setValue(href || '');
             tools.getItem('ViperLinkPlugin:vitp:title').setValue(title || '');
             tools.getItem('ViperLinkPlugin:vitp:subject').setValue(decodeURIComponent(subject) || '');

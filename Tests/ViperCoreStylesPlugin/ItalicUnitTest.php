@@ -872,14 +872,14 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('new ');
-        $this->assertHTMLMatch('<p>%1% <em>new a %2% b</em> %3%</p>');
+        $this->assertHTMLMatch('<p>%1% new <em>a %2% b</em> %3%</p>');
 
         // Test adding content before italic content when cursor starts elsewhere in content
         $this->useTest(9);
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->type('new ');
-        $this->assertHTMLMatch('<p>%1% <em>new a %2% b</em> %3%</p>');
+        $this->assertHTMLMatch('<p>%1% new <em>a %2% b</em> %3%</p>');
 
         // Test adding content after italic content when cursor starts inside the italic content
         $this->useTest(9);
@@ -935,12 +935,12 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->selectKeyword(2);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('abc');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic test <em>abc test abc %4%</em> content to test</p>');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic test abc<em> test abc %4%</em> content to test</p>');
 
         $this->selectKeyword(4);
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('test');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic test <em>abc test abc test</em> content to test</p>');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic test abc<em> test abc test</em> content to test</p>');
 
     }//end testEditingItalicContent()
 
@@ -966,7 +966,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('<p>%1% </p><p><em>test a %2% b</em> %3%</p>');
+        $this->assertHTMLMatch('<p>%1% </p><p>test <em>a %2% b</em> %3%</p>');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
@@ -974,7 +974,7 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test');
-        $this->assertHTMLMatch('<p>%1% test</p><p><em>test a %2% b</em> %3%</p>');
+        $this->assertHTMLMatch('<p>%1% test</p><p>test <em>a %2% b</em> %3%</p>');
 
         // Test pressing enter at the end of italic content
         $this->useTest(9);

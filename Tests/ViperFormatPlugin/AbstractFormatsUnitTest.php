@@ -10,6 +10,34 @@ abstract class AbstractFormatsUnitTest extends AbstractViperUnitTest
 
 
     /**
+     * Returns the Apply Changes button text.
+     *
+     * @return array
+     */
+    protected function getButtonText($name, $toolbar=null)
+    {
+        switch ($name) {
+            case 'insertStyle':
+            case 'updateStyle':
+                $name = 'Apply Styles';
+            break;
+
+            case 'insertAnchor':
+                $name = 'Insert Anchor';
+            break;
+
+            case 'updateAnchor':
+                $name = 'Update Anchor';
+            break;
+
+        }
+
+        return $name;
+
+    }//end getButtonText()
+
+
+    /**
      * Checks the status of the format icons in the top toolbar.
      *
      * @param $pStatus     The status of the P icon

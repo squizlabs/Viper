@@ -10,7 +10,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithHorizontalLineUnitTest extends Abstr
      *
      * @return void
      */
-    public function testAddingHorizontalRuleM()
+    public function testAddingHorizontalRule()
     {
 
         $this->useTest(1);
@@ -19,9 +19,12 @@ class Viper_Tests_BlockTag_BlankBlockTagWithHorizontalLineUnitTest extends Abstr
         // Test adding a horizontal rule at start of page and add content
         $this->useTest(2);
         $this->moveToKeyword(1, 'left');
+        sleep(5);
         $this->clickTopToolbarButton('insertHr');
+        sleep(5);
+        $this->moveToKeyword(1, 'left');
         $this->type('test ');
-        $this->assertHTMLMatch('<hr /><br />test %1% Test content %2% more test content. %3%');
+        $this->assertHTMLMatch('<hr />test %1% Test content %2% more test content. %3%');
 
         // Test adding a horizontal rule in the middle of the paragraph and add content
         $this->useTest(2);
@@ -33,14 +36,16 @@ class Viper_Tests_BlockTag_BlankBlockTagWithHorizontalLineUnitTest extends Abstr
         $this->useTest(2);
         $this->moveToKeyword(2, 'right');
         $this->clickTopToolbarButton('insertHr');
-        $this->type('test ');
-        $this->assertHTMLMatch('%1% Test content %2%<br /><hr />test&nbsp;&nbsp;more test content. %3%');
+        $this->type('test');
+        $this->assertHTMLMatch('%1% Test content %2%<br /><hr />test more test content. %3%');
 
         // Test adding a horizontal rule at the end of the paragraph and add content
         $this->useTest(2);
         $this->moveToKeyword(3, 'right');
         $this->clickTopToolbarButton('insertHr');
-        $this->sikuli->keyDown('Key.DOWN');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT');
+        sleep(3);
         $this->type('test');
         $this->assertHTMLMatch('%1% Test content %2% more test content. %3%<hr />test');
 
@@ -58,37 +63,36 @@ class Viper_Tests_BlockTag_BlankBlockTagWithHorizontalLineUnitTest extends Abstr
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
 
         // Using forward delete
-        $this->useTest(3);
-        $this->moveToKeyword(1, 'left');
-        $this->sikuli->keyDown('Key.UP');
-        $this->sikuli->keyDown('Key.UP');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('%1% Test content');
-
         $this->useTest(4);
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('Test content %1%more test content');
+        $this->assertHTMLMatch('Test content %1%<br/> more test content');
 
         $this->useTest(5);
         $this->moveToKeyword(1, 'right');
+        sleep(1);
         $this->sikuli->keyDown('Key.DELETE');
+        sleep(1);
         $this->assertHTMLMatch('Test content more test content %1%');
 
         // Using backspace
         $this->useTest(3);
         $this->moveToKeyword(1, 'left');
+        sleep(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
+        sleep(1);
         $this->assertHTMLMatch('%1% Test content');
 
         $this->useTest(4);
         $this->moveToKeyword(1, 'right');
+        sleep(1);
         $this->sikuli->keyDown('Key.RIGHT');
+        sleep(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('Test content %1% more test content');
+        sleep(1);
+        $this->assertHTMLMatch('Test content %1%<br /> more test content');
 
         $this->useTest(5);
         $this->moveToKeyword(1, 'right');
@@ -134,7 +138,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithHorizontalLineUnitTest extends Abstr
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         $this->assertHTMLMatch('%1% Test content<br /><hr />%2% more test content. %3%');
 
-    }//end testAddingHorizontalRule()
+    }//end testUndoAndRedoWithHorizontalRule()
 
 
 }//end class

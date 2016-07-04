@@ -144,7 +144,7 @@
     @buttonBorder-selectedActive: @buttonBg-selectedActive;
     @buttonBorder-delete: (@buttonBg-delete - 20%);
 
-    @buttonBorderRadius: 0.25em;
+    @buttonBorderRadius: 0.2em;
 
     @buttonShadow-default: 0 0 2px 0 rgba(0, 0, 0, 0.55);
 
@@ -375,6 +375,10 @@
             &.Viper-image {
                 .icon (29);
             }
+            // Image Crop
+            &.Viper-crop {
+                .icon (60);
+            }
             // Rerun Accessibility Auditor
             &.Viper-accessRerun {
                 .icon (30);
@@ -585,7 +589,6 @@
             -moz-transition-duration: 0.3s;
             -webkit-transition-property: color, background;
             -webkit-transition-duration: 0.3s;
-            color: #5A8BD0;
         }
 
         .Viper-textbox.Viper-active .Viper-textbox-label {
@@ -1145,6 +1148,10 @@
                 cursor: pointer;
                 position: relative;
                 transition: background-color 0.1s ease-out;
+
+                &.lastVisibleItem {
+                    border-bottom: none;
+                }
 
                 &:before {
                     content: "";
