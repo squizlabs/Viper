@@ -54,11 +54,11 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
 
 
     /**
-     * Test inserting and then changing the URL for an image.
+     * Test that you cannot edit the URL for an image once it has been inserted.
      *
      * @return void
      */
-    public function testInsertingAndEditingTheUrlForAnImage()
+    public function testCannotEditUrlForAnImage()
     {
         $this->moveToKeyword(1, 'right');
 
@@ -70,17 +70,18 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
 
         $this->assertHTMLMatchNoHeaders('<table border="0" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1%<img src="%url%/ViperImagePlugin/Images/editing.png" alt="" /> FoX %2%</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%3%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        // Check inline toolbar
+        $this->clickElement('img', 0);
+        sleep(1);
+        $this->clickInlineToolbarButton('image', 'active');
+        $this->assertFalse($this->fieldExists('URL'));
+
+        // Check top toolbar
         $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
-        $this->clearFieldValue('URL');
-        $this->type('%url%/ViperImagePlugin/Images/editing.png');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->clickTopToolbarButton('image', 'active-selected');
-        $this->clickKeyword(3);
+        $this->assertFalse($this->fieldExists('URL'));
 
-        $this->assertHTMLMatchNoHeaders('<table border="0" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1%<img src="%url%/ViperImagePlugin/Images/editing.png" alt="" /> FoX %2%</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%3%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
-
-    }//end testInsertingAndEditingTheUrlForAnImage()
+    }//end testCannotEditUrlForAnImage()
 
 
     /**
@@ -97,7 +98,7 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Alt tag');
         sleep(1);
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Insert Image', NULL, TRUE);
 
         $this->assertHTMLMatchNoHeaders('<table border="0" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1%<img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" /> FoX %2%</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%3%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
@@ -105,7 +106,7 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
         $this->clickTopToolbarButton('image', 'active');
 
         $this->clickField('Image is decorative');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Update Image', NULL, TRUE);
         $this->clickTopToolbarButton('image', 'active-selected');
 
         $this->assertHTMLMatchNoHeaders('<table border="0" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1%<img src="%url%/ViperImagePlugin/Images/editing.png" alt="" /> FoX %2%</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%3%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
@@ -159,7 +160,7 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
 
         $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
-        $this->sikuli->keyDown('Key.TAB');
+        $this->clickField('Alt');
 
         // use backspace to delete the content for IE and Firefox
         for ($i = 1; $i <= 7; $i++) {
@@ -192,8 +193,8 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
         $this->sikuli->keyDown('Key.ENTER');
         $this->clickElement('img', 0);
 
-        $this->findImage('ImageHandle-sw', '.Viper-image-handle-sw', 0, true);
-        $this->findImage('ImageHandle-se', '.Viper-image-handle-se', 0, true);
+        $this->findImage('ImageHandle-bottomLeft', '.ViperImagePlugin-resizeBox-handle-bottomLeft', 0, true);
+        $this->findImage('ImageHandle-bottomRight', '.ViperImagePlugin-resizeBox-handle-bottomRight', 0, true);
 
     }//end testImageResizeHandles()
 
@@ -208,20 +209,25 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
         $this->selectKeyword(1);
         $this->selectInlineToolbarLineageItem(3);
 
+        // Insert image
         $this->clickTopToolbarButton('image');
         $this->type('%url%/ViperImagePlugin/Images/editing.png');
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Alt tag');
         $this->sikuli->keyDown('Key.ENTER');
         $this->clickElement('img', 0);
-
         $this->assertHTMLMatchNoHeaders('<table border="0" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" /></td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%3%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
-        $this->resizeImage(200);
 
+        // Resize the image to be smaller
+        $this->resizeImage(50);
         $this->checkResizeHandles('img');
+        $this->assertHTMLMatchNoHeaders('<table border="0" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" width="50" height="45" /></td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%3%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
-        $this->assertHTMLMatchNoHeaders('<table border="0" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" width="200" height="180" /></td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%3%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        // Resize the image to be maximum size
+        $this->resizeImage(300);
+        $this->checkResizeHandles('img');
+        $this->assertHTMLMatchNoHeaders('<table border="0" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" /></td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%3%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testResizingAnImageInATable()
 
@@ -233,8 +239,7 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
      */
     public function testResizingAnImageAndEditingItInATable()
     {
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(3);
+        $this->moveToKeyword(1, 'right');
 
         $this->clickTopToolbarButton('image');
         $this->type('%url%/ViperImagePlugin/Images/editing.png');
@@ -245,17 +250,17 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
 
         $this->resizeImage(50);
 
-        $this->assertHTMLMatchNoHeaders('<table border="0" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" width="50" height="45" /></td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%3%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="0" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1%<img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" width="50" height="45" /> FoX %2%</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%3%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
+        $this->clickKeyword(2);
         $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
-        $this->sikuli->keyDown('Key.TAB');
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Title tag');
         $this->sikuli->keyDown('Key.ENTER');
         $this->clickTopToolbarButton('image', 'active-selected');
 
-        $this->assertHTMLMatchNoHeaders('<table border="0" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" width="50" height="45" title="Title tag"/></td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%3%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
+        $this->assertHTMLMatchNoHeaders('<table border="0" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text goes here la</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td>UnaU %1%<img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" width="50" height="45" title="Title tag"/> FoX %2%</td><td><strong><em>WoW</em></strong> sapien vel aliquet</td><td>Another cell</td></tr><tr><td><h3>%3%</h3></td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testResizingAnImageAndEditingItInATable()
 
@@ -334,7 +339,7 @@ class Viper_Tests_ViperImagePlugin_ImagesInTablesUnitTest extends AbstractViperI
         $this->sikuli->keyDown('Key.ENTER');
 
         $this->clickElement('img', 0);
-        sleep(1);  
+        sleep(1);
         $this->clickInlineToolbarButton('image', 'active');
         $this->clickField('Image is decorative');
         $this->sikuli->keyDown('Key.ENTER');

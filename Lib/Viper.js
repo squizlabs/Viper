@@ -1011,10 +1011,6 @@
                             Viper.Util.insertBefore(child, p);
                         }
 
-                        if (child.nodeType === Viper.Util.TEXT_NODE) {
-                            child.data = Viper.Util.trim(child.data);
-                        }
-
                         p.appendChild(child);
                     }//end for
 
@@ -1194,6 +1190,10 @@
             range = range || this.getViperRange();
 
             var nodeSelection = range.getNodeSelection();
+            if (nodeSelection === this.getViperElement()) {
+                nodeSelection = null;
+            }
+
             var node          = this.fireCallbacks('Viper:getNodeSelection', {range: range});
 
             if (node) {
@@ -3497,6 +3497,19 @@
             if (Viper.Util.isTag(element, 'span') === true
                 && Viper.Util.hasClass(element, '__viper_selHighlight') === true
             ) {
+                return true;
+            }
+
+            return false;
+
+        },
+
+        /**
+         * Returns true if the given element is the current editable element.
+         */
+        isEditableElement: function(element)
+        {
+            if (element === this.getViperElement()) {
                 return true;
             }
 

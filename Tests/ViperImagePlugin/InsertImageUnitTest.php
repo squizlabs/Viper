@@ -28,7 +28,7 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
         $this->type($this->getTestURL('/ViperImagePlugin/Images/editing.png'));
         $this->clickField('Image is decorative');
         sleep(1);
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Insert Image', NULL, TRUE);
         $this->assertHTMLMatch('<p>%1%<img src="%url%/ViperImagePlugin/Images/editing.png" alt=""/> Content to test inserting images</p><p>Another paragraph in the content <img src="%url%/ViperImagePlugin/Images/editing.png" alt=""/></p>');
 
     }//end testInsertingImageWithoutAltAndTitle()
@@ -57,7 +57,7 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Another Alt tag');
         sleep(1);
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Insert Image', NULL, TRUE);
         $this->assertHTMLMatch('<p>%1%<img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag"/> Content to test inserting images</p><p>Another paragraph in the content <img src="%url%/ViperImagePlugin/Images/editing.png" alt="Another Alt tag"/></p>');
 
     }//end testInsertingImageWithAltTag()
@@ -90,7 +90,7 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Another Title tag');
         sleep(1);
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Insert Image', NULL, TRUE);
         $this->assertHTMLMatch('<p>%1%<img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" title="Title tag"/> Content to test inserting images</p><p>Another paragraph in the content <img src="%url%/ViperImagePlugin/Images/editing.png" alt="Another Alt tag" title="Another Title tag"/></p>');
 
     }//end testInsertingWithAltAndTitleTag()
@@ -125,7 +125,7 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
         $this->type('Alt tag');
         $this->clickField('Image is decorative');
         sleep(1);
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Insert Image', NULL, TRUE);
         $this->assertHTMLMatch('<p>%1%<img src="%url%/ViperImagePlugin/Images/editing.png" alt=""/> Content to test inserting images</p><p>Another paragraph in the content <img src="%url%/ViperImagePlugin/Images/editing.png" alt=""/></p>');
 
         // Switch Is Decorative after inserting an alt and title tag
@@ -153,7 +153,7 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
         $this->type('Title tag');
         $this->clickField('Image is decorative');
         sleep(1);
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Insert Image', NULL, TRUE);
         $this->assertHTMLMatch('<p>%1%<img src="%url%/ViperImagePlugin/Images/editing.png" alt=""/> Content to test inserting images</p><p>Another paragraph in the content <img src="%url%/ViperImagePlugin/Images/editing.png" alt=""/></p>');
 
     }//end testChangingIsDecorativeWhileInsertingImage()
@@ -205,7 +205,7 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
         // Add alt tag
         $this->clickField('Alt', TRUE);
         $this->type('Another Alt tag');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Insert Image', NULL, TRUE);
         sleep(1);
         $this->assertHTMLMatch('<p>%1%<img src="%url%/ViperImagePlugin/Images/editing.png" alt="Alt tag" title="Title tag"/> Content to test inserting images</p><p>Another paragraph in the content <img src="%url%/ViperImagePlugin/Images/editing.png" alt="Another Alt tag" title="Another Title tag"/></p>');
 
@@ -363,7 +363,7 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
         $this->clickTopToolbarButton('image');
         $this->type($this->getTestURL('/ViperImagePlugin/Images/editing.png'));
         $this->clickField('Image is decorative');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Insert Image', NULL, TRUE);
         sleep(1);
         $this->assertHTMLMatch('<p>%1%<img src="%url%/ViperImagePlugin/Images/editing.png" alt=""/> Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
 
@@ -371,7 +371,7 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
         sleep(1);
         $this->clickField('Alt', TRUE);
         $this->type('alt tag');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Update Image', NULL, TRUE);
         sleep(1);
         $this->assertHTMLMatch('<p>%1%<img src="%url%/ViperImagePlugin/Images/editing.png" alt="alt tag"/> Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
 
@@ -384,7 +384,7 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
         $this->clickTopToolbarButton('image', 'active');
         $this->clickField('Image is decorative');
         sleep(1);
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Update Image', NULL, TRUE);
         sleep(1);
         $this->assertHTMLMatch('<p>%1%<img src="%url%/ViperImagePlugin/Images/editing.png" alt=""/> Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
 

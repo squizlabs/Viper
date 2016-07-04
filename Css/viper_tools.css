@@ -80,7 +80,7 @@
 }
 .Viper-button {
   position: relative;
-  border-radius: 0.25em;
+  border-radius: 0.2em;
   cursor: pointer;
   display: inline-block;
   font-size: 1.5em;
@@ -124,12 +124,12 @@
   border-right-width: 0;
 }
 .Viper-buttonGroup .Viper-button:first-child {
-  border-top-left-radius: 0.25em;
-  border-bottom-left-radius: 0.25em;
+  border-top-left-radius: 0.2em;
+  border-bottom-left-radius: 0.2em;
 }
 .Viper-buttonGroup .Viper-button:last-child {
-  border-top-right-radius: 0.25em;
-  border-bottom-right-radius: 0.25em;
+  border-top-right-radius: 0.2em;
+  border-bottom-right-radius: 0.2em;
   border-right-width: 1px;
 }
 .Viper-button {
@@ -185,6 +185,7 @@
   margin-left: -13px;
   background-image: url("../Images/buttonIcons.svg");
   /* PNG fallback for older trowsers */
+
 }
 .Viper-browserVer-msie8 .Viper-buttonIcon {
   background-image: url("../Images/buttonIcons.png");
@@ -414,6 +415,13 @@
 .Viper-button.Viper-active .Viper-buttonIcon.Viper-image,
 .Viper-button.Viper-active.Viper-selected .Viper-buttonIcon.Viper-image {
   background-position: -34px -756px;
+}
+.Viper-buttonIcon.Viper-crop {
+  background-position: 0 -1593px;
+}
+.Viper-button.Viper-active .Viper-buttonIcon.Viper-crop,
+.Viper-button.Viper-active.Viper-selected .Viper-buttonIcon.Viper-crop {
+  background-position: -34px -1593px;
 }
 .Viper-buttonIcon.Viper-accessRerun {
   background-position: 0 -783px;
@@ -677,7 +685,6 @@
   -moz-transition-duration: 0.3s;
   -webkit-transition-property: color, background;
   -webkit-transition-duration: 0.3s;
-  color: #5A8BD0;
 }
 .Viper-textbox.Viper-active .Viper-textbox-label {
   background: #205caf;
@@ -823,6 +830,7 @@
   top: 50%;
   margin-top: -9px;
   /* PNG fallback for older trowsers */
+
 }
 .Viper-browserVer-msie8 .Viper-textbox-action,
 .Viper-browserVer-msie8 .Viper-textbox.Viper-required .Viper-textbox-main:after {
@@ -941,6 +949,7 @@
   -moz-transition: 0.2s opacity ease-in;
   -webkit-transition: 0.2s opacity ease-in;
   /* PNG fallback for older trowsers */
+
 }
 .Viper-browserVer-msie8 .Viper-checkbox-switch:before {
   filter: alpha(opacity = 0);
@@ -1132,6 +1141,9 @@
   cursor: pointer;
   position: relative;
   transition: background-color 0.1s ease-out;
+}
+.Viper-selectionList li.lastVisibleItem {
+  border-bottom: none;
 }
 .Viper-selectionList li:before {
   content: "";

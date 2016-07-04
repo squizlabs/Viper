@@ -33,6 +33,9 @@
         this._containerid          = null;
         this._toolbarButtonToggles = false;
         this._aceTheme             = 'ace/theme/viper';
+        this._base64Images         = {};
+
+        this._aceMarkers = [];
     }
 
     Viper.PluginManager.addPlugin('ViperSourceViewPlugin', ViperSourceViewPlugin);
@@ -184,6 +187,8 @@
                         self._editor.resize();
                         self._editor.focus();
                         self._isVisible = true;
+                        self._setKeywordsReadonly();
+
                     }, 50);
                 } else {
                     this._textEditor.value = content;
@@ -197,6 +202,32 @@
                     callback.call(this);
                 }
             }//end if
+
+        },
+
+        _setKeywordsReadonly: function () {
+
+            var editor = this._editor;
+
+            for (var keyword in this._base64Images) {
+                editor.$search.setOptions({needle: keyword});
+                ranges = editor.$search.findAll(editor.session);
+                this._createAnchorsForRanges(ranges);
+            }
+
+        },
+
+        _createAnchorsForRanges: function (ranges) {
+            var editor       = this._editor;
+            this._aceMarkers = [];
+
+            for (var i = 0; i < ranges.length; i++) {
+                var range = ranges[i];
+                editor.session.addMarker(range, 'ViperSourceViewPlugin-ace-keyword');
+                range.start = editor.session.doc.createAnchor(range.start);
+                range.end   = editor.session.doc.createAnchor(range.end);
+                this._aceMarkers.push(range);
+            }
 
         },
 
@@ -254,6 +285,9 @@
             if (this._originalSource === value) {
                 return;
             }
+
+            value = this._convertBase64KeywordsToBase64SRC(value);
+            this._base64Images = {};
 
             this.viper.setHtml(value);
             this.viper.fireSelectionChanged(null, true);
@@ -515,7 +549,7 @@
         initEditorEvents: function(editor)
         {
             var self = this;
-            editor.getSession().addEventListener("change", function() {
+            editor.on("change", function() {
                 if (self._ignoreUpdate === true) {
                     self._ignoreUpdate = false;
                     return;
@@ -524,16 +558,59 @@
                     self.updatePageContents();
                 }
 
+                self._setKeywordsReadonly();
+
                 self.viper.fireCallbacks('ViperSourceViewPlugin:sourceChanged');
             });
+
+            editor.addEventListener("paste", function(e) {
+                for (var i= 0; i < self._aceMarkers.length; i++) {
+                    var range = self._aceMarkers[i];
+
+                    if (editor.getSelectionRange().intersects(range) === true
+                        && editor.getSelectionRange().containsRange(range) === false
+                    ) {
+                        // TODO: How to prevent default paste event??
+                        setTimeout(
+                            function () {
+                                // Undo this event.
+                                editor.undo();
+                            },
+                            10
+                        );
+
+                        return {
+                            command: 'null',
+                            passEvent: false
+                        };
+                    }
+                }
+
+            }, true);
 
             var popup = self.viper.Tools.getItem('VSVP:popup');
 
             // If the ESC key is pressed close the popup.
             editor.keyBinding.addKeyboardHandler({
-                handleKeyboard: function(data, hashId, keyString, n, e) {
+                handleKeyboard: function(data, hashId, keyString, keyCode, e) {
                     if (!e) {
                         return;
+                    }
+
+                    if (keyCode < 37 || keyCode > 40) {
+                        // Check if typing is done inside a read only zone.
+                        for (var i= 0; i < self._aceMarkers.length; i++) {
+                            var range = self._aceMarkers[i];
+
+                            if (editor.getSelectionRange().intersects(range) === true
+                                && editor.getSelectionRange().containsRange(range) === false
+                            ) {
+                                return {
+                                    command: 'null',
+                                    passEvent: false
+                                };
+                            }
+                        }
                     }
 
                     if (!self._containerid) {
@@ -742,6 +819,10 @@
             }
 
             var html = this.viper.getHtml(null, {emptyTableCellContent:''});
+            var el   = document.createElement('div');
+            ViperUtil.setHtml(el, html);
+            this._convertBase64ImagesToKeywords(el);
+            html = ViperUtil.getHtml(el);
             if (window.StyleHTML) {
                 html = StyleHTML(html);
             }
@@ -817,6 +898,34 @@
             for (var i = 0; i < elems.length; i++) {
                 ViperUtil.removeAttr(elems[i], '__viper_scrollpos');
             }
+
+        },
+
+        _convertBase64ImagesToKeywords: function (elem) {
+            this._base64Images = {};
+            var tags  = ViperUtil.find(elem, '[src^="data:image/"]');
+            var count = 1;
+            for (var i = 0; i < tags.length; i++) {
+                var alt = tags[i].alt;
+                if (alt) {
+                    key = tags[i].alt + '.base64';
+                } else {
+                    key = 'base64_image_' + (i + 1);
+                }
+
+
+                this._base64Images[key] = tags[i].src;
+                tags[i].src = key;
+            }
+
+        },
+
+        _convertBase64KeywordsToBase64SRC: function(content) {
+            for (var key in this._base64Images) {
+                content = content.replace(new RegExp(key, 'g'), this._base64Images[key]);
+            }
+
+            return content;
 
         }
 

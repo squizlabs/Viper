@@ -1,8 +1,8 @@
 <?php
 
-require_once 'AbstractViperUnitTest.php';
+require_once 'AbstractFormatsUnitTest.php';
 
-class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperUnitTest
+class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractFormatsUnitTest
 {
 
 
@@ -102,15 +102,15 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickInlineToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text <span class="test">%1%</span></caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickInlineToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying and removing from content in cell
@@ -119,7 +119,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption class="test"><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(1);
@@ -127,7 +127,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Using top toolbar
@@ -137,16 +137,16 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text <span class="test">%1%</span></caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickKeyword(4);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying and removing from all content in caption
@@ -156,7 +156,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption class="test"><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickKeyword(4);
@@ -165,7 +165,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testApplyingAndRemovingClassInTableCaption()
@@ -185,8 +185,8 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->selectKeyword(2);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickInlineToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 <span class="test">%2%</span></th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickKeyword(3);
@@ -195,7 +195,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         sleep(2);
         $this->clearFieldValue('Class');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying and removing from content in cell
@@ -204,7 +204,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th class="test">Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(2);
@@ -213,7 +213,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         sleep(2);
         $this->clearFieldValue('Class');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying and removing from content in header row
@@ -222,7 +222,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr class="test"><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(2);
@@ -231,7 +231,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         sleep(2);
         $this->clearFieldValue('Class');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying and removing from content in the Thead
@@ -240,7 +240,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead class="test"><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(2);
@@ -249,7 +249,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         sleep(2);
         $this->clearFieldValue('Class');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Using top toolbar
@@ -259,16 +259,16 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 <span class="test">%2%</span></th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('cssClass', 'active');
         sleep(2);
         $this->clearFieldValue('Class');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying and removing from content in cell
@@ -277,7 +277,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th class="test">Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(2);
@@ -286,7 +286,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         sleep(2);
         $this->clearFieldValue('Class');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying and removing from content in header row
@@ -295,7 +295,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr class="test"><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(2);
@@ -304,7 +304,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         sleep(2);
         $this->clearFieldValue('Class');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying and removing from content in the Thead
@@ -313,7 +313,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead class="test"><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(2);
@@ -322,7 +322,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         sleep(2);
         $this->clearFieldValue('Class');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testApplyingAndRemovingClassInTableHeader()
@@ -342,16 +342,16 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->selectKeyword(4);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickInlineToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel <span class="test">%4%</span></td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(4);
         $this->clickInlineToolbarButton('cssClass', 'active');
         sleep(2);
         $this->clearFieldValue('Class');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickInlineToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying and removing from content in cell
@@ -360,7 +360,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td class="test">sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(4);
@@ -369,7 +369,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         sleep(2);
         $this->clearFieldValue('Class');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying and removing from content in row
@@ -378,7 +378,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr class="test"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(4);
@@ -387,7 +387,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         sleep(2);
         $this->clearFieldValue('Class');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying and removing from content in the body
@@ -396,7 +396,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody class="test"><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(4);
@@ -405,7 +405,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         sleep(2);
         $this->clearFieldValue('Class');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Using top toolbar
@@ -415,16 +415,16 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->selectKeyword(4);
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel <span class="test">%4%</span></td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(4);
         $this->clickTopToolbarButton('cssClass', 'active');
         sleep(2);
         $this->clearFieldValue('Class');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying and removing from content in cell
@@ -433,7 +433,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td class="test">sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(4);
@@ -442,7 +442,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         sleep(2);
         $this->clearFieldValue('Class');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying and removing from content in row
@@ -451,7 +451,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr class="test"><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(4);
@@ -460,7 +460,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         sleep(2);
         $this->clearFieldValue('Class');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying and removing from content in the body
@@ -469,7 +469,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody class="test"><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(4);
@@ -478,7 +478,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         sleep(2);
         $this->clearFieldValue('Class');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testApplyingAndRemovingClassInTableBody()
@@ -498,8 +498,8 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->selectKeyword(3);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickInlineToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer <span class="test">%3%</span></td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->clickKeyword(4);
@@ -507,8 +507,8 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickInlineToolbarButton('cssClass', 'active');
         sleep(2);
         $this->clearFieldValue('Class');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickInlineToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying and removing from content in cell
@@ -516,8 +516,8 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->selectInlineToolbarLineageItem(3);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickInlineToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td class="test" colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(3);
@@ -526,8 +526,8 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickInlineToolbarButton('cssClass', 'active');
         sleep(2);
         $this->clearFieldValue('Class');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickInlineToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying and removing from content in row
@@ -536,8 +536,8 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->selectInlineToolbarLineageItem(2);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickInlineToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr class="test"><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(3);
@@ -546,8 +546,8 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickInlineToolbarButton('cssClass', 'active');
         sleep(2);
         $this->clearFieldValue('Class');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickInlineToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying and removing from content in the Tfoot
@@ -556,8 +556,8 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->selectInlineToolbarLineageItem(1);
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickInlineToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot class="test"><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(3);
@@ -566,8 +566,8 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickInlineToolbarButton('cssClass', 'active');
         sleep(2);
         $this->clearFieldValue('Class');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickInlineToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Using top toolbar
@@ -578,8 +578,8 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         sleep(1);
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer <span class="test">%3%</span></td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(3);
@@ -587,8 +587,8 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('cssClass', 'active');
         sleep(2);
         $this->clearFieldValue('Class');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying and removing from content in cell
@@ -597,8 +597,8 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->selectInlineToolbarLineageItem(3);
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td class="test" colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(3);
@@ -607,8 +607,8 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('cssClass', 'active');
         sleep(2);
         $this->clearFieldValue('Class');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying and removing from content in row
@@ -617,8 +617,8 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->selectInlineToolbarLineageItem(2);
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr class="test"><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(3);
@@ -627,8 +627,8 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('cssClass', 'active');
         sleep(2);
         $this->clearFieldValue('Class');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test applying and removing from content in the Tfoot
@@ -637,8 +637,8 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->selectInlineToolbarLineageItem(1);
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead class="test"><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus<strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(2);
@@ -647,8 +647,8 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('cssClass', 'active');
         sleep(2);
         $this->clearFieldValue('Class');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->clickTopToolbarButton('Apply Styles', NULL, TRUE);
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testApplyingAndRemovingClassInTableFooter()
@@ -670,7 +670,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickInlineToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table class="test" border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(4);
@@ -679,18 +679,18 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickInlineToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->inlineToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Using the top toolbar
         $this->useTest(1);
-        
+
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('cssClass');
         $this->type('test');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table class="test" border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         $this->selectKeyword(4);
@@ -698,7 +698,7 @@ class Viper_Tests_ViperFormatPlugin_ClassInTablesUnitTest extends AbstractViperU
         $this->clickTopToolbarButton('cssClass', 'active');
         $this->clearFieldValue('Class');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Apply Changes button should be disabled.');
+        $this->assertTrue($this->topToolbarButtonExists('Apply Styles', 'disabled', TRUE), 'Apply Styles button should be disabled.');
         $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 %2%</th><th>Col3 Header</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>nec porta ante</td><td>sapien vel %4%</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
     }//end testApplyingAndRemovingClassForTable()

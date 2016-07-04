@@ -1,54 +1,124 @@
-.Viper-image-handle {
-    width: 14px;
-    height: 14px;
-    background: transparent url("Images/resizers.svg") 0 0 no-repeat;
-    position: absolute;
-    z-index: 999;
-    background-color: #FFF;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3), 0 0 1px rgba(0, 0, 0, 0.6);
-    border-radius: 0.2em;
-}
+/* Image selection outline */
 
-/* Fallbacks for older trowsers */
-
-    .Viper-browserVer-msie8 .Viper-image-handle {
-        background-image: url("Images/resizers.png");
-        border: 1px solid #d7d7d7;
+    .ViperImagePlugin-resizeBox {
+        position: absolute;
+        border: 2px solid rgba(0,0,0,0.4);
+        border-radius: 5px;
+        pointer-events: none;
+        box-shadow: 0 0 0 1px rgba(255,255,255,0.35);
+        font-family: Arial, sans-serif;
+        box-sizing: content-box;
+        padding: 4px;
+        margin: -6px 0 0 -5px;
     }
 
-.Viper-image-handle-se {
-    cursor: se-resize;
-    margin-left: -10px;
-    margin-top: -10px;
-}
+/* Resize handles */
 
-.Viper-image-handle-sw {
-    background-position: -14px 0;
-    cursor: sw-resize;
-    margin-left: -10px;
-    margin-top: -10px;
-}
+    .ViperImagePlugin-resizeBox-handle {
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        z-index: 101;
+        background: transparent url(../../Images/imageHandle-dark.svg) 0 0 no-repeat;
+        pointer-events: all;
+    }
 
-.ViperImagePlugin-sizeDiv {
-    position: absolute;
-    background-color: rgba(224,222,222,0.7);
-    color: #000;
-    padding: 3px 6px;
-    border-radius: 5px;
-    font-size: 0.9em;
-    z-index: 9999;
-    cursor: pointer;
-}
+    /* PNG fallback for older trowsers */
 
-.ViperImagePlugin-reset {
-    padding-left: 15px;
-    color: #36A2F0;
-}
+        .Viper-browserVer-msie8 .ViperImagePlugin-resizeBox-handle {
+            background-image: url("../../Images/imageHandle-dark.png");
+        }
 
-.ViperImagePlugin-origSize {
-    display: none;
-}
+    .ViperImagePlugin-resizeBox-handle-topLeft {
+        top: -5px;
+        left: -5px;
+        cursor: se-resize;
+        cursor: nwse-resize;
+    }
 
-.ViperImagePlugin-sizeDiv:hover .ViperImagePlugin-origSize {
-    display: inline;
-}
+    .ViperImagePlugin-resizeBox-handle-topRight {
+        top: -5px;
+        right: -5px;
+        cursor: nesw-resize;
+        transform: rotate(90deg);
+    }
+
+    .ViperImagePlugin-resizeBox-handle-bottomLeft {
+        bottom: -5px;
+        left: -5px;
+        transform: rotate(270deg);
+        cursor: nesw-resize;
+    }
+
+    .ViperImagePlugin-resizeBox-handle-bottomRight {
+        bottom: -5px;
+        right: -5px;
+        transform: rotate(180deg);
+        cursor: nwse-resize;
+    }
+
+/* Resized image dimensions */
+
+    .ViperImagePlugin-sizeDiv {
+        position: absolute;
+        box-sizing: content-box;
+        background-color: rgba(255, 255, 255, 0.8);
+        color: #2b2b2b;
+        padding: 3px 6px;
+        border-radius: 3px;
+        font-size: 0.9em;
+        z-index: 9999;
+        box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        bottom: 10px;
+        right: 10px;
+        min-width: 70px;
+        opacity: 0;
+        min-height: 15px;
+        font-size: 12px;
+        pointer-events: all;
+        transition: opacity 0.1s ease;
+    }
+
+    .ViperImagePlugin-sizeDiv.visible {
+        opacity: 1;
+    }
+
+    .ViperImagePlugin-sizeDiv.visible:hover {
+        background-color: #FFF;
+    }
+
+    /* Dimension text */
+
+        .ViperImagePlugin-sizeDiv .ViperImagePlugin-reset,
+        .ViperImagePlugin-sizeDiv .ViperImagePlugin-size {
+            position: absolute;
+            color: #2b7ce0;
+            opacity: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-weight: bold;
+            transition: opacity 0.15s ease;
+        }
+
+        .ViperImagePlugin-sizeDiv .ViperImagePlugin-size {
+            opacity: 1;
+            color: #2b2b2b;
+        }
+
+        /* Hover to show reset text */
+
+            .ViperImagePlugin-sizeDiv:hover .ViperImagePlugin-reset {
+                opacity: 1;
+            }
+
+            .ViperImagePlugin-sizeDiv:hover .ViperImagePlugin-size {
+                opacity: 0;
+            }
+
+        /* Maximum size */
+
+        .ViperImagePlugin-sizeDiv .ViperImagePlugin-size.maximumSize {
+            color: #E33030;
+        }

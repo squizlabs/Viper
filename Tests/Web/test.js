@@ -31,6 +31,17 @@ function sendResult(result)
 
 }
 
+function getCodeCoverage()
+{
+    var coverage = '';
+    if (window['jscoverage_serializeCoverageToJSON']) {
+        coverage = jscoverage_serializeCoverageToJSON();
+    }
+
+    return coverage;
+
+}
+
 
 /**
  * Returns the HTML contents of the specified element.
@@ -451,9 +462,6 @@ function useTest(id)
         viper.element.blur();
     }
 
-    viper.getHistoryManager().clear();
-    viper.getHistoryManager().add();
-
     Viper.Selection.removeAllRanges();
 
     if (Viper.Util.isBrowser('msie') === true) {
@@ -465,6 +473,9 @@ function useTest(id)
     }
 
     viper.cleanDOM(contentElement);
+
+    viper.getHistoryManager().clear();
+    viper.getHistoryManager().add();
 
 }
 

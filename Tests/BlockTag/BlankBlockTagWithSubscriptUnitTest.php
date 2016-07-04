@@ -74,7 +74,9 @@ class Viper_Tests_BlockTag_BlankBlockTagWithSubscriptUnitTest extends AbstractVi
 
         // Test adding content to the start of the subscript formatting
         $this->useTest(4);
-        $this->clickKeyword(1);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test ');
         $this->assertHTMLMatch('Some subscript test <sub>%1% %2%</sub> content to test');
@@ -85,21 +87,44 @@ class Viper_Tests_BlockTag_BlankBlockTagWithSubscriptUnitTest extends AbstractVi
         $this->assertHTMLMatch('Some subscript test <sub>%1% test %2%</sub> content to test');
 
         // Test adding content to the end of subscript formatting
-        $this->clickKeyword(2);
+        $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
-        $this->type(' test');
-        $this->assertHTMLMatch('Some subscript test <sub>%1% test %2% test</sub> content to test');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->type(' %3%');
+        $this->assertHTMLMatch('Some subscript test <sub>%1% test %2% %3%</sub> content to test');
 
         // Test highlighting some content in the sub tags and replacing it
         $this->selectKeyword(2);
         $this->type('abc');
-        $this->assertHTMLMatch('Some subscript test <sub>%1% test abc test</sub> content to test');
+        $this->assertHTMLMatch('Some subscript test <sub>%1% test abc %3%</sub> content to test');
+
+        $this->selectKeyword(1);
+        $this->type('%1%');
+        $this->assertHTMLMatch('Some subscript test <sub>%1% test abc %3%</sub> content to test');
+
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('abc');
+        $this->assertHTMLMatch('Some subscript test abc<sub> test abc %3%</sub> content to test');
+
+        // Undo so we can test backspace
+        $this->sikuli->keyDown('Key.CMD + z');
 
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.BACKSPACE');
         $this->type('abc');
-        $this->assertHTMLMatch('Some subscript test <sub>abc test abc test</sub> content to test');
+        $this->assertHTMLMatch('Some subscript test abc<sub> test abc %3%</sub> content to test');
+
+        $this->selectKeyword(3);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('%1%');
+        $this->assertHTMLMatch('Some subscript test abc<sub> test abc %1%</sub> content to test');
+
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('abc');
+        $this->assertHTMLMatch('Some subscript test abc<sub> test abc abc</sub> content to test');
 
     }//end testEditingSubscriptContent()
 
@@ -185,7 +210,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithSubscriptUnitTest extends AbstractVi
         $this->moveToKeyword(1, 'left');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('Some subscript <br /><sub>test %1% %2%</sub> content to test');
+        $this->assertHTMLMatch('Some subscript <br />test <sub>%1% %2%</sub> content to test');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
@@ -193,7 +218,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithSubscriptUnitTest extends AbstractVi
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test');
-        $this->assertHTMLMatch('Some subscript test<br /><sub>test %1% %2%</sub> content to test');
+        $this->assertHTMLMatch('Some subscript test<br />test <sub>%1% %2%</sub> content to test');
 
         // Test pressing enter at the end of subscript content
         $this->useTest(4);
@@ -231,7 +256,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithSubscriptUnitTest extends AbstractVi
         $this->sikuli->keyDown('Key.CMD + z');
         $this->assertHTMLMatch('This is %1% %2% some content');
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        $this->assertHTMLMatch('This is <sub>%1%</sub> %2% some content');        
+        $this->assertHTMLMatch('This is <sub>%1%</sub> %2% some content');
 
     }//end testUndoAndRedoWithSubscriptContent()
 

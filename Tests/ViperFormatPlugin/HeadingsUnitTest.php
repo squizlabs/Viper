@@ -1,8 +1,8 @@
 <?php
 
-require_once 'AbstractViperUnitTest.php';
+require_once 'AbstractFormatsUnitTest.php';
 
-class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractViperUnitTest
+class Viper_Tests_ViperFormatPlugin_HeadingsUnitTest extends AbstractFormatsUnitTest
 {
 
 

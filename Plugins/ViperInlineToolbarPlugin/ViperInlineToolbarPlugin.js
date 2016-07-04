@@ -585,7 +585,7 @@
 
             var nodeSelection = nodeSelection || range.getNodeSelection(range, true);
 
-            if (nodeSelection) {
+            if (nodeSelection && this.viper.getViperElement() !== nodeSelection) {
                 parent = nodeSelection;
             } else {
                 var startNode = range.getStartNode();

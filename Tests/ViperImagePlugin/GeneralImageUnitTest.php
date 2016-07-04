@@ -130,7 +130,7 @@ class Viper_Tests_ViperImagePlugin_GeneralImageUnitTest extends AbstractViperIma
         $this->clickField('Alt', true);
         $this->type('test');
         sleep(1);
-        $this->clicktopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clicktopToolbarButton('Insert Image', NULL, TRUE);
         $this->assertHTMLMatch('<h1>Viper Image Test</h1><p><img alt="test" src="%url%/ViperImagePlugin/Images/hero-shot.jpg"  />%1% XuT</p><p><img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></p><p>LABS is ORSM %2%</p>');
 
     }//end testRequiredFieldsWhenModifiyingAnImage()
@@ -143,27 +143,8 @@ class Viper_Tests_ViperImagePlugin_GeneralImageUnitTest extends AbstractViperIma
      */
     public function testRequiredFieldsWhenModifiyingAnImage()
     {
-        // Test URL field in inline toolbar
         $this->useTest(1);
-        $this->selectKeyword(1);
-        sleep(1);
-        $this->clickElement('img', 0);
-        sleep(1);
-        $this->clickinlineToolbarButton('image', 'active');
-        $this->clearFieldValue('URL');
-        sleep(1);
-        $this->clickField('URL', true);
-        $this->type('%url%/ViperImagePlugin/Images/hero-shot.jpg');
-        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" /></p><p>LABS is ORSM %2%</p>');
-
-        // Test URL field in top toolbar
-        $this->clicktopToolbarButton('image', 'active');
-        $this->clearFieldValue('URL');
-        sleep(1);
-        $this->clickField('URL', true);
-        $this->type('%url%/ViperImagePlugin/Images/hero-shot.jpg');
-        $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="" width="369" height="167" /></p><p>LABS is ORSM %2%</p>');
-
+        
         // Test Alt field in inline toolbar
         $this->clickElement('img', 0);
         sleep(1);
@@ -171,7 +152,7 @@ class Viper_Tests_ViperImagePlugin_GeneralImageUnitTest extends AbstractViperIma
         $this->clickField('Image is decorative');
         $this->clickField('Alt', true);
         $this->type('test');
-        $this->clickButton('Apply Changes', NULL, TRUE);
+        $this->clickButton('Update Image', NULL, TRUE);
         $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="test" width="369" height="167" /></p><p>LABS is ORSM %2%</p>');
 
         // Test Alt field in top toolbar
@@ -180,7 +161,7 @@ class Viper_Tests_ViperImagePlugin_GeneralImageUnitTest extends AbstractViperIma
         $this->clearFieldValue('Alt');
         $this->clickField('Alt', true);
         $this->type('TEST');
-        $this->clickButton('Apply Changes', NULL, TRUE);
+        $this->clickButton('Update Image', NULL, TRUE);
         $this->assertHTMLMatch('<h1>Viper Image Test</h1><p>%1% XuT</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="TEST" width="369" height="167" /></p><p>LABS is ORSM %2%</p>');
 
     }//end testRequiredFieldsWhenModifiyingAnImage()
@@ -273,7 +254,7 @@ class Viper_Tests_ViperImagePlugin_GeneralImageUnitTest extends AbstractViperIma
 
 
     /**
-     * Test required fields when modifying an image.
+     * Test that images retain same qualities after viewing source without making changes.
      *
      * @return void
      */
@@ -291,7 +272,7 @@ class Viper_Tests_ViperImagePlugin_GeneralImageUnitTest extends AbstractViperIma
         $this->clicktopToolbarButton('sourceView');
         sleep(2);
         $this->clickButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<ul><li><a href="test-url" title="test-title"><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></a></li><li>%1% Test content %2%</li><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li>%3% Test content %4%</li><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li></ul>');
+        $this->assertHTMLMatch('<ul><li><a href="test-url" title="test-title"><img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></a></li><li>%1% Test content %2%</li><li><img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li>%3% Test content %4%</li><li><img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li></ul>');
 
         // Test linked content
         $this->useTest(3);
@@ -305,7 +286,7 @@ class Viper_Tests_ViperImagePlugin_GeneralImageUnitTest extends AbstractViperIma
         $this->clicktopToolbarButton('sourceView');
         sleep(2);
         $this->clickButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<ul><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li><a href="test-url" title="test-title">%1% Test content %2%</a></li><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li>%3% Test content %4%</li><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li></ul>');
+        $this->assertHTMLMatch('<ul><li><img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li><a href="test-url" title="test-title">%1% Test content %2%</a></li><li><img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li>%3% Test content %4%</li><li><img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li></ul>');
 
         $this->useTest(3);
         $this->selectKeyword(3, 4);
@@ -318,13 +299,13 @@ class Viper_Tests_ViperImagePlugin_GeneralImageUnitTest extends AbstractViperIma
         $this->clicktopToolbarButton('sourceView');
         sleep(2);
         $this->clickButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<ul><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li>%1% Test content %2%</li><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li><a href="test-url" title="test-title">%3% Test content %4%</a></li><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li></ul>');
+        $this->assertHTMLMatch('<ul><li><img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li>%1% Test content %2%</li><li><img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li><a href="test-url" title="test-title">%3% Test content %4%</a></li><li><img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li></ul>');
 
     }//end testUnchangedSourceForImagesAndLinksInUnorderedLists()
 
 
     /**
-     * Test required fields when modifying an image.
+     * Test that images retain same qualities after viewing source without making changes.
      *
      * @return void
      */
@@ -342,7 +323,7 @@ class Viper_Tests_ViperImagePlugin_GeneralImageUnitTest extends AbstractViperIma
         $this->clicktopToolbarButton('sourceView');
         sleep(2);
         $this->clickButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<ol><li><a href="test-url" title="test-title"><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></a></li><li>%1% Test content %2%</li><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li>%3% Test content %4%</li><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li></ol>');
+        $this->assertHTMLMatch('<ol><li><a href="test-url" title="test-title"><img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></a></li><li>%1% Test content %2%</li><li><img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li>%3% Test content %4%</li><li><img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li></ol>');
 
         // Test linked content
         $this->useTest(4);
@@ -356,7 +337,7 @@ class Viper_Tests_ViperImagePlugin_GeneralImageUnitTest extends AbstractViperIma
         $this->clicktopToolbarButton('sourceView');
         sleep(2);
         $this->clickButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<ol><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li><a href="test-url" title="test-title">%1% Test content %2%</a></li><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li>%3% Test content %4%</li><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li></ol>');
+        $this->assertHTMLMatch('<ol><li><img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li><a href="test-url" title="test-title">%1% Test content %2%</a></li><li><img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li>%3% Test content %4%</li><li><img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li></ol>');
 
         $this->useTest(4);
         $this->selectKeyword(3, 4);
@@ -369,7 +350,7 @@ class Viper_Tests_ViperImagePlugin_GeneralImageUnitTest extends AbstractViperIma
         $this->clicktopToolbarButton('sourceView');
         sleep(2);
         $this->clickButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('<ol><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li>%1% Test content %2%</li><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li><a href="test-url" title="test-title">%3% Test content %4%</a></li><li><img alt="" height="167" src="http://localhost/~slabs/Viper/Tests/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li></ol>');
+        $this->assertHTMLMatch('<ol><li><img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li>%1% Test content %2%</li><li><img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li><li><a href="test-url" title="test-title">%3% Test content %4%</a></li><li><img alt="" height="167" src="%url%/ViperImagePlugin/Images/hero-shot.jpg" width="369" /></li></ol>');
     
     }//end testUnchangedSourceForImagesAndLinksInOrderedLists()
 
