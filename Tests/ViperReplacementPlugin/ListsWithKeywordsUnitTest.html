@@ -10,3 +10,31 @@
 	<p>%1% Test content <img alt="TITLE" src="((prop:url))" /> more test content.%2%</p>
 </div>
 
+<div id="test-4">
+	<ul>
+		<li><a href="((lookup:url:1))" title="Home">Home</a><br></li>
+		<li><a href="((lookup:url:3))" title="((prop:__name__:3))">Services</a><br></li>
+		<li><a href="((lookup:url:2))" title="((prop:__name__:2))">((prop:productName))</a><br>    
+		<ul>
+			<li><a href="((lookup:url:27))" title="((prop:__name__:27))">((prop:productName)) %1%</a><br></li>
+			<li><a href="((lookup:url:28))" title="((prop:__name__:28))">((prop:productName)) %2%</a><br></li>
+			<li><a href="((lookup:url:29))" title="((prop:__name__:29))">((prop:productName)) %3%</a><br></li>
+		</ul><br>  
+		</li>
+	</ul>
+</div>
+
+<div id="test-5">
+	<ol>
+		<li><a href="((lookup:url:1))" title="Home">Home</a><br></li>
+		<li><a href="((lookup:url:3))" title="((prop:__name__:3))">Services</a><br></li>
+		<li><a href="((lookup:url:2))" title="((prop:__name__:2))">((prop:productName))</a><br>    
+		<ol>
+			<li><a href="((lookup:url:27))" title="((prop:__name__:27))">((prop:productName)) %1%</a><br></li>
+			<li><a href="((lookup:url:28))" title="((prop:__name__:28))">((prop:productName)) %2%</a><br></li>
+			<li><a href="((lookup:url:29))" title="((prop:__name__:29))">((prop:productName)) %3%</a><br></li>
+		</ol><br>  
+		</li>
+	</ol>
+</div>
+
