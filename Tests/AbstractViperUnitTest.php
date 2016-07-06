@@ -265,9 +265,9 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $contents = str_replace('__TEST_VIPER_VERSION__', self::$_viperVersion, $contents);
         $contents = str_replace('__TEST_URL__', $this->_getBaseUrl(), $contents);
 
-        if (self::$_testRun !== true) {var_dump(1);
+        if (self::$_testRun !== true) {
             $contents = str_replace('__TEST_INIT_COVERAGE__', 'localStorage.removeItem("jscover");', $contents);
-        } else {var_dump(2);
+        } else {
             $contents = str_replace('__TEST_INIT_COVERAGE__', '', $contents);
         }
 
