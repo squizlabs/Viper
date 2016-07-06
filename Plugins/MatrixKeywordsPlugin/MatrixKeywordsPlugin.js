@@ -235,8 +235,14 @@
 
 		var newNode = document.createTextNode(keyword);
 
-		range.insertNode(newNode);
-		range.setStart(newNode, keyword.length);
+		var startNode = range.getStartNode(); 
+		if (ViperUtil.isStubElement(startNode) === true) { 
+			ViperUtil.insertBefore(startNode, newNode) 
+		}
+		else {
+			range.insertNode(newNode);
+			range.setStart(newNode, keyword.length);
+		}
 
 		if (ViperUtil.isBrowser('msie') === true) {
 		    range.moveStart('character', keyword.length);
