@@ -67,7 +67,7 @@
         padding: 3px 6px;
         border-radius: 3px;
         font-size: 0.9em;
-        z-index: 9999;
+        z-index: 999;
         box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
         cursor: pointer;
         bottom: 10px;

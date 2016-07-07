@@ -128,6 +128,7 @@ class Viper_Tests_ViperReplacementPlugin_ListsWithKeywordsUnitTest extends Abstr
 
     }//end testImageKeywordUnorderedList()
 
+
     /**
      * Test that images using keywords can be added to ordered lists.
      *
@@ -152,4 +153,197 @@ class Viper_Tests_ViperReplacementPlugin_ListsWithKeywordsUnitTest extends Abstr
         $this->assertRawHTMLMatch('<p>%1% Test content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /> more test content.%2%</p>');
         
     }//end testImageKeywordOrderedList()
+
+
+    /**
+     * Test that images using keywords can be added to ordered lists.
+     *
+     * @return void
+     */
+    public function testInlineToolbarUnorderedSubLists()
+    {
+        // Test first item of sub list
+        $this->useTest(4);
+        $this->clickKeyword(1);
+        $this->selectInlineToolbarLineageItem(4);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
+        sleep(2);
+
+        $this->clickKeyword(1);
+        $this->selectInlineToolbarLineageItem(3);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
+        sleep(2);
+
+        $this->clickKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
+        sleep(2);
+
+        $this->clickKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
+        sleep(2);
+
+        $this->clickKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
+        sleep(2);
+
+        // Test middle item of sub list
+        $this->clickKeyword(2);
+        $this->selectInlineToolbarLineageItem(4);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Link</li>', $lineage);
+        sleep(2);
+
+        $this->clickKeyword(2);
+        $this->selectInlineToolbarLineageItem(3);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
+        sleep(2);
+
+        $this->clickKeyword(2);
+        $this->selectInlineToolbarLineageItem(2);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
+        sleep(2);
+
+        $this->clickKeyword(2);
+        $this->selectInlineToolbarLineageItem(1);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
+
+        $this->clickKeyword(2);
+        $this->selectInlineToolbarLineageItem(0);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
+
+        // Test last item of sub list
+        $this->clickKeyword(3);
+        $this->selectInlineToolbarLineageItem(4);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Link</li>', $lineage);
+
+        $this->clickKeyword(3);
+        $this->selectInlineToolbarLineageItem(3);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
+
+        $this->clickKeyword(3);
+        $this->selectInlineToolbarLineageItem(2);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
+
+        $this->clickKeyword(3);
+        $this->selectInlineToolbarLineageItem(1);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
+
+        $this->clickKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
+
+    }//end testInlineToolbarUnorderedSubLists()
+
+
+    /**
+     * Test that images using keywords can be added to ordered lists.
+     *
+     * @return void
+     */
+    public function testInlineToolbarOrderedSubLists()
+    {
+        // Test first item of sub list
+        $this->useTest(5);
+        $this->clickKeyword(1);
+        $this->selectInlineToolbarLineageItem(4);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
+        sleep(2);
+
+        $this->clickKeyword(1);
+        $this->selectInlineToolbarLineageItem(3);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
+        sleep(2);
+
+        $this->clickKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
+        sleep(2);
+
+        $this->clickKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
+        sleep(2);
+
+        $this->clickKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
+        sleep(2);
+
+        // Test middle item of sub list
+        $this->clickKeyword(2);
+        $this->selectInlineToolbarLineageItem(4);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Link</li>', $lineage);
+        sleep(2);
+
+        $this->clickKeyword(2);
+        $this->selectInlineToolbarLineageItem(3);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
+        sleep(2);
+
+        $this->clickKeyword(2);
+        $this->selectInlineToolbarLineageItem(2);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
+        sleep(2);
+
+        $this->clickKeyword(2);
+        $this->selectInlineToolbarLineageItem(1);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
+
+        $this->clickKeyword(2);
+        $this->selectInlineToolbarLineageItem(0);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
+
+        // Test last item of sub list
+        $this->clickKeyword(3);
+        $this->selectInlineToolbarLineageItem(4);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Link</li>', $lineage);
+
+        $this->clickKeyword(3);
+        $this->selectInlineToolbarLineageItem(3);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
+
+        $this->clickKeyword(3);
+        $this->selectInlineToolbarLineageItem(2);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
+
+        $this->clickKeyword(3);
+        $this->selectInlineToolbarLineageItem(1);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
+
+        $this->clickKeyword(3);
+        $this->selectInlineToolbarLineageItem(0);
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
+    }//end testInlineToolbarOrderedSubLists()
 }
