@@ -1215,6 +1215,7 @@
         {
             ViperUtil.removeAttr(image, 'width');
             ViperUtil.removeAttr(image, 'height');
+            this.viper.contentChanged(true);
 
         },
 
