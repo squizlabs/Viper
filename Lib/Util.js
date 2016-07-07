@@ -2397,7 +2397,7 @@
                  var doc = this.getIFrameDocument(frames[i]);
                  if (doc !== null) {
                      if (nested === true) {
-                         docs = docs.concat(dfx.getDocuments(nested, doc))
+                         docs = docs.concat(this.getDocuments(nested, doc))
                      } else {
                          docs.push(doc);
                      }
