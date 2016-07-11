@@ -378,7 +378,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithItalicsUnitTest extends AbstractViperU
     public function testUndoAndRedoWithEditingItalicContent()
     {
         $this->useTest(1);
-        $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
+        $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "DIV")');
 
         // Add content to the middle of the italic content
         $this->useTest(4);
