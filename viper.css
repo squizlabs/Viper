@@ -31,6 +31,11 @@
 
 .Viper-hidden {
     display: none;
+}
+
+.Viper-offScreen {
+    position: absolute;
+    left: -9999px;
 }._viper-CTNode {
     -moz-border-radius: 5px;
 }
@@ -225,6 +230,7 @@
   margin-left: -13px;
   background-image: url(./Images/2.svg);
   /* PNG fallback for older trowsers */
+
 }
 .Viper-browserVer-msie8 .Viper-buttonIcon {
   background-image: url(./Images/3.png);
@@ -869,6 +875,7 @@
   top: 50%;
   margin-top: -9px;
   /* PNG fallback for older trowsers */
+
 }
 .Viper-browserVer-msie8 .Viper-textbox-action,
 .Viper-browserVer-msie8 .Viper-textbox.Viper-required .Viper-textbox-main:after {
@@ -987,6 +994,7 @@
   -moz-transition: 0.2s opacity ease-in;
   -webkit-transition: 0.2s opacity ease-in;
   /* PNG fallback for older trowsers */
+
 }
 .Viper-browserVer-msie8 .Viper-checkbox-switch:before {
   filter: alpha(opacity = 0);
@@ -1178,6 +1186,9 @@
   cursor: pointer;
   position: relative;
   transition: background-color 0.1s ease-out;
+}
+.Viper-selectionList li.lastVisibleItem {
+  border-bottom: none;
 }
 .Viper-selectionList li:before {
   content: "";
@@ -3145,7 +3156,7 @@ table.VCMP-table tr td:nth-of-type(7) {
         padding: 3px 6px;
         border-radius: 3px;
         font-size: 0.9em;
-        z-index: 9999;
+        z-index: 999;
         box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.3);
         cursor: pointer;
         bottom: 10px;
@@ -3264,6 +3275,7 @@ table.VCMP-table tr td:nth-of-type(7) {
             z-index: 2;
             margin: -21px 0 0 -12px;
             border: 12px solid transparent;
+            pointer-events: none;
 
             /* Colours */
                 border-bottom-color: #FFF;
@@ -4274,6 +4286,12 @@ span.VICP {
     color: #FFF;
     background-color: #505050;
     border-radius: 0.4em;
+}
+
+.Viper-buttonIcon.Viper-tableRow.Viper-hidden,
+.Viper-buttonIcon.Viper-tableCol.Viper-hidden,
+.Viper-buttonIcon.Viper-tableCell.Viper-hidden {
+    display: block;
 }
 .ViperTP-bar {
     position: fixed;
