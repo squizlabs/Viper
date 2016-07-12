@@ -3,6 +3,9 @@
     margin-bottom: 0.6em;
 }
 
+label.Viper-uploadImage-button-label{
+   margin: 0;
+}
 .uploadImage-progressIndicator .uploadImage-progress-status {
     font-size: 1.3em;
     white-space: nowrap;

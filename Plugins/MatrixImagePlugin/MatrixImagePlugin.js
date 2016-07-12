@@ -61,7 +61,7 @@
             // append the hidden file upload form
             var form = this.createUploadImageForm(prefix);
 
-            var imageUploaderLabel = ViperUtil.$('<label for="'+ prefix + 'uploadImageButton"></label>').get(0);
+            var imageUploaderLabel = ViperUtil.$('<label for="'+ prefix + 'uploadImageButton" class="Viper-uploadImage-button-label"></label>').get(0);
             imageUploaderLabel.appendChild(imageUploader);
             ViperUtil.insertAfter(urlField, urlRow);
             urlRow.appendChild(urlField);
@@ -167,7 +167,7 @@
 
             });
 
-            var imageUploaderLabel = ViperUtil.$('<label for="'+ prefix + 'uploadImageButton"></label>').get(0);
+            var imageUploaderLabel = ViperUtil.$('<label for="'+ prefix + 'uploadImageButton" class="Viper-uploadImage-button-label"></label>').get(0);
             imageUploaderLabel.appendChild(imageUploader);
 
             // append the hidden file upload form
