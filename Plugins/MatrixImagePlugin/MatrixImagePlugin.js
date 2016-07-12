@@ -230,6 +230,58 @@
 
         },
 
+        _updateToolbar: function(image, toolbarPrefix)
+        {
+            var toolbar = this.viper.PluginManager.getPlugin('ViperToolbarPlugin');
+            if (!toolbar) {
+                return;
+            }
+
+            var tools = this.viper.Tools;
+
+            if (image && ViperUtil.isTag(image, 'img') === true) {
+                tools.setButtonActive('image');
+
+                var src = this.viper.getAttribute(image, 'src');
+                this.setUrlFieldValue(src);
+                tools.getItem(toolbarPrefix + ':altInput').setValue(this.viper.getAttribute(image, 'alt') || '');
+                tools.getItem(toolbarPrefix + ':titleInput').setValue(this.viper.getAttribute(image, 'title') || '');
+
+                if (!image.getAttribute('alt')) {
+                    tools.getItem(toolbarPrefix + ':isDecorative').setValue(true);
+                } else {
+                    tools.getItem(toolbarPrefix + ':isDecorative').setValue(false);
+                }
+
+                // Show URL field.
+                this.showURLField(toolbarPrefix);
+
+                tools.getItem(toolbarPrefix + ':bubbleSubSection').setActionButtonTitle(_('Update Image'));
+
+                // Update preview pane.
+                this.updateImagePreview(src);
+            } else {
+                // Image is being inserted, show the URL field.
+                this.showURLField(toolbarPrefix);
+
+                tools.getItem(toolbarPrefix + ':bubbleSubSection').setActionButtonTitle(_('Insert Image'));
+
+                tools.enableButton('image');
+                tools.setButtonInactive('image');
+
+                tools.getItem(toolbarPrefix + ':isDecorative').setValue(false);
+                tools.getItem(toolbarPrefix + ':urlInput').setValue('');
+                tools.getItem(toolbarPrefix + ':altInput').setValue('');
+                tools.getItem(toolbarPrefix + ':titleInput').setValue('');
+                tools.setFieldErrors(toolbarPrefix + ':urlInput', []);
+
+                // Update preview pane.
+                this._lastPreviewURL = null;
+                ViperUtil.empty(this._previewBox);
+                ViperUtil.setStyle(this._previewBox, 'display', 'none');
+            }//end if
+
+        },
 
         createFileRow: function(prefix)
         {
@@ -239,7 +291,7 @@
             ViperUtil.$(fileInput).on('input', function() {
                 // enable submit button
                 self.viper.Tools.enableButton('ViperImagePlugin:bubbleSubSection-applyButton');
-                self.viper.Tools.enableButton('vitpImagePlugin-infoSubsection-applyButton');
+                self.viper.Tools.enableButton('vitpImagePlugin:bubbleSubSection-applyButton');
 
             });
             fileRow.appendChild(fileInput);
@@ -293,8 +345,8 @@
                         if(self.viper.Tools.getItem('ViperImagePlugin:bubbleSubSection-applyButton')) {
                             self.viper.Tools.disableButton('ViperImagePlugin:bubbleSubSection-applyButton');
                         }
-                        if(self.viper.Tools.getItem('vitpImagePlugin-infoSubsection-applyButton')) {
-                            self.viper.Tools.disableButton('vitpImagePlugin-infoSubsection-applyButton');
+                        if(self.viper.Tools.getItem('vitpImagePlugin:bubbleSubSection-applyButton')) {
+                            self.viper.Tools.disableButton('vitpImagePlugin:bubbleSubSection-applyButton');
                         }
                         return;
                     }
@@ -341,14 +393,14 @@
 
                     // enable the apply button
                     var button1 = self.viper.Tools.getItem('ViperImagePlugin:bubbleSubSection-applyButton');
-                    var button2 = self.viper.Tools.getItem('vitpImagePlugin-infoSubsection-applyButton');
+                    var button2 = self.viper.Tools.getItem('vitpImagePlugin:bubbleSubSection-applyButton');
                     if(button1) {
                         ViperUtil.$(button1.element).html(_('Upload Image'));
                         self.viper.Tools.enableButton('ViperImagePlugin:bubbleSubSection-applyButton');
                     }
                     if(button2) {
                         ViperUtil.$(button2.element).html(_('Upload Image'));
-                        self.viper.Tools.enableButton('vitpImagePlugin-infoSubsection-applyButton');
+                        self.viper.Tools.enableButton('vitpImagePlugin:bubbleSubSection-applyButton');
                     }
                 }
             });
@@ -512,8 +564,8 @@
                 if(self.viper.Tools.getItem('ViperImagePlugin:bubbleSubSection-applyButton')) {
                     self.viper.Tools.enableButton('ViperImagePlugin:bubbleSubSection-applyButton');
                 }
-                if(self.viper.Tools.getItem('vitpImagePlugin-infoSubsection-applyButton')) {
-                    self.viper.Tools.enableButton('vitpImagePlugin-infoSubsection-applyButton');
+                if(self.viper.Tools.getItem('vitpImagePlugin:bubbleSubSection-applyButton')) {
+                    self.viper.Tools.enableButton('vitpImagePlugin:bubbleSubSection-applyButton');
                 }
 
             });
@@ -536,8 +588,8 @@
                 if(self.viper.Tools.getItem('ViperImagePlugin:bubbleSubSection-applyButton')) {
                     self.viper.Tools.enableButton('ViperImagePlugin:bubbleSubSection-applyButton');
                 }
-                if(self.viper.Tools.getItem('vitpImagePlugin-infoSubsection-applyButton')) {
-                    self.viper.Tools.enableButton('vitpImagePlugin-infoSubsection-applyButton');
+                if(self.viper.Tools.getItem('vitpImagePlugin:bubbleSubSection-applyButton')) {
+                    self.viper.Tools.enableButton('vitpImagePlugin:bubbleSubSection-applyButton');
                 }
 
             });
@@ -778,8 +830,8 @@
                         if(tools.getItem('ViperImagePlugin:bubbleSubSection-applyButton')) {
                             tools.enableButton('ViperImagePlugin:bubbleSubSection-applyButton');
                         }
-                        if(tools.getItem('vitpImagePlugin-infoSubsection-applyButton')) {
-                            tools.enableButton('vitpImagePlugin-infoSubsection-applyButton');
+                        if(tools.getItem('vitpImagePlugin:bubbleSubSection-applyButton')) {
+                            tools.enableButton('vitpImagePlugin:bubbleSubSection-applyButton');
                         }
                     }
                     else {
@@ -851,8 +903,8 @@
                         if(tools.getItem('ViperImagePlugin:bubbleSubSection-applyButton')) {
                             tools.enableButton('ViperImagePlugin:bubbleSubSection-applyButton');
                         }
-                        if(tools.getItem('vitpImagePlugin-infoSubsection-applyButton')) {
-                            tools.enableButton('vitpImagePlugin-infoSubsection-applyButton');
+                        if(tools.getItem('vitpImagePlugin:bubbleSubSection-applyButton')) {
+                            tools.enableButton('vitpImagePlugin:bubbleSubSection-applyButton');
                         }
                     }
                     else {
@@ -987,7 +1039,7 @@
                     ViperUtil.$('.' + prefix + '-chooseLocationFields').css('display', 'block');
                     // chaneg the apply button text to 'upload image'
                     var applyButton1 = this.viper.Tools.getItem('ViperImagePlugin:bubbleSubSection-applyButton');
-                    var applyButton2 = this.viper.Tools.getItem('vitpImagePlugin-infoSubsection-applyButton');
+                    var applyButton2 = this.viper.Tools.getItem('vitpImagePlugin:bubbleSubSection-applyButton');
                     ViperUtil.$(applyButton1.element).html(_('Upload Image'));
                     ViperUtil.$(applyButton2.element).html(_('Upload Image'));
 
@@ -995,7 +1047,7 @@
                     // enable the apply button (only if we are not in uploading status)
                     if(!image.dataset.imagepasteStatus || image.dataset.imagepasteStatus != 'loading') {
                         this.viper.Tools.enableButton('ViperImagePlugin:bubbleSubSection-applyButton');
-                        this.viper.Tools.enableButton('vitpImagePlugin-infoSubsection-applyButton');
+                        this.viper.Tools.enableButton('vitpImagePlugin:bubbleSubSection-applyButton');
                     }
 
                     // display previous upload error message
@@ -1043,7 +1095,7 @@
         _resetDroppedImageUpload: function() {
                     // chaneg the apply button text  back to 'Apply Changes'
                     var applyButton1 = this.viper.Tools.getItem('ViperImagePlugin:bubbleSubSection-applyButton');
-                    var applyButton2 = this.viper.Tools.getItem('vitpImagePlugin-infoSubsection-applyButton');
+                    var applyButton2 = this.viper.Tools.getItem('vitpImagePlugin:bubbleSubSection-applyButton');
                     ViperUtil.$(applyButton1.element).html(_('Apply Changes'));
                     ViperUtil.$(applyButton2.element).html(_('Apply Changes'));
                     // hide the warning message
