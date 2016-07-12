@@ -306,7 +306,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 }
             }
 
-            $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
+            $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?v='.self::$_viperVersion);
 
             // Reset zoom.
             $this->sikuli->keyDown('Key.CMD + 0');
@@ -504,7 +504,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $this->getTopToolbar();
         } catch (Exception $e) {
             $this->resetConnection();
-            $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
+            $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?v='.self::$_viperVersion);
             $this->_waitForViper($retries - 1);
             return;
         }
@@ -514,7 +514,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         // Make sure page is loaded.
         if ($this->topToolbarButtonExists('bold', 'disabled') === false) {
             // Try to go to the test URL again. Do not refresh incase browser has navigated to another URL.
-            $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
+            $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?v='.self::$_viperVersion);
             $this->_waitForViper($retries - 1);
             return;
         }
