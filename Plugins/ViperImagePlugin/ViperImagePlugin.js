@@ -636,7 +636,7 @@
                 }
 
                 // Hide URL field.
-                this.hideURLField(toolbarPrefix);
+                this.showURLField(toolbarPrefix);
 
                 tools.getItem(toolbarPrefix + ':bubbleSubSection').setActionButtonTitle(_('Update Image'));
 
