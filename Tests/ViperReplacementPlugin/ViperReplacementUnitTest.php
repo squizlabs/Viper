@@ -439,7 +439,7 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
      *
      * @return void
      */
-    public function testSelectingKeywordsOnWindos()
+    public function testSelectingKeywordsOnWindows()
     {   
         $this->runTestFor('windows');
 
@@ -468,7 +468,7 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
 
         // Test from right of keyword with additional content with arrow keys
         $this->moveToKeyword(2, 'right');
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 4; $i++) {
             $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         }
         sleep(1);
@@ -502,7 +502,7 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
         sleep(1);
         $this->assertEquals($this->replaceKeywords('Viper %2%'), $this->getSelectedText(), 'Keyword and content should be selected');
 
-    }//end testSelectingKeywordsOnWindos()
+    }//end testSelectingKeywordsOnWindows()
     
 
 }//end class
