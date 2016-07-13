@@ -572,7 +572,6 @@
 
             if (inTopBar !== true) {
                 this._targetToolbarButton = false;
-                cellCoords = ViperUtil.getBoundingRectangle(cell);
             } else {
                 var scrollCoords = ViperUtil.getScrollCoords();
 
@@ -1155,6 +1154,10 @@
             coords.y1 += offset.y;
             coords.x2 += offset.x;
             coords.y2 += offset.y;
+
+            var scrollCoords = ViperUtil.getScrollCoords(Viper.window);
+            coords.y1 -= scrollCoords.y;
+            coords.y2 -= scrollCoords.y;
 
             var hElem = document.createElement('div');
             ViperUtil.addClass(hElem, 'ViperITP-highlight Viper-tableHighlight');
