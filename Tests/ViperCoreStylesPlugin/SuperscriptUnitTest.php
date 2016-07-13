@@ -403,40 +403,87 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
     public function testEditingSuperscriptContent()
     {
 
-        $this->useTest(4);
-
-        // Test adding content to the start of the superscript formatting
-        $this->clickKeyword(2);
+        // Test adding content before the start of the superscript formatting
+        $this->useTest(7);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test ');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript test <sup>%2% %3%</sup> content to test</p>');
+        $this->assertHTMLMatch('<p>Some %1% superscript test <sup>%2% content %3% to test %4%</sup> more %5% content</p>');
 
         // Test adding content in the middle of superscript formatting
+        $this->useTest(7);
         $this->moveToKeyword(2, 'right');
         $this->type(' test');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript test <sup>%2% test %3%</sup> content to test</p>');
+        $this->assertHTMLMatch('<p>Some %1% superscript <sup>%2% test content %3% to test %4%</sup> more %5% content</p>');
 
         // Test adding content to the end of superscript formatting
-        $this->clickKeyword(3);
+        $this->useTest(7);
+        $this->moveToKeyword(4, 'left');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
-        $this->type(' %4%');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript test <sup>%2% test %3% %4%</sup> content to test</p>');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->type(' test');
+        $this->assertHTMLMatch('<p>Some %1% superscript <sup>%2% content %3% to test %4% test</sup> more %5% content</p>');
 
-        // Test highlighting some content in the superscript tags and replacing it
+        // Test highlighting some content in the del tags and replacing it
+        $this->useTest(7);
         $this->selectKeyword(3);
-        $this->type('abc');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript test <sup>%2% test abc %4%</sup> content to test</p>');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% superscript <sup>%2% content test to test %4%</sup> more %5% content</p>');
 
+        // Test highlighting the first word of the del tags and replace it. Should stay in del tag.
+        $this->useTest(7);
+        $this->selectKeyword(2);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% superscript <sup>test content %3% to test %4%</sup> more %5% content</p>');
+
+        // Test hightlighting the first word, pressing forward + delete and replace it. Should be outside the del tag.
+        $this->useTest(7);
+        $this->selectKeyword(2);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% superscript test<sup> content %3% to test %4%</sup> more %5% content</p>');
+
+        // Test highlighting the first word, pressing backspace and replace it. Should be outside the del tag.
+        $this->useTest(7);
         $this->selectKeyword(2);
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->type('abc');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript test abc<sup> test abc %4%</sup> content to test</p>');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% superscript test<sup> content %3% to test %4%</sup> more %5% content</p>');
 
+        // Test highlighting the last word of the del tags and replace it. Should stay in del tag.
+        $this->useTest(7);
+        $this->selectKeyword(4);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% superscript <sup>%2% content %3% to test test</sup> more %5% content</p>');
+
+        // Test highlighting the last word of the del tags, pressing forward + delete and replace it. Should stay inside del
+        $this->useTest(7);
         $this->selectKeyword(4);
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('test');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript test abc<sup> test abc test</sup> content to test</p>');
+        $this->assertHTMLMatch('<p>Some %1% superscript <sup>%2% content %3% to test test</sup> more %5% content</p>');
+
+        // Test highlighting the last word of the del tags, pressing backspace and replace it. Should stay inside del.
+        $this->useTest(7);
+        $this->selectKeyword(4);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% superscript <sup>%2% content %3% to test test</sup> more %5% content</p>');
+
+        // Test selecting from before the del tag to inside. New content should not be in superscript.
+        $this->useTest(7);
+        $this->selectKeyword(1, 3);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some test<sup> to test %4%</sup> more %5% content</p>');
+
+        // Test selecting from after the del tag to inside. New content should be in superscript.
+        $this->useTest(7);
+        $this->selectKeyword(3, 5);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% superscript <sup>%2% content test</sup> content</p>');
 
     }//end testEditingSuperscriptContent()
 
@@ -522,6 +569,97 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptUnitTest extends AbstractVipe
         $this->assertHTMLMatch('<p>%1% <sup>a %2% b</sup></p><p>test&nbsp;&nbsp;%3%</p>');
 
     }//end testSplittingSuperscriptContent()
+
+
+    /**
+     * Test undo and redo applying superscript to content
+     *
+     * @return void
+     */
+    public function testUndoAndRedoApplyingSuperscriptContent()
+    {
+        // Apply superscript content
+        $this->useTest(8);
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('superscript');
+        $this->assertHTMLMatch('<p>%1% <sup>%2%</sup> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>%1% <sup>%2%</sup> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>%1% <sup>%2%</sup> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+
+         // Apply superscript content again
+        $this->selectKeyword(4);
+        $this->clickTopToolbarButton('superscript');
+        $this->assertHTMLMatch('<p>%1% <sup>%2%</sup> %3%</p><p>sit <sup>%4%</sup> %5%</p><p>Another p</p>');
+
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1% <sup>%2%</sup> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>%1% <sup>%2%</sup> %3%</p><p>sit <sup>%4%</sup> %5%</p><p>Another p</p>');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>%1% <sup>%2%</sup> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>%1% <sup>%2%</sup> %3%</p><p>sit <sup>%4%</sup> %5%</p><p>Another p</p>');
+
+    }//end testUndoAndRedoApplyingSupercriptContent()
+
+
+    /**
+     * Test undo and redo when editing superscript content
+     *
+     * @return void
+     */
+    public function testUndoAndRedoWithEditingSuperscriptContent()
+    {
+
+        // Add content to the middle of the superscript content
+        $this->useTest(4);
+        $this->moveToKeyword(2, 'right');
+        $this->type(' test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript <sup>%2% test %3%</sup> content to test</p>');
+
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript <sup>%2% %3%</sup> content to test</p>');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript <sup>%2% test %3%</sup> content to test</p>');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript <sup>%2% %3%</sup> content to test</p>');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript <sup>%2% test %3%</sup> content to test</p>');
+
+        // Test deleting content and pressing undo
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content </p><p>Some more superscript <sup>%2% test %3%</sup> content to test</p>');
+
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript <sup>%2% test %3%</sup> content to test</p>');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content </p><p>Some more superscript <sup>%2% test %3%</sup> content to test</p>');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sup>%1%</sup></p><p>Some more superscript <sup>%2% test %3%</sup> content to test</p>');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content </p><p>Some more superscript <sup>%2% test %3%</sup> content to test</p>');
+
+    }//end testUndoAndRedoWithEditingSuperscriptContent()
 
 }//end class
 
