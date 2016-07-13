@@ -246,7 +246,7 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperLinkP
         sleep(1);
         $this->clickField('URL', true);
         $this->type('http://www.squizlabs.com');
-        $this->clickinlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->applyChanges('inline', 'insert');
         $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs.com">%1%</a> test %2%</p>');
 
         // Test using top toolbar
@@ -257,7 +257,7 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperLinkP
         sleep(1);
         $this->clickField('URL', true);
         $this->type('http://www.squizlabs.com');
-        $this->clicktopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->applyChanges('inline', 'insert');
         $this->assertHTMLMatch('<p>Link test <a href="http://www.squizlabs.com">%1%</a> test %2%</p>');
 
     }//end testRequiredFieldsWhenAddingALink()
@@ -511,7 +511,7 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperLinkP
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         sleep(1);
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem Viper-selected">Link</li>', $this->getHtml('.ViperITP-lineage'));
-        
+
         // Test start of a paragraph
         $this->clickKeyword(4);
         $this->moveToKeyword(4, 'left');
@@ -523,7 +523,7 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperLinkP
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         sleep(1);
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Link</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $this->getHtml('.ViperITP-lineage'));
-        
+
         // Test middle of a paragraph
         $this->clickKeyword(5);
         $this->moveToKeyword(5, 'right');
@@ -535,7 +535,7 @@ class Viper_Tests_ViperLinkPlugin_GeneralLinkUnitTest extends AbstractViperLinkP
         $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
         sleep(1);
         $this->assertEquals('<li class="ViperITP-lineageItem">P</li><li class="ViperITP-lineageItem">Link</li><li class="ViperITP-lineageItem Viper-selected">Selection</li>', $this->getHtml('.ViperITP-lineage'));
-        
+
         // Test end of a paragraph
         $this->clickKeyword(6);
         $this->moveToKeyword(6, 'right');
