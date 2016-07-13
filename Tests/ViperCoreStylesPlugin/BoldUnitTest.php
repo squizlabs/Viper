@@ -51,7 +51,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
      *
      * @return void
      */
-    public function testApplyyBoldtoMiddleOfParagraph()
+    public function testApplyyBoldToMiddleOfParagraph()
     {
         $this->useTest(1);
 
@@ -83,7 +83,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-    }//end testApplyyBoldtoMiddleOfParagraph()
+    }//end testApplyyBoldToMiddleOfParagraph()
 
 
     /**
@@ -897,8 +897,8 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('bold', 'active');
 
-        // Perform the check using raw html as there is a bug that removes the space after 'more' when it removes the bold formatting
-        $this->assertEquals('<p>Text <strong>more </strong>%1%text text and more%2%<strong> text</strong></p>', $this->getRawHtml());
+        // Perform the check using raw html as there is a bug that removes the space between 'more %1%' when it removes the bold formatting
+        $this->assertHTMLMatch('<p>Text <strong>more </strong>%1%text text and more%2%<strong> text</strong></p>', $this->getRawHtml());
 
         // Reapply using top toolbar
         $this->clickTopToolbarButton('bold');
