@@ -29762,7 +29762,7 @@ ViperAccessibilityPlugin_WCAG2 = {
         _updateSelection: function()
         {
             try {
-                if (this._tmpNode !== null && ViperUtil.isPartOfDOM(this._tmpNode) === true) {
+                if (this._tmpNode !== null && ViperUtil.isPartOfDOM(this._tmpNode, this.viper.getViperElementDocument()) === true) {
                     var range = this.viper.getCurrentRange();
                     range.setEnd(this._tmpNode, this._tmpNodeOffset);
                     range.setStart(this._tmpNode, this._tmpNodeOffset);
@@ -43067,7 +43067,6 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
 
             if (inTopBar !== true) {
                 this._targetToolbarButton = false;
-                cellCoords = ViperUtil.getBoundingRectangle(cell);
             } else {
                 var scrollCoords = ViperUtil.getScrollCoords();
 
@@ -43642,6 +43641,10 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
             coords.y1 += offset.y;
             coords.x2 += offset.x;
             coords.y2 += offset.y;
+
+            var scrollCoords = ViperUtil.getScrollCoords(Viper.window);
+            coords.y1 -= scrollCoords.y;
+            coords.y2 -= scrollCoords.y;
 
             var hElem = document.createElement('div');
             ViperUtil.addClass(hElem, 'ViperITP-highlight Viper-tableHighlight');
@@ -72233,4 +72236,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = '91749302971ab03ce6a6b303f83577f8b59090f1';
+Viper.build = true;Viper.version = '132c894b8afd3baa13d53ea2f02848ff336185c7';
