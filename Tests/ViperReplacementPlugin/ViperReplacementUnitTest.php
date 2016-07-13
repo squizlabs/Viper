@@ -364,7 +364,7 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
 
 
     /**
-     * Test that keywords can work properly with the delete functions.
+     * Test selecting keywords using keyboard shortcuts.
      *
      * @return void
      */
@@ -404,28 +404,28 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
         // Test from left of keyword with alt keyboard shortcut
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.RIGHT');
-        $this->getOSAltShortcut('WholeWordSelect', 'right');
+        $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.RIGHT');
         sleep(1);
         $this->assertEquals($this->replaceKeywords('Viper'), $this->getSelectedText(), 'Keyword should be selected');
 
         // Test from right of keyword with alt keyboard shortcut
         $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.LEFT');
-        $this->getOSAltShortcut('WholeWordSelect', 'left');
+        $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.LEFT');
         sleep(1);
         $this->assertEquals($this->replaceKeywords('Viper'), $this->getSelectedText(), 'Keyword should be selected');
 
         // Test from left of keyword with additional content with alt keyboard shortcut
         $this->moveToKeyword(1, 'left');
-        $this->getOSAltShortcut('WholeWordSelect', 'right');
-        $this->getOSAltShortcut('WholeWordSelect', 'right');
+        $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.RIGHT');
         sleep(2);
         $this->assertEquals($this->replaceKeywords('%1% Viper'), $this->getSelectedText(), 'Keyword and content should be selected');
 
         // Test from right of keyword with additional content with alt keyboard shortcut
         $this->moveToKeyword(2, 'right');
-        $this->getOSAltShortcut('WholeWordSelect', 'left');
-        $this->getOSAltShortcut('WholeWordSelect', 'left');
+        $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.LEFT');
+        $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.LEFT');
         sleep(1);
         $this->assertEquals($this->replaceKeywords('Viper %2%'), $this->getSelectedText(), 'Keyword and content should be selected');
 
