@@ -550,6 +550,19 @@
                                 return false;
                             }
                         }
+                    } else if (range.startContainer !== range.endContainer
+                        && ViperUtil.isText(range.startContainer) === true
+                        && ViperUtil.isText(range.endContainer) === true
+                    ) {
+                        // Handle: <div>Some [superscript <sup>content] test</sup> content</div> (typed: x)
+                        // Result: <div>Some x*<sup> test</sup> content</div>.
+                        range.deleteContents();
+                        range.startContainer.data += char;
+                        range.setStart(range.startContainer, range.startContainer.data.length);
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+                        this._viper.fireNodesChanged([range.startContainer]);
+                        return false;
                     }
                 }//end if
 
