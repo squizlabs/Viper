@@ -113,6 +113,13 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     private static $_CommandDirection = null;
 
     /**
+     * Location and name of the test template.
+     *
+     * @var string
+     */
+    protected $templateMode = '';
+
+    /**
      * Returns the path of a test file.
      *
      * @param string $type The type of the file, js or html.
@@ -151,6 +158,32 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         return null;
 
     }//end _getTestFile()
+
+
+    /**
+     * Set the template mode.
+     *
+     * @param string $mode The location and name of the test template mode.
+     *
+     * @return void
+     */
+    protected function setPageTemplateMode($mode)
+    {
+        $this->templateMode = $mode;
+
+    }//end setPageTemplateMode()
+
+
+    /**
+     * Returns the template mode.
+     *
+     * @return string
+     */
+    protected function getPageTemplateMode()
+    {
+        return $this->templateMode;
+
+    }//end getPageTemplateMode()
 
 
     /**
@@ -215,7 +248,12 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         // Get the contents of the test file template.
         if (self::$_testContent === null) {
-            self::$_testContent = file_get_contents($baseDir.'/Web/test-template.html');
+            $tplFileName = $this->getPageTemplateMode();
+            if (empty($tplFileName) === true) {
+                $tplFileName = 'Web/test-template';
+            }
+
+            self::$_testContent = file_get_contents($baseDir.'/'.$tplFileName.'.html');
         }
 
         $viperInclude = '';

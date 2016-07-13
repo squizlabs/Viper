@@ -453,7 +453,7 @@ function useTest(id)
 
     viper.fireCallbacks('Viper:clickedOutside');
 
-    var contentElement = win.Viper.Util.getid('content');
+    var contentElement = viperTest.get('contentElement');
     Viper.Util.setHtml(contentElement, testCases[id]);
 
     Viper.Util.setHtml(win.Viper.Util.getid('testCaseTitle'), '(Using Test #' + id + ')');
