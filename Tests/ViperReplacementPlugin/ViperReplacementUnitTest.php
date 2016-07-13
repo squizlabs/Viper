@@ -364,12 +364,14 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
 
 
     /**
-     * Test selecting keywords using keyboard shortcuts.
+     * Test selecting keywords using keyboard shortcuts on OSX
      *
      * @return void
      */
-    public function testSelectingKeywords()
+    public function testSelectingKeywordsOnOsx()
     {   
+        $this->runTestFor('osx');
+
         // Test from left of keyword with arrow keys
         $this->useTest(1);
         $this->moveToKeyword(1, 'right');
@@ -429,7 +431,78 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
         sleep(1);
         $this->assertEquals($this->replaceKeywords('Viper %2%'), $this->getSelectedText(), 'Keyword and content should be selected');
 
-    }//end testSelectingKeywords()
+    }//end testSelectingKeywordsOnOsx()
+
+
+     /**
+     * Test selecting keywords using keyboard shortcuts on Windows
+     *
+     * @return void
+     */
+    public function testSelectingKeywordsOnWindos()
+    {   
+        $this->runTestFor('windows');
+
+        // Test from left of keyword with arrow keys
+        $this->useTest(1);
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.RIGHT + Key.SHIFT');
+        sleep(1);
+        $this->assertEquals($this->replaceKeywords('Viper'), $this->getSelectedText(), 'Keyword should be selected');
+
+        // Test from right of keyword with arrow keys
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT + Key.SHIFT');
+        sleep(1);
+        $this->assertEquals($this->replaceKeywords('Viper'), $this->getSelectedText(), 'Keyword should be selected');
+
+        // Test from left of keyword with additional content with arrow keys
+        $this->moveToKeyword(1, 'left');
+        for ($i = 0; $i < 5; $i++) {
+            $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        }
+        sleep(2);
+        $this->assertEquals($this->replaceKeywords('%1% Viper'), $this->getSelectedText(), 'Keyword and content should be selected');
+
+        // Test from right of keyword with additional content with arrow keys
+        $this->moveToKeyword(2, 'right');
+        for ($i = 0; $i < 5; $i++) {
+            $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        }
+        sleep(1);
+        $this->assertEquals($this->replaceKeywords('Viper %2%'), $this->getSelectedText(), 'Keyword and content should be selected');
+
+        // Test from left of keyword with alt keyboard shortcut
+        $this->moveToKeyword(1, 'right');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.RIGHT');
+        sleep(1);
+        $this->assertEquals($this->replaceKeywords('Viper'), $this->getSelectedText(), 'Keyword should be selected');
+
+        // Test from right of keyword with alt keyboard shortcut
+        $this->moveToKeyword(2, 'left');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.LEFT');
+        sleep(1);
+        $this->assertEquals($this->replaceKeywords('Viper'), $this->getSelectedText(), 'Keyword should be selected');
+
+        // Test from left of keyword with additional content with alt keyboard shortcut
+        $this->moveToKeyword(1, 'left');
+        $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.RIGHT');
+        $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.RIGHT');
+        sleep(2);
+        $this->assertEquals($this->replaceKeywords('%1% Viper'), $this->getSelectedText(), 'Keyword and content should be selected');
+
+        // Test from right of keyword with additional content with alt keyboard shortcut
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.LEFT');
+        $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.LEFT');
+        sleep(1);
+        $this->assertEquals($this->replaceKeywords('Viper %2%'), $this->getSelectedText(), 'Keyword and content should be selected');
+
+    }//end testSelectingKeywordsOnWindos()
     
 
 }//end class
