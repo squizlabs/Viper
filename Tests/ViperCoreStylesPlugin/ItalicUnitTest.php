@@ -907,40 +907,87 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
     public function testEditingItalicContent()
     {
 
-        $this->useTest(7);
-
-        // Test adding content to the start of the italic formatting
-        $this->clickKeyword(2);
+        // Test adding content before the start of the italic formatting
+        $this->useTest(11);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test ');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic test <em>%2% %3%</em> content to test</p>');
+        $this->assertHTMLMatch('<p>Some %1% italic test <em>%2% content %3% to test %4%</em> more %5% content</p>');
 
-        // Test adding content in the middle of italic formatting
+        // Test adding content in the middle of bold formatting
+        $this->useTest(11);
         $this->moveToKeyword(2, 'right');
         $this->type(' test');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic test <em>%2% test %3%</em> content to test</p>');
+        $this->assertHTMLMatch('<p>Some %1% italic <em>%2% test content %3% to test %4%</em> more %5% content</p>');
 
         // Test adding content to the end of italic formatting
-        $this->clickKeyword(3);
+        $this->useTest(11);
+        $this->moveToKeyword(4, 'left');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
-        $this->type(' %4%');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic test <em>%2% test %3% %4%</em> content to test</p>');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->type(' test');
+        $this->assertHTMLMatch('<p>Some %1% italic <em>%2% content %3% to test %4% test</em> more %5% content</p>');
 
-        // Test highlighting some content in the italic tags and replacing it
+        // Test highlighting some content in the em tags and replacing it
+        $this->useTest(11);
         $this->selectKeyword(3);
-        $this->type('abc');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic test <em>%2% test abc %4%</em> content to test</p>');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% italic <em>%2% content test to test %4%</em> more %5% content</p>');
 
+        // Test highlighting the first word of the em tags and replace it. Should stay in em tag.
+        $this->useTest(11);
+        $this->selectKeyword(2);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% italic <em>test content %3% to test %4%</em> more %5% content</p>');
+
+        // Test hightlighting the first word, pressing forward + delete and replace it. Should be outside the em tag.
+        $this->useTest(11);
+        $this->selectKeyword(2);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% italic test<em> content %3% to test %4%</em> more %5% content</p>');
+
+        // Test highlighting the first word, pressing backspace and replace it. Should be outside the em tag.
+        $this->useTest(11);
         $this->selectKeyword(2);
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->type('abc');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic test abc<em> test abc %4%</em> content to test</p>');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% italic test<em> content %3% to test %4%</em> more %5% content</p>');
 
+        // Test highlighting the last word of the em tags and replace it. Should stay in em tag.
+        $this->useTest(11);
+        $this->selectKeyword(4);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% italic <em>%2% content %3% to test test</em> more %5% content</p>');
+
+        // Test highlighting the last word of the em tags, pressing forward + delete and replace it. Should stay inside em
+        $this->useTest(11);
         $this->selectKeyword(4);
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('test');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic test abc<em> test abc test</em> content to test</p>');
+        $this->assertHTMLMatch('<p>Some %1% italic <em>%2% content %3% to test test</em> more %5% content</p>');
+
+        // Test highlighting the last word of the em tags, pressing backspace and replace it. Should stay inside em.
+        $this->useTest(11);
+        $this->selectKeyword(4);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% italic <em>%2% content %3% to test test</em> more %5% content</p>');
+
+        // Test selecting from before the em tag to inside. New content should not be in italic.
+        $this->useTest(11);
+        $this->selectKeyword(1, 3);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some test<em> to test %4%</em> more %5% content</p>');
+
+        // Test selecting from after the em tag to inside. New content should be in italic.
+        $this->useTest(11);
+        $this->selectKeyword(3, 5);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% italic <em>%2% content test</em> content</p>');
 
     }//end testEditingItalicContent()
 
@@ -986,6 +1033,97 @@ class Viper_Tests_ViperCoreStylesPlugin_ItalicUnitTest extends AbstractViperUnit
         $this->assertHTMLMatch('<p>%1% <em>a %2% b</em></p><p>test&nbsp;&nbsp;%3%</p>');
 
     }//end testSplittingItalicContent()
+
+
+    /**
+     * Test undo and redo applying italic to content
+     *
+     * @return void
+     */
+    public function testUndoAndRedoApplyingItalicContent()
+    {
+        // Apply italic content
+        $this->useTest(3);
+        $this->selectKeyword(2);
+        $this->clickInlineToolbarButton('italic');
+        $this->assertHTMLMatch('<p>%1% <em>%2%</em> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>%1% <em>%2%</em> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>%1% <em>%2%</em> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+
+         // Apply italic content again
+        $this->selectKeyword(4);
+        $this->clickInlineToolbarButton('italic');
+        $this->assertHTMLMatch('<p>%1% <em>%2%</em> %3%</p><p>sit <em>%4%</em> %5%</p><p>Another p</p>');
+
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1% <em>%2%</em> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>%1% <em>%2%</em> %3%</p><p>sit <em>%4%</em> %5%</p><p>Another p</p>');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>%1% <em>%2%</em> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>%1% <em>%2%</em> %3%</p><p>sit <em>%4%</em> %5%</p><p>Another p</p>');
+
+    }//end testUndoAndRedoApplyingItalicContent()
+
+
+    /**
+     * Test undo and redo when editing italic content
+     *
+     * @return void
+     */
+    public function testUndoAndRedoWithEditingItalicContent()
+    {
+
+        // Add content to the middle of the italic content
+        $this->useTest(7);
+        $this->moveToKeyword(2, 'right');
+        $this->type(' test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic <em>%2% test %3%</em> content to test</p>');
+
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic <em>%2% %3%</em> content to test</p>');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic <em>%2% test %3%</em> content to test</p>');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic <em>%2% %3%</em> content to test</p>');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic <em>%2% test %3%</em> content to test</p>');
+
+        // Test deleting content and pressing undo
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content </p><p>Some more italic <em>%2% test %3%</em> content to test</p>');
+
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic <em>%2% test %3%</em> content to test</p>');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content </p><p>Some more italic <em>%2% test %3%</em> content to test</p>');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <em>%1%</em></p><p>Some more italic <em>%2% test %3%</em> content to test</p>');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content </p><p>Some more italic <em>%2% test %3%</em> content to test</p>');
+
+    }//end testUndoAndRedoWithEditingBoldContent()
 
 }//end class
 

@@ -1130,19 +1130,19 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
          // Apply bold content again
         $this->selectKeyword(4);
         $this->clickInlineToolbarButton('bold');
-        $this->assertHTMLMatch('p>%1% <strong>%2%</strong> %3%</p><p>sit <strong>%4%</strong> %5%</p><p>Another p</p>');
+        $this->assertHTMLMatch('<p>%1% <strong>%2%</strong> %3%</p><p>sit <strong>%4%</strong> %5%</p><p>Another p</p>');
 
         // Test undo and redo with top toolbar icons
         $this->clickTopToolbarButton('historyUndo');
         $this->assertHTMLMatch('<p>%1% <strong>%2%</strong> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('p>%1% <strong>%2%</strong> %3%</p><p>sit <strong>%4%</strong> %5%</p><p>Another p</p>');
+        $this->assertHTMLMatch('<p>%1% <strong>%2%</strong> %3%</p><p>sit <strong>%4%</strong> %5%</p><p>Another p</p>');
 
         // Test undo and redo with keyboard shortcuts
         $this->sikuli->keyDown('Key.CMD + z');
         $this->assertHTMLMatch('<p>%1% <strong>%2%</strong> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        $this->assertHTMLMatch('p>%1% <strong>%2%</strong> %3%</p><p>sit <strong>%4%</strong> %5%</p><p>Another p</p>');
+        $this->assertHTMLMatch('<p>%1% <strong>%2%</strong> %3%</p><p>sit <strong>%4%</strong> %5%</p><p>Another p</p>');
 
     }//end testUndoAndRedoBoldContent()
 
