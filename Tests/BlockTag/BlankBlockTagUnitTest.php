@@ -198,7 +198,7 @@ class Viper_Tests_BlockTag_BlankBlockTagUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('searchReplace', NULL));
         $this->assertTrue($this->topToolbarButtonExists('langtools', NULL));
         $this->assertTrue($this->topToolbarButtonExists('charmap', NULL));
-        
+
     }//end testBlankBlockTagToolbarIconStatus()
 
 
@@ -228,7 +228,7 @@ class Viper_Tests_BlockTag_BlankBlockTagUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.CMD + z');
         $this->assertHTMLMatch('%1% Test content %2%');
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        $this->assertHTMLMatch(' Test content %2%'); 
+        $this->assertHTMLMatch(' Test content %2%');
 
         // Test delete part of content with backspace
         $this->useTest(2);
@@ -246,7 +246,7 @@ class Viper_Tests_BlockTag_BlankBlockTagUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.CMD + z');
         $this->assertHTMLMatch('%1% Test content %2%');
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        $this->assertHTMLMatch('%1% Test content'); 
+        $this->assertHTMLMatch('%1% Test content');
 
     }//end testBlankBlockTagDeletingPartOfContent()
 
@@ -307,7 +307,7 @@ class Viper_Tests_BlockTag_BlankBlockTagUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('%1% Test content %2%');
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        $this->assertHTMLMatch('test delete'); 
+        $this->assertHTMLMatch('test delete');
 
     }//end testBlankBlockTagDeletingAllContent()
 
@@ -399,7 +399,7 @@ class Viper_Tests_BlockTag_BlankBlockTagUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('abc test Test content %2%');
         // Press redo once will redo the delete
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('test test Test content');
+        $this->assertHTMLMatch('abc test Test content');
 
         // Test undo and redo with keyboard shortcuts
         // Press once will undo the delete
@@ -414,7 +414,7 @@ class Viper_Tests_BlockTag_BlankBlockTagUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('abc test Test content %2%');
         // Press redo once will redo the delete
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        $this->assertHTMLMatch('test test Test content');
+        $this->assertHTMLMatch('abc test Test content');
 
     }//end testUndoAndRedoInContent()
 
