@@ -20,7 +20,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         sleep(1);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com.au');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Insert Link', NULL, TRUE);
         $this->clickKeyword(3);
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.DELETE');
@@ -45,7 +45,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         sleep(1);
         $this->clickTopToolbarButton('link');
         $this->type('www.squizlabs.com.au');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Insert Link', NULL, TRUE);
         $this->clickKeyword(3);
 
         $this->assertHTMLMatch('<p>%1% <a href="www.squizlabs.com.au">((prop:productName))</a> %2% %3%</p>');
