@@ -76,12 +76,12 @@
         opacity: 0;
         min-height: 15px;
         font-size: 12px;
-        pointer-events: all;
         transition: opacity 0.1s ease;
     }
 
     .ViperImagePlugin-sizeDiv.visible {
         opacity: 1;
+        pointer-events: all;
     }
 
     .ViperImagePlugin-sizeDiv.visible:hover {
