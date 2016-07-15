@@ -195,7 +195,7 @@
 
             var chars    = '$|&cent;|&pound;|&curren;|&yen';
             var htmlEnt  = '|1547|2546|2547|2801|3065|3647|6107';
-            htmlEnt     += _getRange(8352, 8375);
+            htmlEnt     += _getRange(8352, 8382);
             htmlEnt     += '|65020|65129|65284|65504|65505|65509|65510';
             chars       += htmlEnt.replace(/\|/g, ';|&#') + ';';
             chars        = chars.split('|');
