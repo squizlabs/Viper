@@ -380,8 +380,14 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
     {
         $this->selectKeyword(1);
 
-        $this->sikuli->click($this->_getToolbarArrow());
-        sleep(2);
+        $this->sikuli->mouseMove($this->_getToolbarArrow());
+
+        // Move mouse down a little as its not possible to click the toolbar arrow.
+        $loc = $this->sikuli->mouseMoveOffset(0, 20);
+
+        $this->sikuli->click($loc);
+
+        sleep(1);
         $this->getInlineToolbar();
 
     }//end testClickOnToolbarNotHideToolbar()
