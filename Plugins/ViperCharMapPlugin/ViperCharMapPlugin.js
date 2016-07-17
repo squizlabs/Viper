@@ -74,7 +74,7 @@
                 catTable     += '<table class="' + tableClass + '" border="0" cellspacing="0" cellpadding="0"><tbody>';
                 var charCount = category.chars.length;
                 for (var j = 0; j < charCount; j++) {
-                    if ((j % 7) === 0) {
+                    if ((j % 10) === 0) {
                         if (j !== 0) {
                             catTable += '</tr>';
                         }
@@ -214,6 +214,11 @@
             chars       = chars.split('|');
             var symbols = chars;
 
+            var greek = [];
+            for (var i = 880; i <= 1023; i++) {
+                greek.push('&#' + i + ';')
+            }
+
             categories.push({
                 name: _('Symbols'),
                 chars: symbols
@@ -232,6 +237,11 @@
             categories.push({
                 name: _('Currency'),
                 chars: currency
+            });
+
+            categories.push({
+                name: _('Greek'),
+                chars: greek
             });
 
             return categories;
