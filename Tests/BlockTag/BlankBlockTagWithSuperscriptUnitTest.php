@@ -238,7 +238,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithSuperscriptUnitTest extends Abstract
         $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('Some %1% superscript <br />test <sup>%2% content %3% to test %4%</sup> more %5% content');
+        $this->assertHTMLMatch('Some %1% superscript <br /><sup>test %2% content %3% to test %4%</sup> more %5% content');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
@@ -246,7 +246,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithSuperscriptUnitTest extends Abstract
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test');
-        $this->assertHTMLMatch('Some %1% superscript test<br />test <sup>%2% content %3% to test %4%</sup> more %5% content');
+        $this->assertHTMLMatch('Some %1% superscript test<br /><sup>test %2% content %3% to test %4%</sup> more %5% content');
 
         // Test pressing enter at the end of superscript content
         $this->useTest(4);

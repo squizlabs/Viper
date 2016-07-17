@@ -231,14 +231,14 @@ class Viper_Tests_BlockTag_DivBlockTagWithSubscriptUnitTest extends AbstractVipe
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test');
-        $this->assertHTMLMatch('<div>Some %1% subscript <sub>%2%<br />test content %3% to test %4%</sub> more %5% content</div>');
+        $this->assertHTMLMatch('<div>Some %1% subscript <sub>%2%</div><div><sub>test content %3% to test %4%</sub> more %5% content</div>');
 
         // Test pressing enter at the start of subscript content
         $this->useTest(4);
         $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('<div>Some %1% subscript <br />test <sub>%2% content %3% to test %4%</sub> more %5% content</div>');
+        $this->assertHTMLMatch('<div>Some %1% subscript </div><div><sub>test %2% content %3% to test %4%</sub> more %5% content</div>');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
@@ -246,14 +246,14 @@ class Viper_Tests_BlockTag_DivBlockTagWithSubscriptUnitTest extends AbstractVipe
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test');
-        $this->assertHTMLMatch('<div>Some %1% subscript test<br />test <sub>%2% content %3% to test %4%</sub> more %5% content</div>');
+        $this->assertHTMLMatch('<div>Some %1% subscript test</div><div><sub>test %2% content %3% to test %4%</sub> more %5% content</div>');
 
         // Test pressing enter at the end of subscript content
         $this->useTest(4);
         $this->moveToKeyword(4, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test');
-        $this->assertHTMLMatch('<div>Some %1% subscript <sub>%2% content %3% to test %4%</sub><br />test more %5% content</div>');
+        $this->assertHTMLMatch('<div>Some %1% subscript <sub>%2% content %3% to test %4%</sub></div><div>test more %5% content</div>');
 
 
     }//end testSplittingSubscriptContent()

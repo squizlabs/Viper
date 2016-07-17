@@ -238,7 +238,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithSubscriptUnitTest extends AbstractVi
         $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('Some %1% subscript <br />test <sub>%2% content %3% to test %4%</sub> more %5% content');
+        $this->assertHTMLMatch('Some %1% subscript <br /><sub>test %2% content %3% to test %4%</sub> more %5% content');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
@@ -246,7 +246,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithSubscriptUnitTest extends AbstractVi
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test');
-        $this->assertHTMLMatch('Some %1% subscript test<br />test <sub>%2% content %3% to test %4%</sub> more %5% content');
+        $this->assertHTMLMatch('Some %1% subscript test<br /><sub>test %2% content %3% to test %4%</sub> more %5% content');
 
         // Test pressing enter at the end of subscript content
         $this->useTest(4);

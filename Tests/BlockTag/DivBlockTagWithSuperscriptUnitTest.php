@@ -231,14 +231,14 @@ class Viper_Tests_BlockTag_DivBlockTagWithSuperscriptUnitTest extends AbstractVi
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test');
-        $this->assertHTMLMatch('<div>Some %1% superscript <sup>%2%<br />test content %3% to test %4%</sup> more %5% content</div>');
+        $this->assertHTMLMatch('<div>Some %1% superscript <sup>%2%</div><div><sup>test content %3% to test %4%</sup> more %5% content</div>');
 
         // Test pressing enter at the start of superscript content
         $this->useTest(4);
         $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('<div>Some %1% superscript <br />test <sup>%2% content %3% to test %4%</sup> more %5% content</div>');
+        $this->assertHTMLMatch('<div>Some %1% superscript </div><div><sup>test %2% content %3% to test %4%</sup> more %5% content</div>');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
@@ -246,14 +246,14 @@ class Viper_Tests_BlockTag_DivBlockTagWithSuperscriptUnitTest extends AbstractVi
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test');
-        $this->assertHTMLMatch('<div>Some %1% superscript test<br />test <sup>%2% content %3% to test %4%</sup> more %5% content</div>');
+        $this->assertHTMLMatch('<div>Some %1% superscript test</div><div><sup>test %2% content %3% to test %4%</sup> more %5% content</div>');
 
         // Test pressing enter at the end of superscript content
         $this->useTest(4);
         $this->moveToKeyword(4, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test');
-        $this->assertHTMLMatch('<div>Some %1% superscript <sup>%2% content %3% to test %4%</sup><br />test more %5% content</div>');
+        $this->assertHTMLMatch('<div>Some %1% superscript <sup>%2% content %3% to test %4%</sup></div><div>test more %5% content</div>');
 
     }//end testSplittingSuperscriptContent()
 

@@ -227,14 +227,14 @@ class Viper_Tests_BlockTag_DivBlockTagWithStrikethroughUnitTest extends Abstract
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test');
-        $this->assertHTMLMatch('<div>Some %1% strikethrough <del>%2%<br />test content %3% to test %4%</del> more %5% content</div>');
+        $this->assertHTMLMatch('<div>Some %1% strikethrough <del>%2%</del></div><div><del>test content %3% to test %4%</del> more %5% content</div>');
 
         // Test pressing enter at the start of strikethrough content
         $this->useTest(4);
         $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('<div>Some %1% strikethrough <br />test <del>%2% content %3% to test %4%</del> more %5% content</div>');
+        $this->assertHTMLMatch('<div>Some %1% strikethrough </div><div><del>test %2% content %3% to test %4%</del> more %5% content</div>');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
@@ -242,14 +242,14 @@ class Viper_Tests_BlockTag_DivBlockTagWithStrikethroughUnitTest extends Abstract
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test');
-        $this->assertHTMLMatch('<div>Some %1% strikethrough test<br />test <del>%2% content %3% to test %4%</del> more %5% content</div>');
+        $this->assertHTMLMatch('<div>Some %1% strikethrough test</div><div><del>test %2% content %3% to test %4%</del> more %5% content</div>');
 
         // Test pressing enter at the end of strikethrough content
         $this->useTest(4);
         $this->moveToKeyword(4, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test');
-        $this->assertHTMLMatch('<div>Some %1% strikethrough <del>%2% content %3% to test %4%</del><br />test more %5% content</div>');
+        $this->assertHTMLMatch('<div>Some %1% strikethrough <del>%2% content %3% to test %4%</del></div><div>test more %5% content</div>');
 
     }//end testSplittingStrikethroughContent()
 

@@ -510,7 +510,7 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('<p>%1% </p><p>test <del>a %2% b</del> %3%</p>');
+        $this->assertHTMLMatch('<p>%1% </p><p><del>test a %2% b</del> %3%</p>');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
@@ -518,7 +518,7 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test');
-        $this->assertHTMLMatch('<p>%1% test</p><p>test <del>a %2% b</del> %3%</p>');
+        $this->assertHTMLMatch('<p>%1% test</p><p><del>test a %2% b</del> %3%</p>');
 
         // Test pressing enter at the end of strikethrough content
         $this->useTest(6);

@@ -238,7 +238,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithStrikethroughUnitTest extends Abstra
         $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('Some %1% strikethrough <br />test <del>%2% content %3% to test %4%</del> more %5% content');
+        $this->assertHTMLMatch('Some %1% strikethrough <br /><del>test %2% content %3% to test %4%</del> more %5% content');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
@@ -246,7 +246,7 @@ class Viper_Tests_BlockTag_BlankBlockTagWithStrikethroughUnitTest extends Abstra
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test');
-        $this->assertHTMLMatch('Some %1% strikethrough test<br />test <del>%2% content %3% to test %4%</del> more %5% content');
+        $this->assertHTMLMatch('Some %1% strikethrough test<br /><del>test %2% content %3% to test %4%</del> more %5% content');
 
         // Test pressing enter at the end of strikethrough content
         $this->useTest(4);
