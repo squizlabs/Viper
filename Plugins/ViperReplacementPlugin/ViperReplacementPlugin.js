@@ -91,8 +91,8 @@
             this.viper.registerCallback('Viper:keyDown', 'ViperReplacementPlugin', function(e) {
                 if (ViperUtil.inArray(e.which, ignoredKeys) === true) {
                     return;
-                } else if ((e.which === 88 || e.which === 67 || e.which === 86) && (e.metaKey === true || e.ctrlKey === true)) {
-                    // Copy/Cut/Paste operation.
+                } else if (e.metaKey === true || e.ctrlKey === true) {
+                    // Copy/Cut/Paste, bold/italic/underline operations.
                     return;
                 }
 
