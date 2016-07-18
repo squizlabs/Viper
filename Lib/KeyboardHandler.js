@@ -403,7 +403,7 @@
                                 // <p>text<strong>insert text here</strong>* more text</p> ->
                                 // <p>text<strong>insert text hereNEW*</strong> more text</p>.
                                 var prevCont = range._getLastSelectableChild(textContainer.previousSibling);
-                                if (ViperUtil.isText(prevCont) === true) {
+                                if (ViperUtil.isText(prevCont) === true && this._viper.isSpecialElement(textContainer.previousSibling) === false) {
                                     prevCont.data += char;
                                     range.setStart(prevCont, prevCont.data.length);
                                     range.collapse(true);
