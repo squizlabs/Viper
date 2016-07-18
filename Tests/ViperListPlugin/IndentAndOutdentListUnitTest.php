@@ -636,7 +636,8 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
         // Test selecting list item and press shift + right once
         // Test using keyboard shortcuts
         $this->useTest(5);
-        $this->selectKeyword(2, 3);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(3);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%</li><li>Accessibility audit report</li></ul>');
@@ -658,7 +659,8 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
         // Test selecting list item and press shift + right twice
         // Test using keyboard shortcuts
         $this->useTest(5);
-        $this->selectKeyword(2, 3);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(3);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
@@ -683,7 +685,8 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
         // Test selecting list item and press shift + right once
         // Test using keyboard shortcuts
         $this->useTest(6);
-        $this->selectKeyword(2, 3);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(3);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%</li><li>Accessibility audit report</li></ol>');
@@ -705,7 +708,8 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
         // Test selecting list item and pressing shift + right twice
         // Test using keyboard shortcuts
         $this->useTest(6);
-        $this->selectKeyword(2, 3);
+        $this->selectKeyword(2);
+        $this->selectInlineToolbarLineageItem(3);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
