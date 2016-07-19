@@ -635,19 +635,7 @@
                 return false;
             }
 
-            // If the current list items is starting with a list and ends up selecting
-            // its whole sublist then move them all by 1 level.
-            if (listItems.length > 1) {
-                var subList = this.getSubListItem(listItems[0]);
-                if (subList) {
-                    var firstItem = listItems.shift();
-                    if (this._isWholeList(listItems) === true) {
-                        return this.indentListItem(firstItem, true, testOnly);
-                    }
-
-                    listItems.unshift(firstItem);
-                }
-            }
+            listItems = this.getTopLevelListItems(listItems);
 
             var c = listItems.length;
             for (var i = 0; i < c; i++) {
@@ -783,28 +771,38 @@
                 }
             }
 
-            // If the current list items is starting with a list and ends up selecting
-            // its whole sublist then move them all by 1 level.
-            if (listItems.length > 1) {
-                var subList = this.getSubListItem(listItems[0]);
-                if (subList) {
-                    var firstItem = listItems.shift();
-                    if (this._isWholeList(listItems) === true) {
-                        return this.outdentListItem(firstItem, testOnly);
-                    }
-
-                    listItems.unshift(firstItem);
-                }
-            }
-
-            var c = listItems.length;
+            // For each list item remove all the sub lists. Construct a new array with the top selected list items.
+            var itemsToOutdent = this.getTopLevelListItems(listItems);
+            var c              = itemsToOutdent.length;
             for (var i = 0; i < c; i++) {
-                if (this.outdentListItem(listItems[i], testOnly) === false) {
+                if (this.outdentListItem(itemsToOutdent[i], testOnly) === false) {
                     return false;
                 }
             }
 
             return true;
+
+        },
+
+        getTopLevelListItems: function (listItems)
+        {
+            var topLevelItems = [listItems.shift()];
+            for (var i = 0; i < listItems.length; i++) {
+                var add     = true;
+                var parents = ViperUtil.getParents(listItems[i], 'li');
+                for (var j = 0; j < parents.length; j++) {
+                    if (ViperUtil.inArray(parents[j], topLevelItems, true) === true) {
+                        add = false;
+                        break;
+                    }
+                }
+
+                if (add === true) {
+                    topLevelItems.push(listItems[i]);
+                }
+            }
+
+            return topLevelItems;
 
         },
 
@@ -1085,20 +1083,31 @@
             }
 
             var listItems = [];
+            var prev      = null;
             for (var i = 0; i < pElems.length; i++) {
                 var p  = pElems[i];
-                var li = document.createElement('li');
-                while (p.firstChild) {
-                    li.appendChild(p.firstChild);
-                }
-
-                if (atEnd !== true) {
-                    listItems.unshift(li);
+                var li = null;
+                if (ViperUtil.isTag(p, ['ul', 'ol']) === true) {
+                    if (prev !== null) {
+                        // Append this list to the previous item as its sub list.
+                        prev.appendChild(p);
+                    }
                 } else {
-                    listItems.push(li);
-                }
+                    var li = document.createElement('li');
+                    while (p.firstChild) {
+                        li.appendChild(p.firstChild);
+                    }
 
-                ViperUtil.remove(p);
+                    ViperUtil.remove(p);
+
+                    if (atEnd !== true) {
+                        listItems.unshift(li);
+                    } else {
+                        listItems.push(li);
+                    }
+
+                    prev = li;
+                }
             }
 
             if (atEnd === true) {
@@ -1616,10 +1625,7 @@
 
             if (indent === true) {
                 increaseIndent = this.canIncreaseIndent(range);
-
-                if (indent === true) {
-                    decreaseIndent = this.canDecreaseIndent(range);
-                }
+                decreaseIndent = this.canDecreaseIndent(range);
             }
 
             if (mainToolbar === true
@@ -2024,7 +2030,7 @@
                 return;
             }
 
-            if (ViperUtil.isTag(element, 'p') === true || ViperUtil.isTag(element, 'td') === true) {
+            if (ViperUtil.isTag(element, ['p', 'td', 'ul', 'ol']) === true) {
                 return element;
             }
 
@@ -2042,6 +2048,10 @@
             if (elems.length > 1) {
                 var first = elems[0];
                 var last  = elems[(elems.length - 1)];
+
+                if (ViperUtil.isTag(first.previousElementSibling, 'li') === true) {
+                    return false;
+                }
 
                 var firstParent = first.parentNode;
                 var lastParent  = last.parentNode;
