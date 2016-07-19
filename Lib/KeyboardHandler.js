@@ -3464,9 +3464,17 @@
                         }
                     } else {
                         var startNode = range.getStartNode();
-                        var endNode   = range.getEndNode();
                         if (ViperUtil.isStubElement(startNode) === true) {
+                            if (ViperUtil.isTag(startNode, 'br') === true) {
+                                // Could be spacer, remove any surrounding parents.
+                                var surroundingParents = ViperUtil.getSurroundingParents(startNode);
+                                if (surroundingParents.length > 0) {
+                                    ViperUtil.remove(surroundingParents.pop());
+                                }
+                            }
+
                             ViperUtil.remove(startNode);
+
                             this._viper.fireNodesChanged();
                             return false;
                         }
