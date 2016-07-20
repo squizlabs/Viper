@@ -78,6 +78,21 @@ abstract class AbstractViperListPluginUnitTest extends AbstractViperUnitTest
     }//end assertIconStatusesCorrect()
 
 
+    /**
+     * Get the content of Viper without stripping the blank LI tags.
+     *
+     * @return string
+     */
+    protected function getHtmllWithBlankLiTags()
+    {
+        $html = $this->sikuli->execJS('Viper.Util.getHtml(Viper.Util.getid(\'content\'))');
+        $html = str_replace('<br>', '', $html);
+
+        return $html;
+
+    }//end _getHtmllWithBlankLiTags
+
+
 }//end class
 
 ?>
