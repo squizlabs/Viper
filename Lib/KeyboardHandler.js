@@ -3338,8 +3338,10 @@
                     }
 
                     // Handle deletion of a whole bold/italic/etc tag.
-                    range = this._viper.moveCaretAway(nodeSelection, e.keyCode === 46);
+                    range = this._viper.moveCaretAway(nodeSelection, nodeSelection.previousSibling !== null);
                     ViperUtil.remove(nodeSelection);
+                    ViperSelection.addRange(range);
+
                     if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
                         && range.startContainer.data === ' '
                         && range.startContainer.previousSibling
@@ -3371,6 +3373,14 @@
                         }
 
                         range.setStart(prev, length);
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+                    } else if (!range.startContainer.nextSibling
+                        && ViperUtil.isBlockElement(range.startContainer.parentNode) === true
+                        && ViperUtil.endsWithSpace(range.startContainer, false) === true
+                    ) {
+                        ViperUtil.replaceCharAt(range.startContainer, 'last', String.fromCharCode(160));
+                        range.setStart(range.startContainer, range.startContainer.data.length);
                         range.collapse(true);
                         ViperSelection.addRange(range);
                     }
