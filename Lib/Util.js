@@ -3150,6 +3150,19 @@
                 while (this.isText(element.nextSibling) === true) {
                     joinTextNodes(element, element.nextSibling);
                 }
+            } else if (this.isText(prevCont) === true) {
+                // Prev container is text.
+                var splitOffset = 0;
+                while (this.isText(element.previousSibling) === true) {
+                    splitOffset += element.previousSibling.data.length;
+                    element.data = element.previousSibling.data + element.data;
+                    ViperUtil.remove(element.previousSibling);
+                }
+
+                info = {
+                    splitOffset: splitOffset,
+                    textNode: element
+                };
             }
 
             return info;

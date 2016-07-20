@@ -2879,14 +2879,13 @@
                     } else if (ViperUtil.isStubElement(startNode.nextSibling) === true
                         && (ViperUtil.isTag(startNode.nextSibling, 'br') === false || startNode.nextSibling.nextSibling)
                     ) {
-                        if (this._viper.getDefaultBlockTag() === '') {
-                            // Check if the next next element is stub, if yes remove it..
-                            if (ViperUtil.isStubElement(startNode.nextSibling.nextSibling) === true) {
-                                ViperUtil.remove(startNode.nextSibling.nextSibling);
-                                this._viper.contentChanged();
-                                return false;
-                            }
+                        // Check if the next next element is stub, if yes remove it.. E.g. test<br/><hr/>more text -> text<br/>more text.
+                        if (ViperUtil.isStubElement(startNode.nextSibling.nextSibling) === true) {
+                            ViperUtil.remove(startNode.nextSibling.nextSibling);
+                            this._viper.contentChanged();
+                            return false;
                         }
+
                         // If the next sibling is a BR but its not the last node then remove.
                         ViperUtil.remove(startNode.nextSibling);
                         this._viper.contentChanged();
@@ -3501,6 +3500,19 @@
 
                             this._viper.fireNodesChanged();
                             return false;
+                        } else if (ViperUtil.isText(startNode) === true) {
+                            // Text node.
+                            if (ViperUtil.startsWithSpace(startNode) === true) {
+                                if (ViperUtil.isTag(startNode.previousSibling, 'br') === true) {
+                                    ViperUtil.remove(startNode.previousSibling);
+                                    var info = ViperUtil.normaliseTextNodeSiblings(startNode);
+                                    range.setStart(info.textNode, info.splitOffset);
+                                    range.collapse(true);
+                                    ViperSelection.addRange(range)
+                                    this._viper.fireNodesChanged();
+                                    return false;
+                                }
+                            }
                         }
                     }//end if
                 }//end if
@@ -3541,17 +3553,18 @@
                                     this._viper.contentChanged(true);
                                     return false;
                                 }
-                            } else {
-                                if (this._viper.getDefaultBlockTag() === '') {
-                                    if (ViperUtil.isTag(range.startContainer.nextSibling, 'br') === true) {
-                                        // Check if the next next element is stub, if yes remove it..
-                                        if (ViperUtil.isStubElement(range.startContainer.nextSibling.nextSibling) === true) {
-                                            ViperUtil.remove(range.startContainer.nextSibling.nextSibling);
-                                            this._viper.contentChanged();
-                                            return false;
-                                        }
-                                    }
+                            } else if (ViperUtil.isStubElement(range.startContainer.nextSibling) === true) {
+                                // Check if the next next element is stub, if yes remove it..
+                                if (ViperUtil.isStubElement(range.startContainer.nextSibling.nextSibling) === true) {
+                                    ViperUtil.remove(range.startContainer.nextSibling.nextSibling);
+                                    this._viper.contentChanged();
+                                    return false;
                                 }
+
+                                // If the next sibling is a BR but its not the last node then remove.
+                                ViperUtil.remove(range.startContainer.nextSibling);
+                                this._viper.contentChanged();
+                                return false;
                             }
                         } else if (range.startOffset - 1 === ViperUtil.rtrim(startContainer.data).length
                             && startContainer.data.length !== ViperUtil.rtrim(startContainer.data).length
