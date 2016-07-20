@@ -3179,11 +3179,11 @@
                 this._viper.contentChanged(true);
                 return false;
             } else if (e.keyCode === 8
-                && range.collapsed === true
+                && (range.collapsed === true
                 && (range.startContainer.nodeType === ViperUtil.TEXT_NODE
                 && (range.startOffset === 0 || (range.startOffset === 1 && range.startContainer.data.charAt(0) === ' '))
                 && ((ViperUtil.isFirstNonEmptyTextNode(range.startContainer) === true || ViperUtil.isTag(range.startContainer.previousSibling, 'br') === true)))
-                || (ViperUtil.isText(startNode) === false && range.startOffset === 0)
+                || (ViperUtil.isText(startNode) === false && range.startOffset === 0))
             ) {
                 // At the start of an element. Check to see if the previous
                 // element is a part of another block element. If it is then
