@@ -927,7 +927,7 @@
                     return;
                 }
 
-                if ((!nodeSelection || nodeSelection.nodeType !== ViperUtil.ELEMENT_NODE || nodeSelection === self.viper.getViperElement())
+                if ((!nodeSelection || nodeSelection.nodeType !== ViperUtil.ELEMENT_NODE || (nodeSelection === self.viper.getViperElement() && self.viper.getDefaultBlockTag() !== ''))
                     && (range.collapsed === true || ViperUtil.getFirstBlockParent(startNode) !== ViperUtil.getFirstBlockParent(endNode))
                     || (startNode === endNode && ViperUtil.isTag(startNode, 'br') === true && range.collapsed === true)
                     || (ViperUtil.isBrowser('msie', '8') === true && range.collapsed === true && nodeSelection && ViperUtil.getHtml(nodeSelection) === '' && ViperUtil.isStubElement(nodeSelection) === false)
@@ -936,7 +936,7 @@
                     tools.disableButton('class');
                     tools.setButtonInactive('anchor');
                     tools.setButtonInactive('class');
-                } else if (nodeSelection && nodeSelection === self.viper.getViperElement()) {
+                } else if (nodeSelection && nodeSelection === self.viper.getViperElement() && self.viper.getDefaultBlockTag() !== '') {
                     tools.disableButton('anchor');
                     tools.disableButton('class');
                     tools.setButtonInactive('anchor');
