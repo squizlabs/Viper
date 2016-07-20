@@ -996,6 +996,7 @@
                 if (image.naturalWidth === 0 || image.naturalHeight === 0) {
                     canResize = false;
                 }
+
                 // if (widthStyle && widthStyle.indexOf('%') !== -1) {
                 //     // Prevent resizing.
                 //     canResize = false;
@@ -1031,7 +1032,15 @@
                     } else {
                         ViperUtil.removeClass(sizeDiv, 'visible');
                     }
+
+                    // If the image is too small move the size div outside of the image.
+                    if (image.width < 60 ||  image.height < 20) {
+                        ViperUtil.addClass(sizeDiv, 'smallImage');
+                    } else {
+                        ViperUtil.removeClass(sizeDiv, 'smallImage');
+                    }
                 };
+
                 _updateSize();
 
                 ViperUtil.addClass(resizeBox, 'ViperImagePlugin-resizeBox');
