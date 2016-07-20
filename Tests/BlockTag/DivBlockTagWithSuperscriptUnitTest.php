@@ -231,7 +231,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSuperscriptUnitTest extends AbstractVi
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test');
-        $this->assertHTMLMatch('<div>Some %1% superscript <sup>%2%</div><div><sup>test content %3% to test %4%</sup> more %5% content</div>');
+        $this->assertHTMLMatch('<div>Some %1% superscript <sup>%2%</sup></div><div><sup>test content %3% to test %4%</sup> more %5% content</div>');
 
         // Test pressing enter at the start of superscript content
         $this->useTest(4);
@@ -252,8 +252,8 @@ class Viper_Tests_BlockTag_DivBlockTagWithSuperscriptUnitTest extends AbstractVi
         $this->useTest(4);
         $this->moveToKeyword(4, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->type('test');
-        $this->assertHTMLMatch('<div>Some %1% superscript <sup>%2% content %3% to test %4%</sup></div><div>test more %5% content</div>');
+        $this->type('test ');
+        $this->assertHTMLMatch('<div>Some %1% superscript <sup>%2% content %3% to test %4%</sup></div><div>test&nbsp;&nbsp;more %5% content</div>');
 
     }//end testSplittingSuperscriptContent()
 

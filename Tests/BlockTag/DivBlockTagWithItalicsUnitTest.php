@@ -317,7 +317,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithItalicsUnitTest extends AbstractViperU
         $this->moveToKeyword(4, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('<div>Some %1% italic <em>%2% content %3% to test %4%</em></div><div>test more %5% content</div>');
+        $this->assertHTMLMatch('<div>Some %1% italic <em>%2% content %3% to test %4%</em></div><div>test&nbsp;&nbsp;more %5% content</div>');
 
     }//end testSplittingItalicContent()
 

@@ -231,7 +231,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithSubscriptUnitTest extends AbstractVipe
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test');
-        $this->assertHTMLMatch('<div>Some %1% subscript <sub>%2%</div><div><sub>test content %3% to test %4%</sub> more %5% content</div>');
+        $this->assertHTMLMatch('<div>Some %1% subscript <sub>%2%</sub></div><div><sub>test content %3% to test %4%</sub> more %5% content</div>');
 
         // Test pressing enter at the start of subscript content
         $this->useTest(4);
@@ -252,8 +252,8 @@ class Viper_Tests_BlockTag_DivBlockTagWithSubscriptUnitTest extends AbstractVipe
         $this->useTest(4);
         $this->moveToKeyword(4, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->type('test');
-        $this->assertHTMLMatch('<div>Some %1% subscript <sub>%2% content %3% to test %4%</sub></div><div>test more %5% content</div>');
+        $this->type('test ');
+        $this->assertHTMLMatch('<div>Some %1% subscript <sub>%2% content %3% to test %4%</sub></div><div>test&nbsp;&nbsp;more %5% content</div>');
 
 
     }//end testSplittingSubscriptContent()
