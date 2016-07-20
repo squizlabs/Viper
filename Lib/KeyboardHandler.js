@@ -1934,7 +1934,15 @@
 
                             var firstChild = currentParent.firstChild;
                             while (currentParent.firstChild) {
-                                prevParent.appendChild(currentParent.firstChild);
+                                if (ViperUtil.isText(currentParent.firstChild) !== true
+                                    && ViperUtil.getTagName(prevParent.lastChild) === ViperUtil.getTagName(currentParent.firstChild)
+                                ) {
+                                    // Same tag, append first child contents to it.
+                                    ViperUtil.moveChildrenToElement(currentParent.firstChild, prevParent.lastChild, false);
+                                    ViperUtil.remove(currentParent.firstChild);
+                                } else {
+                                    prevParent.appendChild(currentParent.firstChild);
+                                }
                             }
 
                             if (ViperUtil.isTag(currentParent, ['td', 'th']) === false) {
@@ -3147,7 +3155,15 @@
                     }
 
                     while (nextParent.firstChild) {
-                        currentParent.appendChild(nextParent.firstChild);
+                        if (ViperUtil.isText(nextParent.firstChild) !== true
+                            && ViperUtil.getTagName(currentParent.lastChild) === ViperUtil.getTagName(nextParent.firstChild)
+                        ) {
+                            // Same tag, append first child contents to it.
+                            ViperUtil.moveChildrenToElement(nextParent.firstChild, currentParent.lastChild, false);
+                            ViperUtil.remove(nextParent.firstChild);
+                        } else {
+                            currentParent.appendChild(nextParent.firstChild);
+                        }
                     }
 
                     ViperUtil.remove(nextParent);
@@ -3240,7 +3256,15 @@
 
                     if (removeParent === true) {
                         while (currentParent.firstChild) {
-                            prevParent.appendChild(currentParent.firstChild);
+                            if (ViperUtil.isText(currentParent.firstChild) !== true
+                                && ViperUtil.getTagName(prevParent.lastChild) === ViperUtil.getTagName(currentParent.firstChild)
+                            ) {
+                                // Same tag, append first child contents to it.
+                                ViperUtil.moveChildrenToElement(currentParent.firstChild, prevParent.lastChild, false);
+                                ViperUtil.remove(currentParent.firstChild);
+                            } else {
+                                prevParent.appendChild(currentParent.firstChild);
+                            }
                         }
 
                         if (ViperUtil.isTag(currentParent, ['td', 'th']) === false) {
