@@ -414,7 +414,7 @@
 
                             }
 
-                            // At the start of a text node with an element sibling. Make sure character is inserted in previous text container.
+                            // At the start of a text node with an element sibling. Make sure character is inserted in previous text container (unless its start of a block element).
                             // Also make sure that there is no non breaking space at the start text node followed by a non
                             // space character.
                             if (!textContainer.previousSibling) {
@@ -427,7 +427,7 @@
                                     parent = parent.parentNode;
                                 }
 
-                                if (ViperUtil.isText(parent.previousSibling) === true) {
+                                if (ViperUtil.isText(parent.previousSibling, true) === true) {
                                     if (char === ' ' && ViperUtil.endsWithSpace(parent.previousSibling) === true) {
                                         char = String.fromCharCode(160);
                                     } else if (char !== ' ' && ViperUtil.endsWithSpace(parent.previousSibling, true) === true) {
@@ -1620,6 +1620,20 @@
                 }
             }//end if
 
+            if (defaultTagName !== '' && range.collapsed === true) {
+                // Base tag is set to nothing.
+                var firstBlockParent = ViperUtil.getFirstBlockParent(range.startContainer);
+                if (firstBlockParent) {
+                    if (firstBlockParent !== viperElem) {
+                        if (ViperUtil.isBrowser('firefox') === true) {
+                            // Got to split range.
+                            this.splitAtRange();
+                            this._viper.contentChanged();
+                            return false;
+                        }
+                    }
+                }
+            }
 
             if (range.startOffset === 0
                 && range.collapsed === true

@@ -332,8 +332,8 @@ class Viper_Tests_BlockTag_DivBlockTagWithBoldUnitTest extends AbstractViperUnit
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
-        $this->type(' test');
-        $this->assertHTMLMatch('<div>Some %1% bold test</div<div><strong>test %2% content %3% to test %4%</strong> more %5% content</div>');
+        $this->type('test');
+        $this->assertHTMLMatch('<div>Some %1% bold test</div><div><strong>test %2% content %3% to test %4%</strong> more %5% content</div>');
 
         // Test pressing enter at the end of bold content
         $this->useTest(4);

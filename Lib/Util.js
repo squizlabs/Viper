@@ -478,8 +478,8 @@
 
         },
 
-        isText: function (node) {
-            if (node && node.nodeType === this.TEXT_NODE) {
+        isText: function (node, notEmpty) {
+            if (node && node.nodeType === this.TEXT_NODE && (notEmpty !== true || node.data.length > 0)) {
                 return true;
             }
 
