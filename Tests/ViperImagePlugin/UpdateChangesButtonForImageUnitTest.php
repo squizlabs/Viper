@@ -27,12 +27,12 @@ class Viper_Tests_ViperImagePlugin_UpdateChangesButtonForImageUnitTest extends A
 
         // Check icons
         $this->assertTrue($this->topToolbarButtonExists('image', 'selected'));
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE));
+        $this->assertTrue($this->topToolbarButtonExists('Insert Image', 'disabled', TRUE));
 
         $this->type($this->getTestURL('/ViperImagePlugin/Images/editing.png'));
         sleep(2);
         $this->clickField('Image is decorative');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Insert Image', NULL, TRUE);
         sleep(1);
         $this->assertHTMLMatch('<h1>Content without an Image</h1><p>%1% the first paragraph</p><p>The second paragraph on the page <img src="%url%/ViperImagePlugin/Images/editing.png" alt="" /></p>');
 
@@ -64,13 +64,13 @@ class Viper_Tests_ViperImagePlugin_UpdateChangesButtonForImageUnitTest extends A
 
         // Check icons
         $this->assertTrue($this->topToolbarButtonExists('image', 'selected'));
-        $this->assertTrue($this->topToolbarButtonExists('Apply Changes', 'disabled', TRUE));
+        $this->assertTrue($this->topToolbarButtonExists('Insert Image', 'disabled', TRUE));
 
         $this->type($this->getTestURL('/ViperImagePlugin/Images/editing.png'));
         sleep(2);
         $this->clickField('URL');
         $this->clickField('Image is decorative');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Insert Image', NULL, TRUE);
         sleep(1);
         $this->assertHTMLMatch('<h1>Content without an Image</h1><p>%1% the first paragraph</p><p>The second paragraph on the page <img src="%url%/ViperImagePlugin/Images/editing.png" alt="" /></p>');
 
@@ -102,12 +102,12 @@ class Viper_Tests_ViperImagePlugin_UpdateChangesButtonForImageUnitTest extends A
         $this->clickElement('img', 0);
         sleep(1);
         $this->clickInlineToolbarButton('image', 'active');
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Update changes button should be disabled');
+        $this->assertTrue($this->inlineToolbarButtonExists('Update Image', 'disabled', TRUE), 'Update changes button should be disabled');
 
         // Edit the image and make sure the Apply Changes button still works.
         $this->clickField('Alt');
         $this->type('alt');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Update Image', NULL, TRUE);
         $this->assertHTMLMatch('<h1>Content with an Image</h1><p>%1% the first paragraph</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="testalt" width="369" height="167"/></p><p>The second paragraph on the page %2%</p>');
 
         // Using the top toolbar
@@ -126,12 +126,12 @@ class Viper_Tests_ViperImagePlugin_UpdateChangesButtonForImageUnitTest extends A
         // Select the image again and make sure the Apply Changes button is inactive
         $this->clickElement('img', 0);
         $this->clickTopToolbarButton('image', 'active');
-        $this->assertTrue($this->inlineToolbarButtonExists('Apply Changes', 'disabled', TRUE), 'Update changes button should be disabled');
+        $this->assertTrue($this->inlineToolbarButtonExists('Update Image', 'disabled', TRUE), 'Update changes button should be disabled');
 
         // Edit the image and make sure the Apply Changes button still works.
         $this->clickField('Alt');
         $this->type('alt');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Update Image', NULL, TRUE);
         $this->assertHTMLMatch('<h1>Content with an Image</h1><p>%1% the first paragraph</p><p><img src="%url%/ViperImagePlugin/Images/hero-shot.jpg" alt="testalt" width="369" height="167"/></p><p>The second paragraph on the page %2%</p>');
 
     }//end testApplyChangesButtonIsDisabledAfterCancellingChangesToAnImage()
