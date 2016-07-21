@@ -3598,11 +3598,12 @@
 
             ViperUtil._dcall++;
 
+            console.info(ViperUtil._dcall);
+
             if (c === ViperUtil._dcall) {
                 debugger;
             }
 
-            console.info(ViperUtil._dcall);
         },
 
         setViperElement: function(element)

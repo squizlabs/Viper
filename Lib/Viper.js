@@ -3052,7 +3052,12 @@
                         }
 
                         if (node === startBookmark.parentNode) {
-                            startBookmark.parentNode.appendChild(endBookmark);
+                            var lastSelectable = range._getLastSelectableChild(node, null, true);
+                            if (lastSelectable) {
+                                Viper.Util.insertAfter(lastSelectable, endBookmark);
+                            } else {
+                                startBookmark.parentNode.appendChild(endBookmark);
+                            }
                         }
                     }
                 }
@@ -4564,6 +4569,7 @@
 
                     case 'td':
                     case 'th':
+                    case 'li':
                     case 'caption':
                         var html = Viper.Util.trim(Viper.Util.getHtml(node));
                         if (html === '' || Viper.Util.trim(html.replace(/&nbsp;/g, '')) === '') {

@@ -596,7 +596,11 @@
                 }
 
                 if (ViperUtil.inArray(endNode, elems) === false) {
-                    elems.push(endNode);
+                    if ((ViperUtil.isBrowser('chrome') !== true && ViperUtil.isBrowser('safari') !== true)
+                        || (range.endContainer.nodeType !== ViperUtil.ELEMENT_NODE || ViperUtil.isTag(range.endContainer, 'li') === false || range.endOffset > 0)
+                    ) {
+                        elems.push(endNode);
+                    }
                 }
 
                 var c = elems.length;
@@ -635,11 +639,16 @@
                 return false;
             }
 
-            listItems = this.getTopLevelListItems(listItems);
+            var topListItems   = this.getTopLevelListItems(listItems);
+            var includeSublist = false;
+            if (listItems.length !== topListItems.length) {
+                // If the sub list items selected then move the sublist item together with the top list item.
+                includeSublist = true;
+            }
 
-            var c = listItems.length;
+            var c = topListItems.length;
             for (var i = 0; i < c; i++) {
-                if (this.indentListItem(listItems[i], false, testOnly) === false) {
+                if (this.indentListItem(topListItems[i], includeSublist, testOnly) === false) {
                     return false;
                 }
             }
@@ -786,6 +795,7 @@
 
         getTopLevelListItems: function (listItems)
         {
+            listItems         = listItems.concat([]);
             var topLevelItems = [listItems.shift()];
             for (var i = 0; i < listItems.length; i++) {
                 var add     = true;

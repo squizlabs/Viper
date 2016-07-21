@@ -519,3 +519,17 @@ function changeTextColour(colour)
 {
     Viper.Util.setStyle(viper.getViperElement(), 'color', colour);
 }
+
+function getTestHTML() {
+    var html = gHtml();
+    var keywords = ['A', 'B', 'C', 'D', 'T', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'];
+    for (var i = 0; i < keywords.length; i++) {
+        html = html.replace('X' + keywords[i] + 'X', '%' + (i + 1) + '%');
+    }
+
+    html.replace('<br /><ol>', '<ol>');
+    html.replace('<br /><ul>', '<ul>');
+
+    return html;
+
+};

@@ -615,7 +615,7 @@
                             return child;
                         } else if (child.lastChild) {
                             // This node does have child nodes.
-                            var res = this._getLastSelectableChild(child, stubElementIsSelectable);
+                            var res = this._getLastSelectableChild(child, skipEmptyNodes, stubElementIsSelectable);
                             if (res !== null) {
                                 return res;
                             } else {
