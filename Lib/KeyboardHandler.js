@@ -3516,6 +3516,16 @@
                                 // Could be spacer, remove any surrounding parents.
                                 var surroundingParents = ViperUtil.getSurroundingParents(startNode);
                                 if (surroundingParents.length > 0) {
+                                    range = this._viper.moveCaretAway(startNode, true);
+                                    // Could have ended up as BR.
+                                    var startNode = range.getStartNode();
+                                    if (ViperUtil.isTag(startNode, 'br') === true && ViperUtil.isText(startNode.previousSibling, true) === true) {
+                                        range.setStart(startNode.previousSibling, startNode.previousSibling.data.length);
+                                        range.collapse(true);
+                                        ViperSelection.addRange(range);
+                                        ViperUtil.remove(startNode);
+                                    }
+
                                     ViperUtil.remove(surroundingParents.pop());
                                 }
                             }
