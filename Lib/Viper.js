@@ -4626,6 +4626,11 @@
                         node.data = node.data.replace(/^\s+/g, ' ');
                         node.data = node.data.replace(/\s*\n\s*/g, ' ');
 
+                        if ((!node.nextSibling || Viper.Util.isSpacerBR(node.nextSibling) === true) && Viper.Util.isBlockElement(node.parentNode) === true) {
+                            // Remove spaces from the end of block elements.
+                            node.data = node.data.replace(/\s+$/g, '');
+                        }
+
                         // TODO: We should normalise these text nodes before calling this method. This way there is no
                         // reason to do this check here as there will be no sibling text nodes.
                         if (node.data.charAt(0) === ' '

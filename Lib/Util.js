@@ -487,6 +487,17 @@
 
         },
 
+        isSpacerBR: function(node) {
+            if (ViperUtil.isTag(node, 'br') === true
+                && !node.nextSibling
+                && ViperUtil.isBlockElement(node.parentNode) === true
+            ) {
+                return true;
+            }
+
+            return false;
+        },
+
         isElement: function (node) {
             if (node && node.nodeType === this.ELEMENT_NODE) {
                 return true;
