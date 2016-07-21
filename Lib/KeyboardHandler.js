@@ -221,10 +221,20 @@
                         && range.collapsed === true
                     ) {
                         // IE text insert when BR tag is selected.
-                        var textNode = document.createTextNode(String.fromCharCode(e.which));
-                        ViperUtil.insertBefore(startNode, textNode);
-                        ViperUtil.remove(startNode);
-                        range.setStart(textNode, 1);
+                        var textNode = null;
+                        if (ViperUtil.isText(startNode.previousSibling) === true) {
+                            textNode       = startNode.previousSibling;
+                            textNode.data += char;
+                        } else {
+                            textNode = document.createTextNode(char);
+                            ViperUtil.insertBefore(startNode, textNode);
+                        }
+
+                        if (ViperUtil.isSpacerBR(startNode) === true) {
+                            ViperUtil.remove(startNode);
+                        }
+
+                        range.setStart(textNode, textNode.data.length);
                         range.collapse(true);
                         ViperSelection.addRange(range);
                         this._viper.fireNodesChanged([textNode]);
@@ -1467,7 +1477,17 @@
                 // Handle XAX*<br>XBX<br>XCX.
                 // Pressing enter changes the content to: <p>XAX</p>*XBX<br>XCX.
                 // By adding an extra BR we keep it in the content.
-                ViperUtil.insertAfter(startNode, document.createElement('br'));
+                var br = startNode.nextSibling;
+                setTimeout(
+                    function () {
+                        var textNode = document.createTextNode('');
+                        ViperUtil.insertBefore(br, textNode);
+                        range.setStart(textNode, 0);
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+                    },
+                    10
+                );
             } else if (startNode.nodeType === ViperUtil.TEXT_NODE
                 && range.endOffset === startNode.data.length
                 && startNode.data.length !== 0
