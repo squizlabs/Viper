@@ -4557,6 +4557,9 @@
                                 }
 
                                 Viper.Util.remove(node);
+                            } else if (Viper.Util.isTag(node.nextSibling, ['ol', 'ul']) === true && Viper.Util.isTag(node.parentNode, 'li') === true) {
+                                // BR before sublist.
+                                Viper.Util.remove(node);
                             }
                         }//end if
                     break;
