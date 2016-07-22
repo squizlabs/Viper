@@ -6,43 +6,74 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
 {
 
     /**
-     * Test that classes can use keyword names.
+     * Test applying a class using keywords.
      *
      * @return void
      */
-    public function testApplyKeywordClassNames()
+    public function testApplingClasses()
     {
         // Using inline toolbar
         $this->useTest(1);
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('cssClass');
-        $this->type('footnote-ref ((prop:className)) ((prop:className))');
+        $this->type('((prop:className))');
         $this->sikuli->KeyDown('Key.ENTER');
         $this->clickKeyword(1);
 
-        $this->assertHTMLMatch('<p>Test content <span class="footnote-ref ((prop:className)) ((prop:className))">%1%</span> more test content</p>');
-        $this->assertRawHTMLMatch('<p>Test content <span data-viper-class="footnote-ref ((prop:className)) ((prop:className))" class="footnote-ref replaced-className ((prop:className))" data-viper-attribite-keywords="true">%1%</span> more test content</p>');
+        $this->assertHTMLMatch('<p>Test content <span class="((prop:className))">%1%</span> more test content</p>');
+        $this->assertRawHTMLMatch('<p>Test content <span data-viper-class="((prop:className))" class="footnote-ref replaced-className ((prop:className))" data-viper-attribite-keywords="true">%1%</span> more test content</p>');
 
         // Using top toolbar
         $this->useTest(1);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('cssClass');
+        $this->type('((prop:className))');
+        $this->sikuli->KeyDown('Key.ENTER');
+        $this->clickKeyword(1);
+
+        $this->assertHTMLMatch('<p>Test content <span class="((prop:className))">%1%</span> more test content</p>');
+        $this->assertRawHTMLMatch('<p>Test content <span data-viper-class="((prop:className))" class="footnote-ref replaced-className ((prop:className))" data-viper-attribite-keywords="true">%1%</span> more test content</p>');
+
+    }//end testApplingClasses()
+
+
+    /**
+     * Test applying a class to a keyword.
+     *
+     * @return void
+     */
+    public function testApplingClassesToKeywords()
+    {
+        // Using inline toolbar
+        $this->useTest(2, 1);
+        $this->clickKeyword(5);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->type('footnote-ref ((prop:className))');
+        $this->sikuli->KeyDown('Key.ENTER');
+
+        $this->assertHTMLMatch('<p>Test %1% content <span class="footnote-ref ((prop:className))">((prop:viperKeyword))</span> more test content</p>');
+        $this->assertRawHTMLMatch('<p>Test %1% content <span class="footnote-ref replaced-className" data-viper-attribite-keywords="true" data-viper-class="footnote-ref ((prop:className))" data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span> more test content</p>');
+
+        // Using top toolbar
+        $this->useTest(2, 1);
+        $this->clickKeyword(5);
+        $this->clickTopToolbarButton('cssClass');
         $this->type('footnote-ref ((prop:className)) ((prop:className))');
         $this->sikuli->KeyDown('Key.ENTER');
         $this->clickKeyword(1);
 
-        $this->assertHTMLMatch('<p>Test content <span class="footnote-ref ((prop:className)) ((prop:className))">%1%</span> more test content</p>');
-        $this->assertRawHTMLMatch('<p>Test content <span data-viper-class="footnote-ref ((prop:className)) ((prop:className))" class="footnote-ref replaced-className ((prop:className))" data-viper-attribite-keywords="true">%1%</span> more test content</p>');
+        $this->assertHTMLMatch('<p>Test %1% content <span class="footnote-ref ((prop:className))">((prop:viperKeyword))</span> more test content</p>');
+        $this->assertRawHTMLMatch('<p>Test %1% content <span class="footnote-ref replaced-className" data-viper-attribite-keywords="true" data-viper-class="footnote-ref ((prop:className))" data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span> more test content</p>');
 
-    }//end testApplyKeywordClassNames()
+    }//end testApplingClassesToKeywords()
 
 
     /**
-     * Test that classes using keyword names can be removed.
+     * Test removing a keyword class
      *
      * @return void
      */
-    public function testRemoveKeywordClassNames()
+    public function testRemovingClass()
     {
         // Using inline toolbar
         $this->useTest(2);
@@ -70,182 +101,191 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
         $this->assertHTMLMatch('<p>Test content %1% more test content</p>');
         $this->assertRawHTMLMatch('<p>Test content %1% more test content</p>');
 
-    }//end testRemoveKeywordClassNames()
+    }//end testRemovingClass()
 
 
     /**
-     * Test that classes using keyword names can be formatted.
+     * Test that you can bold formating to content that has classes applied using keywords.
      *
      * @return void
      */
-    public function testFormattingKeywordClassNames()
+    public function testApplingBoldToContentUsingKeywordClassNames()
     {
-        // Test bold
+        // Test using inline toolbar
         $this->useTest(3);
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.RIGHT');
-
-        for ($i = 0; $i < 13; $i++) {
-            $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        }
-
-        $this->clickTopToolbarButton('bold', NULL);
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('bold');
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'));
+        $this->assertHTMLMatch('<p>Test content <strong><span class="((prop:className))">%1%</span></strong> more content %2%</p>');
+        $this->assertRawHTMLMatch('<p>Test content <strong><span class="replaced-className" data-viper-class="((prop:className))">%1%</span></strong> more content %2%</p>');
 
-        $this->assertHTMLMatch('<p>%1% <strong><span class="footnote-ref ((prop:className)) ((prop:className))">Test content.</span></strong> %2%</p>');
-        $this->assertRawHTMLMatch('<p>%1% <strong><span class="footnote-ref replaced-className replaced-className" data-viper-class="footnote-ref ((prop:className)) ((prop:className))">Test content.</span></strong> %2%</p>');
-
-        // Test for remove format
-        $this->moveToKeyword(1, 'right');
-        sleep(1);
-        $this->sikuli->keyDown('Key.RIGHT');
-
-        for ($i = 0; $i < 13; $i++) {
-            $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        }
-
-        $this->clickTopToolbarButton('removeFormat', NULL);
-        $this->assertTrue($this->topToolbarButtonExists('cssClass', NULL));
-        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', NUll));
-        $this->assertTrue($this->topToolbarButtonExists('bold', NULL));
-
-        // Revert
-        $this->moveToKeyword(1, 'right');
-        sleep(1);
-        $this->sikuli->keyDown('Key.RIGHT');
-
-        for ($i = 0; $i < 13; $i++) {
-            $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        }
-
-        $this->clickInlineToolbarButton('cssClass', NULL);
-        $this->type('footnote-ref ((prop:className)) ((prop:className))');
-        $this->sikuli->KeyDown('Key.ENTER');
-
-        // Test italic
-        $this->moveToKeyword(1, 'right');
-        sleep(1);
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->clickTopToolbarButton('italic', NULL);
+        $this->clickInlineToolbarButton('bold', 'active');
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'));
+        $this->assertHTMLMatch('<p>Test content <span class="((prop:className))">%1%</span> more content %2%</p>');
+        $this->assertRawHTMLMatch('<p>Test content <span class="replaced-className" data-viper-class="((prop:className))">%1%</span> more content %2%</p>');
 
-        $this->assertHTMLMatch('<p>%1% <em><span class="footnote-ref ((prop:className)) ((prop:className))">Test content.</span></em> %2%</p>');
-        $this->assertRawHTMLMatch('<p>%1%<em><span class="footnote-ref replaced-className ((prop:className))" data-viper-attribite-keywords="true" data-viper-class="footnote-ref ((prop:className)) ((prop:className))">Test content.</span></em> %2%</p>');
-
-        // Test for remove format
-        $this->moveToKeyword(1, 'right');
-        sleep(1);
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-
-        $this->clickTopToolbarButton('removeFormat', NULL);
-        $this->assertTrue($this->topToolbarButtonExists('cssClass', NUll));
-        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', NUll));
-        $this->assertTrue($this->topToolbarButtonExists('italic', NULL));
-
-        // Revert
-        $this->moveToKeyword(1, 'right');
-        sleep(1);
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-
-        $this->clickInlineToolbarButton('cssClass', NULL);
-        $this->type('footnote-ref ((prop:className)) ((prop:className))');
-        $this->sikuli->KeyDown('Key.ENTER');
-
-        // Test strikethrough
-        $this->moveToKeyword(1, 'right');
-        sleep(1);
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->clickTopToolbarButton('strikethrough', NULL);
+        // Test using top toolbar
+        $this->clickTopToolbarButton('bold');
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'));
+        $this->assertHTMLMatch('<p>Test content <strong><span class="((prop:className))">%1%</span></strong> more content %2%</p>');
+        $this->assertRawHTMLMatch('<p>Test content <strong><span class="replaced-className" data-viper-class="((prop:className))">%1%</span></strong> more content %2%</p>');
 
-        $this->assertHTMLMatch('<p>%1% <del><span class="footnote-ref ((prop:className)) ((prop:className))">Test content.</span></del> %2%</p>');
-        $this->assertRawHTMLMatch('<p>%1%<del><span class="footnote-ref replaced-className ((prop:className))" data-viper-attribite-keywords="true" data-viper-class="footnote-ref ((prop:className)) ((prop:className))">Test content.</span></del> %2%</p>');
-
-        // Test for remove format
-        $this->moveToKeyword(1, 'right');
-        sleep(1);
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-
-        $this->clickTopToolbarButton('removeFormat', NULL);
-        $this->assertTrue($this->topToolbarButtonExists('cssClass', NUll));
-        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', NUll));
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', NULL));
-
-        // Revert
-        $this->moveToKeyword(1, 'right');
-        sleep(1);
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-
-        $this->clickInlineToolbarButton('cssClass', NULL);
-        $this->type('footnote-ref ((prop:className)) ((prop:className))');
-        $this->sikuli->KeyDown('Key.ENTER');
-
-        // Test superscript
-        $this->moveToKeyword(1, 'right');
-        sleep(1);
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-
-        $this->clickTopToolbarButton('superscript', NULL);
+        $this->clickTopToolbarButton('bold', 'active');
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'));
+        $this->assertHTMLMatch('<p>Test content <span class="((prop:className))">%1%</span> more content %2%</p>');
+        $this->assertRawHTMLMatch('<p>Test content <span class="replaced-className" data-viper-class="((prop:className))">%1%</span> more content %2%</p>');
 
-        $this->assertHTMLMatch('<p>%1% <sup><span class="footnote-ref ((prop:className)) ((prop:className))">Test content.</span></sup> %2%</p>');
-        $this->assertRawHTMLMatch('<p>%1%<sup><span class="footnote-ref replaced-className ((prop:className))" data-viper-attribite-keywords="true" data-viper-class="footnote-ref ((prop:className)) ((prop:className))">Test content.</span></sup> %2%</p>');
-
-        // Test for remove format
-        $this->moveToKeyword(1, 'right');
-        sleep(1);
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-
-        $this->clickTopToolbarButton('removeFormat', NULL);
-        $this->assertTrue($this->topToolbarButtonExists('cssClass', NUll));
-        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', NUll));
-        $this->assertTrue($this->topToolbarButtonExists('superscript', NULL));
-
-        // Revert
-        $this->moveToKeyword(1, 'right');
-        sleep(1);
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-
-        $this->clickInlineToolbarButton('cssClass', NULL);
-        $this->type('footnote-ref ((prop:className)) ((prop:className))');
-        $this->sikuli->KeyDown('Key.ENTER');
-
-        // Test subscript
-        $this->moveToKeyword(1, 'right');
-        sleep(1);
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-
-        $this->clickTopToolbarButton('subscript', NULL);
+        // Test using keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + b');
         $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'));
         $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'));
+        $this->assertHTMLMatch('<p>Test content <strong><span class="((prop:className))">%1%</span></strong> more content %2%</p>');
+        $this->assertRawHTMLMatch('<p>Test content <strong><span class="replaced-className" data-viper-class="((prop:className))">%1%</span></strong> more content %2%</p>');
 
-        $this->assertHTMLMatch('<p>%1% <sub><span class="footnote-ref ((prop:className)) ((prop:className))">Test content.</span></sub> %2%</p>');
-        $this->assertRawHTMLMatch('<p>%1%<sub><span class="footnote-ref replaced-className ((prop:className))" data-viper-attribite-keywords="true" data-viper-class="footnote-ref ((prop:className)) ((prop:className))">Test content.</span></sub> %2%</p>');
+        $this->sikuli->keyDown('Key.CMD + b');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'));
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'));
+        $this->assertHTMLMatch('<p>Test content <span class="((prop:className))">%1%</span> more content %2%</p>');
+        $this->assertRawHTMLMatch('<p>Test content <span class="replaced-className" data-viper-class="((prop:className))">%1%</span> more content %2%</p>');
 
-        // Test for remove format
-        $this->moveToKeyword(1, 'right');
-        sleep(1);
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+    }//end testApplingBoldToContentUsingKeywordClassNames()
 
-        $this->clickTopToolbarButton('removeFormat', NULL);
-        $this->assertTrue($this->topToolbarButtonExists('cssClass', NUll));
-        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', NUll));
-        $this->assertTrue($this->topToolbarButtonExists('subscript', NULL));
-    }//end testFormattingKeywordClassNames()
+
+    /**
+     * Test that you can apply italics to content that has classes applied using keywords.
+     *
+     * @return void
+     */
+    public function testApplingItalicToContentUsingKeywordClassNames()
+    {
+        // Test using inline toolbar
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->clickInlineToolbarButton('italic');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'));
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'));
+        $this->assertHTMLMatch('<p>Test content <em><span class="((prop:className))">%1%</span></em> more content %2%</p>');
+        $this->assertRawHTMLMatch('<p>Test content <em><span class="replaced-className" data-viper-class="((prop:className))">%1%</span></em> more content %2%</p>');
+
+        $this->clickInlineToolbarButton('italic', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'));
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'));
+        $this->assertHTMLMatch('<p>Test content <span class="((prop:className))">%1%</span> more content %2%</p>');
+        $this->assertRawHTMLMatch('<p>Test content <span class="replaced-className" data-viper-class="((prop:className))">%1%</span> more content %2%</p>');
+
+        // Test using top toolbar
+        $this->clickTopToolbarButton('italic');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'));
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'));
+        $this->assertHTMLMatch('<p>Test content <em><span class="((prop:className))">%1%</span></em> more content %2%</p>');
+        $this->assertRawHTMLMatch('<p>Test content <em><span class="replaced-className" data-viper-class="((prop:className))">%1%</span></em> more content %2%</p>');
+
+        $this->clickTopToolbarButton('italic', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'));
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'));
+        $this->assertHTMLMatch('<p>Test content <span class="((prop:className))">%1%</span> more content %2%</p>');
+        $this->assertRawHTMLMatch('<p>Test content <span class="replaced-className" data-viper-class="((prop:className))">%1%</span> more content %2%</p>');
+
+        // Test using keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'));
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'));
+        $this->assertHTMLMatch('<p>Test content <em><span class="((prop:className))">%1%</span></em> more content %2%</p>');
+        $this->assertRawHTMLMatch('<p>Test content <em><span class="replaced-className" data-viper-class="((prop:className))">%1%</span></em> more content %2%</p>');
+
+        $this->sikuli->keyDown('Key.CMD + i');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'));
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'));
+        $this->assertHTMLMatch('<p>Test content <span class="((prop:className))">%1%</span> more content %2%</p>');
+        $this->assertRawHTMLMatch('<p>Test content <span class="replaced-className" data-viper-class="((prop:className))">%1%</span> more content %2%</p>');
+
+    }//end testApplingItalicToContentUsingKeywordClassNames()
+
+
+    /**
+     * Test that you can apply strikethrough to content that has classes applied using keywords.
+     *
+     * @return void
+     */
+    public function testApplingStrikethroughToContentUsingKeywordClassNames()
+    {
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('strikethrough');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'));
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'));
+        $this->assertHTMLMatch('<p>Test content <del><span class="((prop:className))">%1%</span></del> more content %2%</p>');
+        $this->assertRawHTMLMatch('<p>Test content <del><span class="replaced-className" data-viper-class="((prop:className))">%1%</span></del> more content %2%</p>');
+
+        $this->clickTopToolbarButton('strikethrough', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'));
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'));
+        $this->assertHTMLMatch('<p>Test content <span class="((prop:className))">%1%</span> more content %2%</p>');
+        $this->assertRawHTMLMatch('<p>Test content <span class="replaced-className" data-viper-class="((prop:className))">%1%</span> more content %2%</p>');
+
+    }//end testApplingStrikethroughToContentUsingKeywordClassNames()
+
+
+    /**
+     * Test that you can apply subscript to content that has classes applied using keywords.
+     *
+     * @return void
+     */
+    public function testApplingSubscriptToContentUsingKeywordClassNames()
+    {
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('subscript');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'));
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'));
+        $this->assertHTMLMatch('<p>Test content <sub><span class="((prop:className))">%1%</span></sub> more content %2%</p>');
+        $this->assertRawHTMLMatch('<p>Test content <sub><span class="replaced-className" data-viper-class="((prop:className))">%1%</span></sub> more content %2%</p>');
+
+        $this->clickTopToolbarButton('subscript', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'));
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'));
+        $this->assertHTMLMatch('<p>Test content <span class="((prop:className))">%1%</span> more content %2%</p>');
+        $this->assertRawHTMLMatch('<p>Test content <span class="replaced-className" data-viper-class="((prop:className))">%1%</span> more content %2%</p>');
+
+    }//end testApplingSubscriptToContentUsingKeywordClassNames()
+
+
+    /**
+     * Test that you can apply superscript to content that has classes applied using keywords.
+     *
+     * @return void
+     */
+    public function testApplingSuperscriptToContentUsingKeywordClassNames()
+    {
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('superscript');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'));
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'));
+        $this->assertHTMLMatch('<p>Test content <sup><span class="((prop:className))">%1%</span></sup> more content %2%</p>');
+        $this->assertRawHTMLMatch('<p>Test content <sup><span class="replaced-className" data-viper-class="((prop:className))">%1%</span></sup> more content %2%</p>');
+
+        $this->clickTopToolbarButton('superscript', 'active');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass', 'active'));
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass', 'active'));
+        $this->assertHTMLMatch('<p>Test content <span class="((prop:className))">%1%</span> more content %2%</p>');
+        $this->assertRawHTMLMatch('<p>Test content <span class="replaced-className" data-viper-class="((prop:className))">%1%</span> more content %2%</p>');
+
+    }//end testApplingSuperscriptToContentUsingKeywordClassNames()
+
+
+    /**
+     * Test using the remove format icon for content that has classes applied to it.
+     *
+     * @return void
+     */
+    public function testRemoveFormatAndClasses()
+    {
+
+    }//end testRemoveFormatAndClasses()
 
 }
