@@ -217,7 +217,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         sleep(1);
         $this->clickTopToolbarButton('listUL', 'active');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item XAX<br /><ul><li>first sub item</li></ul><p>second sub item XBX</p></li><li>second item XCX</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<br /><ul><li>first sub item</li></ul><p>second sub item %2%</p></li><li>second item %3%</li></ol>');
         $this->clickTopToolbarButton('listUL');
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
         $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<br /><ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ol>');
@@ -225,7 +225,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         //Test unordered sub list with inline toolbar icon
         $this->clickInlineToolbarButton('listUL', 'active');
         $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item XAX<br /><ul><li>first sub item</li></ul><p>second sub item XBX</p></li><li>second item XCX</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<br /><ul><li>first sub item</li></ul><p>second sub item %2%</p></li><li>second item %3%</li></ol>');
         $this->clickInlineToolbarButton('listUL');
         $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
         $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<br /><ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ol>');
@@ -539,11 +539,11 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%</li><li>Accessibility audit report</li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%</li><li>Accessibility audit report</li></ol>');
 
         sleep(1);
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ul></li></ol>');
 
         // Test using top toolbar
         $this->useTest(4);
@@ -551,25 +551,25 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickTopToolbarButton('listOutdent');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%</li><li>Accessibility audit report</li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%</li><li>Accessibility audit report</li></ol>');
 
         sleep(1);
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ul></li></ol>');
 
         // Test using inline toolbar
         $this->useTest(4);
         $this->selectKeyword(2,3);
-        sleep(3);
+        sleep(1);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        sleep(3);
+        sleep(1);
         $this->clickInlineToolbarButton('listOutdent');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%</li><li>Accessibility audit report</li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%</li><li>Accessibility audit report</li></ol>');
 
         sleep(1);
         $this->clickInlineToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ul></li></ol>');
     
         // Test right twice
         // Test using keyboard shortcuts
@@ -602,10 +602,10 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         // Test using inline toolbar
         $this->useTest(4);
         $this->selectKeyword(2,3);
-        sleep(3);
+        sleep(1);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        sleep(3);
+        sleep(1);
         $this->clickInlineToolbarButton('listOutdent');
         sleep(1);
         $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%</li><li>Accessibility audit report</li></ol>');
@@ -628,42 +628,42 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ol><li></li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
 
         $this->selectKeyword(2,3);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<ol><li>Accessibility audit report</li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<br /><ol><li></li><li>Accessibility audit report</li></ol></li></ul>');
 
         sleep(1);
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<ol><li>Accessibility audit report</li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ol><li></li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
 
         // Test using top toolbar
         $this->useTest(3);
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ol><li></li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
 
         $this->selectKeyword(2,3);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickTopToolbarButton('listOutdent');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<ol><li>Accessibility audit report</li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<br /><ol><li></li><li>Accessibility audit report</li></ol></li></ul>');
 
         sleep(1);
         $this->selectKeyword(2,3);
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li>Accessibility audit report</li></ol></li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ol><li></li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
 
         // Test using inline toolbar
         $this->useTest(3);
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ol><li></li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
 
         $this->selectKeyword(2,3);
         sleep(3);
@@ -671,56 +671,56 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         sleep(3);
         $this->clickInlineToolbarButton('listOutdent');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<ol><li>Accessibility audit report</li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<br /><ol><li></li><li>Accessibility audit report</li></ol></li></ul>');
 
         sleep(1);
         $this->selectKeyword(2,3);
         $this->clickInlineToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li>Accessibility audit report</li></ol></li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ol><li></li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
 
         // Test using keyboard shortcuts
         $this->useTest(3);
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ol><li></li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
 
         $this->selectKeyword(2,3);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%</li></ul><p>Accessibility audit report</p>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<br /><ol><li></li><li>Accessibility audit report</li></ol></li></ul>');
 
         sleep(1);
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li></ol></li></ul><p>Accessibility audit report</p>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ol><li></li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
 
         // Test using top toolbar
         $this->useTest(3);
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ol><li></li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
 
         $this->selectKeyword(2,3);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickTopToolbarButton('listOutdent');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%</li></ul><p>Accessibility audit report</p>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<br /><ol><li></li><li>Accessibility audit report</li></ol></li></ul>');
 
         sleep(1);
         $this->selectKeyword(2,3);
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li></ol></li></ul><p>Accessibility audit report</p>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ol><li></li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
 
         // Test using inline toolbar
         $this->useTest(3);
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ol><li></li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
 
         $this->selectKeyword(2,3);
         sleep(3);
@@ -729,12 +729,12 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         sleep(3);
         $this->clickInlineToolbarButton('listOutdent');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%</li></ul><p>Accessibility audit report</p>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<br /><ol><li></li><li>Accessibility audit report</li></ol></li></ul>');
 
         sleep(1);
         $this->selectKeyword(2,3);
         $this->clickInlineToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li></ol></li></ul><p>Accessibility audit report</p>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ol><li></li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
 
     }//end testAddingNewEmptyListItemThenIndentAndOutdentOrderedParentList()
 
@@ -751,42 +751,42 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ul><li></li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
 
         $this->selectKeyword(2,3);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<ul><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<br /><ul><li></li><li>Accessibility audit report</li></ul></li></ol>');
 
         sleep(1);
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<ul><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ul><li></li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
 
         // Test using top toolbar
         $this->useTest(4);
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ul><li></li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
 
         $this->selectKeyword(2,3);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickTopToolbarButton('listOutdent');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<ul><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<br /><ul><li></li><li>Accessibility audit report</li></ul></li></ol>');
 
         sleep(1);
         $this->selectKeyword(2,3);
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li>Accessibility audit report</li></ul></li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ul><li></li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
 
         // Test using inline toolbar
         $this->useTest(4);
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ul><li></li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
 
         $this->selectKeyword(2,3);
         sleep(3);
@@ -794,56 +794,56 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         sleep(3);
         $this->clickInlineToolbarButton('listOutdent');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<ul><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<br /><ul><li></li><li>Accessibility audit report</li></ul></li></ol>');
 
         sleep(1);
         $this->selectKeyword(2,3);
         $this->clickInlineToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li>Accessibility audit report</li></ul></li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ul><li></li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
 
         // Test using keyboard shortcuts
         $this->useTest(4);
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ul><li></li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
 
         $this->selectKeyword(2,3);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%</li></ol><p>Accessibility audit report</p>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<br /><ul><li></li><li>Accessibility audit report</li></ul></li></ol>');
 
         sleep(1);
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li></ul></li></ol><p>Accessibility audit report</p>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ul><li></li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
 
         // Test using top toolbar
         $this->useTest(4);
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ul><li></li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
 
         $this->selectKeyword(2,3);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickTopToolbarButton('listOutdent');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%</li></ol><p>Accessibility audit report</p>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<br /><ul><li></li><li>Accessibility audit report</li></ul></li></ol>');
 
         sleep(1);
         $this->selectKeyword(2,3);
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li></ul></li></ol><p>Accessibility audit report</p>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ul><li></li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
 
         // Test using inline toolbar
         $this->useTest(4);
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ul><li></li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
 
         $this->selectKeyword(2,3);
         sleep(3);
@@ -852,12 +852,12 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         sleep(3);
         $this->clickInlineToolbarButton('listOutdent');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%</li></ol><p>Accessibility audit report</p>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<br /><ul><li></li><li>Accessibility audit report</li></ul></li></ol>');
 
         sleep(1);
         $this->selectKeyword(2,3);
         $this->clickInlineToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li></ul></li></ol><p>Accessibility audit report</p>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ul><li></li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
 
     }//end testAddingNewEmptyListItemThenIndentAndOutdentUnorderedParentList()
 
@@ -875,17 +875,17 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Test content.');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li>Test content.</li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ul><li>Test content.</li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
 
         $this->selectKeyword(2,3);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<br /><ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ol>');
 
         sleep(1);
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
 
         // Test using top toolbar
         $this->useTest(4);
@@ -893,18 +893,18 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Test content.');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li>Test content.</li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ul><li>Test content.</li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
 
         $this->selectKeyword(2,3);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickTopToolbarButton('listOutdent');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<br /><ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ol>');
 
         sleep(1);
         $this->selectKeyword(2,3);
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
 
         // Test using inline toolbar
         $this->useTest(4);
@@ -912,7 +912,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Test content.');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li>Test content.</li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ul><li>Test content.</li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
 
         $this->selectKeyword(2,3);
         sleep(3);
@@ -920,12 +920,12 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         sleep(3);
         $this->clickInlineToolbarButton('listOutdent');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<br /><ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ol>');
 
         sleep(1);
         $this->selectKeyword(2,3);
         $this->clickInlineToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
 
         // Test using keyboard shortcuts
         $this->useTest(4);
@@ -933,18 +933,18 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Test content.');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li>Test content.</li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ul><li>Test content.</li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
 
         $this->selectKeyword(2,3);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<br /><ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ol>');
 
         sleep(1);
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
 
         // Test using top toolbar
         $this->useTest(4);
@@ -952,19 +952,19 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Test content.');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li>Test content.</li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ul><li>Test content.</li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
 
         $this->selectKeyword(2,3);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickTopToolbarButton('listOutdent');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<br /><ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ol>');
 
         sleep(1);
         $this->selectKeyword(2,3);
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
 
         // Test using inline toolbar
         $this->useTest(4);
@@ -972,7 +972,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Test content.');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li>Test content.</li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ul><li>Test content.</li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
 
         $this->selectKeyword(2,3);
         sleep(3);
@@ -981,12 +981,12 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         sleep(3);
         $this->clickInlineToolbarButton('listOutdent');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<br /><ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ol>');
 
         sleep(1);
         $this->selectKeyword(2,3);
         $this->clickInlineToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
 
     }//end testAddingNewListItemThenIndentAndOutdentUnorderedParentList()
 
@@ -1004,17 +1004,17 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Test content.');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li>Test content.</li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ol><li>Test content.</li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
 
         $this->selectKeyword(2,3);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<br /><ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ul>');
 
         sleep(1);
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
 
         // Test using top toolbar
         $this->useTest(3);
@@ -1022,18 +1022,18 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Test content.');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li>Test content.</li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ol><li>Test content.</li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
 
         $this->selectKeyword(2,3);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickTopToolbarButton('listOutdent');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<br /><ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ul>');
 
         sleep(1);
         $this->selectKeyword(2,3);
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
 
         // Test using inline toolbar
         $this->useTest(3);
@@ -1041,7 +1041,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Test content.');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li>Test content.</li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ol><li>Test content.</li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
 
         $this->selectKeyword(2,3);
         sleep(3);
@@ -1049,12 +1049,12 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         sleep(3);
         $this->clickInlineToolbarButton('listOutdent');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<br /><ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ul>');
 
         sleep(1);
         $this->selectKeyword(2,3);
         $this->clickInlineToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
 
         // Test using keyboard shortcuts
         $this->useTest(3);
@@ -1062,18 +1062,18 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Test content.');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li>Test content.</li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ol><li>Test content.</li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
 
         $this->selectKeyword(2,3);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<br /><ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ul>');
 
         sleep(1);
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
 
         // Test using top toolbar
         $this->useTest(3);
@@ -1081,19 +1081,19 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Test content.');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li>Test content.</li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ol><li>Test content.</li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
 
         $this->selectKeyword(2,3);
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
         $this->clickTopToolbarButton('listOutdent');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<br /><ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ul>');
 
         sleep(1);
         $this->selectKeyword(2,3);
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
 
         // Test using inline toolbar
         $this->useTest(3);
@@ -1101,7 +1101,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Test content.');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li>Test content.</li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ol><li>Test content.</li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
 
         $this->selectKeyword(2,3);
         sleep(3);
@@ -1110,12 +1110,12 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         sleep(3);
         $this->clickInlineToolbarButton('listOutdent');
         sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<br /><ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ul>');
 
         sleep(1);
         $this->selectKeyword(2,3);
         $this->clickInlineToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
+        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<br /><ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
 
     }//end testAddingNewListItemThenIndentAndOutdentOrderedParentList()
 
@@ -1134,14 +1134,14 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li></ul><p>List %1% item here..</p><ul><li>Sub %2% list item</li></ul><ul><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ul>');
 
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..</li><li>Sub %2% list item</li></ul><ul><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ul>');
 
         $this->selectKeyword(3, 4);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..</li><li>Sub %2% list item</li></ul><p>List %3% item here..</p><ul><li>Sub %4% list item</li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li></ul><p>List %3% item here..</p><ul><li>Sub %4% list item</li></ul>');
 
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..</li><li>Sub %2% list item</li><li>List %3% item here..</li><li>Sub %4% list item</li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ul>');
 
         // Test using top toolbar
         $this->useTest(5);
@@ -1151,14 +1151,14 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
 
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..</li><li>Sub %2% list item</li></ul><ul><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ul>');
 
         $this->selectKeyword(3, 4);
         $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..</li><li>Sub %2% list item</li></ul><p>List %3% item here..</p><ul><li>Sub %4% list item</li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li></ul><p>List %3% item here..</p><ul><li>Sub %4% list item</li></ul>');
 
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..</li><li>Sub %2% list item</li><li>List %3% item here..</li><li>Sub %4% list item</li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ul>');
 
         // Test using inline toolbar
         $this->useTest(5);
@@ -1189,14 +1189,14 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li></ol><p>List %1% item here..</p><ol><li>Sub %2% list item</li></ol><ol><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
 
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..</li><li>Sub %2% list item</li></ol><ol><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
+        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
 
         $this->selectKeyword(3, 4);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..</li><li>Sub %2% list item</li></ol><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
+        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li></ol><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
 
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..</li><li>Sub %2% list item</li><li>List %3% item here..</li><li>Sub %4% list item</li></ul>');
+        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
 
         // Test using top toolbar
         $this->useTest(6);
@@ -1206,14 +1206,14 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
 
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..</li><li>Sub %2% list item</li></ol><ol><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
+        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
 
         $this->selectKeyword(3, 4);
         $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..</li><li>Sub %2% list item</li></ol><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
+        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li></ol><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
 
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..</li><li>Sub %2% list item</li><li>List %3% item here..</li><li>Sub %4% list item</li></ul>');
+        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
 
         // Test using inline toolbar
         $this->useTest(6);
@@ -1242,14 +1242,14 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li></ul><p>List %1% item here..</p><ol><li>Sub %2% list item</li></ol><ul><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ul>');
 
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..</li></ul><ol><li>Sub %2% list item</li></ol><ul><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ul>');
 
         $this->selectKeyword(3, 4);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..</li></ul><ol><li>Sub %2% list item</li></ol><p>List %3% item here..</p><ul><li>Sub %4% list item</li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li></ul><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
 
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..</li></ul><ol><li>Sub %2% list item</li><li>List %3% item here..</li></ol><ul><li>Sub %4% list item</li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ul>');
 
         // Test using top toolbar
         $this->useTest(7);
@@ -1259,14 +1259,14 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
 
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..</li></ul><ol><li>Sub %2% list item</li></ol><ul><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ul>');
 
         $this->selectKeyword(3, 4);
         $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..</li></ul><ol><li>Sub %2% list item</li></ol><p>List %3% item here..</p><ul><li>Sub %4% list item</li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li></ul><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
 
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..</li></ul><ol><li>Sub %2% list item</li><li>List %3% item here..</li></ol><ul><li>Sub %4% list item</li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ul>');
 
         // Test using inline toolbar
         $this->useTest(7);
@@ -1277,7 +1277,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         $this->useTest(7);
         $this->selectKeyword(3, 4);
         $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li></ul><p>List %3% item here..</p><ul><li>Sub %4% list item</li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li></ul><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
     }//end testIndentAndOutdentUnorderedListItemToPTag()
 
 
@@ -1349,14 +1349,14 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li></ul><p>List %1% item here..</p><ol><li>Sub %2% list item</li></ol><ul><li>List %3% item here.. <ul><li>Sub %4% list item</li></ul></li></ul>');
 
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..</li></ul><ol><li>Sub %2% list item</li></ol><ul><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ul>');
 
         $this->selectKeyword(3, 4);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..</li></ul><ol><li>Sub %2% list item</li></ol><p>List %3% item here..</p><ul><li>Sub %4% list item</li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li></ul><p>List %3% item here..</p><ul><li>Sub %4% list item</li></ul>');
 
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..</li></ul><ol><li>Sub %2% list item</li><li>List %3% item here..</li></ol><ul><li>Sub %4% list item</li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ul>');
 
         // Test using top toolbar
         $this->useTest(9);
@@ -1366,14 +1366,14 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
 
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..</li></ul><ol><li>Sub %2% list item</li></ol><ul><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ul>');
 
         $this->selectKeyword(3, 4);
         $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..</li></ul><ol><li>Sub %2% list item</li></ol><p>List %3% item here..</p><ul><li>Sub %4% list item</li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li></ul><p>List %3% item here..</p><ul><li>Sub %4% list item</li></ul>');
 
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..</li></ul><ol><li>Sub %2% list item</li><li>List %3% item here..</li></ol><ul><li>Sub %4% list item</li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ul>');
 
         // Test using inline toolbar
         $this->useTest(9);
@@ -1399,40 +1399,40 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         $this->useTest(10);
         $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li></ol><p>List %1% item here..</p><ul><li>Sub %2% list item</li></ul><ol><li>List %3% item here.. <ol><li>Sub %4% list item</li></ol></li></ol>');
+        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li></ol><p>List %1% item here..</p><ul><li>Sub %2% list item</li></ul><ol><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
 
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..</li></ol><ul><li>Sub %2% list item</li></ul><ol><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
+        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
 
         $this->selectKeyword(3, 4);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..</li></ol><ul><li>Sub %2% list item</li></ul><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
+        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li></ol><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
 
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..</li></ol><ul><li>Sub %2% list item</li><li>List %3% item here..</li></ul><ol><li>Sub %4% list item</li></ol>');
+        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
 
         // Test using top toolbar
         $this->useTest(10);
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li></ol><p>List %1% item here..</p><ul><li>Sub %2% list item</li></ul><ol><li>List %3% item here.. <ol><li>Sub %4% list item</li></ol></li></ol>');
+        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li></ol><p>List %1% item here..</p><ul><li>Sub %2% list item</li></ul><ol><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
 
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..</li></ol><ul><li>Sub %2% list item</li></ul><ol><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
+        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
 
         $this->selectKeyword(3, 4);
         $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..</li></ol><ul><li>Sub %2% list item</li></ul><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
+        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li></ol><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
 
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..</li></ol><ul><li>Sub %2% list item</li><li>List %3% item here..</li></ul><ol><li>Sub %4% list item</li></ol>');
+        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
 
         // Test using inline toolbar
         $this->useTest(10);
         $this->selectKeyword(1, 2);
         $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li></ol><p>List %1% item here..</p><ul><li>Sub %2% list item</li></ul><ol><li>List %3% item here.. <ol><li>Sub %4% list item</li></ol></li></ol>');
+        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li></ol><p>List %1% item here..</p><ul><li>Sub %2% list item</li></ul><ol><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
 
         $this->useTest(10);
         $this->selectKeyword(3, 4);
