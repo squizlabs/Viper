@@ -475,7 +475,13 @@ function useTest(id)
     viper.cleanDOM(contentElement);
 
     viper.getHistoryManager().clear();
-    viper.getHistoryManager().add();
+    var replacementPlugin = viper.getPluginManager().getPlugin('ViperReplacementPlugin');
+    replacementPlugin.showReplacements(
+        null,
+        function () {
+            viper.getHistoryManager().add();
+        }
+    );
 
 }
 
