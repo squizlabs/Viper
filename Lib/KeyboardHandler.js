@@ -935,10 +935,11 @@
                 }
             }//end if
 
+            var firstBlock = null;
             if (ViperUtil.isTag(endNode, 'li') === true && endNode === startNode && endNode.firstChild === null) {
-                var firstBlock = endNode;
+                firstBlock = endNode;
             } else {
-                var firstBlock = ViperUtil.getFirstBlockParent(endNode);
+                firstBlock = ViperUtil.getFirstBlockParent(endNode);
             }
 
             if (range.collapsed === true
@@ -975,11 +976,7 @@
                             this.splitList(firstBlock);
                             this._viper.contentChanged();
                             return false;
-                        } else if (ViperUtil.isBrowser('chrome') === true
-                            || ViperUtil.isBrowser('safari') === true
-                            || ViperUtil.isBrowser('msie') === true
-                            || ViperUtil.isBrowser('edge') === true
-                        ) {
+                        } else {
                             handleEnter = true;
                             removeFirstBlock = true;
                         }
@@ -1017,7 +1014,6 @@
                             removeFirstBlock = true;
                         } else {
                             if (firstBlockTagName === 'li') {
-                                if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true || ViperUtil.isBrowser('msie') === true || ViperUtil.isBrowser('edge') === true) {
                                     var parentListItem = ViperUtil.getFirstBlockParent(firstBlock.parentNode);
                                     if (parentListItem && ViperUtil.isTag(parentListItem, 'li') === true) {
                                         newList = document.createElement('li');
@@ -1047,7 +1043,6 @@
                                         this._viper.contentChanged();
                                         return false;
                                     }
-                                }
 
                                 // Need to move rest of the list items to a new
                                 // list.
@@ -1472,7 +1467,7 @@
                 && range.endOffset === startNode.data.length
                 && startNode.nextSibling
                 && ViperUtil.isTag(startNode.nextSibling, 'br')
-                && (!startNode.nextSibling.nextSibling || ViperUtil.isTag(startNode.nextSibling.nextSibling, 'br') === false)
+                && (ViperUtil.isText(startNode.nextSibling.nextSibling, true) === true)
             ) {
                 // Handle XAX*<br>XBX<br>XCX.
                 // Pressing enter changes the content to: <p>XAX</p>*XBX<br>XCX.
