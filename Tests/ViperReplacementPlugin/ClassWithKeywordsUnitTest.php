@@ -468,4 +468,23 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
 
     }//end testApplingSuperscriptToContentUsingKeywordClassNames()
 
+
+    /**
+     * Test remove format with a keyword class
+     *
+     * @return void
+     */
+    public function testRemoveFormat()
+    {
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('removeFormat');
+        sleep(1);
+
+        $this->assertHTMLMatch('<p>Test content %1% more content %2%</p>');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'The class icon should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'The class icon should not be active');
+
+    }//end testRemoveFormat()
+
 }
