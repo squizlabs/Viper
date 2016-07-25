@@ -329,6 +329,7 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
         // Test from right of keyword with arrow keys
         $this->moveToKeyword(2, 'left');
         $this->sikuli->keyDown('Key.LEFT');
+        sleep(1);
         $this->sikuli->keyDown('Key.LEFT + Key.SHIFT');
         sleep(1);
         $this->assertEquals($this->replaceKeywords('Viper'), $this->getSelectedText(), 'Keyword should be selected');
