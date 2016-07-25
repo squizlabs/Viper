@@ -13,7 +13,7 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
      */
     public function testKeywordsReplaced()
     {
-        $this->useTest(5);
+        $this->useTest(4);
         $this->clickKeyword(1);
         sleep(1);
         $raw = $this->getRawHtml();
@@ -27,62 +27,6 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
 
 
     /**
-     * Test that keywords can have formats removed with remove format key applied.
-     *
-     * @return void
-     */
-    public function testRemoveFormatOnKeywords()
-    {
-        // Test on italic
-        $this->useTest(3);
-        $this->moveToKeyword(1 , 'right');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.RIGHT + Key.SHIFT');
-        sleep(1);
-        $this->clickTopToolbarButton('removeFormat', NULL);
-        $this->assertHTMLMatch('<p>%1% ((prop:productName))</p><p>%2% <strong>((prop:productName))</strong></p><p>%3% <del>((prop:productName))</del></p><p>%4% <sub>((prop:productName))</sub></p><p>%5% <sup>((prop:productName))</sup></p>');
-        $this->assertRawHTMLMatch('<p>%1% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%2% <strong><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></strong></p><p>%3% <del><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></del></p><p>%4% <sub><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></sub></p><p>%5% <sup><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></sup></p>');
-
-        // Test on bold
-        $this->moveToKeyword(2 , 'right');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        sleep(1);
-        $this->clickTopToolbarButton('removeFormat', NULL);
-        $this->assertHTMLMatch('<p>%1% ((prop:productName))</p><p>%2% ((prop:productName))</p><p>%3% <del>((prop:productName))</del></p><p>%4% <sub>((prop:productName))</sub></p><p>%5% <sup>((prop:productName))</sup></p>');
-        $this->assertRawHTMLMatch('<p>%1% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%2% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%3% <del><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></del></p><p>%4% <sub><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></sub></p><p>%5% <sup><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></sup></p>');
-
-        // Test on strikethrough
-        $this->moveToKeyword(3 , 'right');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        sleep(1);
-        $this->clickTopToolbarButton('removeFormat', NULL);
-        $this->assertHTMLMatch('<p>%1% ((prop:productName))</p><p>%2% ((prop:productName))</p><p>%3% ((prop:productName))</p><p>%4% <sub>((prop:productName))</sub></p><p>%5% <sup>((prop:productName))</sup></p>');
-        $this->assertRawHTMLMatch('<p>%1% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%2% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%3% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%4% <sub><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></sub></p><p>%5% <sup><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></sup></p>');
-
-        // Test on subscript
-        $this->moveToKeyword(4 , 'right');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        sleep(1);
-        $this->clickTopToolbarButton('removeFormat', NULL);
-        $this->assertHTMLMatch('<p>%1% ((prop:productName))</p><p>%2% ((prop:productName))</p><p>%3% ((prop:productName))</p><p>%4% ((prop:productName))</p><p>%5% <sup>((prop:productName))</sup></p>');
-        $this->assertRawHTMLMatch('<p>%1% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%2% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%3% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%4% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%5% <sup><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></sup></p>');
-
-        // Test on subscript
-        $this->moveToKeyword(5 , 'right');
-        $this->sikuli->keyDown('Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        sleep(1);
-        $this->clickTopToolbarButton('removeFormat', NULL);
-        $this->assertHTMLMatch('<p>%1% ((prop:productName))</p><p>%2% ((prop:productName))</p><p>%3% ((prop:productName))</p><p>%4% ((prop:productName))</p><p>%5% ((prop:productName))</p>');
-        $this->assertRawHTMLMatch('<p>%1% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%2% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%3% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%4% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p><p>%5% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></p>');
-
-    }//end testRemoveFormatOnKeywords()
-
-
-    /**
      * Test that keywords can have content around it and be edited.
      *
      * @return void
@@ -91,7 +35,7 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
     {
 
         // Test before keyword at the start of a paragraph
-        $this->useTest(4);
+        $this->useTest(3);
         $this->moveToKeyword(1, 'left');
         sleep(1);
         for ($i = 0; $i < 6; $i++) {
@@ -274,7 +218,7 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
     public function testDeletingKeywords()
     {
         // Test using backspace on a keyword at the start of a paragraph
-        $this->useTest(8);
+        $this->useTest(7);
         $this->clickKeyword(1);
         sleep(2);
         $this->moveToKeyword(1, 'left');
@@ -330,37 +274,39 @@ class Viper_Tests_ViperReplacementPlugin_ViperReplacementUnitTest extends Abstra
     
 
     /**
-     * Test that selections with keywords can be edited.
+     * Test that selection is mainted when removing formating.
      *
      * @return void
      */
-    public function testRetainSelectionWithOneWordNotKeyword()
+    public function testSelectionWhenUsingRemoveFormat()
     {
-        $this->useTest(6);
-        $this->clickKeyword(1);
+        // Test when selecting keyword
+        $this->useTest(5, 1);
+        $this->clickKeyword(5);
         sleep(1);
-        $this->selectKeyword(2);
         $this->clickTopToolbarButton('removeFormat');
-        $this->assertEquals($this->replaceKeywords('%2%'), $this->getSelectedText(), '%2% should be selected');
+        $this->assertEquals($this->replaceKeywords('%5%'), $this->getSelectedText(), '%5% should be selected');
+        $this->assertHTMLMatch('<p><strong>Test %1% content </strong>((prop:viperKeyword))<strong> more test content</strong></p>');
+        $this->assertRawHTMLMatch('<p><strong>Test %1% content</strong><span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span><strong> more test content</strong></p>');
 
-    }//end testRetainSelectionWithOneWordNotKeyword()
-
-
-    /**
-     * Test that selections with keywords can be edited.
-     *
-     * @return void
-     */
-    public function testRetainSelectionWithParagraphNotKeyword()
-    {
-        $this->useTest(6);
-        $this->clickKeyword(1);
+        // Test when selecting content within a paragraph that has a keyword
+        $this->useTest(5);
+        $this->selectKeyword(1);
         sleep(1);
-        $this->selectKeyword(1, 3);
         $this->clickTopToolbarButton('removeFormat');
-        $this->assertEquals($this->replaceKeywords('%1% Test content Viper more test content %2% still test content. %3%'), $this->getSelectedText(), 'First line should be selected');
+        $this->assertEquals($this->replaceKeywords('%1%'), $this->getSelectedText(), '%5% should be selected');
+        $this->assertHTMLMatch('<p><strong>Test</strong>%1%<strong> content ((prop:viperKeyword)) more test content</strong></p>');
+        $this->assertRawHTMLMatch('<p><strong>Test</strong>%1%<strong> content<span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span> more test content</strong></p>');
 
-    }//end testRetainSelectionWithParagraphNotKeyword()
+        // Test when selecting whole paragraph
+        $this->useTest(5);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(0);
+        sleep(1);
+        $this->clickTopToolbarButton('removeFormat');
+        $this->assertEquals($this->replaceKeywords('Test %1% content %5% more test content'), $this->getSelectedText(), 'Paragraph should be selected');
+
+    }//end testSelectionWhenUsingRemoveFormat()
 
 
     /**
