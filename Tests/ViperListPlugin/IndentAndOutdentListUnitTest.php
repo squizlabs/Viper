@@ -124,16 +124,18 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
         $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
 
         //Test ordered list using icons
-        $this->useTest(2);
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
-        $this->assertHTMLMatch('<p>Ordered List:</p><p>%1% first item</p><p>second item %2%</p><p>third %3% item</p>');
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
-        $this->assertHTMLMatch('<p>Ordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
+        foreach ($this->getTestMethods(FALSE) as $method) {
+            $this->useTest(2);
+            $this->selectKeyword(2);
+            $this->selectInlineToolbarLineageItem(0);
+            $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+            $this->doAction($method, 'listOutdent');
+            $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+            $this->assertHTMLMatch('<p>Ordered List:</p><p>%1% first item</p><p>second item %2%</p><p>third %3% item</p>');
+            $this->clickTopToolbarButton('listIndent');
+            $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+            $this->assertHTMLMatch('<p>Ordered List:</p><ul><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></ul>');
+        }
 
         //Test ordered list using keyboard shortcuts
         $this->useTest(2);
@@ -1410,141 +1412,48 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
      */
     public function testUlSubListItemWithEmptySubListAndLiOfNextListItem()
     {
-        // Create blank third level list and test using keyboard shortcuts
-        $this->useTest(5);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertEquals('<h2>Meh</h2><ul><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test %3%<ul><li>&nbsp;</li></ul></li><li>Accessibility audit report %4%</li></ul></li></ul>', $this->getHtmllWithBlankLiTags());
+        foreach ($this->getTestMethods() as $method) {
+            // Create blank third level list and test using keyboard shortcuts
+            $this->useTest(5);
+            $this->moveToKeyword(3, 'right');
+            $this->sikuli->keyDown('Key.ENTER');
+            $this->sikuli->keyDown('Key.TAB');
+            $this->assertEquals('<h2>Meh</h2><ul><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test %3%<ul><li>&nbsp;</li></ul></li><li>Accessibility audit report %4%</li></ul></li></ul>', $this->getHtmllWithBlankLiTags());
 
-        $this->moveToKeyword(2, 'left');
+            $this->moveToKeyword(2, 'left');
 
-        for ($i = 0; $i < 14; $i++) {
-            $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+            for ($i = 0; $i < 14; $i++) {
+                $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+            }
+
+            // Outdent once so the parent and following list item get added to the top level list.
+            $this->doAction($method, 'listOutdent');
+
+            $this->assertEquals('<h2>Meh</h2><ul><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% test %3%<ul><li>&nbsp;</li><li>Accessibility audit report %4%</li></ul></li></ul>', $this->getHtmllWithBlankLiTags());
+            $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+
+            // Outdent again so parent and following list items are removed from the list.
+            $this->doAction($method, 'listOutdent');
+
+            $this->assertEquals('<h2>Meh</h2><ul><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li></ul><p>%2% test %3%</p><ul><li>&nbsp;</li><li>Accessibility audit report %4%</li></ul>', $this->getHtmllWithBlankLiTags());
+
+            $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+
+            // Indent once so items are added back to list
+            $this->doAction($method, 'listIndent');
+            $this->assertEquals('<h2>Meh</h2><ul><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% test %3%<ul><li>&nbsp;</li><li>Accessibility audit report %4%</li></ul></li></ul>', $this->getHtmllWithBlankLiTags());
+            $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+
+            // Indent again so items are added back to sub list
+            $this->doAction($method, 'listIndent');
+            $this->assertEquals('<h2>Meh</h2><ul><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test %3%<ul><li>&nbsp;</li><li>Accessibility audit report %4%</li></ul></li></ul></li></ul>', $this->getHtmllWithBlankLiTags());
+            $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+
+            // Indent again so items are added to the third level list
+            $this->doAction($method, 'listIndent');
+            $this->assertEquals('<h2>Meh</h2><ul><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages<ul><li>%2% test %3%<ul><li>&nbsp;</li><li>Accessibility audit report %4%</li></ul></li></ul></li></ul></li></ul>', $this->getHtmllWithBlankLiTags());
+            $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
         }
-
-        // Outdent once so the parent and following list item get added to the top level list
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertEquals('<h2>Meh</h2><ul><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% test %3%<ul><li>&nbsp;</li></ul></li><li>Accessibility audit report %4%</li></ul>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-
-        // Outdent again so parent and following list items are removed from the list
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-
- // FAILS HERE BECAUSE THERE ARE EMPTY LIST TAGS AT THE END OF THE CONTENT
-       // $this->assertEquals('<h2>Meh</h2><ul><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li></ul><p>%2% test %3%</p><ul><li>&nbsp;</li></ul><p>Accessibility audit report %4%</p>', $this->getHtmllWithBlankLiTags());
-
-// FAILS HERE BECAUSE THE LIST ICONS ARE NOT ENABLED
-        //$this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-
-        // Indent once so items are added back to list
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertEquals('<h2>Meh</h2><ul><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% test %3%<ul><li>&nbsp;</li></ul></li><li>Accessibility audit report %4%</li></ul>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-
-        // Indent again so items are added back to sub list
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertEquals('<h2>Meh</h2><ul><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test %3%<ul><li>&nbsp;</li></ul></li><li>Accessibility audit report %4%</li></ul></li></ul>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-
-        // Indent again so items are added to the third level list
-
-// FAIL HERE BECAUSE ONLY %2% test %3% is indented not all selected items. Not sure if what I have in the assert is correc though
-       /* $this->sikuli->keyDown('Key.TAB');
-        $this->assertEquals('<h2>Meh</h2><ul><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages<li>%2% test %3%<ul><li>&nbsp;</li></ul></li><li>Accessibility audit report %4%</li></ul></li></ul></li></ul>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);*/
-
-        // Create blank third level list and test using inline toolbar
-        $this->useTest(5);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertEquals('<h2>Meh</h2><ul><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test %3%<ul><li>&nbsp;</li></ul></li><li>Accessibility audit report %4%</li></ul></li></ul>', $this->getHtmllWithBlankLiTags());
-
-        $this->moveToKeyword(2, 'left');
-
-        for ($i = 0; $i < 14; $i++) {
-            $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        }
-
-        // Outdent once so the parent and following list item get added to the top level list
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertEquals('<h2>Meh</h2><ul><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% test %3%<ul><li>&nbsp;</li></ul></li><li>Accessibility audit report %4%</li></ul>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-
-        // Outdent again so parent and following list items are removed from the list
-        $this->clickInlineToolbarButton('listOutdent');
-
- // FAILS HERE BECAUSE THERE ARE EMPTY LIST TAGS AT THE END OF THE CONTENT
-        //$this->assertEquals('<h2>Meh</h2><ul><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li></ul><p>%2% test %3%</p><ul><li>&nbsp;</li></ul><p>Accessibility audit report %4%</p>', $this->getHtmllWithBlankLiTags());
-
-// FAILS HERE BECAUSE THE LIST ICONS ARE NOT ENABLED
-        //$this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-
-        // Indent once so items are added back to list. Need to use top toolbar as icon is not in the inline toolbar.
-
-// PRESS TAB FOR NOW BECAUSE ICON IS NOT ENABLED
-        $this->sikuli->keyDown('Key.TAB');
-        //$this->clickTopToolbarButton('listIndent');
-        $this->assertEquals('<h2>Meh</h2><ul><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% test %3%<ul><li>&nbsp;</li></ul></li><li>Accessibility audit report %4%</li></ul>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-
-        // Indent again so items are added back to sub list
-        $this->clickInlineToolbarButton('listIndent');
-        $this->assertEquals('<h2>Meh</h2><ul><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test %3%<ul><li>&nbsp;</li></ul></li><li>Accessibility audit report %4%</li></ul></li></ul>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-
-// FAIL HERE BECAUSE ONLY %2% test %3% is indented not all selected items. Not sure if what I have in the assert is correc though
-        // Indent again so items are added to the third level list
-        /*$this->clickInlineToolbarButton('listIndent');
-        $this->assertEquals('<h2>Meh</h2><ul><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages<li>%2% test %3%<ul><li>&nbsp;</li></ul></li><li>Accessibility audit report %4%</li></ul></li></ul></li></ul>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);*/
-
-        // Create blank third level list and test using top toolbar
-        $this->useTest(5);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertEquals('<h2>Meh</h2><ul><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test %3%<ul><li>&nbsp;</li></ul></li><li>Accessibility audit report %4%</li></ul></li></ul>', $this->getHtmllWithBlankLiTags());
-
-        $this->moveToKeyword(2, 'left');
-
-        for ($i = 0; $i < 14; $i++) {
-            $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        }
-
-        // Outdent once so the parent and following list item get added to the top level list
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertEquals('<h2>Meh</h2><ul><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% test %3%<ul><li>&nbsp;</li></ul></li><li>Accessibility audit report %4%</li></ul>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-
-        // Outdent again so parent and following list items are removed from the list
-        $this->clickTopToolbarButton('listOutdent');
-
- // FAILS HERE BECAUSE THERE ARE EMPTY LIST TAGS AT THE END OF THE CONTENT
-        //$this->assertEquals('<h2>Meh</h2><ul><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li></ul><p>%2% test %3%</p><ul><li>&nbsp;</li></ul><p>Accessibility audit report %4%</p>', $this->getHtmllWithBlankLiTags());
-
-// FAILS HERE BECAUSE THE LIST ICONS ARE NOT ENABLED
-        //$this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-
-        // Indent once so items are added back to list.
-
-// PRESS TAB FOR NOW BECAUSE ICON IS NOT ENABLED
-        $this->sikuli->keyDown('Key.TAB');
-        //$this->clickTopToolbarButton('listIndent');
-        $this->assertEquals('<h2>Meh</h2><ul><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% test %3%<ul><li>&nbsp;</li></ul></li><li>Accessibility audit report %4%</li></ul>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-
-        // Indent again so items are added back to sub list
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertEquals('<h2>Meh</h2><ul><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test %3%<ul><li>&nbsp;</li></ul></li><li>Accessibility audit report %4%</li></ul></li></ul>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-
-// FAIL HERE BECAUSE ONLY %2% test %3% is indented not all selected items. Not sure if what I have in the assert is correc though
-        // Indent again so items are added to the third level list
-        /*$this->clickTopToolbarButton('listIndent');
-        $this->assertEquals('<h2>Meh</h2><ul><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages<li>%2% test %3%<ul><li>&nbsp;</li></ul></li><li>Accessibility audit report %4%</li></ul></li></ul></li></ul>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);*/
 
     }//end testUlSubListItemWithEmptySubListAndLiOfNextListItem()
 
@@ -1554,131 +1463,48 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
      *
      * @return void
      */
-    public function testOlSubListItemWithStartOfEmptySubList()
+    public function testUlSubListItemWithEmptySubListAndLiOfNextListItem2()
     {
-        // Create blank third level list and test using keyboard shortcuts
-        $this->useTest(6);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertEquals('<h2>Meh</h2><ol><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test %3%<ol><li>&nbsp;</li></ol></li><li>Accessibility audit report %4%</li></ol></li></ol>', $this->getHtmllWithBlankLiTags());
+        foreach ($this->getTestMethods() as $method) {
+            // Create blank third level list and test using keyboard shortcuts
+            $this->useTest(6);
+            $this->moveToKeyword(3, 'right');
+            $this->sikuli->keyDown('Key.ENTER');
+            $this->sikuli->keyDown('Key.TAB');
+            $this->assertEquals('<h2>Meh</h2><ol><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test %3%<ol><li>&nbsp;</li></ol></li><li>Accessibility audit report %4%</li></ol></li></ol>', $this->getHtmllWithBlankLiTags());
 
-        $this->moveToKeyword(2, 'left');
+            $this->moveToKeyword(2, 'left');
 
-        // Use foreach so the selection works in ie
-        for ($i = 0; $i < 13; $i++) {
-            $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        }
+            // Use foreach so the selection works in ie
+            for ($i = 0; $i < 13; $i++) {
+                $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+            }
 
-        // Outdent once so the parent gets added to the top level list
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertEquals('<h2>Meh</h2><ol><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% test %3%<ol><li>&nbsp;</li><li>Accessibility audit report %4%</li></ol></li></ol>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+            // Outdent once so the parent gets added to the top level list.
+            $this->doAction($method, 'listOutdent');
+            $this->assertEquals('<h2>Meh</h2><ol><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% test %3%<ol><li>&nbsp;</li><li>Accessibility audit report %4%</li></ol></li></ol>', $this->getHtmllWithBlankLiTags());
+            $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
-        // Outdent again so parent is removed from the list
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertEquals('<h2>Meh</h2><ol><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li></ol><p>%2% test %3%</p><ol><li>&nbsp;</li><li>Accessibility audit report %4%</li></ol>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+            // Outdent again so parent is removed from the list
+            $this->doAction($method, 'listOutdent');
+            $this->assertEquals('<h2>Meh</h2><ol><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li></ol><p>%2% test %3%</p><ol><li>&nbsp;</li><li>Accessibility audit report %4%</li></ol>', $this->getHtmllWithBlankLiTags());
+            $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
 
-        // Indent once paragraph is added back to the top list
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertEquals('<h2>Meh</h2><ol><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% test %3%<ol><li>&nbsp;</li><li>Accessibility audit report %4%</li></ol></li></ol>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+            // Indent once paragraph is added back to the top list
+            $this->doAction($method, 'listIndent');
+            $this->assertEquals('<h2>Meh</h2><ol><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% test %3%<ol><li>&nbsp;</li><li>Accessibility audit report %4%</li></ol></li></ol>', $this->getHtmllWithBlankLiTags());
+            $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
-        // Indent again so parent is added back to second level list
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertEquals('<h2>Meh</h2><ol><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test %3%<ol><li>&nbsp;</li><li>Accessibility audit report %4%</li></ol></li></ol></li></ol>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+            // Indent again so parent is added back to second level list
+            $this->doAction($method, 'listIndent');
+            $this->assertEquals('<h2>Meh</h2><ol><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test %3%<ol><li>&nbsp;</li><li>Accessibility audit report %4%</li></ol></li></ol></li></ol>', $this->getHtmllWithBlankLiTags());
+            $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
 
-// FAILS HERE BECAUSE IT ONLY INDENTS THE %2% test %3% LIST ITEM
-
-        // Indent again so parent is moved to the third level
-      /*  $this->sikuli->keyDown('Key.TAB');
-        $this->assertEquals('<h2>Meh</h2><ol><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages<ol><li>%2% test %3%<ol><li>&nbsp;</li><li>Accessibility audit report %4%</li></ol></li></ol></li></ol></li></ol>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);*/
-
-        // Create blank third level list and test using inline toolbar
-        $this->useTest(6);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertEquals('<h2>Meh</h2><ol><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test %3%<ol><li>&nbsp;</li></ol></li><li>Accessibility audit report %4%</li></ol></li></ol>', $this->getHtmllWithBlankLiTags());
-
-        $this->moveToKeyword(2, 'left');
-
-        // Use foreach so the selection works in ie
-        for ($i = 0; $i < 13; $i++) {
-            $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        }
-
-        // Outdent once so the parent gets added to the top level list
-        sleep(1);
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertEquals('<h2>Meh</h2><ol><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% test %3%<ol><li>&nbsp;</li><li>Accessibility audit report %4%</li></ol></li></ol>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-
-        // Outdent again so parent is removed from the list
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertEquals('<h2>Meh</h2><ol><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li></ol><p>%2% test %3%</p><ol><li>&nbsp;</li><li>Accessibility audit report %4%</li></ol>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-
-        // Indent once paragraph is added back to the top list. Use the top toolbar icon as it doesn't appear in the inline toolbar.
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertEquals('<h2>Meh</h2><ol><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% test %3%<ol><li>&nbsp;</li><li>Accessibility audit report %4%</li></ol></li></ol>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-
-        // Indent again so parent is added back to second level list
-        $this->clickInlineToolbarButton('listIndent');
-        $this->assertEquals('<h2>Meh</h2><ol><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test %3%<ol><li>&nbsp;</li><li>Accessibility audit report %4%</li></ol></li></ol></li></ol>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-
-// FAILS HERE BECAUSE IT ONLY INDENTS THE %2% test %3% LIST ITEM
-
-        // Indent again so parent is moved to the third level
-       /* $this->clickInlineToolbarButton('listIndent');
-        $this->assertEquals('<h2>Meh</h2><ol><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages<ol><li>%2% test %3%<ol><li>&nbsp;</li><li>Accessibility audit report %4%</li></ol></li></ol></li></ol></li></ol>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);*/
-
-        // Create blank third level list and test using top toolbar
-        $this->useTest(6);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertEquals('<h2>Meh</h2><ol><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test %3%<ol><li>&nbsp;</li></ol></li><li>Accessibility audit report %4%</li></ol></li></ol>', $this->getHtmllWithBlankLiTags());
-
-        $this->moveToKeyword(2, 'left');
-
-        // Use foreach so the selection works in ie
-        for ($i = 0; $i < 13; $i++) {
-            $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        }
-
-        // Outdent once so the parent gets added to the top level list
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertEquals('<h2>Meh</h2><ol><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% test %3%<ol><li>&nbsp;</li><li>Accessibility audit report %4%</li></ol></li></ol>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-
-        // Outdent again so parent is removed from the list
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertEquals('<h2>Meh</h2><ol><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li></ol><p>%2% test %3%</p><ol><li>&nbsp;</li><li>Accessibility audit report %4%</li></ol>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-
-        // Indent once paragraph is added back to the top list.
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertEquals('<h2>Meh</h2><ol><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% test %3%<ol><li>&nbsp;</li><li>Accessibility audit report %4%</li></ol></li></ol>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect(TURE, 'active', TRUE, TRUE);
-
-        // Indent again so parent is added back to second level list
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertEquals('<h2>Meh</h2><ol><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test %3%<ol><li>&nbsp;</li><li>Accessibility audit report %4%</li></ol></li></ol></li></ol>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-
-// FAILS HERE BECAUSE IT ONLY INDENTS THE %2% test %3% LIST ITEM
-
-        // Indent again so parent is moved to the third level
-        /*$this->clickTopToolbarButton('listIndent');
-        $this->assertEquals('<h2>Meh</h2><ol><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages<ol><li>%2% test %3%<ol><li>&nbsp;</li><li>Accessibility audit report %4%</li></ol></li></ol></li></ol></li></ol>', $this->getHtmllWithBlankLiTags());
-        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);*/
+            // Indent again so parent is moved to the third level
+            $this->doAction($method, 'listIndent');
+            $this->assertEquals('<h2>Meh</h2><ol><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages<ol><li>%2% test %3%<ol><li>&nbsp;</li><li>Accessibility audit report %4%</li></ol></li></ol></li></ol></li></ol>', $this->getHtmllWithBlankLiTags());
+            $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        }//end foreach
 
     }//end testOlSubListItemWithStartOfEmptySubList()
 

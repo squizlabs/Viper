@@ -113,6 +113,27 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     private static $_CommandDirection = null;
 
     /**
+     * The list of testing methods.
+     *
+     * @var string
+     */
+    private $_methods = array();
+
+    /**
+     * List of toolbar button shortcuts.
+     *
+     * @var string
+     */
+    private $_buttonShortcuts = array(
+                                 'bold'         => 'Key.CMD + b',
+                                 'italic'       => 'Key.CMD + b',
+                                 'listOutdent'  => 'Key.SHIFT + Key.TAB',
+                                 'listIndent'   => 'Key.TAB',
+                                 'historyUndo'  => 'Key.CMD + z',
+                                 'historyRedo'  => 'Key.CMD + Key.SHIFT + z',
+                                );
+
+    /**
      * Location and name of the test template.
      *
      * @var string
@@ -1057,6 +1078,88 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         }
 
     }//end useTest()
+
+
+    /**
+     * Returns the list of methods to test.
+     *
+     * @param boolean $topToolbar    True if the top toolbar should be tested.
+     * @param boolean $inlineToolbar True if the inline toolbar should be tested.
+     * @param boolean $shortcuts     True if the button shortcut should be tested.
+     *
+     * @return array
+     */
+    public function getTestMethods($topToolbar=TRUE, $inlineToolbar=TRUE, $shortcut=TRUE)
+    {
+        $this->_methods = array();
+        if ($topToolbar === TRUE) {
+            $this->_methods[] = 'topToolbar';
+        }
+
+        if ($inlineToolbar === TRUE) {
+            $this->_methods[] = 'inlineToolbar';
+        }
+
+        if ($shortcut === TRUE) {
+            $this->_methods[] = 'shortcut';
+        }
+
+        return $this->_methods;
+
+    }//end getTestMethods()
+
+
+    /**
+     * Triggers the specified action.
+     *
+     * @param string  $method     The method to use to trigger the action, e.g. inlineToolbar.
+     * @param string  $buttonIcon The name of the button.
+     * @param string  $state      The name of the button state (active, selected).
+     * @param boolean $isText     If TRUE then the button is a text button (i.e. no icon).
+     * @param boolean $forceJSPos If isText option is set to TRUE and this is set to TRUE then
+     *                            image will not be used.
+     *
+     * @return void
+     */
+    public function doAction($method, $buttonIcon, $state=null, $isText=false, $forceJSPos=false)
+    {
+        switch ($method) {
+            case 'topToolbar':
+                $this->clickTopToolbarButton($buttonIcon, $state, $isText, $forceJSPos);
+            break;
+
+            case 'inlineToolbar':
+                usleep(100000);
+                $this->clickInlineToolbarButton($buttonIcon, $state, $isText, $forceJSPos);
+            break;
+
+            case 'shortcut':
+                $shortcut = $this->getShortcutForButton($buttonIcon);
+                if ($shortcut !== null) {
+                    $this->sikuli->keyDown($shortcut);
+                }
+            break;
+        }
+
+    }//end doAction()
+
+
+    /**
+     * Returns the keyboard shortcut for specified toolbar button.
+     *
+     * @param string  $buttonIcon The name of the button.
+     *
+     * @return string
+     */
+    public function getShortcutForButton($buttonIcon)
+    {
+        if (isset($this->_buttonShortcuts[$buttonIcon]) === true) {
+            return $this->_buttonShortcuts[$buttonIcon];
+        }
+
+        return null;
+
+    }//end getShortcutForButton()
 
 
     /**
