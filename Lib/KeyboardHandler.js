@@ -3241,8 +3241,8 @@
                 // element is a part of another block element. If it is then
                 // join these elements.
                 var prevSelectable = range.getPreviousContainer(range.startContainer, null, true, true);
-                var currentParent  = ViperUtil.getFirstBlockParent(range.startContainer);
-                var prevParent     = ViperUtil.getFirstBlockParent(prevSelectable);
+                var currentParent  = ViperUtil.getFirstBlockParent(range.startContainer, null, true);
+                var prevParent     = ViperUtil.getFirstBlockParent(prevSelectable, null, true);
 
                 if (!currentParent) {
                     currentParent = range.startContainer;
