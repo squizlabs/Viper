@@ -58,7 +58,7 @@
             });
 
             this.viper.registerCallback('Viper:mouseUp', 'ViperInlineToolbarPlugin', function(e) {
-                if (ViperUtil.isChildOf(self.viper._mouseDownEvent.target, self._toolbarElement) === true) {
+                if (self.viper._mouseDownEvent && ViperUtil.isChildOf(self.viper._mouseDownEvent.target, self._toolbarElement) === true) {
                     // The mouse down event happened in the Inline Toolbar so do not fire mouse up event.
                     return false;
                 }
