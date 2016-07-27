@@ -679,7 +679,15 @@
             } else if (ViperUtil.isKey(e, 'SHIFT+ENTER') === true) {
                 return this.handleSoftEnter(e);
             } else if (ViperUtil.isKey(e, 'DELETE') === true || ViperUtil.isKey(e, 'BACKSPACE') === true) {
-                return this.handleDelete(e);
+                var retval = this.handleDelete(e);
+                if (retval !== false) {
+                    var self = this;
+                    setTimeout(function() {
+                        self._viper.fireNodesChanged();
+                    }, 5);
+                }
+
+                return retval;
             }
 
             var returnValue = this._viper.fireCallbacks('Viper:keyDown', e);
