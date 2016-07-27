@@ -665,6 +665,7 @@
         {
             var range = this.viper.getViperRange().cloneRange();
             range     = this.viper.adjustRange(range);
+            var self  = this;
 
             var nodeSelection = range.getNodeSelection();
             var startNode     = null;
@@ -719,8 +720,8 @@
                 var continueElement = null;
                 if (!bookmark || elem !== bookmark.start) {
                     if (elem.nodeType === ViperUtil.ELEMENT_NODE) {
-                        ViperUtil.removeAttr(elem, 'style');
-                        ViperUtil.removeAttr(elem, 'class');
+                        self.viper.removeAttribute(elem, 'style');
+                        self.viper.removeAttribute(elem, 'class');
 
                         if (elem.attributes.length === 0 && ViperUtil.isTag(elem, 'span') === true) {
                             // Set the continueElement to be the first child of this element as it will be removed and

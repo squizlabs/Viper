@@ -1330,6 +1330,18 @@
         },
 
         /**
+         * Removes the specified attribute of an element.
+         *
+         * @param {DOMNode} element   The element to remove.
+         * @param {string}  attribute The attribute name.
+         */
+        removeAttribute: function(element, attribute)
+        {
+            return this.setAttribute(element, attribute, '', false);
+
+        },
+
+        /**
          * Find the next good position for the caret outside of the sourceElement.
          *
          * This method should be used when removing an element where caret is in.
