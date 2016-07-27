@@ -1090,6 +1090,26 @@
             ) {
                 this._nodeSel.node = range.endContainer.previousSibling;
                 return this._nodeSel.node;
+            } else if (ViperUtil.isText(startNode) === true
+                && range.startOffset === startNode.data.length
+                && ViperUtil.isElement(range.endContainer) === true
+                && ViperUtil.isText(range.endContainer.childNodes[range.endOffset]) === true
+                && ViperUtil.isElement(startNode.nextSibling) === true
+                && startNode.nextSibling.nextSibling === range.endContainer.childNodes[range.endOffset]
+            ) {
+                // Case: <p>text [<span>text</span>] more text.
+                // range endContainer actually is the P instead of the ' more text' text node.
+                this._nodeSel.node = startNode.nextSibling;
+                return this._nodeSel.node;
+            } else if (ViperUtil.isText(startNode) === true
+                && range.startOffset === 0
+                && ViperUtil.isElement(range.endContainer) === true
+                && !startNode.previousSibling
+                && ViperUtil.isText(range.endContainer.childNodes[range.endOffset]) === true
+                && startNode.parentNode.nextSibling === range.endContainer.childNodes[range.endOffset]
+            ) {
+                this._nodeSel.node = startNode.parentNode;
+                return this._nodeSel.node;
             }
 
             // We may need to adjust the "startNode" depending on its offset.

@@ -20,7 +20,7 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
         $this->sikuli->KeyDown('Key.ENTER');
         $this->assertEquals('((prop:className))', $this->getFieldValue('Class'), 'Class field should not be empty');
         $this->assertHTMLMatch('<p>Test content <span class="((prop:className))">%1%</span> more test content</p>');
-        $this->assertRawHTMLMatch('<p>Test content<span class="replaced-className" data-viper-attribite-keywords="true" data-viper-class="((prop:className))">%1%</span> more test content</p>');
+        $this->assertRawHTMLMatch('<p>Test content<span class="replaced-className" data-viper-attribute-keywords="true" data-viper-class="((prop:className))">%1%</span> more test content</p>');
 
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('cssClass', 'active');
@@ -38,7 +38,7 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
         $this->sikuli->KeyDown('Key.ENTER');
         $this->assertEquals('((prop:className))', $this->getFieldValue('Class'), 'Class field should not be empty');
         $this->assertHTMLMatch('<p>Test content <span class="((prop:className))">%1%</span> more test content</p>');
-        $this->assertRawHTMLMatch('<p>Test content<span class="replaced-className" data-viper-attribite-keywords="true" data-viper-class="((prop:className))">%1%</span> more test content</p>');
+        $this->assertRawHTMLMatch('<p>Test content<span class="replaced-className" data-viper-attribute-keywords="true" data-viper-class="((prop:className))">%1%</span> more test content</p>');
 
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('cssClass', 'active');
@@ -66,7 +66,7 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
         $this->sikuli->KeyDown('Key.ENTER');
         $this->assertEquals('test ((prop:className))', $this->getFieldValue('Class'), 'Class field should not be empty');
         $this->assertHTMLMatch('<p>Test content <span class="test ((prop:className))">%1%</span> more test content</p>');
-        $this->assertRawHTMLMatch('<p>Test content<span class="test replaced-className" data-viper-attribite-keywords="true" data-viper-class="test ((prop:className))">%1%</span> more test content</p>');
+        $this->assertRawHTMLMatch('<p>Test content<span class="test replaced-className" data-viper-attribute-keywords="true" data-viper-class="test ((prop:className))">%1%</span> more test content</p>');
 
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('cssClass', 'active');
@@ -85,7 +85,7 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
         $this->assertEquals('((prop:className)) test', $this->getFieldValue('Class'), 'Class field should not be empty');
         sleep(1);
         $this->assertHTMLMatch('<p>Test content <span class="((prop:className)) test">%1%</span> more test content</p>');
-        $this->assertRawHTMLMatch('<p>Test content<span class="replaced-className test" data-viper-attribite-keywords="true" data-viper-class="((prop:className)) test">%1%</span> more test content</p>');
+        $this->assertRawHTMLMatch('<p>Test content<span class="replaced-className test" data-viper-attribute-keywords="true" data-viper-class="((prop:className)) test">%1%</span> more test content</p>');
 
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('cssClass', 'active');
@@ -115,7 +115,7 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
         $this->selectStyles(array('ordered-list'));
         $this->sikuli->KeyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>Test content <span class="((prop:className)) ordered-list">%1%</span> more test content</p>');
-        $this->assertRawHTMLMatch('<p>Test content<span class="replaced-className ordered-list" data-viper-attribite-keywords="true" data-viper-class="((prop:className)) ordered-list">%1%</span> more test content</p>');
+        $this->assertRawHTMLMatch('<p>Test content<span class="replaced-className ordered-list" data-viper-attribute-keywords="true" data-viper-class="((prop:className)) ordered-list">%1%</span> more test content</p>');
 
         $this->selectKeyword(1);
         $this->clickInlineToolbarButton('cssClass', 'active');
@@ -135,7 +135,7 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
         $this->selectStyles(array('ordered-list'));
         $this->sikuli->KeyDown('Key.ENTER');
         $this->assertHTMLMatch('<p>Test content <span class="((prop:className)) ordered-list">%1%</span> more test content</p>');
-        $this->assertRawHTMLMatch('<p>Test content<span class="replaced-className ordered-list" data-viper-attribite-keywords="true" data-viper-class="((prop:className)) ordered-list">%1%</span> more test content</p>');
+        $this->assertRawHTMLMatch('<p>Test content<span class="replaced-className ordered-list" data-viper-attribute-keywords="true" data-viper-class="((prop:className)) ordered-list">%1%</span> more test content</p>');
 
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('cssClass', 'active');
@@ -165,7 +165,7 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
         $this->sikuli->KeyDown('Key.ENTER');
         $this->assertEquals('((prop:className))', $this->getFieldValue('Class'), 'Class field should not be empty');
         $this->assertHTMLMatch('<p>Test %1% content <span class="((prop:className))">((prop:viperKeyword))</span> more test content</p>');
-        $this->assertRawHTMLMatch('<p>Test %1% content <span class="replaced-className" data-viper-attribite-keywords="true" data-viper-class="((prop:className))" data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span> more test content</p>');
+        $this->assertRawHTMLMatch('<p>Test %1% content <span class="replaced-className" data-viper-attribute-keywords="true" data-viper-class="((prop:className))" data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span> more test content</p>');
 
         $this->clickKeyword(5);
         $this->clickInlineToolbarButton('cssClass', 'active');
@@ -173,7 +173,7 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
         $this->sikuli->KeyDown('Key.ENTER');
         $this->assertEquals('', $this->getFieldValue('Class'), 'Class field should not be empty');
         $this->assertHTMLMatch('<p>Test %1% content ((prop:viperKeyword)) more test content</p>');
-        $this->assertRawHTMLMatch('<p>Test %1% content <span class="footnote-ref replaced-className" data-viper-attribite-keywords="true" data-viper-class="footnote-ref ((prop:className))" data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span> more test content</p>');
+        $this->assertRawHTMLMatch('<p>Test %1% content <span class="footnote-ref replaced-className" data-viper-attribute-keywords="true" data-viper-class="footnote-ref ((prop:className))" data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span> more test content</p>');
 
         // Using top toolbar
         $this->useTest(2, 1);
@@ -183,7 +183,7 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
         $this->sikuli->KeyDown('Key.ENTER');
         $this->assertEquals('((prop:className))', $this->getFieldValue('Class'), 'Class field should not be empty');
         $this->assertHTMLMatch('<p>Test %1% content <span class="((prop:className))">((prop:viperKeyword))</span> more test content</p>');
-        $this->assertRawHTMLMatch('<p>Test %1% content <span class="replaced-className" data-viper-attribite-keywords="true" data-viper-class="((prop:className))" data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span> more test content</p>');
+        $this->assertRawHTMLMatch('<p>Test %1% content <span class="replaced-className" data-viper-attribute-keywords="true" data-viper-class="((prop:className))" data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span> more test content</p>');
 
         $this->clickKeyword(5);
         $this->clickTopToolbarButton('cssClass', 'active');
@@ -191,7 +191,7 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
         $this->sikuli->KeyDown('Key.ENTER');
         $this->assertEquals('', $this->getFieldValue('Class'), 'Class field should not be empty');
         $this->assertHTMLMatch('<p>Test %1% content ((prop:viperKeyword)) more test content</p>');
-        $this->assertRawHTMLMatch('<p>Test %1% content <span class="footnote-ref replaced-className" data-viper-attribite-keywords="true" data-viper-class="footnote-ref ((prop:className))" data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span> more test content</p>');
+        $this->assertRawHTMLMatch('<p>Test %1% content <span class="footnote-ref replaced-className" data-viper-attribute-keywords="true" data-viper-class="footnote-ref ((prop:className))" data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span> more test content</p>');
 
     }//end testApplyAndRemoveClassKeywordToKeyword()
 
@@ -211,7 +211,7 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
         $this->sikuli->KeyDown('Key.ENTER');
         $this->assertEquals('test ((prop:className))', $this->getFieldValue('Class'), 'Class field should not be empty');
         $this->assertHTMLMatch('<p>Test %1% content <span class="test ((prop:className))">((prop:viperKeyword))</span> more test content</p>');
-        $this->assertRawHTMLMatch('<p>Test %1% content <span class="test replaced-className" data-viper-attribite-keywords="true" data-viper-class="test ((prop:className))" data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span> more test content</p>');
+        $this->assertRawHTMLMatch('<p>Test %1% content <span class="test replaced-className" data-viper-attribute-keywords="true" data-viper-class="test ((prop:className))" data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span> more test content</p>');
 
         $this->clickKeyword(5);
         $this->clickInlineToolbarButton('cssClass', 'active');
@@ -219,7 +219,7 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
         $this->sikuli->KeyDown('Key.ENTER');
         $this->assertEquals('', $this->getFieldValue('Class'), 'Class field should not be empty');
         $this->assertHTMLMatch('<p>Test %1% content ((prop:viperKeyword)) more test content</p>');
-        $this->assertRawHTMLMatch('<p>Test %1% content <span class="footnote-ref replaced-className" data-viper-attribite-keywords="true" data-viper-class="footnote-ref ((prop:className))" data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span> more test content</p>');
+        $this->assertRawHTMLMatch('<p>Test %1% content <span class="footnote-ref replaced-className" data-viper-attribute-keywords="true" data-viper-class="footnote-ref ((prop:className))" data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span> more test content</p>');
 
         // Using top toolbar
         $this->useTest(2, 1);
@@ -230,7 +230,7 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
         sleep(1);
         $this->assertEquals('((prop:className)) test', $this->getFieldValue('Class'), 'Class field should not be empty');
         $this->assertHTMLMatch('<p>Test %1% content <span class="((prop:className)) test">((prop:viperKeyword))</span> more test content</p>');
-        $this->assertRawHTMLMatch('<p>Test %1% content <span class="replaced-className test" data-viper-attribite-keywords="true" data-viper-class="((prop:className)) test" data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span> more test content</p>');
+        $this->assertRawHTMLMatch('<p>Test %1% content <span class="replaced-className test" data-viper-attribute-keywords="true" data-viper-class="((prop:className)) test" data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span> more test content</p>');
 
         $this->clickKeyword(5);
         $this->clickTopToolbarButton('cssClass', 'active');
@@ -238,7 +238,7 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
         $this->sikuli->KeyDown('Key.ENTER');
         $this->assertEquals('', $this->getFieldValue('Class'), 'Class field should not be empty');
         $this->assertHTMLMatch('<p>Test %1% content ((prop:viperKeyword)) more test content</p>');
-        $this->assertRawHTMLMatch('<p>Test %1% content <span class="footnote-ref replaced-className" data-viper-attribite-keywords="true" data-viper-class="footnote-ref ((prop:className))" data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span> more test content</p>');
+        $this->assertRawHTMLMatch('<p>Test %1% content <span class="footnote-ref replaced-className" data-viper-attribute-keywords="true" data-viper-class="footnote-ref ((prop:className))" data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span> more test content</p>');
 
     }//end testApplyAndRemoveClassKeywordAndNormalClassToKeyword()
 
@@ -252,45 +252,26 @@ class Viper_Tests_ViperReplacementPlugin_ClassWithKeywordsUnitTest extends Abstr
     {
         $this->setCustomClassStyles();
 
-        // Using inline toolbar
-        $this->useTest(2, 1);
-        $this->clickKeyword(5);
-        $this->clickInlineToolbarButton('cssClass');
-        $this->type('((prop:className))');
-        $this->selectStyles(array('ordered-list'));
-        $this->sikuli->KeyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Test %1% content <span class="((prop:className)) ordered-list">((prop:viperKeyword))</span> more test content</p>');
-        $this->assertRawHTMLMatch('<p>Test %1% content <span class="replaced-className ordered-list" data-viper-attribite-keywords="true" data-viper-class="((prop:className)) ordered-list" data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span> more test content</p>');
+        foreach ($this->getTestMethods(TRUE, TRUE, FALSE) as $method) {
+            $this->useTest(2, 1);
+            $this->clickKeyword(5);
+            $this->doAction($method, 'cssClass');
+            $this->type('((prop:className))');
+            $this->selectStyles(array('ordered-list'));
+            $this->sikuli->KeyDown('Key.ENTER');
+            $this->assertHTMLMatch('<p>Test %1% content <span class="((prop:className)) ordered-list">((prop:viperKeyword))</span> more test content</p>');
+            $this->assertRawHTMLMatch('<p>Test %1% content <span class="replaced-className ordered-list" data-viper-attribute-keywords="true" data-viper-class="((prop:className)) ordered-list" data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span> more test content</p>');
 
-        $this->clickKeyword(5);
-        $this->clickInlineToolbarButton('cssClass', 'active');
-        $selectedStyles = $this->getSelectedStyles();
-        $this->removeStyles($selectedStyles);
-        $this->clearFieldValue('Class');
-        $this->sikuli->KeyDown('Key.ENTER');
-        $this->assertEquals('', $this->getFieldValue('Class'), 'Class field should not be empty');
-        $this->assertHTMLMatch('<p>Test %1% content ((prop:viperKeyword)) more test content</p>');
-        $this->assertRawHTMLMatch('<p>Test %1% content <span class="footnote-ref replaced-className" data-viper-attribite-keywords="true" data-viper-class="footnote-ref ((prop:className))" data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span> more test content</p>');
-
-        // Using top toolbar
-        $this->useTest(2, 1);
-        $this->clickKeyword(5);
-        $this->clickTopToolbarButton('cssClass');
-        $this->type('((prop:className))');
-        $this->selectStyles(array('ordered-list'));
-        $this->sikuli->KeyDown('Key.ENTER');
-        $this->assertHTMLMatch('<p>Test %1% content <span class="((prop:className)) ordered-list">((prop:viperKeyword))</span> more test content</p>');
-        $this->assertRawHTMLMatch('<p>Test %1% content <span class="replaced-className ordered-list" data-viper-attribite-keywords="true" data-viper-class="((prop:className)) ordered-list" data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span> more test content</p>');
-
-        $this->clickKeyword(5);
-        $this->clickTopToolbarButton('cssClass', 'active');
-        $selectedStyles = $this->getSelectedStyles();
-        $this->removeStyles($selectedStyles);
-        $this->clearFieldValue('Class');
-        $this->sikuli->KeyDown('Key.ENTER');
-        $this->assertEquals('', $this->getFieldValue('Class'), 'Class field should not be empty');
-        $this->assertHTMLMatch('<p>Test %1% content ((prop:viperKeyword)) more test content</p>');
-        $this->assertRawHTMLMatch('<p>Test %1% content <span class="footnote-ref replaced-className" data-viper-attribite-keywords="true" data-viper-class="footnote-ref ((prop:className))" data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span> more test content</p>');
+            $this->clickKeyword(5);
+            $this->doAction($method, 'cssClass', 'active');
+            $selectedStyles = $this->getSelectedStyles();
+            $this->removeStyles($selectedStyles);
+            $this->clearFieldValue('Class');
+            $this->sikuli->KeyDown('Key.ENTER');
+            $this->assertEquals('', $this->getFieldValue('Class'), 'Class field should not be empty');
+            $this->assertHTMLMatch('<p>Test %1% content ((prop:viperKeyword)) more test content</p>');
+            $this->assertRawHTMLMatch('<p>Test %1% content <span data-viper-keyword="((prop:viperKeyword))" title="((prop:viperKeyword))">%5%</span> more test content</p>');
+        }
 
     }//end testApplyAndRemoveClassKeywordAndNormalClassToKeyword()
 

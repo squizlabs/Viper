@@ -353,6 +353,21 @@
                 if (ViperUtil.hasAttribute(data.element, cloneName) === true) {
                     ViperUtil.removeAttr(data.element, cloneName);
                 }
+
+                // Check if the data-viper-attribute-keywords attribute needs to be removed if this was the only
+                // keyword attribute on the element.
+                var remove = true;
+                for (var i = 0; i < data.element.attributes.length; i++) {
+                    if (ViperUtil.hasAttribute(data.element, 'data-viper-' + data.element.attributes[i].nodeName) === true) {
+                        remove = false;
+                        break;
+                    }
+                }
+
+                if (remove === true) {
+                    ViperUtil.removeAttr(data.element, 'data-viper-attribute-keywords');
+                }
+
             });
 
             this.viper.addAttributeGetModifier(
@@ -670,7 +685,7 @@
             for (var i = 0; i < elems.length; i++) {
                 for (var j = (elems[i].attributes.length - 1); j >= 0; j--) {
                     var attr = elems[i].attributes[j];
-                    if (attr.nodeName === 'data-viper-attribite-keywords') {
+                    if (attr.nodeName === 'data-viper-attribute-keywords') {
                         // Remove the cloned attribute.
                         ViperUtil.removeAttr(elems[i], attr.nodeName);
                     } else if (attr.nodeName.indexOf('data-viper-') === 0) {
@@ -754,7 +769,7 @@
             var attrRegex = new RegExp(subRegex, 'g');
 
             var regex      = self.getReplacementRegex();
-            if (!regex) {
+            if (!regex || !content) {
                 return keywords;
             }
 
@@ -797,7 +812,7 @@
             parentElem = parentElem || this.viper.getViperElement();
 
             var regex = this.getReplacementRegex();
-            if (!regex) {
+            if (!regex || !parentElem) {
                 return keywords;
             }
 
@@ -959,7 +974,7 @@
             realValue     = realValue.replace(keyword, replacement);
             ViperUtil.attr(element, attribute, realValue);
 
-            ViperUtil.attr(element, 'data-viper-attribite-keywords', 'true');
+            ViperUtil.attr(element, 'data-viper-attribute-keywords', 'true');
 
             return realValue;
 
