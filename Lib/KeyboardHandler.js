@@ -3541,12 +3541,12 @@
                                 if (surroundingParents.length > 0) {
                                     range = this._viper.moveCaretAway(startNode, true);
                                     // Could have ended up as BR.
-                                    var startNode = range.getStartNode();
-                                    if (ViperUtil.isTag(startNode, 'br') === true && ViperUtil.isText(startNode.previousSibling, true) === true) {
-                                        range.setStart(startNode.previousSibling, startNode.previousSibling.data.length);
+                                    var newStartNode = range.getStartNode();
+                                    if (ViperUtil.isTag(newStartNode, 'br') === true && ViperUtil.isText(newStartNode.previousSibling, true) === true) {
+                                        range.setStart(newStartNode.previousSibling, newStartNode.previousSibling.data.length);
                                         range.collapse(true);
                                         ViperSelection.addRange(range);
-                                        ViperUtil.remove(startNode);
+                                        ViperUtil.remove(newStartNode);
                                     }
 
                                     ViperUtil.remove(surroundingParents.pop());
