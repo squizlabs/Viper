@@ -892,9 +892,10 @@
 
                 // Convert this item to a default block tag.
                 var subList = null;
-                var p       = document.createElement('p');
                 var bTag    = this.viper.getDefaultBlockTag();
+                var p       = document.createElement('p');
                 if (bTag !== '') {
+                    p       = document.createElement(bTag);
                     while (li.firstChild) {
                         if (ViperUtil.isTag(li.firstChild, 'ul') === true || ViperUtil.isTag(li.firstChild, 'ol') === true) {
                             // Sub list needs to go after the p tag.

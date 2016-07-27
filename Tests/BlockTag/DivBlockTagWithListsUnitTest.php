@@ -120,39 +120,33 @@ class Viper_Tests_BlockTag_DivBlockTagWithListsUnitTest extends AbstractViperUni
 
         // Test removing the first element from an unordered list
         $this->useTest(2);
-        $this->clickKeyword(1);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->assertHTMLMatch('<div>%1% Test content</div><ul><li>%2% Test content</li><li>%3%</li></ul>');
 
         // Test removing the middle element from an unordered list
-        $this->useTest(2);
-        $this->clickKeyword(2);
+        $this->useTest(2, 2);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->assertHTMLMatch('<ul><li>%1% Test content</li></ul><div>%2% Test content</div><ul><li>%3%</li></ul>');
 
         // Test removing the last element from an unordered list
-        $this->useTest(2);
-        $this->clickKeyword(3);
+        $this->useTest(2, 3);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ul><li>%1% Test content</li><li><div>%2% Test content</div></li></ul>%3%');
+        $this->assertHTMLMatch('<ul><li>%1% Test content</li><li>%2% Test content</li></ul><div>%3%</div>');
 
         // Test removing the first element from an ordered list
         $this->useTest(3);
-        $this->clickKeyword(1);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('%1% Test content<ol><li><div>%2% Test content</div></li><li>%3%</li></ol>');
+        $this->assertHTMLMatch('<div>XAX Test content</div><ol><li>XBX Test content</li><li>XCX</li></ol>');
 
         // Test removing the middle element from an ordered list
-        $this->useTest(3);
-        $this->clickKeyword(2);
+        $this->useTest(3, 2);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
         $this->assertHTMLMatch('<ol><li>%1% Test content</li></ol><div>%2% Test content</div><ol><li>%3%</li></ol>');
 
         // Test removing the last element from an ordered list
-        $this->useTest(2);
-        $this->clickKeyword(3);
+        $this->useTest(3, 3);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ul><li>%1% Test content</li><li>%2% Test content</li></ul><div>%3%</div>');
+        $this->assertHTMLMatch('<ol><li>%1% Test content</li><li>%2% Test content</li></ol><div>%3%</div>');
 
     }//end testRemovingItemsFromList()
 
@@ -184,7 +178,7 @@ class Viper_Tests_BlockTag_DivBlockTagWithListsUnitTest extends AbstractViperUni
         $this->sikuli->keyDown('Key.CMD + z');
         $this->assertHTMLMatch('<ul><li>%1% Test content</li><li>%2% Test content</li><li>%3%</li></ul>');
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        $this->assertHTMLMatch('<ul><li>%1% Test content</li><li>%2% Test content</li><li>%3%</li><li>test</li></ul>');  
+        $this->assertHTMLMatch('<ul><li>%1% Test content</li><li>%2% Test content</li><li>%3%</li><li>test</li></ul>');
 
         // Add a list item to an ordered list
         $this->useTest(3);
