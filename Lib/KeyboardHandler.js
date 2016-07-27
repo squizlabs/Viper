@@ -680,7 +680,7 @@
                 return this.handleSoftEnter(e);
             } else if (ViperUtil.isKey(e, 'DELETE') === true || ViperUtil.isKey(e, 'BACKSPACE') === true) {
                 var retval = this.handleDelete(e);
-                if (retval !== false && this.isBrowser('firefox') === false) {
+                if (retval !== false && ViperUtil.isBrowser('firefox') === false) {
                     var self = this;
                     setTimeout(function() {
                         self._viper.fireNodesChanged();
