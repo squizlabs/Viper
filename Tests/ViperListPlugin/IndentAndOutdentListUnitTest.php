@@ -1440,7 +1440,7 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
             $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
 
             // Indent once so items are added back to list
-            $this->doAction($method, 'listIndent');
+            $this->doTopToolbarAction($method, 'listIndent');
             $this->assertEquals('<h2>Meh</h2><ul><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% test %3%<ul><li>&nbsp;</li><li>Accessibility audit report %4%</li></ul></li></ul>', $this->getHtmllWithBlankLiTags());
             $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
 

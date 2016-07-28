@@ -1145,6 +1145,38 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
 
     /**
+     * Triggers the specified action, if the inlineToolbar button does not exist then it will fallback to Top Toolbar.
+     *
+     * @param string  $method     The method to use to trigger the action, e.g. inlineToolbar.
+     * @param string  $buttonIcon The name of the button.
+     * @param string  $state      The name of the button state (active, selected).
+     * @param boolean $isText     If TRUE then the button is a text button (i.e. no icon).
+     * @param boolean $forceJSPos If isText option is set to TRUE and this is set to TRUE then
+     *                            image will not be used.
+     *
+     * @return void
+     */
+    public function doTopToolbarAction($method, $buttonIcon, $state=null, $isText=false, $forceJSPos=false)
+    {
+        switch ($method) {
+            case 'inlineToolbar':
+                usleep(50000);
+                if ($this->inlineToolbarButtonExists($buttonIcon, $state, $isText) === false) {
+                    $this->clickTopToolbarButton($buttonIcon, $state, $isText, $forceJSPos);
+                } else {
+                    $this->clickInlineToolbarButton($buttonIcon, $state, $isText, $forceJSPos);
+                }
+            break;
+
+            default:
+                $this->doAction($method, $buttonIcon, $state, $isText, $forceJSPos);
+            break;
+        }
+
+    }//end doAction()
+
+
+    /**
      * Returns the keyboard shortcut for specified toolbar button.
      *
      * @param string  $buttonIcon The name of the button.
