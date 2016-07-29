@@ -5,7 +5,6 @@ require_once 'AbstractViperListPluginUnitTest.php';
 class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperListPluginUnitTest
 {
 
-
 	/**
      * Test adding a new list item to the parent list
      *
@@ -13,25 +12,29 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
      */
     public function testAddingNewItemsToParentList()
     {
-        //Test unordered list
-        $this->useTest(1);
-        $this->moveToKeyword(1, 'right');
-		$this->sikuli->keyDown('Key.ENTER');
-		$this->type('new item');
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('third item');
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%</li><li>new item<ol><li>first sub item</li><li>second sub item %2%</li></ol></li><li>second item %3%</li><li>third item</li></ul>');
+        foreach (array('ol', 'ul') as $listType) {
+                if ($listType === 'ul') {
+                    $this->useTest(1);
+                    $ulStatus = 'active';
+                    $olStatus = TRUE;
+                    $subListType = 'ol';
+                } else {
+                    $this->useTest(2);
+                    $ulStatus = TRUE;
+                    $olStatus = 'active';
+                    $subListType = 'ul';
+                }
 
-        //Test ordered list
-        $this->useTest(2);
-        $this->moveToKeyword(1, 'right');
-		$this->sikuli->keyDown('Key.ENTER');
-		$this->type('new item');
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('third item');
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%</li><li>new item<ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li><li>third item</li></ol>');
+            $this->moveToKeyword(1, 'right');
+    		$this->sikuli->keyDown('Key.ENTER');
+    		$this->type('new item');
+            $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
+            $this->moveToKeyword(3, 'right');
+            $this->sikuli->keyDown('Key.ENTER');
+            $this->type('third item');
+            $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>First item %1%</li><li>new item<'.$subListType.'><li>first sub item</li><li>second sub item %2%</li></'.$subListType.'></li><li>second item %3%</li><li>third item</li></'.$listType.'>');
+        }
 
     }//end testAddingNewItemsToParentList()
 

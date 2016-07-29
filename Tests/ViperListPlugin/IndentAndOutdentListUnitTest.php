@@ -516,7 +516,7 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
 
 
     /**
-     * Test selecting one list item, pressing shift + right once and outdenting and indenting content
+     * Test selecting one list item, pressing shift + right once to select the start of the next list item and outdenting and indenting content
      *
      * @return void
      */
@@ -663,22 +663,18 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
 
                 // Indent once paragraph is added back to the top list
                 $this->doTopToolbarAction($method, 'listIndent');
-                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1% <'.$listType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$listType.'></li><li>%2% test</li><li></li><li>Accessibility audit report</li></'.$listType.'>');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$listType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$listType.'></li><li>%2% test<'.$listType.'><li></li><li>Accessibility audit report</li></'.$listType.'></li></'.$listType.'>');
                 $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
 
-// FAILS HERE. Need to talk to sertan. the blank li shoud also go in i think
-
                 // Indent again so parent is added back to second level list
-                /*$this->doAction($method, 'listIndent');
+                $this->doAction($method, 'listIndent');
                 $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1% <'.$listType.'><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test<'.$listType.'><li>&nbsp;</li><li>Accessibility audit report</li></'.$listType.'></li></'.$listType.'></li></'.$listType.'>');
-                $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);*/
-
-        // FAILS HERE BECAUSE IT ONLY INDENTS THE %2% test %3% LIST ITEM
+                $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
 
                 // Indent again so parent is moved to the third level
-              /*  $this->doAction($method, 'listIndent');
-                $this->assertEquals('<h2>Meh</h2><'.$listType.'><li>%1% <'.$listType.'><li>Audit of Homepage and 6 Section Landing pages<'.$listType.'><li>%2% test<'.$listType.'><li>&nbsp;</li><li>Accessibility audit report %4%</li></'.$listType.'></li></'.$listType.'></li></'.$listType.'></li></'.$listType.'>', $this->getHtmllWithBlankLiTags());
-                $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);*/
+                $this->doAction($method, 'listIndent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1% <'.$listType.'><li>Audit of Homepage and 6 Section Landing pages<'.$listType.'><li>%2% test <'.$listType.'><li>&nbsp;</li><li>Accessibility audit report</li></'.$listType.'></li></'.$listType.'></li></'.$listType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatus, $olStatus, FALSE, TRUE);
             }
         }
 
