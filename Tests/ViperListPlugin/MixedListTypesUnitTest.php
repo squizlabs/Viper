@@ -1295,7 +1295,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li></ol><p>List %1% item here..</p><ul><li>Sub %2% list item</li></ul><ol><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ol>');
 
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..</li></ol><ul><li>Sub %2% list item</li></ul><ol><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ol>');
+        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ol>');
 
         $this->selectKeyword(3, 4);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
@@ -1453,45 +1453,45 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         $this->useTest(11);
         $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li></ul><p>List %1% item here..</p><ol><li>Sub %2% list item</li></ol><ul><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li></ul><p>List %1% item here..</p><ul><li>Sub %2% list item</li></ul><ul><li>List %3% item here.. <ol><li>Sub %4% list item</li></ol></li></ul>');
 
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..</li><li>Sub %2% list item</li></ul><ul><li>List %3% item here.. <ol><li>Sub %4% list item</li></ol></li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ul>');
 
         $this->selectKeyword(3, 4);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..</li><li>Sub %2% list item</li></ul><p>List %3% item here..</p><ul><li>Sub %4% list item</li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li></ul><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
 
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..</li><li>Sub %2% list item</li><li>List %3% item here..</li><li>Sub %4% list item</li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ul>');
 
         // Test using top toolbar
         $this->useTest(11);
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li></ul><p>List %1% item here..</p><ol><li>Sub %2% list item</li></ol><ul><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li></ul><p>List %1% item here..</p><ul><li>Sub %2% list item</li></ul><ul><li>List %3% item here.. <ol><li>Sub %4% list item</li></ol></li></ul>');
 
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..</li><li>Sub %2% list item</li></ul><ul><li>List %3% item here.. <ol><li>Sub %4% list item</li></ol></li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ul>');
 
         $this->selectKeyword(3, 4);
         $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..</li><li>Sub %2% list item</li></ul><p>List %3% item here..</p><ul><li>Sub %4% list item</li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li></ul><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
 
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..</li><li>Sub %2% list item</li><li>List %3% item here..</li><li>Sub %4% list item</li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ul>');
 
         // Test using inline toolbar
         $this->useTest(11);
         $this->selectKeyword(1, 2);
         $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li></ul><p>List %1% item here..</p><ul><li>Sub %2% list item</li></ul><ul><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li></ul><p>List %1% item here..</p><ul><li>Sub %2% list item</li></ul><ul><li>List %3% item here.. <ol><li>Sub %4% list item</li></ol></li></ul>');
 
         $this->useTest(11);
         $this->selectKeyword(3, 4);
         $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here.. <ul><li>Sub %2% list item</li></ul></li></ul><p>List %3% item here..</p><ul><li>Sub %4% list item</li></ul>');
+        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li></ul><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
     }//end testIndentAndOutdentUnorderedWithOrderedSubFirst()
 
 
@@ -1509,14 +1509,14 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
         $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li></ol><p>List %1% item here..</p><ol><li>Sub %2% list item</li></ol><ol><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ol>');
 
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..</li><li>Sub %2% list item</li></ol><ol><li>List %3% item here.. <ul><li>Sub %4% list item</li></ul></li></ol>');
+        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ol>');
 
         $this->selectKeyword(3, 4);
         $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..</li><li>Sub %2% list item</li></ol><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
+        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li></ol><p>List %3% item here..</p><ul><li>Sub %4% list item</li></ul>');
 
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..</li><li>Sub %2% list item</li><li>List %3% item here..</li><li>Sub %4% list item</li></ol>');
+        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ol>');
 
         // Test using top toolbar
         $this->useTest(12);
@@ -1526,25 +1526,25 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
 
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..</li><li>Sub %2% list item</li></ol><ol><li>List %3% item here.. <ul><li>Sub %4% list item</li></ul></li></ol>');
+        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ol>');
 
         $this->selectKeyword(3, 4);
         $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..</li><li>Sub %2% list item</li></ol><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
+        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li></ol><p>List %3% item here..</p><ul><li>Sub %4% list item</li></ul>');
 
         $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..</li><li>Sub %2% list item</li><li>List %3% item here..</li><li>Sub %4% list item</li></ol>');
+        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ol>');
 
         // Test using inline toolbar
         $this->useTest(12);
         $this->selectKeyword(1, 2);
         $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here.. <ol><li>Sub %2% list item</li></ol></li></ol><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
+        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li></ol><p>List %1% item here..</p><ol><li>Sub %2% list item</li></ol><ol><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ol>');
 
         $this->useTest(12);
         $this->selectKeyword(3, 4);
         $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here.. <ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..</li><li>Sub %4% list item</li></ol>');
+        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li></ol><p>List %3% item here..</p><ul><li>Sub %4% list item</li></ul>');
 
     }//end testIndentAndOutdentOrderedWithUnorderedSubFirst()
 
