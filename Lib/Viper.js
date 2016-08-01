@@ -3053,15 +3053,7 @@
                 // Move the range where its suppose to be instead of browser deciding that it should
                 // move the end of range to the begining of the next sibling.
                 if (!endBookmark.previousSibling) {
-                    var node = endBookmark.parentNode.previousSibling;
-                    while (node) {
-                        if (node.nodeType !== Viper.Util.TEXT_NODE || Viper.Util.isBlank(node.data) === false) {
-                            break;
-                        }
-
-                        node = node.previousSibling;
-                    }
-
+                    var node = range.getPreviousContainer(endBookmark, null, true, true);
                     if (node === startBookmark.parentNode) {
                         var lastSelectable = range._getLastSelectableChild(node, null, true);
                         if (lastSelectable) {
@@ -3069,6 +3061,8 @@
                         } else {
                             startBookmark.parentNode.appendChild(endBookmark);
                         }
+                    } else if (node && Viper.Util.isChildOf(node, startBookmark.parentNode) == true) {
+                        Viper.Util.insertAfter(node, endBookmark);
                     }
                 }
 
