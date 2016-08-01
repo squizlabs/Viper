@@ -596,11 +596,7 @@
                 }
 
                 if (ViperUtil.inArray(endNode, elems) === false) {
-                    if ((ViperUtil.isBrowser('chrome') !== true && ViperUtil.isBrowser('safari') !== true)
-                        || (range.endContainer.nodeType !== ViperUtil.ELEMENT_NODE || ViperUtil.isTag(range.endContainer, 'li') === false || range.endOffset > 0)
-                    ) {
-                        elems.push(endNode);
-                    }
+                    elems.push(endNode);
                 }
 
                 var c = elems.length;
