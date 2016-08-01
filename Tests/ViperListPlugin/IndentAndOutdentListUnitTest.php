@@ -28,9 +28,11 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
                 $this->moveToKeyword(2);
                 $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
                 $this->doAction($method, 'listOutdent');
+                sleep(1);
                 $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
                 $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>%1% first item</li></'.$listType.'><p>second item %2%</p><'.$listType.'><li>third %3% item</li></'.$listType.'>');
                 $this->doTopToolbarAction($method, 'listIndent');
+                sleep(1);
                 $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
                 $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>%1% first item</li><li>second item %2%</li><li>third %3% item</li></'.$listType.'>');
             }
@@ -108,7 +110,9 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
                 }
 
                 $this->selectKeyword(2);
+                sleep(1);
                 $this->selectInlineToolbarLineageItem(0);
+                sleep(1);
                 $this->assertIconStatusesCorrect($ulStatus, $olStatus, FALSE, TRUE);
                 $this->doAction($method, 'listOutdent');
                 $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
@@ -416,7 +420,9 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
                 }
 
                 $this->selectKeyword(2);
+                sleep(1);
                 $this->selectInlineToolbarLineageItem(2);
+                sleep(1);
                 $this->doAction($method, 'listOutdent');
                 $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
                 $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>first item</li><li>second item</li><li>first sub item %1%</li><li>second sub item %2%</li><li>third sub item %3%</li><li>third item</li></'.$listType.'>');
@@ -536,31 +542,37 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
                 }
 
                 $this->selectKeyword(2);
+                sleep(1);
                 $this->selectInlineToolbarLineageItem(3);
                 $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
 
                 // Outdent once so list items are at the top level
                 $this->doAction($method, 'listOutdent');
+                sleep(1);
                 $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$listType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$listType.'></li><li>%2% test %3%</li><li>Accessibility audit report %4%</li></'.$listType.'>');
                 $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
 
                 // Outdent again so list items are no longer in list
                 $this->doAction($method, 'listOutdent');
+                sleep(1);
                 $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$listType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$listType.'></li></'.$listType.'><p>%2% test %3%</p><p>Accessibility audit report %4%</p>');
                 $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, FALSE);
 
                 // Indent once so they are back in the list
                 $this->doTopToolbarAction($method, 'listIndent');
+                sleep(1);
                 $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$listType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$listType.'></li><li>%2% test %3%</li><li>Accessibility audit report %4%</li></'.$listType.'>');
                 $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
 
                 // Indent again so they added to the sub list
                 $this->doAction($method, 'listIndent');
+                sleep(1);
                 $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$listType.'><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test %3%</li><li>Accessibility audit report %4%</li></'.$listType.'></li></'.$listType.'>');
                 $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
 
                 // Indent again so a third level list is created
                 $this->doAction($method, 'listIndent');
+                sleep(1);
                 $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$listType.'><li>Audit of Homepage and 6 Section Landing pages<'.$listType.'><li>%2% test %3%</li><li>Accessibility audit report %4%</li></'.$listType.'></li></'.$listType.'></li></'.$listType.'>');
                 $this->assertIconStatusesCorrect($ulStatus, $olStatus, FALSE, TRUE);
             }
@@ -764,26 +776,31 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
 
                 // Outdent once so the parent gets added to the top level list
                 $this->doAction($method, 'listOutdent');
+                sleep(1);
                 $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$listType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$listType.'></li><li>%2% test<'.$listType.'><li>test data %3%</li><li>Accessibility audit report</li></'.$listType.'></li></'.$listType.'>');
                 $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
 
                 // Outdent again so parent is removed from the list
                 $this->doAction($method, 'listOutdent');
+                sleep(1);
                 $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1% <'.$listType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$listType.'></li></'.$listType.'><p>%2% test </p><'.$listType.'><li>test data %3%</li><li>Accessibility audit report</li></'.$listType.'>');
                 $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, FALSE);
 
                 // Indent once paragraph is added back to the top list
                 $this->doTopToolbarAction($method, 'listIndent');
+                sleep(1);
                 $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1% <'.$listType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$listType.'></li><li>%2% test <'.$listType.'><li>test data %3%</li><li>Accessibility audit report</li></'.$listType.'></li></'.$listType.'>');
                 $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
 
                 // Indent again so parent is added back to second level list
                 $this->doAction($method, 'listIndent');
+                sleep(1);
                 $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1% <'.$listType.'><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test <'.$listType.'><li>test data %3%</li><li>Accessibility audit report</li></'.$listType.'></li></'.$listType.'></li></'.$listType.'>');
                 $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
 
                 // Indent again so parent is moved to the third level
                 $this->doAction($method, 'listIndent');
+                sleep(1);
                 $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$listType.'><li>Audit of Homepage and 6 Section Landing pages<'.$listType.'><li>%2% test<'.$listType.'><li>test data %3%</li><li>Accessibility audit report</li></'.$listType.'></li></'.$listType.'></li></'.$listType.'></li></'.$listType.'>');
                 $this->assertIconStatusesCorrect($ulStatus, $olStatus, FALSE, TRUE);
             }
