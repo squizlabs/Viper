@@ -675,17 +675,17 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
 
                 // Indent once paragraph is added back to the top list
                 $this->doTopToolbarAction($method, 'listIndent');
-                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$listType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$listType.'></li><li>%2% test<'.$listType.'><li></li><li>Accessibility audit report</li></'.$listType.'></li></'.$listType.'>');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1% <'.$listType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$listType.'></li><li>%2% test</li><li>&nbsp;</li><li>Accessibility audit report</li></'.$listType.'>');
                 $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
 
                 // Indent again so parent is added back to second level list
                 $this->doAction($method, 'listIndent');
-                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1% <'.$listType.'><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test<'.$listType.'><li>&nbsp;</li><li>Accessibility audit report</li></'.$listType.'></li></'.$listType.'></li></'.$listType.'>');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1% <'.$listType.'><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test</li></'.$listType.'></li><li>&nbsp;</li><li>Accessibility audit report</li></'.$listType.'>');
                 $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
 
                 // Indent again so parent is moved to the third level
                 $this->doAction($method, 'listIndent');
-                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1% <'.$listType.'><li>Audit of Homepage and 6 Section Landing pages<'.$listType.'><li>%2% test <'.$listType.'><li>&nbsp;</li><li>Accessibility audit report</li></'.$listType.'></li></'.$listType.'></li></'.$listType.'></li></'.$listType.'>');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1% <'.$listType.'><li>Audit of Homepage and 6 Section Landing pages<'.$listType.'><li>%2% test</li></'.$listType.'></li></'.$listType.'></li><li>&nbsp;</li><li>Accessibility audit report</li></'.$listType.'>');
                 $this->assertIconStatusesCorrect($ulStatus, $olStatus, FALSE, TRUE);
             }
         }
