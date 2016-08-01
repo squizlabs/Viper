@@ -596,7 +596,17 @@
                 }
 
                 if (ViperUtil.inArray(endNode, elems) === false) {
-                    elems.push(endNode);
+                    if ((ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true)) {
+                        if (range.endContainer.nodeType !== ViperUtil.ELEMENT_NODE || ViperUtil.isTag(range.endContainer, 'li') === false || range.endOffset > 0) {
+                            elems.push(endNode);
+                        }
+                    } else if (range.collapsed === true
+                        || ViperUtil.isText(range.endContainer) !== true
+                        || range.endOffset !== 0
+                        || ViperUtil.isTag(ViperUtil.getFirstBlockParent(range.endContainer), 'li') !== true
+                    ) {
+                        elems.push(endNode);
+                    }
                 }
 
                 var c = elems.length;
