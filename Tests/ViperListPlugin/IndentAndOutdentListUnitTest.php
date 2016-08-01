@@ -715,9 +715,9 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
                     $olStatus = 'active';
                 }
 
-                $this->moveToKeyword(2, 'left');
+                $this->sikuli->tripleClick($this->findKeyword(2));
 
-                for ($i = 0; $i < 10; $i++) {
+                for ($i = 0; $i < 2; $i++) {
                     $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
                 }
 
