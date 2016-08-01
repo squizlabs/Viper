@@ -3050,26 +3050,24 @@
                     }
                 }
 
-                if (Viper.Util.isBrowser('chrome') === true || Viper.Util.isBrowser('safari') === true) {
-                    // Sigh.. Move the range where its suppose to be instead of Webkit deciding that it should
-                    // move the end of range to the begining of the next sibling -.-.
-                    if (!endBookmark.previousSibling) {
-                        var node = endBookmark.parentNode.previousSibling;
-                        while (node) {
-                            if (node.nodeType !== Viper.Util.TEXT_NODE || Viper.Util.isBlank(node.data) === false) {
-                                break;
-                            }
-
-                            node = node.previousSibling;
+                // Move the range where its suppose to be instead of browser deciding that it should
+                // move the end of range to the begining of the next sibling.
+                if (!endBookmark.previousSibling) {
+                    var node = endBookmark.parentNode.previousSibling;
+                    while (node) {
+                        if (node.nodeType !== Viper.Util.TEXT_NODE || Viper.Util.isBlank(node.data) === false) {
+                            break;
                         }
 
-                        if (node === startBookmark.parentNode) {
-                            var lastSelectable = range._getLastSelectableChild(node, null, true);
-                            if (lastSelectable) {
-                                Viper.Util.insertAfter(lastSelectable, endBookmark);
-                            } else {
-                                startBookmark.parentNode.appendChild(endBookmark);
-                            }
+                        node = node.previousSibling;
+                    }
+
+                    if (node === startBookmark.parentNode) {
+                        var lastSelectable = range._getLastSelectableChild(node, null, true);
+                        if (lastSelectable) {
+                            Viper.Util.insertAfter(lastSelectable, endBookmark);
+                        } else {
+                            startBookmark.parentNode.appendChild(endBookmark);
                         }
                     }
                 }

@@ -74,7 +74,7 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
                     $ulStatus = TRUE;
                     $olStatus = 'active';
                 }
-       
+
                 $this->selectKeyword(2);
                 $this->selectInlineToolbarLineageItem(1);
                 $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
@@ -264,7 +264,7 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
     public function testCannotIndentFirstItemInList()
     {
         foreach (array('ol', 'ul') as $listType) {
-            
+
                 if ($listType === 'ul') {
                     $this->useTest(1);
                     $ulStatus = 'active';
@@ -296,7 +296,7 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
     public function testKeepingSelectionAndStylesApplied()
     {
         foreach (array('ol', 'ul') as $listType) {
-            
+
                 if ($listType === 'ul') {
                     $this->useTest(1);
                     $ulStatus = 'active';
@@ -355,7 +355,7 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
     public function testListKeyboardNavForList()
     {
         foreach (array('ol', 'ul') as $listType) {
-            
+
                 if ($listType === 'ul') {
                     $this->useTest(1);
                     $ulStatus = 'active';
@@ -408,7 +408,7 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
     {
         foreach (array('ol', 'ul') as $listType) {
             foreach ($this->getTestMethods(TRUE, TRUE, TRUE) as $method) {
-                
+
                 if ($listType === 'ul') {
                     $this->useTest(3);
                     $ulStatus = 'active';
@@ -431,7 +431,7 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
                 $this->assertIconStatusesCorrect($ulStatus, $olStatus, FALSE, TRUE);
                 $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>first item</li><li>second item<'.$listType.'><li>first sub item %1%</li><li>second sub item %2%</li><li>third sub item %3%</li></'.$listType.'></li><li>third item</li></'.$listType.'>');
             }
-        }  
+        }
 
     }//end testAllSubListItems()
 
@@ -445,7 +445,7 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
     {
         foreach (array('ol', 'ul') as $listType) {
             foreach ($this->getTestMethods(TRUE, TRUE, TRUE) as $method) {
-                
+
                 if ($listType === 'ul') {
                     $this->useTest(3);
                     $ulStatus = 'active';
@@ -478,7 +478,7 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
     {
         foreach (array('ol', 'ul') as $listType) {
             foreach ($this->getTestMethods(TRUE, TRUE, TRUE) as $method) {
-                
+
                 if ($listType === 'ul') {
                     $this->useTest(5);
                     $ulStatus = 'active';
@@ -530,7 +530,7 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
     {
         foreach (array('ol', 'ul') as $listType) {
             foreach ($this->getTestMethods(TRUE, TRUE, TRUE) as $method) {
-                
+
                 if ($listType === 'ul') {
                     $this->useTest(5);
                     $ulStatus = 'active';
@@ -561,19 +561,19 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
                 // Indent once so they are back in the list
                 $this->doTopToolbarAction($method, 'listIndent');
                 sleep(1);
-                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$listType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$listType.'></li><li>%2% test %3%<'.$listType.'><li>Accessibility audit report %4%</li></'.$listType.'></li></'.$listType.'>');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$listType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$listType.'></li><li>%2% test %3%</li><li>Accessibility audit report %4%</li></'.$listType.'>');
                 $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
 
                 // Indent again so they added to the sub list
                 $this->doAction($method, 'listIndent');
                 sleep(1);
-                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$listType.'><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test %3%<'.$listType.'><li>Accessibility audit report %4%</li></'.$listType.'></li></'.$listType.'></li></'.$listType.'>');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$listType.'><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test %3%</li></'.$listType.'></li><li>Accessibility audit report %4%</li></'.$listType.'>');
                 $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
 
                 // Indent again so a third level list is created
                 $this->doAction($method, 'listIndent');
                 sleep(1);
-                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$listType.'><li>Audit of Homepage and 6 Section Landing pages<'.$listType.'><li>%2% test %3%</li><li>Accessibility audit report %4%</li></'.$listType.'></li></'.$listType.'></li></'.$listType.'>');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1% <'.$listType.'><li>Audit of Homepage and 6 Section Landing pages<'.$listType.'><li>%2% test %3%</li></'.$listType.'></li></'.$listType.'></li><li>Accessibility audit report %4%</li></'.$listType.'>');
                 $this->assertIconStatusesCorrect($ulStatus, $olStatus, FALSE, TRUE);
             }
         }
@@ -590,7 +590,7 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
     {
         foreach (array('ol', 'ul') as $listType) {
             foreach ($this->getTestMethods(TRUE, TRUE, TRUE) as $method) {
-                
+
                 if ($listType === 'ul') {
                     $this->useTest(5);
                     $ulStatus = 'active';
@@ -645,7 +645,7 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
     {
         foreach (array('ol', 'ul') as $listType) {
             foreach ($this->getTestMethods(TRUE, TRUE, TRUE) as $method) {
-                
+
                 if ($listType === 'ul') {
                     $this->useTest(7);
                     $ulStatus = 'active';
@@ -704,7 +704,7 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
 
         foreach (array('ol', 'ul') as $listType) {
             foreach ($this->getTestMethods(TRUE, TRUE, TRUE) as $method) {
-                
+
                 if ($listType === 'ul') {
                     $this->useTest(7);
                     $ulStatus = 'active';
@@ -760,7 +760,7 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
     {
         foreach (array('ol', 'ul') as $listType) {
             foreach ($this->getTestMethods(TRUE, TRUE, TRUE) as $method) {
-                
+
                 if ($listType === 'ul') {
                     $this->useTest(9);
                     $ulStatus = 'active';
