@@ -237,6 +237,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         parent::setUp();
 
+        $keepOpen = FALSE;
+        if (getenv('VIPER_TEST_KEEP_BROWSER_OPEN') === 'TRUE') {
+            $keepOpen = TRUE;
+        }
+
         if (self::$_sikuli === null) {
             $browser       = getenv('VIPER_TEST_BROWSER');
             $options       = array(
@@ -249,6 +254,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                                                    'y' => 50,
                                                   ),
                               'fileGroupOwner' => '_www',
+                              'keepOpen'       => $keepOpen,
                              );
             self::$_sikuli = new PHPSikuliBrowser($browser, $options);
         }
