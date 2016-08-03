@@ -51,27 +51,31 @@ abstract class AbstractViperListPluginUnitTest extends AbstractViperUnitTest
 
         $statuses = $this->sikuli->execJS('gListBStatus()');
 
-        if ($statuses['vitp'] !== FALSE) {
-            foreach ($statuses['vitp'] as $btn => $status) {
-                if ($status !== NULL && $$btn === NULL) {
-                    $this->fail('Expected '.$btn.' button to be not visible in inline toolbar.');
-                } else if ($status === 'active' && $$btn !== 'active') {
-                    $this->fail('Expected '.$btn.' button to be active in inline toolbar.');
-                } else if ($status === TRUE && $$btn === FALSE) {
-                    $this->fail('Expected '.$btn.' button to be disabled in inline toolbar.');
-                } else if ($status === FALSE && $$btn === TRUE) {
-                    $this->fail('Expected '.$btn.' button to be enabled in inline toolbar.');
-                }
-            }
-        }
+        $toolbars = array(
+                     'vitp'       => 'Inline Toolbar',
+                     'topToolbar' => 'Top Toolbar',
+                    );
 
-        foreach ($statuses['topToolbar'] as $btn => $status) {
-            if ($status === TRUE && ($$btn === FALSE || $$btn === NULL)) {
-                $this->fail('Expected '.$btn.' button to be disabled in top toolbar.');
-            } else if ($status === 'active' && $$btn !== 'active') {
-                $this->fail('Expected '.$btn.' button to be active in top toolbar.');
-            } else if ($status === FALSE && $$btn === TRUE) {
-                $this->fail('Expected '.$btn.' button to be enabled in top toolbar.');
+        foreach ($toolbars as $toolbar => $toolbarName) {
+            if ($statuses[$toolbar] !== FALSE) {
+                foreach ($statuses[$toolbar] as $btn => $status) {
+                    if ($$btn !== $status) {
+                        $msg = 'Expected '.$btn.' button to be ';
+
+                        if ($$btn === NULL) {
+                            $msg .= 'not visible';
+                        } else if ($$btn === TRUE) {
+                            $msg .= 'enabled';
+                        } else if ($$btn === FALSE) {
+                            $msg .= 'disabled';
+                        } else if ($$btn === 'active') {
+                            $msg .= 'active';
+                        }
+
+                        $msg .= ' in '.$toolbarName.'.';
+                        $this->fail($msg);
+                    }
+                }
             }
         }
 
