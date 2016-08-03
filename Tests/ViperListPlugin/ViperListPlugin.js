@@ -67,7 +67,7 @@ function gListBStatus()
         var elem = Viper.Util.getClass('Viper-button Viper-' + btn, Viper.Util.getClass('ViperTP-bar')[0])[0];
         if (Viper.Util.hasClass(elem, 'Viper-disabled') === false) {
             if (Viper.Util.hasClass(elem, 'Viper-active') === true) {
-                btns.vitp[btn] = 'active';
+                btns.topToolbar[btn] = 'active';
             } else {
                 btns.topToolbar[btn] = true;
             }
