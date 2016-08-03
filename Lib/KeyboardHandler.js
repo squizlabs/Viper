@@ -157,7 +157,7 @@
                 } else if (e.which >= 32 && e.which <= 126) {
                     var char = String.fromCharCode(e.which);
 
-                    if (nodeSelection && ViperUtil.isBlockElement(nodeSelection) === true && String.fromCharCode(e.which) !== '') {
+                        if (nodeSelection && ViperUtil.isBlockElement(nodeSelection) === true && String.fromCharCode(e.which) !== '') {
                         switch (ViperUtil.getTagName(nodeSelection)) {
                             case 'table':
                             case 'ul':
@@ -573,6 +573,26 @@
                         ViperSelection.addRange(range);
                         this._viper.fireNodesChanged([range.startContainer]);
                         return false;
+                    } else if (range.collapsed === false) {
+                        if (range.startContainer === range.endContainer) {
+                            // Selection is in same container.
+                            if (ViperUtil.isText(startNode) === true) {
+                                // Text selection.
+                                if (ViperUtil.isBrowser('msie') === true) {
+                                    if (char !== ' ') {
+                                        // Replace text.
+                                        startNode.data = startNode.data.substring(0, range.startOffset) + char + startNode.data.substring(range.endOffset);
+                                        range.setStart(startNode, range.startOffset + 1);
+                                        range.collapse(true);
+                                        ViperSelection.addRange(range);
+                                        this._viper.fireNodesChanged([range.startContainer]);
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
+
+
                     }
                 }//end if
 
