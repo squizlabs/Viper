@@ -110,6 +110,15 @@
 
             tools.getItem('ViperLinkPlugin:vtp:link').addSubSectionActionWidgets('ViperLinkPlugin:vtp:linkSubSection', ['ViperLinkPlugin:vtp:anchor', 'ViperLinkPlugin:vtp:includeSummary', 'ViperLinkPlugin:vtp:useDestination']);
 
+
+            // on change of URL value, test if it's a link asset and enable the useDestination row
+            ViperUtil.$(urlField).on('input', function() {
+                var urlValue = ViperUtil.trim(tools.getItem(idPrefix + ':url').getValue());
+                self.retrieveAssetDetails(urlValue, function(type_code) {
+                    self.enableUseDestinationCheckbox(type_code, true);
+                });
+            });
+
             return contents;
 
         },
@@ -155,6 +164,9 @@
             if(this._assetTypeCode && (this._assetTypeCode === 'link' || this._assetTypeCode === 'page_redirect')) {
                 link.setAttribute('data-linktype', this._assetTypeCode);
             }
+            else {
+                link.removeAttribute('data-linktype');
+            }
 
 
             // Anchor.
@@ -188,6 +200,7 @@
             var tools = this.viper.Tools;
             var main  = tools.getItem('ViperLinkPlugin:vtp:link').element;
             var urlValue = tools.getItem('ViperLinkPlugin:vtp:url').getValue();
+            var self = this;
 
             // if this link is marked as special type link, we have to enable t he Use Destination box
             if(link.dataset.linktype) {
@@ -231,6 +244,11 @@
                     // enable the Use Destination Link check box
                     this.enableUseDestinationCheckbox(this._assetTypeCode, true);
                 }
+                else {
+                    this.retrieveAssetDetails(urlValue, function(type_code) {
+                        self.enableUseDestinationCheckbox(type_code, false);
+                    });
+                }
 
 
                 tools.getItem('ViperLinkPlugin:vtp:anchor').setValue(anchorValue);
@@ -253,6 +271,7 @@
             var tools = this.viper.Tools;
             var main  = tools.getItem('ViperLinkPlugin:vitp:link').element;
             var urlValue = tools.getItem('ViperLinkPlugin:vitp:url').getValue();
+            var self = this;
 
 
             // if this link is marked as special type link, we have to enable t he Use Destination box
@@ -295,6 +314,11 @@
                     urlValue = assetid;
                     // enable the Use Destination Link check box
                     this.enableUseDestinationCheckbox(this._assetTypeCode, true);
+                }
+                else {
+                    this.retrieveAssetDetails(urlValue, function(type_code) {
+                        self.enableUseDestinationCheckbox(type_code, false);
+                    });
                 }
 
 
@@ -425,8 +449,10 @@
         enableUseDestinationCheckbox: function(type_code, value)
         {
             var tools = this.viper.Tools;
+            this._assetTypeCode = type_code;
+
             if(type_code == 'link' || type_code == 'page_redirect') {
-               // $('.Viper-useDestinationRow').show();
+
                 var label = _('Use Link Destination');
                 if(type_code == 'page_redirect') {
                     label = _('Use Redirect Link Destination');
@@ -470,6 +496,48 @@
 
             return true;
 
+        },
+
+
+        /*
+         get the asset details
+        */
+        retrieveAssetDetails: function(assetid, callback)
+        {
+            assetid = assetid.replace(/(\?|&).*/g, '');
+            var exp = /^([0-9]+)$/g;
+            var result = exp.exec(assetid);
+            if(result && result[1] && result[1] != 1) {
+                assetid = result[1];
+            }
+            else {
+                callback.call(this, null);
+                return;
+            }
+            if(typeof EasyEdit !== 'undefined') {
+                EasyEditAssetManager.getAsset(assetid, function(asset){
+                    var type_code = asset.attr.type_code;
+                    callback.call(this, type_code);
+                }, 1, true);
+            }
+            else {
+                var jsMap = parent.frames.sq_sidenav.JS_Asset_Map;
+                jsMap.doRequest({
+                    _attributes: {
+                        action: 'get attributes'
+                    },
+                    asset: [
+                        {
+                            _attributes: {
+                                assetid: assetid
+                            }
+                        }
+                    ]
+                }, function(response) {
+                    var data = typeof response['asset'] != 'undefined' ? response['asset'][0]['_attributes']['type_code'] : null;
+                    callback.call(this, data);
+                });
+            }
         }
 
     };
