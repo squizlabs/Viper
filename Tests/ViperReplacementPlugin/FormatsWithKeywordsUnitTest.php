@@ -237,15 +237,12 @@ class Viper_Tests_ViperReplacementPlugin_FormatsWithKeywordsUnitTest extends Abs
     {
         // Test start of paragraph
         $this->useTest(2);
-        $this->clickKeyword(1);
-        sleep(1);
         $this->moveToKeyword(1, 'right');
         sleep(1);
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        for ($i = 0; $i < 4; $i++) {
+            $this->sikuli->keyDown('Key.SHIFT + Key.LEFT');
+        }
+        
         $this->sikuli->keyDown('Key.CMD + b');
         $this->assertEquals($this->replaceKeywords('Viper %1%'), $this->getSelectedText(), 'First line of text should be selected');
 
@@ -256,11 +253,10 @@ class Viper_Tests_ViperReplacementPlugin_FormatsWithKeywordsUnitTest extends Abs
 
         // Test end of paragraph
         $this->moveToKeyword(4, 'left');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        for ($i = 0; $i < 5; $i++) {
+            $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        }
+
         $this->sikuli->keyDown('Key.CMD + b');
         $this->assertEquals($this->replaceKeywords('%4% Viper'), $this->getSelectedText(), 'Third line of text should be selected');
 
