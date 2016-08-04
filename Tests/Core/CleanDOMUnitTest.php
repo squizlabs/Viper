@@ -16,7 +16,7 @@ class Viper_Tests_Core_CleanDOMUnitTest extends AbstractViperUnitTest
         $this->sikuli->click($this->findKeyword(1));
         $this->sikuli->execJS('viper.cleanDOM()');
 
-        $expected = '<p>%1%</p><p><img src="" /><br /><span>test</span></p><ul><li>test</li></ul><table><tbody><tr><td></td></tr></tbody></table><table><tbody><tr><td>test</td></tr></tbody></table><h2>test</h2><p><br /><a name="test"></a><a id="test2" href="">test</a></p>';
+        $expected = '<p>%1%</p><p><img src="" /><br /><span>test</span></p><ul><li>&nbsp;</li></ul><ul><li>test</li></ul><table><tbody><tr><td></td></tr></tbody></table><table><tbody><tr><td>test</td></tr></tbody></table><h2>test</h2><p><br /><a name="test"></a><a id="test2" href="">test</a></p>';
 
         $this->assertHTMLMatch($expected);
 
@@ -33,7 +33,7 @@ class Viper_Tests_Core_CleanDOMUnitTest extends AbstractViperUnitTest
         $this->sikuli->click($this->findKeyword(1));
         $this->sikuli->execJS('viper.cleanDOM(Viper.Util.getTag("p")[2])');
 
-        $expected = '<p>%1%</p><p><img src="" /><br /><span>test</span></p><ul><li>test</li></ul><table><tbody><tr><td></td></tr></tbody></table><table><tbody><tr><td>test</td></tr></tbody></table><h2>test</h2><p><br /><a name="test"></a><a id="test2" href="">test</a></p>';
+        $expected = '<p>%1%</p><p><img src="" /><br /><span>test</span></p><ul><li>&nbsp;</li></ul><ul><li>test</li></ul><table><tbody><tr><td></td></tr></tbody></table><table><tbody><tr><td>test</td></tr></tbody></table><h2>test</h2><p><br /><a name="test"></a><a id="test2" href="">test</a></p>';
 
         $this->assertHTMLMatch($expected);
 
