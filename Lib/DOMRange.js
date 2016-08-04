@@ -1110,6 +1110,22 @@
             ) {
                 this._nodeSel.node = startNode.parentNode;
                 return this._nodeSel.node;
+            } else if (ViperUtil.isBrowser('msie') === true) {
+                // IE specific checks.
+                if (range.startOffset === 0) {
+                    if (ViperUtil.isText(range.startContainer) === true) {
+                        if (ViperUtil.isElement(range.endContainer) === true) {
+                            if (!range.startContainer.previousSibling
+                                && startNode === endNode
+                                && !startNode.nextSibling
+                            ) {
+                                // Case: <p>text <em>[text</em>]</p>.
+                                this._nodeSel.node = startNode.parentNode;
+                                return this._nodeSel.node;
+                            }
+                        }
+                    }
+                }
             }
 
             // We may need to adjust the "startNode" depending on its offset.
