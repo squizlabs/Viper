@@ -23,7 +23,7 @@ class Viper_Tests_ViperListPlugin_CreateListUnitTest extends AbstractViperListPl
         $this->assertHTMLMatch('<ul><li>Create list test %1%</li></ul>');
 
         $this->clickTopToolbarButton('listUL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
         $this->assertHTMLMatch('<p>Create list test %1%</p>');
 
         //Test ordered list.
@@ -32,7 +32,7 @@ class Viper_Tests_ViperListPlugin_CreateListUnitTest extends AbstractViperListPl
         $this->assertHTMLMatch('<ol><li>Create list test %1%</li></ol>');
 
         $this->clickTopToolbarButton('listOL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
         $this->assertHTMLMatch('<p>Create list test %1%</p>');
 
     }//end testListCreationFromClickingInText()
@@ -55,7 +55,7 @@ class Viper_Tests_ViperListPlugin_CreateListUnitTest extends AbstractViperListPl
         $this->assertHTMLMatch('<ul><li>Create list test %1%</li></ul>');
 
         $this->clickTopToolbarButton('listUL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
         $this->assertHTMLMatch('<p>Create list test %1%</p>');
 
         //Test ordered list.
@@ -64,7 +64,7 @@ class Viper_Tests_ViperListPlugin_CreateListUnitTest extends AbstractViperListPl
         $this->assertHTMLMatch('<ol><li>Create list test %1%</li></ol>');
 
         $this->clickTopToolbarButton('listOL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
         $this->assertHTMLMatch('<p>Create list test %1%</p>');
 
     }//end testListCreationFromTextSelection()
@@ -88,7 +88,7 @@ class Viper_Tests_ViperListPlugin_CreateListUnitTest extends AbstractViperListPl
         $this->assertHTMLMatch('<ul><li>Create list test %1%</li></ul>');
 
         $this->clickTopToolbarButton('listUL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
         $this->assertHTMLMatch('<p>Create list test %1%</p>');
 
         //Test ordered list.
@@ -97,7 +97,7 @@ class Viper_Tests_ViperListPlugin_CreateListUnitTest extends AbstractViperListPl
         $this->assertHTMLMatch('<ol><li>Create list test %1%</li></ol>');
 
         $this->clickTopToolbarButton('listOL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
         $this->assertHTMLMatch('<p>Create list test %1%</p>');
 
     }//end testListCreationFromParaSelection()
@@ -110,29 +110,33 @@ class Viper_Tests_ViperListPlugin_CreateListUnitTest extends AbstractViperListPl
      */
     public function testListCreationFromAllContent()
     {
-        $this->useTest(5);
+        foreach (array('ol', 'ul') as $listType) {
+            foreach ($this->getTestMethods(TRUE, TRUE, FALSE) as $method) {
+                if ($listType === 'ul') {
+                    $listIconToClick = 'listUL';
+                    $ulStatus = 'active';
+                    $olStatus = TRUE;
+                } else {
+                    $listIconToClick = 'listOL';
+                    $ulStatus = TRUE;
+                    $olStatus = 'active';
+                }
 
-        $this->selectKeyword(1);
-        $this->sikuli->keyDown('Key.CMD + a');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+                $this->useTest(5);
 
-        //Test unordered list.
-        $this->clickTopToolbarButton('listUL');
-        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
-        $this->assertHTMLMatch('<ul><li>Create list test %1% paragraph one</li><li>This is paragraph two</li><li>This is paragraph three</li></ul>');
+                $this->selectKeyword(1);
+                $this->sikuli->keyDown('Key.CMD + a');
+                $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, TRUE, FALSE);
 
-        $this->clickTopToolbarButton('listUL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-        $this->assertHTMLMatch('<p>Create list test %1% paragraph one</p><p>This is paragraph two</p><p>This is paragraph three</p>');
+                $this->doAction($method, $listIconToClick);
+                $this->assertIconStatusesCorrect($ulStatus, $olStatus, FALSE, TRUE);
+                $this->assertHTMLMatch('<'.$listType.'><li>Create list test %1% paragraph one</li><li>This is paragraph two</li><li>This is paragraph three</li></'.$listType.'>');
 
-        //Test ordered list.
-        $this->clickTopToolbarButton('listOL');
-        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
-        $this->assertHTMLMatch('<ol><li>Create list test %1% paragraph one</li><li>This is paragraph two</li><li>This is paragraph three</li></ol>');
-
-        $this->clickTopToolbarButton('listOL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-        $this->assertHTMLMatch('<p>Create list test %1% paragraph one</p><p>This is paragraph two</p><p>This is paragraph three</p>');
+                $this->doAction($method, $listIconToClick, 'active');
+                $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, TRUE, FALSE);
+                $this->assertHTMLMatch('<p>Create list test %1% paragraph one</p><p>This is paragraph two</p><p>This is paragraph three</p>');
+            }
+        }
 
     }//end testListCreationFromAllContent()
 
@@ -144,35 +148,28 @@ class Viper_Tests_ViperListPlugin_CreateListUnitTest extends AbstractViperListPl
      */
     public function testCreateListAndClickUndo()
     {
-        $this->useTest(1);
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $listIconToClick = 'listUL';
+            } else {
+                $listIconToClick = 'listOL';
+            }
 
-        $this->selectKeyword(1);
+            $this->useTest(1);
 
-        //Test unordered list.
-        $this->clickTopToolbarButton('listUL');
-        $this->assertHTMLMatch('<ul><li>Create list test %1%</li></ul>');
+            $this->selectKeyword(1);
+            $this->clickTopToolbarButton($listIconToClick);
+            $this->assertHTMLMatch('<'.$listType.'><li>Create list test %1%</li></'.$listType.'>');
 
-        $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>Create list test %1%</p>');
+            $this->clickTopToolbarButton('historyUndo');
+            $this->assertHTMLMatch('<p>Create list test %1%</p>');
 
-        $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<ul><li>Create list test %1%</li></ul>');
+            $this->clickTopToolbarButton('historyRedo');
+            $this->assertHTMLMatch('<'.$listType.'><li>Create list test %1%</li></'.$listType.'>');
 
-        $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>Create list test %1%</p>');
-
-        //Test ordered list.
-        $this->clickTopToolbarButton('listOL');
-        $this->assertHTMLMatch('<ol><li>Create list test %1%</li></ol>');
-
-        $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>Create list test %1%</p>');
-
-        $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<ol><li>Create list test %1%</li></ol>');
-
-        $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>Create list test %1%</p>');
+            $this->clickTopToolbarButton('historyUndo');
+            $this->assertHTMLMatch('<p>Create list test %1%</p>');
+        }
 
     }//end testCreateListItemsAndClickUndo()
 
@@ -234,55 +231,39 @@ class Viper_Tests_ViperListPlugin_CreateListUnitTest extends AbstractViperListPl
      */
     public function testCreatingNewListAndDeletingIt()
     {
-        //Test unordered list
-        $this->useTest(1);
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $listIconToClick = 'listUL';
+            } else {
+                $listIconToClick = 'listOL';
+            }
 
-        //Enter content
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('This is content');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('%2% Item one');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('Item two');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('Item three %3%');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('End content');
+            $this->useTest(1);
 
-        // Create unordered list
-        $this->selectKeyword(2, 3);
-        $this->clickTopToolbarButton('listUL');
-        $this->assertHTMLMatch('<p>Create list test %1%</p><p>This is content</p><ul><li>%2% Item one</li><li>Item two</li><li>Item three %3%</li></ul><p>End content</p>');
-        // Delete list
-        $this->selectKeyword(2, 3);
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>Create list test %1%</p><p>This is content</p><p>End content</p>');
+            //Enter content
+            $this->moveToKeyword(1, 'right');
+            $this->sikuli->keyDown('Key.ENTER');
+            $this->type('This is content');
+            $this->sikuli->keyDown('Key.ENTER');
+            $this->type('%2% Item one');
+            $this->sikuli->keyDown('Key.ENTER');
+            $this->type('Item two');
+            $this->sikuli->keyDown('Key.ENTER');
+            $this->type('Item three %3%');
+            $this->sikuli->keyDown('Key.ENTER');
+            $this->type('End content');
 
-        //Test ordered list
-        $this->useTest(1);
+            // Create list
+            $this->selectKeyword(2, 3);
+            $this->clickTopToolbarButton($listIconToClick);
+            $this->assertHTMLMatch('<p>Create list test %1%</p><p>This is content</p><'.$listType.'><li>%2% Item one</li><li>Item two</li><li>Item three %3%</li></'.$listType.'><p>End content</p>');
 
-        //Enter content
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('This is content');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('%2% Item one');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('Item two');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('Item three %3%');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('End content');
+            // Delete list
+            $this->selectKeyword(2, 3);
+            $this->sikuli->keyDown('Key.DELETE');
+            $this->assertHTMLMatch('<p>Create list test %1%</p><p>This is content</p><p>End content</p>');
 
-        // Create unordered list
-        $this->selectKeyword(2, 3);
-        $this->clickTopToolbarButton('listOL');
-        $this->assertHTMLMatch('<p>Create list test %1%</p><p>This is content</p><ol><li>%2% Item one</li><li>Item two</li><li>Item three %3%</li></ol><p>End content</p>');
-        // Delete list
-        $this->selectKeyword(2, 3);
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>Create list test %1%</p><p>This is content</p><p>End content</p>');
+        }
 
     }//end testCreatingNewListAndDeletingIt()
 
@@ -294,47 +275,32 @@ class Viper_Tests_ViperListPlugin_CreateListUnitTest extends AbstractViperListPl
      */
     public function testCreatingNewListAfterDeletingAllContent()
     {
-        //Test unordered list
-        $this->useTest(4);
 
-        //Enter content
-        $this->selectKeyword(1);
-        $this->sikuli->keyDown('Key.CMD + a');
-        $this->sikuli->keyDown('Key.DELETE');
-        sleep(1);
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $listIconToClick = 'listUL';
+            } else {
+                $listIconToClick = 'listOL';
+            }
 
-        // Create unordered list and delete it
-        $this->clickTopToolbarButton('listUL');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        sleep(1);
-        $this->assertHTMLMatch('<p></p>');
+            $this->useTest(4);
 
-        // Create unordered list and add a list item
-        $this->clickTopToolbarButton('listUL');
-        $this->type('New list item');
-        $this->assertHTMLMatch('<ul><li>New list item</li></ul>');
+            //Enter content
+            $this->selectKeyword(1);
+            $this->sikuli->keyDown('Key.CMD + a');
+            $this->sikuli->keyDown('Key.DELETE');
+            sleep(1);
+            $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
-        //Test ordered list
-        $this->useTest(4);
+            $this->clickTopToolbarButton($listIconToClick);
+            $this->sikuli->keyDown('Key.BACKSPACE');
+            sleep(1);
+            $this->assertHTMLMatch('<p></p>');
 
-        //Enter content
-        $this->selectKeyword(1);
-        $this->sikuli->keyDown('Key.CMD + a');
-        $this->sikuli->keyDown('Key.DELETE');
-        sleep(1);
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-
-        // Create ordered list and delete it
-        $this->clickTopToolbarButton('listOL');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        sleep(1);
-        $this->assertHTMLMatch('<p></p>');
-
-        // Create ordered list and add a list item
-        $this->clickTopToolbarButton('listOL');
-        $this->type('New list item');
-        $this->assertHTMLMatch('<ol><li>New list item</li></ol>');
+            $this->clickTopToolbarButton($listIconToClick);
+            $this->type('New list item');
+            $this->assertHTMLMatch('<'.$listType.'><li>New list item</li></'.$listType.'>');
+        }
 
     }//end testCreatingNewListAfterDeletingAllContent()
 

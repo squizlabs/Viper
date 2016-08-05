@@ -91,6 +91,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testNoToolbarAtStart()
     {
+        $this->useTest(1);
+
         try {
             $this->getInlineToolbar();
         } catch (Exception $e) {
@@ -109,6 +111,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testNoToolbarWhenRightClick()
     {
+        $this->useTest(1);
+
         $word = $this->findKeyword(1);
         $this->sikuli->rightClick($word);
 
@@ -134,6 +138,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testSimpleSelectionPosition()
     {
+        $this->useTest(1);
+
         $word = $this->findKeyword(2);
         $this->selectKeyword(2);
 
@@ -151,6 +157,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testParagraphSelectionPosition()
     {
+        $this->useTest(1);
+
         $para = $this->findKeyword(4);
         $this->selectKeyword(4);
 
@@ -171,6 +179,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
      public function testMultiParagraphSelectionPosition()
      {
+        $this->useTest(1);
+
          $start = $this->findKeyword(1);
          $mid   = $this->findKeyword(3);
          $end   = $this->findKeyword(4);
@@ -199,6 +209,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testPositionAfterWindowResize()
     {
+        $this->useTest(1);
+
         $this->selectKeyword(2);
         $this->sikuli->resize(1600, 800);
 
@@ -219,6 +231,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testPositionOrientationLeft()
     {
+        $this->useTest(1);
+
         $this->sikuli->execJS('viperTest.getWindow().Viper.Util.setStyle(viperTest.getWindow().Viper.Util.getid("content"), "margin-left", "10px")');
         sleep(1);
 
@@ -240,6 +254,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testPositionOrientationRight()
     {
+        $this->useTest(1);
+
         $this->sikuli->resize(1150, 800);
 
         $word = $this->findKeyword(5);
@@ -259,6 +275,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testHideOnClick()
     {
+        $this->useTest(1);
+
         $word = $this->findKeyword(1);
         $this->selectKeyword(1);
         $this->sikuli->click($word);
@@ -282,6 +300,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testHideOnCaretMove()
     {
+        $this->useTest(1);
+
         $this->moveToKeyword(1, 'right');
         sleep(2);
 
@@ -303,6 +323,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testLineageOneParent()
     {
+        $this->useTest(1);
+
         $this->selectKeyword(1);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
@@ -318,6 +340,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testLineageMultiParentSameParagraph()
     {
+        $this->useTest(1);
+
         $this->selectKeyword(7);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
@@ -333,6 +357,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testLineageNodeSelection()
     {
+        $this->useTest(1);
+
         $this->selectKeyword(7, 8);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
@@ -348,6 +374,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testLineageDiffParentSameParagraph()
     {
+        $this->useTest(1);
+
         $this->selectKeyword(6, 7);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
@@ -363,6 +391,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testLineageMultiParentDiffParagraph()
     {
+        $this->useTest(1);
+
         $this->selectKeyword(1, 6);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
@@ -372,12 +402,50 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
 
 
     /**
+     * Test that VITP lineage is correct when selecting all content on the page.
+     *
+     * @return void
+     */
+    public function testLineageWhenSelectingAllContentOnPage()
+    {
+        $this->useTest(1);
+
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + a');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
+
+    }//end testLineageWhenSelectingAllContentOnPage()
+
+
+    /**
+     * Test that VITP lineage is correct when all paragraphs on the page.
+     *
+     * @return void
+     */
+    public function testLineageWhenSelectingAllParagraphs()
+    {
+        $this->useTest(2);
+
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + a');
+
+        $lineage = $this->getHtml('.ViperITP-lineage');
+        $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">Selection</li>', $lineage);
+
+    }//end testLineageWhenSelectingAllParagraphs()
+
+
+    /**
      * Test that VITP does not close when mouse is clicked on it.
      *
      * @return void
      */
     public function testClickOnToolbarNotHideToolbar()
     {
+        $this->useTest(1);
+
         $this->selectKeyword(1);
 
         $this->sikuli->mouseMove($this->_getToolbarArrow());
@@ -400,6 +468,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testSwitchingFromSelectionToParagraphWhenSubToolbarIsOpen()
     {
+        $this->useTest(1);
+
         $this->selectKeyword(2);
 
         $lineage = $this->getHtml('.ViperITP-lineage');
@@ -421,6 +491,8 @@ class Viper_Tests_ViperInlineToolbarPlugin_InlineToolbarUnitTest extends Abstrac
      */
     public function testSwitchingFromParagraphToSelectionWhenSubToolbarIsOpen()
     {
+        $this->useTest(1);
+
         $this->selectKeyword(1);
 
         $this->selectInlineToolbarLineageItem(0);
