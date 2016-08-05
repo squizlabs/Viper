@@ -157,7 +157,7 @@
                 } else if (e.which >= 32 && e.which <= 126) {
                     var char = String.fromCharCode(e.which);
 
-                        if (nodeSelection && ViperUtil.isBlockElement(nodeSelection) === true && String.fromCharCode(e.which) !== '') {
+                    if (nodeSelection && ViperUtil.isBlockElement(nodeSelection) === true && String.fromCharCode(e.which) !== '') {
                         switch (ViperUtil.getTagName(nodeSelection)) {
                             case 'table':
                             case 'ul':
@@ -408,6 +408,7 @@
                             if (textContainer.previousSibling
                                 && ViperUtil.isStubElement(textContainer.previousSibling) === false
                                 && ViperUtil.isText(textContainer.previousSibling) === false
+                                && ViperUtil.isBlockElement(textContainer.previousSibling) === false
                             ) {
                                 // Need to insert the character to the previous sibling.
                                 // <p>text<strong>insert text here</strong>* more text</p> ->
@@ -1221,7 +1222,7 @@
                             selectable = document.createTextNode('');
                             ViperUtil.insertAfter(br, selectable);
                         }
-                    } else {console.info(2);
+                    } else {
                         selectable = document.createTextNode(String.fromCharCode(160));
                         ViperUtil.insertAfter(br, selectable);
                     }
