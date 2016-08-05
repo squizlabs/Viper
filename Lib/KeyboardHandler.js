@@ -1187,6 +1187,8 @@
 
                     if (parent && parent !== viperElem) {
                         ViperUtil.insertAfter(parent, br);
+                    } else {
+                        ViperUtil.insertAfter(range.startContainer, br);
                     }
                 } else if (ViperUtil.isText(range.startContainer) === true
                     && range.startOffset === 0
@@ -1209,16 +1211,26 @@
                     this._viper.insertNodeAtCaret(br);
                 }
 
-                if (!br.nextSibling
-                    || br.nextSibling.nodeType !== ViperUtil.TEXT_NODE
-                    || br.nextSibling.data.charAt(0) === "\n"
-                ) {
-                    ViperUtil.insertAfter(br, document.createTextNode(''));
+                var selectable = br.nextSibling;
+                if (ViperUtil.isText(br.nextSibling) !== true || br.nextSibling.data.charAt(0) === "\n") {
+                    if (ViperUtil.isElement(br.nextSibling) === true && ViperUtil.isStubElement(br.nextSibling) === false) {
+                        var firstSelectable = range._getFirstSelectableChild(br.nextSibling);
+                        if (firstSelectable) {
+                            selectable = firstSelectable;
+                        } else {
+                            selectable = document.createTextNode('');
+                            ViperUtil.insertAfter(br, selectable);
+                        }
+                    } else {console.info(2);
+                        selectable = document.createTextNode(String.fromCharCode(160));
+                        ViperUtil.insertAfter(br, selectable);
+                    }
                 }
 
-                range.setStart(br.nextSibling, 0);
+                range.setStart(selectable, 0);
                 range.collapse(true);
                 ViperSelection.addRange(range);
+                this._viper.contentChanged();
 
                 return false;
             } else if (ViperUtil.isBrowser('msie') === true
