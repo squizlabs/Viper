@@ -1720,7 +1720,7 @@
                     focusSubSection: function() {
                         try {
                             var subSection    = this._subSections[this._activeSection];
-                            var inputElements = ViperUtil.getTag('input[type=text], textarea', subSection);
+                            var inputElements = ViperUtil.getTag('input[type=text], textarea, input[type=checkbox]', subSection);
                             if (inputElements.length > 0) {
                                 for (var i = 0; i < inputElements.length; i++) {
                                     if (ViperUtil.getElementWidth(inputElements[i]) === 0 || inputElements[i].disabled) {
