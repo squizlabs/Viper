@@ -29,7 +29,8 @@ abstract class AbstractViperListPluginUnitTest extends AbstractViperUnitTest
     /**
      * Checks that the icon statuses are correct.
      *
-     * @param mixed $listUL                     The status of the unordered list button.
+     * @param mixed $listUL                     The status of the unordered list button. TRUE = visible, 'active' = active, NULL = not visible, 
+     *                                          FALSE = disabled
      * @param mixed $listOL                     The status of the ordered list button.
      * @param mixed $listIndent                 The status of the list indent button.
      * @param mixed $listOutdent                The status of the list outdent button.

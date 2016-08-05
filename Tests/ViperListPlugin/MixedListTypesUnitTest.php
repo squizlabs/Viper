@@ -33,7 +33,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
             $this->sikuli->keyDown('Key.ENTER');
             $this->type('third item');
             $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
-            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>First item %1%</li><li>new item<'.$subListType.'><li>first sub item</li><li>second sub item %2%</li></'.$subListType.'></li><li>second item %3%</li><li>third item</li></'.$listType.'>');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>First item %1%</li><li>new item<'.$subListType.'><li>first sub item</li><li>second sub item %2%</li><li>third sub item</li></'.$subListType.'></li><li>second item %3%</li><li>third item</li></'.$listType.'>');
         }
 
     }//end testAddingNewItemsToParentList()
@@ -46,83 +46,31 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
      */
     public function testAddingNewItemsToSubList()
     {
-        //Test unordered list
-        $this->useTest(1);
-        $this->moveToKeyword(2, 'right');
-		$this->sikuli->keyDown('Key.ENTER');
-		$this->type('new item');
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ol><li>first sub item</li><li>second sub item %2%</li><li>new item</li></ol></li><li>second item %3%</li></ul>');
+        foreach (array('ol', 'ul') as $listType) {
+                if ($listType === 'ul') {
+                    $this->useTest(1);
+                    $subListType = 'ol';
 
-        //Test ordered list
-        $this->useTest(2);
-        $this->moveToKeyword(2, 'right');
-		$this->sikuli->keyDown('Key.ENTER');
-		$this->type('new item');
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ul><li>first sub item</li><li>second sub item %2%</li><li>new item</li></ul></li><li>second item %3%</li></ol>');
+                    // Status is reserve as we are testing the sub list
+                    $ulStatus = TRUE;
+                    $olStatus = 'active';
+                } else {
+                    $this->useTest(2);
+                    $subListType = 'ul';
+
+                    // Status is reserve as we are testing the sub list
+                    $ulStatus = 'active';
+                    $olStatus = TRUE;
+                }
+
+            $this->moveToKeyword(2, 'right');
+    		$this->sikuli->keyDown('Key.ENTER');
+    		$this->type('new item');
+            $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>First item %1%<'.$subListType.'><li>first sub item</li><li>second sub item %2%</li><li>new item</li><li>third sub item</li></'.$subListType.'></li><li>second item %3%</li></'.$listType.'>');
+        }
 
     }//end testAddingNewItemsToSubList()
-
-
-	/**
-     * Test that when you indent and outdent an item in the sub list, it remains the sub list list type.
-     *
-     * @return void
-     */
-    public function testIndentAndOutdentSubListItem()
-    {
-        //Test ordered sub list with keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(2);
-		$this->sikuli->keyDown('Key.TAB');
-        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ol><li>first sub item<ol><li>second sub item %2%</li></ol></li></ol></li><li>second item %3%</li></ul>');
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ol><li>first sub item</li><li>second sub item %2%</li></ol></li><li>second item %3%</li></ul>');
-
-        //Test ordered sub list with inline toolbar icons
-        $this->clickInlineToolbarButton('listIndent');
-        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ol><li>first sub item<ol><li>second sub item %2%</li></ol></li></ol></li><li>second item %3%</li></ul>');
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ol><li>first sub item</li><li>second sub item %2%</li></ol></li><li>second item %3%</li></ul>');
-
-        //Test ordered sub list with top toolbar icons
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ol><li>first sub item<ol><li>second sub item %2%</li></ol></li></ol></li><li>second item %3%</li></ul>');
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ol><li>first sub item</li><li>second sub item %2%</li></ol></li><li>second item %3%</li></ul>');
-
-        //Test unordered sub list with keyboard shortcuts
-        $this->useTest(2);
-        $this->selectKeyword(2);
-		$this->sikuli->keyDown('Key.TAB');
-        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ul><li>first sub item<ul><li>second sub item %2%</li></ul></li></ul></li><li>second item %3%</li></ol>');
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ol>');
-
-        //Test unordered sub list with inline toolbar icons
-        $this->clickInlineToolbarButton('listIndent');
-        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ul><li>first sub item<ul><li>second sub item %2%</li></ul></li></ul></li><li>second item %3%</li></ol>');
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ol>');
-
-        //Test unordered sub list with top toolbar icons
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ul><li>first sub item<ul><li>second sub item %2%</li></ul></li></ul></li><li>second item %3%</li></ol>');
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ol>');
-
-    }//end testIndentAndOutdentSubListItem()
 
 
 	/**
@@ -132,57 +80,63 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
      */
     public function testOutdentAndIndentSubListItem()
     {
-        //Test ordered sub list with keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(2);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-		$this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ol><li>first sub item</li></ol></li><li>second sub item %2%</li><li>second item %3%</li></ul>');
-		$this->sikuli->keyDown('Key.TAB');
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ol><li>first sub item</li><li>second sub item %2%</li></ol></li><li>second item %3%</li></ul>');
+        foreach (array('ol', 'ul') as $listType) {
+            foreach ($this->getTestMethods(TRUE, TRUE, TRUE) as $method) {
+                if ($listType === 'ul') {
+                    $this->useTest(1);
+                    $subListType = 'ol';
 
-        //Test ordered sub list with inline toolbar icons
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ol><li>first sub item</li></ol></li><li>second sub item %2%</li><li>second item %3%</li></ul>');
-        $this->clickInlineToolbarButton('listIndent');
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ol><li>first sub item</li><li>second sub item %2%</li></ol></li><li>second item %3%</li></ul>');
+                    $ulStatusForParent = 'active';
+                    $olStatusForParent = TRUE;
+                    $ulStatusForSub = TRUE;
+                    $olStatusForSub = 'active';
 
-        //Test ordered sub list with top toolbar icons
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ol><li>first sub item</li></ol></li><li>second sub item %2%</li><li>second item %3%</li></ul>');
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ol><li>first sub item</li><li>second sub item %2%</li></ol></li><li>second item %3%</li></ul>');
+                } else {
+                    $this->useTest(2);
+                    $subListType = 'ul';
 
-        //Test unordered sub list with keyboard shortcuts
-        $this->useTest(2);
-        $this->selectKeyword(2);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-		$this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ul><li>first sub item</li></ul></li><li>second sub item %2%</li><li>second item %3%</li></ol>');
-		$this->sikuli->keyDown('Key.TAB');
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ol>');
+                    $ulStatusForParent = TRUE;
+                    $olStatusForParent = 'active';
+                    $ulStatusForSub = 'active';
+                    $olStatusForSub = TRUE;
+                }
 
-        //Test unordered sub list with inline toolbar icons
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ul><li>first sub item</li></ul></li><li>second sub item %2%</li><li>second item %3%</li></ol>');
-        $this->clickInlineToolbarButton('listIndent');
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ol>');
+                $this->selectKeyword(2);
+                sleep(1);
+                $this->selectInlineToolbarLineageItem(3);
 
-        //Test unordered sub list with top toolbar icons
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ul><li>first sub item</li></ul></li><li>second sub item %2%</li><li>second item %3%</li></ol>');
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ol>');
+                // Try pressing shift + right once to make sure the selection reamins at the single list item.
+                $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+
+                // Outdent once so list items are at the top level
+                $this->doAction($method, 'listOutdent');
+        		$this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>First item %1%<'.$subListType.'><li>first sub item</li></'.$subListType.'></li><li>second sub item %2%<'.$subListType.'><li>third sub item</li></'.$subListType.'></li><li>second item %3%</li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForParent, $olStatusForParent, TRUE, TRUE);
+
+                // Outdent again so list items are no longer in list
+                $this->doAction($method, 'listOutdent');
+                sleep(1);
+                $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>First item %1%<'.$subListType.'><li>first sub item</li></'.$subListType.'></li></'.$listType.'><p>second sub item %2%</p><'.$subListType.'><li>third sub item</li></'.$subListType.'><'.$listType.'><li>second item %3%</li></'.$listType.'>');
+                $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
+
+                // Indent once so it is back in the parent list
+                $this->doTopToolbarAction($method, 'listIndent');
+                sleep(1);
+                $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>First item %1%<'.$subListType.'><li>first sub item</li></'.$subListType.'></li><li>second sub item %2%</li></'.$listType.'><'.$subListType.'><li>third sub item</li></'.$subListType.'><'.$listType.'><li>second item %3%</li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForParent, $olStatusForParent, TRUE, TRUE);
+
+                // Indent again so it is added to the sub list
+        		$this->doAction($method, 'listIndent');
+                $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>First item %1%<'.$subListType.'><li>first sub item</li><li>second sub item %2%</li></'.$subListType.'></li></'.$listType.'><'.$subListType.'><li>third sub item</li></'.$subListType.'><'.$listType.'><li>second item %3%</li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForSub, $olStatusForSub, TRUE, TRUE);
+
+                // Indent again so a third level list is created
+                $this->doAction($method, 'listIndent');
+                sleep(1);
+                $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>First item %1%<'.$subListType.'><li>first sub item<'.$subListType.'><li>second sub item %2%</li></'.$subListType.'></li></'.$subListType.'></li></'.$listType.'><'.$subListType.'><li>third sub item</li></'.$subListType.'><'.$listType.'><li>second item %3%</li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForSub, $olStatusForSub, FALSE, TRUE);
+            }
+        }
 
     }//end testOutdentAndIndentSubListItem()
 
@@ -192,102 +146,75 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
      *
      * @return void
      */
-    public function testRemovingAnItemFromTheSubListAndAddingItBackUsingTheSameListIcon()
+    public function testRemoveAndAddingSubItemsUsingIcons()
     {
-        //Test ordered sub list with top toolbar icon
-        $this->useTest(1);
-        $this->moveToKeyword(1);
-        $this->selectKeyword(2);
-        sleep(1);
-        $this->clickTopToolbarButton('listOL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ol><li>first sub item</li></ol><p>second sub item %2%</p></li><li>second item %3%</li></ul>');
-        $this->clickTopToolbarButton('listOL');
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ol><li>first sub item</li><li>second sub item %2%</li></ol></li><li>second item %3%</li></ul>');
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
+        foreach (array('ol', 'ul') as $listType) {
+            foreach ($this->getTestMethods(TRUE, TRUE, FALSE) as $method) {
+                if ($listType === 'ul') {
+                    $this->useTest(1);
+                    $subListType = 'ol';
+                    $ulStatus = TRUE;
+                    $olStatus = 'active';
+                    $listIconToClick = 'listOL';
+                } else {
+                    $this->useTest(2);
+                    $subListType = 'ul';
+                    $ulStatus = 'active';
+                    $olStatus = TRUE;
+                    $listIconToClick = 'listUL';
+                }
 
-        //Test ordered sub list with inline toolbar icon
-        $this->clickInlineToolbarButton('listOL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ol><li>first sub item</li></ol><p>second sub item %2%</p></li><li>second item %3%</li></ul>');
-        $this->clickInlineToolbarButton('listOL');
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ol><li>first sub item</li><li>second sub item %2%</li></ol></li><li>second item %3%</li></ul>');
+                $this->selectKeyword(2);
+                sleep(1);
+                $this->doAction($method, $listIconToClick, 'active');
+                $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, TRUE, FALSE);
+                $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>First item %1%<'.$subListType.'><li>first sub item</li></'.$subListType.'><p>second sub item %2%</p><'.$subListType.'><li>third sub item</li></'.$subListType.'></li><li>second item %3%</li></'.$listType.'>');
+                $this->doAction($method, $listIconToClick);
+                $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>First item %1%<'.$subListType.'><li>first sub item</li><li>second sub item %2%</li><li>third sub item</li></'.$subListType.'></li><li>second item %3%</li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
+            }
+        }
 
-        //Test unordered sub list with top toolbar icon
-        $this->useTest(2);
-        $this->selectKeyword(2);
-        sleep(1);
-        $this->clickTopToolbarButton('listUL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ul><li>first sub item</li></ul><p>second sub item %2%</p></li><li>second item %3%</li></ol>');
-        $this->clickTopToolbarButton('listUL');
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ol>');
-
-        //Test unordered sub list with inline toolbar icon
-        $this->clickInlineToolbarButton('listUL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ul><li>first sub item</li></ul><p>second sub item %2%</p></li><li>second item %3%</li></ol>');
-        $this->clickInlineToolbarButton('listUL');
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ol>');
-
-    }//end testRemovingAnItemFromTheSubListAndAddingItBackUsingTheSameListIcon()
+    }//end testRemoveAndAddingSubItemsUsingIcons()
 
 
     /**
-     * Test that you can remove an item from the list using the list icon and then add create another sub list using the different list type.
+     * Test that you can remove a sub list item by clicking the active list icon in the toolbar and then create a different type of list by 
+     * using the other list icon
      *
      * @return void
      */
-    public function testRemovingAnItemFromTheSubListUsingTheListIconAndCreatingANewSubListWithANewListType()
+    public function testRemoveItemFromSubListAndCreateNewSubListType()
     {
-        //Test ordered sub list with top toolbar icon
-        $this->useTest(1);
-        $this->moveToKeyword(1);
-        $this->selectKeyword(2);
-        $this->clickTopToolbarButton('listOL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ol><li>first sub item</li></ol><p>second sub item %2%</p></li><li>second item %3%</li></ul>');
-        $this->clickTopToolbarButton('listUL');
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ol><li>first sub item</li></ol><ul><li>second sub item %2%</li></ul></li><li>second item %3%</li></ul>');
-        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+        foreach (array('ol', 'ul') as $listType) {
+            foreach ($this->getTestMethods(TRUE, TRUE, FALSE) as $method) {
+                if ($listType === 'ul') {
+                    $this->useTest(1);
+                    $subListType = 'ol';
+                    $ulStatus = 'active';
+                    $olStatus = TRUE;
+                    $activeListIconToClick = 'listOL';
+                    $listIconToClick = 'listUL';
+                } else {
+                    $this->useTest(2);
+                    $subListType = 'ul';
+                    $ulStatus = TRUE;
+                    $olStatus = 'active';
+                    $activeListIconToClick = 'listUL';
+                    $listIconToClick = 'listOL';
+                }
 
-        //Test ordered sub list with inline toolbar icon
-        $this->useTest(1);
-        $this->moveToKeyword(1);
-        $this->selectKeyword(2);
-        $this->clickInlineToolbarButton('listOL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ol><li>first sub item</li></ol><p>second sub item %2%</p></li><li>second item %3%</li></ul>');
-        $this->clickTopToolbarButton('listUL');
-        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ol><li>first sub item</li></ol><ul><li>second sub item %2%</li></ul></li><li>second item %3%</li></ul>');
+                $this->selectKeyword(2);
+                $this->doAction($method, $activeListIconToClick, 'active');
+                $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, TRUE, FALSE);
+                $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>First item %1%<'.$subListType.'><li>first sub item</li></'.$subListType.'><p>second sub item %2%</p><'.$subListType.'><li>third sub item</li></'.$subListType.'></li><li>second item %3%</li></'.$listType.'>');
+                $this->doAction($method, $listIconToClick);
+                $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>First item %1%<'.$subListType.'><li>first sub item</li></'.$subListType.'><'.$listType.'><li>second sub item %2%</li></'.$listType.'><'.$subListType.'><li>third sub item</li></'.$subListType.'></li><li>second item %3%</li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatus, $olStatus, FALSE, TRUE);
+            }
+        }
 
-        //Test unordered sub list with top toolbar icon
-        $this->useTest(2);
-        $this->moveToKeyword(1);
-        $this->selectKeyword(2);
-        $this->clickTopToolbarButton('listUL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ul><li>first sub item</li></ul><p>second sub item %2%</p></li><li>second item %3%</li></ol>');
-        $this->clickTopToolbarButton('listOL');
-        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ul><li>first sub item</li></ul><ol><li>second sub item %2%</li></ol></li><li>second item %3%</li></ol>');
-
-        //Test unordered sub list with inline toolbar icon
-        $this->useTest(2);
-        $this->moveToKeyword(1);
-        $this->selectKeyword(2);
-        $this->clickInlineToolbarButton('listUL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ul><li>first sub item</li></ul><p>second sub item %2%</p></li><li>second item %3%</li></ol>');
-        $this->clickTopToolbarButton('listOL');
-        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ul><li>first sub item</li></ul><ol><li>second sub item %2%</li></ol></li><li>second item %3%</li></ol>');
-
-    }//end testRemovingAnItemFromTheSubListUsingTheListIconAndCreatingANewSubListWithANewListType()
+    }//end testRemoveItemFromSubListAndCreateNewSubListType()
 
 
 	/**
@@ -297,1259 +224,773 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
      */
     public function testOutdentAllSubListItemsAndIndentAgain()
     {
-        //Test ordered sub list with keyboard shortcuts
-        $this->useTest(1);
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(2);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%</li><li>first sub item</li><li>second sub item %2%</li><li>second item %3%</li></ul>');
-		$this->sikuli->keyDown('Key.TAB');
-        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ul>');
+        foreach (array('ol', 'ul') as $listType) {
+            foreach ($this->getTestMethods(TRUE, TRUE, TRUE) as $method) {
+                if ($listType === 'ul') {
+                    $this->useTest(1);
+                    $ulStatus = 'active';
+                    $olStatus = TRUE;
+                } else {
+                    $this->useTest(2);
+                    $ulStatus = TRUE;
+                    $olStatus = 'active';
+                }
 
-        //Test ordered sub list with inline toolbar icons
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%</li><li>first sub item</li><li>second sub item %2%</li><li>second item %3%</li></ul>');
-        $this->clickInlineToolbarButton('listIndent');
-        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ul>');
-
-        //Test ordered sub list with top toolbar icons
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%</li><li>first sub item</li><li>second sub item %2%</li><li>second item %3%</li></ul>');
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ul>');
-
-        //Test unordered sub list with keyboard shortcuts
-        $this->useTest(2);
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(2);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%</li><li>first sub item</li><li>second sub item %2%</li><li>second item %3%</li></ol>');
-		$this->sikuli->keyDown('Key.TAB');
-        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ol><li>first sub item</li><li>second sub item %2%</li></ol></li><li>second item %3%</li></ol>');
-
-        //Test unordered sub list with inline toolbar icons
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%</li><li>first sub item</li><li>second sub item %2%</li><li>second item %3%</li></ol>');
-        $this->clickInlineToolbarButton('listIndent');
-        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ol><li>first sub item</li><li>second sub item %2%</li></ol></li><li>second item %3%</li></ol>');
-
-        //Test unordered sub list with top toolbar icons
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, TRUE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%</li><li>first sub item</li><li>second sub item %2%</li><li>second item %3%</li></ol>');
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ol><li>first sub item</li><li>second sub item %2%</li></ol></li><li>second item %3%</li></ol>');
+                $this->selectKeyword(2);
+                $this->selectInlineToolbarLineageItem(2);
+                $this->doAction($method, 'listOutdent');
+                $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
+                $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>First item %1%</li><li>first sub item</li><li>second sub item %2%</li><li>third sub item</li><li>second item %3%</li></'.$listType.'>');
+        		$this->doAction($method, 'listIndent');
+                $this->assertIconStatusesCorrect($ulStatus, $olStatus, FALSE, TRUE);
+                $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>First item %1%<'.$listType.'><li>first sub item</li><li>second sub item %2%</li><li>third sub item</li></'.$listType.'></li><li>second item %3%</li></'.$listType.'>');
+            }
+        }
 
     }//end testOutdentAllSubListItemsAndIndentAgain()
 
 
     /**
-     * Test that when you can remove all items from the sub list and re-create the sub list using the list icons.
+     * Test that you can remove all items from the sub list and re-create the sub list using the list icons.
      *
      * @return void
      */
-    public function testRemoveAllSubListItemsAndAddItBackAgainUsingListIcons()
+    public function testRemoveAndRecreateSubList()
     {
-        //Test ordered sub list with inline toolbar icons
-        $this->useTest(1);
-        $this->moveToKeyword(1);
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(2);
-        $this->clickInlineToolbarButton('listOL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<br /><p>first sub item</p><p>second sub item %2%</p></li><li>second item %3%</li></ul>');
-        $this->clickInlineToolbarButton('listOL');
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ol><li>first sub item</li><li>second sub item %2%</li></ol></li><li>second item %3%</li></ul>');
-        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
+        foreach (array('ol', 'ul') as $listType) {
+            foreach ($this->getTestMethods(TRUE, TRUE, FALSE) as $method) {
+                if ($listType === 'ul') {
+                    $this->useTest(1);
+                    $subListType = 'ol';
+                    $ulStatus = TRUE;
+                    $olStatus = 'active';
+                    $listIconToClick = 'listOL';
+                } else {
+                    $this->useTest(2);
+                    $subListType = 'ul';
+                    $ulStatus = 'active';
+                    $olStatus = TRUE;
+                    $listIconToClick = 'listUL';
+                }
 
-        //Test ordered sub list with top toolbar icons
-        $this->clickTopToolbarButton('listOL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<br /><p>first sub item</p><p>second sub item %2%</p></li><li>second item %3%</li></ul>');
-        $this->clickTopToolbarButton('listOL');
-        $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ol><li>first sub item</li><li>second sub item %2%</li></ol></li><li>second item %3%</li></ul>');
+                $this->selectKeyword(2);
+                $this->selectInlineToolbarLineageItem(2);
+                $this->doAction($method, $listIconToClick, 'active');
+                $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, TRUE, FALSE);
+                $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>First item %1%<br /><p>first sub item</p><p>second sub item %2%</p><p>third sub item</p></li><li>second item %3%</li></'.$listType.'>');
+                $this->doAction($method, $listIconToClick);
+                $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>First item %1%<'.$subListType.'><li>first sub item</li><li>second sub item %2%</li><li>third sub item</li></'.$subListType.'></li><li>second item %3%</li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatus, $olStatus, FALSE, TRUE);
+            }
+        }
 
-        //Test unordered sub list with inline toolbar icons
-        $this->useTest(2);
-        $this->moveToKeyword(1);
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(2);
-        $this->clickInlineToolbarButton('listUL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, FALSE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<br /><p>first sub item</p><p>second sub item %2%</p></li><li>second item %3%</li></ol>');
-        $this->clickInlineToolbarButton('listUL');
-        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ol>');
-
-        //Test unordered sub list with top toolbar icons
-        $this->clickTopToolbarButton('listUL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, 'active', TRUE, FALSE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<br /><p>first sub item</p><p>second sub item %2%</p></li><li>second item %3%</li></ol>');
-        $this->clickTopToolbarButton('listUL');
-        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ol>');
-
-    }//end testRemoveAllSubListItemsAndAddItBackAgainUsingListIcons()
+    }//end testRemoveAndRecreateSubList()
 
 
     /**
-     * Test that when you can remove all items from the sub list using the list icon and create a new sub list using the parent list type by pressing tab.
+     * Test that you can remove all items from the sub list using the list icon and create a new sub list using the parent list type by pressing tab.
      *
      * @return void
      */
-    public function testRemoveAllSubListItemsUsingListIconsAndCreatingNewSubListByPressingTab()
+    public function testRemoveSubListAndCreateNewListWithTabKey()
     {
-        //Test ordered sub list
-        $this->useTest(1);
-        $this->moveToKeyword(1);
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(2);
-        $this->clickInlineToolbarButton('listOL', 'active');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<br /><p>first sub item</p><p>second sub item %2%</p></li><li>second item %3%</li></ul>');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
-        $this->assertHTMLMatch('<p>Unordered List with ordered sub list:</p><ul><li>First item %1%<ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ul>');
+        foreach (array('ol', 'ul') as $listType) {
+            foreach ($this->getTestMethods(TRUE, TRUE, FALSE) as $method) {
+                if ($listType === 'ul') {
+                    $this->useTest(1);
+                    $listIconToClick = 'listOL';
+                } else {
+                    $this->useTest(2);
+                    $listIconToClick = 'listUL';
+                }
 
-        //Test unordered sub list
-        $this->useTest(2);
-        $this->moveToKeyword(1);
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(2);
-        $this->clickInlineToolbarButton('listUL', 'active');
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, FALSE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<br /><p>first sub item</p><p>second sub item %2%</p></li><li>second item %3%</li></ol>');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
-        $this->assertHTMLMatch('<p>Ordered List with unordered sub list:</p><ol><li>First item %1%<ul><li>first sub item</li><li>second sub item %2%</li></ul></li><li>second item %3%</li></ol>');
+                $this->selectKeyword(2);
+                $this->selectInlineToolbarLineageItem(2);
+                $this->doAction($method, $listIconToClick, 'active');
+                $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, TRUE, FALSE);
+                $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>First item %1%<br /><p>first sub item</p><p>second sub item %2%</p><p>third sub item</p></li><li>second item %3%</li></'.$listType.'>');
+                $this->sikuli->keyDown('Key.TAB');
+                $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
+                $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>First item %1%<ul><li>first sub item</li><li>second sub item %2%</li><li>third sub item</li></ul></li><li>second item %3%</li></'.$listType.'>');
+            }
+        }
 
-    }//end testRemoveAllSubListItemsUsingListIconsAndCreatingNewSubListByPressingTab()
+    }//end testRemoveSubListAndCreateNewListWithTabKey()
 
 
     /**
-     * Test outdent multiple items and then indent a single item within a unordered parent and ordered sub list.
+     * Test outdent and indent two sub list items when selecting both list items.
      *
      * @return void
      */
-    public function testOutdentAndIndentOrderedListItemWithinUnorderedListItem()
+    public function testOutdentAndIndentTwoSubListItems()
     {
-        // Test right once
-        // Test using keyboard shortcuts
-        $this->useTest(3);
-        $this->selectKeyword(2,3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%</li><li>Accessibility audit report</li></ul>');
+        foreach (array('ol', 'ul') as $listType) {
+            foreach ($this->getTestMethods(TRUE, TRUE, FALSE) as $method) {
+                if ($listType === 'ul') {
+                    $this->useTest(3);
+                    $subListType = 'ol';
+                    $ulStatusForParent = 'active';
+                    $olStatusForParent = TRUE;
+                    $ulStatusForSub = TRUE;
+                    $olStatusForSub = 'active';
+                } else {
+                    $this->useTest(4);
+                    $subListType = 'ul';
+                    $ulStatusForParent = TRUE;
+                    $olStatusForParent = 'active';
+                    $ulStatusForSub = 'active';
+                    $olStatusForSub = TRUE;
+                }
 
-        sleep(3);
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ol></li></ul>');
+                // Outdent once so list items are at the top level
+                $this->selectKeyword(2, 4);
+                $this->doAction($method, 'listOutdent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$subListType.'></li><li>%2% additional %3%</li><li>Accessibility audit report %4%</li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForParent, $olStatusForParent, TRUE, TRUE);
 
-        // Test using top toolbar
-        $this->useTest(3);
-        $this->selectKeyword(2,3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->clickTopToolbarButton('listOutdent');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%</li><li>Accessibility audit report</li></ul>');
+                // Outdent again so list items are no longer in list
+                $this->doAction($method, 'listOutdent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$subListType.'></li></'.$listType.'><p>%2% additional %3%</p><p>Accessibility audit report %4%</p>');
+                $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, TRUE, FALSE);
 
-        sleep(1);
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ol></li></ul>');
+                // Indent once so they are back in the list
+                $this->doTopToolbarAction($method, 'listIndent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$subListType.'></li><li>%2% additional %3%</li><li>Accessibility audit report %4%</li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForParent, $olStatusForParent, TRUE, TRUE);
 
-        // Test using inline toolbar
-        $this->useTest(3);
-        $this->selectKeyword(2,3);
-        sleep(3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        sleep(3);
-        $this->clickInlineToolbarButton('listOutdent');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%</li><li>Accessibility audit report</li></ul>');
+                // Indent again so they added to the sub list
+                $this->doAction($method, 'listIndent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report %4%</li></'.$subListType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForSub, $olStatusForSub, TRUE, TRUE);
 
-        sleep(1);
-        $this->clickInlineToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ol></li></ul>');
+                // Indent again so a third level list is created
+                $this->doAction($method, 'listIndent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages<'.$subListType.'><li>%2% additional %3%</li><li>Accessibility audit report %4%</li></'.$subListType.'></li></'.$subListType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForSub, $olStatusForSub, FALSE, TRUE);
+            }
+        }
 
-        // Test right twice
-        // Test using keyboard shortcuts
-        $this->useTest(3);
-        $this->selectKeyword(2,3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%</li><li>Accessibility audit report</li></ul>');
-
-        sleep(3);
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ol></li></ul>');
-
-        // Test using top toolbar
-        $this->useTest(3);
-        $this->selectKeyword(2,3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->clickTopToolbarButton('listOutdent');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%</li><li>Accessibility audit report</li></ul>');
-
-        sleep(1);
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ol></li></ul>');
-
-        // Test using inline toolbar
-        $this->useTest(3);
-        $this->selectKeyword(2,3);
-        sleep(3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        sleep(3);
-        $this->clickInlineToolbarButton('listOutdent');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%</li><li>Accessibility audit report</li></ul>');
-
-        sleep(1);
-        $this->clickInlineToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ol></li></ul>');
-    }//end testOutdentAndIndentOrderedListItemWithinUnorderedListItem()
+    }//end testOutdentAndIndentTwoSubListItems()
 
 
     /**
-     * Test outdent multiple items and then indent a single item within a ordered parent and unordered sub list.
+     * Test selecting one list item, pressing shift + right twice and outdenting and indenting content
      *
      * @return void
      */
-    public function testOutdentAndIndentUnorderedListItemWithinOrderedListItem()
+    public function testOutdentAndIndentTwoSubListItemsWithPartialSelection()
     {
-        // Test right once
-        // Test using keyboard shortcuts
-        $this->useTest(4);
-        $this->selectKeyword(2,3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%</li><li>Accessibility audit report</li></ol>');
+        foreach (array('ol', 'ul') as $listType) {
+            foreach ($this->getTestMethods(TRUE, TRUE, TRUE) as $method) {
 
-        sleep(1);
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ul></li></ol>');
+                if ($listType === 'ul') {
+                    $this->useTest(3);
+                    $subListType = 'ol';
+                    $ulStatusForParent = 'active';
+                    $olStatusForParent = TRUE;
+                    $ulStatusForSub = TRUE;
+                    $olStatusForSub = 'active';
+                } else {
+                    $this->useTest(4);
+                    $subListType = 'ul';
+                    $ulStatusForParent = TRUE;
+                    $olStatusForParent = 'active';
+                    $ulStatusForSub = 'active';
+                    $olStatusForSub = TRUE;
+                }
 
-        // Test using top toolbar
-        $this->useTest(4);
-        $this->selectKeyword(2,3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->clickTopToolbarButton('listOutdent');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%</li><li>Accessibility audit report</li></ol>');
+                $this->selectKeyword(2);
+                $this->selectInlineToolbarLineageItem(3);
+                $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+                $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
 
-        sleep(1);
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ul></li></ol>');
+                // Outdent once so list items are at the top level
+                $this->doAction($method, 'listOutdent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$subListType.'></li><li>%2% additional %3%</li><li>Accessibility audit report %4%</li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForParent, $olStatusForParent, TRUE, TRUE);
 
-        // Test using inline toolbar
-        $this->useTest(4);
-        $this->selectKeyword(2,3);
-        sleep(1);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        sleep(1);
-        $this->clickInlineToolbarButton('listOutdent');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%</li><li>Accessibility audit report</li></ol>');
+                // Outdent again so list items are no longer in list
+                $this->doAction($method, 'listOutdent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$subListType.'></li></'.$listType.'><p>%2% additional %3%</p><p>Accessibility audit report %4%</p>');
+                $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, TRUE, FALSE);
 
-        sleep(1);
-        $this->clickInlineToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1% <ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ul></li></ol>');
+                // Indent once so they are back in the list
+                $this->doTopToolbarAction($method, 'listIndent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$subListType.'></li><li>%2% additional %3%</li><li>Accessibility audit report %4%</li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForParent, $olStatusForParent, TRUE, TRUE);
 
-        // Test right twice
-        // Test using keyboard shortcuts
-        $this->useTest(4);
-        $this->selectKeyword(2,3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        sleep(1);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%</li><li>Accessibility audit report</li></ol>');
+                // Indent again so they added to the sub list
+                $this->doAction($method, 'listIndent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report %4%</li></'.$subListType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForSub, $olStatusForSub, TRUE, TRUE);
 
-        sleep(1);
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ul></li></ol>');
+                // Indent again so a third level list is created
+                $this->doAction($method, 'listIndent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages<'.$subListType.'><li>%2% additional %3%</li><li>Accessibility audit report %4%</li></'.$subListType.'></li></'.$subListType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForSub, $olStatusForSub, FALSE, TRUE);
+            }
+        }
 
-        // Test using top toolbar
-        $this->useTest(4);
-        $this->selectKeyword(2,3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->clickTopToolbarButton('listOutdent');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%</li><li>Accessibility audit report</li></ol>');
-
-        sleep(1);
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ul></li></ol>');
-
-        // Test using inline toolbar
-        $this->useTest(4);
-        $this->selectKeyword(2,3);
-        sleep(1);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        sleep(1);
-        $this->clickInlineToolbarButton('listOutdent');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%</li><li>Accessibility audit report</li></ol>');
-
-        sleep(1);
-        $this->clickInlineToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%</li><li>Accessibility audit report</li></ul></li></ol>');
-    }//end testOutdentAndIndentOrderedListItemWithinUnorderedListItem()
+    }//end testOutdentAndIndentTwoSubListItemsWithPartialSelection()
 
 
     /**
-     * Test outdent multiple items and then indent a single item within a ordered parent list with an empty item.
+     * Test selecting a second level sub list item and using indent
+     * and outdent.
      *
      * @return void
      */
-    public function testAddingNewEmptyListItemThenIndentAndOutdentOrderedParentList()
+    public function testOutdentAndIndentSubListItemThatHasEmptySubList()
     {
-        // Test using keyboard shortcuts
-        $this->useTest(3);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li></li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
 
-        $this->selectKeyword(2,3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<ol><li></li><li>Accessibility audit report</li></ol></li></ul>');
+        // Test when the sub list is the same list type as the empty list
+        foreach (array('ol', 'ul') as $listType) {
+            foreach ($this->getTestMethods(TRUE, TRUE, TRUE) as $method) {
 
-        sleep(1);
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li></li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
+                if ($listType === 'ul') {
+                    $this->useTest(5);
+                    $subListType = 'ol';
+                    $ulStatusForParent = 'active';
+                    $olStatusForParent = TRUE;
+                    $ulStatusForSub = TRUE;
+                    $olStatusForSub = 'active';
+                } else {
+                    $this->useTest(6);
+                    $subListType = 'ul';
+                    $ulStatusForParent = TRUE;
+                    $olStatusForParent = 'active';
+                    $ulStatusForSub = 'active';
+                    $olStatusForSub = TRUE;
+                }
 
-        // Test using top toolbar
-        $this->useTest(3);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li></li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
+                $this->sikuli->tripleClick($this->findKeyword(2));
 
-        $this->selectKeyword(2,3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->clickTopToolbarButton('listOutdent');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<ol><li></li><li>Accessibility audit report</li></ol></li></ul>');
+                // Press shift + right once to make sure the selection is maintained. It should not select the next list item.
+                $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
 
-        sleep(1);
-        $this->selectKeyword(2,3);
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li></li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
+                // Outdent once so the parent and following list item get added to the top level list.
+                $this->doAction($method, 'listOutdent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$subListType.'></li><li>%2% test<'.$subListType.'><li>&nbsp;</li><li>Accessibility audit report</li></'.$subListType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForParent, $olStatusForParent, TRUE, TRUE);
 
-        // Test using inline toolbar
-        $this->useTest(3);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li></li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
+                // Outdent again so parent and following list items are removed from the list.
+                $this->doAction($method, 'listOutdent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$subListType.'></li></'.$listType.'><p>%2% test</p><'.$subListType.'><li>&nbsp;</li><li>Accessibility audit report</li></'.$subListType.'>');
+                $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
-        $this->selectKeyword(2,3);
-        sleep(3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        sleep(3);
-        $this->clickInlineToolbarButton('listOutdent');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<ol><li></li><li>Accessibility audit report</li></ol></li></ul>');
+                // Indent once so items are added back to list
+                $this->doTopToolbarAction($method, 'listIndent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$subListType.'></li><li>%2% test</li></'.$listType.'><'.$subListType.'><li>&nbsp;</li><li>Accessibility audit report</li></'.$subListType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForParent, $olStatusForParent, TRUE, TRUE);
 
-        sleep(1);
-        $this->selectKeyword(2,3);
-        $this->clickInlineToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li></li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
+                // Indent again so items are added back to sub list
+                $this->doAction($method, 'listIndent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test</li></'.$subListType.'></li></'.$listType.'><'.$subListType.'><li>&nbsp;</li><li>Accessibility audit report</li></'.$subListType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForSub, $olStatusForSub, TRUE, TRUE);
 
-        // Test using keyboard shortcuts
-        $this->useTest(3);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li></li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
+                // Indent again so items are added to the third level list
+                $this->doAction($method, 'listIndent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages<'.$subListType.'><li>%2% test</li></'.$subListType.'></li></'.$subListType.'></li></'.$listType.'><'.$subListType.'><li>&nbsp;</li><li>Accessibility audit report</li></'.$subListType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForSub, $olStatusForSub, FALSE, TRUE);
+            }
+        }
 
-        $this->selectKeyword(2,3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<ol><li></li><li>Accessibility audit report</li></ol></li></ul>');
+        // Test when the sub list is a different list type to the empty list
+        foreach (array('ol', 'ul') as $listType) {
+            foreach ($this->getTestMethods(TRUE, TRUE, TRUE) as $method) {
 
-        sleep(1);
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li></li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
+                if ($listType === 'ul') {
+                    $this->useTest(7);
+                    $subListType = 'ol';
+                    $ulStatusForParent = 'active';
+                    $olStatusForParent = TRUE;
+                    $ulStatusForSub = TRUE;
+                    $olStatusForSub = 'active';
+                } else {
+                    $this->useTest(8);
+                    $subListType = 'ul';
+                    $ulStatusForParent = TRUE;
+                    $olStatusForParent = 'active';
+                    $ulStatusForSub = 'active';
+                    $olStatusForSub = TRUE;
+                }
 
-        // Test using top toolbar
-        $this->useTest(3);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li></li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
+                $this->sikuli->tripleClick($this->findKeyword(2));
 
-        $this->selectKeyword(2,3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->clickTopToolbarButton('listOutdent');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<ol><li></li><li>Accessibility audit report</li></ol></li></ul>');
+                // Press shift + right once to make sure the selection is maintained. It should not select the next list item.
+                $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
 
-        sleep(1);
-        $this->selectKeyword(2,3);
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li></li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
+                // Outdent once so the parent and following list item get added to the top level list.
+                $this->doAction($method, 'listOutdent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$subListType.'></li><li>%2% test<'.$listType.'><li>&nbsp;</li><li>Accessibility audit report</li></'.$listType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForParent, $olStatusForParent, TRUE, TRUE);
 
-        // Test using inline toolbar
-        $this->useTest(3);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li></li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
+                // Outdent again so parent and following list items are removed from the list.
+                $this->doAction($method, 'listOutdent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$subListType.'></li></'.$listType.'><p>%2% test</p><'.$listType.'><li>&nbsp;</li><li>Accessibility audit report</li></'.$listType.'>');
+                $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
-        $this->selectKeyword(2,3);
-        sleep(3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        sleep(3);
-        $this->clickInlineToolbarButton('listOutdent');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<ol><li></li><li>Accessibility audit report</li></ol></li></ul>');
+                // Indent once so items are added back to list
+                $this->doTopToolbarAction($method, 'listIndent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$subListType.'></li><li>%2% test</li><li>&nbsp;</li><li>Accessibility audit report</li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForParent, $olStatusForParent, TRUE, TRUE);
 
-        sleep(1);
-        $this->selectKeyword(2,3);
-        $this->clickInlineToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1% <ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li></li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
+                // Indent again so items are added back to sub list
+                $this->doAction($method, 'listIndent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test</li></'.$subListType.'></li><li>&nbsp;</li><li>Accessibility audit report</li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForSub, $olStatusForSub, TRUE, TRUE);
 
-    }//end testAddingNewEmptyListItemThenIndentAndOutdentOrderedParentList()
+                // Indent again so items are added to the third level list
+                $this->doAction($method, 'listIndent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages<'.$subListType.'><li>%2% test</li></'.$subListType.'></li></'.$subListType.'></li><li>&nbsp;</li><li>Accessibility audit report</li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForSub, $olStatusForSub, FALSE, TRUE);
+            }
+        }
+
+    }//end testOutdentAndIndentSubListItemThatHasEmptySubList()
 
 
     /**
-     * Test outdent multiple items and then indent a single item within a unordered parent list with an empty item.
+     * Test selecting a second level sub list item, pressing shift + right twice to select its empty sub list item and using indent
+     * and outdent.
      *
      * @return void
      */
-    public function testAddingNewEmptyListItemThenIndentAndOutdentUnorderedParentList()
+    public function testOutdentAndIndentSubListItemAndEmptySubList()
     {
-        // Test using keyboard shortcuts
-        $this->useTest(4);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li></li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
 
-        $this->selectKeyword(2,3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<ul><li></li><li>Accessibility audit report</li></ul></li></ol>');
+        // Test when the sub list is the same list type as the empty list
+        foreach (array('ol', 'ul') as $listType) {
+            foreach ($this->getTestMethods(TRUE, TRUE, TRUE) as $method) {
 
-        sleep(1);
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li></li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
+                if ($listType === 'ul') {
+                    $this->useTest(5);
+                    $subListType = 'ol';
+                    $ulStatusForParent = 'active';
+                    $olStatusForParent = TRUE;
+                    $ulStatusForSub = TRUE;
+                    $olStatusForSub = 'active';
+                } else {
+                    $this->useTest(6);
+                    $subListType = 'ul';
+                    $ulStatusForParent = TRUE;
+                    $olStatusForParent = 'active';
+                    $ulStatusForSub = 'active';
+                    $olStatusForSub = TRUE;
+                }
 
-        // Test using top toolbar
-        $this->useTest(4);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li></li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
+                $this->sikuli->tripleClick($this->findKeyword(2));
 
-        $this->selectKeyword(2,3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->clickTopToolbarButton('listOutdent');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<ul><li></li><li>Accessibility audit report</li></ul></li></ol>');
+                for ($i = 0; $i < 2; $i++) {
+                    $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+                }
 
-        sleep(1);
-        $this->selectKeyword(2,3);
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li></li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
+                // Outdent once so the parent and following list item get added to the top level list.
+                $this->doAction($method, 'listOutdent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$subListType.'></li><li>%2% test<'.$subListType.'><li>&nbsp;</li><li>Accessibility audit report</li></'.$subListType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForParent, $olStatusForParent, TRUE, TRUE);
 
-        // Test using inline toolbar
-        $this->useTest(4);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li></li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
+                // Outdent again so parent and following list items are removed from the list.
+                $this->doAction($method, 'listOutdent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$subListType.'></li></'.$listType.'><p>%2% test</p><'.$subListType.'><li>&nbsp;</li><li>Accessibility audit report</li></'.$subListType.'>');
+                $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
-        $this->selectKeyword(2,3);
-        sleep(3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        sleep(3);
-        $this->clickInlineToolbarButton('listOutdent');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<ul><li></li><li>Accessibility audit report</li></ul></li></ol>');
+                // Indent once so items are added back to list
+                $this->doTopToolbarAction($method, 'listIndent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$subListType.'></li><li>%2% test<'.$subListType.'><li>&nbsp;</li><li>Accessibility audit report</li></'.$subListType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForParent, $olStatusForParent, TRUE, TRUE);
 
-        sleep(1);
-        $this->selectKeyword(2,3);
-        $this->clickInlineToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li></li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
+                // Indent again so items are added back to sub list
+                $this->doAction($method, 'listIndent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test<'.$subListType.'><li>&nbsp;</li><li>Accessibility audit report</li></'.$subListType.'></li></'.$subListType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForSub, $olStatusForSub, TRUE, TRUE);
 
-        // Test using keyboard shortcuts
-        $this->useTest(4);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li></li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
+                // Indent again so items are added to the third level list
+                $this->doAction($method, 'listIndent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages<'.$subListType.'><li>%2% test<'.$subListType.'><li>&nbsp;</li><li>Accessibility audit report</li></'.$subListType.'></li></'.$subListType.'></li></'.$subListType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForSub, $olStatusForSub, FALSE, TRUE);
+            }
+        }
 
-        $this->selectKeyword(2,3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<ul><li></li><li>Accessibility audit report</li></ul></li></ol>');
+        // Test when the sub list is a different list type to the empty list
+        foreach (array('ol', 'ul') as $listType) {
+            foreach ($this->getTestMethods(TRUE, TRUE, TRUE) as $method) {
 
-        sleep(1);
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li></li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
+                if ($listType === 'ul') {
+                    $this->useTest(7);
+                    $subListType = 'ol';
+                    $ulStatusForParent = 'active';
+                    $olStatusForParent = TRUE;
+                    $ulStatusForSub = TRUE;
+                    $olStatusForSub = 'active';
+                } else {
+                    $this->useTest(8);
+                    $subListType = 'ul';
+                    $ulStatusForParent = TRUE;
+                    $olStatusForParent = 'active';
+                    $ulStatusForSub = 'active';
+                    $olStatusForSub = TRUE;
+                }
 
-        // Test using top toolbar
-        $this->useTest(4);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li></li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
+                $this->sikuli->tripleClick($this->findKeyword(2));
 
-        $this->selectKeyword(2,3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->clickTopToolbarButton('listOutdent');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<ul><li></li><li>Accessibility audit report</li></ul></li></ol>');
+                for ($i = 0; $i < 2; $i++) {
+                    $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+                }
 
-        sleep(1);
-        $this->selectKeyword(2,3);
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li></li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
+                // Outdent once so the parent and following list item get added to the top level list.
+                $this->doAction($method, 'listOutdent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$subListType.'></li><li>%2% test<'.$listType.'><li>&nbsp;</li><li>Accessibility audit report</li></'.$listType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForParent, $olStatusForParent, TRUE, TRUE);
 
-        // Test using inline toolbar
-        $this->useTest(4);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li></li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
+                // Outdent again so parent and following list items are removed from the list.
+                $this->doAction($method, 'listOutdent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$subListType.'></li></'.$listType.'><p>%2% test</p><'.$listType.'><li>&nbsp;</li><li>Accessibility audit report</li></'.$listType.'>');
+                $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
-        $this->selectKeyword(2,3);
-        sleep(3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        sleep(3);
-        $this->clickInlineToolbarButton('listOutdent');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<ul><li></li><li>Accessibility audit report</li></ul></li></ol>');
+                // Indent once so items are added back to list
+                $this->doTopToolbarAction($method, 'listIndent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages</li></'.$subListType.'></li><li>%2% test<'.$listType.'><li>&nbsp;</li><li>Accessibility audit report</li></'.$listType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForParent, $olStatusForParent, TRUE, TRUE);
 
-        sleep(1);
-        $this->selectKeyword(2,3);
-        $this->clickInlineToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li></li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
+                // Indent again so items are added back to sub list
+                $this->doAction($method, 'listIndent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% test<'.$listType.'><li>&nbsp;</li><li>Accessibility audit report</li></'.$listType.'></li></'.$subListType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForSub, $olStatusForSub, TRUE, TRUE);
 
-    }//end testAddingNewEmptyListItemThenIndentAndOutdentUnorderedParentList()
+                // Indent again so items are added to the third level list
+                $this->doAction($method, 'listIndent');
+                $this->assertHTMLMatch('<h2>Meh</h2><'.$listType.'><li>%1%<'.$subListType.'><li>Audit of Homepage and 6 Section Landing pages<'.$subListType.'><li>%2% test<'.$listType.'><li>&nbsp;</li><li>Accessibility audit report</li></'.$listType.'></li></'.$subListType.'></li></'.$subListType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForSub, $olStatusForSub, FALSE, TRUE);
+            }
+        }
+
+    }//end testOutdentAndIndentSubListItemAndEmptySubList()
 
 
     /**
-     * Test outdent multiple items and then indent a single item within a unordered parent list with an empty item.
+     * Test selecting a list item and its sub list and using indent and outdent.
      *
      * @return void
      */
-    public function testAddingNewListItemThenIndentAndOutdentUnorderedParentList()
+    public function testOutdentAndIndentListItemWithItsSubList()
     {
-        // Test using keyboard shortcuts
-        $this->useTest(4);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->type('Test content.');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li>Test content.</li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
+        // Test selecting items located in the middle of the list
+        foreach (array('ol', 'ul') as $listType) {
+            foreach ($this->getTestMethods(TRUE, TRUE, TRUE) as $method) {
 
-        $this->selectKeyword(2,3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ol>');
+                if ($listType === 'ul') {
+                    $this->useTest(9);
+                    $subListType = 'ol';
+                    $ulStatus = 'active';
+                    $olStatus = TRUE;
+                } else {
+                    $this->useTest(10);
+                    $subListType = 'ul';
+                    $ulStatus = TRUE;
+                    $olStatus = 'active';
+                }
 
-        sleep(1);
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
+                $this->selectKeyword(1);
+                $this->selectInlineToolbarLineageItem(1);
 
-        // Test using top toolbar
-        $this->useTest(4);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->type('Test content.');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li>Test content.</li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
+                // Outdent again so parent is removed from the list
+                $this->doAction($method, 'listOutdent');
+                sleep(1);
+                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan</li></'.$listType.'><p>List %1% item here..</p><'.$subListType.'><li>Sub %2% list item</li></'.$subListType.'><'.$listType.'><li>List %3% item here..<'.$subListType.'><li>Sub %4% list item</li></'.$subListType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
-        $this->selectKeyword(2,3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->clickTopToolbarButton('listOutdent');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ol>');
+                // Indent once paragraph is added back to the top list
+                $this->doTopToolbarAction($method, 'listIndent');
+                sleep(1);
+                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan</li><li>List %1% item here..<'.$subListType.'><li>Sub %2% list item</li></'.$subListType.'></li><li>List %3% item here..<'.$subListType.'><li>Sub %4% list item</li></'.$subListType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
 
-        sleep(1);
-        $this->selectKeyword(2,3);
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
+                // Indent again so parent is added back to second level list
+                $this->doAction($method, 'listIndent');
+                sleep(1);
+                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan<'.$listType.'><li>List %1% item here..<'.$subListType.'><li>Sub %2% list item</li></'.$subListType.'></li></'.$listType.'></li><li>List %3% item here..<'.$subListType.'><li>Sub %4% list item</li></'.$subListType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatus, $olStatus, FALSE, TRUE);
 
-        // Test using inline toolbar
-        $this->useTest(4);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->type('Test content.');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li>Test content.</li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
+            }
+        }
 
-        $this->selectKeyword(2,3);
-        sleep(3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        sleep(3);
-        $this->clickInlineToolbarButton('listOutdent');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ol>');
+        // Test selecting items located at the bottom of the list
+        foreach (array('ol', 'ul') as $listType) {
+            foreach ($this->getTestMethods(TRUE, TRUE, TRUE) as $method) {
 
-        sleep(1);
-        $this->selectKeyword(2,3);
-        $this->clickInlineToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
+                 if ($listType === 'ul') {
+                    $this->useTest(9);
+                    $subListType = 'ol';
+                    $ulStatusForParent = 'active';
+                    $olStatusForParent = TRUE;
+                    $ulStatusForSub = TRUE;
+                    $olStatusForSub = 'active';
+                } else {
+                    $this->useTest(10);
+                    $subListType = 'ul';
+                    $ulStatusForParent = TRUE;
+                    $olStatusForParent = 'active';
+                    $ulStatusForSub = 'active';
+                    $olStatusForSub = TRUE;
+                }
 
-        // Test using keyboard shortcuts
-        $this->useTest(4);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->type('Test content.');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li>Test content.</li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
+                $this->selectKeyword(3);
+                $this->selectInlineToolbarLineageItem(1);
 
-        $this->selectKeyword(2,3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ol>');
+                // Outdent so parent is removed from the list
+                $this->doAction($method, 'listOutdent');
+                sleep(1);
+                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan</li><li>List %1% item here..<'.$subListType.'><li>Sub %2% list item</li></'.$subListType.'></li></'.$listType.'><p>List %3% item here..</p><'.$subListType.'><li>Sub %4% list item</li></'.$subListType.'>');
+                $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
-        sleep(1);
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
+                // Indent once paragraph is added back to the top list
+                $this->doTopToolbarAction($method, 'listIndent');
+                sleep(1);
+                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan</li><li>List %1% item here..<'.$subListType.'><li>Sub %2% list item</li></'.$subListType.'></li><li>List %3% item here..<'.$subListType.'><li>Sub %4% list item</li></'.$subListType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForParent, $olStatusForParent, TRUE, TRUE);
 
-        // Test using top toolbar
-        $this->useTest(4);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->type('Test content.');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li>Test content.</li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
+                // Indent again so parent is added back to second level list
+                $this->doAction($method, 'listIndent');
+                sleep(1);
+                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan</li><li>List %1% item here..<'.$subListType.'><li>Sub %2% list item</li><li>List %3% item here..<'.$subListType.'><li>Sub %4% list item</li></'.$subListType.'></li></'.$subListType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForSub, $olStatusForSub, TRUE, TRUE);
 
-        $this->selectKeyword(2,3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->clickTopToolbarButton('listOutdent');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ol>');
+                // Indent again so parent is added back to third level list
+                $this->doAction($method, 'listIndent');
+                sleep(1);
+                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan</li><li>List %1% item here..<'.$subListType.'><li>Sub %2% list item<'.$subListType.'><li>List %3% item here..<'.$subListType.'><li>Sub %4% list item</li></'.$subListType.'></li></'.$subListType.'></li></'.$subListType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForSub, $olStatusForSub, FALSE, TRUE);
 
-        sleep(1);
-        $this->selectKeyword(2,3);
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
+            }
+        }
 
-        // Test using inline toolbar
-        $this->useTest(4);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->type('Test content.');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li>Test content.</li></ul></li><li>Accessibility audit report</li></ul></li></ol>');
-
-        $this->selectKeyword(2,3);
-        sleep(3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        sleep(3);
-        $this->clickInlineToolbarButton('listOutdent');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li></ul></li><li>%2% additional %3%<ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ol>');
-
-        sleep(1);
-        $this->selectKeyword(2,3);
-        $this->clickInlineToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ol><li>%1%<ul><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ul><li>Test content.</li><li>Accessibility audit report</li></ul></li></ul></li></ol>');
-
-    }//end testAddingNewListItemThenIndentAndOutdentUnorderedParentList()
+    }//end testOutdentAndIndentListItemWithItsSubList()
 
 
     /**
-     * Test outdent multiple items and then indent a single item within a unordered parent list with an empty item.
+     * Test selecting a list item and its sub list and using indent and outdent.
      *
      * @return void
      */
-    public function testAddingNewListItemThenIndentAndOutdentOrderedParentList()
+    public function testOutdentAndIndentListItemWithMixedSubLists()
     {
-        // Test using keyboard shortcuts
-        $this->useTest(3);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->type('Test content.');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li>Test content.</li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
+        // Test selecting items located in the middle of the list where sub list is a different type
+        foreach (array('ol', 'ul') as $listType) {
+            foreach ($this->getTestMethods(TRUE, TRUE, TRUE) as $method) {
 
-        $this->selectKeyword(2,3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ul>');
+                if ($listType === 'ul') {
+                    $this->useTest(11);
+                    $subListType = 'ol';
+                    $ulStatus = 'active';
+                    $olStatus = TRUE;
+                } else {
+                    $this->useTest(12);
+                    $subListType = 'ul';
+                    $ulStatus = TRUE;
+                    $olStatus = 'active';
+                }
 
-        sleep(1);
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
+                $this->selectKeyword(1);
+                $this->selectInlineToolbarLineageItem(1);
 
-        // Test using top toolbar
-        $this->useTest(3);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->type('Test content.');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li>Test content.</li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
+                // Outdent again so parent is removed from the list
+                $this->doAction($method, 'listOutdent');
+                sleep(1);
+                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan</li></'.$listType.'><p>List %1% item here..</p><'.$subListType.'><li>Sub %2% list item</li></'.$subListType.'><'.$listType.'><li>List %3% item here..<'.$listType.'><li>Sub %4% list item</li></'.$listType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
-        $this->selectKeyword(2,3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->clickTopToolbarButton('listOutdent');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ul>');
+                // Indent once paragraph is added back to the top list
+                $this->doTopToolbarAction($method, 'listIndent');
+                sleep(1);
+                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan</li><li>List %1% item here..<'.$subListType.'><li>Sub %2% list item</li></'.$subListType.'></li><li>List %3% item here..<'.$listType.'><li>Sub %4% list item</li></'.$listType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
 
-        sleep(1);
-        $this->selectKeyword(2,3);
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
+                // Indent again so parent is added back to second level list
+                $this->doAction($method, 'listIndent');
+                sleep(1);
+                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan<'.$listType.'><li>List %1% item here..<'.$subListType.'><li>Sub %2% list item</li></'.$subListType.'></li></'.$listType.'></li><li>List %3% item here..<'.$listType.'><li>Sub %4% list item</li></'.$listType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatus, $olStatus, FALSE, TRUE);
 
-        // Test using inline toolbar
-        $this->useTest(3);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->type('Test content.');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li>Test content.</li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
+            }
+        }
 
-        $this->selectKeyword(2,3);
-        sleep(3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        sleep(3);
-        $this->clickInlineToolbarButton('listOutdent');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ul>');
+        // Test selecting items located in the middle of the list where sub list is the same type
+       foreach (array('ol', 'ul') as $listType) {
+            foreach ($this->getTestMethods(TRUE, TRUE, TRUE) as $method) {
 
-        sleep(1);
-        $this->selectKeyword(2,3);
-        $this->clickInlineToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
+                if ($listType === 'ul') {
+                    $this->useTest(13);
+                    $subListType = 'ol';
+                    $ulStatus = 'active';
+                    $olStatus = TRUE;
+                } else {
+                    $this->useTest(14);
+                    $subListType = 'ul';
+                    $ulStatus = TRUE;
+                    $olStatus = 'active';
+                }
 
-        // Test using keyboard shortcuts
-        $this->useTest(3);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->type('Test content.');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li>Test content.</li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
+                $this->selectKeyword(1);
+                $this->selectInlineToolbarLineageItem(1);
 
-        $this->selectKeyword(2,3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ul>');
+                // Outdent again so parent is removed from the list
+                $this->doAction($method, 'listOutdent');
+                sleep(1);
+                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan</li></'.$listType.'><p>List %1% item here..</p><'.$listType.'><li>Sub %2% list item</li></'.$listType.'><'.$listType.'><li>List %3% item here..<'.$subListType.'><li>Sub %4% list item</li></'.$subListType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
-        sleep(1);
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
+                // Indent once paragraph is added back to the top list
+                $this->doTopToolbarAction($method, 'listIndent');
+                sleep(1);
+                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan</li><li>List %1% item here..<'.$listType.'><li>Sub %2% list item</li></'.$listType.'></li><li>List %3% item here..<'.$subListType.'><li>Sub %4% list item</li></'.$subListType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
 
-        // Test using top toolbar
-        $this->useTest(3);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->type('Test content.');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li>Test content.</li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
+                // Indent again so parent is added back to second level list
+                $this->doAction($method, 'listIndent');
+                sleep(1);
+                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan<'.$listType.'><li>List %1% item here..<'.$listType.'><li>Sub %2% list item</li></'.$listType.'></li></'.$listType.'></li><li>List %3% item here..<'.$subListType.'><li>Sub %4% list item</li></'.$subListType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatus, $olStatus, FALSE, TRUE);
 
-        $this->selectKeyword(2,3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->clickTopToolbarButton('listOutdent');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ul>');
+            }
+        }
 
-        sleep(1);
-        $this->selectKeyword(2,3);
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
+        // Test selecting items located at the bottom of the list where sub list is of the same type
+        foreach (array('ol', 'ul') as $listType) {
+            foreach ($this->getTestMethods(TRUE, TRUE, TRUE) as $method) {
 
-        // Test using inline toolbar
-        $this->useTest(3);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->sikuli->keyDown('Key.TAB');
-        $this->type('Test content.');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li>Test content.</li></ol></li><li>Accessibility audit report</li></ol></li></ul>');
+                 if ($listType === 'ul') {
+                    $this->useTest(11);
+                    $subListType = 'ol';
+                    $ulStatusForParent = 'active';
+                    $olStatusForParent = TRUE;
+                    $ulStatusForSub = TRUE;
+                    $olStatusForSub = 'active';
+                } else {
+                    $this->useTest(12);
+                    $subListType = 'ul';
+                    $ulStatusForParent = TRUE;
+                    $olStatusForParent = 'active';
+                    $ulStatusForSub = 'active';
+                    $olStatusForSub = TRUE;
+                }
 
-        $this->selectKeyword(2,3);
-        sleep(3);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        sleep(3);
-        $this->clickInlineToolbarButton('listOutdent');
-        sleep(1);
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li></ol></li><li>%2% additional %3%<ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ul>');
+                $this->selectKeyword(3);
+                $this->selectInlineToolbarLineageItem(1);
 
-        sleep(1);
-        $this->selectKeyword(2,3);
-        $this->clickInlineToolbarButton('listIndent');
-        $this->assertHTMLMatch('<h2>Meh</h2><ul><li>%1%<ol><li>Audit of Homepage and 6 Section Landing pages</li><li>%2% additional %3%<ol><li>Test content.</li><li>Accessibility audit report</li></ol></li></ol></li></ul>');
+                // Outdent so parent is removed from the list
+                $this->doAction($method, 'listOutdent');
+                sleep(1);
+                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan</li><li>List %1% item here..<'.$subListType.'><li>Sub %2% list item</li></'.$subListType.'></li></'.$listType.'><p>List %3% item here..</p><'.$listType.'><li>Sub %4% list item</li></'.$listType.'>');
+                $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
-    }//end testAddingNewListItemThenIndentAndOutdentOrderedParentList()
+                // Indent once paragraph is added back to the top list
+                $this->doTopToolbarAction($method, 'listIndent');
+                sleep(1);
+                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan</li><li>List %1% item here..<'.$subListType.'><li>Sub %2% list item</li></'.$subListType.'></li><li>List %3% item here..<'.$listType.'><li>Sub %4% list item</li></'.$listType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForParent, $olStatusForParent, TRUE, TRUE);
+
+                // Indent again so parent is added back to second level list
+                $this->doAction($method, 'listIndent');
+                sleep(1);
+                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan</li><li>List %1% item here..<'.$subListType.'><li>Sub %2% list item</li><li>List %3% item here..<'.$listType.'><li>Sub %4% list item</li></'.$listType.'></li></'.$subListType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForSub, $olStatusForSub, TRUE, TRUE);
+
+                // Indent again so parent is added back to second level list
+                $this->doAction($method, 'listIndent');
+                sleep(1);
+                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan</li><li>List %1% item here..<'.$subListType.'><li>Sub %2% list item<'.$subListType.'><li>List %3% item here..<'.$listType.'><li>Sub %4% list item</li></'.$listType.'></li></'.$subListType.'></li></'.$subListType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatusForSub, $olStatusForSub, FALSE, TRUE);
+
+            }
+        }
+
+        // Test selecting items located at the bottom of the list where sub list is of a different type
+        foreach (array('ol', 'ul') as $listType) {
+            foreach ($this->getTestMethods(TRUE, TRUE, TRUE) as $method) {
+
+                 if ($listType === 'ul') {
+                    $this->useTest(13);
+                    $subListType = 'ol';
+                    $ulStatus = 'active';
+                    $olStatus = TRUE;
+                } else {
+                    $this->useTest(14);
+                    $subListType = 'ul';
+                    $ulStatus = TRUE;
+                    $olStatus = 'active';
+                }
+
+                $this->selectKeyword(3);
+                $this->selectInlineToolbarLineageItem(1);
+
+                // Outdent so parent is removed from the list
+                $this->doAction($method, 'listOutdent');
+                sleep(1);
+                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan</li><li>List %1% item here..<'.$listType.'><li>Sub %2% list item</li></'.$listType.'></li></'.$listType.'><p>List %3% item here..</p><'.$subListType.'><li>Sub %4% list item</li></'.$subListType.'>');
+                $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
+
+                // Indent once paragraph is added back to the top list
+                $this->doTopToolbarAction($method, 'listIndent');
+                sleep(1);
+                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan</li><li>List %1% item here..<'.$listType.'><li>Sub %2% list item</li></'.$listType.'></li><li>List %3% item here..<'.$subListType.'><li>Sub %4% list item</li></'.$subListType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
+
+                // Indent again so parent is added back to second level list
+                $this->doAction($method, 'listIndent');
+                sleep(1);
+                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan</li><li>List %1% item here..<'.$listType.'><li>Sub %2% list item</li><li>List %3% item here..<'.$subListType.'><li>Sub %4% list item</li></'.$subListType.'></li></'.$listType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
+
+                // Indent again so parent is added back to second level list
+                $this->doAction($method, 'listIndent');
+                sleep(1);
+                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan</li><li>List %1% item here..<'.$listType.'><li>Sub %2% list item<'.$listType.'><li>List %3% item here..<'.$subListType.'><li>Sub %4% list item</li></'.$subListType.'></li></'.$listType.'></li></'.$listType.'></li></'.$listType.'>');
+                $this->assertIconStatusesCorrect($ulStatus, $olStatus, FALSE, TRUE);
+            }
+        }
+
+    }//end testOutdentAndIndentListItemWithMixedSubLists()
 
 
     /**
-     * Test outdent multiple items and then indent a single item within a unordered parent list with an empty item.
+     * Test indent and outdent all items in a list and sub list.
      *
      * @return void
      */
-    public function testIndentAndOutdentUnorderedListItemToPTag()
+    public function testOutdentAndIndentAllItemsInListAndSubList()
     {
-        // Test using keyboard shortcuts
-        $this->useTest(5);
-        $this->selectKeyword(1, 2);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li></ul><p>List %1% item here..</p><ul><li>Sub %2% list item</li></ul><ul><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ul>');
 
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ul>');
-
-        $this->selectKeyword(3, 4);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li></ul><p>List %3% item here..</p><ul><li>Sub %4% list item</li></ul>');
-
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ul>');
-
-        // Test using top toolbar
-        $this->useTest(5);
-        $this->selectKeyword(1, 2);
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li></ul><p>List %1% item here..</p><ul><li>Sub %2% list item</li></ul><ul><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ul>');
-
-        $this->selectKeyword(1, 2);
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ul>');
-
-        $this->selectKeyword(3, 4);
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li></ul><p>List %3% item here..</p><ul><li>Sub %4% list item</li></ul>');
-
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ul>');
-
-        // Test using inline toolbar
-        $this->useTest(5);
-        $this->selectKeyword(1, 2);
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li></ul><p>List %1% item here..</p><ul><li>Sub %2% list item</li></ul><ul><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ul>');
-
-        $this->useTest(5);
-        $this->selectKeyword(4);
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->selectKeyword(3);
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li></ul><p>List %3% item here..</p><ul><li>Sub %4% list item</li></ul>');
-    }//end testIndentAndOutdentUnorderedListItemToPTag()
-
-
-    /**
-     * Test outdent multiple items and then indent a single item within a unordered parent list with an empty item.
-     *
-     * @return void
-     */
-    public function testIndentAndOutdentOrderedListItemToPTag()
-    {
-        // Test using keyboard shortcuts
-        $this->useTest(6);
-        $this->selectKeyword(1, 2);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li></ol><p>List %1% item here..</p><ol><li>Sub %2% list item</li></ol><ol><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
-
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
-
-        $this->selectKeyword(3, 4);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li></ol><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
-
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
-
-        // Test using top toolbar
-        $this->useTest(6);
-        $this->selectKeyword(1, 2);
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li></ol><p>List %1% item here..</p><ol><li>Sub %2% list item</li></ol><ol><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
-
-        $this->selectKeyword(1, 2);
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
-
-        $this->selectKeyword(3, 4);
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li></ol><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
-
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
-
-        // Test using inline toolbar
-        $this->useTest(6);
-        $this->selectKeyword(1, 2);
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li></ol><p>List %1% item here..</p><ol><li>Sub %2% list item</li></ol><ol><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
-
-        $this->useTest(6);
-        $this->selectKeyword(3, 4);
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li></ol><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
-    }//end testIndentAndOutdentOrderedListItemToPTag()
-
-
-    /**
-     * Test outdent multiple items and then indent a single item within a unordered parent list with an empty item.
-     *
-     * @return void
-     */
-    public function testIndentAndOutdentUnorderedListItemInOrderedListToPTag()
-    {
-        // Test using keyboard shortcuts
-        $this->useTest(7);
-        $this->selectKeyword(1, 2);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li></ul><p>List %1% item here..</p><ol><li>Sub %2% list item</li></ol><ul><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ul>');
-
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ul>');
-
-        $this->selectKeyword(3, 4);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li></ul><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
-
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ul>');
-
-        // Test using top toolbar
-        $this->useTest(7);
-        $this->selectKeyword(1, 2);
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li></ul><p>List %1% item here..</p><ol><li>Sub %2% list item</li></ol><ul><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ul>');
-
-        $this->selectKeyword(1, 2);
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ul>');
-
-        $this->selectKeyword(3, 4);
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li></ul><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
-
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ul>');
-
-        // Test using inline toolbar
-        $this->useTest(7);
-        $this->selectKeyword(1, 2);
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li></ul><p>List %1% item here..</p><ol><li>Sub %2% list item</li></ol><ul><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ul>');
-
-        $this->useTest(7);
-        $this->selectKeyword(3, 4);
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li></ul><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
-    }//end testIndentAndOutdentUnorderedListItemToPTag()
-
-
-    /**
-     * Test outdent multiple items and then indent a single item within a unordered parent list with an empty item.
-     *
-     * @return void
-     */
-    public function testIndentAndOutdentOrderedListItemInUnorderedListToPTag()
-    {
-        // Test using keyboard shortcuts
-        $this->useTest(8);
-        $this->selectKeyword(1, 2);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li></ol><p>List %1% item here..</p><ul><li>Sub %2% list item</li></ul><ol><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ol>');
-
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ol>');
-
-        $this->selectKeyword(3, 4);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..</li></ol><ul><li>Sub %2% list item</li></ul><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
-
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..</li></ol><ul><li>Sub %2% list item</li><li>List %3% item here..</li></ul><ol><li>Sub %4% list item</li></ol>');
-
-        // Test using top toolbar
-        $this->useTest(8);
-        $this->selectKeyword(1, 2);
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li></ol><p>List %1% item here..</p><ul><li>Sub %2% list item</li></ul><ol><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ol>');
-
-        $this->selectKeyword(1, 2);
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..</li></ol><ul><li>Sub %2% list item</li></ul><ol><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ol>');
-
-        $this->selectKeyword(3, 4);
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..</li></ol><ul><li>Sub %2% list item</li></ul><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
-
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..</li></ol><ul><li>Sub %2% list item</li><li>List %3% item here..</li></ul><ol><li>Sub %4% list item</li></ol>');
-
-        // Test using inline toolbar
-        $this->useTest(8);
-        $this->selectKeyword(1, 2);
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li></ol><p>List %1% item here..</p><ul><li>Sub %2% list item</li></ul><ol><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ol>');
-
-        $this->useTest(8);
-        $this->selectKeyword(3, 4);
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li></ol><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
-
-    }//end testIndentAndOutdentOrderedListItemToPTag()
-
-
-    /**
-     * Test outdent and indent items from different lists within an unordered parent with an ordered sublist then an unordered sublist.
-     *
-     * @return void
-     */
-    public function testIndentAndOutdentUnorderedWithOrderedSubFirst()
-    {
-        // Test using keyboard shortcuts
-        $this->useTest(9);
-        $this->selectKeyword(1, 2);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li></ul><p>List %1% item here..</p><ol><li>Sub %2% list item</li></ol><ul><li>List %3% item here.. <ul><li>Sub %4% list item</li></ul></li></ul>');
-
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ul>');
-
-        $this->selectKeyword(3, 4);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li></ul><p>List %3% item here..</p><ul><li>Sub %4% list item</li></ul>');
-
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ul>');
-
-        // Test using top toolbar
-        $this->useTest(9);
-        $this->selectKeyword(1, 2);
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li></ul><p>List %1% item here..</p><ol><li>Sub %2% list item</li></ol><ul><li>List %3% item here.. <ul><li>Sub %4% list item</li></ul></li></ul>');
-
-        $this->selectKeyword(1, 2);
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ul>');
-
-        $this->selectKeyword(3, 4);
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li></ul><p>List %3% item here..</p><ul><li>Sub %4% list item</li></ul>');
-
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ul>');
-
-        // Test using inline toolbar
-        $this->useTest(9);
-        $this->selectKeyword(1, 2);
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li></ul><p>List %1% item here..</p><ol><li>Sub %2% list item</li></ol><ul><li>List %3% item here.. <ul><li>Sub %4% list item</li></ul></li></ul>');
-
-        $this->useTest(9);
-        $this->selectKeyword(3, 4);
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li></ul><p>List %3% item here..</p><ul><li>Sub %4% list item</li></ul>');
-    }//end testIndentAndOutdentUnorderedWithOrderedSubFirst()
-
-
-    /**
-     * Test outdent and indent items from different lists within an ordered parent with an unordered sublist then an ordered sublist.
-     *
-     * @return void
-     */
-    public function testIndentAndOutdentOrderedWithUnorderedSubFirst()
-    {
-        // Test using keyboard shortcuts
-        $this->useTest(10);
-        $this->selectKeyword(1, 2);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li></ol><p>List %1% item here..</p><ul><li>Sub %2% list item</li></ul><ol><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
-
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
-
-        $this->selectKeyword(3, 4);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li></ol><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
-
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
-
-        // Test using top toolbar
-        $this->useTest(10);
-        $this->selectKeyword(1, 2);
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li></ol><p>List %1% item here..</p><ul><li>Sub %2% list item</li></ul><ol><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
-
-        $this->selectKeyword(1, 2);
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
-
-        $this->selectKeyword(3, 4);
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li></ol><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
-
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
-
-        // Test using inline toolbar
-        $this->useTest(10);
-        $this->selectKeyword(1, 2);
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li></ol><p>List %1% item here..</p><ul><li>Sub %2% list item</li></ul><ol><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ol>');
-
-        $this->useTest(10);
-        $this->selectKeyword(3, 4);
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li></ol><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
-
-    }//end testIndentAndOutdentOrderedWithUnorderedSubFirst()
-
-
-    /**
-     * Test outdent and indent items from different lists within an unordered parent with an unordered sublist then an ordered sublist.
-     *
-     * @return void
-     */
-    public function testIndentAndOutdentUnorderedWithUnorderedSubFirst()
-    {
-        // Test using keyboard shortcuts
-        $this->useTest(11);
-        $this->selectKeyword(1, 2);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li></ul><p>List %1% item here..</p><ul><li>Sub %2% list item</li></ul><ul><li>List %3% item here.. <ol><li>Sub %4% list item</li></ol></li></ul>');
-
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ul>');
-
-        $this->selectKeyword(3, 4);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li></ul><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
-
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ul>');
-
-        // Test using top toolbar
-        $this->useTest(11);
-        $this->selectKeyword(1, 2);
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li></ul><p>List %1% item here..</p><ul><li>Sub %2% list item</li></ul><ul><li>List %3% item here.. <ol><li>Sub %4% list item</li></ol></li></ul>');
-
-        $this->selectKeyword(1, 2);
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ul>');
-
-        $this->selectKeyword(3, 4);
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li></ul><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
-
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li><li>List %3% item here..<ol><li>Sub %4% list item</li></ol></li></ul>');
-
-        // Test using inline toolbar
-        $this->useTest(11);
-        $this->selectKeyword(1, 2);
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li></ul><p>List %1% item here..</p><ul><li>Sub %2% list item</li></ul><ul><li>List %3% item here.. <ol><li>Sub %4% list item</li></ol></li></ul>');
-
-        $this->useTest(11);
-        $this->selectKeyword(3, 4);
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ul><li>Recommendations and action plan</li><li>List %1% item here..<ul><li>Sub %2% list item</li></ul></li></ul><p>List %3% item here..</p><ol><li>Sub %4% list item</li></ol>');
-    }//end testIndentAndOutdentUnorderedWithOrderedSubFirst()
-
-
-    /**
-     * Test outdent and indent items from different lists within an ordered parent with an ordered sublist then an unordered sublist.
-     *
-     * @return void
-     */
-    public function testIndentAndOutdentOrderedWithOrderedSubFirst()
-    {
-        // Test using keyboard shortcuts
-        $this->useTest(12);
-        $this->selectKeyword(1, 2);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li></ol><p>List %1% item here..</p><ol><li>Sub %2% list item</li></ol><ol><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ol>');
-
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ol>');
-
-        $this->selectKeyword(3, 4);
-        $this->sikuli->keyDown('Key.SHIFT + Key.TAB');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li></ol><p>List %3% item here..</p><ul><li>Sub %4% list item</li></ul>');
-
-        $this->sikuli->keyDown('Key.TAB');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ol>');
-
-        // Test using top toolbar
-        $this->useTest(12);
-        $this->selectKeyword(1, 2);
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li></ol><p>List %1% item here..</p><ol><li>Sub %2% list item</li></ol><ol><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ol>');
-
-        $this->selectKeyword(1, 2);
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ol>');
-
-        $this->selectKeyword(3, 4);
-        $this->clickTopToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li></ol><p>List %3% item here..</p><ul><li>Sub %4% list item</li></ul>');
-
-        $this->clickTopToolbarButton('listIndent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ol>');
-
-        // Test using inline toolbar
-        $this->useTest(12);
-        $this->selectKeyword(1, 2);
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li></ol><p>List %1% item here..</p><ol><li>Sub %2% list item</li></ol><ol><li>List %3% item here..<ul><li>Sub %4% list item</li></ul></li></ol>');
-
-        $this->useTest(12);
-        $this->selectKeyword(3, 4);
-        $this->clickInlineToolbarButton('listOutdent');
-        $this->assertHTMLMatch('<ol><li>Recommendations and action plan</li><li>List %1% item here..<ol><li>Sub %2% list item</li></ol></li></ol><p>List %3% item here..</p><ul><li>Sub %4% list item</li></ul>');
-
-    }//end testIndentAndOutdentOrderedWithUnorderedSubFirst()
+        foreach (array('ol', 'ul') as $listType) {
+            foreach ($this->getTestMethods(TRUE, TRUE, TRUE) as $method) {
+
+                if ($listType === 'ul') {
+                    $this->useTest(15);
+                    $subListType = 'ol';
+                } else {
+                    $this->useTest(16);
+                    $subListType = 'ul';
+                }
+
+                $this->selectKeyword(1);
+                sleep(1);
+                $this->selectInlineToolbarLineageItem(1);
+                sleep(1);
+
+                // Outdent once so the parent is moved to a paragraph
+                $this->doAction($method, 'listOutdent');
+                $this->assertHTMLMatch('<p>Some content</p><p>List %1% item here..</p><'.$subListType.'><li>Sub %2% list item</li></'.$subListType.'>');
+                $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
+
+                // Indent once so the parent is added back to a list
+                $this->doTopToolbarAction($method, 'listIndent');
+                $this->assertHTMLMatch('<p>List:</p><ul> <li> List %1% item here..<'.$subListType.'><li> Sub %2% list item </li> </'.$subListType.'> </li></ul>');
+                $this->assertIconStatusesCorrect('active', TRUE, FALSE, FALSE, TRUE, FALSE);
+            }
+        }
+
+    }//end testAllItemsInListAndSubList()
 
 }//end class
 
