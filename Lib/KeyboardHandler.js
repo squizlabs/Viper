@@ -1681,7 +1681,7 @@
                 var firstBlockParent = ViperUtil.getFirstBlockParent(range.startContainer);
                 if (firstBlockParent) {
                     if (firstBlockParent !== viperElem) {
-                        if (ViperUtil.isBrowser('firefox') === true) {
+                        if (ViperUtil.isBrowser('firefox') === true && ViperUtil.isTag(firstBlockParent.parentNode, 'blockquote') === false) {
                             // Got to split range.
                             this.splitAtRange();
                             this._viper.contentChanged();
