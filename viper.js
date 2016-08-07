@@ -1216,6 +1216,13 @@
         },
 
         
+        removeAttribute: function(element, attribute)
+        {
+            return this.setAttribute(element, attribute, '', false);
+
+        },
+
+        
         moveCaretAway: function(sourceElement, back)
         {
             back      = back || false;
@@ -2808,22 +2815,19 @@
                     }
                 }
 
-                if (Viper.Util.isBrowser('chrome') === true || Viper.Util.isBrowser('safari') === true) {
-                    // Sigh.. Move the range where its suppose to be instead of Webkit deciding that it should
-                    // move the end of range to the begining of the next sibling -.-.
-                    if (!endBookmark.previousSibling) {
-                        var node = endBookmark.parentNode.previousSibling;
-                        while (node) {
-                            if (node.nodeType !== Viper.Util.TEXT_NODE || Viper.Util.isBlank(node.data) === false) {
-                                break;
-                            }
-
-                            node = node.previousSibling;
-                        }
-
-                        if (node === startBookmark.parentNode) {
+                // Move the range where its suppose to be instead of browser deciding that it should
+                // move the end of range to the begining of the next sibling.
+                if (!endBookmark.previousSibling) {
+                    var node = range.getPreviousContainer(endBookmark, null, true, true);
+                    if (node === startBookmark.parentNode) {
+                        var lastSelectable = range._getLastSelectableChild(node, null, true);
+                        if (lastSelectable) {
+                            Viper.Util.insertAfter(lastSelectable, endBookmark);
+                        } else {
                             startBookmark.parentNode.appendChild(endBookmark);
                         }
+                    } else if (node && Viper.Util.isChildOf(node, startBookmark.parentNode) == true) {
+                        Viper.Util.insertAfter(node, endBookmark);
                     }
                 }
 
@@ -4253,6 +4257,9 @@
                                 }
 
                                 Viper.Util.remove(node);
+                            } else if (Viper.Util.isTag(node.nextSibling, ['ol', 'ul']) === true && Viper.Util.isTag(node.parentNode, 'li') === true) {
+                                // BR before sublist.
+                                Viper.Util.remove(node);
                             }
                         }//end if
                     break;
@@ -4265,6 +4272,7 @@
 
                     case 'td':
                     case 'th':
+                    case 'li':
                     case 'caption':
                         var html = Viper.Util.trim(Viper.Util.getHtml(node));
                         if (html === '' || Viper.Util.trim(html.replace(/&nbsp;/g, '')) === '') {
@@ -4308,7 +4316,9 @@
                             || cont === '&nbsp;'
                             || (cont === '' && Viper.Util.isTag(node, ['p', 'div']))
                         ) {
-                            Viper.Util.remove(node);
+                            if (this.isSpecialElement(node) !== true) {
+                                Viper.Util.remove(node);
+                            }
                         }
                     break;
                 }//end switch
@@ -4326,6 +4336,11 @@
                         // Remove extra spaces from the node.
                         node.data = node.data.replace(/^\s+/g, ' ');
                         node.data = node.data.replace(/\s*\n\s*/g, ' ');
+
+                        if ((!node.nextSibling || Viper.Util.isSpacerBR(node.nextSibling) === true) && Viper.Util.isBlockElement(node.parentNode) === true) {
+                            // Remove spaces from the end of block elements.
+                            node.data = node.data.replace(/\s+$/g, '');
+                        }
 
                         // TODO: We should normalise these text nodes before calling this method. This way there is no
                         // reason to do this check here as there will be no sibling text nodes.
@@ -4807,13 +4822,24 @@
 
         },
 
-        isText: function (node) {
-            if (node && node.nodeType === this.TEXT_NODE) {
+        isText: function (node, notEmpty) {
+            if (node && node.nodeType === this.TEXT_NODE && (notEmpty !== true || node.data.length > 0)) {
                 return true;
             }
 
             return false;
 
+        },
+
+        isSpacerBR: function(node) {
+            if (ViperUtil.isTag(node, 'br') === true
+                && !node.nextSibling
+                && ViperUtil.isBlockElement(node.parentNode) === true
+            ) {
+                return true;
+            }
+
+            return false;
         },
 
         isElement: function (node) {
@@ -7138,6 +7164,19 @@
                 while (this.isText(element.nextSibling) === true) {
                     joinTextNodes(element, element.nextSibling);
                 }
+            } else if (this.isText(prevCont) === true) {
+                // Prev container is text.
+                var splitOffset = 0;
+                while (this.isText(element.previousSibling) === true) {
+                    splitOffset += element.previousSibling.data.length;
+                    element.data = element.previousSibling.data + element.data;
+                    ViperUtil.remove(element.previousSibling);
+                }
+
+                info = {
+                    splitOffset: splitOffset,
+                    textNode: element
+                };
             }
 
             return info;
@@ -7525,11 +7564,12 @@
 
             ViperUtil._dcall++;
 
+            console.info(ViperUtil._dcall);
+
             if (c === ViperUtil._dcall) {
                 debugger;
             }
 
-            console.info(ViperUtil._dcall);
         },
 
         setViperElement: function(element)
@@ -9237,7 +9277,7 @@
                     focusSubSection: function() {
                         try {
                             var subSection    = this._subSections[this._activeSection];
-                            var inputElements = ViperUtil.getTag('input[type=text], textarea', subSection);
+                            var inputElements = ViperUtil.getTag('input[type=text], textarea, input[type=checkbox]', subSection);
                             if (inputElements.length > 0) {
                                 for (var i = 0; i < inputElements.length; i++) {
                                     if (ViperUtil.getElementWidth(inputElements[i]) === 0 || inputElements[i].disabled) {
@@ -10418,7 +10458,7 @@
                             return child;
                         } else if (child.lastChild) {
                             // This node does have child nodes.
-                            var res = this._getLastSelectableChild(child, stubElementIsSelectable);
+                            var res = this._getLastSelectableChild(child, skipEmptyNodes, stubElementIsSelectable);
                             if (res !== null) {
                                 return res;
                             } else {
@@ -10889,6 +10929,42 @@
             ) {
                 this._nodeSel.node = range.endContainer.previousSibling;
                 return this._nodeSel.node;
+            } else if (ViperUtil.isText(startNode) === true
+                && range.startOffset === startNode.data.length
+                && ViperUtil.isElement(range.endContainer) === true
+                && ViperUtil.isText(range.endContainer.childNodes[range.endOffset]) === true
+                && ViperUtil.isElement(startNode.nextSibling) === true
+                && startNode.nextSibling.nextSibling === range.endContainer.childNodes[range.endOffset]
+            ) {
+                // Case: <p>text [<span>text</span>] more text.
+                // range endContainer actually is the P instead of the ' more text' text node.
+                this._nodeSel.node = startNode.nextSibling;
+                return this._nodeSel.node;
+            } else if (ViperUtil.isText(startNode) === true
+                && range.startOffset === 0
+                && ViperUtil.isElement(range.endContainer) === true
+                && !startNode.previousSibling
+                && ViperUtil.isText(range.endContainer.childNodes[range.endOffset]) === true
+                && startNode.parentNode.nextSibling === range.endContainer.childNodes[range.endOffset]
+            ) {
+                this._nodeSel.node = startNode.parentNode;
+                return this._nodeSel.node;
+            } else if (ViperUtil.isBrowser('msie') === true) {
+                // IE specific checks.
+                if (range.startOffset === 0) {
+                    if (ViperUtil.isText(range.startContainer) === true) {
+                        if (ViperUtil.isElement(range.endContainer) === true) {
+                            if (!range.startContainer.previousSibling
+                                && startNode === endNode
+                                && !startNode.nextSibling
+                            ) {
+                                // Case: <p>text <em>[text</em>]</p>.
+                                this._nodeSel.node = startNode.parentNode;
+                                return this._nodeSel.node;
+                            }
+                        }
+                    }
+                }
             }
 
             // We may need to adjust the "startNode" depending on its offset.
@@ -13234,7 +13310,13 @@
             }
 
             var modify = false;
-            if (action === 'text_change' && this._lastAction === action) {
+            if (action === 'text_change'
+                && this._lastAction
+                && this._lastAction.action === action
+                && this._lastAction.range
+                && this._lastAction.range.startOffset === (range.startOffset - 1)
+                && this._lastAction.range.startContainer === range.startContainer
+            ) {
                 if (this._charCount < this._maxChars) {
                     modify = true;
                 } else {
@@ -13246,7 +13328,10 @@
                 this._charCount = 0;
             }
 
-            this._lastAction = action;
+            this._lastAction = {
+                action: action,
+                range: range
+            };
 
             // If batching is active then do not add the task to undoHistory.
             if (this.batchTask === null) {
@@ -13719,10 +13804,20 @@
                         && range.collapsed === true
                     ) {
                         // IE text insert when BR tag is selected.
-                        var textNode = document.createTextNode(String.fromCharCode(e.which));
-                        ViperUtil.insertBefore(startNode, textNode);
-                        ViperUtil.remove(startNode);
-                        range.setStart(textNode, 1);
+                        var textNode = null;
+                        if (ViperUtil.isText(startNode.previousSibling) === true) {
+                            textNode       = startNode.previousSibling;
+                            textNode.data += char;
+                        } else {
+                            textNode = document.createTextNode(char);
+                            ViperUtil.insertBefore(startNode, textNode);
+                        }
+
+                        if (ViperUtil.isSpacerBR(startNode) === true) {
+                            ViperUtil.remove(startNode);
+                        }
+
+                        range.setStart(textNode, textNode.data.length);
                         range.collapse(true);
                         ViperSelection.addRange(range);
                         this._viper.fireNodesChanged([textNode]);
@@ -13896,12 +13991,13 @@
                             if (textContainer.previousSibling
                                 && ViperUtil.isStubElement(textContainer.previousSibling) === false
                                 && ViperUtil.isText(textContainer.previousSibling) === false
+                                && ViperUtil.isBlockElement(textContainer.previousSibling) === false
                             ) {
                                 // Need to insert the character to the previous sibling.
                                 // <p>text<strong>insert text here</strong>* more text</p> ->
                                 // <p>text<strong>insert text hereNEW*</strong> more text</p>.
                                 var prevCont = range._getLastSelectableChild(textContainer.previousSibling);
-                                if (ViperUtil.isText(prevCont) === true) {
+                                if (ViperUtil.isText(prevCont) === true && this._viper.isSpecialElement(textContainer.previousSibling) === false) {
                                     prevCont.data += char;
                                     range.setStart(prevCont, prevCont.data.length);
                                     range.collapse(true);
@@ -13912,7 +14008,7 @@
 
                             }
 
-                            // At the start of a text node with an element sibling. Make sure character is inserted in previous text container.
+                            // At the start of a text node with an element sibling. Make sure character is inserted in previous text container (unless its start of a block element).
                             // Also make sure that there is no non breaking space at the start text node followed by a non
                             // space character.
                             if (!textContainer.previousSibling) {
@@ -13925,7 +14021,7 @@
                                     parent = parent.parentNode;
                                 }
 
-                                if (ViperUtil.isText(parent.previousSibling) === true) {
+                                if (ViperUtil.isText(parent.previousSibling, true) === true) {
                                     if (char === ' ' && ViperUtil.endsWithSpace(parent.previousSibling) === true) {
                                         char = String.fromCharCode(160);
                                     } else if (char !== ' ' && ViperUtil.endsWithSpace(parent.previousSibling, true) === true) {
@@ -14048,6 +14144,39 @@
                                 return false;
                             }
                         }
+                    } else if (range.startContainer !== range.endContainer
+                        && ViperUtil.isText(range.startContainer) === true
+                        && ViperUtil.isText(range.endContainer) === true
+                    ) {
+                        // Handle: <div>Some [superscript <sup>content] test</sup> content</div> (typed: x)
+                        // Result: <div>Some x*<sup> test</sup> content</div>.
+                        range.deleteContents();
+                        range.startContainer.data += char;
+                        range.setStart(range.startContainer, range.startContainer.data.length);
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+                        this._viper.fireNodesChanged([range.startContainer]);
+                        return false;
+                    } else if (range.collapsed === false) {
+                        if (range.startContainer === range.endContainer) {
+                            // Selection is in same container.
+                            if (ViperUtil.isText(startNode) === true) {
+                                // Text selection.
+                                if (ViperUtil.isBrowser('msie') === true) {
+                                    if (char !== ' ') {
+                                        // Replace text.
+                                        startNode.data = startNode.data.substring(0, range.startOffset) + char + startNode.data.substring(range.endOffset);
+                                        range.setStart(startNode, range.startOffset + 1);
+                                        range.collapse(true);
+                                        ViperSelection.addRange(range);
+                                        this._viper.fireNodesChanged([range.startContainer]);
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
+
+
                     }
                 }//end if
 
@@ -14143,7 +14272,15 @@
             } else if (ViperUtil.isKey(e, 'SHIFT+ENTER') === true) {
                 return this.handleSoftEnter(e);
             } else if (ViperUtil.isKey(e, 'DELETE') === true || ViperUtil.isKey(e, 'BACKSPACE') === true) {
-                return this.handleDelete(e);
+                var retval = this.handleDelete(e);
+                if (retval !== false && ViperUtil.isBrowser('firefox') === false) {
+                    var self = this;
+                    setTimeout(function() {
+                        self._viper.fireNodesChanged();
+                    }, 5);
+                }
+
+                return retval;
             }
 
             var returnValue = this._viper.fireCallbacks('Viper:keyDown', e);
@@ -14399,10 +14536,11 @@
                 }
             }//end if
 
+            var firstBlock = null;
             if (ViperUtil.isTag(endNode, 'li') === true && endNode === startNode && endNode.firstChild === null) {
-                var firstBlock = endNode;
+                firstBlock = endNode;
             } else {
-                var firstBlock = ViperUtil.getFirstBlockParent(endNode);
+                firstBlock = ViperUtil.getFirstBlockParent(endNode);
             }
 
             if (range.collapsed === true
@@ -14439,11 +14577,7 @@
                             this.splitList(firstBlock);
                             this._viper.contentChanged();
                             return false;
-                        } else if (ViperUtil.isBrowser('chrome') === true
-                            || ViperUtil.isBrowser('safari') === true
-                            || ViperUtil.isBrowser('msie') === true
-                            || ViperUtil.isBrowser('edge') === true
-                        ) {
+                        } else {
                             handleEnter = true;
                             removeFirstBlock = true;
                         }
@@ -14481,7 +14615,6 @@
                             removeFirstBlock = true;
                         } else {
                             if (firstBlockTagName === 'li') {
-                                if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true || ViperUtil.isBrowser('msie') === true || ViperUtil.isBrowser('edge') === true) {
                                     var parentListItem = ViperUtil.getFirstBlockParent(firstBlock.parentNode);
                                     if (parentListItem && ViperUtil.isTag(parentListItem, 'li') === true) {
                                         newList = document.createElement('li');
@@ -14511,7 +14644,6 @@
                                         this._viper.contentChanged();
                                         return false;
                                     }
-                                }
 
                                 // Need to move rest of the list items to a new
                                 // list.
@@ -14628,6 +14760,8 @@
 
                     if (parent && parent !== viperElem) {
                         ViperUtil.insertAfter(parent, br);
+                    } else {
+                        ViperUtil.insertAfter(range.startContainer, br);
                     }
                 } else if (ViperUtil.isText(range.startContainer) === true
                     && range.startOffset === 0
@@ -14650,16 +14784,26 @@
                     this._viper.insertNodeAtCaret(br);
                 }
 
-                if (!br.nextSibling
-                    || br.nextSibling.nodeType !== ViperUtil.TEXT_NODE
-                    || br.nextSibling.data.charAt(0) === "\n"
-                ) {
-                    ViperUtil.insertAfter(br, document.createTextNode(''));
+                var selectable = br.nextSibling;
+                if (ViperUtil.isText(br.nextSibling) !== true || br.nextSibling.data.charAt(0) === "\n") {
+                    if (ViperUtil.isElement(br.nextSibling) === true && ViperUtil.isStubElement(br.nextSibling) === false) {
+                        var firstSelectable = range._getFirstSelectableChild(br.nextSibling);
+                        if (firstSelectable) {
+                            selectable = firstSelectable;
+                        } else {
+                            selectable = document.createTextNode('');
+                            ViperUtil.insertAfter(br, selectable);
+                        }
+                    } else {
+                        selectable = document.createTextNode(String.fromCharCode(160));
+                        ViperUtil.insertAfter(br, selectable);
+                    }
                 }
 
-                range.setStart(br.nextSibling, 0);
+                range.setStart(selectable, 0);
                 range.collapse(true);
                 ViperSelection.addRange(range);
+                this._viper.contentChanged();
 
                 return false;
             } else if (ViperUtil.isBrowser('msie') === true
@@ -14936,12 +15080,22 @@
                 && range.endOffset === startNode.data.length
                 && startNode.nextSibling
                 && ViperUtil.isTag(startNode.nextSibling, 'br')
-                && (!startNode.nextSibling.nextSibling || ViperUtil.isTag(startNode.nextSibling.nextSibling, 'br') === false)
+                && (ViperUtil.isText(startNode.nextSibling.nextSibling, true) === true)
             ) {
                 // Handle XAX*<br>XBX<br>XCX.
                 // Pressing enter changes the content to: <p>XAX</p>*XBX<br>XCX.
                 // By adding an extra BR we keep it in the content.
-                ViperUtil.insertAfter(startNode, document.createElement('br'));
+                var br = startNode.nextSibling;
+                setTimeout(
+                    function () {
+                        var textNode = document.createTextNode('');
+                        ViperUtil.insertBefore(br, textNode);
+                        range.setStart(textNode, 0);
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+                    },
+                    10
+                );
             } else if (startNode.nodeType === ViperUtil.TEXT_NODE
                 && range.endOffset === startNode.data.length
                 && startNode.data.length !== 0
@@ -15094,6 +15248,20 @@
                 }
             }//end if
 
+            if (defaultTagName !== '' && range.collapsed === true) {
+                // Base tag is set to nothing.
+                var firstBlockParent = ViperUtil.getFirstBlockParent(range.startContainer);
+                if (firstBlockParent) {
+                    if (firstBlockParent !== viperElem) {
+                        if (ViperUtil.isBrowser('firefox') === true && ViperUtil.isTag(firstBlockParent.parentNode, 'blockquote') === false) {
+                            // Got to split range.
+                            this.splitAtRange();
+                            this._viper.contentChanged();
+                            return false;
+                        }
+                    }
+                }
+            }
 
             if (range.startOffset === 0
                 && range.collapsed === true
@@ -15394,7 +15562,15 @@
 
                             var firstChild = currentParent.firstChild;
                             while (currentParent.firstChild) {
-                                prevParent.appendChild(currentParent.firstChild);
+                                if (ViperUtil.isText(currentParent.firstChild) !== true
+                                    && ViperUtil.getTagName(prevParent.lastChild) === ViperUtil.getTagName(currentParent.firstChild)
+                                ) {
+                                    // Same tag, append first child contents to it.
+                                    ViperUtil.moveChildrenToElement(currentParent.firstChild, prevParent.lastChild, false);
+                                    ViperUtil.remove(currentParent.firstChild);
+                                } else {
+                                    prevParent.appendChild(currentParent.firstChild);
+                                }
                             }
 
                             if (ViperUtil.isTag(currentParent, ['td', 'th']) === false) {
@@ -16339,14 +16515,13 @@
                     } else if (ViperUtil.isStubElement(startNode.nextSibling) === true
                         && (ViperUtil.isTag(startNode.nextSibling, 'br') === false || startNode.nextSibling.nextSibling)
                     ) {
-                        if (this._viper.getDefaultBlockTag() === '') {
-                            // Check if the next next element is stub, if yes remove it..
-                            if (ViperUtil.isStubElement(startNode.nextSibling.nextSibling) === true) {
-                                ViperUtil.remove(startNode.nextSibling.nextSibling);
-                                this._viper.contentChanged();
-                                return false;
-                            }
+                        // Check if the next next element is stub, if yes remove it.. E.g. test<br/><hr/>more text -> text<br/>more text.
+                        if (ViperUtil.isStubElement(startNode.nextSibling.nextSibling) === true) {
+                            ViperUtil.remove(startNode.nextSibling.nextSibling);
+                            this._viper.contentChanged();
+                            return false;
                         }
+
                         // If the next sibling is a BR but its not the last node then remove.
                         ViperUtil.remove(startNode.nextSibling);
                         this._viper.contentChanged();
@@ -16608,7 +16783,15 @@
                     }
 
                     while (nextParent.firstChild) {
-                        currentParent.appendChild(nextParent.firstChild);
+                        if (ViperUtil.isText(nextParent.firstChild) !== true
+                            && ViperUtil.getTagName(currentParent.lastChild) === ViperUtil.getTagName(nextParent.firstChild)
+                        ) {
+                            // Same tag, append first child contents to it.
+                            ViperUtil.moveChildrenToElement(nextParent.firstChild, currentParent.lastChild, false);
+                            ViperUtil.remove(nextParent.firstChild);
+                        } else {
+                            currentParent.appendChild(nextParent.firstChild);
+                        }
                     }
 
                     ViperUtil.remove(nextParent);
@@ -16653,18 +16836,18 @@
                 this._viper.contentChanged(true);
                 return false;
             } else if (e.keyCode === 8
-                && range.collapsed === true
+                && (range.collapsed === true
                 && (range.startContainer.nodeType === ViperUtil.TEXT_NODE
                 && (range.startOffset === 0 || (range.startOffset === 1 && range.startContainer.data.charAt(0) === ' '))
                 && ((ViperUtil.isFirstNonEmptyTextNode(range.startContainer) === true || ViperUtil.isTag(range.startContainer.previousSibling, 'br') === true)))
-                || (ViperUtil.isText(startNode) === false && range.startOffset === 0)
+                || (ViperUtil.isText(startNode) === false && range.startOffset === 0))
             ) {
                 // At the start of an element. Check to see if the previous
                 // element is a part of another block element. If it is then
                 // join these elements.
                 var prevSelectable = range.getPreviousContainer(range.startContainer, null, true, true);
-                var currentParent  = ViperUtil.getFirstBlockParent(range.startContainer);
-                var prevParent     = ViperUtil.getFirstBlockParent(prevSelectable);
+                var currentParent  = ViperUtil.getFirstBlockParent(range.startContainer, null, true);
+                var prevParent     = ViperUtil.getFirstBlockParent(prevSelectable, null, true);
 
                 if (!currentParent) {
                     currentParent = range.startContainer;
@@ -16701,7 +16884,15 @@
 
                     if (removeParent === true) {
                         while (currentParent.firstChild) {
-                            prevParent.appendChild(currentParent.firstChild);
+                            if (ViperUtil.isText(currentParent.firstChild) !== true
+                                && ViperUtil.getTagName(prevParent.lastChild) === ViperUtil.getTagName(currentParent.firstChild)
+                            ) {
+                                // Same tag, append first child contents to it.
+                                ViperUtil.moveChildrenToElement(currentParent.firstChild, prevParent.lastChild, false);
+                                ViperUtil.remove(currentParent.firstChild);
+                            } else {
+                                prevParent.appendChild(currentParent.firstChild);
+                            }
                         }
 
                         if (ViperUtil.isTag(currentParent, ['td', 'th']) === false) {
@@ -16812,8 +17003,10 @@
                     }
 
                     // Handle deletion of a whole bold/italic/etc tag.
-                    range = this._viper.moveCaretAway(nodeSelection, e.keyCode === 46);
+                    range = this._viper.moveCaretAway(nodeSelection, nodeSelection.previousSibling !== null);
                     ViperUtil.remove(nodeSelection);
+                    ViperSelection.addRange(range);
+
                     if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
                         && range.startContainer.data === ' '
                         && range.startContainer.previousSibling
@@ -16845,6 +17038,14 @@
                         }
 
                         range.setStart(prev, length);
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+                    } else if (!range.startContainer.nextSibling
+                        && ViperUtil.isBlockElement(range.startContainer.parentNode) === true
+                        && ViperUtil.endsWithSpace(range.startContainer, false) === true
+                    ) {
+                        ViperUtil.replaceCharAt(range.startContainer, 'last', String.fromCharCode(160));
+                        range.setStart(range.startContainer, range.startContainer.data.length);
                         range.collapse(true);
                         ViperSelection.addRange(range);
                     }
@@ -16938,11 +17139,42 @@
                         }
                     } else {
                         var startNode = range.getStartNode();
-                        var endNode   = range.getEndNode();
                         if (ViperUtil.isStubElement(startNode) === true) {
+                            if (ViperUtil.isTag(startNode, 'br') === true) {
+                                // Could be spacer, remove any surrounding parents.
+                                var surroundingParents = ViperUtil.getSurroundingParents(startNode);
+                                if (surroundingParents.length > 0) {
+                                    range = this._viper.moveCaretAway(startNode, true);
+                                    // Could have ended up as BR.
+                                    var newStartNode = range.getStartNode();
+                                    if (ViperUtil.isTag(newStartNode, 'br') === true && ViperUtil.isText(newStartNode.previousSibling, true) === true) {
+                                        range.setStart(newStartNode.previousSibling, newStartNode.previousSibling.data.length);
+                                        range.collapse(true);
+                                        ViperSelection.addRange(range);
+                                        ViperUtil.remove(newStartNode);
+                                    }
+
+                                    ViperUtil.remove(surroundingParents.pop());
+                                }
+                            }
+
                             ViperUtil.remove(startNode);
+
                             this._viper.fireNodesChanged();
                             return false;
+                        } else if (ViperUtil.isText(startNode) === true) {
+                            // Text node.
+                            if (ViperUtil.startsWithSpace(startNode) === true) {
+                                if (ViperUtil.isTag(startNode.previousSibling, 'br') === true) {
+                                    ViperUtil.remove(startNode.previousSibling);
+                                    var info = ViperUtil.normaliseTextNodeSiblings(startNode);
+                                    range.setStart(info.textNode, info.splitOffset);
+                                    range.collapse(true);
+                                    ViperSelection.addRange(range)
+                                    this._viper.fireNodesChanged();
+                                    return false;
+                                }
+                            }
                         }
                     }//end if
                 }//end if
@@ -16983,17 +17215,18 @@
                                     this._viper.contentChanged(true);
                                     return false;
                                 }
-                            } else {
-                                if (this._viper.getDefaultBlockTag() === '') {
-                                    if (ViperUtil.isTag(range.startContainer.nextSibling, 'br') === true) {
-                                        // Check if the next next element is stub, if yes remove it..
-                                        if (ViperUtil.isStubElement(range.startContainer.nextSibling.nextSibling) === true) {
-                                            ViperUtil.remove(range.startContainer.nextSibling.nextSibling);
-                                            this._viper.contentChanged();
-                                            return false;
-                                        }
-                                    }
+                            } else if (ViperUtil.isStubElement(range.startContainer.nextSibling) === true) {
+                                // Check if the next next element is stub, if yes remove it..
+                                if (ViperUtil.isStubElement(range.startContainer.nextSibling.nextSibling) === true) {
+                                    ViperUtil.remove(range.startContainer.nextSibling.nextSibling);
+                                    this._viper.contentChanged();
+                                    return false;
                                 }
+
+                                // If the next sibling is a BR but its not the last node then remove.
+                                ViperUtil.remove(range.startContainer.nextSibling);
+                                this._viper.contentChanged();
+                                return false;
                             }
                         } else if (range.startOffset - 1 === ViperUtil.rtrim(startContainer.data).length
                             && startContainer.data.length !== ViperUtil.rtrim(startContainer.data).length
@@ -26917,7 +27150,7 @@ ViperAccessibilityPlugin_WCAG2 = {
                 catTable     += '<table class="' + tableClass + '" border="0" cellspacing="0" cellpadding="0"><tbody>';
                 var charCount = category.chars.length;
                 for (var j = 0; j < charCount; j++) {
-                    if ((j % 7) === 0) {
+                    if ((j % 10) === 0) {
                         if (j !== 0) {
                             catTable += '</tr>';
                         }
@@ -27038,7 +27271,7 @@ ViperAccessibilityPlugin_WCAG2 = {
 
             var chars    = '$|&cent;|&pound;|&curren;|&yen';
             var htmlEnt  = '|1547|2546|2547|2801|3065|3647|6107';
-            htmlEnt     += _getRange(8352, 8375);
+            htmlEnt     += _getRange(8352, 8382);
             htmlEnt     += '|65020|65129|65284|65504|65505|65509|65510';
             chars       += htmlEnt.replace(/\|/g, ';|&#') + ';';
             chars        = chars.split('|');
@@ -27056,6 +27289,11 @@ ViperAccessibilityPlugin_WCAG2 = {
             chars       = '&uml;|&macr;|&acute;|&cedil;|&iexcl;|&iquest;|&middot;|&brvbar;|&laquo;|&raquo;|&para;|&sect;|&copy;|&reg;|&trade;';
             chars       = chars.split('|');
             var symbols = chars;
+
+            var greek = [];
+            for (var i = 880; i <= 1023; i++) {
+                greek.push('&#' + i + ';')
+            }
 
             categories.push({
                 name: _('Symbols'),
@@ -27075,6 +27313,11 @@ ViperAccessibilityPlugin_WCAG2 = {
             categories.push({
                 name: _('Currency'),
                 chars: currency
+            });
+
+            categories.push({
+                name: _('Greek'),
+                chars: greek
             });
 
             return categories;
@@ -29762,7 +30005,10 @@ ViperAccessibilityPlugin_WCAG2 = {
         _updateSelection: function()
         {
             try {
-                if (this._tmpNode !== null && ViperUtil.isPartOfDOM(this._tmpNode, this.viper.getViperElementDocument()) === true) {
+                if (this._tmpNode !== null 
+                    && (ViperUtil.isPartOfDOM(this._tmpNode, this.viper.getViperElement()) === true
+                        || (ViperUtil.isBrowser('msie') === true && ViperUtil.isChildOf(this._tmpNode, this.viper.getViperElement()) === true))
+                ) {
                     var range = this.viper.getCurrentRange();
                     range.setEnd(this._tmpNode, this._tmpNodeOffset);
                     range.setStart(this._tmpNode, this._tmpNodeOffset);
@@ -30442,6 +30688,7 @@ ViperAccessibilityPlugin_WCAG2 = {
         {
             var range = this.viper.getViperRange().cloneRange();
             range     = this.viper.adjustRange(range);
+            var self  = this;
 
             var nodeSelection = range.getNodeSelection();
             var startNode     = null;
@@ -30496,8 +30743,8 @@ ViperAccessibilityPlugin_WCAG2 = {
                 var continueElement = null;
                 if (!bookmark || elem !== bookmark.start) {
                     if (elem.nodeType === ViperUtil.ELEMENT_NODE) {
-                        ViperUtil.removeAttr(elem, 'style');
-                        ViperUtil.removeAttr(elem, 'class');
+                        self.viper.removeAttribute(elem, 'style');
+                        self.viper.removeAttribute(elem, 'class');
 
                         if (elem.attributes.length === 0 && ViperUtil.isTag(elem, 'span') === true) {
                             // Set the continueElement to be the first child of this element as it will be removed and
@@ -32470,7 +32717,7 @@ ViperAccessibilityPlugin_WCAG2 = {
                     return;
                 }
 
-                if ((!nodeSelection || nodeSelection.nodeType !== ViperUtil.ELEMENT_NODE || nodeSelection === self.viper.getViperElement())
+                if ((!nodeSelection || nodeSelection.nodeType !== ViperUtil.ELEMENT_NODE || (nodeSelection === self.viper.getViperElement() && self.viper.getDefaultBlockTag() !== ''))
                     && (range.collapsed === true || ViperUtil.getFirstBlockParent(startNode) !== ViperUtil.getFirstBlockParent(endNode))
                     || (startNode === endNode && ViperUtil.isTag(startNode, 'br') === true && range.collapsed === true)
                     || (ViperUtil.isBrowser('msie', '8') === true && range.collapsed === true && nodeSelection && ViperUtil.getHtml(nodeSelection) === '' && ViperUtil.isStubElement(nodeSelection) === false)
@@ -32479,7 +32726,7 @@ ViperAccessibilityPlugin_WCAG2 = {
                     tools.disableButton('class');
                     tools.setButtonInactive('anchor');
                     tools.setButtonInactive('class');
-                } else if (nodeSelection && nodeSelection === self.viper.getViperElement()) {
+                } else if (nodeSelection && nodeSelection === self.viper.getViperElement() && self.viper.getDefaultBlockTag() !== '') {
                     tools.disableButton('anchor');
                     tools.disableButton('class');
                     tools.setButtonInactive('anchor');
@@ -35186,6 +35433,7 @@ ViperAccessibilityPlugin_WCAG2 = {
                 if (image.naturalWidth === 0 || image.naturalHeight === 0) {
                     canResize = false;
                 }
+
                 // if (widthStyle && widthStyle.indexOf('%') !== -1) {
                 //     // Prevent resizing.
                 //     canResize = false;
@@ -35221,7 +35469,15 @@ ViperAccessibilityPlugin_WCAG2 = {
                     } else {
                         ViperUtil.removeClass(sizeDiv, 'visible');
                     }
+
+                    // If the image is too small move the size div outside of the image.
+                    if (image.width < 60 ||  image.height < 20) {
+                        ViperUtil.addClass(sizeDiv, 'smallImage');
+                    } else {
+                        ViperUtil.removeClass(sizeDiv, 'smallImage');
+                    }
                 };
+
                 _updateSize();
 
                 ViperUtil.addClass(resizeBox, 'ViperImagePlugin-resizeBox');
@@ -35477,7 +35733,7 @@ ViperAccessibilityPlugin_WCAG2 = {
             });
 
             this.viper.registerCallback('Viper:mouseUp', 'ViperInlineToolbarPlugin', function(e) {
-                if (ViperUtil.isChildOf(self.viper._mouseDownEvent.target, self._toolbarElement) === true) {
+                if (self.viper._mouseDownEvent && ViperUtil.isChildOf(self.viper._mouseDownEvent.target, self._toolbarElement) === true) {
                     // The mouse down event happened in the Inline Toolbar so do not fire mouse up event.
                     return false;
                 }
@@ -35969,8 +36225,9 @@ ViperAccessibilityPlugin_WCAG2 = {
             var parent        = null;
 
             var nodeSelection = nodeSelection || range.getNodeSelection(range, true);
+            var viperElement  = this.viper.getViperElement();
 
-            if (nodeSelection && this.viper.getViperElement() !== nodeSelection) {
+            if (nodeSelection && viperElement !== nodeSelection) {
                 parent = nodeSelection;
             } else {
                 var startNode = range.getStartNode();
@@ -35986,9 +36243,15 @@ ViperAccessibilityPlugin_WCAG2 = {
                     startNode = startNode.nextSibling;
                 }
 
+                var endNode = range.getEndNode();
                 if (startNode.nodeType !== ViperUtil.TEXT_NODE || ViperUtil.isBlank(startNode.data) !== true) {
                     if (startNode.nodeType !== ViperUtil.TEXT_NODE && startNode !== range.getEndNode()) {
-                        lineage.push(range.getEndNode());
+                        if (endNode !== viperElement) {
+                            lineage.push(range.getEndNode());
+                        } else {
+                            var firstSelectable = range._getFirstSelectableChild(startNode);
+                            lineage.push(firstSelectable);
+                        }
                     } else {
                         if (ViperUtil.isBrowser('edge') === true
                             && startNode.nodeType === ViperUtil.TEXT_NODE
@@ -38296,7 +38559,17 @@ ViperAccessibilityPlugin_WCAG2 = {
                 }
 
                 if (ViperUtil.inArray(endNode, elems) === false) {
-                    elems.push(endNode);
+                    if ((ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true)) {
+                        if (range.endContainer.nodeType !== ViperUtil.ELEMENT_NODE || ViperUtil.isTag(range.endContainer, 'li') === false || range.endOffset > 0) {
+                            elems.push(endNode);
+                        }
+                    } else if (range.collapsed === true
+                        || ViperUtil.isText(range.endContainer) !== true
+                        || range.endOffset !== 0
+                        || ViperUtil.isTag(ViperUtil.getFirstBlockParent(range.endContainer), 'li') !== true
+                    ) {
+                        elems.push(endNode);
+                    }
                 }
 
                 var c = elems.length;
@@ -38335,23 +38608,16 @@ ViperAccessibilityPlugin_WCAG2 = {
                 return false;
             }
 
-            // If the current list items is starting with a list and ends up selecting
-            // its whole sublist then move them all by 1 level.
-            if (listItems.length > 1) {
-                var subList = this.getSubListItem(listItems[0]);
-                if (subList) {
-                    var firstItem = listItems.shift();
-                    if (this._isWholeList(listItems) === true) {
-                        return this.indentListItem(firstItem, true, testOnly);
-                    }
-
-                    listItems.unshift(firstItem);
-                }
+            var topListItems   = this.getTopLevelListItems(listItems);
+            var includeSublist = false;
+            if (listItems.length !== topListItems.length) {
+                // If the sub list items selected then move the sublist item together with the top list item.
+                includeSublist = true;
             }
 
-            var c = listItems.length;
+            var c = topListItems.length;
             for (var i = 0; i < c; i++) {
-                if (this.indentListItem(listItems[i], false, testOnly) === false) {
+                if (this.indentListItem(topListItems[i], includeSublist, testOnly) === false) {
                     return false;
                 }
             }
@@ -38483,28 +38749,39 @@ ViperAccessibilityPlugin_WCAG2 = {
                 }
             }
 
-            // If the current list items is starting with a list and ends up selecting
-            // its whole sublist then move them all by 1 level.
-            if (listItems.length > 1) {
-                var subList = this.getSubListItem(listItems[0]);
-                if (subList) {
-                    var firstItem = listItems.shift();
-                    if (this._isWholeList(listItems) === true) {
-                        return this.outdentListItem(firstItem, testOnly);
-                    }
-
-                    listItems.unshift(firstItem);
-                }
-            }
-
-            var c = listItems.length;
+            // For each list item remove all the sub lists. Construct a new array with the top selected list items.
+            var itemsToOutdent = this.getTopLevelListItems(listItems);
+            var c              = itemsToOutdent.length;
             for (var i = 0; i < c; i++) {
-                if (this.outdentListItem(listItems[i], testOnly) === false) {
+                if (this.outdentListItem(itemsToOutdent[i], testOnly) === false) {
                     return false;
                 }
             }
 
             return true;
+
+        },
+
+        getTopLevelListItems: function (listItems)
+        {
+            listItems         = listItems.concat([]);
+            var topLevelItems = [listItems.shift()];
+            for (var i = 0; i < listItems.length; i++) {
+                var add     = true;
+                var parents = ViperUtil.getParents(listItems[i], 'li');
+                for (var j = 0; j < parents.length; j++) {
+                    if (ViperUtil.inArray(parents[j], topLevelItems, true) === true) {
+                        add = false;
+                        break;
+                    }
+                }
+
+                if (add === true) {
+                    topLevelItems.push(listItems[i]);
+                }
+            }
+
+            return topLevelItems;
 
         },
 
@@ -38584,9 +38861,10 @@ ViperAccessibilityPlugin_WCAG2 = {
 
                 // Convert this item to a default block tag.
                 var subList = null;
-                var p       = document.createElement('p');
                 var bTag    = this.viper.getDefaultBlockTag();
+                var p       = document.createElement('p');
                 if (bTag !== '') {
+                    p       = document.createElement(bTag);
                     while (li.firstChild) {
                         if (ViperUtil.isTag(li.firstChild, 'ul') === true || ViperUtil.isTag(li.firstChild, 'ol') === true) {
                             // Sub list needs to go after the p tag.
@@ -38785,20 +39063,31 @@ ViperAccessibilityPlugin_WCAG2 = {
             }
 
             var listItems = [];
+            var prev      = null;
             for (var i = 0; i < pElems.length; i++) {
                 var p  = pElems[i];
-                var li = document.createElement('li');
-                while (p.firstChild) {
-                    li.appendChild(p.firstChild);
-                }
-
-                if (atEnd !== true) {
-                    listItems.unshift(li);
+                var li = null;
+                if (ViperUtil.isTag(p, ['ul', 'ol']) === true) {
+                    if (prev !== null) {
+                        // Append this list to the previous item as its sub list.
+                        prev.appendChild(p);
+                    }
                 } else {
-                    listItems.push(li);
-                }
+                    var li = document.createElement('li');
+                    while (p.firstChild) {
+                        li.appendChild(p.firstChild);
+                    }
 
-                ViperUtil.remove(p);
+                    ViperUtil.remove(p);
+
+                    if (atEnd !== true) {
+                        listItems.unshift(li);
+                    } else {
+                        listItems.push(li);
+                    }
+
+                    prev = li;
+                }
             }
 
             if (atEnd === true) {
@@ -39306,10 +39595,7 @@ ViperAccessibilityPlugin_WCAG2 = {
 
             if (indent === true) {
                 increaseIndent = this.canIncreaseIndent(range);
-
-                if (indent === true) {
-                    decreaseIndent = this.canDecreaseIndent(range);
-                }
+                decreaseIndent = this.canDecreaseIndent(range);
             }
 
             if (mainToolbar === true
@@ -39712,7 +39998,7 @@ ViperAccessibilityPlugin_WCAG2 = {
                 return;
             }
 
-            if (ViperUtil.isTag(element, 'p') === true || ViperUtil.isTag(element, 'td') === true) {
+            if (ViperUtil.isTag(element, ['p', 'td', 'ul', 'ol']) === true) {
                 return element;
             }
 
@@ -39730,6 +40016,10 @@ ViperAccessibilityPlugin_WCAG2 = {
             if (elems.length > 1) {
                 var first = elems[0];
                 var last  = elems[(elems.length - 1)];
+
+                if (ViperUtil.isTag(first.previousElementSibling, 'li') === true) {
+                    return false;
+                }
 
                 var firstParent = first.parentNode;
                 var lastParent  = last.parentNode;
@@ -39876,8 +40166,8 @@ ViperAccessibilityPlugin_WCAG2 = {
             this.viper.registerCallback('Viper:keyDown', 'ViperReplacementPlugin', function(e) {
                 if (ViperUtil.inArray(e.which, ignoredKeys) === true) {
                     return;
-                } else if ((e.which === 88 || e.which === 67 || e.which === 86) && (e.metaKey === true || e.ctrlKey === true)) {
-                    // Copy/Cut/Paste operation.
+                } else if (e.metaKey === true || e.ctrlKey === true) {
+                    // Copy/Cut/Paste, bold/italic/underline operations.
                     return;
                 }
 
@@ -40138,6 +40428,21 @@ ViperAccessibilityPlugin_WCAG2 = {
                 if (ViperUtil.hasAttribute(data.element, cloneName) === true) {
                     ViperUtil.removeAttr(data.element, cloneName);
                 }
+
+                // Check if the data-viper-attribute-keywords attribute needs to be removed if this was the only
+                // keyword attribute on the element.
+                var remove = true;
+                for (var i = 0; i < data.element.attributes.length; i++) {
+                    if (ViperUtil.hasAttribute(data.element, 'data-viper-' + data.element.attributes[i].nodeName) === true) {
+                        remove = false;
+                        break;
+                    }
+                }
+
+                if (remove === true) {
+                    ViperUtil.removeAttr(data.element, 'data-viper-attribute-keywords');
+                }
+
             });
 
             this.viper.addAttributeGetModifier(
@@ -40451,7 +40756,7 @@ ViperAccessibilityPlugin_WCAG2 = {
             for (var i = 0; i < elems.length; i++) {
                 for (var j = (elems[i].attributes.length - 1); j >= 0; j--) {
                     var attr = elems[i].attributes[j];
-                    if (attr.nodeName === 'data-viper-attribite-keywords') {
+                    if (attr.nodeName === 'data-viper-attribute-keywords') {
                         // Remove the cloned attribute.
                         ViperUtil.removeAttr(elems[i], attr.nodeName);
                     } else if (attr.nodeName.indexOf('data-viper-') === 0) {
@@ -40529,7 +40834,7 @@ ViperAccessibilityPlugin_WCAG2 = {
             var attrRegex = new RegExp(subRegex, 'g');
 
             var regex      = self.getReplacementRegex();
-            if (!regex) {
+            if (!regex || !content) {
                 return keywords;
             }
 
@@ -40572,7 +40877,7 @@ ViperAccessibilityPlugin_WCAG2 = {
             parentElem = parentElem || this.viper.getViperElement();
 
             var regex = this.getReplacementRegex();
-            if (!regex) {
+            if (!regex || !parentElem) {
                 return keywords;
             }
 
@@ -40730,7 +41035,7 @@ ViperAccessibilityPlugin_WCAG2 = {
             realValue     = realValue.replace(keyword, replacement);
             ViperUtil.attr(element, attribute, realValue);
 
-            ViperUtil.attr(element, 'data-viper-attribite-keywords', 'true');
+            ViperUtil.attr(element, 'data-viper-attribute-keywords', 'true');
 
             return realValue;
 
@@ -41617,6 +41922,7 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
         this._toolbarButtonToggles = false;
         this._aceTheme             = 'ace/theme/viper';
         this._base64Images         = {};
+        this._keepScrollAttr       = false;
 
         this._aceMarkers = [];
     }
@@ -42401,7 +42707,11 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
                 }
             }
 
+            // Make sure scroll to attribute is not removed by getHtml().
+            this._keepScrollAttr = true;
             var html = this.viper.getHtml(null, {emptyTableCellContent:''});
+            this._keepScrollAttr = false;
+
             var el   = document.createElement('div');
             ViperUtil.setHtml(el, html);
             this._convertBase64ImagesToKeywords(el);
@@ -42470,6 +42780,11 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
         },
 
         _removeScrollAttribute: function (elem) {
+            if (this._keepScrollAttr === true) {
+                // When the editor is opening do not remove the scroll to attribute.
+                return;
+            }
+
             // Remove Viper scroll attribute from content.
             elem      = elem || this.viper.getViperElement();
             var elems = ViperUtil.find(elem, '[__viper_scrollpos]');
@@ -42617,7 +42932,7 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
                     var cell = self._getCellElement(data.target);
                     if (cell) {
                         var range = self.viper.getViperRange();
-                        if (range.collapsed !== true) {
+                        if (range.collapsed !== true && !range.getNodeSelection()) {
                             // Collapse the range incase the mouse is being clicked on a selection.
                             range.collapse(true);
                             ViperSelection.addRange(range);
@@ -46706,7 +47021,7 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
                     }
 
                     var inputElements = ViperUtil.getTag('input[type=text], textarea', this._subSections[id]);
-                    if (inputElements.length > 0 && ViperUtil.getElementHeight(inputElements[0]) > 0) {
+                    if (inputElements.length > 0 && self._canFocusField(inputElements[0]) === true) {
                         try {
                             setTimeout(function() {
                                 inputElements[0].focus();
@@ -46786,7 +47101,7 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
                                 // Give focus back to the form field.
                                 var inputElements = ViperUtil.getTag('input[type=text], textarea', subSection.form);
                                 for (var i = 0; i < inputElements.length; i++) {
-                                    if (ViperUtil.getElementWidth(inputElements[i]) !== 0) {
+                                    if (self._canFocusField(inputElements[i]) === true) {
                                         try {
                                             inputElements[i].focus();
                                         } catch(e) {}
@@ -47043,7 +47358,7 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
 
             var inputElements = ViperUtil.getTag('input[type=text], textarea', bubbleElem);
             for (var i = 0; i < inputElements.length; i++) {
-                if (ViperUtil.getElementWidth(inputElements[i]) !== 0) {
+                if (this._canFocusField(inputElements[i]) === true) {
                     try {
                         setTimeout(function() {
                             inputElements[i].focus();
@@ -47065,6 +47380,16 @@ function StyleHTML(html_source, indent_size, indent_character, max_char, brace_s
                     return bubble.getActiveSubSection().onsubmit();
                 }
             });
+
+        },
+
+        _canFocusField: function (field) {
+            if (ViperUtil.getElementWidth(field) !== 0 && (ViperUtil.isBrowser('chrome') !== true || ViperUtil.getElementCoords(field).x > 0)) {
+                // Fields in Chrome may appear off screen due to the Viper-offScreen CSS class.
+                return true;
+            }
+
+            return false;
 
         },
 
@@ -72236,4 +72561,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = '132c894b8afd3baa13d53ea2f02848ff336185c7';
+Viper.build = true;Viper.version = '072095e22cdc87cec6d0a12a0819639e104413f9';
