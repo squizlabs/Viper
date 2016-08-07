@@ -4620,7 +4620,9 @@
                             || cont === '&nbsp;'
                             || (cont === '' && Viper.Util.isTag(node, ['p', 'div']))
                         ) {
-                            Viper.Util.remove(node);
+                            if (this.isSpecialElement(node) !== true) {
+                                Viper.Util.remove(node);
+                            }
                         }
                     break;
                 }//end switch
