@@ -154,13 +154,13 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
 
                 // Outdent once so the parent is moved to a paragraph
                 $this->doAction($method, 'listOutdent');
-                $this->assertHTMLMatch('<p>Some content</p><p>List %1% item here..</p><'.$listType.'><li>Sub %2% list item</li></'.$listType.'>');
+                $this->assertHTMLMatch('<p>List:</p><p>List %1% item here..</p><'.$listType.'><li>Sub %2% list item</li></'.$listType.'>');
                 $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
                 // Indent once so the parent is added back to a list
                 $this->doTopToolbarAction($method, 'listIndent');
-                $this->assertHTMLMatch('<p>List:</p><'.$listType.'> <li> List %1% item here..<'.$listType.'><li> Sub %2% list item </li> </'.$listType.'> </li></'.$listType.'>');
-                $this->assertIconStatusesCorrect($ulStatus, $olStatus, FALSE, FALSE, TRUE, FALSE);
+                $this->assertHTMLMatch('<p>List:</p><ul><li>List %1% item here..<'.$listType.'><li>Sub %2% list item</li></'.$listType.'></li></ul>');
+                $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
             }
         }
 

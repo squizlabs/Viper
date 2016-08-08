@@ -743,49 +743,6 @@
                 return false;
             }
 
-            if (this._isWholeList(listItems) === true) {
-                // Get the parent list.
-                var list = this._getListElement(listItems[0]);
-                if (!this._getListElement(list)) {
-                    // First check for sub lists.
-                    for (var i = 0; i < listItems.length; i++) {
-                        var li = listItems[i];
-                        var subList = this.getSubListItem(li);
-                        if (subList) {
-                            return false;
-                        }
-                    }
-
-                    if (testOnly === true) {
-                        return true;
-                    }
-
-                    if (listItems.length === 1
-                        && (ViperUtil.isTag(list.parentNode, 'td') === true || ViperUtil.isTag(list.parentNode, 'th') === true)
-                    ) {
-                        var li = listItems[0];
-                        while (li.firstChild) {
-                            ViperUtil.insertBefore(list, li.firstChild);
-                        }
-                    } else {
-                        // Conver to P tags.
-                        for (var i = 0; i < listItems.length; i++) {
-                            var li = listItems[i];
-                            var p  = document.createElement('p');
-                            while (li.firstChild) {
-                                p.appendChild(li.firstChild);
-                            }
-
-                            ViperUtil.insertBefore(list, p);
-                        }
-                    }
-
-                    ViperUtil.remove(list);
-
-                    return true;
-                }
-            }
-
             // For each list item remove all the sub lists. Construct a new array with the top selected list items.
             var itemsToOutdent = this.getTopLevelListItems(listItems);
             var c              = itemsToOutdent.length;
@@ -976,6 +933,10 @@
                     // Put the sub list that was in the original list element right after
                     // the P tag.
                     ViperUtil.insertAfter(p, subList);
+                }
+
+                if (!ViperUtil.getFirstElementChild(list)) {
+                    ViperUtil.remove(list);
                 }
 
                 return true;

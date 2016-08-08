@@ -179,7 +179,7 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
 
 
     /**
-     * Test that you can remove a sub list item by clicking the active list icon in the toolbar and then create a different type of list by 
+     * Test that you can remove a sub list item by clicking the active list icon in the toolbar and then create a different type of list by
      * using the other list icon
      *
      * @return void
@@ -980,13 +980,13 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
 
                 // Outdent once so the parent is moved to a paragraph
                 $this->doAction($method, 'listOutdent');
-                $this->assertHTMLMatch('<p>Some content</p><p>List %1% item here..</p><'.$subListType.'><li>Sub %2% list item</li></'.$subListType.'>');
+                $this->assertHTMLMatch('<p>List:</p><p>List %1% item here..</p><'.$subListType.'><li>Sub %2% list item</li></'.$subListType.'>');
                 $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
                 // Indent once so the parent is added back to a list
                 $this->doTopToolbarAction($method, 'listIndent');
-                $this->assertHTMLMatch('<p>List:</p><ul> <li> List %1% item here..<'.$subListType.'><li> Sub %2% list item </li> </'.$subListType.'> </li></ul>');
-                $this->assertIconStatusesCorrect('active', TRUE, FALSE, FALSE, TRUE, FALSE);
+                $this->assertHTMLMatch('<p>List:</p><ul><li>List %1% item here..<'.$subListType.'><li>Sub %2% list item</li></'.$subListType.'></li></ul>');
+                $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
             }
         }
 
