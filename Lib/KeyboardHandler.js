@@ -3920,10 +3920,7 @@
 
             elem.appendChild(docFrag);
 
-            // Remove DEL tags before getting the text content.
             var elemClone = ViperUtil.cloneNode(elem);
-            ViperUtil.remove(ViperUtil.getTag('del', elemClone));
-
             if (ViperUtil.isBlank(ViperUtil.getNodeTextContent(elemClone)) === true) {
                 // Do not need this empty element.
                 elem = null;
