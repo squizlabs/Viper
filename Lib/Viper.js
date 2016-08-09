@@ -1807,6 +1807,18 @@
 
         },
 
+        createDefaultBlockElement: function() {
+            var baseTag = this.getDefaultBlockTag();
+            if (baseTag) {
+                var el = document.createElement(baseTag);
+                el.appendChild(document.createElement('br'));
+                return el;
+            }
+
+            return null;
+
+        },
+
         /**
          * This is not as simple as wrapping a selection with the specified node.
          * For example, if the specified node is a STRONG tag, which is an inline
