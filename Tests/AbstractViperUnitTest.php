@@ -217,6 +217,12 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     {
         self::$_testCount++;
 
+        $totalTests = ViperTestListener::getNumberOfTests();
+        if ($totalTests === 0) {
+            $this->markTestSkipped();
+            return;
+        }
+
         $baseDir = dirname(__FILE__);
 
         // Get the test HTML file.
@@ -300,7 +306,6 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $testTitle  = $this->getName();
         $numFails   = ViperTestListener::getFailures();
         $numErrors  = ViperTestListener::getErrors();
-        $totalTests = ViperTestListener::getNumberOfTests();
         $testsRun   = ViperTestListener::getTestsRun();
 
         // Reset the Sikuli connection and restart the browser if the number of consecutive errors reach the limit or
@@ -542,9 +547,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         }
 
         // Get coverage data.
-        $coverage = self::$_sikuli->execJS('getCodeCoverage()');
-        if (empty($coverage) === FALSE) {
-            file_put_contents(dirname(__FILE__).'/tmp/coverage.json', $coverage);
+        if (self::$_sikuli !== NULL) {
+            $coverage = self::$_sikuli->execJS('getCodeCoverage()');
+            if (empty($coverage) === FALSE) {
+                file_put_contents(dirname(__FILE__).'/tmp/coverage.json', $coverage);
+            }
         }
 
     }//end tearDownAfterClass()
@@ -1076,6 +1083,10 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function useTest($id, $clickKeyword=1)
     {
+        if ($this->sikuli === NULL) {
+            return;
+        }
+
         $this->sikuli->execJS('useTest("test-'.$id.'")', TRUE);
         sleep(1);
 
