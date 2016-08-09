@@ -111,7 +111,7 @@ class Viper_Tests_ViperListPlugin_ConvertListTypesUnitTest extends AbstractViper
             $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1 %1%</li><li>item 2 %2%</li><li>item 3</li></ul><ol><li>item 4 %3%</li></ol>');
             $this->doAction($method, 'listUL');
             $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
-            $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1 %1%</li><li>item 2 %2%</li><li>item 3</li><li>item 4 %3%</li></ul>');        
+            $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1 %1%</li><li>item 2 %2%</li><li>item 3</li><li>item 4 %3%</li></ul>');
         }
 
     }//end testConvertFirstItemInList()
@@ -173,12 +173,12 @@ class Viper_Tests_ViperListPlugin_ConvertListTypesUnitTest extends AbstractViper
             $this->useTest(2);
             $this->selectKeyword(1);
             $this->selectInlineToolbarLineageItem(0);
-            $this->assertIconStatusesCorrect('active', TRUE, FALSE, FALSE, TRUE, FALSE);
+            $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
             $this->doAction($method, 'listOL');
-            $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, FALSE, TRUE, FALSE);
+            $this->assertIconStatusesCorrect(TRUE, 'active', FALSE, TRUE);
             $this->assertHTMLMatch('<p>List convert test:</p><ol><li>item 1<ol><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ol></li><li>item 2</li><li>item 3</li><li>item 4</li></ol>');
             $this->doAction($method, 'listUL');
-            $this->assertIconStatusesCorrect('active', TRUE, FALSE, FALSE, TRUE, FALSE);
+            $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE);
             $this->assertHTMLMatch('<p>List convert test:</p><ul><li>item 1<ul><li>sub item 1 %1%</li><li>sub item 2 %2%</li></ul></li><li>item 2</li><li>item 3</li><li>item 4</li></ul>');
         }
 
@@ -244,7 +244,7 @@ class Viper_Tests_ViperListPlugin_ConvertListTypesUnitTest extends AbstractViper
                 $this->doAction($method, $firstIconToClick);
                 $this->assertIconStatusesCorrect($ulConvertStatus, $olConvertStatus, FALSE, TRUE);
                 $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>item 1</li></'.$listType.'><'.$convertListType.'><li>%1% item 2</li><li>item 3 %2%</li></'.$convertListType.'><'.$listType.'><li>item 4</li></'.$listType.'>');
-                
+
                 $this->doAction($method, $secondIconToClick);
                 $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
                 $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>item 1</li><li>%1% item 2</li><li>item 3 %2%</li><li>item 4</li></'.$listType.'>');
