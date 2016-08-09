@@ -805,11 +805,11 @@
                 }
             }
 
-            if (parentListItem) {
-                if (testOnly === true) {
-                    return true;
-                }
+            if (testOnly === true) {
+                return true;
+            }
 
+            if (parentListItem) {
                 if (siblingItems.length > 0) {
                     // Move these (next) siblings under an exisiting sub list or
                     // under a new list (and place the new list under the current item).
@@ -849,14 +849,10 @@
 
                 return true;
             } else {
-                if (testOnly === true) {
-                    return true;
-                }
-
                 // Convert this item to a default block tag.
                 var subList = null;
                 var bTag    = this.viper.getDefaultBlockTag();
-                var p       = document.createElement('p');
+                var p       = null;
                 if (bTag !== '') {
                     p       = document.createElement(bTag);
                     while (li.firstChild) {
@@ -868,6 +864,8 @@
                             p.appendChild(li.firstChild);
                         }
                     }
+                } else {
+                    p = document.createElement('p');
                 }
 
                 // If there are more list items after this item then move them in to a
@@ -931,8 +929,14 @@
 
                 if (subList) {
                     // Put the sub list that was in the original list element right after
-                    // the P tag.
-                    ViperUtil.insertAfter(p, subList);
+                    // the P tag. However, if there is already a list of same type then join to that list.
+                    if (ViperUtil.isTag(p.nextSibling, ViperUtil.getTagName(subList)) === true) {
+                        while (subList.firstChild) {
+                            ViperUtil.insertBefore(p.nextSibling.firstChild, subList.firstChild);
+                        }
+                    } else {
+                        ViperUtil.insertAfter(p, subList);
+                    }
                 }
 
                 if (!ViperUtil.getFirstElementChild(list)) {

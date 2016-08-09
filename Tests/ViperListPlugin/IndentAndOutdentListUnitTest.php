@@ -561,7 +561,7 @@ class Viper_Tests_ViperListPlugin_IndentAndOutdentListUnitTest extends AbstractV
                 $this->doAction($method, 'listOutdent');
                 sleep(1);
                 $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>first item</li><li>second item<'.$listType.'><li>first sub item %1%</li></'.$listType.'></li></'.$listType.'><p>%2% second sub item</p><'.$listType.'><li>third sub item %3%</li><li>third item</li></'.$listType.'>');
-                $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, FALSE);
+                $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
                 // Indent once it is added back in the list
                 $this->doTopToolbarAction($method, 'listIndent');
