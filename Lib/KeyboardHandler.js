@@ -2036,23 +2036,10 @@
                 && range.collapsed === false
                 && ViperUtil.isBrowser('msie') !== true
             ) {
-                // Chrome has issues with removing list items from lists.
-                var startNode = range.getStartNode();
-                var endNode   = range.getEndNode();
-
-                // First issue is, if a whole list item is selected, it removes the li
-                // and it adds a span tag in place of it, creating invalid HTML and
-                // causing all sorts of issues. It should only remove the list item
-                // contents and leave the list item un touched..
-                if (startNode === endNode
-                    && startNode.nodeType === ViperUtil.TEXT_NODE
-                    && ViperUtil.isTag(startNode.parentNode, 'li') === true
-                    && startNode.data.length === range.endOffset
-                ) {
-                    ViperUtil.setHtml(startNode.parentNode, '<br />');
-                    this._viper.contentChanged();
-                    return false;
-                } else if ((ViperUtil.isTag(range.commonAncestorContainer, 'ul') || ViperUtil.isTag(range.commonAncestorContainer, 'ol'))) {
+                if ((ViperUtil.isTag(range.commonAncestorContainer, 'ul') || ViperUtil.isTag(range.commonAncestorContainer, 'ol'))) {
+                    // Chrome has issues with removing list items from lists.
+                    var startNode = range.getStartNode();
+                    var endNode   = range.getEndNode();
                     // Second issue is with removing multiple list items.
                     if (endNode.data.length === range.endOffset) {
                         var endItem = ViperUtil.getParents(endNode, 'li')[0];
