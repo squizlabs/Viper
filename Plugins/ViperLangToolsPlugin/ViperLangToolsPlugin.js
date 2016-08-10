@@ -55,8 +55,8 @@
                         element = document.createElement(tagName);
                         element.setAttribute('title', titleAttribute);
 
-                        ViperUtil.insertBefore(node, element);
-                        element.appendChild(node);
+                        ViperUtil.moveChildrenToElement(node, element);
+                        node.appendChild(element);
                     }
                 }
             } else {
