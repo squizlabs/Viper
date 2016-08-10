@@ -1,5 +1,5 @@
 <?php
-
+    error_reporting(E_ALL);
     chdir(dirname(__FILE__));
 
     $opts = getopt('b::u::t::cvk::', array('url::', 'built', 'log::', 'help', 'range::'));
