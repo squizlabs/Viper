@@ -126,7 +126,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     private $_buttonShortcuts = array(
                                  'bold'         => 'Key.CMD + b',
-                                 'italic'       => 'Key.CMD + b',
+                                 'italic'       => 'Key.CMD + i',
                                  'listOutdent'  => 'Key.SHIFT + Key.TAB',
                                  'listIndent'   => 'Key.TAB',
                                  'historyUndo'  => 'Key.CMD + z',
