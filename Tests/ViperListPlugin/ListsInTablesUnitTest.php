@@ -68,7 +68,7 @@ class Viper_Tests_ViperListPlugin_ListsInTablesUnitTest extends AbstractViperLis
             // Test removing list
             $this->clickTopToolbarButton($listIconToClick, 'active');
             $this->assertHTMLMatchNoHeaders('<table border="1" cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> A table with list</caption><tbody><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 Header</th></tr><tr><td><p>Cell 1 %1%</p></td><td>Cell 2</td><td>Cell 3<br /><ul><li>item 1</li><li>item 2 %2%</li></ul></td></tr></tbody></table>');
-            $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
+            $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FASLE);
 
             // Test re-creating the list
             $this->clickTopToolbarButton($listIconToClick);
