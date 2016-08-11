@@ -464,10 +464,12 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
                     $olStatusForSub = TRUE;
                 }
 
-                $this->sikuli->tripleClick($this->findKeyword(2));
+                $this->moveToKeyword(2, 'left');
 
-                // Press shift + right once to make sure the selection is maintained. It should not select the next list item.
-                $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+                // Press shift + right an extra time make sure the selection is maintained. It should not select the next list item.
+                for ($i = 0; $i < 9; $i++) {
+                    $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+                }
 
                 // Outdent once so the parent and following list item get added to the top level list.
                 $this->doAction($method, 'listOutdent');
@@ -516,10 +518,12 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
                     $olStatusForSub = TRUE;
                 }
 
-                $this->sikuli->tripleClick($this->findKeyword(2));
-
-                // Press shift + right once to make sure the selection is maintained. It should not select the next list item.
-                $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+                $this->moveToKeyword(2, 'left');
+                
+                // Press shift + right an extra time make sure the selection is maintained. It should not select the next list item.
+                for ($i = 0; $i < 9; $i++) {
+                    $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+                }
 
                 // Outdent once so the parent and following list item get added to the top level list.
                 $this->doAction($method, 'listOutdent');
@@ -838,19 +842,19 @@ class Viper_Tests_ViperListPlugin_MixedListTypesUnitTest extends AbstractViperLi
                 // Outdent again so parent is removed from the list
                 $this->doAction($method, 'listOutdent');
                 sleep(1);
-                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan</li></'.$listType.'><p>List %1% item here..</p><'.$listType.'><li>Sub %2% list item</li></'.$listType.'><'.$listType.'><li>List %3% item here..<'.$subListType.'><li>Sub %4% list item</li></'.$subListType.'></li></'.$listType.'>');
+                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan</li></'.$listType.'><p>List %1% item here..</p><'.$listType.'><li>Sub %2% list item</li><li>List %3% item here..<'.$subListType.'><li>Sub %4% list item</li></'.$subListType.'></li></'.$listType.'>');
                 $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
                 // Indent once paragraph is added back to the top list
                 $this->doTopToolbarAction($method, 'listIndent');
                 sleep(1);
-                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan</li><li>List %1% item here..<'.$listType.'><li>Sub %2% list item</li></'.$listType.'></li><li>List %3% item here..<'.$subListType.'><li>Sub %4% list item</li></'.$subListType.'></li></'.$listType.'>');
+                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan</li><li>List %1% item here..<'.$listType.'><li>Sub %2% list item</li><li>List %3% item here..<'.$subListType.'><li>Sub %4% list item</li></'.$subListType.'></li></'.$listType.'></li></'.$listType.'>');
                 $this->assertIconStatusesCorrect($ulStatus, $olStatus, TRUE, TRUE);
 
                 // Indent again so parent is added back to second level list
                 $this->doAction($method, 'listIndent');
                 sleep(1);
-                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan<'.$listType.'><li>List %1% item here..<'.$listType.'><li>Sub %2% list item</li></'.$listType.'></li></'.$listType.'></li><li>List %3% item here..<'.$subListType.'><li>Sub %4% list item</li></'.$subListType.'></li></'.$listType.'>');
+                $this->assertHTMLMatch('<'.$listType.'><li>Recommendations and action plan<'.$listType.'><li>List %1% item here..<'.$listType.'><li>Sub %2% list item</li><li>List %3% item here..<'.$subListType.'><li>Sub %4% list item</li></'.$subListType.'></li></'.$listType.'></li></'.$listType.'></li></'.$listType.'>');
                 $this->assertIconStatusesCorrect($ulStatus, $olStatus, FALSE, TRUE);
 
             }
