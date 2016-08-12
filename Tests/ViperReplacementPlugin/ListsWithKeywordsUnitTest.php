@@ -1,349 +1,170 @@
 <?php
 
-require_once 'AbstractViperUnitTest.php';
+require_once __DIR__.'/../ViperListPlugin/AbstractViperListPluginUnitTest.php';
 
-class Viper_Tests_ViperReplacementPlugin_ListsWithKeywordsUnitTest extends AbstractViperUnitTest
+class Viper_Tests_ViperReplacementPlugin_ListsWithKeywordsUnitTest extends AbstractViperListPluginUnitTest
 {
 
     /**
-     * Test that keyword can be added to ordered lists.
+     * Test creating and removing lists with keywords
      *
      * @return void
      */
-    public function testKeywordOrderedList()
+    public function testCreatingAndRemovingLists()
     {
-        $this->useTest(1);
-        $this->clickKeyword(1);
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->clickTopToolbarButton('listOL');
+        foreach (array('ol', 'ul') as $listType) {
+            foreach ($this->getTestMethods(TRUE, FALSE, TRUE) as $method) {
+                if ($listType === 'ul') {
+                    $listIconToClick = 'listUL';
+                    $ulStatus = 'active';
+                    $olStatus = TRUE;
+                } else {
+                    $listIconToClick = 'listOL';
+                    $ulStatus = TRUE;
+                    $olStatus = 'active';
+                }
 
-        $this->assertHTMLMatch('<ol><li>%1% ((prop:productName))</li></ol>');
-        $this->assertRawHTMLMatch('<ol><li>%1% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></li></ol>');
-        // Test for revert
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->clickTopToolbarButton('listOL', 'active');
+                $this->useTest(1, 1);
+                $this->clickKeyword(5);
+                $this->doAction($method, $listIconToClick);
+                $this->assertIconStatusesCorrect($ulStatus, $olStatus, FALSE, TRUE);
+                $this->assertHTMLMatch('<p>%1%</p><'.$listType.'><li>((prop:viperKeyword))</li></'.$listType.'>');
+                $this->assertRawHTMLMatch('<p>%1%</p><'.$listType.'><li> <span title="((prop:viperKeyword))" data-viper-keyword="((prop:viperKeyword))">%5%</span></li></'.$listType.'>');
 
-        $this->assertHTMLMatch('<p>%1% ((prop:productName))</p>');
-        $this->assertRawHTMLMatch('<p>%1% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p>');
-    }//end testKeywordOrderedList()
+                // Remove list
+                $this->doAction($method, $listIconToClick, 'active');
+                $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
+                $this->assertHTMLMatch('<p>%1%</p><p>((prop:viperKeyword))</p>');
+                $this->assertRawHTMLMatch('<p>%1%</p><p><span title="((prop:viperKeyword))" data-viper-keyword="((prop:viperKeyword))">%5%</span></p>');
+            }
+        }
+
+    }//end testCreatingAndRemovingLists()
 
 
     /**
-     * Test that keyword can be added unordered to lists.
+     * Test creating lists with keywords that are linked
      *
      * @return void
      */
-    public function testKeywordUnorderedList()
+    public function testCreateListWithLinkedKeyword()
     {
-        $this->useTest(1);
-        $this->clickKeyword(1);
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->clickTopToolbarButton('listUL');
+        foreach (array('ol', 'ul') as $listType) {
+            foreach ($this->getTestMethods(TRUE, FALSE, TRUE) as $method) {
+                if ($listType === 'ul') {
+                    $listIconToClick = 'listUL';
+                    $ulStatus = 'active';
+                    $olStatus = TRUE;
+                } else {
+                    $listIconToClick = 'listOL';
+                    $ulStatus = TRUE;
+                    $olStatus = 'active';
+                }
 
-        $this->assertHTMLMatch('<ul><li>%1% ((prop:productName))</li></ul>');
-        $this->assertRawHTMLMatch('<ul><li>%1% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></li></ul>');
-        // Test for revert
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->clickTopToolbarButton('listUL', 'active');
+                $this->useTest(2, 1);
+                $this->clickKeyword(5);
+                $this->doAction($method, $listIconToClick);
+                $this->assertIconStatusesCorrect($ulStatus, $olStatus, FALSE, TRUE);
+                $this->assertHTMLMatch('<p>%1%</p><'.$listType.'><li><a href="www.squizlabs.com.au">((prop:viperKeyword))</a></li></'.$listType.'>');
+                $this->assertRawHTMLMatch('<p>%1%</p><'.$listType.'><li> <a href="www.squizlabs.com.au"><span title="((prop:viperKeyword))" data-viper-keyword="((prop:viperKeyword))">%5%</span></a></li></'.$listType.'>');
 
-        $this->assertHTMLMatch('<p>%1% ((prop:productName))</p>');
-        $this->assertRawHTMLMatch('<p>%1% <span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></p>');
-    }//end testKeywordUnorderedList()
+                // Remove list
+                $this->doAction($method, $listIconToClick, 'active');
+                $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
+                $this->assertHTMLMatch('<p>%1%</p><p><a href="www.squizlabs.com.au">((prop:viperKeyword))</a></p>');
+                $this->assertRawHTMLMatch('<p>%1%</p><p><a href="www.squizlabs.com.au"><span title="((prop:viperKeyword))" data-viper-keyword="((prop:viperKeyword))">%5%</span></a></p>');
+            }
+        }
+
+    }//end testCreateListWithLinkedKeyword()
 
 
     /**
-     * Test that linked keyword can be added to unordered lists.
+     * Test that you can create lists with content that has an image in it that uses a keyword
      *
      * @return void
      */
-    public function testLinkedKeywordUnorderedList()
+    public function testCreateListWithImage()
     {
-        $this->useTest(2);
-        $this->clickKeyword(1);
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->clickTopToolbarButton('listUL');
+        foreach (array('ol', 'ul') as $listType) {
+            foreach ($this->getTestMethods(TRUE, FALSE, TRUE) as $method) {
+                if ($listType === 'ul') {
+                    $listIconToClick = 'listUL';
+                    $ulStatus = 'active';
+                    $olStatus = TRUE;
+                } else {
+                    $listIconToClick = 'listOL';
+                    $ulStatus = TRUE;
+                    $olStatus = 'active';
+                }
 
-        $this->assertHTMLMatch('<ul><li>%1% <a href="www.squizlabs.com.au">((prop:productName))</a></li></ul>');
-        $this->assertRawHTMLMatch('<ul><li>%1% <a href="www.squizlabs.com.au"><span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></a></li></ul>');
-        // Test for revert
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->clickTopToolbarButton('listUL', 'active');
+                $this->useTest(3, 1);
+                $this->selectKeyword(2);
+                $this->doAction($method, $listIconToClick);
+                $this->assertIconStatusesCorrect($ulStatus, $olStatus, FALSE, TRUE);
+                $this->assertHTMLMatch('<p>%1%</p><'.$listType.'><li>Test %2% content<img alt="TITLE" src="((prop:url))" /> more test content.</li></'.$listType.'>');
+                $this->assertRawHTMLMatch('<p>%1%</p><'.$listType.'><li>Test %2% content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /> more test content.</li></'.$listType.'>');
 
-        $this->assertHTMLMatch('<p>%1% <a href="www.squizlabs.com.au">((prop:productName))</a></p>');
-        $this->assertRawHTMLMatch('<p>%1% <a href="www.squizlabs.com.au"><span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></a></p>');
-    }//end testLinkedKeywordUnorderedList()
+                // Remove list
+                $this->doAction($method, $listIconToClick, 'active');
+                $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
+                $this->assertHTMLMatch('<p>%1%</p><p>Test %2% content <img alt="TITLE" src="((prop:url))" /> more test content.</p>');
+                $this->assertRawHTMLMatch('<p>%1%</p><p>Test %2% content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /> more test content.</p>');
+            }
+        }
+
+    }//end testCreateListWithImage()
 
 
     /**
-     * Test that linked keyword can be added to ordered lists.
+     * Test the inline toolbar lineage works correctly when list items are linked
      *
      * @return void
      */
-    public function testLinkedKeywordOrderedList()
+    public function testInlineToolbarLineageWithLinkedKeywords()
     {
-        $this->useTest(2);
-        $this->clickKeyword(1);
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->clickTopToolbarButton('listOL');
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(4);
+            } else {
+                $this->useTest(5);
+            }
 
-        $this->assertHTMLMatch('<ol><li>%1% <a href="www.squizlabs.com.au">((prop:productName))</a></li></ol>');
-        $this->assertRawHTMLMatch('<ol><li>%1% <a href="www.squizlabs.com.au"><span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></a></li></ol>');
-        // Test for revert
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->clickTopToolbarButton('listOL', 'active');
+            // Test using the lineage when the content is linked using keywords
+            $this->clickKeyword(1);
+            $lineage = $this->getHtml('.ViperITP-lineage');
+            $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
 
-        $this->assertHTMLMatch('<p>%1% <a href="www.squizlabs.com.au">((prop:productName))</a></p>');
-        $this->assertRawHTMLMatch('<p>%1% <a href="www.squizlabs.com.au"><span title="((prop:productName))" data-viper-keyword="((prop:productName))">Viper</span></a></p>');
-    }//end testLinkedKeywordOrderedList()
+            $this->selectInlineToolbarLineageItem(2);
+            $lineage = $this->getHtml('.ViperITP-lineage');
+            $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Link</li>', $lineage);
 
+            $this->selectInlineToolbarLineageItem(1);
+            $lineage = $this->getHtml('.ViperITP-lineage');
+            $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
 
-    /**
-     * Test that images using keywords can be added to unordered lists.
-     *
-     * @return void
-     */
-    public function testImageKeywordUnorderedList()
-    {
-        $this->useTest(3);
-        $this->clickKeyword(1);
-        $this->selectKeyword(1, 2);
-        $this->clickTopToolbarButton('listUL');
+            $this->selectInlineToolbarLineageItem(0);
+            $lineage = $this->getHtml('.ViperITP-lineage');
+            $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
 
-        $this->assertHTMLMatch('<ul><li>%1% Test content<img alt="TITLE" src="((prop:url))" /> more test content.%2%</li></ul>');
-        $this->assertRawHTMLMatch('<ul><li>%1% Test content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /> more test content.%2%</li></ul>');
-        // Test for revert
-        $this->selectKeyword(1, 2);
-        $this->clickTopToolbarButton('listUL', 'active');
+            // Test using the lineage when a keyword is linked
+            $this->clickKeyword(5);
+            $lineage = $this->getHtml('.ViperITP-lineage');
+            $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li><li class="ViperITP-lineageItem Viper-selected">Keyword</li>', $lineage);
 
-        $this->assertHTMLMatch('<p>%1% Test content <img alt="TITLE" src="((prop:url))" /> more test content.%2%</p>');
-        $this->assertRawHTMLMatch('<p>%1% Test content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /> more test content.%2%</p>');
+            $this->selectInlineToolbarLineageItem(2);
+            $lineage = $this->getHtml('.ViperITP-lineage');
+            $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Link</li><li class="ViperITP-lineageItem">Keyword</li>', $lineage);
 
-    }//end testImageKeywordUnorderedList()
+            $this->selectInlineToolbarLineageItem(1);
+            $lineage = $this->getHtml('.ViperITP-lineage');
+            $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">Link</li><li class="ViperITP-lineageItem">Keyword</li>', $lineage);
 
+            $this->selectInlineToolbarLineageItem(0);
+            $lineage = $this->getHtml('.ViperITP-lineage');
+            $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li><li class="ViperITP-lineageItem">Keyword</li>', $lineage);
+        }
 
-    /**
-     * Test that images using keywords can be added to ordered lists.
-     *
-     * @return void
-     */
-    public function testImageKeywordOrderedList()
-    {
-        $this->useTest(3);
-        $this->clickKeyword(1);
-        $this->selectKeyword(1, 2);
-        $this->clickTopToolbarButton('listOL');
+    }//end testInlineToolbarLineageWithLinkedKeywords()
 
-        $this->assertHTMLMatch('<ol><li>%1% Test content<img alt="TITLE" src="((prop:url))" /> more test content.%2%</li></ol>');
-        $this->assertRawHTMLMatch('<ol><li>%1% Test content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /> more test content.%2%</li></ol>');
-
-        // Test for revert
-        $this->selectKeyword(1, 2);
-        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
-        $this->clickTopToolbarButton('listOL', 'active');
-
-        $this->assertHTMLMatch('<p>%1% Test content <img alt="TITLE" src="((prop:url))" /> more test content.%2%</p>');
-        $this->assertRawHTMLMatch('<p>%1% Test content<img alt="TITLE" data-viper-src="((prop:url))" src="'.$this->getTestURL('/Web/testImage.png').'" /> more test content.%2%</p>');
-        
-    }//end testImageKeywordOrderedList()
-
-
-    /**
-     * Test that images using keywords can be added to ordered lists.
-     *
-     * @return void
-     */
-    public function testInlineToolbarUnorderedSubLists()
-    {
-        // Test first item of sub list
-        $this->useTest(4);
-        $this->clickKeyword(1);
-        $this->selectInlineToolbarLineageItem(4);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
-        sleep(2);
-
-        $this->clickKeyword(1);
-        $this->selectInlineToolbarLineageItem(3);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
-        sleep(2);
-
-        $this->clickKeyword(1);
-        $this->selectInlineToolbarLineageItem(2);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
-        sleep(2);
-
-        $this->clickKeyword(1);
-        $this->selectInlineToolbarLineageItem(1);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
-        sleep(2);
-
-        $this->clickKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
-        sleep(2);
-
-        // Test middle item of sub list
-        $this->clickKeyword(2);
-        $this->selectInlineToolbarLineageItem(4);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Link</li>', $lineage);
-        sleep(2);
-
-        $this->clickKeyword(2);
-        $this->selectInlineToolbarLineageItem(3);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
-        sleep(2);
-
-        $this->clickKeyword(2);
-        $this->selectInlineToolbarLineageItem(2);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
-        sleep(2);
-
-        $this->clickKeyword(2);
-        $this->selectInlineToolbarLineageItem(1);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
-
-        $this->clickKeyword(2);
-        $this->selectInlineToolbarLineageItem(0);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
-
-        // Test last item of sub list
-        $this->clickKeyword(3);
-        $this->selectInlineToolbarLineageItem(4);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Link</li>', $lineage);
-
-        $this->clickKeyword(3);
-        $this->selectInlineToolbarLineageItem(3);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
-
-        $this->clickKeyword(3);
-        $this->selectInlineToolbarLineageItem(2);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
-
-        $this->clickKeyword(3);
-        $this->selectInlineToolbarLineageItem(1);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
-
-        $this->clickKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
-
-    }//end testInlineToolbarUnorderedSubLists()
-
-
-    /**
-     * Test that images using keywords can be added to ordered lists.
-     *
-     * @return void
-     */
-    public function testInlineToolbarOrderedSubLists()
-    {
-        // Test first item of sub list
-        $this->useTest(5);
-        $this->clickKeyword(1);
-        $this->selectInlineToolbarLineageItem(4);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
-        sleep(2);
-
-        $this->clickKeyword(1);
-        $this->selectInlineToolbarLineageItem(3);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
-        sleep(2);
-
-        $this->clickKeyword(1);
-        $this->selectInlineToolbarLineageItem(2);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
-        sleep(2);
-
-        $this->clickKeyword(1);
-        $this->selectInlineToolbarLineageItem(1);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
-        sleep(2);
-
-        $this->clickKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
-        sleep(2);
-
-        // Test middle item of sub list
-        $this->clickKeyword(2);
-        $this->selectInlineToolbarLineageItem(4);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Link</li>', $lineage);
-        sleep(2);
-
-        $this->clickKeyword(2);
-        $this->selectInlineToolbarLineageItem(3);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
-        sleep(2);
-
-        $this->clickKeyword(2);
-        $this->selectInlineToolbarLineageItem(2);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
-        sleep(2);
-
-        $this->clickKeyword(2);
-        $this->selectInlineToolbarLineageItem(1);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
-
-        $this->clickKeyword(2);
-        $this->selectInlineToolbarLineageItem(0);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
-
-        // Test last item of sub list
-        $this->clickKeyword(3);
-        $this->selectInlineToolbarLineageItem(4);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">Link</li>', $lineage);
-
-        $this->clickKeyword(3);
-        $this->selectInlineToolbarLineageItem(3);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
-
-        $this->clickKeyword(3);
-        $this->selectInlineToolbarLineageItem(2);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
-
-        $this->clickKeyword(3);
-        $this->selectInlineToolbarLineageItem(1);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem Viper-selected">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
-
-        $this->clickKeyword(3);
-        $this->selectInlineToolbarLineageItem(0);
-        $lineage = $this->getHtml('.ViperITP-lineage');
-        $this->assertEquals('<li class="ViperITP-lineageItem Viper-selected">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">List</li><li class="ViperITP-lineageItem">Item</li><li class="ViperITP-lineageItem">Link</li>', $lineage);
-    }//end testInlineToolbarOrderedSubLists()
 }
