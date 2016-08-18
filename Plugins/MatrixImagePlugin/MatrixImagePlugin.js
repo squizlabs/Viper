@@ -88,8 +88,11 @@
                                 ViperUtil.$(button.element).mousedown();
                             });
                         };
+                        EasyEditOverlay.showOverlay('loading',{message: _('Loading image...')}, null, false);
                         // show the overlay of image editing
-                        EasyEditOverlay.showOverlay('imageDetails',{assetid: rawassetid, initAssetid: value, saveCallback: saveCallbackFunc});
+                        EasyEditOverlay.showOverlay('imageDetails',{assetid: rawassetid, initAssetid: value, saveCallback: saveCallbackFunc}, function() {
+                            EasyEditOverlay.hideOverlay('loading');
+                        });
                     }
                 });
                 urlRow.appendChild(imageEditor);
@@ -202,6 +205,14 @@
                 ViperUtil.$('.Viper-image-error-message').html('').hide();
                 // hide choose location fields
                 ViperUtil.$('.' + prefix + '-chooseLocationFields').hide();
+
+                // hide the dropped image msg box, because we won't be using it
+                ViperUtil.$('.VipperDroppedImage-msgBox').remove();
+
+                // change button text
+                ViperUtil.$(this).parent().parent().parent().parent().find('#content-screen-vitpImagePlugin\\:bubbleSubSection-applyButton').html(_('Apply Changes'));
+                ViperUtil.$(this).parent().parent().parent().parent().find('#content-screen-ViperImagePlugin\\:bubbleSubSection-applyButton').html(_('Apply Changes'));
+
             })
             $uploadTab.click(function(e) {
                 ViperUtil.preventDefault(e);
@@ -209,6 +220,14 @@
                 ViperUtil.$(this).parent().find('a').removeClass('selected');
                 $uploadTab.addClass('selected');
 
+                // if it's a dropped image upload, we don't need to do anything, prepareDroppedImageUpload() would take care everything
+                var value = ViperUtil.$(this).parent().parent().find('.Viper-chooseAssetRow input.Viper-textbox-input').val();
+                if(value.indexOf('- Dropped Image -') == 0) {
+                    return;
+                }
+
+                // hide the dropped image msg box, because we won't be using it
+                ViperUtil.$('.VipperDroppedImage-msgBox').remove();
 
                 // reset the base64 file content from previous uploads
                 self._inlineUploadForm.find('input[name=base64]').val('');
@@ -224,6 +243,10 @@
 
                 ViperUtil.$(this).parent().parent().find('.Viper-imageUploadFileRow').hide();
                 ViperUtil.$('.Viper-image-error-message').html('').hide();
+
+                  // change button text
+                ViperUtil.$(this).parent().parent().parent().parent().find('#content-screen-vitpImagePlugin\\:bubbleSubSection-applyButton').html(_('Upload Image'));
+                ViperUtil.$(this).parent().parent().parent().parent().find('#content-screen-ViperImagePlugin\\:bubbleSubSection-applyButton').html(_('Upload Image'));
             })
             $urlTab.click(function(e) {
                 ViperUtil.preventDefault(e);
@@ -263,6 +286,13 @@
                 ViperUtil.$('.Viper-image-error-message').html('').hide();
                 // hide choose location fields
                 ViperUtil.$('.' + prefix + '-chooseLocationFields').hide();
+
+                // hide the dropped image msg box, because we won't be using it
+                ViperUtil.$('.VipperDroppedImage-msgBox').remove();
+
+                // change button text
+                ViperUtil.$(this).parent().parent().parent().parent().find('#content-screen-vitpImagePlugin\\:bubbleSubSection-applyButton').html(_('Apply Changes'));
+                ViperUtil.$(this).parent().parent().parent().parent().find('#content-screen-ViperImagePlugin\\:bubbleSubSection-applyButton').html(_('Apply Changes'));
 
             });
 
@@ -342,6 +372,22 @@
             });
 
                   
+            // when you click on a pasted image, pop up the upload menu directly
+            this.viper.registerCallback('Viper:mouseUp', 'MatrixImagePlugin', function(e) {
+                var target = ViperUtil.getMouseEventTarget(e);
+                self._ieImageResize = null;
+
+                if (ViperUtil.isTag(target, 'img') === true) {
+                    if(target && target.dataset && target.dataset.imagepaste && target.dataset.imagepaste == 'true') {
+                        setTimeout(function(){
+                            ViperUtil.$('#' + self.viper.getId() + '-vitpImage').mousedown();
+                        }, 250);
+
+                    }
+                }
+            });
+
+
         },
 
         /* this function gets called when you click anywhere in viper content, 
@@ -387,7 +433,7 @@
                 if(this._isInternalLink(src)) {
                     $dialog.find('#' + toolbarPrefix + 'tabAsset').click();
                 }
-                else if (src.indexOf('filepath://') == 0) {
+                else if (src.indexOf('filepath://') == 0 || src.indexOf('data:image') == 0) {
                     $dialog.find('#' + toolbarPrefix + 'tabUpload').click();
                 }
                 else {
@@ -1135,7 +1181,7 @@
             }
 
             // if it's a inline file upload, don't worry about it, it's already handled elsewhere
-            if(url.indexOf("filepath://") === 0 || url.indexOf("data:") === 0 || url.length === 0) {
+            if(url.indexOf("filepath://") === 0 || url.indexOf("data:") === 0 || url.length === 0 || url.indexOf("- Dropped Image -") === 0) {
                 ViperUtil.$('.ViperImagePlugin-previewPanel').hide();
                 return;
             }
