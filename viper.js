@@ -1621,6 +1621,18 @@
 
         },
 
+        createDefaultBlockElement: function() {
+            var baseTag = this.getDefaultBlockTag();
+            if (baseTag) {
+                var el = document.createElement(baseTag);
+                el.appendChild(document.createElement('br'));
+                return el;
+            }
+
+            return null;
+
+        },
+
         
         surroundContents: function(tag, attributes, range, keepSelection)
         {
@@ -15608,23 +15620,10 @@
                 && range.collapsed === false
                 && ViperUtil.isBrowser('msie') !== true
             ) {
-                // Chrome has issues with removing list items from lists.
-                var startNode = range.getStartNode();
-                var endNode   = range.getEndNode();
-
-                // First issue is, if a whole list item is selected, it removes the li
-                // and it adds a span tag in place of it, creating invalid HTML and
-                // causing all sorts of issues. It should only remove the list item
-                // contents and leave the list item un touched..
-                if (startNode === endNode
-                    && startNode.nodeType === ViperUtil.TEXT_NODE
-                    && ViperUtil.isTag(startNode.parentNode, 'li') === true
-                    && startNode.data.length === range.endOffset
-                ) {
-                    ViperUtil.setHtml(startNode.parentNode, '<br />');
-                    this._viper.contentChanged();
-                    return false;
-                } else if ((ViperUtil.isTag(range.commonAncestorContainer, 'ul') || ViperUtil.isTag(range.commonAncestorContainer, 'ol'))) {
+                if ((ViperUtil.isTag(range.commonAncestorContainer, 'ul') || ViperUtil.isTag(range.commonAncestorContainer, 'ol'))) {
+                    // Chrome has issues with removing list items from lists.
+                    var startNode = range.getStartNode();
+                    var endNode   = range.getEndNode();
                     // Second issue is with removing multiple list items.
                     if (endNode.data.length === range.endOffset) {
                         var endItem = ViperUtil.getParents(endNode, 'li')[0];
@@ -17145,16 +17144,19 @@
                                 var surroundingParents = ViperUtil.getSurroundingParents(startNode);
                                 if (surroundingParents.length > 0) {
                                     range = this._viper.moveCaretAway(startNode, true);
-                                    // Could have ended up as BR.
-                                    var newStartNode = range.getStartNode();
-                                    if (ViperUtil.isTag(newStartNode, 'br') === true && ViperUtil.isText(newStartNode.previousSibling, true) === true) {
-                                        range.setStart(newStartNode.previousSibling, newStartNode.previousSibling.data.length);
-                                        range.collapse(true);
-                                        ViperSelection.addRange(range);
-                                        ViperUtil.remove(newStartNode);
+                                    var parentToRemove = surroundingParents.pop();
+                                    if (range) {
+                                        // Could have ended up as BR.
+                                        var newStartNode = range.getStartNode();
+                                        if (ViperUtil.isTag(newStartNode, 'br') === true && ViperUtil.isText(newStartNode.previousSibling, true) === true) {
+                                            range.setStart(newStartNode.previousSibling, newStartNode.previousSibling.data.length);
+                                            range.collapse(true);
+                                            ViperSelection.addRange(range);
+                                            ViperUtil.remove(newStartNode);
+                                        }
                                     }
 
-                                    ViperUtil.remove(surroundingParents.pop());
+                                    ViperUtil.remove(parentToRemove);
                                 }
                             }
 
@@ -17492,10 +17494,7 @@
 
             elem.appendChild(docFrag);
 
-            // Remove DEL tags before getting the text content.
             var elemClone = ViperUtil.cloneNode(elem);
-            ViperUtil.remove(ViperUtil.getTag('del', elemClone));
-
             if (ViperUtil.isBlank(ViperUtil.getNodeTextContent(elemClone)) === true) {
                 // Do not need this empty element.
                 elem = null;
@@ -36571,8 +36570,8 @@ ViperAccessibilityPlugin_WCAG2 = {
                         element = document.createElement(tagName);
                         element.setAttribute('title', titleAttribute);
 
-                        ViperUtil.insertBefore(node, element);
-                        element.appendChild(node);
+                        ViperUtil.moveChildrenToElement(node, element);
+                        node.appendChild(element);
                     }
                 }
             } else {
@@ -38706,49 +38705,6 @@ ViperAccessibilityPlugin_WCAG2 = {
                 return false;
             }
 
-            if (this._isWholeList(listItems) === true) {
-                // Get the parent list.
-                var list = this._getListElement(listItems[0]);
-                if (!this._getListElement(list)) {
-                    // First check for sub lists.
-                    for (var i = 0; i < listItems.length; i++) {
-                        var li = listItems[i];
-                        var subList = this.getSubListItem(li);
-                        if (subList) {
-                            return false;
-                        }
-                    }
-
-                    if (testOnly === true) {
-                        return true;
-                    }
-
-                    if (listItems.length === 1
-                        && (ViperUtil.isTag(list.parentNode, 'td') === true || ViperUtil.isTag(list.parentNode, 'th') === true)
-                    ) {
-                        var li = listItems[0];
-                        while (li.firstChild) {
-                            ViperUtil.insertBefore(list, li.firstChild);
-                        }
-                    } else {
-                        // Conver to P tags.
-                        for (var i = 0; i < listItems.length; i++) {
-                            var li = listItems[i];
-                            var p  = document.createElement('p');
-                            while (li.firstChild) {
-                                p.appendChild(li.firstChild);
-                            }
-
-                            ViperUtil.insertBefore(list, p);
-                        }
-                    }
-
-                    ViperUtil.remove(list);
-
-                    return true;
-                }
-            }
-
             // For each list item remove all the sub lists. Construct a new array with the top selected list items.
             var itemsToOutdent = this.getTopLevelListItems(listItems);
             var c              = itemsToOutdent.length;
@@ -38811,11 +38767,11 @@ ViperAccessibilityPlugin_WCAG2 = {
                 }
             }
 
-            if (parentListItem) {
-                if (testOnly === true) {
-                    return true;
-                }
+            if (testOnly === true) {
+                return true;
+            }
 
+            if (parentListItem) {
                 if (siblingItems.length > 0) {
                     // Move these (next) siblings under an exisiting sub list or
                     // under a new list (and place the new list under the current item).
@@ -38855,14 +38811,10 @@ ViperAccessibilityPlugin_WCAG2 = {
 
                 return true;
             } else {
-                if (testOnly === true) {
-                    return true;
-                }
-
                 // Convert this item to a default block tag.
                 var subList = null;
                 var bTag    = this.viper.getDefaultBlockTag();
-                var p       = document.createElement('p');
+                var p       = null;
                 if (bTag !== '') {
                     p       = document.createElement(bTag);
                     while (li.firstChild) {
@@ -38874,6 +38826,8 @@ ViperAccessibilityPlugin_WCAG2 = {
                             p.appendChild(li.firstChild);
                         }
                     }
+                } else {
+                    p = document.createElement('p');
                 }
 
                 // If there are more list items after this item then move them in to a
@@ -38937,8 +38891,18 @@ ViperAccessibilityPlugin_WCAG2 = {
 
                 if (subList) {
                     // Put the sub list that was in the original list element right after
-                    // the P tag.
-                    ViperUtil.insertAfter(p, subList);
+                    // the P tag. However, if there is already a list of same type then join to that list.
+                    if (ViperUtil.isTag(p.nextSibling, ViperUtil.getTagName(subList)) === true) {
+                        while (subList.firstChild) {
+                            ViperUtil.insertBefore(p.nextSibling.firstChild, subList.firstChild);
+                        }
+                    } else {
+                        ViperUtil.insertAfter(p, subList);
+                    }
+                }
+
+                if (!ViperUtil.getFirstElementChild(list)) {
+                    ViperUtil.remove(list);
                 }
 
                 return true;
@@ -72561,4 +72525,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = '072095e22cdc87cec6d0a12a0819639e104413f9';
+Viper.build = true;Viper.version = '53728fbd6bda39308a86c7a7c0abd21a8eebfd3b';
