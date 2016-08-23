@@ -651,6 +651,19 @@
                 ViperUtil.setStyle(tools, 'width', 'auto');
             }
 
+            if (this.viper.isEditableInIframe() === true) {
+                // If the editable element is inside another frame then make sure position of the tools is updated as
+                // the frame is scrolling.
+                Viper.Util.addEvent(
+                    this.viper.getViperElement().ownerDocument.defaultView,
+                    'scroll',
+                    function(e) {
+                        self.viper.Tools.updatePositionOfElement(tools, null, cell);
+                        ViperUtil.setStyle(tools, 'width', 'auto');
+                    }
+                );
+            };
+
         },
 
         hideCellToolsIcon: function()
@@ -1071,11 +1084,12 @@
         removeHighlights: function()
         {
             ViperUtil.remove(this._highlightElement);
+            this._highlightElement = null;
 
         },
 
 
-        highlightActiveCell: function(parentType)
+        highlightActiveCell: function(parentType, updatePositionOnly)
         {
             parentType     = parentType || 'cell';
             var activeCell = this.getActiveCell();
@@ -1143,7 +1157,9 @@
                 break;
             }//end switch
 
-            this.removeHighlights();
+            if (updatePositionOnly !== true) {
+                this.removeHighlights();
+            }
 
             if (element && !coords) {
                 coords = ViperUtil.getBoundingRectangle(element);
@@ -1155,37 +1171,58 @@
             coords.x2 += offset.x;
             coords.y2 += offset.y;
 
-            var scrollCoords = ViperUtil.getScrollCoords(Viper.window);
-            coords.y1 -= scrollCoords.y;
-            coords.y2 -= scrollCoords.y;
+            var self = this;
+            if (this.viper.isEditableInIframe() === true) {
+                var scrollCoords = ViperUtil.getScrollCoords(Viper.window);
+                coords.y1 -= scrollCoords.y;
+                coords.y2 -= scrollCoords.y;
+            }
 
-            var hElem = document.createElement('div');
-            ViperUtil.addClass(hElem, 'ViperITP-highlight Viper-tableHighlight');
+            var hElem = this._highlightElement;
+
+            if (updatePositionOnly !== true || !hElem) {
+                hElem = document.createElement('div');
+                ViperUtil.addClass(hElem, 'ViperITP-highlight Viper-tableHighlight');
+
+                ViperUtil.addEvent(hElem, 'mousedown', function(e) {
+                    ViperUtil.preventDefault(e);
+                    ViperUtil.remove(hElem);
+                    return false;
+                });
+
+                // Hide the highlight element when the mouse is over it. Show it again, when
+                // the mouse is over the table tools bar.
+                ViperUtil.hover(hElem, function() {
+                    ViperUtil.setStyle(hElem, 'display', 'none');
+                }, function() {});
+
+                ViperUtil.hover(self._toolbarWidget.element, function() {
+                    ViperUtil.setStyle(hElem, 'display', 'block');
+                }, function() {});
+
+                if (this.viper.isEditableInIframe() === true) {
+                    // If the editable element is inside another frame then make sure position of the tools is updated as
+                    // the frame is scrolling.
+                    ViperUtil.removeEvent(this.viper.getViperElement().ownerDocument.defaultView, 'scroll.ViperTableEditorPlugin-' + self.viper.getId());
+                    ViperUtil.addEvent(
+                        this.viper.getViperElement().ownerDocument.defaultView,
+                        'scroll.ViperTableEditorPlugin-' + self.viper.getId(),
+                        function(e) {
+                            self.highlightActiveCell(parentType, true);
+                        }
+                    );
+                }
+            }
 
             ViperUtil.setStyle(hElem, 'width', (coords.x2 - coords.x1) + 'px');
             ViperUtil.setStyle(hElem, 'height', (coords.y2 - coords.y1) + 'px');
             ViperUtil.setStyle(hElem, 'top', coords.y1 + 'px');
             ViperUtil.setStyle(hElem, 'left', coords.x1 + 'px');
 
-            this.viper.addElement(hElem);
-            this._highlightElement = hElem;
-
-            ViperUtil.addEvent(hElem, 'mousedown', function(e) {
-                ViperUtil.preventDefault(e);
-                ViperUtil.remove(hElem);
-                return false;
-            });
-
-            // Hide the highlight element when the mouse is over it. Show it again, when
-            // the mouse is over the table tools bar.
-            var self = this;
-            ViperUtil.hover(hElem, function() {
-                ViperUtil.setStyle(hElem, 'display', 'none');
-            }, function() {});
-
-            ViperUtil.hover(self._toolbarWidget.element, function() {
-                ViperUtil.setStyle(hElem, 'display', 'block');
-            }, function() {});
+            if (updatePositionOnly !== true) {
+                this.viper.addElement(hElem);
+                this._highlightElement = hElem;
+            }
 
         },
 
