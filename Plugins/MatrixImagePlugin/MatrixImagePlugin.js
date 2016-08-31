@@ -88,7 +88,7 @@
                                 ViperUtil.$(button.element).mousedown();
                             });
                         };
-                        EasyEditOverlay.showOverlay('loading',{message: _('Loading image...')}, null, false);
+                        EasyEditOverlay.showOverlay('loading',{message: _('Loading Quick Edit...')}, null, false);
                         // show the overlay of image editing
                         EasyEditOverlay.showOverlay('imageDetails',{assetid: rawassetid, initAssetid: value, saveCallback: saveCallbackFunc}, function() {
                             EasyEditOverlay.hideOverlay('loading');
