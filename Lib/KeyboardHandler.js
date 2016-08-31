@@ -3693,8 +3693,6 @@
                 }
             }
 
-            this._viper.contentChanged();
-
         },
 
         _placeCaretToValidPosition: function(startNode, endNode)
