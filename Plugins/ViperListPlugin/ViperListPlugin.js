@@ -1061,6 +1061,7 @@
                 // No list found, create a new list.
                 list = document.createElement(listType || 'ul');
                 ViperUtil.insertBefore(pElems[0], list);
+
                 atEnd = true;
             }
 
@@ -1080,7 +1081,12 @@
                         li.appendChild(p.firstChild);
                     }
 
-                    ViperUtil.remove(p);
+                    if (ViperUtil.isTag(p, ['td', 'th']) === true) {
+                        ViperUtil.insertBefore(list, p);
+                        p.appendChild(list);
+                    } else {
+                        ViperUtil.remove(p);
+                    }
 
                     if (atEnd !== true) {
                         listItems.unshift(li);
