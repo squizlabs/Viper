@@ -86,8 +86,8 @@
                 return function() {};
             });
 
-            // Enter, Shift, Control, Alt, Caps lock, esc, L-CMD, R-CMD, arrow keys.
-            var ignoredKeys = [13, 16, 17, 18, 20, 27, 91, 93, 37, 38, 39, 40, 224];
+            // Tab, Enter, Shift, Control, Alt, Caps lock, ESC, L-CMD, R-CMD, arrow keys.
+            var ignoredKeys = [9, 13, 16, 17, 18, 20, 27, 91, 93, 37, 38, 39, 40, 224];
             this.viper.registerCallback('Viper:keyDown', 'ViperReplacementPlugin', function(e) {
                 if (ViperUtil.inArray(e.which, ignoredKeys) === true) {
                     return;
