@@ -577,6 +577,10 @@
         {
             this.resetViperRange(null);
 
+            if (!this.element) {
+                return;
+            }
+
             var range = null;
             if (enabled === true && this.enabled === false) {
                 this._addEvents();
@@ -729,6 +733,11 @@
             var self = this;
 
             if (this.element === elem) {
+                return;
+            } else if (!elem) {
+                this.setEnabled(false);
+                this.element = null;
+                Viper.Util.setViperElement(null);
                 return;
             }
 
@@ -17276,8 +17285,6 @@
                     }
                 }
             }
-
-            this._viper.contentChanged();
 
         },
 
@@ -39023,6 +39030,7 @@ ViperAccessibilityPlugin_WCAG2 = {
                 // No list found, create a new list.
                 list = document.createElement(listType || 'ul');
                 ViperUtil.insertBefore(pElems[0], list);
+
                 atEnd = true;
             }
 
@@ -39042,7 +39050,12 @@ ViperAccessibilityPlugin_WCAG2 = {
                         li.appendChild(p.firstChild);
                     }
 
-                    ViperUtil.remove(p);
+                    if (ViperUtil.isTag(p, ['td', 'th']) === true) {
+                        ViperUtil.insertBefore(list, p);
+                        p.appendChild(list);
+                    } else {
+                        ViperUtil.remove(p);
+                    }
 
                     if (atEnd !== true) {
                         listItems.unshift(li);
@@ -40125,8 +40138,8 @@ ViperAccessibilityPlugin_WCAG2 = {
                 return function() {};
             });
 
-            // Enter, Shift, Control, Alt, Caps lock, esc, L-CMD, R-CMD, arrow keys.
-            var ignoredKeys = [13, 16, 17, 18, 20, 27, 91, 93, 37, 38, 39, 40, 224];
+            // Tab, Enter, Shift, Control, Alt, Caps lock, ESC, L-CMD, R-CMD, arrow keys.
+            var ignoredKeys = [9, 13, 16, 17, 18, 20, 27, 91, 93, 37, 38, 39, 40, 224];
             this.viper.registerCallback('Viper:keyDown', 'ViperReplacementPlugin', function(e) {
                 if (ViperUtil.inArray(e.which, ignoredKeys) === true) {
                     return;
@@ -72562,4 +72575,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = '51fbdbf33736cd5a1858832f486a0bfd63e57ac7';
+Viper.build = true;Viper.version = '8274a6b86a5586895b5b850ccdf4fa333cb8a401';
