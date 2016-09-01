@@ -90,6 +90,22 @@
                 }
             });
 
+            this.viper.registerCallback('Viper:mouseUp', 'ViperImagePlugin', function(e) {
+                var target = ViperUtil.getMouseEventTarget(e);
+                if (ViperUtil.isTag(target, 'img') === true) {
+                    self.hideImageResizeHandles();
+                    self.showImageResizeHandles(target);
+                    self._cancelMove();
+                    self._updateToolbars(target);
+
+                    var range = self.viper.getViperRange();
+                    range.selectNode(target);
+                    ViperSelection.addRange(range);
+                    self.viper.fireSelectionChanged(range, true);
+                }
+
+            });
+
             this.viper.registerCallback(['Viper:keyDown', 'Viper:beforeDelete'], 'ViperImagePlugin', function(e) {
                 if (self._resizeImage
                     && ViperUtil.isInputKey(e)
