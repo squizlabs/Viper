@@ -3345,6 +3345,20 @@
 
         },
 
+        targetIsOutside: function(target)
+        {
+            if (this.element !== target && Viper.Util.isChildOfElems(target, [this.element]) !== true && this.isMemberElement(target) !== true) {
+                inside = false;
+
+                // Ask plugins if its one of their element.
+                var pluginName = this._getPluginForElement(target);
+                if (!pluginName && Viper.Util.isChildOfElems(target, [this._viperElementHolder]) !== true) {
+                    return true;
+                }
+            }
+
+        },
+
         mouseDown: function(e)
         {
             this._mouseDownEvent = e;
@@ -34531,6 +34545,22 @@ ViperAccessibilityPlugin_WCAG2 = {
                     self._updateToolbars();
                     return self.hideImageResizeHandles();
                 }
+            });
+
+            this.viper.registerCallback('Viper:mouseUp', 'ViperImagePlugin', function(e) {
+                var target = ViperUtil.getMouseEventTarget(e);
+                if (ViperUtil.isTag(target, 'img') === true) {
+                    self.hideImageResizeHandles();
+                    self.showImageResizeHandles(target);
+                    self._cancelMove();
+                    self._updateToolbars(target);
+
+                    var range = self.viper.getViperRange();
+                    range.selectNode(target);
+                    ViperSelection.addRange(range);
+                    self.viper.fireSelectionChanged(range, true);
+                }
+
             });
 
             this.viper.registerCallback(['Viper:keyDown', 'Viper:beforeDelete'], 'ViperImagePlugin', function(e) {
@@ -72575,4 +72605,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = '8274a6b86a5586895b5b850ccdf4fa333cb8a401';
+Viper.build = true;Viper.version = '754e69e510f6f043ab278059ac54a9f2c1fe4d2d';
