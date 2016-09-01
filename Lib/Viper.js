@@ -638,6 +638,10 @@
         {
             this.resetViperRange(null);
 
+            if (!this.element) {
+                return;
+            }
+
             var range = null;
             if (enabled === true && this.enabled === false) {
                 this._addEvents();
@@ -806,6 +810,11 @@
             var self = this;
 
             if (this.element === elem) {
+                return;
+            } else if (!elem) {
+                this.setEnabled(false);
+                this.element = null;
+                Viper.Util.setViperElement(null);
                 return;
             }
 
