@@ -3617,6 +3617,20 @@
 
         },
 
+        targetIsOutside: function(target)
+        {
+            if (this.element !== target && Viper.Util.isChildOfElems(target, [this.element]) !== true && this.isMemberElement(target) !== true) {
+                inside = false;
+
+                // Ask plugins if its one of their element.
+                var pluginName = this._getPluginForElement(target);
+                if (!pluginName && Viper.Util.isChildOfElems(target, [this._viperElementHolder]) !== true) {
+                    return true;
+                }
+            }
+
+        },
+
         mouseDown: function(e)
         {
             this._mouseDownEvent = e;
