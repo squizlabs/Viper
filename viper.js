@@ -37107,8 +37107,9 @@ ViperAccessibilityPlugin_WCAG2 = {
 (function(ViperUtil, ViperSelection, _) {
     function ViperLinkPlugin(viper)
     {
-        this.viper = viper;
+        this.viper                     = viper;
         this._autoLinkOpensInNewWindow = false;
+        this._inlineToolbar            = null;
 
         this.initToolbar();
         this.initInlineToolbar();
@@ -37121,6 +37122,27 @@ ViperAccessibilityPlugin_WCAG2 = {
         init: function()
         {
             this.enableAutoLink();
+
+            var self = this;
+            this.viper.registerCallback(
+                'Viper:mouseUp',
+                'ViperLinkPlugin',
+                function(e) {
+                    if (!self._inlineToolbar) {
+                        return;
+                    }
+
+                    if (ViperUtil.isTag(e.target, 'a') === false || self._inlineToolbar.isVisible() === true) {
+                        return;
+                    }
+
+                    // Select the clicked link.
+                    var range = self.viper.getViperRange();
+                    range.selectNode(e.target);
+                    ViperSelection.addRange(range);
+                    self.viper.fireSelectionChanged(range, true);
+                }
+            );
 
         },
 
@@ -37650,6 +37672,7 @@ ViperAccessibilityPlugin_WCAG2 = {
         {
             var self = this;
             this.viper.registerCallback('ViperInlineToolbarPlugin:initToolbar', 'ViperLinkPlugin', function(toolbar) {
+                self._inlineToolbar = toolbar;
                 self.createInlineToolbar(toolbar);
             });
             this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperLinkPlugin', function(data) {
@@ -41211,7 +41234,7 @@ ViperAccessibilityPlugin_WCAG2 = {
             toolbar.addButton(searchBtn);
             toolbar.setBubbleButton('ViperSearchPlugin:bubble', 'searchReplace');
 
-            tools.getItem('ViperSearchPlugin:bubble').setSubSectionAction('ViperSearchPlugin:bubbleSubSection', function() {console.info(111);
+            tools.getItem('ViperSearchPlugin:bubble').setSubSectionAction('ViperSearchPlugin:bubbleSubSection', function() {
                 return _findNext();
             }, ['ViperSearchPlugin:searchInput'], 'ViperSearchPlugin:findNext', true);
 
@@ -72605,4 +72628,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = '754e69e510f6f043ab278059ac54a9f2c1fe4d2d';
+Viper.build = true;Viper.version = '092ddc978009f3a27a3031690240959ada45065d';
