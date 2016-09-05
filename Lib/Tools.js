@@ -587,66 +587,81 @@
                 ViperUtil.addClass(textBox, 'Viper-actionClear');
             }
 
+            var onchange = function(e) {
+                ViperUtil.addClass(textBox, 'Viper-focused');
+
+                if (isTextArea !== true) {
+                    var actionIcon = ViperUtil.getClass('Viper-textbox-action', main);
+                    if (actionIcon.length === 0) {
+                        actionIcon = _addActionButton();
+                    } else {
+                        actionIcon = actionIcon[0];
+                    }
+                }
+
+                ViperUtil.setStyle(actionIcon, 'display', 'block');
+                ViperUtil.setStyle(actionIcon, 'visibility', 'visible');
+
+                ViperUtil.removeClass(textBox, 'Viper-actionClear');
+                ViperUtil.removeClass(textBox, 'Viper-actionRevert');
+
+                if (input.value !== value && value !== '') {
+                    // Show the revert icon.
+                    if (isTextArea !== true) {
+                        actionIcon.setAttribute('title', 'Revert to original value');
+                        ViperUtil.addClass(textBox, 'Viper-actionRevert');
+                    }
+
+                    ViperUtil.removeClass(textBox, 'Viper-required');
+                } else if (input.value !== '') {
+                    if (isTextArea !== true) {
+                        actionIcon.setAttribute('title', 'Clear this value');
+                        ViperUtil.addClass(textBox, 'Viper-actionClear');
+                    }
+
+                    ViperUtil.removeClass(textBox, 'Viper-required');
+                } else {
+                    if (isTextArea !== true) {
+                        ViperUtil.setStyle(actionIcon, 'display', 'none');
+                    }
+
+                    if (required === true) {
+                        ViperUtil.addClass(textBox, 'Viper-required');
+                    }
+                }//end if
+
+                if ((e.which !== 13 || isTextArea === true || e.type === 'paste') && (input.value !== value)) {
+                    self.viper.fireCallbacks('ViperTools:changed:' + id);
+                }
+
+                // Action.
+                if (action && e.which === 13) {
+                    self.viper.focus();
+                    action.call(input, input.value);
+                } else if (!action && e.which === 13 && isTextArea !== true && (ViperUtil.isBrowser('chrome') || ViperUtil.isBrowser('safari'))) {
+                    var forms = ViperUtil.getParents(main, 'form', self.viper.getViperElement());
+                    if (forms.length > 0 && ViperUtil.getTag('input', forms[0]).length > 2) {
+                        return forms[0].onsubmit();
+                    }
+                }
+            };
+
             ViperUtil.addEvent(
                 input,
                 'keyup',
-                function(e) {
-                    ViperUtil.addClass(textBox, 'Viper-focused');
+                onchange
+            );
 
-                    if (isTextArea !== true) {
-                        var actionIcon = ViperUtil.getClass('Viper-textbox-action', main);
-                        if (actionIcon.length === 0) {
-                            actionIcon = _addActionButton();
-                        } else {
-                            actionIcon = actionIcon[0];
-                        }
-                    }
-
-                    ViperUtil.setStyle(actionIcon, 'display', 'block');
-                    ViperUtil.setStyle(actionIcon, 'visibility', 'visible');
-
-                    ViperUtil.removeClass(textBox, 'Viper-actionClear');
-                    ViperUtil.removeClass(textBox, 'Viper-actionRevert');
-
-                    if (input.value !== value && value !== '') {
-                        // Show the revert icon.
-                        if (isTextArea !== true) {
-                            actionIcon.setAttribute('title', 'Revert to original value');
-                            ViperUtil.addClass(textBox, 'Viper-actionRevert');
-                        }
-
-                        ViperUtil.removeClass(textBox, 'Viper-required');
-                    } else if (input.value !== '') {
-                        if (isTextArea !== true) {
-                            actionIcon.setAttribute('title', 'Clear this value');
-                            ViperUtil.addClass(textBox, 'Viper-actionClear');
-                        }
-
-                        ViperUtil.removeClass(textBox, 'Viper-required');
-                    } else {
-                        if (isTextArea !== true) {
-                            ViperUtil.setStyle(actionIcon, 'display', 'none');
-                        }
-
-                        if (required === true) {
-                            ViperUtil.addClass(textBox, 'Viper-required');
-                        }
-                    }//end if
-
-                    if ((e.which !== 13 || isTextArea === true) && (input.value !== value)) {
-                        self.viper.fireCallbacks('ViperTools:changed:' + id);
-                    }
-
-                    // Action.
-                    if (action && e.which === 13) {
-                        self.viper.focus();
-                        action.call(input, input.value);
-                    } else if (!action && e.which === 13 && isTextArea !== true && (ViperUtil.isBrowser('chrome') || ViperUtil.isBrowser('safari'))) {
-                        var forms = ViperUtil.getParents(main, 'form', self.viper.getViperElement());
-                        if (forms.length > 0 && ViperUtil.getTag('input', forms[0]).length > 2) {
-                            return forms[0].onsubmit();
-                        }
-                    }
+             ViperUtil.addEvent(
+                input,
+                'paste',
+                function (e) {
+                    setTimeout(
+                        function () {
+                            return onchange(e);
+                        },
+                        10
+                    );
                 }
             );
 
