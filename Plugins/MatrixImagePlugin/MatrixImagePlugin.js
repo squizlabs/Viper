@@ -577,6 +577,7 @@
             var urlInputs = {'ViperImagePlugin' : this.viper.Tools.getItem('ViperImagePlugin:urlInput'), 'vitpImagePlugin' : this.viper.Tools.getItem('vitpImagePlugin:urlInput')};
             var self = this;
             var varietyData = data.attributes.varieties;
+            var originalImageSize = data.attributes.width + ' x ' + data.attributes.height + ' (' + self._readablizeBytes(data.attributes.size) + ')';
             if(typeof varietyData == 'string') {
                 varietyData = JSON.parse(varietyData);
             }
@@ -603,7 +604,6 @@
                         $chooser.attr('data-varietyid', data.varietyid);
                     }
                     else {
-                        var originalImageSize = data.attributes.width + ' x ' + data.attributes.height + ' (' + self._readablizeBytes(data.attributes.size) + ')';
                         $text.html(originalImageSize);
                         $name.html(_('Original Image'));
                         // remove the current variety attr
