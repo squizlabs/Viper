@@ -994,13 +994,8 @@
                 return false;
             }
 
-            this.viper.HistoryManager.begin();
-
             // Apply the new tag.
             this.applyTag(style);
-
-            this.viper.contentChanged();
-            this.viper.HistoryManager.end();
 
             // Prevent event bubbling etc.
             return false;
@@ -1019,6 +1014,7 @@
         {
             this.viper.HistoryManager.begin();
             this.viper.surroundContents(tag);
+            this.viper.contentChanged();
             this.viper.HistoryManager.end();
 
         },

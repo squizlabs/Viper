@@ -78,7 +78,7 @@
             }
 
             var tools = viper.Tools;
-            if (viper.HistoryManager.getUndoCount() > 1) {
+            if (viper.HistoryManager.getUndoCount() > 1 || viper.HistoryManager.isBatching() === true) {
                 tools.enableButton(toolbarButtons.undo);
             } else {
                 tools.disableButton(toolbarButtons.undo);

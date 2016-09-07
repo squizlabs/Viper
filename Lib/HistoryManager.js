@@ -14,19 +14,20 @@
 (function(ViperUtil, ViperSelection) {
     Viper.HistoryManager = function(viper)
     {
-        this.viper = viper;
-
-        this.undoHistory    = [];
-        this.redoHistory    = [];
-        this.batchCount     = 0;
-        this.batchTask      = null;
-        this.historyStore   = {};
-        this._activeElement = null;
-        this.historyLimit   = 30;
-        this._ignoreAdd     = false;
-        this._maxChars      = 50;
-        this._charCount     = 0;
-        this._lastAction    = null;
+        this._viper           = viper;
+        this._undoHistory     = [];
+        this._redoHistory     = [];
+        this._batchCount      = 0;
+        this._batchTask       = null;
+        this._historyStore    = {};
+        this._activeElement   = null;
+        this._historyLimit    = 30;
+        this._ignoreAdd       = false;
+        this._maxChars        = 30;
+        this._charCount       = 0;
+        this._lastAction      = null;
+        this._prevContent     = null;
+        this._originalContent = null;
 
     }
 
@@ -45,15 +46,15 @@
             }
 
             // If a sub element is active then do not add this change.
-            if (this.viper._subElementActive === true) {
+            if (this._viper._subElementActive === true) {
                 return;
             }
 
             try {
-                var range = this.viper.getCurrentRange();
-                if (this.viper.rangeInViperBounds(range) === false) {
+                var range = this._viper.getCurrentRange();
+                if (this._viper.rangeInViperBounds(range) === false) {
                     // Set the range to be the first selectable element of Viper element.
-                    var child = range._getFirstSelectableChild(this.viper.getViperElement());
+                    var child = range._getFirstSelectableChild(this._viper.getViperElement());
                     if (!child) {
                         range = null;
                     } else {
@@ -69,12 +70,7 @@
                 range = null;
             }
 
-            if (!range) {
-                var task  = {
-                    content: this.viper.getRawHTML(),
-                    range: null
-                };
-            } else {
+            if (range) {
                 var startContainer = range.startContainer;
                 if (startContainer.nodeType === ViperUtil.ELEMENT_NODE
                     && startContainer.childNodes[range.startOffset]
@@ -89,83 +85,100 @@
                         range.collapse(true);
                     }
                 }
-
-                var task  = {
-                    content: this.viper.getRawHTML(),
-                    range: {
-                        startContainer: ViperUtil.getXPath(range.startContainer),
-                        endContainer: ViperUtil.getXPath(range.endContainer),
-                        startOffset: range.startOffset,
-                        endOffset: range.endOffset,
-                        collapsed: range.collapsed
-                    }
-                };
             }
 
-            var modify = false;
-            if (action === 'text_change'
-                && this._lastAction
-                && this._lastAction.action === action
-                && this._lastAction.range
-                && this._lastAction.range.startOffset === (range.startOffset - 1)
-                && this._lastAction.range.startContainer === range.startContainer
-            ) {
-                if (this._charCount < this._maxChars) {
-                    modify = true;
-                } else {
-                    this._charCount = 0;
-                }
+            var rawhtml = this._viper.getRawHTML();
 
-                this._charCount++;
+            if (this._prevContent === null) {
+                this._originalContent = rawhtml;
+                this._prevContent     = rawhtml;
+            }
+
+            var diff       = JsDiff.createPatch('content', this._prevContent, rawhtml);
+            var startXPath = ViperUtil.getXPath(range.startContainer);
+            var task       = {
+                patch: diff,
+                range: {
+                    startContainer: startXPath,
+                    endContainer: ViperUtil.getXPath(range.endContainer),
+                    startOffset: range.startOffset,
+                    endOffset: range.endOffset,
+                    collapsed: range.collapsed
+                }
+            };
+
+            if (action === 'text_change') {
+                if (this._charCount === 0) {
+                    this._charCount++;
+                    this.begin();
+                } else if (this._lastAction && this._lastAction.action === 'text_change') {
+                    if (this._lastAction.range
+                        && this._lastAction.range.startOffset === (range.startOffset - 1)
+                        && this._lastAction.range.startContainer === range.startContainer
+                        && this._lastAction.startXPath === startXPath
+                    ) {
+                        if ((this._charCount + 1) >= this._maxChars) {
+                            this.end();
+                            return;
+                        }
+
+                        this._charCount++;
+                    } else if (this._batchTask) {
+                        // End the batch operation.
+                        this.end();
+                        return;
+                    }
+                }
             } else {
-                this._charCount = 0;
+                this._resetCharCount();
+                if (this._batchTask && this._lastAction && this._lastAction.action === 'text_change') {
+                    this.end();
+                    return;
+                }
             }
 
             this._lastAction = {
                 action: action,
-                range: range
+                range: range,
+                startXPath: ViperUtil.getXPath(range.startContainer)
             };
 
             // If batching is active then do not add the task to undoHistory.
-            if (this.batchTask === null) {
-                if (modify === true) {
-                    this.undoHistory[(this.undoHistory.length - 1)] = task;
-                } else {
-                    this.undoHistory.push(task);
-                    if (this.undoHistory.length > this.historyLimit) {
-                        this.undoHistory.shift();
-                    }
+            if (this._batchTask === null) {
+                // Update the previous content var.
+                this._prevContent = rawhtml;
+
+                this._undoHistory.push(task);
+                if (this._undoHistory.length > this._historyLimit) {
+                    this._undoHistory.shift();
                 }
 
                 // Reset the redo history.
-                this.redoHistory = [];
+                this._redoHistory = [];
             } else {
-                this.batchTask = task;
+                this._batchTask = task;
             }
 
-            this.viper.fireCallbacks('ViperHistoryManager:add');
-
+            this._viper.fireCallbacks('ViperHistoryManager:add');
         },
 
         /**
          * Undo the last task and move it from undo history to redo history.
          */
-        undo: function()
-        {
-            if (this.viper._subElementActive === true) {
-                return;
+        undo: function() {
+            if (this._batchTask) {
+                this.end();
             }
 
-            var undoLength = this.undoHistory.length;
+            var undoLength = this._undoHistory.length;
             if (undoLength <= 1) {
                 return;
             }
 
-            this.viper.fireCallbacks('ViperHistoryManager:beforeUndo');
+            this._viper.fireCallbacks('ViperHistoryManager:beforeUndo');
 
             // Get the current state of the content and add it to redo list.
-            var range        = this.viper.getCurrentRange();
-
+            var range     = this._viper.getCurrentRange();
             var startPath = null;
             var endPath   = null;
 
@@ -174,8 +187,21 @@
                 endPath   = ViperUtil.getXPath(range.endContainer);
             } catch(e) {}
 
+            this._undoHistory.pop();
+
+            var content = this._originalContent;
+            for (var i = 0; i < this._undoHistory.length; i++) {
+               content = JsDiff.applyPatch(content, this._undoHistory[i].patch);
+            }
+
+            var task = null;
+            if (this._undoHistory.length > 0) {
+                task = this._undoHistory[(this._undoHistory.length - 1)];
+            }
+
+            var diff         = JsDiff.createPatch('content', content, this._viper.getRawHTML());
             var currentState = {
-                content: this.viper.getRawHTML(),
+                patch: diff,
                 range: {
                     startContainer: startPath,
                     endContainer: endPath,
@@ -185,64 +211,54 @@
                 }
             };
 
-            // Add this undo to redo.
-            this.redoHistory.push(currentState);
+            this._redoHistory.push(currentState);
 
-            this.undoHistory.pop();
-
-            if (this.undoHistory.length > 0) {
-                task = this.undoHistory[(this.undoHistory.length - 1)];
-            }
-
-            // Set the contents.
-            this.viper.setRawHTML(task.content);
+            this._viper.setRawHTML(content);
 
             this._selectTaskRange(task);
-            this.viper.highlightToSelection();
+            this._viper.highlightToSelection();
 
             // Fire nodesChanged event.
             this._ignoreAdd = true;
-            this.viper.resetViperRange(null);
-            this.viper.fireNodesChanged([this.viper.getViperElement()]);
-            this.viper.fireCallbacks('ViperHistoryManager:undo');
-            this.viper.fireSelectionChanged();
+            this._viper.resetViperRange(null);
+            this._viper.fireNodesChanged([this._viper.getViperElement()]);
+            this._viper.fireCallbacks('ViperHistoryManager:undo');
+            this._viper.fireSelectionChanged();
             this._ignoreAdd  = false;
             this._lastAction = null;
-
         },
 
         redo: function()
         {
-            if (this.viper._subElementActive === true) {
+            if (this._redoHistory.length === 0) {
                 return;
             }
 
-            if (this.redoHistory.length === 0) {
-                return;
-            }
-
-            var task = this.redoHistory.pop();
+            var task = this._redoHistory.pop();
 
             // Add this redo to undo.
-            this.undoHistory.push(task);
+            this._undoHistory.push(task);
 
-            // Set the contents.
-            this.viper.setRawHTML(task.content);
+            var content = this._originalContent;
+            for (var i = 0; i < this._undoHistory.length; i++) {
+               content = JsDiff.applyPatch(content, this._undoHistory[i].patch);
+            }
+
+            this._viper.setRawHTML(content);
 
             this._selectTaskRange(task);
-
-            this.viper.highlightToSelection();
+            this._viper.highlightToSelection();
 
             // Fire nodesChanged event.
             this._ignoreAdd = true;
-            this.viper.resetViperRange(null);
-            this.viper.fireNodesChanged([this.viper.getViperElement()]);
-            this.viper.fireCallbacks('ViperHistoryManager:redo');
-            this.viper.fireSelectionChanged();
+            this._viper.resetViperRange(null);
+            this._viper.fireNodesChanged([this._viper.getViperElement()]);
+            this._viper.fireCallbacks('ViperHistoryManager:redo');
+            this._viper.fireSelectionChanged();
             this._ignoreAdd  = false;
             this._lastAction = null;
 
-            return this.redoHistory.length;
+            return this._redoHistory.length;
 
         },
 
@@ -251,22 +267,22 @@
          */
         clear: function()
         {
-            this.undoHistory = [];
-            this.redoHistory = [];
-            this.batchCount  = 0;
-            this.batchTask   = null;
+            this._undoHistory = [];
+            this._redoHistory = [];
+            this._batchCount  = 0;
+            this._batchTask   = null;
             this._ignoreAdd  = false;
             this._lastAction = null;
-            this._charCount  = 0;
+            this._resetCharCount();
 
-            this.viper.fireCallbacks('ViperHistoryManager:clear');
+            this._viper.fireCallbacks('ViperHistoryManager:clear');
 
         },
 
         setActiveElement: function(elem)
         {
             if (this._activeElement) {
-                if (this.historyStore[this._activeElement] && this.historyStore[this._activeElement].element !== elem) {
+                if (this._historyStore[this._activeElement] && this._historyStore[this._activeElement].element !== elem) {
                     // There is an active history alrady, save it.
                     this._saveHistory(this._activeElement);
                 }
@@ -274,8 +290,8 @@
 
             var self   = this;
             var loaded = false;
-            ViperUtil.foreach(this.historyStore, function(key) {
-                if (self.historyStore[key].element === elem) {
+            ViperUtil.foreach(this._historyStore, function(key) {
+                if (self._historyStore[key].element === elem) {
                     self._loadHistory(key);
                     loaded = true;
                     return false;
@@ -285,7 +301,7 @@
             if (loaded === false) {
                 // Need to add a new historyStore.
                 var key = ViperUtil.getUniqueId();
-                this.historyStore[key] = {
+                this._historyStore[key] = {
                     undo: [],
                     redo: [],
                     element: elem
@@ -309,7 +325,7 @@
             try {
                 var startContainer = ViperUtil.getNodeFromXPath(task.range.startContainer);
                 var endContainer   = ViperUtil.getNodeFromXPath(task.range.endContainer);
-                var range = this.viper.getCurrentRange();
+                var range = this._viper.getCurrentRange();
                 range.setEnd(endContainer, task.range.endOffset);
                 range.setStart(startContainer, task.range.startOffset);
                 range.setEnd(endContainer, task.range.endOffset);
@@ -325,21 +341,21 @@
 
         _loadHistory: function(key)
         {
-            if (this.historyStore[key]) {
+            if (this._historyStore[key]) {
                 this._activeElement   = key;
-                this.undoHistory      = this.historyStore[key].undo;
-                this.redoHistory      = this.historyStore[key].redo;
-                this.batchTask            = null;
-                this.batchCount       = 0;
+                this._undoHistory      = this._historyStore[key].undo;
+                this._redoHistory      = this._historyStore[key].redo;
+                this._batchTask            = null;
+                this._batchCount       = 0;
             }
 
         },
 
         _saveHistory: function(key)
         {
-            if (this.historyStore[key]) {
-                this.historyStore[key].undo = this.undoHistory;
-                this.historyStore[key].redo = this.redoHistory;
+            if (this._historyStore[key]) {
+                this._historyStore[key].undo = this._undoHistory;
+                this._historyStore[key].redo = this._redoHistory;
             }
 
         },
@@ -351,10 +367,14 @@
          */
         begin: function()
         {
-            this.batchCount++;
-            if (this.batchTask === null) {
+            if (this._batchTask && this._lastAction && this._lastAction.action === 'text_change') {
+                this.end();
+            }
+
+            this._batchCount++;
+            if (this._batchTask === null) {
                  // Set batch to true so that add() will add the task to this.batch.
-                this.batchTask = true;
+                this._batchTask = true;
             }
 
         },
@@ -364,26 +384,41 @@
          */
         end: function()
         {
-            this.batchCount--;
-            if (this.batchCount === 0 && this.batchTask !== null) {
-                this.batchTask = null;
-                if (this.batchTask !== true) {
-                    this.add();
-                }
+            this._resetCharCount();
+            this._lastAction = null;
+            this._batchCount--;
+
+            if (this._batchCount === 0 && this._batchTask !== null) {
+                this._batchTask = null;
+                this.add();
             }
 
         },
 
         getUndoCount: function()
         {
-            return this.undoHistory.length;
+            return this._undoHistory.length;
 
         },
 
         getRedoCount: function()
         {
-            return this.redoHistory.length;
+            return this._redoHistory.length;
 
+        },
+
+        isBatching: function()
+        {
+            if (this._batchTask) {
+                return true;
+            }
+
+            return false;
+
+        },
+
+        _resetCharCount: function() {
+            this._charCount = 0;
         }
 
     };
