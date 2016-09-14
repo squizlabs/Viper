@@ -38,7 +38,10 @@
                         return;
                     }
 
-                    if (ViperUtil.isTag(e.target, 'a') === false || self._inlineToolbar.isVisible() === true) {
+                    if (ViperUtil.isTag(e.target, 'a') === false
+                        || self._inlineToolbar.isVisible() === true
+                        || self.viper.isOutOfBounds(e.target) === true
+                    ) {
                         return;
                     }
 
