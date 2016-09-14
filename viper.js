@@ -34565,8 +34565,12 @@ ViperAccessibilityPlugin_WCAG2 = {
             });
 
             this.viper.registerCallback('Viper:mouseUp', 'ViperImagePlugin', function(e) {
+                if (self.viper.isEnabled() !== true) {
+                    return;
+                }
+
                 var target = ViperUtil.getMouseEventTarget(e);
-                if (ViperUtil.isTag(target, 'img') === true) {
+                if (ViperUtil.isTag(target, 'img') === true && self.viper.isOutOfBounds(target) !== true) {
                     self.hideImageResizeHandles();
                     self.showImageResizeHandles(target);
                     self._cancelMove();
@@ -72645,4 +72649,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = '37bf3fb6f4efa800fb982849305350e23cdd605a';
+Viper.build = true;Viper.version = 'de3c40db1e3a39ccbc012434b1d25e55793d6db0';
