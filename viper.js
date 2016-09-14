@@ -37153,7 +37153,10 @@ ViperAccessibilityPlugin_WCAG2 = {
                         return;
                     }
 
-                    if (ViperUtil.isTag(e.target, 'a') === false || self._inlineToolbar.isVisible() === true) {
+                    if (ViperUtil.isTag(e.target, 'a') === false
+                        || self._inlineToolbar.isVisible() === true
+                        || self.viper.isOutOfBounds(e.target) === true
+                    ) {
                         return;
                     }
 
@@ -72649,4 +72652,4 @@ exports.Search = function(editor, isReplace) {
 
 
 }
-Viper.build = true;Viper.version = 'de3c40db1e3a39ccbc012434b1d25e55793d6db0';
+Viper.build = true;Viper.version = '4c1d5108f26be120479c8f15e3eb246270239b72';
