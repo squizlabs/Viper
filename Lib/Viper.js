@@ -4301,18 +4301,19 @@
         /**
          * Sets the Viper content, content cannot contain Viper specific elements.
          */
-        setHtml: function(contents, callback)
+        setHtml: function(contents, callback, element)
         {
             contents = this.removeInvalidCharacters(contents);
             var self = this;
             this.fireCallbacks('Viper:setHtmlContent', contents, function(data, newContents) {
-                self._setHTML(newContents, callback);
+                self._setHTML(newContents, callback, element);
             });
 
         },
 
-        _setHTML: function(contents, callback)
+        _setHTML: function(contents, callback, element)
         {
+            element   = element || this.element;
             var clone = Viper.document.createElement('div');
 
             if (typeof contents === 'string') {
@@ -4346,8 +4347,8 @@
                     html = html.replace(/<param /ig, '<viper:param ');
                 }
 
-                self.element.innerHTML = html;
-                self.initEditableElement();
+                element.innerHTML = html;
+                self.initEditableElement(element);
 
                 self.contentChanged();
                 if (callback) {
