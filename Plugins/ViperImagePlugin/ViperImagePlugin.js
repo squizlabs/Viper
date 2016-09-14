@@ -91,8 +91,12 @@
             });
 
             this.viper.registerCallback('Viper:mouseUp', 'ViperImagePlugin', function(e) {
+                if (self.viper.isEnabled() !== true) {
+                    return;
+                }
+
                 var target = ViperUtil.getMouseEventTarget(e);
-                if (ViperUtil.isTag(target, 'img') === true) {
+                if (ViperUtil.isTag(target, 'img') === true && self.viper.isOutOfBounds(target) !== true) {
                     self.hideImageResizeHandles();
                     self.showImageResizeHandles(target);
                     self._cancelMove();
