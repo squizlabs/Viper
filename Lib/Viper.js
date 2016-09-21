@@ -4405,15 +4405,15 @@
                         attrValue = attrValue.toLowerCase();
                     }
 
+                    var res = ' ' + attrName;
+
                     // Remove single and double quotes and then wrap the value with
                     // double quotes.
-                    if (attrValue) {
+                    if (typeof attrValue != 'undefined') {
                         attrValue = Viper.Util.trim(attrValue, '"\'');
-                    } else {
-                        attrValue = '';
+                        res += '="' + attrValue + '"';
                     }
 
-                    var res = ' ' + attrName + '="' + attrValue + '"';
                     return res;
                 });
 

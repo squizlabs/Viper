@@ -785,16 +785,19 @@
                 match = match.replace(attrRegex, function(a, attrName, attrValue) {
                     // All attribute names must be lowercase.
                     attrName = attrName.toLowerCase();
-                    var res  = ' ' + attrName + '=' + attrValue + '';
+                    var res  = ' ' + attrName;
+                    if (attrValue) {
+                        res += '=' + attrValue + '';
 
-                    if (!cache.attributes[res]) {
-                        var matches = attrValue.match(regex);
-                        if (matches !== null) {
-                            cache.attributes[res] = [];
-                            var match  = null;
-                            while (match = matches.pop()) {
-                                cache.attributes[res].push(match);
-                                keywords[match] = '';
+                        if (!cache.attributes[res]) {
+                            var matches = attrValue.match(regex);
+                            if (matches !== null) {
+                                cache.attributes[res] = [];
+                                var match  = null;
+                                while (match = matches.pop()) {
+                                    cache.attributes[res].push(match);
+                                    keywords[match] = '';
+                                }
                             }
                         }
                     }
