@@ -657,6 +657,101 @@ class Viper_Tests_ViperFormatPlugin_AnchorUnitTest extends AbstractFormatsUnitTe
     }//end testAnchorFieldCanBeModified()
 
 
+    /**
+     * Test applying an anchor to content with italic format applied first then bold.
+     *
+     * @return void
+     */
+    public function testAddingAnchorToItalicContentWithBoldFormat()
+    {
+        // Test using top toolbar
+        // Select bold in lineage
+        $this->useTest(7);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test-anchor');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<strong id="test-anchor"><em>%1%</em></strong> and more content</p>');
+
+        // Select italic in lineage
+        $this->useTest(7);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test-anchor');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<strong><em id="test-anchor">%1%</em></strong> and more content</p>');
+
+        // Test using inline toolbar
+        // Select bold in lineage
+        $this->useTest(7);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test-anchor');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<strong id="test-anchor"><em>%1%</em></strong> and more content</p>');
+
+        // Select italic in lineage
+        $this->useTest(7);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test-anchor');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<strong><em id="test-anchor">%1%</em></strong> and more content</p>');
+
+    }//end testAddingAnchorToItalicContentWithBoldFormat()
+
+
+    /**
+     * Test applying an anchor to content with bold format applied first then italic.
+     *
+     * @return void
+     */
+    public function testAddingAnchorToBoldContentWithItalicFormat()
+    {
+        // Test using top toolbar
+        // Select italic in lineage
+        $this->useTest(8);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test-anchor');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<em id="test-anchor"><strong>%1%</strong></em> and more content</p>');
+
+        // Select bold in lineage
+        $this->useTest(8);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickTopToolbarButton('anchorID');
+        $this->type('test-anchor');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<em><strong id="test-anchor">%1%</strong></em> and more content</p>');
+
+        // Test using inline toolbar
+        // Select italic in lineage
+        $this->useTest(8);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test-anchor');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<em id="test-anchor"><strong>%1%</strong></em> and more content</p>');
+
+        // Select bold in lineage
+        $this->useTest(8);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickInlineToolbarButton('anchorID');
+        $this->type('test-anchor');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<em><strong id="test-anchor">%1%</strong></em> and more content</p>');
+
+    }//end testAddingAnchorToBoldContentWithItalicFormat()
+
 }//end class
 
 ?>

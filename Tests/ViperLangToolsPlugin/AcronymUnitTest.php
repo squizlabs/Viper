@@ -5,7 +5,6 @@ require_once 'AbstractViperUnitTest.php';
 class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnitTest
 {
 
-
     /**
      * Test that the acronym icon is not active when you don't select some text and when you select a block of text.
      *
@@ -13,6 +12,7 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
      */
     public function testAcronymIconIsDisabled()
     {
+        $this->useTest(1);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('langTools');
 
@@ -36,6 +36,7 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
      */
     public function testUpdateChangesButton()
     {
+        $this->useTest(1);
         $textLoc = $this->findKeyword(1);
 
         $this->selectKeyword(1);
@@ -55,6 +56,7 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
      */
     public function testAddingAcronymToAWord()
     {
+        $this->useTest(1);
 
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('langTools');
@@ -96,6 +98,7 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
      */
     public function testRemovingAcronymAttributeFromAWord()
     {
+        $this->useTest(1);
 
         $this->selectKeyword(4);
         $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Language icon in Top Toolbar should be active.');
@@ -139,6 +142,7 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
      */
     public function testEditingAcronym()
     {
+        $this->useTest(1);
 
         $this->selectKeyword(4);
         $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Class icon in Top Toolbar should be active.');
@@ -169,6 +173,7 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
      */
     public function testAddingAcronymToABoldWord()
     {
+        $this->useTest(1);
 
         $this->selectKeyword(3);
         $this->clickTopToolbarButton('langTools');
@@ -188,6 +193,7 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
      */
     public function testAddingAcronymToAItalicWord()
     {
+        $this->useTest(1);
 
         $this->selectKeyword(5);
         $this->clickTopToolbarButton('langTools');
@@ -207,6 +213,7 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
      */
     public function testSelectionIsMaintainedWhenSwitchingFromAcronymToClass()
     {
+        $this->useTest(1);
         $this->selectKeyword(1);
 
         $this->clickTopToolbarButton('langTools');
@@ -229,6 +236,7 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
      */
     public function testUndoAndRedoForAcronym()
     {
+        $this->useTest(1);
 
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('langTools');
@@ -254,6 +262,7 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
      */
     public function testUndoAfterDeletingAcronym()
     {
+        $this->useTest(1);
         // Apply acronym
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('langTools');
@@ -280,6 +289,117 @@ class Viper_Tests_ViperLangToolsPlugin_AcronymUnitTest extends AbstractViperUnit
         $this->assertHTMLMatch('<p>LOREM %1% %2%</p><p>sit amet <strong>%3%</strong></p><p>Squiz <acronym title="abc">%4%</acronym> is orsm</p><p>The <em>%5%</em> brown fox</p>');
 
     }//end testUndoAfterDeletingAcronym()
+
+
+    /**
+     * Test applying acronym to content with italic format applied first then bold and underline.
+     *
+     * @return void
+     */
+    public function testAddingAcronymToItalicContentWithOtherFormats()
+    {
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Acronym', NULL, TRUE);
+        $this->type('test-acro');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<u><strong><em><acronym title="test-acro">%1%</acronym></em></strong></u> and more content</p>');
+
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Acronym', NULL, TRUE);
+        $this->type('test-acro');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<u><strong><em><acronym title="test-acro">%1%</acronym></em></strong></u> and more content</p>');
+
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Acronym', NULL, TRUE);
+        $this->type('test-acro');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<u><strong><em><acronym title="test-acro">%1%</acronym></em></strong></u> and more content</p>');
+
+    }//end testAddingAcronymToItalicContentWithOtherFormats()
+
+
+    /**
+     * Test applying acronym to content with underline format applied first then italic and bold.
+     *
+     * @return void
+     */
+    public function testAddingAcronymToUnderlineContentWithOtherFormats()
+    {
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Acronym', NULL, TRUE);
+        $this->type('test-acro');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<strong><em><u><acronym title="test-acro">%1%</acronym></u></em></strong> and more content</p>');
+
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Acronym', NULL, TRUE);
+        $this->type('test-acro');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<strong><em><u><acronym title="test-acro">%1%</acronym></u></em></strong> and more content</p>');
+
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Acronym', NULL, TRUE);
+        $this->type('test-acro');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<strong><em><u><acronym title="test-acro">%1%</acronym></u></em></strong> and more content</p>');
+
+    }//end testAddingAcronymToBoldContentWithOtherFormats()
+
+
+    /**
+     * Test applying acronym to content with bold format applied first then underline and italic.
+     *
+     * @return void
+     */
+    public function testAddingAcronymToBoldContentWithOtherFormats()
+    {
+        $this->useTest(4);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Acronym', NULL, TRUE);
+        $this->type('test-acro');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<em><u><strong><acronym title="test-acro">%1%</acronym></strong></u></em> and more content</p>');
+
+        $this->useTest(4);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Acronym', NULL, TRUE);
+        $this->type('test-acro');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<em><u><strong><acronym title="test-acro">%1%</acronym></strong></u></em> and more content</p>');
+
+        $this->useTest(4);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Acronym', NULL, TRUE);
+        $this->type('test-acro');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<em><u><strong><acronym title="test-acro">%1%</acronym></strong></u></em> and more content</p>');
+
+    }//end testAddingAcronymToItalicContentWithOtherFormats()
 
 
 }//end class

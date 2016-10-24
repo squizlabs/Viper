@@ -14,6 +14,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
     public function testMergeAndSplitIconsInTableWithoutHeaders()
     {
         $this->insertTable(1, 0);
+        sleep(1);
         $this->assertMergeAndSplitIconStatuses(11, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE);
         $this->assertMergeAndSplitIconStatuses(10, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE);
         $this->assertMergeAndSplitIconStatuses(9, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE);
@@ -38,6 +39,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
     public function testMergeAndSplitIconsInTableWithLeftHeaders()
     {
         $this->insertTable(1, 1);
+        sleep(1);
         $this->assertMergeAndSplitIconStatuses(11, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE);
         $this->assertMergeAndSplitIconStatuses(10, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE);
         $this->assertMergeAndSplitIconStatuses(9, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE);
@@ -62,6 +64,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
     public function testMergeAndSplitIconsInTableWithTopHeaders()
     {
         $this->insertTable(1);
+        sleep(1);
         $this->assertMergeAndSplitIconStatuses(11, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE);
         $this->assertMergeAndSplitIconStatuses(10, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE);
         $this->assertMergeAndSplitIconStatuses(9, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE);
@@ -86,6 +89,7 @@ class Viper_Tests_ViperTableEditorPlugin_MergeAndSplitUnitTest extends AbstractV
     public function testMergeAndSplitIconsInTableWithBothHeaders()
     {
         $this->insertTable(1, 3);
+        sleep(1);
         $this->assertMergeAndSplitIconStatuses(11, FALSE, FALSE, TRUE, FALSE, TRUE, FALSE);
         $this->assertMergeAndSplitIconStatuses(10, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE);
         $this->assertMergeAndSplitIconStatuses(9, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE);

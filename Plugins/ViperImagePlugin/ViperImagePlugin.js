@@ -90,6 +90,26 @@
                 }
             });
 
+            this.viper.registerCallback('Viper:mouseUp', 'ViperImagePlugin', function(e) {
+                if (self.viper.isEnabled() !== true) {
+                    return;
+                }
+
+                var target = ViperUtil.getMouseEventTarget(e);
+                if (ViperUtil.isTag(target, 'img') === true && self.viper.isOutOfBounds(target) !== true) {
+                    self.hideImageResizeHandles();
+                    self.showImageResizeHandles(target);
+                    self._cancelMove();
+                    self._updateToolbars(target);
+
+                    var range = self.viper.getViperRange();
+                    range.selectNode(target);
+                    ViperSelection.addRange(range);
+                    self.viper.fireSelectionChanged(range, true);
+                }
+
+            });
+
             this.viper.registerCallback(['Viper:keyDown', 'Viper:beforeDelete'], 'ViperImagePlugin', function(e) {
                 if (self._resizeImage
                     && ViperUtil.isInputKey(e)
@@ -996,6 +1016,7 @@
                 if (image.naturalWidth === 0 || image.naturalHeight === 0) {
                     canResize = false;
                 }
+
                 // if (widthStyle && widthStyle.indexOf('%') !== -1) {
                 //     // Prevent resizing.
                 //     canResize = false;
@@ -1031,7 +1052,15 @@
                     } else {
                         ViperUtil.removeClass(sizeDiv, 'visible');
                     }
+
+                    // If the image is too small move the size div outside of the image.
+                    if (image.width < 60 ||  image.height < 20) {
+                        ViperUtil.addClass(sizeDiv, 'smallImage');
+                    } else {
+                        ViperUtil.removeClass(sizeDiv, 'smallImage');
+                    }
                 };
+
                 _updateSize();
 
                 ViperUtil.addClass(resizeBox, 'ViperImagePlugin-resizeBox');

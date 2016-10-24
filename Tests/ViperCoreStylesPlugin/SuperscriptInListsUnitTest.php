@@ -13,234 +13,207 @@ class Viper_Tests_ViperCoreStylesPlugin_SuperscriptInListsUnitTest extends Abstr
      */
     public function testAddAndRemoveSuperscriptToWordInListItem()
     {
-        $this->useTest(1);
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(1);
+            } else {
+                $this->useTest(2);
+            }
 
-        // Apply superscript using top toolbar
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('superscript');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'superscript icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 <sup>%1%</sup></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
+            // Apply superscript
+            $this->selectKeyword(1);
+            $this->clickTopToolbarButton('superscript');
+            $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'superscript icon in the top toolbar is not active');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>item 1</li><li>item 2 <sup>%1%</sup></li><li>item 3</li><li><sup>item 4 %2%</sup></li><li>item 5</li></'.$listType.'>');
 
-        $this->selectKeyword(2);
-        $this->clickTopToolbarButton('superscript');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 <sup>%1%</sup></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 <sup>%2%</sup></li><li>item 3</li></ol>');
-
-         // Remove superscript using top toolbar
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript'), 'Superscript icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 <sup>%2%</sup></li><li>item 3</li></ol>');
-
-        $this->selectKeyword(2);
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript'), 'Superscript icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
+             // Remove superscript
+            $this->selectKeyword(1);
+            $this->clickTopToolbarButton('superscript', 'active');
+            $this->assertTrue($this->topToolbarButtonExists('superscript'), 'Superscript icon in the top toolbar is active');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>item 1</li><li>item 2 %1%</li><li>item 3</li><li><sup>item 4 %2%</sup></li><li>item 5</li></'.$listType.'>');
+        }
 
     }//end testAddAndRemoveSuperscriptToWordInListItem()
 
 
     /**
-     * Test applying superscript to a word a list item.
+     * Test applying superscript to a list item.
      *
      * @return void
      */
     public function testAddAndRemoveSuperscriptToListItem()
     {
-        $this->useTest(1);
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(1);
+            } else {
+                $this->useTest(2);
+            }
 
-        // Apply superscript using top toolbar
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->clickTopToolbarButton('superscript');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><sup>item 2 %1%</sup></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
+            // Apply superscript
+            $this->selectKeyword(1);
+            $this->selectInlineToolbarLineageItem(1);
+            $this->clickTopToolbarButton('superscript');
+            $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>item 1</li><li><sup>item 2 %1%</sup></li><li>item 3</li><li><sup>item 4 %2%</sup></li><li>item 5</li></'.$listType.'>');
 
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->clickTopToolbarButton('superscript');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><sup>item 2 %1%</sup></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><sup>item 2 %2%</sup></li><li>item 3</li></ol>');
-
-         // Remove superscript using top toolbar
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript'), 'Superscript icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><sup>item 2 %2%</sup></li><li>item 3</li></ol>');
-
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript'), 'Superscript icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
+             // Remove superscript
+            $this->selectKeyword(1);
+            $this->selectInlineToolbarLineageItem(1);
+            $this->clickTopToolbarButton('superscript', 'active');
+            $this->assertTrue($this->topToolbarButtonExists('superscript'), 'Superscript icon in the top toolbar is active');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>item 1</li><li>item 2 %1%</li><li>item 3</li><li><sup>item 4 %2%</sup></li><li>item 5</li></'.$listType.'>');
+        }
 
     }//end testAddAndRemoveSuperscriptToListItem()
 
 
     /**
-     * Test applying superscript to a word a list.
+     * Test applying superscript to all items in the list.
      *
      * @return void
      */
     public function testAddAndRemoveSuperscriptToList()
     {
-        $this->useTest(1);
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(1);
+            } else {
+                $this->useTest(2);
+            }
 
-        // Apply superscript using top toolbar
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('superscript');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li><sup>item 1</sup></li><li><sup>item 2 %1%</sup></li><li><sup>item 3</sup></li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
+            // Apply superscript
+            $this->selectKeyword(1);
+            $this->selectInlineToolbarLineageItem(0);
+            $this->clickTopToolbarButton('superscript');
+            $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li><sup>item 1</sup></li><li><sup>item 2 %1%</sup></li><li><sup>item 3</sup></li><li><sup>item 4 %2%</sup></li><li><sup>item 5</sup></li></'.$listType.'>');
 
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('superscript');
-        $this->assertTrue($this->topToolbarButtonExists('superscript', 'active'), 'Superscript icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li><sup>item 1</sup></li><li><sup>item 2 %1%</sup></li><li><sup>item 3</sup></li></ul><p>Ordered list:</p><ol><li><sup>item 1</sup></li><li><sup>item 2 %2%</sup></li><li><sup>item 3</sup></li></ol>');
-
-         // Remove superscript using top toolbar
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript'), 'Superscript icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li><sup>item 1</sup></li><li><sup>item 2 %2%</sup></li><li><sup>item 3</sup></li></ol>');
-
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('superscript', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('superscript'), 'Superscript icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
+             // Remove superscript
+            $this->selectKeyword(1);
+            $this->selectInlineToolbarLineageItem(0);
+            $this->clickTopToolbarButton('superscript', 'active');
+            $this->assertTrue($this->topToolbarButtonExists('superscript'), 'Superscript icon in the top toolbar is active');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>item 1</li><li>item 2 %1%</li><li>item 3</li><li>item 4 %2%</li><li>item 5</li></'.$listType.'>');
+        }
 
     }//end testAddAndRemoveSuperscriptToListItem()
 
+
     /**
-     * Test deleting content from unordered lists including superscript formating
+     * Test that creating new list items after a superscript formatted list item.
      *
      * @return void
      */
-    public function testDeletingSuperscriptContentFromUnorderedLists()
+    public function testCreatingNewListItemAfterASuperscriptItem()
+    {
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(1);
+            } else {
+                $this->useTest(2);
+            }
+
+            $this->moveToKeyword(2, 'right');
+            $this->sikuli->keyDown('Key.ENTER');
+            sleep(1);
+            $this->type('new item');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>item 1</li><li>item 2 %1%</li><li>item 3</li><li><sup>item 4 %2%</sup></li><li><sup>new item</sup></li><li>item 5</li></'.$listType.'>');
+        }
+
+    }//end testCreatingNewListItemAfterASuperscriptItem()
+
+
+    /**
+     * Test deleting content from lists including superscript formating
+     *
+     * @return void
+     */
+    public function testDeletingSuperscriptContentFromLists()
     {
         // Check deleting a word after the superscript content
-        $this->useTest(2);
-        $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% <sup>test</sup></li></ul>');
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(3);
+            } else {
+                $this->useTest(4);
+            }
 
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% <sup>testcontent</sup></li></ul>');
+            $this->moveToKeyword(2, 'right');
+            $this->sikuli->keyDown('Key.BACKSPACE');
+            $this->sikuli->keyDown('Key.BACKSPACE');
+            $this->sikuli->keyDown('Key.BACKSPACE');
+            $this->sikuli->keyDown('Key.BACKSPACE');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>%1% <sup>test</sup></li></'.$listType.'>');
+
+            // Add content to check the position of the cursor
+            $this->type('content');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>%1% <sup>testcontent</sup></li></'.$listType.'>');
+        }
 
         // Check deleting from the end of the list item including superscript content
-        $this->useTest(2);
-        $this->moveToKeyword(2, 'right');
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(3);
+            } else {
+                $this->useTest(4);
+            }
 
-        for ($i = 0; $i < 8; $i++) {
-            $this->sikuli->keyDown('Key.BACKSPACE');
+            $this->moveToKeyword(2, 'right');
+
+            for ($i = 0; $i < 8; $i++) {
+                $this->sikuli->keyDown('Key.BACKSPACE');
+            }
+
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>%1%</li></'.$listType.'>');
+
+            // Add content to check the position of the cursor
+            $this->type('content');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>%1% content</li></'.$listType.'>');
         }
-
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1%</li></ul>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% content</li></ul>');
 
         // Check deleting from the start of the paragraph
-        $this->useTest(2);
-        $this->moveToKeyword(1, 'left');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li><sup>test</sup> %2%</li></ul>');
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(3);
+            } else {
+                $this->useTest(4);
+            }
 
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li><sup>contenttest</sup> %2%</li></ul>');
+            $this->moveToKeyword(1, 'left');
+            $this->sikuli->keyDown('Key.DELETE');
+            $this->sikuli->keyDown('Key.DELETE');
+            $this->sikuli->keyDown('Key.DELETE');
+            $this->sikuli->keyDown('Key.DELETE');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li><sup>test</sup> %2%</li></'.$listType.'>');
+
+            // Add content to check the position of the cursor
+            $this->type('content');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li><sup>contenttest</sup> %2%</li></'.$listType.'>');
+        }
 
         // Check deleting from the start of the list item including superscript content
-        $this->useTest(2);
-        $this->moveToKeyword(1, 'left');
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(3);
+            } else {
+                $this->useTest(4);
+            }
 
-        for ($i = 0; $i < 8; $i++) {
-            $this->sikuli->keyDown('Key.DELETE');
+            $this->moveToKeyword(1, 'left');
+
+            for ($i = 0; $i < 8; $i++) {
+                $this->sikuli->keyDown('Key.DELETE');
+            }
+
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>%2%</li></'.$listType.'>');
+
+            // Add content to check the position of the cursor
+            $this->type('content');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>content %2%</li></'.$listType.'>');
         }
 
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%2%</li></ul>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>content %2%</li></ul>');
-
-    }//end testDeletingSuperscriptContentFromUnorderedLists()
-
-
-    /**
-     * Test deleting content from ordered lists including superscript formating
-     *
-     * @return void
-     */
-    public function testDeletingSuperscriptContentFromOrderedLists()
-    {
-        // Check deleting a word after the stirkethrough content
-        $this->useTest(3);
-        $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% <sup>test</sup></li></ol>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% <sup>testcontent</sup></li></ol>');
-
-        // Check deleting from the end of the list item including stirkethrough content
-        $this->useTest(3);
-        $this->moveToKeyword(2, 'right');
-
-        for ($i = 0; $i < 8; $i++) {
-            $this->sikuli->keyDown('Key.BACKSPACE');
-        }
-
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1%</li></ol>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% content</li></ol>');
-
-        // Check deleting from the start of the list item
-        $this->useTest(3);
-        $this->moveToKeyword(1, 'left');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li><sup>test</sup> %2%</li></ol>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li><sup>contenttest</sup> %2%</li></ol>');
-
-        // Check deleting from the start of the list item including stirkethrough content
-        $this->useTest(3);
-        $this->moveToKeyword(1, 'left');
-
-        for ($i = 0; $i < 8; $i++) {
-            $this->sikuli->keyDown('Key.DELETE');
-        }
-
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%2%</li></ol>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>content %2%</li></ol>');
-
-    }//end testDeletingSuperscriptContentFromOrderedLists()
+    }//end testDeletingSuperscriptContentFromLists()
 
 }//end class
 

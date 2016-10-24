@@ -240,6 +240,8 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('removeFormat');
         $this->assertHTMLMatch('<p>Test content <a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a> more test content.</p>');
+        $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'The link icon should should still be active');
+        $this->assertTrue($this->topToolbarButtonExists('link', 'active'), 'The link icon should should still be active');
 
         // Apply bold formatting to the link and then remove it using remove format
         $this->selectKeyword(1);
@@ -260,6 +262,8 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
         $this->selectInlineToolbarLineageItem(2);
         $this->clickTopToolbarButton('removeFormat');
         $this->assertHTMLMatch('<p><strong>Test content </strong><a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a><strong> more test content.</strong></p>');
+        $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'The link icon should should still be active');
+        $this->assertTrue($this->topToolbarButtonExists('link', 'active'), 'The link icon should should still be active');
 
         // Apply italics formatting to the link and then remove it using remove format
         $this->useTest(7);
@@ -281,6 +285,8 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
         $this->selectInlineToolbarLineageItem(2);
         $this->clickTopToolbarButton('removeFormat');
         $this->assertHTMLMatch('<p><em>Test content </em><a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a><em> more test content.</em></p>');
+        $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'The link icon should should still be active');
+        $this->assertTrue($this->topToolbarButtonExists('link', 'active'), 'The link icon should should still be active');
 
         // Apply strikethrough formatting to the link and then remove it using remove format
         $this->useTest(7);
@@ -302,6 +308,8 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
         $this->selectInlineToolbarLineageItem(2);
         $this->clickTopToolbarButton('removeFormat');
         $this->assertHTMLMatch('<p><del>Test content </del><a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a><del> more test content.</del></p>');
+        $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'The link icon should should still be active');
+        $this->assertTrue($this->topToolbarButtonExists('link', 'active'), 'The link icon should should still be active');
 
         // Apply subscript formatting to the link and then remove it using remove format
         $this->useTest(7);
@@ -323,6 +331,8 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
         $this->selectInlineToolbarLineageItem(2);
         $this->clickTopToolbarButton('removeFormat');
         $this->assertHTMLMatch('<p><sub>Test content </sub><a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a><sub> more test content.</sub></p>');
+        $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'The link icon should should still be active');
+        $this->assertTrue($this->topToolbarButtonExists('link', 'active'), 'The link icon should should still be active');
 
          // Apply superscript formatting to the link and then remove it using remove format
         $this->useTest(7);
@@ -344,8 +354,29 @@ class Viper_Tests_ViperCoreStylesPlugin_RemoveFormatUnitTest extends AbstractVip
         $this->selectInlineToolbarLineageItem(2);
         $this->clickTopToolbarButton('removeFormat');
         $this->assertHTMLMatch('<p><sup>Test content </sup><a href="http://www.squizlabs.com" title="Squiz Labs">%1%</a><sup> more test content.</sup></p>');
+        $this->assertTrue($this->inlineToolbarButtonExists('link', 'active'), 'The link icon should should still be active');
+        $this->assertTrue($this->topToolbarButtonExists('link', 'active'), 'The link icon should should still be active');
 
-    }//end testRemoveFormatForANestedStyleElement()
+    }//end testRemoveFormatForLink()
+
+
+    /**
+     * Test that when you click remove format and classes.
+     *
+     * @return void
+     */
+    public function testRemoveFormatWithClasses()
+    {
+        $this->useTest(8);
+        $this->selectKeyword(1);
+        $this->clickTopToolbarButton('removeFormat');
+        sleep(1);
+
+        $this->assertHTMLMatch('<p>This is some content %1% with classes applied %2%.</p>');
+        $this->assertTrue($this->inlineToolbarButtonExists('cssClass'), 'The class icon should not be active');
+        $this->assertTrue($this->topToolbarButtonExists('cssClass'), 'The class icon should not be active');
+
+    }//end testRemoveFormatWithClasses()
 
 }//end class
 

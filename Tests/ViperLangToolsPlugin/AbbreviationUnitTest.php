@@ -5,7 +5,6 @@ require_once 'AbstractViperUnitTest.php';
 class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractViperUnitTest
 {
 
-
     /**
      * Test that the abbreviation icon is not active when you don't select some text and when you select a block of text.
      *
@@ -13,6 +12,7 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
      */
     public function testAbbreviationIconIsDisabled()
     {
+        $this->useTest(1);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('langTools');
 
@@ -36,6 +36,7 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
      */
     public function testUpdateChangesButton()
     {
+        $this->useTest(1);
         $textLoc = $this->findKeyword(2);
 
         $this->selectKeyword(1);
@@ -55,6 +56,7 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
      */
     public function testAddingAbbreviationToAWord()
     {
+        $this->useTest(1);
 
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('langTools');
@@ -99,6 +101,7 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
      */
     public function testRemovingAbbreviationAttributeFromAWord()
     {
+        $this->useTest(1);
 
         $this->selectKeyword(5);
         $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Class icon in Top Toolbar should be active.');
@@ -141,6 +144,7 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
      */
     public function testEditingAbbreviation()
     {
+        $this->useTest(1);
 
         $this->selectKeyword(5);
         $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Class icon in Top Toolbar should be active.');
@@ -171,6 +175,7 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
      */
     public function testAddingAbbreviationToABoldWord()
     {
+        $this->useTest(1);
 
         $this->selectKeyword(4);
         $this->clickTopToolbarButton('langTools');
@@ -190,6 +195,7 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
      */
     public function testAddingAbbreviationToAItalicWord()
     {
+        $this->useTest(1);
 
         $this->selectKeyword(6);
         $this->clickTopToolbarButton('langTools');
@@ -209,6 +215,7 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
      */
     public function testSelectionIsMaintainedWhenSwitchingFromAbbreviationToClass()
     {
+        $this->useTest(1);
         $this->selectKeyword(2);
 
         $this->clickTopToolbarButton('langTools');
@@ -231,6 +238,7 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
      */
     public function testUndoAndRedoForAbbreviation()
     {
+        $this->useTest(1);
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
@@ -257,7 +265,9 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
      */
     public function testUndoAfterDeletingAbbreviation()
     {
+
         // Apply abbreviation
+        $this->useTest(1);
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
@@ -285,6 +295,115 @@ class Viper_Tests_ViperLangToolsPlugin_AbbreviationUnitTest extends AbstractVipe
     }//end testUndoAfterDeletingAbbreviation()
 
 
+    /**
+     * Test applying abbreviation to content with italic format applied first then bold and underline.
+     *
+     * @return void
+     */
+    public function testAddingAbbreviationToItalicContentWithOtherFormats()
+    {
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
+        $this->type('test-acro');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<u><strong><em><abbr title="test-acro">%1%</abbr></em></strong></u> and more content</p>');
+
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
+        $this->type('test-acro');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<u><strong><em><abbr title="test-acro">%1%</abbr></em></strong></u> and more content</p>');
+
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
+        $this->type('test-acro');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<u><strong><em><abbr title="test-acro">%1%</abbr></em></strong></u> and more content</p>');
+
+    }//end testAddingAbbreviationToItalicContentWithOtherFormats()
+
+
+    /**
+     * Test applying abbreviation to content with underline format applied first then italic and bold.
+     *
+     * @return void
+     */
+    public function testAddingAbbreviationToUnderlineContentWithOtherFormats()
+    {
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
+        $this->type('test-acro');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<strong><em><u><abbr title="test-acro">%1%</abbr></u></em></strong> and more content</p>');
+
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
+        $this->type('test-acro');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<strong><em><u><abbr title="test-acro">%1%</abbr></u></em></strong> and more content</p>');
+
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
+        $this->type('test-acro');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<strong><em><u><abbr title="test-acro">%1%</abbr></u></em></strong> and more content</p>');
+
+    }//end testAddingAbbreviationToBoldContentWithOtherFormats()
+
+
+    /**
+     * Test applying abbreviation to content with bold format applied first then underline and italic.
+     *
+     * @return void
+     */
+    public function testAddingAbbreviationToBoldContentWithOtherFormats()
+    {
+        $this->useTest(4);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
+        $this->type('test-acro');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<em><u><strong><abbr title="test-acro">%1%</abbr></strong></u></em> and more content</p>');
+
+        $this->useTest(4);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
+        $this->type('test-acro');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<em><u><strong><abbr title="test-acro">%1%</abbr></strong></u></em> and more content</p>');
+
+        $this->useTest(4);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Abbreviation', NULL, TRUE);
+        $this->type('test-acro');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<em><u><strong><abbr title="test-acro">%1%</abbr></strong></u></em> and more content</p>');
+
+    }//end testAddingAbbreviationToItalicContentWithOtherFormats()
 }//end class
 
 ?>

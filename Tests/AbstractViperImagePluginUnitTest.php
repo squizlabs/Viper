@@ -7,6 +7,8 @@ require_once 'AbstractViperUnitTest.php';
  */
 abstract class AbstractViperImagePluginUnitTest extends AbstractViperUnitTest
 {
+
+
     /**
      * Resize specified image to given width.
      *
@@ -53,6 +55,8 @@ abstract class AbstractViperImagePluginUnitTest extends AbstractViperUnitTest
         $this->assertEquals(($image['x2'] - 4), $rightHandle['x1']);
         $this->assertEquals(($image['y2'] - 5), $rightHandle['y1']);
     }//end checkResizeHandles()
+
+
     /**
      * Checks that the preview image size is correct.
      *
@@ -72,6 +76,8 @@ abstract class AbstractViperImagePluginUnitTest extends AbstractViperUnitTest
         $this->assertEquals($imageWidth, $maxPreviewSize);
         $this->assertTrue($parent['y2'] > $image['y2']);
     }//end checkPreviewImageSize()
+
+
     /**
      * Drags and drops testing image to specified location.
      *
@@ -116,5 +122,24 @@ abstract class AbstractViperImagePluginUnitTest extends AbstractViperUnitTest
         // Drop the image file at given location.
         $this->sikuli->dropAt($dropOn);
     }//end dragDropFromDesktop()
+
+
+    /**
+     * Returns the Apply Changes button text.
+     *
+     * @return array
+     */
+    protected function getButtonText($name, $toolbar=null)
+    {
+        if ($name === 'update') {
+            $name = 'Update Image';
+        } else {
+            $name = 'Insert Image';
+        }
+
+        return $name;
+
+    }//end getButtonText()
+
 
 }//end class

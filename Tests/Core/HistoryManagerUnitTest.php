@@ -39,7 +39,7 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
         $this->topToolbarButtonExists('historyRedo');
 
         // Make sure the content is reverted.
-        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ %2%</p>');
 
     }//end testUndoUsingKeyboardShortcut()
 
@@ -61,7 +61,7 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
         $this->topToolbarButtonExists('historyRedo');
 
         // Make sure the content is reverted.
-        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ %2%</p>');
 
     }//end testUndoUsingTopToolbar()
 
@@ -86,7 +86,7 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
 
         // Make sure caret is at the correct position.
         $this->type('...');
-        $this->assertHTMLMatch('<p>%1% test...</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1% test...</p><p>EIB MOZ %2%</p>');
 
     }//end testRedoUsingKeyboardShort()
 
@@ -110,7 +110,7 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
 
         // Make sure the content is reverted.
         $this->type('.');
-        $this->assertHTMLMatch('<p>%1% test.</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1% test.</p><p>EIB MOZ %2%</p>');
 
     }//end testRedoUsingTopToolbar()
 
@@ -138,14 +138,14 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
         // Both Undo and Redo button should be active.
         $this->topToolbarButtonExists('historyUndo');
         $this->topToolbarButtonExists('historyRedo');
-        $this->assertHTMLMatch('<p>%1%aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1%aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p><p>EIB MOZ %2%</p>');
         sleep(1);
 
         // Pressing undo will remove the remaining characters that were added
         $this->sikuli->keyDown('Key.CMD + z');
         $this->topToolbarButtonExists('historyUndo', 'disabled');
         $this->topToolbarButtonExists('historyRedo', 'disabled');
-        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ %2%</p>');
 
     }//end testUndoAndRedoMaxCharlimit()
 
@@ -165,7 +165,7 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('New content');
-        $this->assertHTMLMatch('<p>%1%</p><p>New content</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1%</p><p>New content</p><p>EIB MOZ %2%</p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
 
@@ -173,19 +173,19 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
         $this->clickTopToolbarButton('historyUndo');
         //Undo the new paragraph
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ %2%</p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
 
         $this->clickTopToolbarButton('historyRedo');
         $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<p>%1%</p><p>New content</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1%</p><p>New content</p><p>EIB MOZ %2%</p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
 
         $this->clickTopToolbarButton('historyUndo');
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ %2%</p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
 
@@ -207,28 +207,28 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('New content');
-        $this->assertHTMLMatch('<p>%1%</p><p>New content</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1%</p><p>New content</p><p>EIB MOZ %2%</p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
 
         $this->sikuli->keyDown('Key.CMD + z');
         $this->sikuli->keyDown('Key.CMD + z');
         $this->sikuli->keyDown('Key.CMD + z');
-        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ %2%</p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
 
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        $this->assertHTMLMatch('<p>%1%</p><p>New content</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1%</p><p>New content</p><p>EIB MOZ %2%</p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo'), 'Undo icon should be active');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
 
         $this->sikuli->keyDown('Key.CMD + z');
         $this->sikuli->keyDown('Key.CMD + z');
         $this->sikuli->keyDown('Key.CMD + z');
-        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ %2%</p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
 
@@ -251,7 +251,7 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
 
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ %2%</p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
 
@@ -261,7 +261,7 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
 
         $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ %2%</p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
 
@@ -284,7 +284,7 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
 
         $this->sikuli->keyDown('Key.CMD + z');
-        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ %2%</p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
 
@@ -294,11 +294,58 @@ class Viper_Tests_Core_HistoryManagerUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('historyRedo', 'disabled'), 'Redo icon should be disabled');
 
         $this->sikuli->keyDown('Key.CMD + z');
-        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ</p>');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ %2%</p>');
         $this->assertTrue($this->topToolbarButtonExists('historyUndo', 'disabled'), 'Undo icon should be disabled');
         $this->assertTrue($this->topToolbarButtonExists('historyRedo'), 'Redo icon should be active');
 
     }//end testDeleteAllClickUndoAndClickRedo()
+
+
+    /**
+     * Test undo and redo when editing content
+     *
+     * @return void
+     */
+    public function testUndoAndRedoForMultipleEdits()
+    {
+        // Test making multiple changes and pressing undo
+        $this->selectKeyword(1);
+        $this->type('abc');
+        $this->selectKeyword(2);
+        $this->sikuli->keyDown('def');
+        $this->assertHTMLMatch('<p>abc</p><p>EIB MOZ def</p>');
+
+        // Test undo and redo with top toolbar icons
+        // Press once will undo one edit
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>abc</p><p>EIB MOZ %2%</p>');
+        // Press again will undo the replace
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ %2%</p>');
+
+        // Press redo once will redo the replace
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>abc</p><p>EIB MOZ %2%</p>');
+        // Press redo once will redo the delete
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>abc</p><p>EIB MOZ def</p>');
+
+        // Test undo and redo with keyboard shortcuts
+        // Press once will undo the delete
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>abc</p><p>EIB MOZ %2%</p>');
+        // Press again will undo the replace
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>%1%</p><p>EIB MOZ %2%</p>');
+
+        // Press redo once will redo the replace
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>abc</p><p>EIB MOZ %2%</p>');
+        // Press redo once will redo the delete
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>abc</p><p>EIB MOZ def</p>');
+
+    }//end testUndoAndRedoForMultipleEdits()
 
 }//end class
 

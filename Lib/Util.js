@@ -478,13 +478,24 @@
 
         },
 
-        isText: function (node) {
-            if (node && node.nodeType === this.TEXT_NODE) {
+        isText: function (node, notEmpty) {
+            if (node && node.nodeType === this.TEXT_NODE && (notEmpty !== true || node.data.length > 0)) {
                 return true;
             }
 
             return false;
 
+        },
+
+        isSpacerBR: function(node) {
+            if (ViperUtil.isTag(node, 'br') === true
+                && !node.nextSibling
+                && ViperUtil.isBlockElement(node.parentNode) === true
+            ) {
+                return true;
+            }
+
+            return false;
         },
 
         isElement: function (node) {
@@ -3150,6 +3161,19 @@
                 while (this.isText(element.nextSibling) === true) {
                     joinTextNodes(element, element.nextSibling);
                 }
+            } else if (this.isText(prevCont) === true) {
+                // Prev container is text.
+                var splitOffset = 0;
+                while (this.isText(element.previousSibling) === true) {
+                    splitOffset += element.previousSibling.data.length;
+                    element.data = element.previousSibling.data + element.data;
+                    ViperUtil.remove(element.previousSibling);
+                }
+
+                info = {
+                    splitOffset: splitOffset,
+                    textNode: element
+                };
             }
 
             return info;
@@ -3574,11 +3598,12 @@
 
             ViperUtil._dcall++;
 
+            console.info(ViperUtil._dcall);
+
             if (c === ViperUtil._dcall) {
                 debugger;
             }
 
-            console.info(ViperUtil._dcall);
         },
 
         setViperElement: function(element)

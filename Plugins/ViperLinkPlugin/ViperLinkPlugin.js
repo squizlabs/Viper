@@ -13,8 +13,9 @@
 (function(ViperUtil, ViperSelection, _) {
     function ViperLinkPlugin(viper)
     {
-        this.viper = viper;
+        this.viper                     = viper;
         this._autoLinkOpensInNewWindow = false;
+        this._inlineToolbar            = null;
 
         this.initToolbar();
         this.initInlineToolbar();
@@ -27,6 +28,30 @@
         init: function()
         {
             this.enableAutoLink();
+
+            var self = this;
+            this.viper.registerCallback(
+                'Viper:mouseUp',
+                'ViperLinkPlugin',
+                function(e) {
+                    if (!self._inlineToolbar) {
+                        return;
+                    }
+
+                    if (ViperUtil.isTag(e.target, 'a') === false
+                        || self._inlineToolbar.isVisible() === true
+                        || self.viper.isOutOfBounds(e.target) === true
+                    ) {
+                        return;
+                    }
+
+                    // Select the clicked link.
+                    var range = self.viper.getViperRange();
+                    range.selectNode(e.target);
+                    ViperSelection.addRange(range);
+                    self.viper.fireSelectionChanged(range, true);
+                }
+            );
 
         },
 
@@ -564,6 +589,7 @@
         {
             var self = this;
             this.viper.registerCallback('ViperInlineToolbarPlugin:initToolbar', 'ViperLinkPlugin', function(toolbar) {
+                self._inlineToolbar = toolbar;
                 self.createInlineToolbar(toolbar);
             });
             this.viper.registerCallback('ViperInlineToolbarPlugin:updateToolbar', 'ViperLinkPlugin', function(data) {

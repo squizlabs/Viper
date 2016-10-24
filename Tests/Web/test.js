@@ -453,7 +453,7 @@ function useTest(id)
 
     viper.fireCallbacks('Viper:clickedOutside');
 
-    var contentElement = win.Viper.Util.getid('content');
+    var contentElement = viperTest.get('contentElement');
     Viper.Util.setHtml(contentElement, testCases[id]);
 
     Viper.Util.setHtml(win.Viper.Util.getid('testCaseTitle'), '(Using Test #' + id + ')');
@@ -475,7 +475,13 @@ function useTest(id)
     viper.cleanDOM(contentElement);
 
     viper.getHistoryManager().clear();
-    viper.getHistoryManager().add();
+    var replacementPlugin = viper.getPluginManager().getPlugin('ViperReplacementPlugin');
+    replacementPlugin.showReplacements(
+        null,
+        function () {
+            viper.getHistoryManager().add();
+        }
+    );
 
 }
 
@@ -519,3 +525,17 @@ function changeTextColour(colour)
 {
     Viper.Util.setStyle(viper.getViperElement(), 'color', colour);
 }
+
+function getTestHTML() {
+    var html = gHtml();
+    var keywords = ['A', 'B', 'C', 'D', 'T', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M'];
+    for (var i = 0; i < keywords.length; i++) {
+        html = html.replace('X' + keywords[i] + 'X', '%' + (i + 1) + '%');
+    }
+
+    html.replace('<br /><ol>', '<ol>');
+    html.replace('<br /><ul>', '<ul>');
+
+    return html;
+
+};

@@ -2688,7 +2688,10 @@
         _updateSelection: function()
         {
             try {
-                if (this._tmpNode !== null && ViperUtil.isPartOfDOM(this._tmpNode) === true) {
+                if (this._tmpNode !== null 
+                    && (ViperUtil.isPartOfDOM(this._tmpNode, this.viper.getViperElement()) === true
+                        || (ViperUtil.isBrowser('msie') === true && ViperUtil.isChildOf(this._tmpNode, this.viper.getViperElement()) === true))
+                ) {
                     var range = this.viper.getCurrentRange();
                     range.setEnd(this._tmpNode, this._tmpNodeOffset);
                     range.setStart(this._tmpNode, this._tmpNodeOffset);
