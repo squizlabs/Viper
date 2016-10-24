@@ -5,7 +5,6 @@ require_once 'AbstractViperUnitTest.php';
 class Viper_Tests_ViperCoreStylesPlugin_StrikethroughInListsUnitTest extends AbstractViperUnitTest
 {
 
-
     /**
      * Test applying strikethrough to a word in a list.
      *
@@ -13,235 +12,208 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughInListsUnitTest extends Abs
      */
     public function testAddAndRemoveStrikethroughToWordInListItem()
     {
-        $this->useTest(1);
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(1);
+            } else {
+                $this->useTest(2);
+            }
 
-        // Apply strikethrough using top toolbar
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'strikethrough icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 <del>%1%</del></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
+            // Apply strikethrough
+            $this->selectKeyword(1);
+            $this->clickTopToolbarButton('strikethrough');
+            $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'strikethrough icon in the top toolbar is not active');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>item 1</li><li>item 2 <del>%1%</del></li><li>item 3</li><li><del>item 4 %2%</del></li><li>item 5</li></'.$listType.'>');
 
-        $this->selectKeyword(2);
-        $this->clickTopToolbarButton('strikethrough');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 <del>%1%</del></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 <del>%2%</del></li><li>item 3</li></ol>');
-
-        // Remove strikethrough using top toolbar
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough'), 'Strikethrough icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 <del>%2%</del></li><li>item 3</li></ol>');
-
-        $this->selectKeyword(2);
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough'), 'Strikethrough icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
+            // Remove strikethrough
+            $this->selectKeyword(1);
+            $this->clickTopToolbarButton('strikethrough', 'active');
+            $this->assertTrue($this->topToolbarButtonExists('strikethrough'), 'Strikethrough icon in the top toolbar is active');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>item 1</li><li>item 2 %1%</li><li>item 3</li><li><del>item 4 %2%</del></li><li>item 5</li></'.$listType.'>');
+        }
 
     }//end testAddAndRemoveStrikethroughToWordInListItem()
 
 
     /**
-     * Test applying strikethrough to a word a list item.
+     * Test applying strikethrough to a list item.
      *
      * @return void
      */
     public function testAddAndRemoveStrikethroughToListItem()
     {
-        $this->useTest(1);
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(1);
+            } else {
+                $this->useTest(2);
+            }
 
-        // Apply strikethrough using top toolbar
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->clickTopToolbarButton('strikethrough');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><del>item 2 %1%</del></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
+            // Apply strikethrough 
+            $this->selectKeyword(1);
+            $this->selectInlineToolbarLineageItem(1);
+            $this->clickTopToolbarButton('strikethrough');
+            $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar is not active');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>item 1</li><li><del>item 2 %1%</del></li><li>item 3</li><li><del>item 4 %2%</del></li><li>item 5</li></'.$listType.'>');
 
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->clickTopToolbarButton('strikethrough');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><del>item 2 %1%</del></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><del>item 2 %2%</del></li><li>item 3</li></ol>');
-
-         // Remove strikethrough using top toolbar
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough'), 'Strikethrough icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><del>item 2 %2%</del></li><li>item 3</li></ol>');
-
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough'), 'Strikethrough icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
+             // Remove strikethrough
+            $this->selectKeyword(1);
+            $this->selectInlineToolbarLineageItem(1);
+            $this->clickTopToolbarButton('strikethrough', 'active');
+            $this->assertTrue($this->topToolbarButtonExists('strikethrough'), 'Strikethrough icon in the top toolbar is active');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>item 1</li><li>item 2 %1%</li><li>item 3</li><li><del>item 4 %2%</del></li><li>item 5</li></'.$listType.'>');
+        }
 
     }//end testAddAndRemoveStrikethroughToListItem()
 
 
     /**
-     * Test applying strikethrough to a word a list.
+     * Test applying strikethrough to all items in the list.
      *
      * @return void
      */
-    public function testAddAndRemoveStrikethroughToList()
+    public function testAddAndRemoveStrikethroughToAllListItems()
     {
-        $this->useTest(1);
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(1);
+            } else {
+                $this->useTest(2);
+            }
 
-        // Apply strikethrough using top toolbar
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('strikethrough');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li><del>item 1</del></li><li><del>item 2 %1%</del></li><li><del>item 3</del></li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
+            // Apply strikethrough
+            $this->selectKeyword(1);
+            $this->selectInlineToolbarLineageItem(0);
+            $this->clickTopToolbarButton('strikethrough');
+            $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar is not active');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li><del>item 1</del></li><li><del>item 2 %1%</del></li><li><del>item 3</del></li><li><del>item 4 %2%</del></li><li><del>item 5</del></li></'.$listType.'>');
 
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('strikethrough');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough', 'active'), 'Strikethrough icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li><del>item 1</del></li><li><del>item 2 %1%</del></li><li><del>item 3</del></li></ul><p>Ordered list:</p><ol><li><del>item 1</del></li><li><del>item 2 %2%</del></li><li><del>item 3</del></li></ol>');
+             // Remove strikethrough
+            $this->selectKeyword(1);
+            $this->selectInlineToolbarLineageItem(0);
+            $this->clickTopToolbarButton('strikethrough', 'active');
+            $this->assertTrue($this->topToolbarButtonExists('strikethrough'), 'Strikethrough icon in the top toolbar is active');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>item 1</li><li>item 2 %1%</li><li>item 3</li><li>item 4 %2%</li><li>item 5</li></'.$listType.'>');
+        }
 
-         // Remove strikethrough using top toolbar
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough'), 'Strikethrough icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li><del>item 1</del></li><li><del>item 2 %2%</del></li><li><del>item 3</del></li></ol>');
-
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('strikethrough', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('strikethrough'), 'Strikethrough icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
-
-    }//end testAddAndRemoveStrikethroughToListItem()
+    }//end testAddAndRemoveStrikethroughToAllListItems()
 
 
     /**
-     * Test deleting content from unordered lists including strikethrough formating
+     * Test that creating new list items after a strikethrough formatted list item.
      *
      * @return void
      */
-    public function testDeletingStrikethroughContentFromUnorderedLists()
+    public function testCreatingNewListItemAfterAStrikethroughItem()
+    {
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(1);
+            } else {
+                $this->useTest(2);
+            }
+
+            $this->moveToKeyword(2, 'right');
+            $this->sikuli->keyDown('Key.ENTER');
+            sleep(1);
+            $this->type('new item');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>item 1</li><li>item 2 %1%</li><li>item 3</li><li><del>item 4 %2%</del></li><li><del>new item</del></li><li>item 5</li></'.$listType.'>');
+        }
+
+    }//end testCreatingNewListItemAfterAStrikethroughItem()
+
+
+    /**
+     * Test deleting content from lists including strikethrough formating
+     *
+     * @return void
+     */
+    public function testDeletingStrikethroughContentFromLists()
     {
         // Check deleting a word after the strikethrough content
-        $this->useTest(2);
-        $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% <del>test</del></li></ul>');
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(3);
+            } else {
+                $this->useTest(4);
+            }
 
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% <del>testcontent</del></li></ul>');
+            $this->moveToKeyword(2, 'right');
+            $this->sikuli->keyDown('Key.BACKSPACE');
+            $this->sikuli->keyDown('Key.BACKSPACE');
+            $this->sikuli->keyDown('Key.BACKSPACE');
+            $this->sikuli->keyDown('Key.BACKSPACE');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>%1% <del>test</del></li></'.$listType.'>');
+
+            // Add content to check the position of the cursor
+            $this->type('content');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>%1% <del>testcontent</del></li></'.$listType.'>');
+        }
 
         // Check deleting from the end of the list item including strikethrough content
-        $this->useTest(2);
-        $this->moveToKeyword(2, 'right');
+         foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(3);
+            } else {
+                $this->useTest(4);
+            }
 
-        for ($i = 0; $i < 8; $i++) {
-            $this->sikuli->keyDown('Key.BACKSPACE');
+            $this->moveToKeyword(2, 'right');
+
+            for ($i = 0; $i < 8; $i++) {
+                $this->sikuli->keyDown('Key.BACKSPACE');
+            }
+
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>%1%</li></'.$listType.'>');
+
+            // Add content to check the position of the cursor
+            $this->type('content');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>%1% content</li></'.$listType.'>');
         }
 
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1%</li></ul>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% content</li></ul>');
-
         // Check deleting from the list item of the paragraph
-        $this->useTest(2);
-        $this->moveToKeyword(1, 'left');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li><del>test</del> %2%</li></ul>');
+         foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(3);
+            } else {
+                $this->useTest(4);
+            }
 
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li><del>contenttest</del> %2%</li></ul>');
+            $this->moveToKeyword(1, 'left');
+            $this->sikuli->keyDown('Key.DELETE');
+            $this->sikuli->keyDown('Key.DELETE');
+            $this->sikuli->keyDown('Key.DELETE');
+            $this->sikuli->keyDown('Key.DELETE');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li><del>test</del> %2%</li></'.$listType.'>');
+
+            // Add content to check the position of the cursor
+            $this->type('content');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li><del>contenttest</del> %2%</li></'.$listType.'>');
+        }
 
         // Check deleting from the start of the list item including strikethrough content
-        $this->useTest(2);
-        $this->moveToKeyword(1, 'left');
+         foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(3);
+            } else {
+                $this->useTest(4);
+            }
 
-        for ($i = 0; $i < 8; $i++) {
-            $this->sikuli->keyDown('Key.DELETE');
+            $this->moveToKeyword(1, 'left');
+
+            for ($i = 0; $i < 8; $i++) {
+                $this->sikuli->keyDown('Key.DELETE');
+            }
+
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>%2%</li></'.$listType.'>');
+
+            // Add content to check the position of the cursor
+            $this->type('content');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>content %2%</li></'.$listType.'>');
         }
 
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%2%</li></ul>');
 
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>content %2%</li></ul>');
-
-    }//end testDeletingStrikethroughContentFromUnorderedLists()
-
-
-    /**
-     * Test deleting content from ordered lists including strikethrough formating
-     *
-     * @return void
-     */
-    public function testDeletingStrikethroughContentFromOrderedLists()
-    {
-        // Check deleting a word after the stirkethrough content in a list
-        $this->useTest(3);
-        $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% <del>test</del></li></ol>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% <del>testcontent</del></li></ol>');
-
-        // Check deleting from the end of the list item including stirkethrough content
-        $this->useTest(3);
-        $this->moveToKeyword(2, 'right');
-
-        for ($i = 0; $i < 8; $i++) {
-            $this->sikuli->keyDown('Key.BACKSPACE');
-        }
-
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1%</li></ol>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% content</li></ol>');
-
-        // Check deleting from the list item of the paragraph
-        $this->useTest(3);
-        $this->moveToKeyword(1, 'left');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li><del>test</del> %2%</li></ol>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li><del>contenttest</del> %2%</li></ol>');
-
-        // Check deleting from the list item including stirkethrough content
-        $this->useTest(3);
-        $this->moveToKeyword(1, 'left');
-
-        for ($i = 0; $i < 8; $i++) {
-            $this->sikuli->keyDown('Key.DELETE');
-        }
-
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%2%</li></ol>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>content %2%</li></ol>');
-
-    }//end testDeletingStrikethroughContentFromOrderedLists()
+    }//end testDeletingStrikethroughContentFromLists()
 
 }//end class
 

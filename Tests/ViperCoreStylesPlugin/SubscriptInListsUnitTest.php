@@ -13,235 +13,208 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptInListsUnitTest extends Abstrac
      */
     public function testAddAndRemoveSubscriptToWordInListItem()
     {
-        $this->useTest(1);
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(1);
+            } else {
+                $this->useTest(2);
+            }
 
-        // Apply subscript using top toolbar
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('subscript');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'subscript icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 <sub>%1%</sub></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
 
-        $this->selectKeyword(2);
-        $this->clickTopToolbarButton('subscript');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 <sub>%1%</sub></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 <sub>%2%</sub></li><li>item 3</li></ol>');
+            // Apply subscript
+            $this->selectKeyword(1);
+            $this->clickTopToolbarButton('subscript');
+            $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'subscript icon in the top toolbar is not active');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>item 1</li><li>item 2 <sub>%1%</sub></li><li>item 3</li><li><sub>item 4 %2%</sub></li><li>item 5</li></'.$listType.'>');
 
-         // Remove subscript using top toolbar
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript'), 'Subscript icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 <sub>%2%</sub></li><li>item 3</li></ol>');
-
-        $this->selectKeyword(2);
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript'), 'Subscript icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
+             // Remove subscript
+            $this->selectKeyword(1);
+            $this->clickTopToolbarButton('subscript', 'active');
+            $this->assertTrue($this->topToolbarButtonExists('subscript'), 'Subscript icon in the top toolbar is active');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>item 1</li><li>item 2 %1%</li><li>item 3</li><li><sub>item 4 %2%</sub></li><li>item 5</li></'.$listType.'>');
+        }
 
     }//end testAddAndRemoveSubscriptToWordInListItem()
 
 
     /**
-     * Test applying subscript to a word a list item.
+     * Test applying subscript to a list item.
      *
      * @return void
      */
     public function testAddAndRemoveSubscriptToListItem()
     {
-        $this->useTest(1);
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(1);
+            } else {
+                $this->useTest(2);
+            }
 
-        // Apply subscript using top toolbar
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->clickTopToolbarButton('subscript');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><sub>item 2 %1%</sub></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
+            // Apply subscript
+            $this->selectKeyword(1);
+            $this->selectInlineToolbarLineageItem(1);
+            $this->clickTopToolbarButton('subscript');
+            $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>item 1</li><li><sub>item 2 %1%</sub></li><li>item 3</li><li><sub>item 4 %2%</sub></li><li>item 5</li></'.$listType.'>');
 
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->clickTopToolbarButton('subscript');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><sub>item 2 %1%</sub></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><sub>item 2 %2%</sub></li><li>item 3</li></ol>');
-
-         // Remove subscript using top toolbar
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript'), 'Subscript icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><sub>item 2 %2%</sub></li><li>item 3</li></ol>');
-
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript'), 'Subscript icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
+             // Remove subscript
+            $this->selectKeyword(1);
+            $this->selectInlineToolbarLineageItem(1);
+            $this->clickTopToolbarButton('subscript', 'active');
+            $this->assertTrue($this->topToolbarButtonExists('subscript'), 'Subscript icon in the top toolbar is active');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>item 1</li><li>item 2 %1%</li><li>item 3</li><li><sub>item 4 %2%</sub></li><li>item 5</li></'.$listType.'>');
+        }
 
     }//end testAddAndRemoveSubscriptToListItem()
 
 
     /**
-     * Test applying subscript to a word a list.
+     * Test applying subscript to all items in the list.
      *
      * @return void
      */
-    public function testAddAndRemoveSubscriptToListA()
+    public function testAddAndRemoveSubscriptToListAllItems()
     {
-        $this->useTest(1);
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(1);
+            } else {
+                $this->useTest(2);
+            }
 
-        // Apply subscript using top toolbar
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('subscript');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li><sub>item 1</sub></li><li><sub>item 2 %1%</sub></li><li><sub>item 3</sub></li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
+            // Apply subscript
+            $this->selectKeyword(1);
+            $this->selectInlineToolbarLineageItem(0);
+            $this->clickTopToolbarButton('subscript');
+            $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li><sub>item 1</sub></li><li><sub>item 2 %1%</sub></li><li><sub>item 3</sub></li><li><sub>item 4 %2%</sub></li><li><sub>item 5</sub></li></'.$listType.'>');
 
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('subscript');
-        $this->assertTrue($this->topToolbarButtonExists('subscript', 'active'), 'Subscript icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li><sub>item 1</sub></li><li><sub>item 2 %1%</sub></li><li><sub>item 3</sub></li></ul><p>Ordered list:</p><ol><li><sub>item 1</sub></li><li><sub>item 2 %2%</sub></li><li><sub>item 3</sub></li></ol>');
+             // Remove subscript
+            $this->selectKeyword(1);
+            $this->selectInlineToolbarLineageItem(0);
+            $this->clickTopToolbarButton('subscript', 'active');
+            $this->assertTrue($this->topToolbarButtonExists('subscript'), 'Subscript icon in the top toolbar is active');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>item 1</li><li>item 2 %1%</li><li>item 3</li><li>item 4 %2%</li><li>item 5</li></'.$listType.'>');
+        }
 
-         // Remove subscript using top toolbar
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript'), 'Subscript icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li><sub>item 1</sub></li><li><sub>item 2 %2%</sub></li><li><sub>item 3</sub></li></ol>');
-
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('subscript', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('subscript'), 'Subscript icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
-
-    }//end testAddAndRemoveSubscriptToListItem()
+    }//end testAddAndRemoveSubscriptToListAllItems()
 
 
-      /**
-     * Test deleting content from unordered lists including subscript formating
+    /**
+     * Test that creating new list items after a subscript formatted list item.
      *
      * @return void
      */
-    public function testDeletingSubscriptContentFromUnorderedLists()
+    public function testCreatingNewListItemAfterASubscriptItem()
+    {
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(1);
+            } else {
+                $this->useTest(2);
+            }
+
+            $this->moveToKeyword(2, 'right');
+            $this->sikuli->keyDown('Key.ENTER');
+            sleep(1);
+            $this->type('new item');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>item 1</li><li>item 2 %1%</li><li>item 3</li><li><sub>item 4 %2%</sub></li><li><sub>new item</sub></li><li>item 5</li></'.$listType.'>');
+        }
+
+    }//end testCreatingNewListItemAfterASubscriptItem()
+
+
+    /**
+     * Test deleting content from lists including subscript formating
+     *
+     * @return void
+     */
+    public function testDeletingSubscriptContentFromLists()
     {
         // Check deleting a word after the subscript content
-        $this->useTest(2);
-        $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% <sub>test</sub></li></ul>');
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(3);
+            } else {
+                $this->useTest(4);
+            }
 
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% <sub>testcontent</sub></li></ul>');
+            $this->moveToKeyword(2, 'right');
+            $this->sikuli->keyDown('Key.BACKSPACE');
+            $this->sikuli->keyDown('Key.BACKSPACE');
+            $this->sikuli->keyDown('Key.BACKSPACE');
+            $this->sikuli->keyDown('Key.BACKSPACE');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>%1% <sub>test</sub></li></'.$listType.'>');
+
+            // Add content to check the position of the cursor
+            $this->type('content');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>%1% <sub>testcontent</sub></li></'.$listType.'>');
+        }
 
         // Check deleting from the end of the list item including subscript content
-        $this->useTest(2);
-        $this->moveToKeyword(2, 'right');
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(3);
+            } else {
+                $this->useTest(4);
+            }
 
-        for ($i = 0; $i < 8; $i++) {
-            $this->sikuli->keyDown('Key.BACKSPACE');
+            $this->moveToKeyword(2, 'right');
+
+            for ($i = 0; $i < 8; $i++) {
+                $this->sikuli->keyDown('Key.BACKSPACE');
+            }
+
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>%1%</li></'.$listType.'>');
+
+            // Add content to check the position of the cursor
+            $this->type('content');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>%1% content</li></'.$listType.'>');
         }
 
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1%</li></ul>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% content</li></ul>');
-
         // Check deleting from the start of the list item
-        $this->useTest(2);
-        $this->moveToKeyword(1, 'left');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li><sub>test</sub> %2%</li></ul>');
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(3);
+            } else {
+                $this->useTest(4);
+            }
 
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li><sub>contenttest</sub> %2%</li></ul>');
+            $this->moveToKeyword(1, 'left');
+            $this->sikuli->keyDown('Key.DELETE');
+            $this->sikuli->keyDown('Key.DELETE');
+            $this->sikuli->keyDown('Key.DELETE');
+            $this->sikuli->keyDown('Key.DELETE');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li><sub>test</sub> %2%</li></'.$listType.'>');
+
+            // Add content to check the position of the cursor
+            $this->type('content');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li><sub>contenttest</sub> %2%</li></'.$listType.'>');
+        }
 
         // Check deleting from the start of the list item including subscript content
-        $this->useTest(2);
-        $this->moveToKeyword(1, 'left');
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(3);
+            } else {
+                $this->useTest(4);
+            }
 
-        for ($i = 0; $i < 8; $i++) {
-            $this->sikuli->keyDown('Key.DELETE');
+            $this->moveToKeyword(1, 'left');
+
+            for ($i = 0; $i < 8; $i++) {
+                $this->sikuli->keyDown('Key.DELETE');
+            }
+
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>%2%</li></'.$listType.'>');
+
+            // Add content to check the position of the cursor
+            $this->type('content');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>content %2%</li></'.$listType.'>');
         }
 
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%2%</li></ul>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>content %2%</li></ul>');
-
-    }//end testDeletingSubscriptContentFromUnorderedLists()
-
-
-    /**
-     * Test deleting content from ordered lists including subscript formating
-     *
-     * @return void
-     */
-    public function testDeletingSubscriptContentFromOrderedLists()
-    {
-        // Check deleting a word after the stirkethrough content
-        $this->useTest(3);
-        $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% <sub>test</sub></li></ol>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% <sub>testcontent</sub></li></ol>');
-
-        // Check deleting from the end of the list item including stirkethrough content
-        $this->useTest(3);
-        $this->moveToKeyword(2, 'right');
-
-        for ($i = 0; $i < 8; $i++) {
-            $this->sikuli->keyDown('Key.BACKSPACE');
-        }
-
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1%</li></ol>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% content</li></ol>');
-
-        // Check deleting from the start of the list item
-        $this->useTest(3);
-        $this->moveToKeyword(1, 'left');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li><sub>test</sub> %2%</li></ol>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li><sub>contenttest</sub> %2%</li></ol>');
-
-        // Check deleting from the start of the paragraph including stirkethrough content
-        $this->useTest(3);
-        $this->moveToKeyword(1, 'left');
-
-        for ($i = 0; $i < 8; $i++) {
-            $this->sikuli->keyDown('Key.DELETE');
-        }
-
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%2%</li></ol>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>content %2%</li></ol>');
-
-    }//end testDeletingSubscriptContentFromOrderedLists()
+    }//end testDeletingSubscriptContentFromLists()
 
 }//end class
 

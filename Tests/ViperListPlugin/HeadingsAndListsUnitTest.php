@@ -16,17 +16,17 @@ class Viper_Tests_ViperListPlugin_HeadingsAndListsUnitTest extends AbstractViper
         $this->useTest(1);
 
         $this->clickKeyword(1);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectKeyword(1);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
     }//end testNoListToolsForAHeading()
 

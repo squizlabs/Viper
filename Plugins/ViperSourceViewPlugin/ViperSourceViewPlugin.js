@@ -34,6 +34,7 @@
         this._toolbarButtonToggles = false;
         this._aceTheme             = 'ace/theme/viper';
         this._base64Images         = {};
+        this._keepScrollAttr       = false;
 
         this._aceMarkers = [];
     }
@@ -818,7 +819,11 @@
                 }
             }
 
+            // Make sure scroll to attribute is not removed by getHtml().
+            this._keepScrollAttr = true;
             var html = this.viper.getHtml(null, {emptyTableCellContent:''});
+            this._keepScrollAttr = false;
+
             var el   = document.createElement('div');
             ViperUtil.setHtml(el, html);
             this._convertBase64ImagesToKeywords(el);
@@ -892,6 +897,11 @@
         },
 
         _removeScrollAttribute: function (elem) {
+            if (this._keepScrollAttr === true) {
+                // When the editor is opening do not remove the scroll to attribute.
+                return;
+            }
+
             // Remove Viper scroll attribute from content.
             elem      = elem || this.viper.getViperElement();
             var elems = ViperUtil.find(elem, '[__viper_scrollpos]');

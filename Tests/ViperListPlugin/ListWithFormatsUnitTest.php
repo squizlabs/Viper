@@ -53,33 +53,33 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
 
         // Test single line div
         $this->clickKeyword(3);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectKeyword(3);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->moveToKeyword(3, 'right');
         sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
         // Test multi-line div
         $this->clickKeyword(4);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectKeyword(4);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->moveToKeyword(4, 'right');
         sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
     }//end testListToolsAreNotAvailableForADiv()
 
@@ -131,31 +131,31 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
 
         // Test single line pre
         $this->clickKeyword(3);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
         $this->selectKeyword(3);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
         // Test multi-line pre
         $this->clickKeyword(4);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
         $this->selectKeyword(4);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->moveToKeyword(4, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
     }//end testListToolsAreNotAvailableForAPre()
 
@@ -207,70 +207,70 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
 
         // Test single line quote
         $this->clickKeyword(3);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
         $this->selectKeyword(3);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
         // Test multi-line quote
         $this->clickKeyword(4);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
         $this->selectKeyword(4);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->moveToKeyword(4, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
         // Test quote section inside multiple P's
         $this->clickKeyword(5);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
         $this->selectKeyword(5);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->moveToKeyword(5, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
         $this->clickKeyword(6);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
         $this->selectKeyword(6);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->moveToKeyword(6, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
     }//end testListToolsAreNotAvailableForAQuote()
 
@@ -318,33 +318,33 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
 
         // Test single line paragraph
         $this->clickKeyword(3);
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
 
         $this->selectKeyword(3);
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
         $this->moveToKeyword(3, 'right');
         sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
 
         // Test multi-line paragraph
         $this->clickKeyword(4);
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
 
         $this->selectKeyword(4);
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
         $this->moveToKeyword(4, 'right');
         sleep(1);
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
 
     }//end testListToolsAvailableForAParagraph()
 
@@ -360,53 +360,53 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
 
         // Test one P inside a Div
         $this->moveToKeyword(1);
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
 
         $this->selectKeyword(1);
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
 
         // Test two P's inside a div
         $this->moveToKeyword(2);
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
 
         $this->selectKeyword(2);
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
 
         $this->moveToKeyword(3);
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
 
         $this->selectKeyword(3);
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
 
     }//end testListToolsAvailableForPSectionsInsideDivSection()
 
@@ -422,58 +422,58 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
 
         // Test one Div inside a Div
         $this->clickKeyword(1);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
         $this->selectKeyword(1);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
 
         // Test two P's inside a div
         $this->clickKeyword(2);
         sleep(2);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
         $this->selectKeyword(2);
         sleep(2);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(1);
         sleep(2);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->moveToKeyword(2, 'right');
         sleep(2);
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
 
         $this->clickKeyword(3);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
         $this->selectKeyword(3);
         sleep(2);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, NULL);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
 
     }//end testListToolsAvailableForPSectionsInsideDivSection()
 
@@ -489,62 +489,62 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
 
         // Test one quote inside a Div
         $this->clickKeyword(1);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
         $this->selectKeyword(1);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(2);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
         // Test two quote's inside a div
         $this->clickKeyword(2);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
         $this->selectKeyword(2);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(2);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
         $this->clickKeyword(3);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
         $this->selectKeyword(3);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(2);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
     }//end testListToolsNotAvailableForQuoteSectionsInsideDivSection()
 
@@ -560,288 +560,54 @@ class Viper_Tests_ViperListPlugin_ListWithFormatsUnitTest extends AbstractViperL
 
         // Test one Pre inside a Div
         $this->clickKeyword(1);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
         $this->selectKeyword(1);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->moveToKeyword(1, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
         // Test two Pre's inside a div
         $this->clickKeyword(2);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
         $this->selectKeyword(2);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
         $this->clickKeyword(3);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectKeyword(3);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(1);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->selectInlineToolbarLineageItem(0);
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE);
 
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.ENTER');
-        $this->assertIconStatusesCorrect(NULL, NULL, NULL, NULL);
+        $this->assertIconStatusesCorrect(FALSE, FALSE, FALSE, FALSE);
 
     }//end testListToolsNotAvailableForPreSectionsInsideDivSection()
-
-
-    /**
-     * Test that creating new list items after a bold formatted list item functions correctly.
-     *
-     * @return void
-     */
-    public function testCreatingNewListItemAfterABoldItem()
-    {
-        // Test using top toolbar
-        // Test unordered list
-        $this->useTest(9);
-        $this->selectKeyword(1, 2);
-        $this->clickTopToolbarButton('bold');
-        $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
-        $this->type('new item');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>%1% item 2 %2%</strong></li><li><strong>new item</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
-
-        // Test ordered list
-        $this->selectKeyword(3, 4);
-        $this->clickTopToolbarButton('bold');
-        $this->moveToKeyword(4, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
-        $this->type('new item');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>%1% item 2 %2%</strong></li><li><strong>new item</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><strong>%3% item 2 %4%</strong></li><li><strong>new item</strong></li><li>item 3</li></ol>');
-
-        // Test using inline toolbar
-        // Test unordered list
-        $this->useTest(9);
-        $this->selectKeyword(1, 2);
-        $this->clickInlineToolbarButton('bold');
-        $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
-        $this->type('new item');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>%1% item 2 %2%</strong></li><li><strong>new item</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
-
-        // Test ordered list
-        $this->selectKeyword(3, 4);
-        $this->clickInlineToolbarButton('bold');
-        $this->moveToKeyword(4, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
-        $this->type('new item');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>%1% item 2 %2%</strong></li><li><strong>new item</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><strong>%3% item 2 %4%</strong></li><li><strong>new item</strong></li><li>item 3</li></ol>');
-
-        // Test using keyboard shortcuts
-        // Test unordered list
-        $this->useTest(9);
-        $this->selectKeyword(1, 2);
-        sleep(1);
-        $this->sikuli->keyDown('Key.CMD + b');
-        $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
-        $this->type('new item');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>%1% item 2 %2%</strong></li><li><strong>new item</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
-
-        // Test ordered list
-        $this->selectKeyword(3, 4);
-        sleep(1);
-        $this->sikuli->keyDown('Key.CMD + b');
-        $this->moveToKeyword(4, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
-        $this->type('new item');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>%1% item 2 %2%</strong></li><li><strong>new item</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><strong>%3% item 2 %4%</strong></li><li><strong>new item</strong></li><li>item 3</li></ol>');
-
-    }//end testCreatingNewListItemAfterABoldItem()
-
-
-    /**
-     * Test that creating new list items after an italic formatted list item functions correctly.
-     *
-     * @return void
-     */
-    public function testCreatingNewListItemAfterAnItalicItem()
-    {
-        // Test using top toolbar
-        // Test unordered list
-        $this->useTest(9);
-        $this->selectKeyword(1, 2);
-        $this->clickTopToolbarButton('italic');
-        $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
-$this->type('new item');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><em>%1% item 2 %2%</em></li><li><em>new item</em></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
-
-        // Test ordered list
-        $this->selectKeyword(3, 4);
-        $this->clickTopToolbarButton('italic');
-        $this->moveToKeyword(4, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
-        $this->type('new item');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><em>%1% item 2 %2%</em></li><li><em>new item</em></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><em>%3% item 2 %4%</em></li><li><em>new item</em></li><li>item 3</li></ol>');
-
-        // Test using inline toolbar
-        // Test unordered list
-        $this->useTest(9);
-        $this->selectKeyword(1, 2);
-        $this->clickInlineToolbarButton('italic');
-        $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
-        $this->type('new item');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><em>%1% item 2 %2%</em></li><li><em>new item</em></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
-
-        // Test ordered list
-        $this->selectKeyword(3, 4);
-        $this->clickInlineToolbarButton('italic');
-        $this->moveToKeyword(4, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
-        $this->type('new item');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><em>%1% item 2 %2%</em></li><li><em>new item</em></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><em>%3% item 2 %4%</em></li><li><em>new item</em></li><li>item 3</li></ol>');
-
-        // Test using keyboard shortcuts
-        // Test unordered list
-        $this->useTest(9);
-        $this->selectKeyword(1, 2);
-        sleep(1);
-        $this->sikuli->keyDown('Key.CMD + i');
-        $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
-        $this->type('new item');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><em>%1% item 2 %2%</em></li><li><em>new item</em></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
-
-        // Test ordered list
-        $this->selectKeyword(3, 4);
-        sleep(1);
-        $this->sikuli->keyDown('Key.CMD + i');
-        $this->moveToKeyword(4, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
-        $this->type('new item');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><em>%1% item 2 %2%</em></li><li><em>new item</em></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><em>%3% item 2 %4%</em></li><li><em>new item</em></li><li>item 3</li></ol>');
-
-    }//end testCreatingNewListItemAfterAnItalicItem()
-
-
-    /**
-     * Test that creating new list items after a superscript formatted list item functions correctly.
-     *
-     * @return void
-     */
-    public function testCreatingNewListItemAfterASuperscriptItem()
-    {
-        // Test using top toolbar
-        // Test unordered list
-        $this->useTest(9);
-        $this->selectKeyword(1, 2);
-        $this->clickTopToolbarButton('superscript');
-        $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
-        $this->type('new item');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><sup>%1% item 2 %2%</sup></li><li><sup>new item</sup></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
-
-        // Test ordered list
-        $this->selectKeyword(3, 4);
-        $this->clickTopToolbarButton('superscript');
-        $this->moveToKeyword(4, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
-        $this->type('new item');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><sup>%1% item 2 %2%</sup></li><li><sup>new item</sup></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><sup>%3% item 2 %4%</sup></li><li><sup>new item</sup></li><li>item 3</li></ol>');
-
-    }//end testCreatingNewListItemAfterASuperscriptItem()
-
-
-    /**
-     * Test that creating new list items after a subscript formatted list item functions correctly.
-     *
-     * @return void
-     */
-    public function testCreatingNewListItemAfterASubscriptItem()
-    {
-        // Test using top toolbar
-        // Test unordered list
-        $this->useTest(9);
-        $this->selectKeyword(1, 2);
-        $this->clickTopToolbarButton('subscript');
-        $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
-        $this->type('new item');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><sub>%1% item 2 %2%</sub></li><li><sub>new item</sub></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
-
-        // Test ordered list
-        $this->selectKeyword(3, 4);
-        $this->clickTopToolbarButton('subscript');
-        $this->moveToKeyword(4, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
-        $this->type('new item');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><sub>%1% item 2 %2%</sub></li><li><sub>new item</sub></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><sub>%3% item 2 %4%</sub></li><li><sub>new item</sub></li><li>item 3</li></ol>');
-
-    }//end testCreatingNewListItemAfterASubscriptItem()
-
-
-    /**
-     * Test that creating new list items after a strikethrough formatted list item functions correctly.
-     *
-     * @return void
-     */
-    public function testCreatingNewListItemAfterAStrikethroughItem()
-    {
-        // Test using top toolbar
-        // Test unordered list
-        $this->useTest(9);
-        $this->selectKeyword(1, 2);
-        $this->clickTopToolbarButton('strikethrough');
-        $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
-        $this->type('new item');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><del>%1% item 2 %2%</del></li><li><del>new item</del></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>%3% item 2 %4%</li><li>item 3</li></ol>');
-
-        // Test ordered list
-        $this->selectKeyword(3, 4);
-        $this->clickTopToolbarButton('strikethrough');
-        $this->moveToKeyword(4, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        sleep(1);
-        $this->type('new item');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><del>%1% item 2 %2%</del></li><li><del>new item</del></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><del>%3% item 2 %4%</del></li><li><del>new item</del></li><li>item 3</li></ol>');
-
-    }//end testCreatingNewListItemAfterAStrikethroughItem()
 
 }

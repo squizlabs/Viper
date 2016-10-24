@@ -113,6 +113,34 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
     private static $_CommandDirection = null;
 
     /**
+     * The list of testing methods.
+     *
+     * @var string
+     */
+    private $_methods = array();
+
+    /**
+     * List of toolbar button shortcuts.
+     *
+     * @var string
+     */
+    private $_buttonShortcuts = array(
+                                 'bold'         => 'Key.CMD + b',
+                                 'italic'       => 'Key.CMD + i',
+                                 'listOutdent'  => 'Key.SHIFT + Key.TAB',
+                                 'listIndent'   => 'Key.TAB',
+                                 'historyUndo'  => 'Key.CMD + z',
+                                 'historyRedo'  => 'Key.CMD + Key.SHIFT + z',
+                                );
+
+    /**
+     * Location and name of the test template.
+     *
+     * @var string
+     */
+    protected $templateMode = '';
+
+    /**
      * Returns the path of a test file.
      *
      * @param string $type The type of the file, js or html.
@@ -154,6 +182,32 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
 
     /**
+     * Set the template mode.
+     *
+     * @param string $mode The location and name of the test template mode.
+     *
+     * @return void
+     */
+    protected function setPageTemplateMode($mode)
+    {
+        $this->templateMode = $mode;
+
+    }//end setPageTemplateMode()
+
+
+    /**
+     * Returns the template mode.
+     *
+     * @return string
+     */
+    protected function getPageTemplateMode()
+    {
+        return $this->templateMode;
+
+    }//end getPageTemplateMode()
+
+
+    /**
      * Setup test.
      *
      * @return void
@@ -161,7 +215,15 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        error_reporting(E_ALL);
+
         self::$_testCount++;
+
+        $totalTests = ViperTestListener::getNumberOfTests();
+        if ($totalTests === 0) {
+            $this->markTestSkipped();
+            return;
+        }
 
         $baseDir = dirname(__FILE__);
 
@@ -183,6 +245,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         parent::setUp();
 
+        $keepOpen = FALSE;
+        if (getenv('VIPER_TEST_KEEP_BROWSER_OPEN') === 'TRUE') {
+            $keepOpen = TRUE;
+        }
+
         if (self::$_sikuli === null) {
             $browser       = getenv('VIPER_TEST_BROWSER');
             $options       = array(
@@ -195,6 +262,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                                                    'y' => 50,
                                                   ),
                               'fileGroupOwner' => '_www',
+                              'keepOpen'       => $keepOpen,
                              );
             self::$_sikuli = new PHPSikuliBrowser($browser, $options);
         }
@@ -215,7 +283,12 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
 
         // Get the contents of the test file template.
         if (self::$_testContent === null) {
-            self::$_testContent = file_get_contents($baseDir.'/Web/test-template.html');
+            $tplFileName = $this->getPageTemplateMode();
+            if (empty($tplFileName) === true) {
+                $tplFileName = 'Web/test-template';
+            }
+
+            self::$_testContent = file_get_contents($baseDir.'/'.$tplFileName.'.html');
         }
 
         $viperInclude = '';
@@ -235,7 +308,6 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $testTitle  = $this->getName();
         $numFails   = ViperTestListener::getFailures();
         $numErrors  = ViperTestListener::getErrors();
-        $totalTests = ViperTestListener::getNumberOfTests();
         $testsRun   = ViperTestListener::getTestsRun();
 
         // Reset the Sikuli connection and restart the browser if the number of consecutive errors reach the limit or
@@ -306,7 +378,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                 }
             }
 
-            $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
+            $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?v='.self::$_viperVersion);
 
             // Reset zoom.
             $this->sikuli->keyDown('Key.CMD + 0');
@@ -477,9 +549,11 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         }
 
         // Get coverage data.
-        $coverage = self::$_sikuli->execJS('getCodeCoverage()');
-        if (empty($coverage) === FALSE) {
-            file_put_contents(dirname(__FILE__).'/tmp/coverage.json', $coverage);
+        if (self::$_sikuli !== NULL) {
+            $coverage = self::$_sikuli->execJS('getCodeCoverage()');
+            if (empty($coverage) === FALSE) {
+                file_put_contents(dirname(__FILE__).'/tmp/coverage.json', $coverage);
+            }
         }
 
     }//end tearDownAfterClass()
@@ -504,7 +578,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
             $this->getTopToolbar();
         } catch (Exception $e) {
             $this->resetConnection();
-            $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
+            $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?v='.self::$_viperVersion);
             $this->_waitForViper($retries - 1);
             return;
         }
@@ -514,7 +588,7 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         // Make sure page is loaded.
         if ($this->topToolbarButtonExists('bold', 'disabled') === false) {
             // Try to go to the test URL again. Do not refresh incase browser has navigated to another URL.
-            $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?_t='.time());
+            $this->sikuli->goToURL($this->_getBaseUrl().'/tmp/test_tmp.html?v='.self::$_viperVersion);
             $this->_waitForViper($retries - 1);
             return;
         }
@@ -1011,6 +1085,10 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
      */
     protected function useTest($id, $clickKeyword=1)
     {
+        if ($this->sikuli === NULL) {
+            return;
+        }
+
         $this->sikuli->execJS('useTest("test-'.$id.'")', TRUE);
         sleep(1);
 
@@ -1019,6 +1097,120 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         }
 
     }//end useTest()
+
+
+    /**
+     * Returns the list of methods to test.
+     *
+     * @param boolean $topToolbar    True if the top toolbar should be tested.
+     * @param boolean $inlineToolbar True if the inline toolbar should be tested.
+     * @param boolean $shortcuts     True if the button shortcut should be tested.
+     *
+     * @return array
+     */
+    public function getTestMethods($topToolbar=TRUE, $inlineToolbar=TRUE, $shortcut=TRUE)
+    {
+        $this->_methods = array();
+        if ($topToolbar === TRUE) {
+            $this->_methods[] = 'topToolbar';
+        }
+
+        if ($inlineToolbar === TRUE) {
+            $this->_methods[] = 'inlineToolbar';
+        }
+
+        if ($shortcut === TRUE) {
+            $this->_methods[] = 'shortcut';
+        }
+
+        return $this->_methods;
+
+    }//end getTestMethods()
+
+
+    /**
+     * Triggers the specified action.
+     *
+     * @param string  $method     The method to use to trigger the action, e.g. inlineToolbar.
+     * @param string  $buttonIcon The name of the button.
+     * @param string  $state      The name of the button state (active, selected).
+     * @param boolean $isText     If TRUE then the button is a text button (i.e. no icon).
+     * @param boolean $forceJSPos If isText option is set to TRUE and this is set to TRUE then
+     *                            image will not be used.
+     *
+     * @return void
+     */
+    public function doAction($method, $buttonIcon, $state=null, $isText=false, $forceJSPos=false)
+    {
+        switch ($method) {
+            case 'topToolbar':
+                $this->clickTopToolbarButton($buttonIcon, $state, $isText, $forceJSPos);
+            break;
+
+            case 'inlineToolbar':
+                usleep(100000);
+                $this->clickInlineToolbarButton($buttonIcon, $state, $isText, $forceJSPos);
+            break;
+
+            case 'shortcut':
+                $shortcut = $this->getShortcutForButton($buttonIcon);
+                if ($shortcut !== null) {
+                    $this->sikuli->keyDown($shortcut);
+                }
+            break;
+        }
+
+    }//end doAction()
+
+
+    /**
+     * Triggers the specified action, if the inlineToolbar button does not exist then it will fallback to Top Toolbar.
+     *
+     * @param string  $method     The method to use to trigger the action, e.g. inlineToolbar.
+     * @param string  $buttonIcon The name of the button.
+     * @param string  $state      The name of the button state (active, selected).
+     * @param boolean $isText     If TRUE then the button is a text button (i.e. no icon).
+     * @param boolean $forceJSPos If isText option is set to TRUE and this is set to TRUE then
+     *                            image will not be used.
+     *
+     * @return void
+     */
+    public function doTopToolbarAction($method, $buttonIcon, $state=null, $isText=false, $forceJSPos=false)
+    {
+        switch ($method) {
+            case 'inlineToolbar':
+                usleep(50000);
+                if ($this->inlineToolbarButtonExists($buttonIcon, $state, $isText) === false) {
+                    $this->clickTopToolbarButton($buttonIcon, $state, $isText, $forceJSPos);
+                } else {
+                    $this->clickInlineToolbarButton($buttonIcon, $state, $isText, $forceJSPos);
+                }
+            break;
+
+            default:
+                $this->doAction($method, $buttonIcon, $state, $isText, $forceJSPos);
+            break;
+        }
+
+    }//end doAction()
+
+
+    /**
+     * Returns the keyboard shortcut for specified toolbar button.
+     *
+     * @param string  $buttonIcon The name of the button.
+     *
+     * @return string
+     */
+    public function getShortcutForButton($buttonIcon)
+    {
+        if (isset($this->_buttonShortcuts[$buttonIcon]) === true) {
+            return $this->_buttonShortcuts[$buttonIcon];
+        }
+
+        return null;
+
+    }//end getShortcutForButton()
 
 
     /**
@@ -2851,259 +3043,5 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         return $coords;
 
     }//end getScrollCoords()
-
-
-    /**
-     * Automatically provides OS alternative shortcuts
-     *
-     * @param string   $_Command             The selector for the command to execute
-     * @param string   $_CommandDirection    The selector for commands that require direction
-     *
-     * @return void
-     */
-    public function getOSAltShortcut($_Command=NULL, $_CommandDirection=NULL)
-    {
-        if ($_Command !== NULL) {
-            if ($this->sikuli->getOS() === 'windows') {
-                switch ($_Command) {
-                    case 'WholeWordSelect':
-                        switch ($_CommandDirection) {
-                            case 'right':
-                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.RIGHT');
-                            break;
-                            case 'left':
-                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.LEFT');
-                            break;
-                            case 'up':
-                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.UP');
-                            break;
-                            case 'down':
-                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.DOWN');
-                            break;
-                        } // End WholeWordSelect
-                        break;
-                    case 'Copy':
-                        switch ($_CommandDirection) {
-                            case 'right':
-                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.RIGHT');
-                                $this->sikuli->keyDown('Key.CTRL + c');
-                            break;
-                            case 'left':
-                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.LEFT');
-                                $this->sikuli->keyDown('Key.CTRL + c');
-                            break;
-                            case 'up':
-                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.UP');
-                                $this->sikuli->keyDown('Key.CTRL + c');
-                            break;
-                            case 'down':
-                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.DOWN');
-                                $this->sikuli->keyDown('Key.CTRL + c');
-                            break;
-                            case NULL:
-                                $this->sikuli->keyDown('Key.CTRL + c');
-                            break;
-                        } // End Copy
-                        break;
-                    case 'Cut':
-                        switch ($_CommandDirection) {
-                            case 'right':
-                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.RIGHT');
-                                $this->sikuli->keyDown('Key.CTRL + x');
-                            break;
-                            case 'left':
-                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.LEFT');
-                                $this->sikuli->keyDown('Key.CTRL + x');
-                            break;
-                            case 'up':
-                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.UP');
-                                $this->sikuli->keyDown('Key.CTRL + x');
-                            break;
-                            case 'down':
-                                $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + Key.DOWN');
-                                $this->sikuli->keyDown('Key.CTRL + x');
-                            break;
-                            case NULL:
-                                $this->sikuli->keyDown('Key.CTRL + x');
-                            break;
-                        } // End Cut
-                        break;
-                    case 'Paste':
-                        switch ($_CommandDirection) {
-                            case 'right':
-                                $this->sikuli->keyDown('Key.RIGHT');
-                                $this->sikuli->keyDown('Key.CTRL + v');
-                            break;
-                            case 'left':
-                                $this->sikuli->keyDown('Key.LEFT');
-                                $this->sikuli->keyDown('Key.CTRL + v');
-                            break;
-                            case 'up':
-                                $this->sikuli->keyDown('Key.UP');
-                                $this->sikuli->keyDown('Key.CTRL + v');
-                            break;
-                            case 'down':
-                                $this->sikuli->keyDown('Key.DOWN');
-                                $this->sikuli->keyDown('Key.CTRL + v');
-                            break;
-                            case NULL:
-                                $this->sikuli->keyDown('Key.CTRL + v');
-                            break;
-                        } // End Paste
-                        break;
-                    case 'Undo':
-                        $this->sikuli->keyDown('Key.CTRL + z');
-                    break;
-                    case 'Redo':
-                        $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + z');
-                    break;
-                    case 'Bold':
-                        $this->sikuli->keyDown('Key.CTRL + b');
-                    break;
-                    case 'Italic':
-                        $this->sikuli->keyDown('Key.CTRL + i');
-                    break;
-                    case 'Underline':
-                        $this->sikuli->keyDown('Key.CTRL + u');
-                    break;
-                    case 'SelectAll':
-                        $this->sikuli->keyDown('Key.CTRL + a');
-                    break;
-                    case 'DeselectAll':
-                        $this->sikuli->keyDown('Key.CTRL + Key.SHIFT + a');
-                    break;
-                } // End $_Command for windows
-            } else {
-                switch ($_Command) {
-                    case 'WholeWordSelect':
-                        switch ($_CommandDirection) {
-                            case 'right':
-                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.RIGHT');
-                            break;
-                            case 'left':
-                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.LEFT');
-                            break;
-                            case 'up':
-                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.UP');
-                            break;
-                            case 'down':
-                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.DOWN');
-                            break;
-                        } // End WholeWordSelect
-                        break;
-                    case 'ToEndOfLineSelect':
-                        switch ($_CommandDirection) {
-                            case 'right':
-                                $this->sikuli->keyDown('Key.CMD + Key.SHIFT + Key.RIGHT');
-                            break;
-                            case 'left':
-                                $this->sikuli->keyDown('Key.CMD + Key.SHIFT + Key.LEFT');
-                            break;
-                            case 'up':
-                                $this->sikuli->keyDown('Key.CMD + Key.SHIFT + Key.UP');
-                            break;
-                            case 'down':
-                                $this->sikuli->keyDown('Key.CMD + Key.SHIFT + Key.DOWN');
-                            break;
-                        } // End ToEndOfLineSelect
-                        break;
-                    case 'Copy':
-                        switch ($_CommandDirection) {
-                            case 'right':
-                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.RIGHT');
-                                $this->sikuli->keyDown('Key.CMD + c');
-                            break;
-                            case 'left':
-                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.LEFT');
-                                $this->sikuli->keyDown('Key.CMD + c');
-                            break;
-                            case 'up':
-                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.UP');
-                                $this->sikuli->keyDown('Key.CMD + c');
-                            break;
-                            case 'down':
-                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.DOWN');
-                                $this->sikuli->keyDown('Key.CMD + c');
-                            break;
-                            case NULL:
-                                $this->sikuli->keyDown('Key.CMD + c');
-                            break;
-                            case '':
-                                $this->sikuli->keyDown('Key.CMD + c');
-                            break;
-                        } // End Copy
-                        break;
-                    case 'Cut':
-                        switch ($_CommandDirection) {
-                            case 'right':
-                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.RIGHT');
-                                $this->sikuli->keyDown('Key.CMD + x');
-                            break;
-                            case 'left':
-                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.LEFT');
-                                $this->sikuli->keyDown('Key.CMD + x');
-                            break;
-                            case 'up':
-                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.UP');
-                                $this->sikuli->keyDown('Key.CMD + x');
-                            break;
-                            case 'down':
-                                $this->sikuli->keyDown('Key.ALT + Key.SHIFT + Key.DOWN');
-                                $this->sikuli->keyDown('Key.CMD + x');
-                            break;
-                            case NULL:
-                                $this->sikuli->keyDown('Key.CMD + x');
-                            break;
-                        } // End Cut
-                        break;
-                    case 'Paste':
-                        switch ($_CommandDirection) {
-                            case 'right':
-                                $this->sikuli->keyDown('Key.RIGHT');
-                                $this->sikuli->keyDown('Key.CMD + v');
-                            break;
-                            case 'left':
-                                $this->sikuli->keyDown('Key.LEFT');
-                                $this->sikuli->keyDown('Key.CMD + v');
-                            break;
-                            case 'up':
-                                $this->sikuli->keyDown('Key.UP');
-                                $this->sikuli->keyDown('Key.CMD + v');
-                            break;
-                            case 'down':
-                                $this->sikuli->keyDown('Key.DOWN');
-                                $this->sikuli->keyDown('Key.CMD + v');
-                            break;
-                            case NULL:
-                                $this->sikuli->keyDown('Key.CMD + v');
-                            break;
-                        } // End Paste
-                        break;
-                    case 'Undo':
-                        $this->sikuli->keyDown('Key.CMD + z');
-                    break;
-                    case 'Redo':
-                        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-                    break;
-                    case 'Bold':
-                        $this->sikuli->keyDown('Key.CMD + b');
-                    break;
-                    case 'Italic':
-                        $this->sikuli->keyDown('Key.CMD + i');
-                    break;
-                    case 'Underline':
-                        $this->sikuli->keyDown('Key.CMD + u');
-                    break;
-                    case 'SelectAll':
-                        $this->sikuli->keyDown('Key.CMD + a');
-                    break;
-                    case 'DeselectAll':
-                        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + a');
-                    break;
-                } // End $_Command for osx
-            } // End GetOS()
-        } // End $_Command switch
-    }//end getOSAltShortcut()
-
 
 }//end class

@@ -638,6 +638,10 @@
         {
             this.resetViperRange(null);
 
+            if (!this.element) {
+                return;
+            }
+
             var range = null;
             if (enabled === true && this.enabled === false) {
                 this._addEvents();
@@ -806,6 +810,11 @@
             var self = this;
 
             if (this.element === elem) {
+                return;
+            } else if (!elem) {
+                this.setEnabled(false);
+                this.element = null;
+                Viper.Util.setViperElement(null);
                 return;
             }
 
@@ -1330,6 +1339,18 @@
         },
 
         /**
+         * Removes the specified attribute of an element.
+         *
+         * @param {DOMNode} element   The element to remove.
+         * @param {string}  attribute The attribute name.
+         */
+        removeAttribute: function(element, attribute)
+        {
+            return this.setAttribute(element, attribute, '', false);
+
+        },
+
+        /**
          * Find the next good position for the caret outside of the sourceElement.
          *
          * This method should be used when removing an element where caret is in.
@@ -1792,6 +1813,18 @@
 
         makeElementUneditable: function (element) {
             Viper.Util.attr(element, 'contenteditable', false);
+
+        },
+
+        createDefaultBlockElement: function() {
+            var baseTag = this.getDefaultBlockTag();
+            if (baseTag) {
+                var el = document.createElement(baseTag);
+                el.appendChild(document.createElement('br'));
+                return el;
+            }
+
+            return null;
 
         },
 
@@ -3038,22 +3071,19 @@
                     }
                 }
 
-                if (Viper.Util.isBrowser('chrome') === true || Viper.Util.isBrowser('safari') === true) {
-                    // Sigh.. Move the range where its suppose to be instead of Webkit deciding that it should
-                    // move the end of range to the begining of the next sibling -.-.
-                    if (!endBookmark.previousSibling) {
-                        var node = endBookmark.parentNode.previousSibling;
-                        while (node) {
-                            if (node.nodeType !== Viper.Util.TEXT_NODE || Viper.Util.isBlank(node.data) === false) {
-                                break;
-                            }
-
-                            node = node.previousSibling;
-                        }
-
-                        if (node === startBookmark.parentNode) {
+                // Move the range where its suppose to be instead of browser deciding that it should
+                // move the end of range to the begining of the next sibling.
+                if (!endBookmark.previousSibling) {
+                    var node = range.getPreviousContainer(endBookmark, null, true, true);
+                    if (node === startBookmark.parentNode) {
+                        var lastSelectable = range._getLastSelectableChild(node, null, true);
+                        if (lastSelectable) {
+                            Viper.Util.insertAfter(lastSelectable, endBookmark);
+                        } else {
                             startBookmark.parentNode.appendChild(endBookmark);
                         }
+                    } else if (node && Viper.Util.isChildOf(node, startBookmark.parentNode) == true) {
+                        Viper.Util.insertAfter(node, endBookmark);
                     }
                 }
 
@@ -3584,6 +3614,20 @@
         addSpecialKey: function(keyCode)
         {
             this._specialKeys.push(keyCode);
+
+        },
+
+        targetIsOutside: function(target)
+        {
+            if (this.element !== target && Viper.Util.isChildOfElems(target, [this.element]) !== true && this.isMemberElement(target) !== true) {
+                inside = false;
+
+                // Ask plugins if its one of their element.
+                var pluginName = this._getPluginForElement(target);
+                if (!pluginName && Viper.Util.isChildOfElems(target, [this._viperElementHolder]) !== true) {
+                    return true;
+                }
+            }
 
         },
 
@@ -4257,18 +4301,19 @@
         /**
          * Sets the Viper content, content cannot contain Viper specific elements.
          */
-        setHtml: function(contents, callback)
+        setHtml: function(contents, callback, element)
         {
             contents = this.removeInvalidCharacters(contents);
             var self = this;
             this.fireCallbacks('Viper:setHtmlContent', contents, function(data, newContents) {
-                self._setHTML(newContents, callback);
+                self._setHTML(newContents, callback, element);
             });
 
         },
 
-        _setHTML: function(contents, callback)
+        _setHTML: function(contents, callback, element)
         {
+            element   = element || this.element;
             var clone = Viper.document.createElement('div');
 
             if (typeof contents === 'string') {
@@ -4302,8 +4347,8 @@
                     html = html.replace(/<param /ig, '<viper:param ');
                 }
 
-                self.element.innerHTML = html;
-                self.initEditableElement();
+                element.innerHTML = html;
+                self.initEditableElement(element);
 
                 self.contentChanged();
                 if (callback) {
@@ -4360,15 +4405,15 @@
                         attrValue = attrValue.toLowerCase();
                     }
 
+                    var res = ' ' + attrName;
+
                     // Remove single and double quotes and then wrap the value with
                     // double quotes.
-                    if (attrValue) {
+                    if (typeof attrValue != 'undefined') {
                         attrValue = Viper.Util.trim(attrValue, '"\'');
-                    } else {
-                        attrValue = '';
+                        res += '="' + attrValue + '"';
                     }
 
-                    var res = ' ' + attrName + '="' + attrValue + '"';
                     return res;
                 });
 
@@ -4552,6 +4597,9 @@
                                 }
 
                                 Viper.Util.remove(node);
+                            } else if (Viper.Util.isTag(node.nextSibling, ['ol', 'ul']) === true && Viper.Util.isTag(node.parentNode, 'li') === true) {
+                                // BR before sublist.
+                                Viper.Util.remove(node);
                             }
                         }//end if
                     break;
@@ -4564,6 +4612,7 @@
 
                     case 'td':
                     case 'th':
+                    case 'li':
                     case 'caption':
                         var html = Viper.Util.trim(Viper.Util.getHtml(node));
                         if (html === '' || Viper.Util.trim(html.replace(/&nbsp;/g, '')) === '') {
@@ -4607,7 +4656,9 @@
                             || cont === '&nbsp;'
                             || (cont === '' && Viper.Util.isTag(node, ['p', 'div']))
                         ) {
-                            Viper.Util.remove(node);
+                            if (this.isSpecialElement(node) !== true) {
+                                Viper.Util.remove(node);
+                            }
                         }
                     break;
                 }//end switch
@@ -4625,6 +4676,11 @@
                         // Remove extra spaces from the node.
                         node.data = node.data.replace(/^\s+/g, ' ');
                         node.data = node.data.replace(/\s*\n\s*/g, ' ');
+
+                        if ((!node.nextSibling || Viper.Util.isSpacerBR(node.nextSibling) === true) && Viper.Util.isBlockElement(node.parentNode) === true) {
+                            // Remove spaces from the end of block elements.
+                            node.data = node.data.replace(/\s+$/g, '');
+                        }
 
                         // TODO: We should normalise these text nodes before calling this method. This way there is no
                         // reason to do this check here as there will be no sibling text nodes.

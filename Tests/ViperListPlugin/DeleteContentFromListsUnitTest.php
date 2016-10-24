@@ -5,181 +5,175 @@ require_once 'AbstractViperListPluginUnitTest.php';
 class Viper_Tests_ViperListPlugin_DeleteContentFromListsUnitTest extends AbstractViperListPluginUnitTest
 {
     /**
-     * Test that deleteing content around a unordered list
+     * Test deleteing a paragraph after the list
      *
      * @return void
      */
-    public function testDeletingContentAroundUnorderedLists()
+    public function testDeletingParagraphAfterList()
     {
-        // Check deleting a paragraph after the list
-        $this->useTest(1);
-        $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>%1%</p><ul><li>test list</li></ul>');
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(1);
+            } else {
+                $this->useTest(2);
+            }
 
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>%1%</p><ul><li>test list</li></ul><p>content</p>');
-
-        // Check deleteing the paragraph after the list up to the end of the last list item
-        $this->useTest(1);
-        $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>%1%</p><ul><li>test list</li></ul>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>%1%</p><ul><li>test listcontent</li></ul>');
-
-        // Check deleting a paragraph after the list and some content from the list
-        $this->useTest(1);
-        $this->moveToKeyword(2, 'right');
-
-        for ($i = 0; $i < 9; $i++) {
+            $this->moveToKeyword(2, 'right');
             $this->sikuli->keyDown('Key.BACKSPACE');
+            $this->sikuli->keyDown('Key.BACKSPACE');
+            $this->sikuli->keyDown('Key.BACKSPACE');
+            $this->assertHTMLMatch('<p>%1%</p><'.$listType.'><li>test list</li></'.$listType.'>');
+
+            // Add content to check the position of the cursor
+            $this->type('content');
+            $this->assertHTMLMatch('<p>%1%</p><'.$listType.'><li>test list</li></'.$listType.'><p>content</p>');
         }
 
-        $this->assertHTMLMatch('<p>%1%</p><ul><li>test</li></ul>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>%1%</p><ul><li>testcontent</li></ul>');
-
-        // Check deleting a paragraph before the list
-        $this->useTest(1);
-        $this->moveToKeyword(1, 'left');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<ul><li>test list</li></ul><p>%2%</p>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>content</p><ul><li>test list</li></ul><p>%2%</p>');
-
-        // Check deleting a paragraph before the list up to the start of the list
-        $this->useTest(1);
-        $this->moveToKeyword(1, 'left');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<ul><li>test list</li></ul><p>%2%</p>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<ul><li>contenttest list</li></ul><p>%2%</p>');
-
-        // Check deleting a paragraph before the list and some content from the list
-        $this->useTest(1);
-        $this->moveToKeyword(1, 'left');
-
-        for ($i = 0; $i < 9; $i++) {
-            $this->sikuli->keyDown('Key.DELETE');
-        }
-
-        $this->assertHTMLMatch('<ul><li>list</li></ul><p>%2%</p>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<ul><li>contentlist</li></ul><p>%2%</p>');
-
-    }//end testDeletingContentAroundUnorderedLists()
+    }//end testDeletingParagraphAfterList()
 
 
     /**
-     * Test that deleteing content around a ordered list
+     * Test deleteing the paragraph after the list up to the end of the last list item
      *
      * @return void
      */
-    public function testDeletingContentAroundOrderedLists()
+    public function testDeletingContentAfterListUpToLastListItem()
     {
-        // Check deleting a paragraph after the list
-        $this->useTest(2);
-        $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>%1%</p><ol><li>test list</li></ol>');
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(1);
+            } else {
+                $this->useTest(2);
+            }
 
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>%1%</p><ol><li>test list</li></ol><p>content</p>');
-
-        // Check deleting a paragraph after the list up to the end of the list item
-        $this->useTest(2);
-        $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>%1%</p><ol><li>test list</li></ol>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>%1%</p><ol><li>test listcontent</li></ol>');
-
-        // Check deleting the paragraph after the list and content in the list
-        $this->useTest(2);
-        $this->moveToKeyword(2, 'right');
-
-        for ($i = 0; $i < 9; $i++) {
+            $this->moveToKeyword(2, 'right');
             $this->sikuli->keyDown('Key.BACKSPACE');
+            $this->sikuli->keyDown('Key.BACKSPACE');
+            $this->sikuli->keyDown('Key.BACKSPACE');
+            $this->sikuli->keyDown('Key.BACKSPACE');
+            $this->assertHTMLMatch('<p>%1%</p><'.$listType.'><li>test list</li></'.$listType.'>');
+
+            // Add content to check the position of the cursor
+            $this->type('content');
+            $this->assertHTMLMatch('<p>%1%</p><'.$listType.'><li>test listcontent</li></'.$listType.'>');
         }
 
-        $this->assertHTMLMatch('<p>%1%</p><ol><li>test </li></ol>');
+    }//end testDeletingContentAfterListUpToLastListItem()
 
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>%1%</p><ol><li>testcontent</li></ol>');
 
-        // Check deleting a paragraph before the list
-        $this->useTest(2);
-        $this->moveToKeyword(1, 'left');
-        sleep(1);
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<ol><li>test list</li></ol><p>%2%</p>');
+    /**
+     * Test deleting a paragraph after the list and some content from the list
+     *
+     * @return void
+     */
+    public function testDeletingContentAfterListAndSomeListContent()
+    {
 
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>content</p><ol><li>test list</li></ol><p>%2%</p>');
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(1);
+            } else {
+                $this->useTest(2);
+            }
 
-        // Check deleting a paragraph before the list up to the start of the list
-        $this->useTest(2);
-        $this->moveToKeyword(1, 'left');
-        sleep(1);
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<ol><li>test list</li></ol><p>%2%</p>');
+            $this->moveToKeyword(2, 'right');
 
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<ol><li>contenttest list</li></ol><p>%2%</p>');
+            for ($i = 0; $i < 9; $i++) {
+                $this->sikuli->keyDown('Key.BACKSPACE');
+            }
 
-        // Check deleting the paragraph before the list and content in the list
-        $this->useTest(2);
-        $this->moveToKeyword(1, 'left');
-        sleep(1);
-        for ($i = 0; $i < 9; $i++) {
+            $this->assertHTMLMatch('<p>%1%</p><'.$listType.'><li>test</li></'.$listType.'>');
+
+            // Add content to check the position of the cursor
+            $this->type('content');
+            $this->assertHTMLMatch('<p>%1%</p><'.$listType.'><li>testcontent</li></'.$listType.'>');
+        }
+
+    }//end testDeletingContentAfterListAndSomeListContent()
+
+
+    /**
+     * Test deleting a paragraph before the list
+     *
+     * @return void
+     */
+    public function testDeletingContentBeforeList()
+    {
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(1);
+            } else {
+                $this->useTest(2);
+            }
+            $this->moveToKeyword(1, 'left');
             $this->sikuli->keyDown('Key.DELETE');
+            $this->sikuli->keyDown('Key.DELETE');
+            $this->sikuli->keyDown('Key.DELETE');
+            $this->assertHTMLMatch('<'.$listType.'><li>test list</li></'.$listType.'><p>%2%</p>');
+
+            // Add content to check the position of the cursor
+            $this->type('content');
+            $this->assertHTMLMatch('<p>content</p><'.$listType.'><li>test list</li></'.$listType.'><p>%2%</p>');
         }
 
-        $this->assertHTMLMatch('<ol><li>list</li></ol><p>%2%</p>');
+    }//end testDeletingContentBeforeList()
 
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<ol><li>contentlist</li></ol><p>%2%</p>');
 
-    }//end testDeletingContentWithinOrderedLists()
+    /**
+     * Test deleting a paragraph before the list up to the start of the list
+     *
+     * @return void
+     */
+    public function testDeletingContentBeforeListUpToStartOfList()
+    {
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(1);
+            } else {
+                $this->useTest(2);
+            }
+            $this->moveToKeyword(1, 'left');
+            $this->sikuli->keyDown('Key.DELETE');
+            $this->sikuli->keyDown('Key.DELETE');
+            $this->sikuli->keyDown('Key.DELETE');
+            $this->sikuli->keyDown('Key.DELETE');
+            $this->assertHTMLMatch('<'.$listType.'><li>test list</li></'.$listType.'><p>%2%</p>');
+
+            // Add content to check the position of the cursor
+            $this->type('content');
+            $this->assertHTMLMatch('<'.$listType.'><li>contenttest list</li></'.$listType.'><p>%2%</p>');
+        }
+
+    }//end testDeletingContentBeforeListUpToStartOfList()
+
+
+    /**
+     * Test deleting a paragraph before the list and some content from the list
+     *
+     * @return void
+     */
+    public function testDeletingContentBeforeListAndSomeListContent()
+    {
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(1);
+            } else {
+                $this->useTest(2);
+            }
+            $this->moveToKeyword(1, 'left');
+
+            for ($i = 0; $i < 9; $i++) {
+                $this->sikuli->keyDown('Key.DELETE');
+            }
+
+            $this->assertHTMLMatch('<'.$listType.'><li>list</li></'.$listType.'><p>%2%</p>');
+
+            // Add content to check the position of the cursor
+            $this->type('content');
+            $this->assertHTMLMatch('<'.$listType.'><li>contentlist</li></'.$listType.'><p>%2%</p>');
+        }
+
+    }//end testDeletingContentBeforeListAndSomeListContent()
 
 }//end class
 

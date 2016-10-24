@@ -321,7 +321,7 @@
                     }
 
                     var inputElements = ViperUtil.getTag('input[type=text], textarea', this._subSections[id]);
-                    if (inputElements.length > 0 && ViperUtil.getElementHeight(inputElements[0]) > 0) {
+                    if (inputElements.length > 0 && self._canFocusField(inputElements[0]) === true) {
                         try {
                             setTimeout(function() {
                                 inputElements[0].focus();
@@ -401,7 +401,7 @@
                                 // Give focus back to the form field.
                                 var inputElements = ViperUtil.getTag('input[type=text], textarea', subSection.form);
                                 for (var i = 0; i < inputElements.length; i++) {
-                                    if (ViperUtil.getElementWidth(inputElements[i]) !== 0) {
+                                    if (self._canFocusField(inputElements[i]) === true) {
                                         try {
                                             inputElements[i].focus();
                                         } catch(e) {}
@@ -658,7 +658,7 @@
 
             var inputElements = ViperUtil.getTag('input[type=text], textarea', bubbleElem);
             for (var i = 0; i < inputElements.length; i++) {
-                if (ViperUtil.getElementWidth(inputElements[i]) !== 0) {
+                if (this._canFocusField(inputElements[i]) === true) {
                     try {
                         setTimeout(function() {
                             inputElements[i].focus();
@@ -680,6 +680,16 @@
                     return bubble.getActiveSubSection().onsubmit();
                 }
             });
+
+        },
+
+        _canFocusField: function (field) {
+            if (ViperUtil.getElementWidth(field) !== 0 && (ViperUtil.isBrowser('chrome') !== true || ViperUtil.getElementCoords(field).x > 0)) {
+                // Fields in Chrome may appear off screen due to the Viper-offScreen CSS class.
+                return true;
+            }
+
+            return false;
 
         },
 

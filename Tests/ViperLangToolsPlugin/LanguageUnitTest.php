@@ -13,6 +13,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testLanguageIconIsDisabled()
     {
+        $this->useTest(1);
         $this->clickKeyword(1);
         $this->assertTrue($this->topToolbarButtonExists('langTools', 'disabled'), 'Language icon in Top Toolbar should not be active.');
 
@@ -29,7 +30,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testUpdateChangesButton()
     {
-
+        $this->useTest(1);
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
@@ -47,7 +48,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testAddingLanguageToAWord()
     {
-
+        $this->useTest(1);
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
@@ -88,7 +89,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testEditingALanguage()
     {
-
+        $this->useTest(1);
         $this->selectKeyword(6);
         $this->clickTopToolbarButton('langTools', 'active');
         $this->clickTopToolbarButton('Language', 'active', TRUE);
@@ -107,7 +108,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testAddingLanguageToAParagraph()
     {
-
+        $this->useTest(1);
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('langTools');
@@ -143,7 +144,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testRemovingLanguageAttributeFromAParagraph()
     {
-
+        $this->useTest(1);
         $this->selectKeyword(4);
         $this->selectInlineToolbarLineageItem(0);
         $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Language icon in Top Toolbar should be active.');
@@ -187,7 +188,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testRemovingLanguageAttributeFromAWord()
     {
-
+        $this->useTest(1);
         $this->selectKeyword(6);
         $this->assertTrue($this->topToolbarButtonExists('langTools', 'active'), 'Class icon in Top Toolbar should be active.');
 
@@ -227,7 +228,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testAddingAndRemovingLanguageToAParagraphWithBoldFirstWord()
     {
-
+        $this->useTest(1);
         $this->selectKeyword(8);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('langTools');
@@ -257,7 +258,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testAddingAndRemovingLanguageToAParagraphWithItalicFirstWord()
     {
-
+        $this->useTest(1);
         $this->selectKeyword(7);
         $this->selectInlineToolbarLineageItem(0);
         $this->clickTopToolbarButton('langTools');
@@ -287,7 +288,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testAddingAndRemovingLanguageToABoldWord()
     {
-
+        $this->useTest(1);
         $this->selectKeyword(8);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
@@ -315,7 +316,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testAddingAndRemovingLanguageToItalicWord()
     {
-
+        $this->useTest(1);
         $this->selectKeyword(9);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
@@ -343,7 +344,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testAutoFocusLanguageTextbox()
     {
-
+        $this->useTest(1);
         $this->selectKeyword(1);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
@@ -363,6 +364,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testSelectionIsMaintainedWhenSwitchingFromLanguageToClass()
     {
+        $this->useTest(1);
         $this->selectKeyword(2);
         $this->selectInlineToolbarLineageItem(0);
 
@@ -386,6 +388,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
      */
     public function testUndoAndRedoForLanguage()
     {
+        $this->useTest(1);
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
@@ -411,6 +414,7 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
     public function testUndoAfterDeletingLanguage()
     {
         // Apply language
+        $this->useTest(1);
         $this->selectKeyword(2);
         $this->clickTopToolbarButton('langTools');
         $this->clickTopToolbarButton('Language', NULL, TRUE);
@@ -436,6 +440,116 @@ class Viper_Tests_ViperLangToolsPlugin_LanguageUnitTest extends AbstractViperUni
 
     }//end testUndoAfterDeletingLanguage()
 
+
+    /**
+     * Test applying language to content with italic format applied first then bold and underline.
+     *
+     * @return void
+     */
+    public function testAddingLanguageToItalicContentWithOtherFormats()
+    {
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
+        $this->type('test-lang');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<u><strong><em lang="test-lang">%1%</em></strong></u> and more content</p>');
+
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
+        $this->type('test-lang');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<u><strong><em lang="test-lang">%1%</em></strong></u> and more content</p>');
+
+        $this->useTest(2);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
+        $this->type('test-lang');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<u><strong><em lang="test-lang">%1%</em></strong></u> and more content</p>');
+
+    }//end testAddingLanguageToItalicContentWithOtherFormats()
+
+
+    /**
+     * Test applying language to content with underline format applied first then italic and bold.
+     *
+     * @return void
+     */
+    public function testAddingLanguageToUnderlineContentWithOtherFormats()
+    {
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
+        $this->type('test-lang');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<strong><em><u lang="test-lang">%1%</u></em></strong> and more content</p>');
+
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
+        $this->type('test-lang');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<strong><em><u lang="test-lang">%1%</u></em></strong> and more content</p>');
+
+        $this->useTest(3);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
+        $this->type('test-lang');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<strong><em><u lang="test-lang">%1%</u></em></strong> and more content</p>');
+
+    }//end testAddingLanguageToBoldContentWithOtherFormats()
+
+
+    /**
+     * Test applying language to content with bold format applied first then underline and italic.
+     *
+     * @return void
+     */
+    public function testAddingLanguageToBoldContentWithOtherFormats()
+    {
+        $this->useTest(4);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
+        $this->type('test-lang');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<em><u><strong lang="test-lang">%1%</strong></u></em> and more content</p>');
+
+        $this->useTest(4);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
+        $this->type('test-lang');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<em><u><strong lang="test-lang">%1%</strong></u></em> and more content</p>');
+
+        $this->useTest(4);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(3);
+        $this->clickTopToolbarButton('langTools');
+        $this->clickTopToolbarButton('Language', NULL, TRUE);
+        $this->type('test-lang');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<em><u><strong lang="test-lang">%1%</strong></u></em> and more content</p>');
+
+    }//end testAddingLanguageToItalicContentWithOtherFormats()
 
 }//end class
 

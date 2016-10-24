@@ -58,7 +58,7 @@
             });
 
             this.viper.registerCallback('Viper:mouseUp', 'ViperInlineToolbarPlugin', function(e) {
-                if (ViperUtil.isChildOf(self.viper._mouseDownEvent.target, self._toolbarElement) === true) {
+                if (self.viper._mouseDownEvent && ViperUtil.isChildOf(self.viper._mouseDownEvent.target, self._toolbarElement) === true) {
                     // The mouse down event happened in the Inline Toolbar so do not fire mouse up event.
                     return false;
                 }
@@ -584,8 +584,9 @@
             var parent        = null;
 
             var nodeSelection = nodeSelection || range.getNodeSelection(range, true);
+            var viperElement  = this.viper.getViperElement();
 
-            if (nodeSelection && this.viper.getViperElement() !== nodeSelection) {
+            if (nodeSelection && viperElement !== nodeSelection) {
                 parent = nodeSelection;
             } else {
                 var startNode = range.getStartNode();
@@ -601,9 +602,15 @@
                     startNode = startNode.nextSibling;
                 }
 
+                var endNode = range.getEndNode();
                 if (startNode.nodeType !== ViperUtil.TEXT_NODE || ViperUtil.isBlank(startNode.data) !== true) {
                     if (startNode.nodeType !== ViperUtil.TEXT_NODE && startNode !== range.getEndNode()) {
-                        lineage.push(range.getEndNode());
+                        if (endNode !== viperElement) {
+                            lineage.push(range.getEndNode());
+                        } else {
+                            var firstSelectable = range._getFirstSelectableChild(startNode);
+                            lineage.push(firstSelectable);
+                        }
                     } else {
                         if (ViperUtil.isBrowser('edge') === true
                             && startNode.nodeType === ViperUtil.TEXT_NODE

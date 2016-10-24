@@ -169,42 +169,21 @@ class Viper_Tests_BlockTag_BlankBlockTagWithListsUnitTest extends AbstractViperU
         $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
 
         // Add a list item to an unordered list
-        $this->useTest(2);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('test');
-        $this->assertHTMLMatch('<ul><li>%1% Test content</li><li>%2% Test content</li><li>%3%</li><li>test</li></ul>');
+        foreach (array('ol' => 3, 'ul' => 2) as $listType => $useTest) {
+            foreach ($this->getTestMethods(TRUE, FALSE, TRUE) as $method) {
+                $this->useTest($useTest);
+                $this->moveToKeyword(3, 'right');
+                $this->sikuli->keyDown('Key.ENTER');
+                $this->type('test');
+                $this->assertHTMLMatch('<'.$listType.'><li>%1% Test content</li><li>%2% Test content</li><li>%3%</li><li>test</li></'.$listType.'>');
 
-        // Test undo and redo with top toolbar icons
-        $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<ul><li>%1% Test content</li><li>%2% Test content</li><li>%3%</li></ul>');
-        $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<ul><li>%1% Test content</li><li>%2% Test content</li><li>%3%</li><li>test</li></ul>');
-
-        // Test undo and redo with keyboard shortcuts
-        $this->sikuli->keyDown('Key.CMD + z');
-        $this->assertHTMLMatch('<ul><li>%1% Test content</li><li>%2% Test content</li><li>%3%</li></ul>');
-        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        $this->assertHTMLMatch('<ul><li>%1% Test content</li><li>%2% Test content</li><li>%3%</li><li>test</li></ul>');  
-
-        // Add a list item to an ordered list
-        $this->useTest(3);
-        $this->moveToKeyword(3, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('test');
-        $this->assertHTMLMatch('<ol><li>%1% Test content</li><li>%2% Test content</li><li>%3%</li><li>test</li></ol>');
-
-        // Test undo and redo with top toolbar icons
-        $this->clickTopToolbarButton('historyUndo');
-        $this->assertHTMLMatch('<ol><li>%1% Test content</li><li>%2% Test content</li><li>%3%</li></ol>');
-        $this->clickTopToolbarButton('historyRedo');
-        $this->assertHTMLMatch('<ol><li>%1% Test content</li><li>%2% Test content</li><li>%3%</li><li>test</li></ol>');
-
-        // Test undo and redo with keyboard shortcuts
-        $this->sikuli->keyDown('Key.CMD + z');
-        $this->assertHTMLMatch('<ol><li>%1% Test content</li><li>%2% Test content</li><li>%3%</li></ol>');
-        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        $this->assertHTMLMatch('<ol><li>%1% Test content</li><li>%2% Test content</li><li>%3%</li><li>test</li></ol>');
+                // Test undo and redo with top toolbar icons
+                $this->doAction($method, 'historyUndo');
+                $this->assertHTMLMatch('<'.$listType.'><li>%1% Test content</li><li>%2% Test content</li><li>%3%</li><li></li></'.$listType.'>');
+                $this->doAction($method, 'historyRedo');
+                $this->assertHTMLMatch('<'.$listType.'><li>%1% Test content</li><li>%2% Test content</li><li>%3%</li><li>test</li></'.$listType.'>');
+            }
+        }
 
     }//end testUndoAndRedoWithLists()
 

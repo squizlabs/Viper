@@ -103,7 +103,13 @@
             }
 
             var modify = false;
-            if (action === 'text_change' && this._lastAction === action) {
+            if (action === 'text_change'
+                && this._lastAction
+                && this._lastAction.action === action
+                && this._lastAction.range
+                && this._lastAction.range.startOffset === (range.startOffset - 1)
+                && this._lastAction.range.startContainer === range.startContainer
+            ) {
                 if (this._charCount < this._maxChars) {
                     modify = true;
                 } else {
@@ -115,7 +121,10 @@
                 this._charCount = 0;
             }
 
-            this._lastAction = action;
+            this._lastAction = {
+                action: action,
+                range: range
+            };
 
             // If batching is active then do not add the task to undoHistory.
             if (this.batchTask === null) {

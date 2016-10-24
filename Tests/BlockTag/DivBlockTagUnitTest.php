@@ -204,7 +204,7 @@ class Viper_Tests_BlockTag_DivBlockTagUnitTest extends AbstractViperUnitTest
         $this->assertTrue($this->topToolbarButtonExists('searchReplace', NULL));
         $this->assertTrue($this->topToolbarButtonExists('langtools', NULL));
         $this->assertTrue($this->topToolbarButtonExists('charmap', NULL));
-        
+
     }//end testToolbarIconStatus()
 
 
@@ -235,7 +235,7 @@ class Viper_Tests_BlockTag_DivBlockTagUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.CMD + z');
         $this->assertHTMLMatch('<div>%1% Test content %2%</div>');
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        $this->assertHTMLMatch('<div>Test content %2%</div>'); 
+        $this->assertHTMLMatch('<div>Test content %2%</div>');
 
         // Test delete part of content with backspace
         $this->useTest(2);
@@ -253,7 +253,7 @@ class Viper_Tests_BlockTag_DivBlockTagUnitTest extends AbstractViperUnitTest
         $this->sikuli->keyDown('Key.CMD + z');
         $this->assertHTMLMatch('<div>%1% Test content %2%</div>');
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        $this->assertHTMLMatch('<div>%1% Test content</div>'); 
+        $this->assertHTMLMatch('<div>%1% Test content</div>');
 
     }//end testDeletingPartOfContent()
 
@@ -278,18 +278,26 @@ class Viper_Tests_BlockTag_DivBlockTagUnitTest extends AbstractViperUnitTest
 
         // Test undo and redo with top toolbar icons
         $this->clickTopToolbarButton('historyUndo');
+        sleep(1);
         $this->clickTopToolbarButton('historyUndo');
+        sleep(1);
         $this->assertHTMLMatch('<div>%1% Test content %2%</div>');
         $this->clickTopToolbarButton('historyRedo');
+        sleep(1);
         $this->clickTopToolbarButton('historyRedo');
+        sleep(1);
         $this->assertHTMLMatch('<div>test delete</div>');
 
         // Test undo and redo with keyboard shortcuts
         $this->sikuli->keyDown('Key.CMD + z');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + z');
+        sleep(1);
         $this->assertHTMLMatch('<div>%1% Test content %2%</div>');
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        sleep(1);
         $this->assertHTMLMatch('<div>test delete</div>');
 
         // Test delete all content with backspace
@@ -302,19 +310,27 @@ class Viper_Tests_BlockTag_DivBlockTagUnitTest extends AbstractViperUnitTest
 
         // Test undo and redo with top toolbar icons
         $this->clickTopToolbarButton('historyUndo');
+        sleep(1);
         $this->clickTopToolbarButton('historyUndo');
+        sleep(1);
         $this->assertHTMLMatch('<div>%1% Test content %2%</div>');
         $this->clickTopToolbarButton('historyRedo');
+        sleep(1);
         $this->clickTopToolbarButton('historyRedo');
+        sleep(1);
         $this->assertHTMLMatch('<div>test delete</div>');
 
         // Test undo and redo with keyboard shortcuts
         $this->sikuli->keyDown('Key.CMD + z');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + z');
+        sleep(1);
         $this->assertHTMLMatch('<div>%1% Test content %2%</div>');
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        sleep(1);
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        $this->assertHTMLMatch('<div>test delete</div>'); 
+        sleep(1);
+        $this->assertHTMLMatch('<div>test delete</div>');
 
     }//end testDeletingAllContent()
 
@@ -356,5 +372,73 @@ class Viper_Tests_BlockTag_DivBlockTagUnitTest extends AbstractViperUnitTest
         $this->assertHTMLMatch('<div>test</div>');
 
     }//end testWithParagraphs()
+
+
+     /**
+     * Test undo and redo when editing content
+     *
+     * @return void
+     */
+    public function testUndoAndRedoInContent()
+    {
+        $this->useTest(1);
+        $this->sikuli->execJS('viper.setSetting("defaultBlockTag", "")');
+
+        // Add content to the page
+        $this->useTest(2);
+        $this->moveToKeyword(1, 'right');
+        $this->type(' test');
+        $this->assertHTMLMatch('<div>%1% test Test content %2%</div>');
+
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<div>%1% Test content %2%</div>');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<div>%1% test Test content %2%</div>');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<div>%1% Test content %2%</div>');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<div>%1% test Test content %2%</div>');
+
+        // Test making multiple changes and pressing undo
+        $this->selectKeyword(1);
+        $this->type('abc');
+        $this->selectKeyword(2);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<div>abc test Test content</div>');
+
+        // Test undo and redo with top toolbar icons
+        // Press once will undo the delete
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<div>abc test Test content %2%</div>');
+        // Press again will undo the replace
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<div>%1% test Test content %2%</div>');
+
+        // Press redo once will redo the replace
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<div>abc test Test content %2%</div>');
+        // Press redo once will redo the delete
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<div>abc test Test content</div>');
+
+        // Test undo and redo with keyboard shortcuts
+        // Press once will undo the delete
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<div>abc test Test content %2%</div>');
+        // Press again will undo the replace
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<div>%1% test Test content %2%</div>');
+
+        // Press redo once will redo the replace
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<div>abc test Test content %2%</div>');
+        // Press redo once will redo the delete
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<div>abc test Test content</div>');
+
+    }//end testUndoAndRedoInContent()
 
 }//end class
