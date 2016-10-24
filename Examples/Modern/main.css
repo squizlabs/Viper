@@ -423,12 +423,10 @@ background-color: #f9f8b1;
 #content ul li li {
     margin: 0 0 0.6em 0;
     padding-left: 25px;
-    background: transparent url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/bullet-lvl2.png) 0 0.4em no-repeat;
 }
 #content ul li li li {
     margin: 0 0 0.2em 0;
     padding-left: 17px;
-    background: transparent url(http://manuals.matrix.squizsuite.net/__designs/matrix-library/bullet-lvl3.png) 0 0.6em no-repeat;
 }
 #content ul ul {
     margin-bottom: 0;

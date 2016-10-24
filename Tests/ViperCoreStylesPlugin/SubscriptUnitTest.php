@@ -386,40 +386,87 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
     public function testEditingSubscriptContent()
     {
 
-        $this->useTest(4);
-
-        // Test adding content to the start of the subscript formatting
-        $this->clickKeyword(2);
+        // Test adding content before the start of the subscript formatting
+        $this->useTest(7);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test ');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sub>%1%</sub></p><p>Some more subscript test <sub>%2% %3%</sub> content to test</p>');
+        $this->assertHTMLMatch('<p>Some %1% subscript test <sub>%2% content %3% to test %4%</sub> more %5% content</p>');
 
         // Test adding content in the middle of subscript formatting
+        $this->useTest(7);
         $this->moveToKeyword(2, 'right');
         $this->type(' test');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sub>%1%</sub></p><p>Some more subscript test <sub>%2% test %3%</sub> content to test</p>');
+        $this->assertHTMLMatch('<p>Some %1% subscript <sub>%2% test content %3% to test %4%</sub> more %5% content</p>');
 
         // Test adding content to the end of subscript formatting
-        $this->clickKeyword(3);
+        $this->useTest(7);
+        $this->moveToKeyword(4, 'left');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
-        $this->type(' %4%');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sub>%1%</sub></p><p>Some more subscript test <sub>%2% test %3% %4%</sub> content to test</p>');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->type(' test');
+        $this->assertHTMLMatch('<p>Some %1% subscript <sub>%2% content %3% to test %4% test</sub> more %5% content</p>');
 
-        // Test highlighting some content in the subscript tags and replacing it
+        // Test highlighting some content in the del tags and replacing it
+        $this->useTest(7);
         $this->selectKeyword(3);
-        $this->type('abc');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sub>%1%</sub></p><p>Some more subscript test <sub>%2% test abc %4%</sub> content to test</p>');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% subscript <sub>%2% content test to test %4%</sub> more %5% content</p>');
 
+        // Test highlighting the first word of the del tags and replace it. Should stay in del tag.
+        $this->useTest(7);
+        $this->selectKeyword(2);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% subscript <sub>test content %3% to test %4%</sub> more %5% content</p>');
+
+        // Test hightlighting the first word, pressing forward + delete and replace it. Should be outside the del tag.
+        $this->useTest(7);
+        $this->selectKeyword(2);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% subscript test<sub> content %3% to test %4%</sub> more %5% content</p>');
+
+        // Test highlighting the first word, pressing backspace and replace it. Should be outside the del tag.
+        $this->useTest(7);
         $this->selectKeyword(2);
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->type('abc');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sub>%1%</sub></p><p>Some more subscript test abc<sub> test abc %4%</sub> content to test</p>');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% subscript test<sub> content %3% to test %4%</sub> more %5% content</p>');
 
+        // Test highlighting the last word of the del tags and replace it. Should stay in del tag.
+        $this->useTest(7);
+        $this->selectKeyword(4);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% subscript <sub>%2% content %3% to test test</sub> more %5% content</p>');
+
+        // Test highlighting the last word of the del tags, pressing forward + delete and replace it. Should stay inside del
+        $this->useTest(7);
         $this->selectKeyword(4);
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('test');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sub>%1%</sub></p><p>Some more subscript test abc<sub> test abc test</sub> content to test</p>');
+        $this->assertHTMLMatch('<p>Some %1% subscript <sub>%2% content %3% to test test</sub> more %5% content</p>');
+
+        // Test highlighting the last word of the del tags, pressing backspace and replace it. Should stay inside del.
+        $this->useTest(7);
+        $this->selectKeyword(4);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% subscript <sub>%2% content %3% to test test</sub> more %5% content</p>');
+
+        // Test selecting from before the del tag to inside. New content should not be in subscript.
+        $this->useTest(7);
+        $this->selectKeyword(1, 3);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some test<sub> to test %4%</sub> more %5% content</p>');
+
+        // Test selecting from after the del tag to inside. New content should be in subscript.
+        $this->useTest(7);
+        $this->selectKeyword(3, 5);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% subscript <sub>%2% content test</sub> content</p>');
 
     }//end testEditingSubscriptContent()
 
@@ -485,7 +532,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('<p>%1% </p><p>test <sub>a %2% b</sub> %3%</p>');
+        $this->assertHTMLMatch('<p>%1% </p><p><sub>test a %2% b</sub> %3%</p>');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
@@ -493,7 +540,7 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test');
-        $this->assertHTMLMatch('<p>%1% test</p><p>test <sub>a %2% b</sub> %3%</p>');
+        $this->assertHTMLMatch('<p>%1% test</p><p><sub>test a %2% b</sub> %3%</p>');
 
         // Test pressing enter at the end of subscript content
         $this->useTest(6);
@@ -505,6 +552,97 @@ class Viper_Tests_ViperCoreStylesPlugin_SubscriptUnitTest extends AbstractViperU
         $this->assertHTMLMatch('<p>%1% <sub>a %2% b</sub></p><p>test&nbsp;&nbsp;%3%</p>');
 
     }//end testSplittingSubscriptContent()
+
+
+    /**
+     * Test undo and redo applying subscript to content
+     *
+     * @return void
+     */
+    public function testUndoAndRedoApplyingSubscriptContent()
+    {
+        // Apply subscript content
+        $this->useTest(8);
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('subscript');
+        $this->assertHTMLMatch('<p>%1% <sub>%2%</sub> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>%1% <sub>%2%</sub> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>%1% <sub>%2%</sub> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+
+         // Apply subscript content again
+        $this->selectKeyword(4);
+        $this->clickTopToolbarButton('subscript');
+        $this->assertHTMLMatch('<p>%1% <sub>%2%</sub> %3%</p><p>sit <sub>%4%</sub> %5%</p><p>Another p</p>');
+
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1% <sub>%2%</sub> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>%1% <sub>%2%</sub> %3%</p><p>sit <sub>%4%</sub> %5%</p><p>Another p</p>');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>%1% <sub>%2%</sub> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>%1% <sub>%2%</sub> %3%</p><p>sit <sub>%4%</sub> %5%</p><p>Another p</p>');
+
+    }//end testUndoAndRedoApplyingSubscriptContent()
+
+
+    /**
+     * Test undo and redo when editing subscript content
+     *
+     * @return void
+     */
+    public function testUndoAndRedoWithEditingSubscriptContent()
+    {
+
+        // Add content to the middle of the subscript content
+        $this->useTest(4);
+        $this->moveToKeyword(2, 'right');
+        $this->type(' test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sub>%1%</sub></p><p>Some more subscript <sub>%2% test %3%</sub> content to test</p>');
+
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sub>%1%</sub></p><p>Some more subscript <sub>%2% %3%</sub> content to test</p>');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sub>%1%</sub></p><p>Some more subscript <sub>%2% test %3%</sub> content to test</p>');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sub>%1%</sub></p><p>Some more subscript <sub>%2% %3%</sub> content to test</p>');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sub>%1%</sub></p><p>Some more subscript <sub>%2% test %3%</sub> content to test</p>');
+
+        // Test deleting content and pressing undo
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content </p><p>Some more subscript <sub>%2% test %3%</sub> content to test</p>');
+
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sub>%1%</sub></p><p>Some more subscript <sub>%2% test %3%</sub> content to test</p>');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content </p><p>Some more subscript <sub>%2% test %3%</sub> content to test</p>');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <sub>%1%</sub></p><p>Some more subscript <sub>%2% test %3%</sub> content to test</p>');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content </p><p>Some more subscript <sub>%2% test %3%</sub> content to test</p>');
+
+    }//end testUndoAndRedoWithEditingSubscriptContent()
 
 }//end class
 

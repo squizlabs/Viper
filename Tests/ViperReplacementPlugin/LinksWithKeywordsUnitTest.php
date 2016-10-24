@@ -20,7 +20,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         sleep(1);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com.au');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Insert Link', NULL, TRUE);
         $this->clickKeyword(3);
         $this->moveToKeyword(3, 'right');
         $this->sikuli->keyDown('Key.DELETE');
@@ -45,7 +45,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         sleep(1);
         $this->clickTopToolbarButton('link');
         $this->type('www.squizlabs.com.au');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Insert Link', NULL, TRUE);
         $this->clickKeyword(3);
 
         $this->assertHTMLMatch('<p>%1% <a href="www.squizlabs.com.au">((prop:productName))</a> %2% %3%</p>');
@@ -79,7 +79,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         sleep(1);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com.au');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Insert Link', NULL, TRUE);
         $this->clickKeyword(2);
 
         $this->assertHTMLMatch('<p>%1% <a href="http://www.squizlabs.com.au">((prop:productName))</a> %2%</p><p>((prop:productName)) %3%</p><p>%4% ((prop:productName))</p><p>Test content.</p>');
@@ -92,7 +92,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         sleep(1);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com.au');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Insert Link', NULL, TRUE);
         $this->clickKeyword(1);
 
         $this->assertHTMLMatch('<p>%1% <a href="http://www.squizlabs.com.au">((prop:productName))</a> %2%</p><p><a href="http://www.squizlabs.com.au">((prop:productName))</a> %3%</p><p>%4% ((prop:productName))</p><p>Test content.</p>');
@@ -105,7 +105,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         sleep(1);
         $this->clickInlineToolbarButton('link');
         $this->type('http://www.squizlabs.com.au');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickInlineToolbarButton('Insert Link', NULL, TRUE);
         $this->clickKeyword(1);
 
         $this->assertHTMLMatch('<p>%1% <a href="http://www.squizlabs.com.au">((prop:productName))</a> %2%</p><p><a href="http://www.squizlabs.com.au">((prop:productName))</a> %3%</p><p>%4% <a href="http://www.squizlabs.com.au">((prop:productName))</a></p><p>Test content.</p>');
@@ -156,7 +156,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         sleep(1);
         $this->clickTopToolbarButton('link');
         $this->type('http://www.squizlabs.com.au');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Insert Link', NULL, TRUE);
         $this->clickKeyword(4);
 
         $this->assertHTMLMatch('<p>%1% <a href="http://www.squizlabs.com.au">((prop:productName))</a> %2%</p><p>((prop:productName)) %3%</p><p>%4% ((prop:productName))</p><p>Test content.</p>');
@@ -169,7 +169,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         sleep(1);
         $this->clickTopToolbarButton('link');
         $this->type('http://www.squizlabs.com.au');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Insert Link', NULL, TRUE);
         $this->clickKeyword(4);
 
         $this->assertHTMLMatch('<p>%1% <a href="http://www.squizlabs.com.au">((prop:productName))</a> %2%</p><p><a href="http://www.squizlabs.com.au">((prop:productName))</a> %3%</p><p>%4% ((prop:productName))</p><p>Test content.</p>');
@@ -182,7 +182,7 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         sleep(1);
         $this->clickTopToolbarButton('link');
         $this->type('http://www.squizlabs.com.au');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->clickTopToolbarButton('Insert Link', NULL, TRUE);
         $this->clickKeyword(4);
 
         $this->assertHTMLMatch('<p>%1% <a href="http://www.squizlabs.com.au">((prop:productName))</a> %2%</p><p><a href="http://www.squizlabs.com.au">((prop:productName))</a> %3%</p><p>%4% <a href="http://www.squizlabs.com.au">((prop:productName))</a></p><p>Test content.</p>');
@@ -385,4 +385,86 @@ class Viper_Tests_ViperReplacementPlugin_LinksWithKeywordsUnitTest extends Abstr
         $this->assertHTMLMatch('<p><a href="((lookup:url:1))">Test content additional content %1%</a></p><p><a href="((lookup:url:1))">%2% More test more content %3% content. %4%</a></p>');
 
     }//end testEditingKeywordLinkedContent()
+
+
+    /**
+     * Test undo and redo when adding a link on keyword.
+     *
+     * @return void
+     */
+    public function testUndoAndRedoAddingLinkOnKeywords()
+    {
+        // Test using keyboard shortcuts
+        $this->useTest(1);
+        $this->moveToKeyword(1 , 'right');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        $this->clickInlineToolbarButton('link');
+        $this->type('http://www.squizlabs.com.au');
+        $this->clickInlineToolbarButton('Insert Link', NULL, TRUE);
+        $this->assertHTMLMatch('<p>%1% <a href="http://www.squizlabs.com.au">((prop:productName))</a> %2% %3%</p>');
+        $this->assertRawHTMLMatch('<p>%1% <a href="http://www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a> %2% %3%</p>');
+
+        $this->clickKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>%1% ((prop:productName)) %2% %3%</p>');
+        $this->assertRawHTMLMatch('<p>%1% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %2% %3%</p>');
+
+        // Test for redo
+        $this->clickKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>%1% <a href="http://www.squizlabs.com.au">((prop:productName))</a> %2% %3%</p>');
+        $this->assertRawHTMLMatch('<p>%1% <a href="http://www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a> %2% %3%</p>');
+
+        // Test using top toolbar
+        $this->clickTopToolbarButton('historyUndo', NULL);
+        $this->assertHTMLMatch('<p>%1% ((prop:productName)) %2% %3%</p>');
+        $this->assertRawHTMLMatch('<p>%1% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %2% %3%</p>');
+
+        // Test for redo
+        $this->clickTopToolbarButton('historyRedo', NULL);
+        $this->assertHTMLMatch('<p>%1% <a href="http://www.squizlabs.com.au">((prop:productName))</a> %2% %3%</p>');
+        $this->assertRawHTMLMatch('<p>%1% <a href="http://www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a> %2% %3%</p>');
+
+    }//end testUndoAndRedoAddingLinkOnKeywords()
+
+
+    /**
+     * Test undo and redo when removing a link on a keyword.
+     *
+     * @return void
+     */
+    public function testUndoAndRedoDeletingLinkOnKeywords()
+    {
+        // Test using keyboard shortcuts
+        $this->useTest(6);
+        $this->moveToKeyword(1 , 'right');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->sikuli->keyDown('Key.SHIFT + Key.RIGHT');
+        sleep(1);
+        $this->clickTopToolbarButton('linkremove', NULL);
+        $this->assertHTMLMatch('<p>%1% ((prop:productName)) %2%</p><p>%3% %4%</p>');
+        $this->assertRawHTMLMatch('<p>%1% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %2%</p><p>%3% %4%</p>');
+
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>%1% <a href="www.squizlabs.com.au">((prop:productName))</a> %2%</p><p>%3% %4%</p>');
+        $this->assertRawHTMLMatch('<p>%1% <a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a> %2%</p><p>%3% %4%</p>');
+
+        // Test for redo
+        $this->clickKeyword(1);
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>%1% ((prop:productName)) %2%</p><p>%3% %4%</p>');
+        $this->assertRawHTMLMatch('<p>%1% <span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %2%</p><p>%3% %4%</p>');
+
+        // Test using top toolbar
+        $this->clickTopToolbarButton('historyUndo', NULL);
+        $this->assertHTMLMatch('<p>%1% <a href="www.squizlabs.com.au">((prop:productName))</a> %2%</p><p>%3% %4%</p>');
+        $this->assertRawHTMLMatch('<p>%1%<a href="www.squizlabs.com.au"><span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span></a> %2%</p><p>%3% %4%</p>');
+
+        // Test for redo
+        $this->clickTopToolbarButton('historyRedo', NULL);
+        $this->assertHTMLMatch('<p>%1% ((prop:productName)) %2%</p><p>%3% %4%</p>');
+        $this->assertRawHTMLMatch('<p>%1%<span data-viper-keyword="((prop:productName))" title="((prop:productName))">Viper</span> %2%</p><p>%3% %4%</p>');
+
+    }//end testUndoAndRedoDeletingLinkOnKeywords()
 }

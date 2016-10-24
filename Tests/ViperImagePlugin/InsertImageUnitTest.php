@@ -295,9 +295,9 @@ class Viper_Tests_ViperImagePlugin_InsertImageUnitTest extends AbstractViperImag
         sleep(2);
         $this->clickField('Image is decorative');
         sleep(2);
-        $this->sikuli->keyDown('Key.ENTER');
-        sleep(2);
         $this->findImage('ViperImagePlugin-loadError', '.Viper-textbox-error');
+        sleep(2);
+        $this->sikuli->keyDown('Key.ENTER');
         sleep(2);
         $this->assertHTMLMatch('<p>%1%<img src="http://www.squizlabs.com/editing.png" alt="" /> Content to test inserting images</p><p>Another paragraph in the content %2%</p>');
 

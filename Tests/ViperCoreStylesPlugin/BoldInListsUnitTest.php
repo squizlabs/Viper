@@ -13,397 +13,218 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldInListsUnitTest extends AbstractVipe
      */
     public function testAddAndRemoveBoldToWordInListItem()
     {
-        $this->useTest(1);
+        foreach (array('ol', 'ul') as $listType) {
+            foreach ($this->getTestMethods(TRUE, TRUE, TRUE) as $method) {
+                if ($listType === 'ul') {
+                    $this->useTest(1);
+                } else {
+                    $this->useTest(2);
+                }
 
-        // Apply bold using inline toolbar
-        $this->selectKeyword(1);
-        $this->clickInlineToolbarButton('bold');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 <strong>%1%</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
+                $this->selectKeyword(1);
+                $this->doAction($method, 'bold');
+                $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
+                $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
+                $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>item 1</li><li>item 2 <strong>%1%</strong></li><li>item 3</li><li><strong>item 4 %2%</strong></li><li>item 5</li></'.$listType.'>');
 
-        $this->selectKeyword(2);
-        $this->clickInlineToolbarButton('bold');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 <strong>%1%</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 <strong>%2%</strong></li><li>item 3</li></ol>');
-
-        // Remove bold using inline toolbar
-        $this->selectKeyword(1);
-        $this->clickInlineToolbarButton('bold', 'active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon in the inline toolbar is active');
-        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 <strong>%2%</strong></li><li>item 3</li></ol>');
-
-        $this->selectKeyword(2);
-        $this->clickInlineToolbarButton('bold', 'active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon in the inline toolbar is active');
-        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
-
-        // Apply bold using top toolbar
-        $this->selectKeyword(1);
-        $this->clickInlineToolbarButton('bold');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 <strong>%1%</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
-
-        $this->selectKeyword(2);
-        $this->clickInlineToolbarButton('bold');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 <strong>%1%</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 <strong>%2%</strong></li><li>item 3</li></ol>');
-
-         // Remove bold using top toolbar
-        $this->selectKeyword(1);
-        $this->clickTopToolbarButton('bold', 'active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon in the inline toolbar is active');
-        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 <strong>%2%</strong></li><li>item 3</li></ol>');
-
-        $this->selectKeyword(2);
-        $this->clickTopToolbarButton('bold', 'active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon in the inline toolbar is active');
-        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
-
-        // Apply bold using keyboard shortcuts
-        $this->selectKeyword(1);
-        $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 <strong>%1%</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
-
-        $this->selectKeyword(2);
-        $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 <strong>%1%</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 <strong>%2%</strong></li><li>item 3</li></ol>');
-
-         // Remove bold using top toolbar
-        $this->selectKeyword(1);
-        $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon in the inline toolbar is active');
-        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 <strong>%2%</strong></li><li>item 3</li></ol>');
-
-        $this->selectKeyword(2);
-        $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon in the inline toolbar is active');
-        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
+                // Remove bold
+                $this->selectKeyword(1);
+                $this->doAction($method, 'bold', 'active');
+                $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon in the inline toolbar is active');
+                $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
+                $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>item 1</li><li>item 2 %1%</li><li>item 3</li><li><strong>item 4 %2%</strong></li><li>item 5</li></'.$listType.'>');
+            }
+        }
 
     }//end testAddAndRemoveBoldToWordInListItem()
 
 
     /**
-     * Test applying bold to a word a list item.
+     * Test applying bold to an item in the list
      *
      * @return void
      */
     public function testAddAndRemoveBoldToListItem()
     {
-        $this->useTest(1);
+        foreach (array('ol', 'ul') as $listType) {
+            foreach ($this->getTestMethods(TRUE, TRUE, TRUE) as $method) {
+                if ($listType === 'ul') {
+                    $this->useTest(1);
+                } else {
+                    $this->useTest(2);
+                }
 
-        // Apply bold using inline toolbar
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->clickInlineToolbarButton('bold');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>item 2 %1%</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
+                $this->selectKeyword(1);
+                $this->selectInlineToolbarLineageItem(1);
+                $this->doAction($method, 'bold');
+                sleep(1);
+                $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
+                $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
+                $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>item 1</li><li><strong>item 2 %1%</strong></li><li>item 3</li><li><strong>item 4 %2%</strong></li><li>item 5</li></'.$listType.'>');
 
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->clickInlineToolbarButton('bold');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>item 2 %1%</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><strong>item 2 %2%</strong></li><li>item 3</li></ol>');
-
-        // Remove bold using inline toolbar
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->clickInlineToolbarButton('bold', 'active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon in the inline toolbar is active');
-        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><strong>item 2 %2%</strong></li><li>item 3</li></ol>');
-
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->clickInlineToolbarButton('bold', 'active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon in the inline toolbar is active');
-        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
-
-        // Apply bold using top toolbar
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->clickTopToolbarButton('bold');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>item 2 %1%</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
-
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->clickTopToolbarButton('bold');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>item 2 %1%</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><strong>item 2 %2%</strong></li><li>item 3</li></ol>');
-
-         // Remove bold using top toolbar
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->clickTopToolbarButton('bold', 'active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon in the inline toolbar is active');
-        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><strong>item 2 %2%</strong></li><li>item 3</li></ol>');
-
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->clickTopToolbarButton('bold', 'active');
-        $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon in the inline toolbar is active');
-        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
-
-        // Apply bold using keyboard shortcuts
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->sikuli->keyDown('Key.CMD + b');
-        sleep(1);
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>item 2 %1%</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
-
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->sikuli->keyDown('Key.CMD + b');
-        sleep(1);
-        $this->assertTrue($this->inlineToolbarButtonExists('bold', 'active'), 'Bold icon in the inline toolbar is not active');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li><strong>item 2 %1%</strong></li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><strong>item 2 %2%</strong></li><li>item 3</li></ol>');
-
-        // Remove bold using top toolbar
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->sikuli->keyDown('Key.CMD + b');
-        sleep(1);
-        $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon in the inline toolbar is active');
-        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li><strong>item 2 %2%</strong></li><li>item 3</li></ol>');
-
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(1);
-        $this->sikuli->keyDown('Key.CMD + b');
-        sleep(1);
-        $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon in the inline toolbar is active');
-        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
+                // Remove bold
+                $this->selectKeyword(1);
+                $this->selectInlineToolbarLineageItem(1);
+                $this->doAction($method, 'bold', 'active');
+                $this->assertTrue($this->inlineToolbarButtonExists('bold'), 'Bold icon in the inline toolbar is active');
+                $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
+                $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>item 1</li><li>item 2 %1%</li><li>item 3</li><li><strong>item 4 %2%</strong></li><li>item 5</li></'.$listType.'>');
+            }
+        }
 
     }//end testAddAndRemoveBoldToListItem()
 
 
     /**
-     * Test applying bold to a word a list.
+     * Test applying bold to all items in the list.
      *
      * @return void
      */
-    public function testAddAndRemoveBoldToList()
+    public function testAddAndRemoveBoldToAllItemsInList()
     {
-        $this->useTest(1);
+        foreach (array('ol', 'ul') as $listType) {
+            foreach ($this->getTestMethods(TRUE, FALSE, TRUE) as $method) {
+                if ($listType === 'ul') {
+                    $this->useTest(1);
+                } else {
+                    $this->useTest(2);
+                }
 
-        // Apply bold using top toolbar
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('bold');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
-        // Make sure the bold icon does not appear in the inline toolbar
-        $this->assertFalse($this->inlineToolbarButtonExists('bold'), 'Bold icon is in the inline toolbar is not active');
-        $this->assertFalse($this->inlineToolbarButtonExists('bold', 'active'), 'Active bold icon appears in the inline toolbar');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li><strong>item 1</strong></li><li><strong>item 2 %1%</strong></li><li><strong>item 3</strong></li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
+                $this->selectKeyword(1);
+                $this->selectInlineToolbarLineageItem(0);
+                $this->doAction($method, 'bold');
+                $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
 
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('bold');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
-        // Make sure the bold icon does not appear in the inline toolbar
-        $this->assertFalse($this->inlineToolbarButtonExists('bold'), 'Bold icon is in the inline toolbar is not active');
-        $this->assertFalse($this->inlineToolbarButtonExists('bold', 'active'), 'Active bold icon appears in the inline toolbar');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li><strong>item 1</strong></li><li><strong>item 2 %1%</strong></li><li><strong>item 3</strong></li></ul><p>Ordered list:</p><ol><li><strong>item 1</strong></li><li><strong>item 2 %2%</strong></li><li><strong>item 3</strong></li></ol>');
+                // Make sure the bold icon does not appear in the inline toolbar
+                $this->assertFalse($this->inlineToolbarButtonExists('bold'), 'Bold icon is in the inline toolbar is not active');
+                $this->assertFalse($this->inlineToolbarButtonExists('bold', 'active'), 'Active bold icon appears in the inline toolbar');
+                $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li><strong>item 1</strong></li><li><strong>item 2 %1%</strong></li><li><strong>item 3</strong></li><li><strong>item 4 %2%</strong></li><li><strong>item 5</strong></li></'.$listType.'>');
 
-         // Remove bold using top toolbar
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('bold', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li><strong>item 1</strong></li><li><strong>item 2 %2%</strong></li><li><strong>item 3</strong></li></ol>');
+                $this->selectKeyword(1);
+                $this->selectInlineToolbarLineageItem(0);
+                $this->doAction($method, 'bold', 'active');
+                $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
+                $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>item 1</li><li>item 2 %1%</li><li>item 3</li><li>item 4 %2%</li><li>item 5</li></'.$listType.'>');
+            }
+        }
 
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->clickTopToolbarButton('bold', 'active');
-        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
-
-        // Apply bold using keyboard shortcuts
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
-        // Make sure the bold icon does not appear in the inline toolbar
-        $this->assertFalse($this->inlineToolbarButtonExists('bold'), 'Bold icon is in the inline toolbar is not active');
-        $this->assertFalse($this->inlineToolbarButtonExists('bold', 'active'), 'Active bold icon appears in the inline toolbar');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li><strong>item 1</strong></li><li><strong>item 2 %1%</strong></li><li><strong>item 3</strong></li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
-
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertTrue($this->topToolbarButtonExists('bold', 'active'), 'Bold icon in the top toolbar is not active');
-        // Make sure the bold icon does not appear in the inline toolbar
-        $this->assertFalse($this->inlineToolbarButtonExists('bold'), 'Bold icon is in the inline toolbar is not active');
-        $this->assertFalse($this->inlineToolbarButtonExists('bold', 'active'), 'Active bold icon appears in the inline toolbar');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li><strong>item 1</strong></li><li><strong>item 2 %1%</strong></li><li><strong>item 3</strong></li></ul><p>Ordered list:</p><ol><li><strong>item 1</strong></li><li><strong>item 2 %2%</strong></li><li><strong>item 3</strong></li></ol>');
-
-        // Remove bold using top toolbar
-        $this->selectKeyword(1);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li><strong>item 1</strong></li><li><strong>item 2 %2%</strong></li><li><strong>item 3</strong></li></ol>');
-
-        $this->selectKeyword(2);
-        $this->selectInlineToolbarLineageItem(0);
-        $this->sikuli->keyDown('Key.CMD + b');
-        $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
-        $this->assertHTMLMatch('<p>Unordered list:</p><ul><li>item 1</li><li>item 2 %1%</li><li>item 3</li></ul><p>Ordered list:</p><ol><li>item 1</li><li>item 2 %2%</li><li>item 3</li></ol>');
-
-    }//end testAddAndRemoveBoldToListItem()
+    }//end testAddAndRemoveBoldToAllItemsInList()
 
 
     /**
-     * Test deleting content from unordered lists including bold formating
+     * Test that creating new list items after a bold formatted list item functions correctly.
      *
      * @return void
      */
-    public function testDeletingBoldContentFromUnorderedLists()
+    public function testCreatingNewListItemAfterABoldItem()
+    {
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(1);
+            } else {
+                $this->useTest(2);
+            }
+                
+            $this->moveToKeyword(2, 'right');
+            $this->sikuli->keyDown('Key.ENTER');
+            sleep(1);
+            $this->type('new item');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>item 1</li><li>item 2 %1%</li><li>item 3</li><li><strong>item 4 %2%</strong></li><li><strong>new item</strong></li><li>item 5</li></'.$listType.'>');
+        } 
+
+    }//end testCreatingNewListItemAfterABoldItem()
+
+
+    /**
+     * Test deleting content from lists including bold formating
+     *
+     * @return void
+     */
+    public function testDeletingBoldContentFromLists()
     {
         // Check deleting a word after the bold content in a list item
-        $this->useTest(2);
-        $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% <strong>test</strong></li></ul>');
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(3);
+            } else {
+                $this->useTest(4);
+            }
 
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% <strong>testcontent</strong></li></ul>');
+            $this->moveToKeyword(2, 'right');
+            $this->sikuli->keyDown('Key.BACKSPACE');
+            $this->sikuli->keyDown('Key.BACKSPACE');
+            $this->sikuli->keyDown('Key.BACKSPACE');
+            $this->sikuli->keyDown('Key.BACKSPACE');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>%1% <strong>test</strong></li></'.$listType.'>');
+
+            // Add content to check the position of the cursor
+            $this->type('content');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>%1% <strong>testcontent</strong></li></'.$listType.'>');
+        }
 
         // Check deleting from the end of the paragraph including bold content
-        $this->useTest(2);
-        $this->moveToKeyword(2, 'right');
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(3);
+            } else {
+                $this->useTest(4);
+            }
+            
+            $this->moveToKeyword(2, 'right');
 
-        for ($i = 0; $i < 8; $i++) {
-            $this->sikuli->keyDown('Key.BACKSPACE');
+            for ($i = 0; $i < 8; $i++) {
+                $this->sikuli->keyDown('Key.BACKSPACE');
+            }
+
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>%1%</li></'.$listType.'>');
+
+            // Add content to check the position of the cursor
+            $this->type('content');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>%1% content</li></'.$listType.'>');
         }
 
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1%</li></ul>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%1% content</li></ul>');
-
         // Check deleting from the start of the list item
-        $this->useTest(2);
-        $this->moveToKeyword(1, 'left');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li><strong>test</strong> %2%</li></ul>');
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(3);
+            } else {
+                $this->useTest(4);
+            }
+            
+            $this->moveToKeyword(1, 'left');
+            $this->sikuli->keyDown('Key.DELETE');
+            $this->sikuli->keyDown('Key.DELETE');
+            $this->sikuli->keyDown('Key.DELETE');
+            $this->sikuli->keyDown('Key.DELETE');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li><strong>test</strong> %2%</li></'.$listType.'>');
 
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li><strong>contenttest</strong> %2%</li></ul>');
+            // Add content to check the position of the cursor
+            $this->type('content');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li><strong>contenttest</strong> %2%</li></'.$listType.'>');
+        }
 
         // Check deleting from the start of the list item including bold content
-        $this->useTest(2);
-        $this->moveToKeyword(1, 'left');
+        foreach (array('ol', 'ul') as $listType) {
+            if ($listType === 'ul') {
+                $this->useTest(3);
+            } else {
+                $this->useTest(4);
+            }
 
-        for ($i = 0; $i < 8; $i++) {
-            $this->sikuli->keyDown('Key.DELETE');
+            $this->moveToKeyword(1, 'left');
+
+            for ($i = 0; $i < 8; $i++) {
+                $this->sikuli->keyDown('Key.DELETE');
+            }
+
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>%2%</li></'.$listType.'>');
+
+            // Add content to check the position of the cursor
+            $this->type('content');
+            $this->assertHTMLMatch('<p>List:</p><'.$listType.'><li>content %2%</li></'.$listType.'>');
         }
 
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>%2%</li></ul>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>content %2%</li></ul>');
-
-    }//end testDeletingBoldContentFromUnorderedLists()
-
-
-     /**
-     * Test deleting content from ordered lists including bold formating
-     *
-     * @return void
-     */
-    public function testDeletingBoldContentFromOrderedLists()
-    {
-        // Check deleting a word after the bold content in a list item
-        $this->useTest(3);
-        $this->moveToKeyword(2, 'right');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% <strong>test</strong></li></ol>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% <strong>testcontent</strong></li></ol>');
-
-        // Check deleting from the end of the list item including bold content
-        $this->useTest(3);
-        $this->moveToKeyword(2, 'right');
-
-        for ($i = 0; $i < 8; $i++) {
-            $this->sikuli->keyDown('Key.BACKSPACE');
-        }
-
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1%</li></ol>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%1% content</li></ol>');
-
-        // Check deleting from the start of the list item
-        $this->useTest(3);
-        $this->moveToKeyword(1, 'left');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li><strong>test</strong> %2%</li></ol>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li><strong>contenttest</strong> %2%</li></ol>');
-
-        // Check deleting from the start of the paragraph including bold content
-        $this->useTest(3);
-        $this->moveToKeyword(1, 'left');
-
-        for ($i = 0; $i < 8; $i++) {
-            $this->sikuli->keyDown('Key.DELETE');
-        }
-
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>%2%</li></ol>');
-
-        // Add content to check the position of the cursor
-        $this->type('content');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>content %2%</li></ol>');
-
-    }//end testDeletingBoldContentFromOrderedLists()
+    }//end testDeletingBoldContentFromLists()
 
 }//end class
 

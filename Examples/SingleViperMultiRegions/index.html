@@ -10,13 +10,13 @@
     <script type="text/javascript">
         var viper = null;
         ViperReadyCallback = function() {
-            viper = new Viper('test', null, null, [ViperUtil.getid('content-1'), ViperUtil.getid('content-2')]);
+            viper = new Viper('test', null, null, [Viper.Util.getid('content-1'), Viper.Util.getid('content-2')]);
 
-            ViperUtil.addEvent(ViperUtil.getClass('boxmsg'), 'mousedown', function(e) {
-                var target   = ViperUtil.getMouseEventTarget(e);
+            Viper.Util.addEvent(Viper.Util.getClass('boxmsg'), 'mousedown', function(e) {
+                var target   = Viper.Util.getMouseEventTarget(e);
                 var editElem = target.parentNode;
 
-                ViperUtil.remove(target);
+                Viper.Util.remove(target);
 
                 viper.setEditableElement(editElem);
                 viper.setEnabled(true);
@@ -61,8 +61,8 @@
     </ol>
 </div>
 
-<div id="content-1" class="editingBox"><div class="boxmsg">Click to edit.</div></div>
-<div id="content-2" class="editingBox"><div class="boxmsg">Click to edit.</div></div>
+<div id="content-1" class="editingBox">Example content <a href="squizlabs.com">Squiz Labs</a> more text..<div class="boxmsg">Click to edit.</div></div>
+<div id="content-2" class="editingBox">Example content<div class="boxmsg">Click to edit.</div></div>
 
 
     </div>

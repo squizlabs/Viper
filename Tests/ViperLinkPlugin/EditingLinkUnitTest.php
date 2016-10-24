@@ -18,7 +18,7 @@ class Viper_Tests_ViperLinkPlugin_EditingLinkUnitTest extends AbstractViperLinkP
         $this->clickInlineToolbarButton('link', 'active');
         $this->clearFieldValue('URL');
         $this->type('http://www.google.com');
-        $this->applyChanges('inline', 'insert');
+        $this->applyChanges('inline', 'update');
         $this->assertHTMLMatch('<p>Link in the content <a href="http://www.google.com">%1%</a> for testing</p>');
 
         // Using the top toolbar
@@ -154,7 +154,6 @@ class Viper_Tests_ViperLinkPlugin_EditingLinkUnitTest extends AbstractViperLinkP
 
         $this->type(' modified');
         $this->applyChanges('inline', 'update');
-return;
         $this->assertHTMLMatch('<p>Linked<a href="test link modified content" title="test-title">%1% test content %2%</a> for testing</p>');
 
         // Test using top toolbar

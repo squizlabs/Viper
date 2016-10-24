@@ -615,7 +615,7 @@
                             return child;
                         } else if (child.lastChild) {
                             // This node does have child nodes.
-                            var res = this._getLastSelectableChild(child, stubElementIsSelectable);
+                            var res = this._getLastSelectableChild(child, skipEmptyNodes, stubElementIsSelectable);
                             if (res !== null) {
                                 return res;
                             } else {
@@ -1090,6 +1090,42 @@
             ) {
                 this._nodeSel.node = range.endContainer.previousSibling;
                 return this._nodeSel.node;
+            } else if (ViperUtil.isText(startNode) === true
+                && range.startOffset === startNode.data.length
+                && ViperUtil.isElement(range.endContainer) === true
+                && ViperUtil.isText(range.endContainer.childNodes[range.endOffset]) === true
+                && ViperUtil.isElement(startNode.nextSibling) === true
+                && startNode.nextSibling.nextSibling === range.endContainer.childNodes[range.endOffset]
+            ) {
+                // Case: <p>text [<span>text</span>] more text.
+                // range endContainer actually is the P instead of the ' more text' text node.
+                this._nodeSel.node = startNode.nextSibling;
+                return this._nodeSel.node;
+            } else if (ViperUtil.isText(startNode) === true
+                && range.startOffset === 0
+                && ViperUtil.isElement(range.endContainer) === true
+                && !startNode.previousSibling
+                && ViperUtil.isText(range.endContainer.childNodes[range.endOffset]) === true
+                && startNode.parentNode.nextSibling === range.endContainer.childNodes[range.endOffset]
+            ) {
+                this._nodeSel.node = startNode.parentNode;
+                return this._nodeSel.node;
+            } else if (ViperUtil.isBrowser('msie') === true) {
+                // IE specific checks.
+                if (range.startOffset === 0) {
+                    if (ViperUtil.isText(range.startContainer) === true) {
+                        if (ViperUtil.isElement(range.endContainer) === true) {
+                            if (!range.startContainer.previousSibling
+                                && startNode === endNode
+                                && !startNode.nextSibling
+                            ) {
+                                // Case: <p>text <em>[text</em>]</p>.
+                                this._nodeSel.node = startNode.parentNode;
+                                return this._nodeSel.node;
+                            }
+                        }
+                    }
+                }
             }
 
             // We may need to adjust the "startNode" depending on its offset.

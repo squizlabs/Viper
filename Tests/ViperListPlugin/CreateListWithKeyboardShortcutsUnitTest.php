@@ -21,10 +21,10 @@ class Viper_Tests_ViperListPlugin_CreateListWithKeyboardShortcutsUnitTest extend
         $this->sikuli->keyDown('Key.ENTER');
         $this->sikuli->keyDown('Key.TAB');
         $this->type('Item 1');
-        $this->assertIconStatusesCorrect('active', TRUE, NULL, TRUE);
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE, FALSE, FALSE);
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('Item 2');
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE, FALSE, FALSE);
 
         $this->assertHTMLMatch('<p>Create list test %1%</p><p>Test list:</p><ul><li>Item 1</li><li>Item 2</li></ul>');
 
@@ -108,10 +108,10 @@ class Viper_Tests_ViperListPlugin_CreateListWithKeyboardShortcutsUnitTest extend
 
         $this->type('New list item');
         $this->sikuli->keyDown('Key.TAB');
-        $this->assertIconStatusesCorrect('active', TRUE, NULL, TRUE);
+        $this->assertIconStatusesCorrect('active', TRUE, FALSE, TRUE, FALSE, FALSE);
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('Second list item');
-        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE);
+        $this->assertIconStatusesCorrect('active', TRUE, TRUE, TRUE, FALSE, FALSE);
 
         $this->assertHTMLMatch('<p>Create list test %1%</p><ul><li>New list item</li><li>Second list item</li></ul>');
 
@@ -132,7 +132,7 @@ class Viper_Tests_ViperListPlugin_CreateListWithKeyboardShortcutsUnitTest extend
         $this->selectKeyword(1);
         $this->sikuli->keyDown('Key.CMD + a');
         $this->sikuli->keyDown('Key.DELETE');
-        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE);
+        $this->assertIconStatusesCorrect(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE);
 
         // Create unordered list and delete it
         $this->sikuli->keyDown('Key.TAB');

@@ -483,7 +483,7 @@ class ViperTestListener implements PHPUnit_Framework_TestListener
 
                     $tests = $suite->tests();
                     foreach ($tests as $test) {
-                        if (preg_match('#'.$testName.'#', $test->getName()) > 0) {
+                        if ($exactMatch !== TRUE && preg_match('#'.$testName.'#', $test->getName()) > 0) {
                             self::$_numTests += $test->count();
                         } else if (method_exists($test, 'tests') === TRUE) {
                             foreach ($test->tests() as $testCase) {
