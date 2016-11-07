@@ -7,7 +7,7 @@ class Viper_Tests_ViperCharMapPlugin_CharacterMapPluginUnitTest extends Abstract
 
 
     /**
-     * Test that the character map opens and the correct symbols are shown for each menu.
+     * Test that the character map opens and you can insert symbols.
      *
      * @return void
      */
@@ -53,7 +53,7 @@ class Viper_Tests_ViperCharMapPlugin_CharacterMapPluginUnitTest extends Abstract
 
         $this->assertHTMLMatch('<p>LOREM XAX&para;§ç&times;฿ dolor</p><p>sit amet<strong>WoW</strong></p>');
 
-    }//end testOpeningCharacterMap()
+    }//end testInsertingCharacter()
 
 
     /**
