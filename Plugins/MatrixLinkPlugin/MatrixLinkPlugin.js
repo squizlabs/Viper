@@ -4,6 +4,7 @@
         this._parent = viper.getPluginManager().getPluginObject('ViperLinkPlugin');
         this._parent.call(this, viper);
         this._assetTypeCode    = null;
+        this._retrivingAssetQueue = [];
     }
 
     Viper.PluginManager.addPlugin('MatrixLinkPlugin', MatrixLinkPlugin, 'ViperLinkPlugin');
@@ -504,39 +505,65 @@
         */
         retrieveAssetDetails: function(assetid, callback)
         {
-            assetid = assetid.replace(/(\?|&).*/g, '');
-            var exp = /^([0-9]+)$/g;
-            var result = exp.exec(assetid);
-            if(result && result[1] && result[1] != 1) {
-                assetid = result[1];
-            }
-            else {
-                callback.call(this, null);
+            var self = this;
+            // push this request to queue
+            if(assetid != null && callback != null) {
+                this._retrivingAssetQueue.push({'assetid':assetid, 'callback':callback});
+                // try check later
+                setTimeout(function(){ self.retrieveAssetDetails(assetid, null); }, 300);
                 return;
             }
-            if(typeof EasyEdit !== 'undefined') {
-                EasyEditAssetManager.getAsset(assetid, function(asset){
-                    var type_code = asset.attr.type_code;
-                    callback.call(this, type_code);
-                }, 1, true);
-            }
-            else {
-                var jsMap = parent.frames.sq_sidenav.JS_Asset_Map;
-                jsMap.doRequest({
-                    _attributes: {
-                        action: 'get attributes'
-                    },
-                    asset: [
-                        {
-                            _attributes: {
-                                assetid: assetid
+
+            if (assetid != null && callback == null)
+            {
+                // so this request times up, let's see if it's the "latest" in queue, if not, no need to update
+                // this trick is used to prevent user quickly typing and those ajax requests gets messed up in return order
+                // we only need to fire the ajax request for the very last request in the queue, and remove all previous queued item
+                var lastElement = this._retrivingAssetQueue[this._retrivingAssetQueue.length - 1];
+
+                if (!lastElement || lastElement.assetid != assetid) {
+                    return;
+                }
+                this._retrivingAssetQueue = [];
+
+                assetid = lastElement.assetid;
+                callback = lastElement.callback;
+
+
+                assetid = assetid.replace(/(\?|&).*/g, '');
+                var exp = /^([0-9]+)$/g;
+                var result = exp.exec(assetid);
+                if(result && result[1] && result[1] != 1) {
+                    assetid = result[1];
+                }
+                else {
+                    callback.call(this, null);
+                    return;
+                }
+                if(typeof EasyEdit !== 'undefined') {
+                    EasyEditAssetManager.getAsset(assetid, function(asset){
+                        var type_code = asset.attr.type_code;
+                        callback.call(this, type_code);
+                    }, 1, true);
+                }
+                else {
+                    var jsMap = parent.frames.sq_sidenav.JS_Asset_Map;
+                    jsMap.doRequest({
+                        _attributes: {
+                            action: 'get attributes'
+                        },
+                        asset: [
+                            {
+                                _attributes: {
+                                    assetid: assetid
+                                }
                             }
-                        }
-                    ]
-                }, function(response) {
-                    var data = typeof response['asset'] != 'undefined' ? response['asset'][0]['_attributes']['type_code'] : null;
-                    callback.call(this, data);
-                });
+                        ]
+                    }, function(response) {
+                        var data = typeof response['asset'] != 'undefined' ? response['asset'][0]['_attributes']['type_code'] : null;
+                        callback.call(this, data);
+                    });
+                }
             }
         }
 

@@ -1,40 +1,35 @@
 <div id="test-1">
-	<p>%1% ((prop:productName))</p>
+	<p>%1%</p>
+	<p>((prop:viperKeyword))</p>
 </div>
 
 <div id="test-2">
-	<p>%1% <a href="www.squizlabs.com.au">((prop:productName))</a></p>
+	<p>%1%</p>
+	<p><a href="www.squizlabs.com.au">((prop:viperKeyword))</a></p>
 </div>
 
 <div id="test-3">
-	<p>%1% Test content <img alt="TITLE" src="((prop:url))" /> more test content.%2%</p>
+	<p>%1%</p>
+	<p>Test %2% content <img alt="TITLE" src="((prop:url))" /> more test content.</p>
 </div>
 
 <div id="test-4">
+	<p>List:</p>
 	<ul>
-		<li><a href="((lookup:url:1))" title="Home">Home</a><br></li>
-		<li><a href="((lookup:url:3))" title="((prop:__name__:3))">Services</a><br></li>
-		<li><a href="((lookup:url:2))" title="((prop:__name__:2))">((prop:productName))</a><br>    
-		<ul>
-			<li><a href="((lookup:url:27))" title="((prop:__name__:27))">((prop:productName)) %1%</a><br></li>
-			<li><a href="((lookup:url:28))" title="((prop:__name__:28))">((prop:productName)) %2%</a><br></li>
-			<li><a href="((lookup:url:29))" title="((prop:__name__:29))">((prop:productName)) %3%</a><br></li>
-		</ul><br>  
-		</li>
+		<li>Item 1</li>
+		<li><a href="((lookup:url:27))" title="((prop:__name__:27))">%1%</a></li>
+		<li>Item 2</li>
+		<li><a href="((lookup:url:27))" title="((prop:__name__:27))">((prop:viperKeyword))</a></li>   
 	</ul>
 </div>
 
 <div id="test-5">
+	<p>List:</p>
 	<ol>
-		<li><a href="((lookup:url:1))" title="Home">Home</a><br></li>
-		<li><a href="((lookup:url:3))" title="((prop:__name__:3))">Services</a><br></li>
-		<li><a href="((lookup:url:2))" title="((prop:__name__:2))">((prop:productName))</a><br>    
-		<ol>
-			<li><a href="((lookup:url:27))" title="((prop:__name__:27))">((prop:productName)) %1%</a><br></li>
-			<li><a href="((lookup:url:28))" title="((prop:__name__:28))">((prop:productName)) %2%</a><br></li>
-			<li><a href="((lookup:url:29))" title="((prop:__name__:29))">((prop:productName)) %3%</a><br></li>
-		</ol><br>  
-		</li>
+		<li>Item 1</li>
+		<li><a href="((lookup:url:27))" title="((prop:__name__:27))">%1%</a></li>
+		<li>Item 2</li>
+		<li><a href="((lookup:url:27))" title="((prop:__name__:27))">((prop:viperKeyword))</a></li>   
 	</ol>
 </div>
 

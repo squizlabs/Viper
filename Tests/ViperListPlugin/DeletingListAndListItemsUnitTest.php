@@ -19,7 +19,7 @@ class Viper_Tests_ViperListPlugin_DeletingListAndListItemsUnitTest extends Abstr
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.BACKSPACE');
         sleep(1);
-        
+
         // Check that the inline toolbar no longer appears  on the screen
         $inlineToolbarFound = true;
         try
@@ -196,7 +196,7 @@ class Viper_Tests_ViperListPlugin_DeletingListAndListItemsUnitTest extends Abstr
         $this->selectInlineToolbarLineageItem(3);
         // Remove whole item.
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub list item 1</li><li>sub list item 3</li></ul></li><li>second item</li><li>third item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<ul><li>sub list item 1</li><li>sub list item 3</li></ul></li><li>second item</li><li>third item</li></ul>');
 
         //Test ordered list
         $this->useTest(4);
@@ -205,7 +205,7 @@ class Viper_Tests_ViperListPlugin_DeletingListAndListItemsUnitTest extends Abstr
         $this->selectInlineToolbarLineageItem(3);
         // Remove whole item.
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub list item 1</li><li>sub list item 3</li></ol></li><li>second item</li><li>third item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<ol><li>sub list item 1</li><li>sub list item 3</li></ol></li><li>second item</li><li>third item</li></ol>');
 
     }//end testDeletingAnItemFromSubList()
 
@@ -223,7 +223,7 @@ class Viper_Tests_ViperListPlugin_DeletingListAndListItemsUnitTest extends Abstr
         $this->selectInlineToolbarLineageItem(0);
         $this->sikuli->keyDown('Key.DELETE');
         sleep(1);
-        
+
         // Check that the inline toolbar no longer appears  on the screen
         $inlineToolbarFound = true;
         try
@@ -272,13 +272,13 @@ class Viper_Tests_ViperListPlugin_DeletingListAndListItemsUnitTest extends Abstr
         $this->useTest(1);
         $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>third %3% item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li></li><li>third %3% item</li></ul>');
 
         //Test ordered list
         $this->useTest(2);
         $this->selectKeyword(1, 2);
         $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>third %3% item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li></li><li>third %3% item</li></ol>');
 
     }//end testDeletingMultipleListItemsUsingDeleteKey()
 
@@ -367,7 +367,7 @@ class Viper_Tests_ViperListPlugin_DeletingListAndListItemsUnitTest extends Abstr
         $this->selectInlineToolbarLineageItem(3);
         // Remove whole item.
         $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<br /><ul><li>sub list item 1</li><li>sub list item 3</li></ul></li><li>second item</li><li>third item</li></ul>');
+        $this->assertHTMLMatch('<p>Unordered List:</p><ul><li>first item<ul><li>sub list item 1</li><li>sub list item 3</li></ul></li><li>second item</li><li>third item</li></ul>');
 
         //Test ordered list
         $this->useTest(4);
@@ -376,7 +376,7 @@ class Viper_Tests_ViperListPlugin_DeletingListAndListItemsUnitTest extends Abstr
         $this->selectInlineToolbarLineageItem(3);
         // Remove whole item.
         $this->sikuli->keyDown('Key.DELETE');
-        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<br /><ol><li>sub list item 1</li><li>sub list item 3</li></ol></li><li>second item</li><li>third item</li></ol>');
+        $this->assertHTMLMatch('<p>Ordered List:</p><ol><li>first item<ol><li>sub list item 1</li><li>sub list item 3</li></ol></li><li>second item</li><li>third item</li></ol>');
 
     }//end testDeletingAnItemFromSubListUsingDeleteKey()
 

@@ -279,7 +279,7 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperLinkP
         $this->clickTopToolbarButton('link', 'active');
         $this->clearFieldValue('URL');
         $this->type('http://www.google.com');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->applyChanges('top', 'update');
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 <a href="http://www.google.com" title="Squiz Labs" target="_blank">%2%</a></th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer %3%</td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test deleting the link
@@ -365,7 +365,7 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperLinkP
         $this->clickInlineToolbarButton('link', 'active');
         $this->clearFieldValue('URL');
         $this->type('http://www.google.com');
-        $this->clickInlineToolbarButton('Apply Changes', NULL, TRUE);
+        $this->applyChanges('inline', 'update');
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer <a href="http://www.google.com" title="Squiz Labs" target="_blank">%3%</a></td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test deleting the link
@@ -410,7 +410,7 @@ class Viper_Tests_ViperLinkPlugin_LinkInTableUnitTest extends AbstractViperLinkP
         $this->clickTopToolbarButton('link', 'active');
         $this->clearFieldValue('URL');
         $this->type('http://www.google.com');
-        $this->clickTopToolbarButton('Apply Changes', NULL, TRUE);
+        $this->applyChanges('top', 'update');
         $this->assertHTMLMatchNoHeaders('<table cellpadding="2" cellspacing="3"><caption><strong>Table 1.2:</strong> The table caption text %1%</caption><thead><tr><th>Col1 Header</th><th>Col2 Header</th><th>Col3 %2%</th></tr></thead><tfoot><tr><td colspan="3">Note: this is the table footer <a href="http://www.google.com" title="Squiz Labs" target="_blank">%3%</a></td></tr></tfoot><tbody><tr><td>sapien vel %4%</td><td>nec porta ante</td><td><ul><li>purus neque luctus ligula, vel molestie arcu</li><li>purus neque luctus</li><li>vel molestie arcu</li></ul></td></tr><tr><td>nec porta ante</td><td colspan="2">purus neque luctus <strong><a href="http://www.google.com">ligula</a></strong>, vel molestie arcu</td></tr></tbody></table>');
 
         // Test deleting the link

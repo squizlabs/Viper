@@ -1101,4 +1101,100 @@ class Viper_Tests_ViperFormatPlugin_ClassUnitTest extends AbstractFormatsUnitTes
 
     }//end testApplyChangesButtonIsDisabledAfterCancellingChangesToAClass()
 
+
+    /**
+     * Test applying an anchor to content with italic format applied first then bold.
+     *
+     * @return void
+     */
+    public function testAddingClassToItalicContentWithBoldFormat()
+    {
+        // Test using top toolbar
+        // Select bold in lineage
+        $this->useTest(10);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('cssClass');
+        $this->type('test-class');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<strong class="test-class"><em>%1%</em></strong> and more content</p>');
+
+        // Select italic in lineage
+        $this->useTest(10);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickTopToolbarButton('cssClass');
+        $this->type('test-class');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<strong><em class="test-class">%1%</em></strong> and more content</p>');
+
+        // Test using inline toolbar
+        // Select bold in lineage
+        $this->useTest(10);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->type('test-class');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<strong class="test-class"><em>%1%</em></strong> and more content</p>');
+
+        // Select italic in lineage
+        $this->useTest(10);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->type('test-class');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<strong><em class="test-class">%1%</em></strong> and more content</p>');
+
+    }//end testAddingClassToItalicContentWithBoldFormat()
+
+
+    /**
+     * Test applying an anchor to content with bold format applied first then italic.
+     *
+     * @return void
+     */
+    public function testAddingClassToBoldContentWithItalicFormat()
+    {
+        // Test using top toolbar
+        // Select italic in lineage
+        $this->useTest(11);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickTopToolbarButton('cssClass');
+        $this->type('test-class');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<em class="test-class"><strong>%1%</strong></em> and more content</p>');
+
+        // Select bold in lineage
+        $this->useTest(11);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickTopToolbarButton('cssClass');
+        $this->type('test-class');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<em><strong class="test-class">%1%</strong></em> and more content</p>');
+
+        // Test using inline toolbar
+        // Select italic in lineage
+        $this->useTest(11);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(1);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->type('test-class');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<em class="test-class"><strong>%1%</strong></em> and more content</p>');
+
+        // Select bold in lineage
+        $this->useTest(11);
+        $this->selectKeyword(1);
+        $this->selectInlineToolbarLineageItem(2);
+        $this->clickInlineToolbarButton('cssClass');
+        $this->type('test-class');
+        $this->sikuli->keyDown('Key.ENTER');
+        $this->assertHTMLMatch('<p>Some content<em><strong class="test-class">%1%</strong></em> and more content</p>');
+
+    }//end testAddingClassToBoldContentWithItalicFormat()
+
 }//end class

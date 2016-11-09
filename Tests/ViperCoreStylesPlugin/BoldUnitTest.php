@@ -51,7 +51,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
      *
      * @return void
      */
-    public function testApplyyBoldtoMiddleOfParagraph()
+    public function testApplyyBoldToMiddleOfParagraph()
     {
         $this->useTest(1);
 
@@ -83,7 +83,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->assertTrue($this->topToolbarButtonExists('bold'), 'Bold icon in the top toolbar is active');
         $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit <em>%4%</em> <strong>%5%</strong></p>');
 
-    }//end testApplyyBoldtoMiddleOfParagraph()
+    }//end testApplyyBoldToMiddleOfParagraph()
 
 
     /**
@@ -897,8 +897,8 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->selectKeyword(1, 2);
         $this->clickTopToolbarButton('bold', 'active');
 
-        // Perform the check using raw html as there is a bug that removes the space after 'more' when it removes the bold formatting
-        $this->assertEquals('<p>Text <strong>more </strong>%1%text text and more%2%<strong> text</strong></p>', $this->getRawHtml());
+        // Perform the check using raw html as there is a bug that removes the space between 'more %1%' when it removes the bold formatting
+        $this->assertHTMLMatch('<p>Text <strong>more </strong>%1%text text and more%2%<strong> text</strong></p>', $this->getRawHtml());
 
         // Reapply using top toolbar
         $this->clickTopToolbarButton('bold');
@@ -974,44 +974,87 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
      */
     public function testEditingBoldContent()
     {
-
-        $this->useTest(7);
-
-        // Test adding content to the start of the bold formatting
+        // Test adding content before the start of the bold formatting
+        $this->useTest(11);
         $this->moveToKeyword(2, 'right');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test ');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test <strong>%2% %3%</strong> content to test</p>');
+        $this->assertHTMLMatch('<p>Some %1% bold test <strong>%2% content %3% to test %4%</strong> more %5% content</p>');
 
         // Test adding content in the middle of bold formatting
+        $this->useTest(11);
         $this->moveToKeyword(2, 'right');
         $this->type(' test');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test <strong>%2% test %3%</strong> content to test</p>');
+        $this->assertHTMLMatch('<p>Some %1% bold <strong>%2% test content %3% to test %4%</strong> more %5% content</p>');
 
         // Test adding content to the end of bold formatting
-        $this->moveToKeyword(3, 'left');
+        $this->useTest(11);
+        $this->moveToKeyword(4, 'left');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
-        $this->type(' %4%');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test <strong>%2% test %3% %4%</strong> content to test</p>');
+        $this->type(' test');
+        $this->assertHTMLMatch('<p>Some %1% bold <strong>%2% content %3% to test %4% test</strong> more %5% content</p>');
 
         // Test highlighting some content in the strong tags and replacing it
+        $this->useTest(11);
         $this->selectKeyword(3);
-        $this->type('abc');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test <strong>%2% test abc %4%</strong> content to test</p>');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% bold <strong>%2% content test to test %4%</strong> more %5% content</p>');
 
+        // Test highlighting the first word of the strong tags and replace it. Should stay in strong tag.
+        $this->useTest(11);
+        $this->selectKeyword(2);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% bold <strong>test content %3% to test %4%</strong> more %5% content</p>');
+
+        // Test hightlighting the first word, pressing forward + delete and replace it. Should be outside the strong tag.
+        $this->useTest(11);
+        $this->selectKeyword(2);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% bold test<strong> content %3% to test %4%</strong> more %5% content</p>');
+
+        // Test highlighting the first word, pressing backspace and replace it. Should be outside the strong tag.
+        $this->useTest(11);
         $this->selectKeyword(2);
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->type('abc');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test abc<strong> test abc %4%</strong> content to test</p>');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% bold test<strong> content %3% to test %4%</strong> more %5% content</p>');
 
+        // Test highlighting the last word of the strong tags and replace it. Should stay in strong tag.
+        $this->useTest(11);
+        $this->selectKeyword(4);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% bold <strong>%2% content %3% to test test</strong> more %5% content</p>');
+
+        // Test highlighting the last word of the strong tags, pressing forward + delete and replace it. Should stay inside strong
+        $this->useTest(11);
         $this->selectKeyword(4);
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('test');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold test abc<strong> test abc test</strong> content to test</p>');
+        $this->assertHTMLMatch('<p>Some %1% bold <strong>%2% content %3% to test test</strong> more %5% content</p>');
+
+        // Test highlighting the last word of the strong tags, pressing backspace and replace it. Should stay inside strong.
+        $this->useTest(11);
+        $this->selectKeyword(4);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% bold <strong>%2% content %3% to test test</strong> more %5% content</p>');
+
+        // Test selecting from before the strong tag to inside. New content should not be in bold.
+        $this->useTest(11);
+        $this->selectKeyword(1, 3);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some test<strong> to test %4%</strong> more %5% content</p>');
+
+        // Test selecting from after the strong tag to inside. New content should be in bold.
+        $this->useTest(11);
+        $this->selectKeyword(3, 5);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% bold <strong>%2% content test</strong> content</p>');
 
     }//end testEditingBoldContent()
 
@@ -1037,7 +1080,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('<p>%1% </p><p>test <strong>a %2% b</strong> %3%</p>');
+        $this->assertHTMLMatch('<p>%1% </p><p><strong>test a %2% b</strong> %3%</p>');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
@@ -1045,7 +1088,7 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test');
-        $this->assertHTMLMatch('<p>%1% test</p><p>test <strong>a %2% b</strong> %3%</p>');
+        $this->assertHTMLMatch('<p>%1% test</p><p><strong>test a %2% b</strong> %3%</p>');
 
         // Test pressing enter at the end of strong content
         $this->useTest(9);
@@ -1064,23 +1107,90 @@ class Viper_Tests_ViperCoreStylesPlugin_BoldUnitTest extends AbstractViperUnitTe
      *
      * @return void
      */
-    public function testUndoAndRedoBoldContent()
+    public function testUndoAndRedoApplyingBoldContent()
     {
-        // Test using keyboard shortcuts
-        // Test undo
-        $this->useTest(11);
-        $this->moveToKeyword(1, 'right');
-        $this->sikuli->keyDown('Key.ENTER');
-        $this->type('%2% Less test content. %3%');
-        $this->selectKeyword(2,3);
-        $this->sikuli->keyDown('Key.CMD + b');
-        $this->sikuli->keyDown('Key.CMD + z');
-        $this->assertHTMLMatch('<p>Test content.</p><p>More test content. %1%</p><p>%2% Less test content. %3%</p>');
+        // Apply bold content
+        $this->useTest(3);
+        $this->selectKeyword(2);
+        $this->clickInlineToolbarButton('bold');
+        $this->assertHTMLMatch('<p>%1% <strong>%2%</strong> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
 
-        // Test redo
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>%1% <strong>%2%</strong> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit %4% %5%</p><p>Another p</p>');
         $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
-        $this->assertHTMLMatch('<p>Test content.</p><p>More test content. %1%</p><p><strong>%2% Less test content. %3%</strong></p>');
+        $this->assertHTMLMatch('<p>%1% <strong>%2%</strong> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+
+         // Apply bold content again
+        $this->selectKeyword(4);
+        $this->clickInlineToolbarButton('bold');
+        $this->assertHTMLMatch('<p>%1% <strong>%2%</strong> %3%</p><p>sit <strong>%4%</strong> %5%</p><p>Another p</p>');
+
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1% <strong>%2%</strong> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>%1% <strong>%2%</strong> %3%</p><p>sit <strong>%4%</strong> %5%</p><p>Another p</p>');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>%1% <strong>%2%</strong> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>%1% <strong>%2%</strong> %3%</p><p>sit <strong>%4%</strong> %5%</p><p>Another p</p>');
+
     }//end testUndoAndRedoBoldContent()
+
+
+    /**
+     * Test undo and redo when editing bold content
+     *
+     * @return void
+     */
+    public function testUndoAndRedoWithEditingBoldContent()
+    {
+
+        // Add content to the middle of the bold content
+        $this->useTest(7);
+        $this->moveToKeyword(2, 'right');
+        $this->type(' test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold <strong>%2% test %3%</strong> content to test</p>');
+
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold <strong>%2% %3%</strong> content to test</p>');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold <strong>%2% test %3%</strong> content to test</p>');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold <strong>%2% %3%</strong> content to test</p>');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold <strong>%2% test %3%</strong> content to test</p>');
+
+        // Test deleting content and pressing undo
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content </p><p>Some more bold <strong>%2% test %3%</strong> content to test</p>');
+
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold <strong>%2% test %3%</strong> content to test</p>');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content </p><p>Some more bold <strong>%2% test %3%</strong> content to test</p>');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <strong>%1%</strong></p><p>Some more bold <strong>%2% test %3%</strong> content to test</p>');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content </p><p>Some more bold <strong>%2% test %3%</strong> content to test</p>');
+
+    }//end testUndoAndRedoWithEditingBoldContent()
 
 
 }//end class

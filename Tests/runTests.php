@@ -1,8 +1,8 @@
 <?php
-
+    error_reporting(E_ALL);
     chdir(dirname(__FILE__));
 
-    $opts = getopt('b::u::t::cv::', array('url::', 'built', 'log::', 'help', 'range::'));
+    $opts = getopt('b::u::t::cvk::', array('url::', 'built', 'log::', 'help', 'range::'));
 
     if (isset($opts['help']) === TRUE) {
         printHelp();
@@ -46,6 +46,11 @@
     if (isset($opts['v']) === TRUE) {
         // Turn on verbose mode.
         putenv('VIPER_TEST_VERBOSE=TRUE');
+    }
+
+    if (isset($opts['k']) === TRUE) {
+        // Keep browser open.
+        putenv('VIPER_TEST_KEEP_BROWSER_OPEN=TRUE');
     }
 
     if (isset($opts['c']) === TRUE) {

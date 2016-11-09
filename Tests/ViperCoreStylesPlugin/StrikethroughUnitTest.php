@@ -364,40 +364,87 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
     public function testEditingStrikethroughContent()
     {
 
-        $this->useTest(4);
-
-        // Test adding content to the start of the strikethrough formatting
-        $this->clickKeyword(2);
+        // Test adding content before the start of the strikethrough formatting
+        $this->useTest(7);
+        $this->moveToKeyword(2, 'right');
+        $this->sikuli->keyDown('Key.LEFT');
+        $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test ');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <del>%1%</del></p><p>Some more strikethrough test <del>%2% %3%</del> content to test</p>');
+        $this->assertHTMLMatch('<p>Some %1% strikethrough test <del>%2% content %3% to test %4%</del> more %5% content</p>');
 
         // Test adding content in the middle of strikethrough formatting
+        $this->useTest(7);
         $this->moveToKeyword(2, 'right');
         $this->type(' test');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <del>%1%</del></p><p>Some more strikethrough test <del>%2% test %3%</del> content to test</p>');
+        $this->assertHTMLMatch('<p>Some %1% strikethrough <del>%2% test content %3% to test %4%</del> more %5% content</p>');
 
         // Test adding content to the end of strikethrough formatting
-        $this->clickKeyword(3);
+        $this->useTest(7);
+        $this->moveToKeyword(4, 'left');
         $this->sikuli->keyDown('Key.RIGHT');
         $this->sikuli->keyDown('Key.RIGHT');
-        $this->type(' %4%');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <del>%1%</del></p><p>Some more strikethrough test <del>%2% test %3% %4%</del> content to test</p>');
+        $this->sikuli->keyDown('Key.RIGHT');
+        $this->type(' test');
+        $this->assertHTMLMatch('<p>Some %1% strikethrough <del>%2% content %3% to test %4% test</del> more %5% content</p>');
 
-        // Test highlighting some content in the strikethrough tags and replacing it
+        // Test highlighting some content in the del tags and replacing it
+        $this->useTest(7);
         $this->selectKeyword(3);
-        $this->type('abc');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <del>%1%</del></p><p>Some more strikethrough test <del>%2% test abc %4%</del> content to test</p>');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% strikethrough <del>%2% content test to test %4%</del> more %5% content</p>');
 
+        // Test highlighting the first word of the del tags and replace it. Should stay in del tag.
+        $this->useTest(7);
+        $this->selectKeyword(2);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% strikethrough <del>test content %3% to test %4%</del> more %5% content</p>');
+
+        // Test hightlighting the first word, pressing forward + delete and replace it. Should be outside the del tag.
+        $this->useTest(7);
+        $this->selectKeyword(2);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% strikethrough test<del> content %3% to test %4%</del> more %5% content</p>');
+
+        // Test highlighting the first word, pressing backspace and replace it. Should be outside the del tag.
+        $this->useTest(7);
         $this->selectKeyword(2);
         $this->sikuli->keyDown('Key.BACKSPACE');
-        $this->type('abc');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <del>%1%</del></p><p>Some more strikethrough test abc<del> test abc %4%</del> content to test</p>');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% strikethrough test<del> content %3% to test %4%</del> more %5% content</p>');
 
+        // Test highlighting the last word of the del tags and replace it. Should stay in del tag.
+        $this->useTest(7);
+        $this->selectKeyword(4);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% strikethrough <del>%2% content %3% to test test</del> more %5% content</p>');
+
+        // Test highlighting the last word of the del tags, pressing forward + delete and replace it. Should stay inside del
+        $this->useTest(7);
         $this->selectKeyword(4);
         $this->sikuli->keyDown('Key.DELETE');
         $this->type('test');
-        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <del>%1%</del></p><p>Some more strikethrough test abc<del> test abc test</del> content to test</p>');
+        $this->assertHTMLMatch('<p>Some %1% strikethrough <del>%2% content %3% to test test</del> more %5% content</p>');
+
+        // Test highlighting the last word of the del tags, pressing backspace and replace it. Should stay inside del.
+        $this->useTest(7);
+        $this->selectKeyword(4);
+        $this->sikuli->keyDown('Key.BACKSPACE');
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% strikethrough <del>%2% content %3% to test test</del> more %5% content</p>');
+
+        // Test selecting from before the del tag to inside. New content should not be in strikethrough.
+        $this->useTest(7);
+        $this->selectKeyword(1, 3);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some test<del> to test %4%</del> more %5% content</p>');
+
+        // Test selecting from after the del tag to inside. New content should be in strikethrough.
+        $this->useTest(7);
+        $this->selectKeyword(3, 5);
+        $this->type('test');
+        $this->assertHTMLMatch('<p>Some %1% strikethrough <del>%2% content test</del> content</p>');
 
     }//end testEditingStrikethroughContent()
 
@@ -463,7 +510,7 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.ENTER');
         $this->type('test ');
-        $this->assertHTMLMatch('<p>%1% </p><p>test <del>a %2% b</del> %3%</p>');
+        $this->assertHTMLMatch('<p>%1% </p><p><del>test a %2% b</del> %3%</p>');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
@@ -471,7 +518,7 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
         $this->sikuli->keyDown('Key.LEFT');
         $this->sikuli->keyDown('Key.LEFT');
         $this->type('test');
-        $this->assertHTMLMatch('<p>%1% test</p><p>test <del>a %2% b</del> %3%</p>');
+        $this->assertHTMLMatch('<p>%1% test</p><p><del>test a %2% b</del> %3%</p>');
 
         // Test pressing enter at the end of strikethrough content
         $this->useTest(6);
@@ -484,6 +531,96 @@ class Viper_Tests_ViperCoreStylesPlugin_StrikethroughUnitTest extends AbstractVi
 
     }//end testSplittingStrikethroughContent()
 
+
+    /**
+     * Test undo and redo applying strikethrough to content
+     *
+     * @return void
+     */
+    public function testUndoAndRedoApplyingStrikethroughContent()
+    {
+        // Apply strikethrough content
+        $this->useTest(8);
+        $this->selectKeyword(2);
+        $this->clickTopToolbarButton('strikethrough');
+        $this->assertHTMLMatch('<p>%1% <del>%2%</del> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>%1% <del>%2%</del> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>%1% %2% %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>%1% <del>%2%</del> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+
+         // Apply strikethrough content again
+        $this->selectKeyword(4);
+        $this->clickTopToolbarButton('strikethrough');
+        $this->assertHTMLMatch('<p>%1% <del>%2%</del> %3%</p><p>sit <del>%4%</del> %5%</p><p>Another p</p>');
+
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>%1% <del>%2%</del> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>%1% <del>%2%</del> %3%</p><p>sit <del>%4%</del> %5%</p><p>Another p</p>');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>%1% <del>%2%</del> %3%</p><p>sit %4% %5%</p><p>Another p</p>');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>%1% <del>%2%</del> %3%</p><p>sit <del>%4%</del> %5%</p><p>Another p</p>');
+
+    }//end testUndoAndRedoApplyingStrikethroughContent()
+
+
+    /**
+     * Test undo and redo when editing strikethrough content
+     *
+     * @return void
+     */
+    public function testUndoAndRedoWithEditingStrikethroughContent()
+    {
+
+        // Add content to the middle of the strikethrough content
+        $this->useTest(4);
+        $this->moveToKeyword(2, 'right');
+        $this->type(' test');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <del>%1%</del></p><p>Some more strikethrough <del>%2% test %3%</del> content to test</p>');
+
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <del>%1%</del></p><p>Some more strikethrough <del>%2% %3%</del> content to test</p>');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <del>%1%</del></p><p>Some more strikethrough <del>%2% test %3%</del> content to test</p>');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <del>%1%</del></p><p>Some more strikethrough <del>%2% %3%</del> content to test</p>');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <del>%1%</del></p><p>Some more strikethrough <del>%2% test %3%</del> content to test</p>');
+
+        // Test deleting content and pressing undo
+        $this->selectKeyword(1);
+        $this->sikuli->keyDown('Key.DELETE');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content </p><p>Some more strikethrough <del>%2% test %3%</del> content to test</p>');
+
+        // Test undo and redo with top toolbar icons
+        $this->clickTopToolbarButton('historyUndo');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <del>%1%</del></p><p>Some more strikethrough <del>%2% test %3%</del> content to test</p>');
+        $this->clickTopToolbarButton('historyRedo');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content </p><p>Some more strikethrough <del>%2% test %3%</del> content to test</p>');
+
+        // Test undo and redo with keyboard shortcuts
+        $this->sikuli->keyDown('Key.CMD + z');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content <del>%1%</del></p><p>Some more strikethrough <del>%2% test %3%</del> content to test</p>');
+        $this->sikuli->keyDown('Key.CMD + Key.SHIFT + z');
+        $this->assertHTMLMatch('<p>Some content</p><p>sit test content </p><p>Some more strikethrough <del>%2% test %3%</del> content to test</p>');
+
+    }//end testUndoAndRedoWithEditingStrikethroughContent()
 
 }//end class
 

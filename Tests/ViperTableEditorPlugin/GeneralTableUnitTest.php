@@ -971,7 +971,7 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
 
 
     /**
-     * Tests using delete and backspace in the last cell of the table
+     * Tests that opening source view and applying changes without changes made will not change anything.
      *
      * @return void
      */
@@ -981,13 +981,13 @@ class Viper_Tests_ViperTableEditorPlugin_GeneralTableUnitTest extends AbstractVi
         $this->useTest(11);
         $this->clickTopToolbarButton('sourceView');
         $this->clickButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('');
+        $this->assertHTMLMatchNoHeaders('<p class="test-class">Test content %1%</p><table style="width:100%;"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table>');
 
         // Test content after table
-        $this->useTest(11);
+        $this->useTest(12);
         $this->clickTopToolbarButton('sourceView');
         $this->clickButton('Apply Changes', NULL, TRUE);
-        $this->assertHTMLMatch('');
+        $this->assertHTMLMatchNoHeaders('<table style="width:100%;"><tbody><tr><th></th><th></th><th></th><th></th></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr></tbody></table><p class="test-class">Test content %1%</p>');
 
     }//end testCreatingParagraphAfterTable()
 

@@ -221,10 +221,20 @@
                         && range.collapsed === true
                     ) {
                         // IE text insert when BR tag is selected.
-                        var textNode = document.createTextNode(String.fromCharCode(e.which));
-                        ViperUtil.insertBefore(startNode, textNode);
-                        ViperUtil.remove(startNode);
-                        range.setStart(textNode, 1);
+                        var textNode = null;
+                        if (ViperUtil.isText(startNode.previousSibling) === true) {
+                            textNode       = startNode.previousSibling;
+                            textNode.data += char;
+                        } else {
+                            textNode = document.createTextNode(char);
+                            ViperUtil.insertBefore(startNode, textNode);
+                        }
+
+                        if (ViperUtil.isSpacerBR(startNode) === true) {
+                            ViperUtil.remove(startNode);
+                        }
+
+                        range.setStart(textNode, textNode.data.length);
                         range.collapse(true);
                         ViperSelection.addRange(range);
                         this._viper.fireNodesChanged([textNode]);
@@ -398,12 +408,13 @@
                             if (textContainer.previousSibling
                                 && ViperUtil.isStubElement(textContainer.previousSibling) === false
                                 && ViperUtil.isText(textContainer.previousSibling) === false
+                                && ViperUtil.isBlockElement(textContainer.previousSibling) === false
                             ) {
                                 // Need to insert the character to the previous sibling.
                                 // <p>text<strong>insert text here</strong>* more text</p> ->
                                 // <p>text<strong>insert text hereNEW*</strong> more text</p>.
                                 var prevCont = range._getLastSelectableChild(textContainer.previousSibling);
-                                if (ViperUtil.isText(prevCont) === true) {
+                                if (ViperUtil.isText(prevCont) === true && this._viper.isSpecialElement(textContainer.previousSibling) === false) {
                                     prevCont.data += char;
                                     range.setStart(prevCont, prevCont.data.length);
                                     range.collapse(true);
@@ -414,7 +425,7 @@
 
                             }
 
-                            // At the start of a text node with an element sibling. Make sure character is inserted in previous text container.
+                            // At the start of a text node with an element sibling. Make sure character is inserted in previous text container (unless its start of a block element).
                             // Also make sure that there is no non breaking space at the start text node followed by a non
                             // space character.
                             if (!textContainer.previousSibling) {
@@ -427,7 +438,7 @@
                                     parent = parent.parentNode;
                                 }
 
-                                if (ViperUtil.isText(parent.previousSibling) === true) {
+                                if (ViperUtil.isText(parent.previousSibling, true) === true) {
                                     if (char === ' ' && ViperUtil.endsWithSpace(parent.previousSibling) === true) {
                                         char = String.fromCharCode(160);
                                     } else if (char !== ' ' && ViperUtil.endsWithSpace(parent.previousSibling, true) === true) {
@@ -550,6 +561,39 @@
                                 return false;
                             }
                         }
+                    } else if (range.startContainer !== range.endContainer
+                        && ViperUtil.isText(range.startContainer) === true
+                        && ViperUtil.isText(range.endContainer) === true
+                    ) {
+                        // Handle: <div>Some [superscript <sup>content] test</sup> content</div> (typed: x)
+                        // Result: <div>Some x*<sup> test</sup> content</div>.
+                        range.deleteContents();
+                        range.startContainer.data += char;
+                        range.setStart(range.startContainer, range.startContainer.data.length);
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+                        this._viper.fireNodesChanged([range.startContainer]);
+                        return false;
+                    } else if (range.collapsed === false) {
+                        if (range.startContainer === range.endContainer) {
+                            // Selection is in same container.
+                            if (ViperUtil.isText(startNode) === true) {
+                                // Text selection.
+                                if (ViperUtil.isBrowser('msie') === true) {
+                                    if (char !== ' ') {
+                                        // Replace text.
+                                        startNode.data = startNode.data.substring(0, range.startOffset) + char + startNode.data.substring(range.endOffset);
+                                        range.setStart(startNode, range.startOffset + 1);
+                                        range.collapse(true);
+                                        ViperSelection.addRange(range);
+                                        this._viper.fireNodesChanged([range.startContainer]);
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
+
+
                     }
                 }//end if
 
@@ -656,7 +700,15 @@
             } else if (ViperUtil.isKey(e, 'SHIFT+ENTER') === true) {
                 return this.handleSoftEnter(e);
             } else if (ViperUtil.isKey(e, 'DELETE') === true || ViperUtil.isKey(e, 'BACKSPACE') === true) {
-                return this.handleDelete(e);
+                var retval = this.handleDelete(e);
+                if (retval !== false && ViperUtil.isBrowser('firefox') === false) {
+                    var self = this;
+                    setTimeout(function() {
+                        self._viper.fireNodesChanged();
+                    }, 5);
+                }
+
+                return retval;
             }
 
             var returnValue = this._viper.fireCallbacks('Viper:keyDown', e);
@@ -912,10 +964,11 @@
                 }
             }//end if
 
+            var firstBlock = null;
             if (ViperUtil.isTag(endNode, 'li') === true && endNode === startNode && endNode.firstChild === null) {
-                var firstBlock = endNode;
+                firstBlock = endNode;
             } else {
-                var firstBlock = ViperUtil.getFirstBlockParent(endNode);
+                firstBlock = ViperUtil.getFirstBlockParent(endNode);
             }
 
             if (range.collapsed === true
@@ -952,11 +1005,7 @@
                             this.splitList(firstBlock);
                             this._viper.contentChanged();
                             return false;
-                        } else if (ViperUtil.isBrowser('chrome') === true
-                            || ViperUtil.isBrowser('safari') === true
-                            || ViperUtil.isBrowser('msie') === true
-                            || ViperUtil.isBrowser('edge') === true
-                        ) {
+                        } else {
                             handleEnter = true;
                             removeFirstBlock = true;
                         }
@@ -994,7 +1043,6 @@
                             removeFirstBlock = true;
                         } else {
                             if (firstBlockTagName === 'li') {
-                                if (ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true || ViperUtil.isBrowser('msie') === true || ViperUtil.isBrowser('edge') === true) {
                                     var parentListItem = ViperUtil.getFirstBlockParent(firstBlock.parentNode);
                                     if (parentListItem && ViperUtil.isTag(parentListItem, 'li') === true) {
                                         newList = document.createElement('li');
@@ -1024,7 +1072,6 @@
                                         this._viper.contentChanged();
                                         return false;
                                     }
-                                }
 
                                 // Need to move rest of the list items to a new
                                 // list.
@@ -1141,6 +1188,8 @@
 
                     if (parent && parent !== viperElem) {
                         ViperUtil.insertAfter(parent, br);
+                    } else {
+                        ViperUtil.insertAfter(range.startContainer, br);
                     }
                 } else if (ViperUtil.isText(range.startContainer) === true
                     && range.startOffset === 0
@@ -1163,16 +1212,26 @@
                     this._viper.insertNodeAtCaret(br);
                 }
 
-                if (!br.nextSibling
-                    || br.nextSibling.nodeType !== ViperUtil.TEXT_NODE
-                    || br.nextSibling.data.charAt(0) === "\n"
-                ) {
-                    ViperUtil.insertAfter(br, document.createTextNode(''));
+                var selectable = br.nextSibling;
+                if (ViperUtil.isText(br.nextSibling) !== true || br.nextSibling.data.charAt(0) === "\n") {
+                    if (ViperUtil.isElement(br.nextSibling) === true && ViperUtil.isStubElement(br.nextSibling) === false) {
+                        var firstSelectable = range._getFirstSelectableChild(br.nextSibling);
+                        if (firstSelectable) {
+                            selectable = firstSelectable;
+                        } else {
+                            selectable = document.createTextNode('');
+                            ViperUtil.insertAfter(br, selectable);
+                        }
+                    } else {
+                        selectable = document.createTextNode(String.fromCharCode(160));
+                        ViperUtil.insertAfter(br, selectable);
+                    }
                 }
 
-                range.setStart(br.nextSibling, 0);
+                range.setStart(selectable, 0);
                 range.collapse(true);
                 ViperSelection.addRange(range);
+                this._viper.contentChanged();
 
                 return false;
             } else if (ViperUtil.isBrowser('msie') === true
@@ -1449,12 +1508,22 @@
                 && range.endOffset === startNode.data.length
                 && startNode.nextSibling
                 && ViperUtil.isTag(startNode.nextSibling, 'br')
-                && (!startNode.nextSibling.nextSibling || ViperUtil.isTag(startNode.nextSibling.nextSibling, 'br') === false)
+                && (ViperUtil.isText(startNode.nextSibling.nextSibling, true) === true)
             ) {
                 // Handle XAX*<br>XBX<br>XCX.
                 // Pressing enter changes the content to: <p>XAX</p>*XBX<br>XCX.
                 // By adding an extra BR we keep it in the content.
-                ViperUtil.insertAfter(startNode, document.createElement('br'));
+                var br = startNode.nextSibling;
+                setTimeout(
+                    function () {
+                        var textNode = document.createTextNode('');
+                        ViperUtil.insertBefore(br, textNode);
+                        range.setStart(textNode, 0);
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+                    },
+                    10
+                );
             } else if (startNode.nodeType === ViperUtil.TEXT_NODE
                 && range.endOffset === startNode.data.length
                 && startNode.data.length !== 0
@@ -1607,6 +1676,20 @@
                 }
             }//end if
 
+            if (defaultTagName !== '' && range.collapsed === true) {
+                // Base tag is set to nothing.
+                var firstBlockParent = ViperUtil.getFirstBlockParent(range.startContainer);
+                if (firstBlockParent) {
+                    if (firstBlockParent !== viperElem) {
+                        if (ViperUtil.isBrowser('firefox') === true && ViperUtil.isTag(firstBlockParent.parentNode, 'blockquote') === false) {
+                            // Got to split range.
+                            this.splitAtRange();
+                            this._viper.contentChanged();
+                            return false;
+                        }
+                    }
+                }
+            }
 
             if (range.startOffset === 0
                 && range.collapsed === true
@@ -1907,7 +1990,15 @@
 
                             var firstChild = currentParent.firstChild;
                             while (currentParent.firstChild) {
-                                prevParent.appendChild(currentParent.firstChild);
+                                if (ViperUtil.isText(currentParent.firstChild) !== true
+                                    && ViperUtil.getTagName(prevParent.lastChild) === ViperUtil.getTagName(currentParent.firstChild)
+                                ) {
+                                    // Same tag, append first child contents to it.
+                                    ViperUtil.moveChildrenToElement(currentParent.firstChild, prevParent.lastChild, false);
+                                    ViperUtil.remove(currentParent.firstChild);
+                                } else {
+                                    prevParent.appendChild(currentParent.firstChild);
+                                }
                             }
 
                             if (ViperUtil.isTag(currentParent, ['td', 'th']) === false) {
@@ -1945,23 +2036,10 @@
                 && range.collapsed === false
                 && ViperUtil.isBrowser('msie') !== true
             ) {
-                // Chrome has issues with removing list items from lists.
-                var startNode = range.getStartNode();
-                var endNode   = range.getEndNode();
-
-                // First issue is, if a whole list item is selected, it removes the li
-                // and it adds a span tag in place of it, creating invalid HTML and
-                // causing all sorts of issues. It should only remove the list item
-                // contents and leave the list item un touched..
-                if (startNode === endNode
-                    && startNode.nodeType === ViperUtil.TEXT_NODE
-                    && ViperUtil.isTag(startNode.parentNode, 'li') === true
-                    && startNode.data.length === range.endOffset
-                ) {
-                    ViperUtil.setHtml(startNode.parentNode, '<br />');
-                    this._viper.contentChanged();
-                    return false;
-                } else if ((ViperUtil.isTag(range.commonAncestorContainer, 'ul') || ViperUtil.isTag(range.commonAncestorContainer, 'ol'))) {
+                if ((ViperUtil.isTag(range.commonAncestorContainer, 'ul') || ViperUtil.isTag(range.commonAncestorContainer, 'ol'))) {
+                    // Chrome has issues with removing list items from lists.
+                    var startNode = range.getStartNode();
+                    var endNode   = range.getEndNode();
                     // Second issue is with removing multiple list items.
                     if (endNode.data.length === range.endOffset) {
                         var endItem = ViperUtil.getParents(endNode, 'li')[0];
@@ -2852,14 +2930,13 @@
                     } else if (ViperUtil.isStubElement(startNode.nextSibling) === true
                         && (ViperUtil.isTag(startNode.nextSibling, 'br') === false || startNode.nextSibling.nextSibling)
                     ) {
-                        if (this._viper.getDefaultBlockTag() === '') {
-                            // Check if the next next element is stub, if yes remove it..
-                            if (ViperUtil.isStubElement(startNode.nextSibling.nextSibling) === true) {
-                                ViperUtil.remove(startNode.nextSibling.nextSibling);
-                                this._viper.contentChanged();
-                                return false;
-                            }
+                        // Check if the next next element is stub, if yes remove it.. E.g. test<br/><hr/>more text -> text<br/>more text.
+                        if (ViperUtil.isStubElement(startNode.nextSibling.nextSibling) === true) {
+                            ViperUtil.remove(startNode.nextSibling.nextSibling);
+                            this._viper.contentChanged();
+                            return false;
                         }
+
                         // If the next sibling is a BR but its not the last node then remove.
                         ViperUtil.remove(startNode.nextSibling);
                         this._viper.contentChanged();
@@ -3121,7 +3198,15 @@
                     }
 
                     while (nextParent.firstChild) {
-                        currentParent.appendChild(nextParent.firstChild);
+                        if (ViperUtil.isText(nextParent.firstChild) !== true
+                            && ViperUtil.getTagName(currentParent.lastChild) === ViperUtil.getTagName(nextParent.firstChild)
+                        ) {
+                            // Same tag, append first child contents to it.
+                            ViperUtil.moveChildrenToElement(nextParent.firstChild, currentParent.lastChild, false);
+                            ViperUtil.remove(nextParent.firstChild);
+                        } else {
+                            currentParent.appendChild(nextParent.firstChild);
+                        }
                     }
 
                     ViperUtil.remove(nextParent);
@@ -3166,18 +3251,18 @@
                 this._viper.contentChanged(true);
                 return false;
             } else if (e.keyCode === 8
-                && range.collapsed === true
+                && (range.collapsed === true
                 && (range.startContainer.nodeType === ViperUtil.TEXT_NODE
                 && (range.startOffset === 0 || (range.startOffset === 1 && range.startContainer.data.charAt(0) === ' '))
                 && ((ViperUtil.isFirstNonEmptyTextNode(range.startContainer) === true || ViperUtil.isTag(range.startContainer.previousSibling, 'br') === true)))
-                || (ViperUtil.isText(startNode) === false && range.startOffset === 0)
+                || (ViperUtil.isText(startNode) === false && range.startOffset === 0))
             ) {
                 // At the start of an element. Check to see if the previous
                 // element is a part of another block element. If it is then
                 // join these elements.
                 var prevSelectable = range.getPreviousContainer(range.startContainer, null, true, true);
-                var currentParent  = ViperUtil.getFirstBlockParent(range.startContainer);
-                var prevParent     = ViperUtil.getFirstBlockParent(prevSelectable);
+                var currentParent  = ViperUtil.getFirstBlockParent(range.startContainer, null, true);
+                var prevParent     = ViperUtil.getFirstBlockParent(prevSelectable, null, true);
 
                 if (!currentParent) {
                     currentParent = range.startContainer;
@@ -3214,7 +3299,15 @@
 
                     if (removeParent === true) {
                         while (currentParent.firstChild) {
-                            prevParent.appendChild(currentParent.firstChild);
+                            if (ViperUtil.isText(currentParent.firstChild) !== true
+                                && ViperUtil.getTagName(prevParent.lastChild) === ViperUtil.getTagName(currentParent.firstChild)
+                            ) {
+                                // Same tag, append first child contents to it.
+                                ViperUtil.moveChildrenToElement(currentParent.firstChild, prevParent.lastChild, false);
+                                ViperUtil.remove(currentParent.firstChild);
+                            } else {
+                                prevParent.appendChild(currentParent.firstChild);
+                            }
                         }
 
                         if (ViperUtil.isTag(currentParent, ['td', 'th']) === false) {
@@ -3325,8 +3418,10 @@
                     }
 
                     // Handle deletion of a whole bold/italic/etc tag.
-                    range = this._viper.moveCaretAway(nodeSelection, e.keyCode === 46);
+                    range = this._viper.moveCaretAway(nodeSelection, nodeSelection.previousSibling !== null);
                     ViperUtil.remove(nodeSelection);
+                    ViperSelection.addRange(range);
+
                     if (range.startContainer.nodeType === ViperUtil.TEXT_NODE
                         && range.startContainer.data === ' '
                         && range.startContainer.previousSibling
@@ -3358,6 +3453,14 @@
                         }
 
                         range.setStart(prev, length);
+                        range.collapse(true);
+                        ViperSelection.addRange(range);
+                    } else if (!range.startContainer.nextSibling
+                        && ViperUtil.isBlockElement(range.startContainer.parentNode) === true
+                        && ViperUtil.endsWithSpace(range.startContainer, false) === true
+                    ) {
+                        ViperUtil.replaceCharAt(range.startContainer, 'last', String.fromCharCode(160));
+                        range.setStart(range.startContainer, range.startContainer.data.length);
                         range.collapse(true);
                         ViperSelection.addRange(range);
                     }
@@ -3451,11 +3554,45 @@
                         }
                     } else {
                         var startNode = range.getStartNode();
-                        var endNode   = range.getEndNode();
                         if (ViperUtil.isStubElement(startNode) === true) {
+                            if (ViperUtil.isTag(startNode, 'br') === true) {
+                                // Could be spacer, remove any surrounding parents.
+                                var surroundingParents = ViperUtil.getSurroundingParents(startNode);
+                                if (surroundingParents.length > 0) {
+                                    range = this._viper.moveCaretAway(startNode, true);
+                                    var parentToRemove = surroundingParents.pop();
+                                    if (range) {
+                                        // Could have ended up as BR.
+                                        var newStartNode = range.getStartNode();
+                                        if (ViperUtil.isTag(newStartNode, 'br') === true && ViperUtil.isText(newStartNode.previousSibling, true) === true) {
+                                            range.setStart(newStartNode.previousSibling, newStartNode.previousSibling.data.length);
+                                            range.collapse(true);
+                                            ViperSelection.addRange(range);
+                                            ViperUtil.remove(newStartNode);
+                                        }
+                                    }
+
+                                    ViperUtil.remove(parentToRemove);
+                                }
+                            }
+
                             ViperUtil.remove(startNode);
+
                             this._viper.fireNodesChanged();
                             return false;
+                        } else if (ViperUtil.isText(startNode) === true) {
+                            // Text node.
+                            if (ViperUtil.startsWithSpace(startNode) === true) {
+                                if (ViperUtil.isTag(startNode.previousSibling, 'br') === true) {
+                                    ViperUtil.remove(startNode.previousSibling);
+                                    var info = ViperUtil.normaliseTextNodeSiblings(startNode);
+                                    range.setStart(info.textNode, info.splitOffset);
+                                    range.collapse(true);
+                                    ViperSelection.addRange(range)
+                                    this._viper.fireNodesChanged();
+                                    return false;
+                                }
+                            }
                         }
                     }//end if
                 }//end if
@@ -3496,17 +3633,18 @@
                                     this._viper.contentChanged(true);
                                     return false;
                                 }
-                            } else {
-                                if (this._viper.getDefaultBlockTag() === '') {
-                                    if (ViperUtil.isTag(range.startContainer.nextSibling, 'br') === true) {
-                                        // Check if the next next element is stub, if yes remove it..
-                                        if (ViperUtil.isStubElement(range.startContainer.nextSibling.nextSibling) === true) {
-                                            ViperUtil.remove(range.startContainer.nextSibling.nextSibling);
-                                            this._viper.contentChanged();
-                                            return false;
-                                        }
-                                    }
+                            } else if (ViperUtil.isStubElement(range.startContainer.nextSibling) === true) {
+                                // Check if the next next element is stub, if yes remove it..
+                                if (ViperUtil.isStubElement(range.startContainer.nextSibling.nextSibling) === true) {
+                                    ViperUtil.remove(range.startContainer.nextSibling.nextSibling);
+                                    this._viper.contentChanged();
+                                    return false;
                                 }
+
+                                // If the next sibling is a BR but its not the last node then remove.
+                                ViperUtil.remove(range.startContainer.nextSibling);
+                                this._viper.contentChanged();
+                                return false;
                             }
                         } else if (range.startOffset - 1 === ViperUtil.rtrim(startContainer.data).length
                             && startContainer.data.length !== ViperUtil.rtrim(startContainer.data).length
@@ -3554,8 +3692,6 @@
                     }
                 }
             }
-
-            this._viper.contentChanged();
 
         },
 
@@ -3772,10 +3908,7 @@
 
             elem.appendChild(docFrag);
 
-            // Remove DEL tags before getting the text content.
             var elemClone = ViperUtil.cloneNode(elem);
-            ViperUtil.remove(ViperUtil.getTag('del', elemClone));
-
             if (ViperUtil.isBlank(ViperUtil.getNodeTextContent(elemClone)) === true) {
                 // Do not need this empty element.
                 elem = null;

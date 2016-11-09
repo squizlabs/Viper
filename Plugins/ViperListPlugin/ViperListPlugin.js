@@ -596,7 +596,17 @@
                 }
 
                 if (ViperUtil.inArray(endNode, elems) === false) {
-                    elems.push(endNode);
+                    if ((ViperUtil.isBrowser('chrome') === true || ViperUtil.isBrowser('safari') === true)) {
+                        if (range.endContainer.nodeType !== ViperUtil.ELEMENT_NODE || ViperUtil.isTag(range.endContainer, 'li') === false || range.endOffset > 0) {
+                            elems.push(endNode);
+                        }
+                    } else if (range.collapsed === true
+                        || ViperUtil.isText(range.endContainer) !== true
+                        || range.endOffset !== 0
+                        || ViperUtil.isTag(ViperUtil.getFirstBlockParent(range.endContainer), 'li') !== true
+                    ) {
+                        elems.push(endNode);
+                    }
                 }
 
                 var c = elems.length;
@@ -635,23 +645,16 @@
                 return false;
             }
 
-            // If the current list items is starting with a list and ends up selecting
-            // its whole sublist then move them all by 1 level.
-            if (listItems.length > 1) {
-                var subList = this.getSubListItem(listItems[0]);
-                if (subList) {
-                    var firstItem = listItems.shift();
-                    if (this._isWholeList(listItems) === true) {
-                        return this.indentListItem(firstItem, true, testOnly);
-                    }
-
-                    listItems.unshift(firstItem);
-                }
+            var topListItems   = this.getTopLevelListItems(listItems);
+            var includeSublist = false;
+            if (listItems.length !== topListItems.length) {
+                // If the sub list items selected then move the sublist item together with the top list item.
+                includeSublist = true;
             }
 
-            var c = listItems.length;
+            var c = topListItems.length;
             for (var i = 0; i < c; i++) {
-                if (this.indentListItem(listItems[i], false, testOnly) === false) {
+                if (this.indentListItem(topListItems[i], includeSublist, testOnly) === false) {
                     return false;
                 }
             }
@@ -740,71 +743,39 @@
                 return false;
             }
 
-            if (this._isWholeList(listItems) === true) {
-                // Get the parent list.
-                var list = this._getListElement(listItems[0]);
-                if (!this._getListElement(list)) {
-                    // First check for sub lists.
-                    for (var i = 0; i < listItems.length; i++) {
-                        var li = listItems[i];
-                        var subList = this.getSubListItem(li);
-                        if (subList) {
-                            return false;
-                        }
-                    }
-
-                    if (testOnly === true) {
-                        return true;
-                    }
-
-                    if (listItems.length === 1
-                        && (ViperUtil.isTag(list.parentNode, 'td') === true || ViperUtil.isTag(list.parentNode, 'th') === true)
-                    ) {
-                        var li = listItems[0];
-                        while (li.firstChild) {
-                            ViperUtil.insertBefore(list, li.firstChild);
-                        }
-                    } else {
-                        // Conver to P tags.
-                        for (var i = 0; i < listItems.length; i++) {
-                            var li = listItems[i];
-                            var p  = document.createElement('p');
-                            while (li.firstChild) {
-                                p.appendChild(li.firstChild);
-                            }
-
-                            ViperUtil.insertBefore(list, p);
-                        }
-                    }
-
-                    ViperUtil.remove(list);
-
-                    return true;
-                }
-            }
-
-            // If the current list items is starting with a list and ends up selecting
-            // its whole sublist then move them all by 1 level.
-            if (listItems.length > 1) {
-                var subList = this.getSubListItem(listItems[0]);
-                if (subList) {
-                    var firstItem = listItems.shift();
-                    if (this._isWholeList(listItems) === true) {
-                        return this.outdentListItem(firstItem, testOnly);
-                    }
-
-                    listItems.unshift(firstItem);
-                }
-            }
-
-            var c = listItems.length;
+            // For each list item remove all the sub lists. Construct a new array with the top selected list items.
+            var itemsToOutdent = this.getTopLevelListItems(listItems);
+            var c              = itemsToOutdent.length;
             for (var i = 0; i < c; i++) {
-                if (this.outdentListItem(listItems[i], testOnly) === false) {
+                if (this.outdentListItem(itemsToOutdent[i], testOnly) === false) {
                     return false;
                 }
             }
 
             return true;
+
+        },
+
+        getTopLevelListItems: function (listItems)
+        {
+            listItems         = listItems.concat([]);
+            var topLevelItems = [listItems.shift()];
+            for (var i = 0; i < listItems.length; i++) {
+                var add     = true;
+                var parents = ViperUtil.getParents(listItems[i], 'li');
+                for (var j = 0; j < parents.length; j++) {
+                    if (ViperUtil.inArray(parents[j], topLevelItems, true) === true) {
+                        add = false;
+                        break;
+                    }
+                }
+
+                if (add === true) {
+                    topLevelItems.push(listItems[i]);
+                }
+            }
+
+            return topLevelItems;
 
         },
 
@@ -834,11 +805,11 @@
                 }
             }
 
-            if (parentListItem) {
-                if (testOnly === true) {
-                    return true;
-                }
+            if (testOnly === true) {
+                return true;
+            }
 
+            if (parentListItem) {
                 if (siblingItems.length > 0) {
                     // Move these (next) siblings under an exisiting sub list or
                     // under a new list (and place the new list under the current item).
@@ -878,15 +849,12 @@
 
                 return true;
             } else {
-                if (testOnly === true) {
-                    return true;
-                }
-
                 // Convert this item to a default block tag.
                 var subList = null;
-                var p       = document.createElement('p');
                 var bTag    = this.viper.getDefaultBlockTag();
+                var p       = null;
                 if (bTag !== '') {
+                    p       = document.createElement(bTag);
                     while (li.firstChild) {
                         if (ViperUtil.isTag(li.firstChild, 'ul') === true || ViperUtil.isTag(li.firstChild, 'ol') === true) {
                             // Sub list needs to go after the p tag.
@@ -896,6 +864,8 @@
                             p.appendChild(li.firstChild);
                         }
                     }
+                } else {
+                    p = document.createElement('p');
                 }
 
                 // If there are more list items after this item then move them in to a
@@ -959,8 +929,18 @@
 
                 if (subList) {
                     // Put the sub list that was in the original list element right after
-                    // the P tag.
-                    ViperUtil.insertAfter(p, subList);
+                    // the P tag. However, if there is already a list of same type then join to that list.
+                    if (ViperUtil.isTag(p.nextSibling, ViperUtil.getTagName(subList)) === true) {
+                        while (subList.firstChild) {
+                            ViperUtil.insertBefore(p.nextSibling.firstChild, subList.firstChild);
+                        }
+                    } else {
+                        ViperUtil.insertAfter(p, subList);
+                    }
+                }
+
+                if (!ViperUtil.getFirstElementChild(list)) {
+                    ViperUtil.remove(list);
                 }
 
                 return true;
@@ -1081,24 +1061,41 @@
                 // No list found, create a new list.
                 list = document.createElement(listType || 'ul');
                 ViperUtil.insertBefore(pElems[0], list);
+
                 atEnd = true;
             }
 
             var listItems = [];
+            var prev      = null;
             for (var i = 0; i < pElems.length; i++) {
                 var p  = pElems[i];
-                var li = document.createElement('li');
-                while (p.firstChild) {
-                    li.appendChild(p.firstChild);
-                }
-
-                if (atEnd !== true) {
-                    listItems.unshift(li);
+                var li = null;
+                if (ViperUtil.isTag(p, ['ul', 'ol']) === true) {
+                    if (prev !== null) {
+                        // Append this list to the previous item as its sub list.
+                        prev.appendChild(p);
+                    }
                 } else {
-                    listItems.push(li);
-                }
+                    var li = document.createElement('li');
+                    while (p.firstChild) {
+                        li.appendChild(p.firstChild);
+                    }
 
-                ViperUtil.remove(p);
+                    if (ViperUtil.isTag(p, ['td', 'th']) === true) {
+                        ViperUtil.insertBefore(list, p);
+                        p.appendChild(list);
+                    } else {
+                        ViperUtil.remove(p);
+                    }
+
+                    if (atEnd !== true) {
+                        listItems.unshift(li);
+                    } else {
+                        listItems.push(li);
+                    }
+
+                    prev = li;
+                }
             }
 
             if (atEnd === true) {
@@ -1616,10 +1613,7 @@
 
             if (indent === true) {
                 increaseIndent = this.canIncreaseIndent(range);
-
-                if (indent === true) {
-                    decreaseIndent = this.canDecreaseIndent(range);
-                }
+                decreaseIndent = this.canDecreaseIndent(range);
             }
 
             if (mainToolbar === true
@@ -2024,7 +2018,7 @@
                 return;
             }
 
-            if (ViperUtil.isTag(element, 'p') === true || ViperUtil.isTag(element, 'td') === true) {
+            if (ViperUtil.isTag(element, ['p', 'td', 'ul', 'ol']) === true) {
                 return element;
             }
 
@@ -2042,6 +2036,10 @@
             if (elems.length > 1) {
                 var first = elems[0];
                 var last  = elems[(elems.length - 1)];
+
+                if (ViperUtil.isTag(first.previousElementSibling, 'li') === true) {
+                    return false;
+                }
 
                 var firstParent = first.parentNode;
                 var lastParent  = last.parentNode;
