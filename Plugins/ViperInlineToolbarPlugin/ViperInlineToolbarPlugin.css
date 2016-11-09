@@ -3,7 +3,7 @@
     /* Bubble Config */
 
     .ViperITP {
-        z-index: 1000;
+        z-index: 999;
         margin-top: 3px;
         font-family: Arial, Sans Serif;
         font-size: 9px;
