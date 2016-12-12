@@ -549,7 +549,13 @@
             for (var i in urlInputs) {
                 var urlInput = urlInputs[i];
                 var $urlInput = ViperUtil.$(urlInput.element);
-                $urlInput.find('div.Viper-textbox-main').hide();
+                // Due to some werid bug in Chrome, if the input field is hidden, the "click" event listener of the next input element 
+                // checkbox "Image is decorative" works only on double click. For workaround, move the element offscreen.
+                if (ViperUtil.isBrowser('chrome') === true) {
+                    $urlInput.find('div.Viper-textbox-main').addClass('Viper-offScreen');
+                } else {
+                    $urlInput.find('div.Viper-textbox-main').hide();
+                }
                 $urlInput.find('div.Viper-image-status').show();
                 $urlInput.find('span.Viper-image-filename-indicator').html(data.attributes.title);
                 var className = '';
@@ -568,7 +574,11 @@
 
         disableAssetStatusIndicator: function(urlInput)
         {
-            ViperUtil.$(urlInput).find('div.Viper-textbox-main').show();
+            if (ViperUtil.isBrowser('chrome') === true) {
+                ViperUtil.$(urlInput).find('div.Viper-textbox-main').removeClass('Viper-offScreen');
+            } else {
+                ViperUtil.$(urlInput).find('div.Viper-textbox-main').show();
+            }
             ViperUtil.$(urlInput).find('div.Viper-image-status').hide();
         },
 
