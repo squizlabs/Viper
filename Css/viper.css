@@ -34,6 +34,6 @@
 }
 
 .Viper-offScreen {
-    position: absolute;
-    left: -9999px;
+    position: absolute !important;
+    left: -9999px !important;
 }
