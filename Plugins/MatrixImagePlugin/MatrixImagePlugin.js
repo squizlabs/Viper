@@ -1625,6 +1625,20 @@
             return false;
         },
 
+
+        // if it's a preview low resolution image, do not show resize handler
+        // resize it would be weird experience
+        showImageResizeHandles: function(image)
+        {
+            if(image.getAttribute('data-imagepaste') == 'true') {
+                return;
+            }
+            else {
+                this._parent.prototype.showImageResizeHandles.call(this, image);
+            }
+        },
+
+
         _prepareDropppedImageUpload: function(prefix) {
             // is this a dropped in image preview?
             var image = this._resizeImage;
