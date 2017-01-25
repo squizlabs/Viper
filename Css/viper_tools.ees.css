@@ -12,17 +12,14 @@
   border-bottom-width: 1px;
   box-shadow: 0 3px 2px rgba(0, 0, 0, 0.05);
 }
-.ViperTP-bar.viper-active {
+.fixedScroll .ViperTP-bar.viper-active {
   opacity: 1;
-  transition: opacity .25s;
-}
-.ViperTP-bar.viper-inactive {
-  z-index: -1;
-  opacity: 0;
   transition: opacity .25s;
 }
 .fixedScroll .ViperTP-bar.viper-inactive {
   z-index: -1;
+  opacity: 0;
+  transition: opacity .25s, z-index .25s;
 }
 .Viper-buttonIcon.Viper-ees-target {
   background-position: 0 -1215px;
