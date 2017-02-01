@@ -3,18 +3,18 @@
   background-color: transparent;
   z-index: auto;
   box-shadow: none;
+  opacity: 1;
+  transition: opacity .25s, z-index .25s;
 }
 .fixedScroll .ViperTP-bar {
   position: fixed !important;
   top: 48px !important;
   z-index: 1000;
+}
+.fixedScroll .ViperTP-bar.viper-active {
   background-color: #EDEDED;
   border-bottom-width: 1px;
   box-shadow: 0 3px 2px rgba(0, 0, 0, 0.05);
-}
-.fixedScroll .ViperTP-bar.viper-active {
-  opacity: 1;
-  transition: opacity .25s;
 }
 .fixedScroll .ViperTP-bar.viper-inactive {
   z-index: -1;
