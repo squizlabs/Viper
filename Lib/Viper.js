@@ -1423,8 +1423,8 @@
 
                 range = new Viper.IERange(rangeObj);
 
-                if (Viper.doc.createRange) {
-                    rangeObj         = Viper.doc.createRange();
+                if (Viper.document.createRange) {
+                    rangeObj         = Viper.document.createRange();
                     var ieToMozRange = new Viper.MozRange(rangeObj);
                     ieToMozRange.setStart(range.startContainer, range.startOffset);
                     ieToMozRange.collapse(true);
