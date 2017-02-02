@@ -1435,6 +1435,8 @@
                     showButton: function(buttonid, disabled) {
                         if (tools.getItem(buttonid).type !== 'button') {
                             throw new Error('Invalid button for showButton(): ' + buttonid);
+                        } else if (_availableButtons !== null && !_availableButtons[buttonid.toLowerCase()]) {
+                            return;
                         }
 
                         this._buttonShown = true;
@@ -1490,7 +1492,7 @@
                                     }
 
                                     buttonElements.push(groupButtons);
-                                } else if (ViperUtil.hasClass('Viper-button') === true) {
+                                } else if (ViperUtil.hasClass(node, 'Viper-button') === true) {
                                     buttonElements.push(node);
                                 }
                             }
@@ -1928,17 +1930,25 @@
                             return;
                         }
 
+                        _availableButtons = {};
+                        buttonElements    = null;
+
                         // Clear the buttons container contents.
                         while (toolsContainer.firstChild) {
                             toolsContainer.removeChild(toolsContainer.firstChild);
                         }
 
                         // Get the button ids and their elements.
-                        var addedButtons = {};
-                        for (var i = 0; i < c; i++) {
-                            var button       = buttons[i];
-                            var id           = button.id.toLowerCase().replace(self.viper.getId().toLowerCase() + '-vitp', '');
-                            addedButtons[id] = button;
+                        var addedButtons = this.addedButtons;
+                        if (addedButtons === null) {
+                            addedButtons = {};
+                            for (var i = 0; i < c; i++) {
+                                var button       = buttons[i];
+                                var id           = button.id.toLowerCase().replace(self.viper.getId().toLowerCase() + '-vitp', '');
+                                addedButtons[id] = button;
+                            }
+
+                            this.addedButtons = addedButtons;
                         }
 
                         var bc = buttonOrder.length;
@@ -1948,6 +1958,7 @@
                                 button = button.toLowerCase();
                                 if (addedButtons[button]) {
                                     // Button is included in the setting, add it to the toolbar.
+                                    _availableButtons['vitp' + button.toLowerCase()] = true;
                                     this.addButton(addedButtons[button]);
                                 }
                             } else {
@@ -1962,6 +1973,8 @@
                                             this.addButton(groupElement);
                                         }
 
+                                        _availableButtons['vitp' + button[j].toLowerCase()] = true;
+
                                         // Button is included in the setting, add it to group.
                                         self.addButtonToGroup('vitp' + ViperUtil.ucFirst(button[j]), groupid);
                                     }
@@ -1969,6 +1982,7 @@
                             }//end if
                         }//end for
                     },
+                    addedButtons: null,
                     hideToolsSection: function() {
                         ViperUtil.setStyle(toolsContainer, 'display', 'none');
                         ViperUtil.addClass(toolbar, 'Viper-noTools');
@@ -1986,6 +2000,7 @@
                     _verticalPosUpdateOnly: false,
                     _keepOpenTagList: [],
                     _onHideCallback: null,
+                    _availableButtons: null,
                     updatePosition: function(range, selectedNode) {
                         var _self = this;
                         self.viper.Tools.updatePositionOfElement(toolbar, range, selectedNode, function() {
