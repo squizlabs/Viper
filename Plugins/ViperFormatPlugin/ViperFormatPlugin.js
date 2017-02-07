@@ -89,7 +89,8 @@
                         - To specify a text selection in the showFor and hideFor filters use "text-selection".
             */
 
-            if (settings.styles && ViperUtil.isEmpty(settings.styles) === false) {
+            settings.styles = settings.styles || {};
+            if (settings.styles) {
                 this._custStyles = settings.styles;
 
                 var items    = {};

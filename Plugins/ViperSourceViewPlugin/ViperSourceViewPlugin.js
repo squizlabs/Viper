@@ -828,7 +828,7 @@
             ViperUtil.setHtml(el, html);
             this._convertBase64ImagesToKeywords(el);
             html = ViperUtil.getHtml(el);
-            if (window.StyleHTML) {
+            if (typeof StyleHTML !== 'undefined') {
                 html = StyleHTML(html);
             }
 

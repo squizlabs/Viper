@@ -61,7 +61,7 @@
          getIssues: function()
          {
              var self = this;
-             if (!window.HTMLCSAuditor) {
+             if (typeof HTMLCSAuditor === 'undefined') {
                  this.includeScript(this._htmlCSsrc + '/HTMLCS.js', function() {
                      self.includeScript(self._htmlCSsrc + 'Auditor/HTMLCSAuditor.js', function() {
                          var link   = document.createElement('link');
@@ -108,7 +108,7 @@
 
          loadHTMLCS: function(callback)
          {
-             if (window.HTMLCS) {
+             if (typeof HTMLCS !== 'undefined') {
                  callback.call(this);
              } else {
                  this.includeScript(this._htmlCSsrc + '/HTMLCS.js', callback);
@@ -186,7 +186,7 @@
                  HTMLCS.process(self._standard, self.viper.getViperElement(), callback);
              };
 
-             if (!window.HTMLCS) {
+             if (typeof HTMLCS === 'undefined') {
                  var script    = document.createElement('script');
                  script.onload = function() {
                      _runChecks();
@@ -502,6 +502,7 @@
           */
          includeScript: function(src, callback) {
              var script    = document.createElement('script');
+             script.type   = 'text/javascript';
              script.onload = function() {
                  script.onload = null;
                  script.onreadystatechange = null;
