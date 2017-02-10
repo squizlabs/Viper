@@ -18,6 +18,7 @@
         this.styleTags         = ['strong', 'em', 'sub', 'sup', 'del'];
         this.toolbarPlugin     = null;
         this._onChangeAddStyle = [];
+        this._justifyButtons   = ['left', 'center', 'right', 'block'];
 
         this._buttons = {
             strong: 'bold',
@@ -43,6 +44,21 @@
 
         },
 
+        setSetting: function(setting, value) {
+            switch (setting) {
+                case 'justifyButtons':
+                    value = value || this._justifyButtons;
+                    for (var i = 0; i < this._justifyButtons.length; i++) {
+                        if (ViperUtil.inArray(this._justifyButtons[i], value) === true) {
+                            this.viper.Tools.getItem('ViperCoreStylesPlugin:vtp:' + this._justifyButtons[i]).show();
+                        } else {
+                            this.viper.Tools.getItem('ViperCoreStylesPlugin:vtp:' + this._justifyButtons[i]).hide();
+                        }
+                    }
+                break;
+            }
+        },
+
         init: function()
         {
             var self = this;
@@ -62,7 +78,7 @@
             // Main styles and remove format button groups.
             toolbarButtons.styles   = ['strong', 'em', 'sub', 'sup', 'del'];
             toolbarButtons.removeFormat = ['removeFormat'];
-            toolbarButtons.justify = ['left', 'center', 'right', 'block'];
+            toolbarButtons.justify = this._justifyButtons;
             toolbarButtons.other = ['hr'];
 
             tools.createButton('bold', '', _('Bold'), 'Viper-bold', function() {

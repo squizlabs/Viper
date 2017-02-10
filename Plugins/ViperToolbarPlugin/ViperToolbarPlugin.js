@@ -710,14 +710,9 @@
                 return;
             }
 
-            var bubble     = this.viper.Tools.getItem(bubbleid).element;
-            var button     = this.viper.Tools.getItem(this._bubbleButtons[bubbleid]).element;
-
-            var toolsWidth = null;
-            var widthStyle = bubble.style.width;
-
-            toolsWidth = ViperUtil.getElementWidth(bubble);
-
+            var bubble       = this.viper.Tools.getItem(bubbleid).element;
+            var button       = this.viper.Tools.getItem(this._bubbleButtons[bubbleid]).element;
+            var toolsWidth   = ViperUtil.getElementWidth(bubble);
             var scrollCoords = ViperUtil.getScrollCoords();
             var windowDim    = ViperUtil.getWindowDimensions();
             var elemDim      = ViperUtil.getBoundingRectangle(button);
@@ -734,10 +729,6 @@
 
             ViperUtil.setStyle(bubble, 'left', left + 'px');
             ViperUtil.setStyle(bubble, 'top', '35px');
-
-            if (!widthStyle) {
-                ViperUtil.setStyle(bubble, 'width', toolsWidth + 'px');
-            }
 
         },
 

@@ -40,6 +40,22 @@
         this._stylesListElement = [];
         this._selectedNode = null;
 
+        this._formatButtons = {
+            p: 'P',
+            div: 'DIV',
+            blockquote: 'Quote',
+            pre: 'PRE'
+        };
+
+        this._headingButtons = {
+            h1: 'H1',
+            h2: 'H2',
+            h3: 'H3',
+            h4: 'H4',
+            h5: 'H5',
+            h6: 'H6'
+        };
+
         this._inlineToolbarActiveSubSection = null;
 
         this.initInlineToolbar();
@@ -87,84 +103,133 @@
 
                     Notes:
                         - To specify a text selection in the showFor and hideFor filters use "text-selection".
+
+                formatButtons: ['p', 'pre', 'div', 'blockquote']
+                headingButtons: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+
             */
+            this.setSetting('styles', settings.styles);
+            this.setSetting('formatButtons', settings.formatButtons);
+            this.setSetting('headerButtons', settings.formatButtons);
 
-            settings.styles = settings.styles || {};
-            if (settings.styles) {
-                this._custStyles = settings.styles;
+        },
 
-                var items    = {};
-                var expanded = {};
-                for (var name in this._custStyles) {
-                    var classNames = '';
-                    var showFor    = '';
-                    var hideFor    = '';
-                    if (typeof this._custStyles[name] === 'string') {
-                        classNames = this._custStyles[name].split(' ');
-                    } else if (typeof this._custStyles[name] === 'object' && this._custStyles[name].classNames) {
-                        // Extra settings provided for this style.
-                        classNames = this._custStyles[name].classNames.split(' ');
+        setSetting: function(setting, value) {
+            switch (setting) {
+                case 'styles':
+                    this._custStyles = value || {};
 
-                        // If the showFor settings is not a * (show for everything) then get the list of tags to show for.
-                        // Note that showFor overrides the hideFor setting.
-                        if (this._custStyles[name].showFor) {
-                            if (this._custStyles[name].showFor === '*') {
-                                showFor = '*';
-                            } else {
-                                showFor = this._custStyles[name].showFor.split(',');
+                    var items    = {};
+                    var expanded = {};
+                    for (var name in this._custStyles) {
+                        var classNames = '';
+                        var showFor    = '';
+                        var hideFor    = '';
+                        if (typeof this._custStyles[name] === 'string') {
+                            classNames = this._custStyles[name].split(' ');
+                        } else if (typeof this._custStyles[name] === 'object' && this._custStyles[name].classNames) {
+                            // Extra settings provided for this style.
+                            classNames = this._custStyles[name].classNames.split(' ');
+
+                            // Note that showFor overrides the hideFor setting.
+                            if (this._custStyles[name].showFor) {
+                            // If the showFor settings is not a * (show for everything) then get the list of tags to show for.
+                                if (this._custStyles[name].showFor === '*') {
+                                    showFor = '*';
+                                } else {
+                                    showFor = this._custStyles[name].showFor.split(',');
+                                }
                             }
+
+                            // Hide for setting.
+                            if (this._custStyles[name].hideFor) {
+                                if (this._custStyles[name].hideFor === '*') {
+                                    hideFor = '*';
+                                } else {
+                                    hideFor = this._custStyles[name].hideFor.split(',');
+                                }
+                            }
+                        } else {
+                            continue;
                         }
 
-                        // Hide for setting.
-                        if (this._custStyles[name].hideFor) {
-                            if (this._custStyles[name].hideFor === '*') {
-                                hideFor = '*';
-                            } else {
-                                hideFor = this._custStyles[name].hideFor.split(',');
-                            }
+                        items[classNames.join(' ')] = name;
+
+                        expanded[classNames.join(' ')] = {
+                            classNames: classNames,
+                            showFor: showFor,
+                            hideFor: hideFor
                         }
-                    } else {
-                        continue;
                     }
 
-                    items[classNames.join(' ')] = name;
+                    this._custStyleNames = items;
+                    this._custStyles     = expanded;
 
-                    expanded[classNames.join(' ')] = {
-                        classNames: classNames,
-                        showFor: showFor,
-                        hideFor: hideFor
+                    var self  = this;
+                    var tools = this.viper.Tools;
+
+                    // If there is a list already remove it.
+                    var listElement = tools.getItem(this._styleListid);
+                    if (listElement) {
+                        ViperUtil.remove(listElement.element);
                     }
-                }
 
-                this._custStyleNames = items;
-                this._custStyles     = expanded;
+                    var listElement = tools.createSelectionList(
+                        this._styleListid,
+                        items,
+                        function () {
+                            // When the item is clicked update the main styles list.
+                            self._updateDefinedStylesList();
+                        }
+                    );
 
-                var self  = this;
-                var tools = this.viper.Tools;
-
-                // If there is a list already remove it.
-                var listElement = tools.getItem(this._styleListid);
-                if (listElement) {
-                    ViperUtil.remove(listElement.element);
-                }
-
-                var listElement = tools.createSelectionList(
-                    this._styleListid,
-                    items,
-                    function () {
-                        // When the item is clicked update the main styles list.
-                        self._updateDefinedStylesList();
+                    var panel = this.viper.Tools.getItem(this._popoutid);
+                    if (!panel) {
+                        return;
                     }
-                );
 
-                var panel = this.viper.Tools.getItem(this._popoutid);
-                if (!panel) {
-                    return;
-                }
+                    panel.element.appendChild(listElement);
+                break;
 
-                panel.element.appendChild(listElement);
-            }//end if
+                case 'formatButtons':
+                    value = value || Object.keys(this._formatButtons);
+                    for (var button in this._formatButtons) {
+                        if (ViperUtil.inArray(button, value) === true) {
+                            this._showButton('formats:' + this._formatButtons[button]);
+                        } else {
+                            this._hideButton('formats:' + this._formatButtons[button]);
+                        }
+                    }
+                break;
 
+                case 'headingButtons':
+                    value = value || Object.keys(this._headingButtons);
+                    for (var button in this._headingButtons) {
+                        if (ViperUtil.inArray(button, value) === true) {
+                            this._showButton('heading:' + button);
+                        } else {
+                            this._hideButton('heading:' + button);
+                        }
+                    }
+                break;
+            }
+
+        },
+
+        _showButton: function(buttonid) {
+            var toolbarTypes = ['vtp', 'vitp'];
+            for (var i = 0; i < toolbarTypes.length; i++) {
+                var fixedid = 'ViperFormatPlugin:' + toolbarTypes[i] + ':' + buttonid;
+                this.viper.Tools.getItem(fixedid).show();
+            }
+        },
+
+        _hideButton: function(buttonid) {
+            var toolbarTypes = ['vtp', 'vitp'];
+            for (var i = 0; i < toolbarTypes.length; i++) {
+                var fixedid = 'ViperFormatPlugin:' + toolbarTypes[i] + ':' + buttonid;
+                this.viper.Tools.getItem(fixedid).hide();
+            }
         },
 
         _getHeadingsSection: function(prefix)
@@ -197,12 +262,7 @@
             var tools  = this.viper.Tools;
 
             var formatsSubSection = document.createElement('div');
-            var formatButtons = {
-                p: 'P',
-                div: 'DIV',
-                blockquote: 'Quote',
-                pre: 'PRE'
-            };
+            var formatButtons     = this._formatButtons;
 
             for (var tag in formatButtons) {
                 (function(tagName) {

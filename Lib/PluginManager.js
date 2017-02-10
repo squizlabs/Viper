@@ -233,6 +233,14 @@
 
         },
 
+        setPluginSetting: function(pluginName, setting, value)
+        {
+            if (this._plugins[pluginName]) {
+                this._plugins[pluginName].setSetting(setting, value);
+            }
+
+        },
+
         disablePlugin: function(name)
         {
             if (this._plugins[name].disable) {
