@@ -223,6 +223,29 @@
 
         },
 
+        /**
+         * Use this method to set settings for multiple plugins.
+         *
+         *  {
+         *      pluginName: {
+         *        settingOne: ...,
+         *        settingTwo: ...
+         *      },
+         *      ...
+         *  }
+         *
+         */
+        setSettings: function(settings)
+        {
+            for (var pluginName in settings) {
+                if (this._plugins[pluginName]) {
+                    for (var settingName in settings[pluginName]) {
+                        this._plugins[pluginName].setSetting(settingName, settings[pluginName][settingName]);
+                    }
+                }
+            }
+        },
+
         setPluginSettings: function(pluginName, settings)
         {
             if (this._plugins[pluginName]) {

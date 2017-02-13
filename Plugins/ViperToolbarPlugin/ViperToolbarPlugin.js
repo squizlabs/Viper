@@ -97,18 +97,31 @@
             }
 
             if (settings.parent) {
-                var parent = settings.parent;
-                if (typeof parent === 'string') {
-                    parent = ViperUtil.getid(settings.parent);
-                }
-
-                this.setParentElement(parent);
+                this.setSetting('parent', settings.parent);
             }
 
             if (settings.buttons) {
-                this.setButtons(settings.buttons);
+                this.setSetting('buttons', settings.buttons);
             }
 
+        },
+
+        setSetting: function(setting, value)
+        {
+            switch (setting) {
+                case 'parent':
+                    var parent = value;
+                    if (typeof parent === 'string') {
+                        parent = ViperUtil.getid(parent);
+                    }
+
+                    this.setParentElement(parent);
+                break;
+
+                case 'buttons':
+                    this.setButtons(value);
+                break;
+            }
         },
 
         setButtons: function(buttons)
