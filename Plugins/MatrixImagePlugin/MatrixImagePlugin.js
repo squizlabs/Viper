@@ -388,6 +388,25 @@
             });
 
 
+            // open the default tab when image plugin bubble is shown
+            var buttonPrefix = prefix == 'ViperImagePlugin' ? 'image' : 'vitpImage';
+            ViperUtil.addEvent(ViperUtil.$('#' + this.viper.getId() + '-' + buttonPrefix).get(0), 'mousedown', function(e) {
+
+                var urlInput = tools.getItem(prefix + ':urlInput');
+                var src = urlInput.getValue();
+
+                // which tab to open
+                var $dialog = ViperUtil.$(urlInput.element).parent().parent().parent();
+                if(self._isInternalLink(src)) {
+                    $dialog.find('#' + prefix + 'tabAsset').click();
+                }
+                else if (src.indexOf('filepath://') == 0 || src.indexOf('data:image') == 0) {
+                    $dialog.find('#' + prefix + 'tabUpload').click();
+                }
+                else {
+                    $dialog.find('#' + prefix + 'tabURL').click();
+                }
+            });
         },
 
         /* this function gets called when you click anywhere in viper content, 
@@ -428,17 +447,6 @@
                     tools.getItem(toolbarPrefix + ':isDecorative').setValue(false);
                 }
 
-
-                // which tab to open
-                if(this._isInternalLink(src)) {
-                    $dialog.find('#' + toolbarPrefix + 'tabAsset').click();
-                }
-                else if (src.indexOf('filepath://') == 0 || src.indexOf('data:image') == 0) {
-                    $dialog.find('#' + toolbarPrefix + 'tabUpload').click();
-                }
-                else {
-                    $dialog.find('#' + toolbarPrefix + 'tabURL').click();
-                }
 
                 // if it's a "droped in content" image upload, we need to prepare ourself
                 self._prepareDropppedImageUpload(toolbarPrefix);
