@@ -96,12 +96,8 @@
                 return;
             }
 
-            if (settings.parent) {
-                this.setSetting('parent', settings.parent);
-            }
-
-            if (settings.buttons) {
-                this.setSetting('buttons', settings.buttons);
+            for (var setting in settings) {
+                this.setSetting(setting, settings[setting]);
             }
 
         },
@@ -120,6 +116,14 @@
 
                 case 'buttons':
                     this.setButtons(value);
+                break;
+
+                case 'allowButtonWrap':
+                    if (value === true) {
+                        $(this._toolbar).addClass('buttonWrap');
+                    } else {
+                        $(this._toolbar).removeClass('buttonWrap');
+                    }
                 break;
             }
         },
