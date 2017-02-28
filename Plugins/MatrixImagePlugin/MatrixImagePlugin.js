@@ -222,7 +222,7 @@
 
                 // if it's a dropped image upload, we don't need to do anything, prepareDroppedImageUpload() would take care everything
                 var value = ViperUtil.$(this).parent().parent().find('.Viper-chooseAssetRow input.Viper-textbox-input').val();
-                if(value.indexOf('- Dropped Image -') == 0) {
+                if(value.indexOf('- Dropped Image -') == 0 || value.indexOf('filepath://') == 0) {
                     return;
                 }
 
@@ -397,7 +397,7 @@
 
                 // which tab to open
                 var $dialog = ViperUtil.$(urlInput.element).parent().parent().parent();
-                if(self._isInternalLink(src)) {
+                if(self._isInternalLink(src) || src == '') {
                     $dialog.find('#' + prefix + 'tabAsset').click();
                 }
                 else if (src.indexOf('filepath://') == 0 || src.indexOf('data:image') == 0) {
