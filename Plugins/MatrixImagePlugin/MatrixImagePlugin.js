@@ -1638,6 +1638,12 @@
         // resize it would be weird experience
         showImageResizeHandles: function(image)
         {
+            // when the image tag is inserted and loaded, set it to its natural width and height
+            // if there isn't custom value on it already
+            if(!image.getAttribute('width') && !image.getAttribute('height')) {
+               this._setImageNaturalWidthHeight(image);
+            }
+
             if(image.getAttribute('data-imagepaste') == 'true') {
                 return;
             }
@@ -1823,6 +1829,25 @@
             return (bytes/Math.pow(1024, Math.floor(e))).toFixed(2)+" "+s[e];
 
         }, //  End readablizeBytes.
+
+        _setImageNaturalWidthHeight: function(image) {
+            if (!image) {
+                return;
+            }
+            image.setAttribute('width', image.naturalWidth);
+            image.setAttribute('height', image.naturalHeight);
+        },
+
+        resetImageSize: function(image)
+        {
+            if (!image) {
+                return;
+            }
+            image.setAttribute('width', image.naturalWidth);
+            image.setAttribute('height', image.naturalHeight);
+            this.viper.contentChanged(true);
+
+        },
 
 
     };
