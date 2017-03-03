@@ -218,17 +218,19 @@ to { -moz-transform: rotateZ(0deg)}
 .ViperITP-msgBox.ViperImagePlugin-previewPanel {
     border:none;
     position: relative;
-    min-height: 150px;
     background: #646468;
 }
 .ViperITP-msgBox.ViperImagePlugin-previewPanel img {
     margin: 0;
     vertical-align: middle;
+    width: auto;
+    height: auto;
+    max-height: 420px;
+    max-width: 320px;
 }
 .ViperITP-msgBox.ViperImagePlugin-previewPanel.Viper-info {
     padding: 0;
     overflow: hidden;
-    max-height: 320px;
 }
 .ViperITP-msgBox.ViperImagePlugin-previewPanel .loadingPreviewMessage
 {
@@ -240,7 +242,6 @@ to { -moz-transform: rotateZ(0deg)}
 }
 .ViperITP-msgBox.ViperImagePlugin-previewPanel span
 {
-    height: 150px;
     display: inline-block;
     vertical-align: middle;
 }
