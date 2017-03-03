@@ -1435,7 +1435,7 @@
                     showButton: function(buttonid, disabled) {
                         if (tools.getItem(buttonid).type !== 'button') {
                             throw new Error('Invalid button for showButton(): ' + buttonid);
-                        } else if (_availableButtons !== null && !_availableButtons[buttonid.toLowerCase()]) {
+                        } else if (this._availableButtons !== null && !this._availableButtons[buttonid.toLowerCase()]) {
                             return;
                         }
 
@@ -1930,8 +1930,8 @@
                             return;
                         }
 
-                        _availableButtons = {};
-                        buttonElements    = null;
+                        this._availableButtons = {};
+                        buttonElements         = null;
 
                         // Clear the buttons container contents.
                         while (toolsContainer.firstChild) {
@@ -1958,7 +1958,7 @@
                                 button = button.toLowerCase();
                                 if (addedButtons[button]) {
                                     // Button is included in the setting, add it to the toolbar.
-                                    _availableButtons['vitp' + button.toLowerCase()] = true;
+                                    this._availableButtons['vitp' + button.toLowerCase()] = true;
                                     this.addButton(addedButtons[button]);
                                 }
                             } else {
@@ -1973,7 +1973,7 @@
                                             this.addButton(groupElement);
                                         }
 
-                                        _availableButtons['vitp' + button[j].toLowerCase()] = true;
+                                        this._availableButtons['vitp' + button[j].toLowerCase()] = true;
 
                                         // Button is included in the setting, add it to group.
                                         self.addButtonToGroup('vitp' + ViperUtil.ucFirst(button[j]), groupid);

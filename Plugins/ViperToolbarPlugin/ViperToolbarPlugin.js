@@ -126,7 +126,7 @@
                     // Single button.
                     var button = this.viper.Tools.getItem(buttons[i]);
                     if (!button || button.type !== 'button') {
-                        throw new Error('Invalid button type: ' + buttons[i]);
+                        continue;
                     }
 
                     this._toolbar.appendChild(button.element);
@@ -139,7 +139,7 @@
                     for (var j = 0; j < subButtonsLen; j++) {
                         var button = this.viper.Tools.getItem(buttons[i][j]);
                         if (!button || button.type !== 'button') {
-                            throw new Error('Invalid button type: ' + buttons[i][j]);
+                            continue;
                         }
 
                         this.viper.Tools.addButtonToGroup(buttons[i][j], groupid);

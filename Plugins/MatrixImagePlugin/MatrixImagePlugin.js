@@ -222,7 +222,7 @@
 
                 // if it's a dropped image upload, we don't need to do anything, prepareDroppedImageUpload() would take care everything
                 var value = ViperUtil.$(this).parent().parent().find('.Viper-chooseAssetRow input.Viper-textbox-input').val();
-                if(value.indexOf('- Dropped Image -') == 0) {
+                if(value.indexOf('- Dropped Image -') == 0 || value.indexOf('filepath://') == 0) {
                     return;
                 }
 
@@ -388,6 +388,25 @@
             });
 
 
+            // open the default tab when image plugin bubble is shown
+            var buttonPrefix = prefix == 'ViperImagePlugin' ? 'image' : 'vitpImage';
+            ViperUtil.addEvent(ViperUtil.$('#' + this.viper.getId() + '-' + buttonPrefix).get(0), 'mousedown', function(e) {
+
+                var urlInput = tools.getItem(prefix + ':urlInput');
+                var src = urlInput.getValue();
+
+                // which tab to open
+                var $dialog = ViperUtil.$(urlInput.element).parent().parent().parent();
+                if(self._isInternalLink(src) || src == '') {
+                    $dialog.find('#' + prefix + 'tabAsset').click();
+                }
+                else if (src.indexOf('filepath://') == 0 || src.indexOf('data:image') == 0) {
+                    $dialog.find('#' + prefix + 'tabUpload').click();
+                }
+                else {
+                    $dialog.find('#' + prefix + 'tabURL').click();
+                }
+            });
         },
 
         /* this function gets called when you click anywhere in viper content, 
@@ -400,7 +419,7 @@
             if (!toolbar) {
                 return;
             }
-
+                      
             var tools = this.viper.Tools;
             var urlInput = tools.getItem(toolbarPrefix + ':urlInput');
             var $dialog = ViperUtil.$(urlInput.element).parent().parent().parent();
@@ -428,17 +447,6 @@
                     tools.getItem(toolbarPrefix + ':isDecorative').setValue(false);
                 }
 
-
-                // which tab to open
-                if(this._isInternalLink(src)) {
-                    $dialog.find('#' + toolbarPrefix + 'tabAsset').click();
-                }
-                else if (src.indexOf('filepath://') == 0 || src.indexOf('data:image') == 0) {
-                    $dialog.find('#' + toolbarPrefix + 'tabUpload').click();
-                }
-                else {
-                    $dialog.find('#' + toolbarPrefix + 'tabURL').click();
-                }
 
                 // if it's a "droped in content" image upload, we need to prepare ourself
                 self._prepareDropppedImageUpload(toolbarPrefix);
@@ -1630,6 +1638,12 @@
         // resize it would be weird experience
         showImageResizeHandles: function(image)
         {
+            // when the image tag is inserted and loaded, set it to its natural width and height
+            // if there isn't custom value on it already
+            if(!image.getAttribute('width') && !image.getAttribute('height')) {
+               this._setImageNaturalWidthHeight(image);
+            }
+            
             if(image.getAttribute('data-imagepaste') == 'true') {
                 return;
             }
@@ -1816,6 +1830,24 @@
 
         }, //  End readablizeBytes.
 
+        _setImageNaturalWidthHeight: function(image) {
+            if (!image) {
+                return;
+            }
+            image.setAttribute('width', image.naturalWidth);
+            image.setAttribute('height', image.naturalHeight);
+        },
+
+        resetImageSize: function(image)
+        {
+            if (!image) {
+                return;
+            }
+            image.setAttribute('width', image.naturalWidth);
+            image.setAttribute('height', image.naturalHeight);
+            this.viper.contentChanged(true);
+
+        },
 
     };
 })(Viper.Util, Viper.Selection, Viper._);
