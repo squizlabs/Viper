@@ -228,6 +228,7 @@ to { -moz-transform: rotateZ(0deg)}
 .ViperITP-msgBox.ViperImagePlugin-previewPanel.Viper-info {
     padding: 0;
     overflow: hidden;
+    max-height: 320px;
 }
 .ViperITP-msgBox.ViperImagePlugin-previewPanel .loadingPreviewMessage
 {
@@ -409,7 +410,7 @@ div.Viper-image-status {
 }
 
 
-.Viper-varietyChooser-menu li 
+.Viper-varietyChooser-menu li
 {
     border-bottom: 1px solid #DCE3EC;
     text-align: left;
@@ -521,4 +522,3 @@ div.Viper-image-status {
     margin-bottom: 0.6em;
     margin-top: 0.6em;
 }
-
