@@ -77,7 +77,7 @@
   background-position: 0 0px;
   background-image: url("../Images/matrixButtonIcons.svg");
 }
-.Viper-button:active .Viper-buttonIcon.Viper-keywords,
+.Viper-button:active:not(.Viper-disabled) .Viper-buttonIcon.Viper-keywords,
 .Viper-button.Viper-active .Viper-buttonIcon.Viper-keywords,
 .Viper-button.Viper-selected .Viper-buttonIcon.Viper-keywords {
   background-position: -34px 0px;
@@ -89,7 +89,7 @@
   background-position: 0 -27px;
   background-image: url("../Images/matrixButtonIcons.svg");
 }
-.Viper-button:active .Viper-buttonIcon.Viper-snippet,
+.Viper-button:active:not(.Viper-disabled) .Viper-buttonIcon.Viper-snippet,
 .Viper-button.Viper-active .Viper-buttonIcon.Viper-snippet,
 .Viper-button.Viper-selected .Viper-buttonIcon.Viper-snippet {
   background-position: -34px -27px;
