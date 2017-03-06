@@ -77,22 +77,12 @@
   background-position: 0 0px;
   background-image: url("../Images/matrixButtonIcons.svg");
 }
-.Viper-button:active:not(.Viper-disabled) .Viper-buttonIcon.Viper-keywords,
-.Viper-button.Viper-active .Viper-buttonIcon.Viper-keywords,
-.Viper-button.Viper-selected .Viper-buttonIcon.Viper-keywords {
-  background-position: -34px 0px;
-}
 .Viper-browserVer-msie8 .Viper-buttonIcon.Viper-keywords {
   background-image: url("../Images/matrixButtonIcons.png");
 }
 .Viper-buttonIcon.Viper-snippet {
   background-position: 0 -27px;
   background-image: url("../Images/matrixButtonIcons.svg");
-}
-.Viper-button:active:not(.Viper-disabled) .Viper-buttonIcon.Viper-snippet,
-.Viper-button.Viper-active .Viper-buttonIcon.Viper-snippet,
-.Viper-button.Viper-selected .Viper-buttonIcon.Viper-snippet {
-  background-position: -34px -27px;
 }
 .Viper-browserVer-msie8 .Viper-buttonIcon.Viper-snippet {
   background-image: url("../Images/matrixButtonIcons.png");
