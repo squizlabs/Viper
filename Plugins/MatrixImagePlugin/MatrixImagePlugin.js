@@ -210,8 +210,10 @@
                 ViperUtil.$('.VipperDroppedImage-msgBox').remove();
 
                 // change button text
-                ViperUtil.$(this).parent().parent().parent().parent().find('#content-screen-vitpImagePlugin\\:bubbleSubSection-applyButton').html(_('Apply Changes'));
-                ViperUtil.$(this).parent().parent().parent().parent().find('#content-screen-ViperImagePlugin\\:bubbleSubSection-applyButton').html(_('Apply Changes'));
+                var applyButton1 = self.viper.Tools.getItem('ViperImagePlugin:bubbleSubSection-applyButton');
+                var applyButton2 = self.viper.Tools.getItem('vitpImagePlugin:bubbleSubSection-applyButton');
+                ViperUtil.$(applyButton1.element).html(_('Apply Changes'));
+                ViperUtil.$(applyButton2.element).html(_('Apply Changes'));
 
             })
             $uploadTab.click(function(e) {
@@ -220,11 +222,16 @@
                 ViperUtil.$(this).parent().find('a').removeClass('selected');
                 $uploadTab.addClass('selected');
 
+
                 // if it's a dropped image upload, we don't need to do anything, prepareDroppedImageUpload() would take care everything
                 var value = ViperUtil.$(this).parent().parent().find('.Viper-chooseAssetRow input.Viper-textbox-input').val();
                 if(value.indexOf('- Dropped Image -') == 0 || value.indexOf('filepath://') == 0) {
                     return;
                 }
+
+                // if user has previously selected an image to upload, we need to clear it
+                ViperUtil.$(this).parent().parent().find('#'+ prefix + 'uploadImageButton').val("");
+
 
                 // hide the dropped image msg box, because we won't be using it
                 ViperUtil.$('.VipperDroppedImage-msgBox').remove();
@@ -245,8 +252,10 @@
                 ViperUtil.$('.Viper-image-error-message').html('').hide();
 
                   // change button text
-                ViperUtil.$(this).parent().parent().parent().parent().find('#content-screen-vitpImagePlugin\\:bubbleSubSection-applyButton').html(_('Upload Image'));
-                ViperUtil.$(this).parent().parent().parent().parent().find('#content-screen-ViperImagePlugin\\:bubbleSubSection-applyButton').html(_('Upload Image'));
+                var applyButton1 = self.viper.Tools.getItem('ViperImagePlugin:bubbleSubSection-applyButton');
+                var applyButton2 = self.viper.Tools.getItem('vitpImagePlugin:bubbleSubSection-applyButton');
+                ViperUtil.$(applyButton1.element).html(_('Upload Image'));
+                ViperUtil.$(applyButton2.element).html(_('Upload Image'));
             })
             $urlTab.click(function(e) {
                 ViperUtil.preventDefault(e);
@@ -291,8 +300,10 @@
                 ViperUtil.$('.VipperDroppedImage-msgBox').remove();
 
                 // change button text
-                ViperUtil.$(this).parent().parent().parent().parent().find('#content-screen-vitpImagePlugin\\:bubbleSubSection-applyButton').html(_('Apply Changes'));
-                ViperUtil.$(this).parent().parent().parent().parent().find('#content-screen-ViperImagePlugin\\:bubbleSubSection-applyButton').html(_('Apply Changes'));
+                var applyButton1 = self.viper.Tools.getItem('ViperImagePlugin:bubbleSubSection-applyButton');
+                var applyButton2 = self.viper.Tools.getItem('vitpImagePlugin:bubbleSubSection-applyButton');
+                ViperUtil.$(applyButton1.element).html(_('Apply Changes'));
+                ViperUtil.$(applyButton2.element).html(_('Apply Changes'));
 
             });
 
