@@ -1082,11 +1082,11 @@
 
             // Default button ordering.
             var buttons = [
-                ['bold', 'italic', 'subscript', 'superscript', 'strikethrough', 'class'], 'removeFormat', ['justify', 'formats', 'headings'], ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], 'insertTable', 'image', 'hr', ['insertLink', 'removeLink', 'anchor'], 'insertCharacter', 'searchReplace', 'langTools', 'accessibility', 'sourceEditor'
+                ['bold', 'italic', 'subscript', 'superscript', 'strikethrough', 'class', 'code'], 'removeFormat', ['justify', 'formats', 'headings'], ['undo', 'redo'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], 'insertTable', 'image', 'hr', ['insertLink', 'removeLink', 'anchor'], 'insertCharacter', 'searchReplace', 'langTools', 'accessibility', 'sourceEditor'
             ];
             this.getPluginManager().setPluginSettings('ViperToolbarPlugin', {buttons: buttons});
 
-            var inlineToolbarButtons = [['bold', 'italic', 'class'], ['justify', 'formats', 'headings'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], ['insertLink', 'removeLink', 'anchor'], ['image', 'imageMove']];
+            var inlineToolbarButtons = [['bold', 'italic', 'class', 'code'], ['justify', 'formats', 'headings'], ['unorderedList', 'orderedList', 'indentList', 'outdentList'], ['insertLink', 'removeLink', 'anchor'], ['image', 'imageMove']];
             this.getPluginManager().setPluginSettings('ViperInlineToolbarPlugin', {buttons: inlineToolbarButtons});
 
             // Accessibility Plugin, standard.

@@ -27,7 +27,8 @@
             sup: 'superscript',
             del: 'strikethrough',
             removeFormat: 'removeFormat',
-            hr: 'hr'
+            hr: 'hr',
+            code: 'code'
         };
 
     }
@@ -76,7 +77,7 @@
             var btnGroup = tools.createButtonGroup('ViperCoreStylesPlugin:vtp:stylesBtns');
 
             // Main styles and remove format button groups.
-            toolbarButtons.styles   = ['strong', 'em', 'sub', 'sup', 'del'];
+            toolbarButtons.styles   = ['strong', 'em', 'sub', 'sup', 'del', 'code'];
             toolbarButtons.removeFormat = ['removeFormat'];
             toolbarButtons.justify = this._justifyButtons;
             toolbarButtons.other = ['hr'];
@@ -106,10 +107,14 @@
             tools.createButton('strikethrough', '', _('Strikethrough'), 'Viper-strikethrough', function() {
                 self.handleStyle('del');
             }, true);
+            tools.createButton('code', '', _('Code'), 'Viper-code', function() {
+                self.handleStyle('code');
+            }, true);
 
             tools.addButtonToGroup('subscript', 'ViperCoreStylesPlugin:vtp:btnGroup2');
             tools.addButtonToGroup('superscript', 'ViperCoreStylesPlugin:vtp:btnGroup2');
             tools.addButtonToGroup('strikethrough', 'ViperCoreStylesPlugin:vtp:btnGroup2');
+            tools.addButtonToGroup('code', 'ViperCoreStylesPlugin:vtp:btnGroup2');
 
             // Justify buttons bubble.
             var justifyBubbleContent = document.createElement('div');
@@ -216,7 +221,8 @@
                 strong: _('Bold'),
                 sub: _('Subscript'),
                 sup: _('Superscript'),
-                del: _('Strikethrough')
+                del: _('Strikethrough'),
+                code: _('Code')
             };
 
             this.viper.registerCallback('Viper:mouseDown', 'ViperCoreStylesPlugin', function(e) {
@@ -1485,6 +1491,7 @@
             this.viper.Tools.removeItem('ViperCoreStylesPlugin:vtp:stylesBtns');
             this.viper.Tools.removeItem('bold');
             this.viper.Tools.removeItem('italic');
+            this.viper.Tools.removeItem('code');
             this.viper.Tools.removeItem('subscript');
             this.viper.Tools.removeItem('superscript');
             this.viper.Tools.removeItem('strikethrough');
