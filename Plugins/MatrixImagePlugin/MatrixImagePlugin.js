@@ -128,7 +128,7 @@
             var $varietyChooser = ViperUtil.$('<div class="Viper-varietyChooser"><div class="Viper-varietyChooserButton"><span class="Viper-varietyChooser-name">' + _('Original Image') + '</span> : <span class="Viper-varietyChooser-size" /><span class="Viper-varietyChooser-right-arrow"></span></div><div class="Viper-varietyChooser-menu"></div></div>');
             ViperUtil.insertAfter(prefix == 'vitpImagePlugin' ? this._vitpPreviewBox : this._previewBox, $varietyChooser.get(0));
 
-        
+
 
             // append the hidden file upload form
             var form = this.createUploadImageForm(prefix);
@@ -193,7 +193,7 @@
                 else {
                     $imageEditorIcon.hide();
                 }
-                
+
                 var $assetPickerIcon = ViperUtil.$(this).parent().parent().find('.Viper-assetSelector-button');
                 $assetPickerIcon.show();
 
@@ -210,8 +210,10 @@
                 ViperUtil.$('.VipperDroppedImage-msgBox').remove();
 
                 // change button text
-                ViperUtil.$(this).parent().parent().parent().parent().find('#content-screen-vitpImagePlugin\\:bubbleSubSection-applyButton').html(_('Apply Changes'));
-                ViperUtil.$(this).parent().parent().parent().parent().find('#content-screen-ViperImagePlugin\\:bubbleSubSection-applyButton').html(_('Apply Changes'));
+                var applyButton1 = self.viper.Tools.getItem('ViperImagePlugin:bubbleSubSection-applyButton');
+                var applyButton2 = self.viper.Tools.getItem('vitpImagePlugin:bubbleSubSection-applyButton');
+                ViperUtil.$(applyButton1.element).html(_('Apply Changes'));
+                ViperUtil.$(applyButton2.element).html(_('Apply Changes'));
 
             })
             $uploadTab.click(function(e) {
@@ -220,11 +222,16 @@
                 ViperUtil.$(this).parent().find('a').removeClass('selected');
                 $uploadTab.addClass('selected');
 
+
                 // if it's a dropped image upload, we don't need to do anything, prepareDroppedImageUpload() would take care everything
                 var value = ViperUtil.$(this).parent().parent().find('.Viper-chooseAssetRow input.Viper-textbox-input').val();
                 if(value.indexOf('- Dropped Image -') == 0 || value.indexOf('filepath://') == 0) {
                     return;
                 }
+
+                // if user has previously selected an image to upload, we need to clear it
+                ViperUtil.$(this).parent().parent().find('#'+ prefix + 'uploadImageButton').val("");
+
 
                 // hide the dropped image msg box, because we won't be using it
                 ViperUtil.$('.VipperDroppedImage-msgBox').remove();
@@ -245,8 +252,10 @@
                 ViperUtil.$('.Viper-image-error-message').html('').hide();
 
                   // change button text
-                ViperUtil.$(this).parent().parent().parent().parent().find('#content-screen-vitpImagePlugin\\:bubbleSubSection-applyButton').html(_('Upload Image'));
-                ViperUtil.$(this).parent().parent().parent().parent().find('#content-screen-ViperImagePlugin\\:bubbleSubSection-applyButton').html(_('Upload Image'));
+                var applyButton1 = self.viper.Tools.getItem('ViperImagePlugin:bubbleSubSection-applyButton');
+                var applyButton2 = self.viper.Tools.getItem('vitpImagePlugin:bubbleSubSection-applyButton');
+                ViperUtil.$(applyButton1.element).html(_('Upload Image'));
+                ViperUtil.$(applyButton2.element).html(_('Upload Image'));
             })
             $urlTab.click(function(e) {
                 ViperUtil.preventDefault(e);
@@ -291,8 +300,10 @@
                 ViperUtil.$('.VipperDroppedImage-msgBox').remove();
 
                 // change button text
-                ViperUtil.$(this).parent().parent().parent().parent().find('#content-screen-vitpImagePlugin\\:bubbleSubSection-applyButton').html(_('Apply Changes'));
-                ViperUtil.$(this).parent().parent().parent().parent().find('#content-screen-ViperImagePlugin\\:bubbleSubSection-applyButton').html(_('Apply Changes'));
+                var applyButton1 = self.viper.Tools.getItem('ViperImagePlugin:bubbleSubSection-applyButton');
+                var applyButton2 = self.viper.Tools.getItem('vitpImagePlugin:bubbleSubSection-applyButton');
+                ViperUtil.$(applyButton1.element).html(_('Apply Changes'));
+                ViperUtil.$(applyButton2.element).html(_('Apply Changes'));
 
             });
 
@@ -371,7 +382,7 @@
                 });
             });
 
-                  
+
             // when you click on a pasted image, pop up the upload menu directly
             this.viper.registerCallback('Viper:mouseUp', 'MatrixImagePlugin', function(e) {
                 var target = ViperUtil.getMouseEventTarget(e);
@@ -409,8 +420,8 @@
             });
         },
 
-        /* this function gets called when you click anywhere in viper content, 
-        it's used to update the plugin interface 
+        /* this function gets called when you click anywhere in viper content,
+        it's used to update the plugin interface
         */
         _updateToolbar: function(image, toolbarPrefix)
         {
@@ -419,7 +430,7 @@
             if (!toolbar) {
                 return;
             }
-                      
+
             var tools = this.viper.Tools;
             var urlInput = tools.getItem(toolbarPrefix + ':urlInput');
             var $dialog = ViperUtil.$(urlInput.element).parent().parent().parent();
@@ -557,7 +568,7 @@
             for (var i in urlInputs) {
                 var urlInput = urlInputs[i];
                 var $urlInput = ViperUtil.$(urlInput.element);
-                // Due to some werid bug in Chrome, if the input field is hidden, the "click" event listener of the next input element 
+                // Due to some werid bug in Chrome, if the input field is hidden, the "click" event listener of the next input element
                 // checkbox "Image is decorative" works only on double click. For workaround, move the element offscreen.
                 if (ViperUtil.isBrowser('chrome') === true) {
                     $urlInput.find('div.Viper-textbox-main').addClass('Viper-offScreen');
@@ -614,7 +625,7 @@
 
                     // if current image is a variety
                     if(data.varietyid && varietyData[data.varietyid])
-                    {   
+                    {
                         // add the chooser's text
                         $text.html(varietyData[data.varietyid].variety_width + ' x ' + varietyData[data.varietyid].variety_height + ' (' + self._readablizeBytes(varietyData[data.varietyid].variety_size) + ')');
                         $name.html(varietyData[data.varietyid].name);
@@ -733,25 +744,28 @@
 
                     var maxWidth  = 320;
                     var maxHeight = 320;
-                    if (height > maxHeight && width > maxWidth) {
-                        if (height > width) {
-                            ViperUtil.setStyle(img, 'height', 'auto');
-                            ViperUtil.setStyle(img, 'width', maxWidth + 'px');
-                        } else {
-                            ViperUtil.setStyle(img, 'width', maxWidth + 'px');
-                            ViperUtil.setStyle(img, 'height', 'auto');
-                        }
-                    } else if (width > maxWidth) {
-                        ViperUtil.setStyle(img, 'width', maxWidth + 'px');
-                        ViperUtil.setStyle(img, 'height', 'auto');
-                    } else if (height > maxHeight) {
-                        ViperUtil.setStyle(img, 'height', maxHeight + 'px');
-                        ViperUtil.setStyle(img, 'width', 'auto');
-                    }
-
+                    // 03/03/2017: SquizMap #10523 - This has been removed as it is not required, Setting the image width/height
+                    // Is best done via CSS. - I have left this here for now in case it causes issues TODO: remove.
+                    //
+                    // if (height > maxHeight && width > maxWidth) {
+                    //     if (height > width) {
+                    //         ViperUtil.setStyle(img, 'height', 'auto');
+                    //         ViperUtil.setStyle(img, 'width', maxWidth + 'px');
+                    //     } else {
+                    //         ViperUtil.setStyle(img, 'width', maxWidth + 'px');
+                    //         ViperUtil.setStyle(img, 'height', 'auto');
+                    //     }
+                    // } else if (width > maxWidth) {
+                    //     ViperUtil.setStyle(img, 'width', maxWidth + 'px');
+                    //     ViperUtil.setStyle(img, 'height', 'auto');
+                    // } else if (height > maxHeight) {
+                    //     ViperUtil.setStyle(img, 'height', maxHeight + 'px');
+                    //     ViperUtil.setStyle(img, 'width', 'auto');
+                    // }
+                    //
 
                     ViperUtil.empty(previewBox);
-                   
+
                     // if it's a very short image (small height value)
                     // we will add a span padding, so that the preview box would have a mininum height, and image would sit in the vertical center
                     if(height < 150) {
@@ -884,7 +898,7 @@
         createUploadImageForm: function(prefix)
         {
             var self = this;
-            
+
             // the hidden file upload form
             var currentUrl = ViperUtil.baseUrl(window.location.href);
             var actionURL = currentUrl + '?SQ_ACTION=image_upload';
@@ -915,7 +929,7 @@
 
                 if(typeof fileName !== 'undefined' && fileName) {
 
-                    self.setUrlFieldValue('filepath://' + fileName);          
+                    self.setUrlFieldValue('filepath://' + fileName);
 
                     // validate file type before sending it to Matrix
                     var cleanFileName = fileName.replace(/^.*[\\\/]/, '');
@@ -968,10 +982,10 @@
                     var idString = ViperUtil.$(editableElement).attr('id');
                     var matches = idString.match(/_([0-9]+)/);
                     if(matches == null) {
-                         ViperUtil.$('.' + prefix + '-chooseLocationFields').find('.Viper-checkbox').css('display', 'none'); 
+                         ViperUtil.$('.' + prefix + '-chooseLocationFields').find('.Viper-checkbox').css('display', 'none');
                     }
                     else {
-                         ViperUtil.$('.' + prefix + '-chooseLocationFields').find('.Viper-checkbox').css('display', 'block'); 
+                         ViperUtil.$('.' + prefix + '-chooseLocationFields').find('.Viper-checkbox').css('display', 'block');
                     }
 
                     // enable the location selector
@@ -1065,7 +1079,7 @@
                         //reset the upload form
                         //uploadForm.get(0).reset();
 
-                       
+
                         // if it's a image preview, we have to locate the preview image and replace it
                         if(response.image_preview_id && response.upload_id) {
                             self._setDroppedImageErrorStatus(response.image_preview_id, response.error, response.upload_id);
@@ -1082,7 +1096,7 @@
 
 
                             // hide choose location fields
-                            ViperUtil.$('.' + prefix + '-chooseLocationFields').css('display', 'none');     
+                            ViperUtil.$('.' + prefix + '-chooseLocationFields').css('display', 'none');
 
                             //reset the upload form
                             uploadForm.get(0).reset();
@@ -1108,14 +1122,14 @@
                                 else {
                                     self._parent.prototype._setImageAttributes.call(self, 'ViperImagePlugin');
                                 }
-                                
+
                             }
 
                             // refresh asset map
                             if (top.frames.sq_sidenav != null && top.frames.sq_sidenav.JS_Asset_Map && response.root_node) {
                                 top.frames.sq_sidenav.JS_Asset_Map.refreshTree(response.root_node);
                             }
-                        }                
+                        }
                     }
               }
             });
@@ -1204,7 +1218,7 @@
                 return;
             }
 
-         
+
 
             // bust browser cache with a time stamp appended to the image url
             url = url.replace(/(\?|&)v=[0-9]+$/g, '');
@@ -1257,7 +1271,7 @@
         {
             var tools = this.viper.Tools;
             var url   = tools.getItem(prefix + ':urlInput').getValue();
-            
+
             if(url == null) return;
             var self = this;
             var uploadForm = null;
@@ -1337,7 +1351,7 @@
                 // set title attribute
                 var altValue = tools.getItem(prefix + ':titleInput').getValue();
                 uploadForm.find('input[name=title]').val(altValue);
-             
+
 
                 // set the nonce token and submit the form
                 if(typeof EasyEdit !== 'undefined') {
@@ -1363,7 +1377,7 @@
             }
         },
 
-        
+
         pickAsset: function(idPrefix, forParentNode)
         {
         var tools       = this.viper.Tools;
@@ -1377,8 +1391,8 @@
             allowedTypes = ['image', 'thumbnail', 'image_variety', 'physical_file'];
         }
 
-       
-            
+
+
         // if in Matrix backend mode
         if(!this._isEditPlus()) {
             var jsMap = parent.frames.sq_sidenav.JS_Asset_Map;
@@ -1539,20 +1553,20 @@
             return true;
 
         },
-        
+
         _getImage: function(url, callback)
         {
             var img    = new Image();
             img.onload = function() {
                 callback.call(this, img);
             };
-        
+
             img.onerror = function() {
                 callback.call(this, false);
             };
-        
+
             this.viper.setAttribute(img, 'src', url);
-        
+
         },
 
 
@@ -1643,7 +1657,7 @@
             if(!image.getAttribute('width') && !image.getAttribute('height')) {
                this._setImageNaturalWidthHeight(image);
             }
-            
+
             if(image.getAttribute('data-imagepaste') == 'true') {
                 return;
             }
@@ -1673,10 +1687,10 @@
                     // set the preview image id
                     this._inlineUploadForm.find('input[name=image_preview_id]').val(id);
                     this._uploadForm.find('input[name=image_preview_id]').val(id);
-                   
+
                     this.viper.Tools.getItem('vitpImagePlugin:urlInput').setValue('filepath://' + image.dataset.filename);
                     this.viper.Tools.getItem('ViperImagePlugin:urlInput').setValue('filepath://' + image.dataset.filename);
-                
+
                     // show choose upload location fields
                     ViperUtil.$('.' + prefix + '-chooseLocationFields').css('display', 'block');
                     // change the apply button text to 'upload image'
@@ -1704,7 +1718,7 @@
                     // display the warning message to ask user to create asset
                     ViperUtil.$('<div />', {
                         "class": 'VipperDroppedImage-msgBox'
-                        }).html(_('Low resolution preview.') + '<br/>' + _('Upload the image to use it in the content.')).insertBefore('.Viper-chooseAssetRow');              
+                        }).html(_('Low resolution preview.') + '<br/>' + _('Upload the image to use it in the content.')).insertBefore('.Viper-chooseAssetRow');
 
                     // hide the URL row and display the file row
                     ViperUtil.$('.Viper-chooseAssetRow').hide();
@@ -1715,7 +1729,7 @@
                     this.viper.Tools.getItem(prefix + ':parentRootNode').disable();
                     // reset the use current location checkbox
                     this.viper.Tools.getItem(prefix + ':useCurrentLocation').setValue(true);
-                    
+
 
                     // prefill the file name field
                     var fileName = image.dataset.filename;
