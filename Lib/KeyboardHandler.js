@@ -3525,6 +3525,10 @@
                                     ViperSelection.addRange(range);
                                 }
                             } else {
+                                if (!textNode.nextSibling && !textNode.prevSibling && ViperUtil.isBlockElement(textNode.parentNode) === true) {
+                                    ViperUtil.insertAfter(textNode, document.createElement('br'));
+                                }
+
                                 range.setStart(textNode, range.startOffset - 1);
                                 range.collapse(true);
                                 ViperSelection.addRange(range);
