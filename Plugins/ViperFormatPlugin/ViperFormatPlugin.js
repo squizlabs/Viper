@@ -1105,6 +1105,11 @@
                 // Heading button will only be enabled if its a whole node selection or
                 // no selection and not in a blockquote with multiple paragraphs.
                 if (nodeSelection) {
+                    var inTableHeaderCell = false;
+                    if (ViperUtil.isTag(nodeSelection, 'th') === true || ViperUtil.getParents(nodeSelection, 'th', self.viper.getViperElement()).length > 0) {
+                        inTableHeaderCell = true;
+                    }
+
                     if (ViperUtil.isBlockElement(nodeSelection) === false) {
                         var surroundParent = ViperUtil.getSurroundingParents(nodeSelection, null, 'block', self.viper.getViperElement());
                         if (surroundParent.length > 0) {
@@ -1114,11 +1119,13 @@
 
                     if (nodeSelection.nodeType === ViperUtil.TEXT_NODE) {
                         if (range.collapsed === true) {
-                            // Disable the heading tag if the selection is in a blockquote
-                            // with multiple paragraph tags.
-                            var blockquote = ViperUtil.getParents(nodeSelection, 'blockquote', self.viper.getViperElement());
-                            if (blockquote.length === 0 || ViperUtil.getTag('p', blockquote[0]).length <= 1) {
-                                tools.enableButton('headings');
+                            if (inTableHeaderCell === false) {
+                                // Disable the heading tag if the selection is in a blockquote
+                                // with multiple paragraph tags.
+                                var blockquote = ViperUtil.getParents(nodeSelection, 'blockquote', self.viper.getViperElement());
+                                if (blockquote.length === 0 || ViperUtil.getTag('p', blockquote[0]).length <= 1) {
+                                    tools.enableButton('headings');
+                                }
                             }
                         }
                     } else if ((ViperUtil.isTag(nodeSelection, 'blockquote') !== true
@@ -1126,7 +1133,7 @@
                         && ((ViperUtil.isTag(nodeSelection, 'p') !== true)
                         || ViperUtil.isTag(nodeSelection.parentNode, 'blockquote') === false)
                     ) {
-                        if (ViperUtil.isBlockElement(nodeSelection) === true && ViperUtil.inArray(ViperUtil.getTagName(nodeSelection), ignoredTags) === false) {
+                        if (inTableHeaderCell === false && ViperUtil.isBlockElement(nodeSelection) === true && ViperUtil.inArray(ViperUtil.getTagName(nodeSelection), ignoredTags) === false) {
                             // Check if this node contains any block elements, if it does
                             // then headings cannnot be applied.
                             var blockChildren = ViperUtil.getBlockChildren(nodeSelection);
@@ -1137,7 +1144,7 @@
                     }
                 } else if (range.collapsed === true && formatElement) {
                     var firstBlock = ViperUtil.getFirstBlockParent(formatElement);
-                    if (ViperUtil.inArray(ViperUtil.getTagName(firstBlock), ignoredTags) === false) {
+                    if (ViperUtil.inArray(ViperUtil.getTagName(firstBlock), ignoredTags) === false && ViperUtil.isTag(firstBlock, 'th') === false) {
                         var isBlockQuote = false;
                         if (ViperUtil.isTag(firstBlock, 'p') === true && ViperUtil.isTag(firstBlock.parentNode, 'blockquote') === true) {
                             firstBlock = firstBlock.parentNode;
@@ -1146,7 +1153,10 @@
                             isBlockQuote = true;
                         }
 
-                        if (firstBlock && (isBlockQuote === false || ViperUtil.getTag('p', firstBlock).length === 1)) {
+                        if (firstBlock
+                            && (isBlockQuote === false || ViperUtil.getTag('p', firstBlock).length === 1)
+                            && ViperUtil.getParents(firstBlock, 'th', self.viper.getViperElement()).length === 0
+                        ) {
                             tools.enableButton('headings');
                         }
                     }
