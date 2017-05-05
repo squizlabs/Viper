@@ -201,7 +201,9 @@
                             if (ViperUtil.isBlockElement(hoverElem) === false || ViperUtil.isStubElement(hoverElem) === true) {
                                 var blockParent = ViperUtil.getFirstBlockParent(hoverElem, self.viper.getViperElement());
                                 if (blockParent) {
-                                    hoverElem = blockParent;
+                                    if (ViperUtil.isTag(blockParent, ['td', 'th', 'caption']) !== true) {
+                                        hoverElem = blockParent;
+                                    }
                                 }
                             }
 
