@@ -17,6 +17,11 @@
     white-space: nowrap;
 }
 
+.ViperTP-bar.buttonWrap {
+    white-space: normal;
+    line-height: 30px;
+}
+
 .ViperTP-bar > * {
     white-space: normal;
 }
