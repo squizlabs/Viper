@@ -218,10 +218,7 @@
             })
             $uploadTab.click(function(e) {
                 ViperUtil.preventDefault(e);
-                var $tabsBar = ViperUtil.$(this).parent();
-                if (!$tabsBar.hasClass('hide')) {
-                    $tabsBar.show();
-                }
+                ViperUtil.$(this).parent().show();
                 ViperUtil.$(this).parent().find('a').removeClass('selected');
                 $uploadTab.addClass('selected');
 
@@ -1093,8 +1090,6 @@
                         // if upload is successful
                         // set the returned asset id
                         if(response.assetid) {
-                            // Show the tabs bar if hidden previosuly by drop image upload
-                            ViperUtil.$('.Viper-imageTabSwitch').show().removeClass('hide');
 
                             ViperUtil.$('.uploadImage-progressIndicator').hide();
                             ViperUtil.$('.uploadImage-progress-bar-inner').width('0%');
@@ -1729,8 +1724,6 @@
                     ViperUtil.$('.Viper-chooseAssetRow').hide();
                     ViperUtil.$('.Viper-imageUploadFileRow').show();
 
-                    // Hide the image tabs bar for drop image preview
-                    ViperUtil.$('.Viper-imageTabSwitch').hide().addClass('hide');
 
                     // enable the location selector
                     this.viper.Tools.getItem(prefix + ':parentRootNode').disable();
