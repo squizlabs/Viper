@@ -18,7 +18,6 @@
         this.styleTags         = ['strong', 'em', 'sub', 'sup', 'del'];
         this.toolbarPlugin     = null;
         this._onChangeAddStyle = [];
-        this._justifyButtons   = ['left', 'center', 'right', 'block'];
 
         this._buttons = {
             strong: 'bold',
@@ -27,8 +26,7 @@
             sup: 'superscript',
             del: 'strikethrough',
             removeFormat: 'removeFormat',
-            hr: 'hr',
-            code: 'code'
+            hr: 'hr'
         };
 
     }
@@ -43,21 +41,6 @@
                 return this.handleStyle(type);
             }
 
-        },
-
-        setSetting: function(setting, value) {
-            switch (setting) {
-                case 'justifyButtons':
-                    value = value || this._justifyButtons;
-                    for (var i = 0; i < this._justifyButtons.length; i++) {
-                        if (ViperUtil.inArray(this._justifyButtons[i], value) === true) {
-                            this.viper.Tools.getItem('ViperCoreStylesPlugin:vtp:' + this._justifyButtons[i]).show();
-                        } else {
-                            this.viper.Tools.getItem('ViperCoreStylesPlugin:vtp:' + this._justifyButtons[i]).hide();
-                        }
-                    }
-                break;
-            }
         },
 
         init: function()
@@ -77,9 +60,9 @@
             var btnGroup = tools.createButtonGroup('ViperCoreStylesPlugin:vtp:stylesBtns');
 
             // Main styles and remove format button groups.
-            toolbarButtons.styles   = ['strong', 'em', 'sub', 'sup', 'del', 'code'];
+            toolbarButtons.styles   = ['strong', 'em', 'sub', 'sup', 'del'];
             toolbarButtons.removeFormat = ['removeFormat'];
-            toolbarButtons.justify = this._justifyButtons;
+            toolbarButtons.justify = ['left', 'center', 'right', 'block'];
             toolbarButtons.other = ['hr'];
 
             tools.createButton('bold', '', _('Bold'), 'Viper-bold', function() {
@@ -107,14 +90,10 @@
             tools.createButton('strikethrough', '', _('Strikethrough'), 'Viper-strikethrough', function() {
                 self.handleStyle('del');
             }, true);
-            tools.createButton('code', '', _('Code'), 'Viper-code', function() {
-                self.handleStyle('code');
-            }, true);
 
             tools.addButtonToGroup('subscript', 'ViperCoreStylesPlugin:vtp:btnGroup2');
             tools.addButtonToGroup('superscript', 'ViperCoreStylesPlugin:vtp:btnGroup2');
             tools.addButtonToGroup('strikethrough', 'ViperCoreStylesPlugin:vtp:btnGroup2');
-            tools.addButtonToGroup('code', 'ViperCoreStylesPlugin:vtp:btnGroup2');
 
             // Justify buttons bubble.
             var justifyBubbleContent = document.createElement('div');
@@ -221,8 +200,7 @@
                 strong: _('Bold'),
                 sub: _('Subscript'),
                 sup: _('Superscript'),
-                del: _('Strikethrough'),
-                code: _('Code')
+                del: _('Strikethrough')
             };
 
             this.viper.registerCallback('Viper:mouseDown', 'ViperCoreStylesPlugin', function(e) {
@@ -1491,7 +1469,6 @@
             this.viper.Tools.removeItem('ViperCoreStylesPlugin:vtp:stylesBtns');
             this.viper.Tools.removeItem('bold');
             this.viper.Tools.removeItem('italic');
-            this.viper.Tools.removeItem('code');
             this.viper.Tools.removeItem('subscript');
             this.viper.Tools.removeItem('superscript');
             this.viper.Tools.removeItem('strikethrough');
