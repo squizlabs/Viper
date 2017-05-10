@@ -95,6 +95,26 @@ h3,h4,h5,h6 {
 
 a img {border: none;}
 
+code {
+    background-color: #ddf5dd;
+    color: #10802f;
+    padding: 0.2em;
+    border-radius: 3px;
+}
+
+code::before,
+code::after {
+    content: "{";
+    color: #a8dcb2;
+    font-weight: bold;
+    padding-right: 0.3em;
+    vertical-align: baseline;
+}
+code::after {
+    content: "}";
+    padding: 0 0 0 0.3em;
+}
+
 /* generic layout framework
 ********************************************************/
 .fl-right {float: right;}
