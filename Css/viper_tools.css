@@ -133,9 +133,9 @@
   border-right-width: 1px;
 }
 .Viper-button {
-  background-color: #ffffff;
+  background-color: #FFF;
   border-color: #d7d7d7;
-  color: #2b2b2b;
+  color: #2B2B2B;
   font-weight: bold;
 }
 .Viper-subSection .Viper-button {
@@ -144,7 +144,7 @@
 .Viper-button.Viper-active {
   background-color: #2b7ce0;
   border-color: #1768cc;
-  color: #ffffff;
+  color: #FFF;
 }
 .Viper-buttonGroup .Viper-button.Viper-active + .Viper-button {
   border-left-color: #1768cc;
@@ -153,9 +153,9 @@
   border-left-color: #1a4c8a;
 }
 .Viper-button.Viper-selected {
-  background: #cacaca;
+  background: #CACACA;
   border-color: #b8b8b8;
-  color: #2b2b2b;
+  color: #2B2B2B;
 }
 .Viper-buttonGroup .Viper-button.Viper-selected + .Viper-button {
   border-left-color: #b8b8b8;
@@ -163,7 +163,7 @@
 .Viper-button.Viper-selected.Viper-active {
   background: #1a4c8a;
   border-color: #1a4c8a;
-  color: #ffffff;
+  color: #FFF;
 }
 .Viper-buttonGroup .Viper-button.Viper-selected.Viper-active + .Viper-button {
   border-left-color: #1a4c8a;
@@ -172,7 +172,7 @@
   display: none;
 }
 .Viper-button.Viper-delete:hover {
-  background-color: #ff5353;
+  background-color: #FF5353;
   border-color: #eb3f3f;
 }
 .Viper-buttonIcon {
@@ -184,8 +184,8 @@
   margin-top: -10px;
   margin-left: -13px;
   background-image: url("../Images/buttonIcons.svg");
+  background-repeat: no-repeat;
   /* PNG fallback for older trowsers */
-
 }
 .Viper-browserVer-msie8 .Viper-buttonIcon {
   background-image: url("../Images/buttonIcons.png");
@@ -633,6 +633,13 @@
 .Viper-button.Viper-active.Viper-selected .Viper-buttonIcon.Viper-formats-pre {
   background-position: -34px -1566px;
 }
+.Viper-buttonIcon.Viper-code {
+  background-position: 0 -1620px;
+}
+.Viper-button.Viper-active .Viper-buttonIcon.Viper-code,
+.Viper-button.Viper-active.Viper-selected .Viper-buttonIcon.Viper-code {
+  background-position: -34px -1620px;
+}
 .__viper_selHighlight {
   background-color: #CCC !important;
 }
@@ -830,7 +837,6 @@
   top: 50%;
   margin-top: -9px;
   /* PNG fallback for older trowsers */
-
 }
 .Viper-browserVer-msie8 .Viper-textbox-action,
 .Viper-browserVer-msie8 .Viper-textbox.Viper-required .Viper-textbox-main:after {
@@ -949,7 +955,6 @@
   -moz-transition: 0.2s opacity ease-in;
   -webkit-transition: 0.2s opacity ease-in;
   /* PNG fallback for older trowsers */
-
 }
 .Viper-browserVer-msie8 .Viper-checkbox-switch:before {
   filter: alpha(opacity = 0);

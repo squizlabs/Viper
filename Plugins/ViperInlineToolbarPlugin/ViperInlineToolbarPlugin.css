@@ -289,6 +289,7 @@
  .ViperITP-header {
     color: #4f4f4f;
     text-transform: uppercase;
+    padding: 0 20px;
 }
 
 .ViperITP-lineage .ViperITP-lineageItem {
