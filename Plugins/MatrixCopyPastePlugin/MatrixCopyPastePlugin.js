@@ -66,26 +66,29 @@
             var self = this;
             reader.onload = function (event) {
                 var image = new Image();
+                image.onload = function() {
+                    // Create the preview of the pasted image once its loaded
+                    var matrixImagePlugin = self.viper.PluginManager.getPlugin('MatrixImagePlugin');
+                    // store the image in temp array
+                    var newLength = matrixImagePlugin.storeDroppedImageToUpload(image);
+
+                    // create a preview image
+                    var preview_img = new Image();
+                    preview_img.src = matrixImagePlugin.imageToDataUri(image, image.width, image.height, 10);
+                    preview_img.width = image.width;
+                    preview_img.height = image.height;
+                    preview_img.setAttribute('data-imagepaste', 'true');
+
+                    preview_img.setAttribute('data-filename', '');
+                    preview_img.setAttribute('data-id', newLength - 1);
+
+
+                    // insert a preview
+                    var range = self.viper.getViperRange();
+                    matrixImagePlugin._rangeToImage(range, preview_img);
+                }
+                // Load the target image
                 image.src = event.target.result;
-
-                var matrixImagePlugin = self.viper.PluginManager.getPlugin('MatrixImagePlugin');
-                // store the image in temp array
-                var newLength = matrixImagePlugin.storeDroppedImageToUpload(image);
-
-                // create a preview image
-                var preview_img = new Image();
-                preview_img.src = matrixImagePlugin.imageToDataUri(image, image.width, image.height, 10);
-                preview_img.width = image.width;
-                preview_img.height = image.height;
-                preview_img.setAttribute('data-imagepaste', 'true');
-
-                preview_img.setAttribute('data-filename', '');
-                preview_img.setAttribute('data-id', newLength - 1);
-
-
-                // insert a preview
-                var range = self.viper.getViperRange();
-                matrixImagePlugin._rangeToImage(range, preview_img);
             };
 
             reader.readAsDataURL(file);
