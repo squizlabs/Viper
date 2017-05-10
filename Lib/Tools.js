@@ -282,13 +282,7 @@
                     setContent: function (content) {
                         ViperUtil.setHtml(button, content);
                     },
-                    _disabled: disabled,
-                    hide: function() {
-                        ViperUtil.addClass(button, 'Viper-hidden');
-                    },
-                    show: function() {
-                        ViperUtil.removeClass(button, 'Viper-hidden');
-                    }
+                    _disabled: disabled
                 }
             );
 

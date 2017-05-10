@@ -96,36 +96,19 @@
                 return;
             }
 
-            for (var setting in settings) {
-                this.setSetting(setting, settings[setting]);
+            if (settings.parent) {
+                var parent = settings.parent;
+                if (typeof parent === 'string') {
+                    parent = ViperUtil.getid(settings.parent);
+                }
+
+                this.setParentElement(parent);
             }
 
-        },
-
-        setSetting: function(setting, value)
-        {
-            switch (setting) {
-                case 'parent':
-                    var parent = value;
-                    if (typeof parent === 'string') {
-                        parent = ViperUtil.getid(parent);
-                    }
-
-                    this.setParentElement(parent);
-                break;
-
-                case 'buttons':
-                    this.setButtons(value);
-                break;
-
-                case 'allowButtonWrap':
-                    if (value === true) {
-                        $(this._toolbar).addClass('buttonWrap');
-                    } else {
-                        $(this._toolbar).removeClass('buttonWrap');
-                    }
-                break;
+            if (settings.buttons) {
+                this.setButtons(settings.buttons);
             }
+
         },
 
         setButtons: function(buttons)
@@ -727,9 +710,14 @@
                 return;
             }
 
-            var bubble       = this.viper.Tools.getItem(bubbleid).element;
-            var button       = this.viper.Tools.getItem(this._bubbleButtons[bubbleid]).element;
-            var toolsWidth   = ViperUtil.getElementWidth(bubble);
+            var bubble     = this.viper.Tools.getItem(bubbleid).element;
+            var button     = this.viper.Tools.getItem(this._bubbleButtons[bubbleid]).element;
+
+            var toolsWidth = null;
+            var widthStyle = bubble.style.width;
+
+            toolsWidth = ViperUtil.getElementWidth(bubble);
+
             var scrollCoords = ViperUtil.getScrollCoords();
             var windowDim    = ViperUtil.getWindowDimensions();
             var elemDim      = ViperUtil.getBoundingRectangle(button);
@@ -746,6 +734,10 @@
 
             ViperUtil.setStyle(bubble, 'left', left + 'px');
             ViperUtil.setStyle(bubble, 'top', '35px');
+
+            if (!widthStyle) {
+                ViperUtil.setStyle(bubble, 'width', toolsWidth + 'px');
+            }
 
         },
 
