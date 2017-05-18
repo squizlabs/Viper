@@ -125,7 +125,7 @@
                     if (attrs) {
                         statusId = typeof attrs.statusId !== 'undefined' ? attrs.statusId : (typeof attrs.status !== 'undefined' ? attrs.status : null);
                     }
-                    self.checkLiveAssetLink(statusId, urlValue.indexOf(':') > 0);
+                    self.checkLiveAssetLink(statusId, urlValue);
                     self.enableUseDestinationCheckbox(type_code, true);
                 });
             });
@@ -416,7 +416,7 @@
                     tools.getItem(idPrefix + ':url').setValue(data.assetid,false);
                     if (data.attributes) {
                         var statusId = typeof data.attributes.status !== 'undefined' ? data.attributes.status : null;
-                        self.checkLiveAssetLink(statusId, data.assetid.indexOf(':') > 0);
+                        self.checkLiveAssetLink(statusId, data.assetid);
                     }
                     // enable the use destination option if required
                     if(data.typecode) {
@@ -448,7 +448,7 @@
                 callback: function(selectedAsset){
                     tools.getItem(idPrefix + ':url').setValue(selectedAsset.id,false);
                     var statusId = typeof selectedAsset.attr.statusId !== 'undefined' ? selectedAsset.attr.statusId : null;
-                    self.checkLiveAssetLink(statusId, selectedAsset.id.indexOf(':') > 0);
+                    self.checkLiveAssetLink(statusId, selectedAsset.id);
 
                     // enable the use destination option if required
                     self._assetTypeCode = selectedAsset.attr.type_code;
@@ -495,31 +495,41 @@
             }
         },
 
-        checkLiveAssetLink: function(statusId, shadowAsset) {
+        checkLiveAssetLink: function(statusId, assetid) {
             var self = this;
             var systemInfo = Matrix && Matrix.systemInfo ? Matrix.systemInfo : (EasyEdit && EasyEdit.systemInfo ? EasyEdit.systemInfo : null);
             var msg = '';
-            if (systemInfo && systemInfo.preferences.content_type_wysiwyg.SQ_LIVE_LINK_ONLY) {
-                var editableElement = self.viper.getEditableElement();
-                var editableAssetStatus = ViperUtil.$(editableElement).data('status');
-                
-                if (statusId === null && !shadowAsset) {
-                    msg = _('Specified asset does not exist.');
-                } else if (statusId !== null && statusId < 16 && editableAssetStatus >= 16) {
-                    // If the editing asset is live, then it cannot have links to non-live assets
-                    msg = _('Linking to non-live asset not allowed.');
-                }
-            } else {
-                // If SQ_LIVE_LINK_ONLY setting is not enabled, still check if asset exist
-                if (statusId === null && !shadowAsset) {
-                    msg = _('Specified asset does not exist.');
+            if (assetid.length) {
+                if (systemInfo && systemInfo.preferences.content_type_wysiwyg.SQ_LIVE_LINK_ONLY) {
+                    var editableElement = self.viper.getEditableElement();
+                    var editableAssetStatus = ViperUtil.$(editableElement).data('status');
+                    
+                    if (statusId === null && assetid.indexOf(':') == -1) {
+                        msg = _('Specified asset does not exist.');
+                    } else if (statusId !== null && statusId < 16 && editableAssetStatus >= 16) {
+                        // If the editing asset is live, then it cannot have links to non-live assets
+                        msg = _('Linking to non-live asset not allowed.');
+                    }
+                } else {
+                    // If SQ_LIVE_LINK_ONLY setting is not enabled, still check if asset exist
+                    if (statusId === null && assetid.indexOf(':') == -1) {
+                        msg = _('Specified asset does not exist.');
+                    }
                 }
             }
             
             if (msg.length) {
+                // Top toolbar
+                ViperUtil.$('div[id="ViperLinkPlugin:vtp:nonLiveWarning"]').html(msg).show();
+                ViperUtil.$('div[id$="ViperLinkPlugin:vtp:link-applyButton"]').addClass('Viper-disabled');
+                // Inline toolbar
                 ViperUtil.$('div[id="ViperLinkPlugin:vitp:nonLiveWarning"]').html(msg).show();
                 ViperUtil.$('div[id$="ViperLinkPlugin:vitp:link-applyButton"]').addClass('Viper-disabled');
             } else {
+                // Top toolbar
+                ViperUtil.$('div[id="ViperLinkPlugin:vtp:nonLiveWarning"]').html(msg).hide();
+                ViperUtil.$('div[id$="ViperLinkPlugin:vtp:link-applyButton"]').removeClass('Viper-disabled');
+                // Inline toolbar
                 ViperUtil.$('div[id="ViperLinkPlugin:vitp:nonLiveWarning"]').html(msg).hide();
                 ViperUtil.$('div[id$="ViperLinkPlugin:vitp:link-applyButton"]').removeClass('Viper-disabled');
             }
