@@ -109,8 +109,8 @@
             // Insert it after URL option
             ViperUtil.insertAfter(urlRow, useDestinationRow);
 
-			// Non-live asset link warning
-			var $nonLiveWarningDiv = ViperUtil.$('<div id="' + idPrefix + ':nonLiveWarning" class="Viper-image-error-message" />').hide();
+            // Non-live asset link warning
+            var $nonLiveWarningDiv = ViperUtil.$('<div id="' + idPrefix + ':nonLiveWarning" class="Viper-image-error-message" />').hide();
             ViperUtil.insertAfter(urlRow, $nonLiveWarningDiv.get(0));
 
             tools.getItem('ViperLinkPlugin:vtp:link').addSubSectionActionWidgets('ViperLinkPlugin:vtp:linkSubSection', ['ViperLinkPlugin:vtp:anchor', 'ViperLinkPlugin:vtp:includeSummary', 'ViperLinkPlugin:vtp:useDestination', 'ViperLinkPlugin:vtp:nonLiveWarning']);
@@ -119,13 +119,13 @@
             ViperUtil.$(urlField).on('input', function() {
                 var urlValue = ViperUtil.trim(tools.getItem(idPrefix + ':url').getValue());
                 self.retrieveAssetDetails(urlValue, function(type_code, attrs) {
-					
-					// EditPlus will return status code in attrs.statusId whereas Matrix will do in attrs.status
-					var statusId = null;
-					if (attrs) {
-						statusId = typeof attrs.statusId !== 'undefined' ? attrs.statusId : (typeof attrs.status !== 'undefined' ? attrs.status : null);
-					}
-					self.checkLiveAssetLink(statusId, urlValue.indexOf(':') > 0);
+                    
+                    // EditPlus will return status code in attrs.statusId whereas Matrix will do in attrs.status
+                    var statusId = null;
+                    if (attrs) {
+                        statusId = typeof attrs.statusId !== 'undefined' ? attrs.statusId : (typeof attrs.status !== 'undefined' ? attrs.status : null);
+                    }
+                    self.checkLiveAssetLink(statusId, urlValue.indexOf(':') > 0);
                     self.enableUseDestinationCheckbox(type_code, true);
                 });
             });
@@ -378,85 +378,85 @@
          */
         pickAsset: function(idPrefix)
         {
-    	var tools       = this.viper.Tools;
-    	var urlField    = tools.getItem(idPrefix + ':url').element;
+        var tools       = this.viper.Tools;
+        var urlField    = tools.getItem(idPrefix + ':url').element;
         var self = this;
 
-    	// if in Matrix backend mode
-    	if(typeof EasyEditAssetManager === 'undefined') {
-    	    var jsMap = parent.frames.sq_sidenav.JS_Asset_Map;
-    	    var name =idPrefix;
-    	    var safeName = idPrefix;
-    	    var closeOnExit = function() {
-    		    if (document.body.getAttribute('data-use-me-close-on-exit') === '1') {
-    			    document.body.removeAttribute('data-use-me-close-on-exit');
-    			    var resizer_frame = window.top.frames['sq_resizer'];
-    			    if (resizer_frame && !resizer_frame.hidden) {
-    				    resizer_frame.toggleFrame();
-    			    }
-    		    }
-    	    };
-    	    var toggleResizerFrame = function() {
-    		    var resizer_frame = window.top.frames['sq_resizer'];
-    		    if (resizer_frame && resizer_frame.hidden) {
-    			    document.body.setAttribute('data-use-me-close-on-exit', '1');
-    			    resizer_frame.toggleFrame();
-    		    }
-    	    };
-    	    if (jsMap.isInUseMeMode(name) === true) {
-    		    alert('Asset Finder In Use');
-    	    } else if (jsMap.isInUseMeMode() === true) {
-    		    closeOnExit();
-    		    jsMap.cancelUseMeMode();
-    	    } else {
-    		    toggleResizerFrame();
-    		    jsMap.setUseMeMode(name, safeName, undefined, true, function(data) {
-    			if(typeof data.assetid !== 'undefined') {
-    			    closeOnExit();
-    			    tools.getItem(idPrefix + ':url').setValue(data.assetid,false);
-					if (data.attributes) {
-						var statusId = typeof data.attributes.status !== 'undefined' ? data.attributes.status : null;
-						self.checkLiveAssetLink(statusId, data.assetid.indexOf(':') > 0);
-					}
+        // if in Matrix backend mode
+        if(typeof EasyEditAssetManager === 'undefined') {
+            var jsMap = parent.frames.sq_sidenav.JS_Asset_Map;
+            var name =idPrefix;
+            var safeName = idPrefix;
+            var closeOnExit = function() {
+                if (document.body.getAttribute('data-use-me-close-on-exit') === '1') {
+                    document.body.removeAttribute('data-use-me-close-on-exit');
+                    var resizer_frame = window.top.frames['sq_resizer'];
+                    if (resizer_frame && !resizer_frame.hidden) {
+                        resizer_frame.toggleFrame();
+                    }
+                }
+            };
+            var toggleResizerFrame = function() {
+                var resizer_frame = window.top.frames['sq_resizer'];
+                if (resizer_frame && resizer_frame.hidden) {
+                    document.body.setAttribute('data-use-me-close-on-exit', '1');
+                    resizer_frame.toggleFrame();
+                }
+            };
+            if (jsMap.isInUseMeMode(name) === true) {
+                alert('Asset Finder In Use');
+            } else if (jsMap.isInUseMeMode() === true) {
+                closeOnExit();
+                jsMap.cancelUseMeMode();
+            } else {
+                toggleResizerFrame();
+                jsMap.setUseMeMode(name, safeName, undefined, true, function(data) {
+                if(typeof data.assetid !== 'undefined') {
+                    closeOnExit();
+                    tools.getItem(idPrefix + ':url').setValue(data.assetid,false);
+                    if (data.attributes) {
+                        var statusId = typeof data.attributes.status !== 'undefined' ? data.attributes.status : null;
+                        self.checkLiveAssetLink(statusId, data.assetid.indexOf(':') > 0);
+                    }
                     // enable the use destination option if required
                     if(data.typecode) {
                         self._assetTypeCode = data.typecode;
                         self.enableUseDestinationCheckbox(self._assetTypeCode, true);
                     }
-    			}
-    		    });
-    		    // close use me mode if user clicks anywhere
+                }
+                });
+                // close use me mode if user clicks anywhere
                         this.viper.registerCallback(['Viper:mouseDown', 'ViperToolbarPlugin:disabled'], 'MatrixLinkPlugin', function(data) {
                             if (jsMap.isInUseMeMode() === true) {
                                     jsMap.cancelUseMeMode();
                             }
-                        });	
-    	    }
-    	}
-    	else {
-    	    // in EES mode
-    	    EasyEditAssetManager.getCurrentAsset(function(asset){
+                        }); 
+            }
+        }
+        else {
+            // in EES mode
+            EasyEditAssetManager.getCurrentAsset(function(asset){
 
-    		var initialValue = tools.getItem(idPrefix + ':url').getValue(),
-    		    focusId = asset.id;
-    		if (/^[0-9]+([:].*)?$/.test(initialValue)) {
-    		    focusId = initialValue;
-    		}// End if
+            var initialValue = tools.getItem(idPrefix + ':url').getValue(),
+                focusId = asset.id;
+            if (/^[0-9]+([:].*)?$/.test(initialValue)) {
+                focusId = initialValue;
+            }// End if
 
-    		EasyEditAssetFinder.init({
-    		    focusAssetId: focusId,
-    		    callback: function(selectedAsset){
-        			tools.getItem(idPrefix + ':url').setValue(selectedAsset.id,false);
-					var statusId = typeof selectedAsset.attr.statusId !== 'undefined' ? selectedAsset.attr.statusId : null;
-					self.checkLiveAssetLink(statusId, selectedAsset.id.indexOf(':') > 0);
+            EasyEditAssetFinder.init({
+                focusAssetId: focusId,
+                callback: function(selectedAsset){
+                    tools.getItem(idPrefix + ':url').setValue(selectedAsset.id,false);
+                    var statusId = typeof selectedAsset.attr.statusId !== 'undefined' ? selectedAsset.attr.statusId : null;
+                    self.checkLiveAssetLink(statusId, selectedAsset.id.indexOf(':') > 0);
 
                     // enable the use destination option if required
                     self._assetTypeCode = selectedAsset.attr.type_code;
                     self.enableUseDestinationCheckbox(self._assetTypeCode, true);
-    		    }
-    		});
-    	    });
-    	}
+                }
+            });
+            });
+        }
         },
 
         /**
@@ -495,36 +495,36 @@
             }
         },
 
-		checkLiveAssetLink: function(statusId, shadowAsset) {
-			var self = this;
-			var systemInfo = Matrix && Matrix.systemInfo ? Matrix.systemInfo : (EasyEdit && EasyEdit.systemInfo ? EasyEdit.systemInfo : null);
-			var msg = '';
-			if (systemInfo && systemInfo.preferences.content_type_wysiwyg.SQ_LIVE_LINK_ONLY) {
-				var editableElement = self.viper.getEditableElement();
-				var editableAssetStatus = ViperUtil.$(editableElement).data('status');
-				
-				if (statusId === null && !shadowAsset) {
-					msg = _('Specified asset does not exist.');
-				} else if (statusId !== null && statusId < 16 && editableAssetStatus >= 16) {
-					// If the editing asset is live, then it cannot have links to non-live assets
-					msg = _('Linking to non-live asset not allowed.');
-				}
-			} else {
-				// If SQ_LIVE_LINK_ONLY setting is not enabled, still check if asset exist
-				if (statusId === null && !shadowAsset) {
-					msg = _('Specified asset does not exist.');
-				}
-			}
-			
-			if (msg.length) {
-				ViperUtil.$('div[id="ViperLinkPlugin:vitp:nonLiveWarning"]').html(msg).show();
-				ViperUtil.$('div[id$="ViperLinkPlugin:vitp:link-applyButton"]').addClass('Viper-disabled');
-			} else {
-				ViperUtil.$('div[id="ViperLinkPlugin:vitp:nonLiveWarning"]').html(msg).hide();
-				ViperUtil.$('div[id$="ViperLinkPlugin:vitp:link-applyButton"]').removeClass('Viper-disabled');
-			}
+        checkLiveAssetLink: function(statusId, shadowAsset) {
+            var self = this;
+            var systemInfo = Matrix && Matrix.systemInfo ? Matrix.systemInfo : (EasyEdit && EasyEdit.systemInfo ? EasyEdit.systemInfo : null);
+            var msg = '';
+            if (systemInfo && systemInfo.preferences.content_type_wysiwyg.SQ_LIVE_LINK_ONLY) {
+                var editableElement = self.viper.getEditableElement();
+                var editableAssetStatus = ViperUtil.$(editableElement).data('status');
+                
+                if (statusId === null && !shadowAsset) {
+                    msg = _('Specified asset does not exist.');
+                } else if (statusId !== null && statusId < 16 && editableAssetStatus >= 16) {
+                    // If the editing asset is live, then it cannot have links to non-live assets
+                    msg = _('Linking to non-live asset not allowed.');
+                }
+            } else {
+                // If SQ_LIVE_LINK_ONLY setting is not enabled, still check if asset exist
+                if (statusId === null && !shadowAsset) {
+                    msg = _('Specified asset does not exist.');
+                }
+            }
+            
+            if (msg.length) {
+                ViperUtil.$('div[id="ViperLinkPlugin:vitp:nonLiveWarning"]').html(msg).show();
+                ViperUtil.$('div[id$="ViperLinkPlugin:vitp:link-applyButton"]').addClass('Viper-disabled');
+            } else {
+                ViperUtil.$('div[id="ViperLinkPlugin:vitp:nonLiveWarning"]').html(msg).hide();
+                ViperUtil.$('div[id$="ViperLinkPlugin:vitp:link-applyButton"]').removeClass('Viper-disabled');
+            }
 
-		},//end checkLiveAssetLink()
+        },//end checkLiveAssetLink()
 
         /**
          * Check to see if the element clicked is a part of the plugin. Here we need to
@@ -607,7 +607,7 @@
                         ]
                     }, function(response) {
                         var type_code = typeof response['asset'] != 'undefined' ? response['asset'][0]['_attributes']['type_code'] : null;
-						var attrs = typeof response['asset'] !== 'undefined' && typeof response['asset'][0] !== 'undefined' && typeof response['asset'][0]['_attributes'] !== 'undefined' ? response['asset'][0]['_attributes'] : null;
+                        var attrs = typeof response['asset'] !== 'undefined' && typeof response['asset'][0] !== 'undefined' && typeof response['asset'][0]['_attributes'] !== 'undefined' ? response['asset'][0]['_attributes'] : null;
                         callback.call(this, type_code, attrs);
                     });
                 }
