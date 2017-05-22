@@ -521,14 +521,14 @@
             if (msg.length) {
                 // Top toolbar
                 ViperUtil.$('div[id="ViperLinkPlugin:vtp:nonLiveWarning"]').html(msg).show();
-                ViperUtil.$('div[id$="ViperLinkPlugin:vtp:link-applyButton"]').addClass('Viper-disabled');
+                ViperUtil.$('div[id$="ViperLinkPlugin:vtp:linkSubSection-applyButton"]').addClass('Viper-disabled');
                 // Inline toolbar
                 ViperUtil.$('div[id="ViperLinkPlugin:vitp:nonLiveWarning"]').html(msg).show();
                 ViperUtil.$('div[id$="ViperLinkPlugin:vitp:link-applyButton"]').addClass('Viper-disabled');
             } else {
                 // Top toolbar
                 ViperUtil.$('div[id="ViperLinkPlugin:vtp:nonLiveWarning"]').html(msg).hide();
-                ViperUtil.$('div[id$="ViperLinkPlugin:vtp:link-applyButton"]').removeClass('Viper-disabled');
+                ViperUtil.$('div[id$="ViperLinkPlugin:vtp:linkSubSection-applyButton"]').removeClass('Viper-disabled');
                 // Inline toolbar
                 ViperUtil.$('div[id="ViperLinkPlugin:vitp:nonLiveWarning"]').html(msg).hide();
                 ViperUtil.$('div[id$="ViperLinkPlugin:vitp:link-applyButton"]').removeClass('Viper-disabled');
