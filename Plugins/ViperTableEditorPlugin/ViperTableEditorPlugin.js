@@ -412,7 +412,7 @@
                                 self._tools.disableButton('insertTable');
                             } else {
                                 var nodeSelection = range.getNodeSelection();
-                                if (!nodeSelection || ViperUtil.isStubElement(nodeSelection) === false) {
+                                if (!nodeSelection || ViperUtil.isStubElement(nodeSelection) === false || ViperUtil.isTag(node, 'br') === true) {
                                     self._tools.enableButton('insertTable');
                                     self._tools.setButtonInactive('insertTable');
                                 } else {
