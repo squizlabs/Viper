@@ -1087,9 +1087,13 @@
             tools.createButton('vitpItalic', '', _('Italic'), 'Viper-italic', function() {
                 return self.handleStyle('em');
             });
+            tools.createButton('vitpCode', '', _('Code'), 'Viper-code', function() {
+                return self.handleStyle('code');
+            });
 
             tools.addButtonToGroup('vitpBold', 'ViperCoreStylesPlugin:vitp:btnGroup');
             tools.addButtonToGroup('vitpItalic', 'ViperCoreStylesPlugin:vitp:btnGroup');
+            tools.addButtonToGroup('vitpCode', 'ViperCoreStylesPlugin:vitp:btnGroup');
 
             toolbar.addButton(buttonGroup);
 
@@ -1112,6 +1116,7 @@
 
             this.viper.Tools.setButtonInactive('vitpBold');
             this.viper.Tools.setButtonInactive('vitpItalic');
+            this.viper.Tools.setButtonInactive('vitpCode');
 
             var selectedNode = data.range.getNodeSelection();
 
@@ -1143,12 +1148,14 @@
                     this.viper.Tools.setButtonActive('vitpBold');
                 } else if (tagName === 'em') {
                     this.viper.Tools.setButtonActive('vitpItalic');
+                } else if (tagName === 'code') {
+                    this.viper.Tools.setButtonActive('vitpCode');
                 }
             }
 
             // If the selection is between multiple elements then find out if the range
             // start and end are in same style tags.
-            var tagNames  = ['strong', 'em'];
+            var tagNames  = ['strong', 'em', 'code'];
             var states    = this._getActiveStates(data.range, tagNames);
             for (var i = 0; i < states.length; i++) {
                 var tagName = states[i];
@@ -1156,11 +1163,14 @@
                     this.viper.Tools.setButtonActive('vitpBold');
                 } else if (tagName === 'em') {
                     this.viper.Tools.setButtonActive('vitpItalic');
+                } else if (tagName === 'code') {
+                    this.viper.Tools.setButtonActive('vitpCode');
                 }
             }
 
             data.toolbar.showButton('vitpBold');
             data.toolbar.showButton('vitpItalic');
+            data.toolbar.showButton('vitpCode');
 
         },
 
