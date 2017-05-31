@@ -678,6 +678,7 @@
 }
 .Viper-textbox-label {
   display: block;
+  overflow: hidden;
   padding: 4px 2px;
   position: relative;
   clear: both;
