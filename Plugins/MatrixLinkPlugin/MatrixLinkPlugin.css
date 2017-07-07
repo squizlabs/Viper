@@ -13,6 +13,6 @@
     display: none;
 }
 
-.Viper-urlRow-hasButton input[type="text"] {
+.Viper-urlRow-hasButton .Viper-textbox-input[type="text"] {
   width: 90%;
 }
