@@ -75,6 +75,9 @@
             var urlRow = tools.getItem(idPrefix + ':urlRow').element;
             ViperUtil.insertAfter(urlRow, anchorRow);
 
+            //add class to indicate the urlRow has an icon in it
+            ViperUtil.addClass(urlRow, 'Viper-urlRow-hasButton');
+
             // The URL field needs to change the interface to internal URL interface
             // if the value is an internal URL.
             this.viper.registerCallback('ViperTools:changed:' + idPrefix + ':url', 'MatrixLinkPlugin', function() {
