@@ -12,3 +12,7 @@
 .Viper-subSectionRow.Viper-useDestinationRow {
     display: none;
 }
+
+.Viper-urlRow-hasButton input[type="text"] {
+  width: 90%;
+}
