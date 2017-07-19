@@ -43,6 +43,7 @@
             var $assetTab = ViperUtil.$('<a href="#" id="' + prefix + 'tabAsset" class="selected" title="' + _('Choose Image from Matrix Asset') + '">' + _('Asset') + '</a>');
             var $uploadTab = ViperUtil.$('<a href="#" id="' + prefix + 'tabUpload" class="" title="' + _('Upload an Image') + '">' + _('Upload') + '</a>');
             var $urlTab = ViperUtil.$('<a href="#" id="' + prefix + 'tabURL" class="" title="' + _('Image from an URL') + '">' + _('URL') + '</a>');
+
             tabSwitch.appendChild($assetTab.get(0));
             tabSwitch.appendChild($uploadTab.get(0));
             tabSwitch.appendChild($urlTab.get(0));
@@ -51,7 +52,6 @@
 
             // customise url field, add the status and file name indicator
             ViperUtil.$(urlField).find('label').append('<div class="Viper-image-status"><span class="Viper-image-status-indicator"></span><span class="Viper-image-filename-indicator"></span></div>');
-
 
             // append asset selector row
             var urlRow = tools.createRow(prefix + ':urlRow', 'Viper-chooseAssetRow');
