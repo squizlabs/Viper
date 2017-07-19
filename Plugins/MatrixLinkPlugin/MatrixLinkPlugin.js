@@ -503,7 +503,7 @@
             var systemInfo = Matrix && Matrix.systemInfo ? Matrix.systemInfo : (EasyEdit && EasyEdit.systemInfo ? EasyEdit.systemInfo : null);
             var msg = '';
             if (assetid.length) {
-                if (systemInfo && systemInfo.preferences.content_type_wysiwyg.SQ_LIVE_LINK_ONLY) {
+                if (systemInfo && systemInfo.preferences.content_type_wysiwyg.SQ_LIVE_LINK_ONLY === '1') {
                     var editableElement = self.viper.getEditableElement();
                     var editableAssetStatus = ViperUtil.$(editableElement).data('status');
                     
