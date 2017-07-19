@@ -122,7 +122,15 @@
             ViperUtil.$(urlField).on('input', function() {
                 var urlValue = ViperUtil.trim(tools.getItem(idPrefix + ':url').getValue());
                 self.retrieveAssetDetails(urlValue, function(type_code, attrs) {
-                    
+                
+                    if (attrs === undefined) {
+                        // Don't need to proceed as the "url" value does not matches the asset ID format. 
+                        // Just hide any previous asset ID input validation message
+                        ViperUtil.$('div[id="ViperLinkPlugin:vtp:nonLiveWarning"]').hide();
+                        ViperUtil.$('div[id="ViperLinkPlugin:vitp:nonLiveWarning"]').hide();
+                        return;
+                    }
+
                     // EditPlus will return status code in attrs.statusId whereas Matrix will do in attrs.status
                     var statusId = null;
                     if (attrs) {
@@ -130,7 +138,7 @@
                     }
                     self.checkLiveAssetLink(statusId, urlValue);
                     self.enableUseDestinationCheckbox(type_code, true);
-                });
+                }, true);
             });
 
             return contents;
@@ -507,7 +515,7 @@
                     var editableElement = self.viper.getEditableElement();
                     var editableAssetStatus = ViperUtil.$(editableElement).data('status');
                     
-                    if (statusId === null && assetid.indexOf(':') == -1) {
+                    if (statusId === null) {
                         msg = _('Specified asset does not exist.');
                     } else if (statusId !== null && statusId < 16 && editableAssetStatus >= 16) {
                         // If the editing asset is live, then it cannot have links to non-live assets
@@ -515,7 +523,7 @@
                     }
                 } else {
                     // If SQ_LIVE_LINK_ONLY setting is not enabled, still check if asset exist
-                    if (statusId === null && assetid.indexOf(':') == -1) {
+                    if (statusId === null) {
                         msg = _('Specified asset does not exist.');
                     }
                 }
@@ -524,17 +532,13 @@
             if (msg.length) {
                 // Top toolbar
                 ViperUtil.$('div[id="ViperLinkPlugin:vtp:nonLiveWarning"]').html(msg).show();
-                ViperUtil.$('div[id$="ViperLinkPlugin:vtp:linkSubSection-applyButton"]').addClass('Viper-disabled');
                 // Inline toolbar
                 ViperUtil.$('div[id="ViperLinkPlugin:vitp:nonLiveWarning"]').html(msg).show();
-                ViperUtil.$('div[id$="ViperLinkPlugin:vitp:link-applyButton"]').addClass('Viper-disabled');
             } else {
                 // Top toolbar
                 ViperUtil.$('div[id="ViperLinkPlugin:vtp:nonLiveWarning"]').html(msg).hide();
-                ViperUtil.$('div[id$="ViperLinkPlugin:vtp:linkSubSection-applyButton"]').removeClass('Viper-disabled');
                 // Inline toolbar
                 ViperUtil.$('div[id="ViperLinkPlugin:vitp:nonLiveWarning"]').html(msg).hide();
-                ViperUtil.$('div[id$="ViperLinkPlugin:vitp:link-applyButton"]').removeClass('Viper-disabled');
             }
 
         },//end checkLiveAssetLink()
@@ -562,14 +566,14 @@
         /*
          get the asset details
         */
-        retrieveAssetDetails: function(assetid, callback)
+        retrieveAssetDetails: function(assetid, callback, checkShadowAsset)
         {
             var self = this;
             // push this request to queue
             if(assetid != null && callback != null) {
                 this._retrivingAssetQueue.push({'assetid':assetid, 'callback':callback});
                 // try check later
-                setTimeout(function(){ self.retrieveAssetDetails(assetid, null); }, 300);
+                setTimeout(function(){ self.retrieveAssetDetails(assetid, null, checkShadowAsset); }, 300);
                 return;
             }
 
@@ -589,8 +593,8 @@
                 callback = lastElement.callback;
 
 
-                assetid = assetid.replace(/(\?|&).*/g, '');
-                var exp = /^([0-9]+)$/g;
+                assetid = assetid.replace(/(\?|&|#).*/g, '');
+                var exp = checkShadowAsset ? /^([0-9]+(:.*)?)$/g : /^([0-9]+)$/g;
                 var result = exp.exec(assetid);
                 if(result && result[1] && result[1] != 1) {
                     assetid = result[1];

@@ -265,11 +265,7 @@ to { -moz-transform: rotateZ(0deg)}
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     height: 26px;
-    margin-right: 0px;
-}
-
-.Viper-button.Viper-assetSelector-button {
-    height: 27px;
+    margin-right: 2px;
 }
 
 .Viper-chooseAssetRow .Viper-textbox .Viper-textbox-input{
