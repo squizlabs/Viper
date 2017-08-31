@@ -478,8 +478,6 @@
                 elem = this.element;
             }
 
-            this._document = elem.ownerDocument;
-            Viper.document = this._document;
             if (this._document.defaultView) {
                 Viper.window = this._document.defaultView;
             } else {
@@ -497,12 +495,12 @@
                     return self.mouseUp(e);
                 });
             } else {
-                Viper.Util.addEvent(Viper.Util.getDocuments(), 'mouseup.' + namespace, function(e) {
+                Viper.Util.addEvent(this._document, 'mouseup.' + namespace, function(e) {
                     return self.mouseUp(e);
                 });
             }
 
-            Viper.Util.addEvent(Viper.Util.getDocuments(), 'mousedown.' + namespace, function(e) {
+            Viper.Util.addEvent(this._document, 'mousedown.' + namespace, function(e) {
                 return self.mouseDown(e);
             });
 
@@ -832,6 +830,10 @@
                 this.element.setAttribute('contentEditable', false);
                 Viper.Util.setStyle(this.element, 'outline', 'invert');
             }
+
+            this._document = elem.ownerDocument;
+            Viper.document = this._document;
+            Viper.window   = Viper.document.defaultView;
 
             this.setEnabled(false);
             this.element = elem;
