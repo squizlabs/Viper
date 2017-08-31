@@ -290,6 +290,8 @@
                 return;
             }
 
+            this._viperElementHolder = Viper.Util.getid(this.getId() + '-elementHolder');
+
             if (!this._viperElementHolder) {
                 this._viperElementHolder = this._createElementHolder();
             }
@@ -301,6 +303,7 @@
         _createElementHolder: function()
         {
             var holder = document.createElement('div');
+            holder.id  = this.getId() + '-elementHolder';
             Viper.document.body.appendChild(holder);
 
             // Add browser type.
@@ -1057,7 +1060,7 @@
 
         addMemberElements: function(elements)
         {
-            this._memberElements.concat(elements);
+            this._memberElements = this._memberElements.concat(elements);
 
         },
 
