@@ -3647,7 +3647,11 @@
             var target = Viper.Util.getMouseEventTarget(e);
             var inside = true;
 
-            if (this.element !== target && Viper.Util.isChildOfElems(target, [this.element]) !== true && this.isMemberElement(target) !== true) {
+            if (this.element !== target
+                && Viper.Util.isChildOfElems(target, [this.element]) !== true
+                && this.isMemberElement(target) !== true
+                && Viper.Util.isChildOfElems(target, this._memberElements) !== true
+            ) {
                 inside = false;
 
                 // Ask plugins if its one of their element.
