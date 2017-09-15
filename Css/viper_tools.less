@@ -80,10 +80,6 @@
     &.Viper-disabled {
         opacity: 0.3;
         cursor: default;
-
-        .Viper-browserVer-msie8 & {
-            filter: ~"alpha(opacity = 30)";
-        }
     }
     &.Viper-hidden {
         display: none;
@@ -210,10 +206,8 @@
     @fieldIconSpriteLocation: 1;
     @iconWidth: 25px;
     @iconHeight: 20px;
-    @iconHeightOffset: 27px;
     @bgY: 0;
     @bgY-activeOffset: 34px;
-    @bgX: -(@fieldIconSpriteLocation - 1) * @iconHeightOffset;
     @startBase64 : "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBpZD0iYnV0dG9uSWNvbi1zcHJpdGUuc3ZnIiB3aWR0aD0iNTkiIGhlaWdodD0iMjciIHZpZXdCb3g9IjAgMCA1OSAyNyI+PG1ldGFkYXRhPjw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+Cjx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTM4IDc5LjE1OTgyNCwgMjAxNi8wOS8xNC0wMTowOTowMSAgICAgICAgIj4KICAgPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4KICAgICAgPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIvPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgo8P3hwYWNrZXQgZW5kPSJ3Ij8+PC9tZXRhZGF0YT48ZGVmcz4KICAgIDxzdHlsZT4KICAgICAgLmNscy0xLCAuY2xzLTIsIC5jbHMtNSwgLmNscy03LCAuY2xzLTkgewogICAgICAgIGZpbGw6ICMyYjJiMmI7CiAgICAgIH0KCiAgICAgIC5jbHMtMSB7CiAgICAgICAgZmlsbC1vcGFjaXR5OiAwOwogICAgICB9CgogICAgICAuY2xzLTEwLCAuY2xzLTIsIC5jbHMtMywgLmNscy00LCAuY2xzLTUsIC5jbHMtNiwgLmNscy05IHsKICAgICAgICBmaWxsLXJ1bGU6IGV2ZW5vZGQ7CiAgICAgIH0KCiAgICAgIC5jbHMtMTAsIC5jbHMtMywgLmNscy02LCAuY2xzLTggewogICAgICAgIGZpbGw6ICNmZmY7CiAgICAgIH0KCiAgICAgIC5jbHMtNSwgLmNscy02IHsKICAgICAgICBvcGFjaXR5OiAwLjM7CiAgICAgIH0KCiAgICAgIC5jbHMtMTAsIC5jbHMtOSB7CiAgICAgICAgb3BhY2l0eTogMC40OwogICAgICB9CiAgICA8L3N0eWxlPgogIDwvZGVmcz48cmVjdCBpZD0iU3ByaXRlX01hc2tfQkciIGRhdGEtbmFtZT0iU3ByaXRlIE1hc2sgQkciIGNsYXNzPSJjbHMtMSIgd2lkdGg9IjU5IiBoZWlnaHQ9IjI3Ii8+";
     @icon1: "@{startBase64}PGcgaWQ9IlVwX2Fycm93LTExIiBkYXRhLW5hbWU9IlVwIGFycm93IiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLCAwKSI+CiAgICA8cGF0aCBpZD0idXBfYXJyb3ctMTIiIGRhdGEtbmFtZT0idXAgYXJyb3ciIGNsYXNzPSJjbHMtMiIgZD0iTTY0LjAwOCwxMTUuMDEzaDN2LTguMDM1aDNsLTQuNS02LTQuNSw2aDN2OC4wMzVaIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNTMgLTk4KSIvPgogICAgPHBhdGggaWQ9InVwX2Fycm93LTEzIiBkYXRhLW5hbWU9InVwIGFycm93IiBjbGFzcz0iY2xzLTMiIGQ9Ik05Ny4wMDgsMTE1LjAxM2gzdi04LjAzNWgzbC00LjUtNi00LjUsNmgzdjguMDM1WiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTUzIC05OCkiLz4KICA8L2c+PC9zdmc+";
     @icon2: "@{startBase64}PGcgaWQ9ImRvd25fYXJyb3ciIGRhdGEtbmFtZT0iZG93biBhcnJvdyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwgLTI3KSI+CiAgICA8cGF0aCBpZD0idXBfYXJyb3ctOSIgZGF0YS1uYW1lPSJ1cCBhcnJvdyIgY2xhc3M9ImNscy0yIiBkPSJNNjQuMDA4LDEyNy45ODdoM1YxMzZoM2wtNC41LDUuOTg3TDYxLjAwOCwxMzZoM3YtOC4wMTdaIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNTMgLTk4KSIvPgogICAgPHBhdGggaWQ9InVwX2Fycm93LTEwIiBkYXRhLW5hbWU9InVwIGFycm93IiBjbGFzcz0iY2xzLTMiIGQ9Ik05OC4wMDgsMTI3Ljk4N2gzVjEzNmgzbC00LjUsNS45ODdMOTUuMDA4LDEzNmgzdi04LjAxN1oiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC01MyAtOTgpIi8+CiAgPC9nPjwvc3ZnPg==";
@@ -292,13 +286,6 @@
 
         .Viper-buttonGroup & {
             margin-left: -((@iconWidth - 1) / 2);
-        }
-
-        .Viper-disabled & {
-
-            .Viper-browserVer-msie8 & {
-                filter: ~"alpha(opacity = 50)";
-            }
         }
 
         // Icon definitions
@@ -587,13 +574,7 @@
 // Delete
 
     .Viper-deleteOverlay {
-        background: transparent url("../Images/deleteOverlay.svg") 0 0 repeat;
-
-        // PNG fallback for older trowsers
-
-            .Viper-browserVer-msie8 & {
-                background-image: url("../Images/deleteOverlay.png");
-            }
+        background: transparent url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIiB3aWR0aD0iNSIgaGVpZ2h0PSI1IiB2aWV3Qm94PSIwIDAgNSA1Ij48ZGVmcz48c3R5bGU+LmNscy0xIHsgZmlsbDogI2ZmZjsgb3BhY2l0eTogMC4yOyB9IC5jbHMtMSwgLmNscy0yIHsgZmlsbC1ydWxlOiBldmVub2RkOyB9IC5jbHMtMiB7IGZpbGw6ICNlMzMwMzA7IG9wYWNpdHk6IDAuNTsgfTwvc3R5bGU+PC9kZWZzPjxwYXRoIGQ9Ik0zLjM1NCA3LjM1NGwtLjcwOC0uNzA4IDUtNSAuNzA4LjcwOC01IDV6bS0zLTFsLS43MDgtLjcwOC41LS41LS41LS41IDUtNSAuNzA4LjcwOC0uNS41LjUuNS01IDV6bS0yLjcwOC0zLjcwOGw1LTUgLjcwOC43MDgtNSA1LS43MDgtLjcwOHoiIGNsYXNzPSJjbHMtMSIvPjxwYXRoIGQ9Ik0yLjM1NCA2LjM1NGwtLjcwOC0uNzA4IDUtNSAuNzA4LjcwOC01IDV6bS0zLjcwOC0yLjcwOGw1LTUgLjcwOC43MDgtNSA1LS43MDgtLjcwOHoiIGNsYXNzPSJjbHMtMiIvPjwvc3ZnPg==") 0 0 repeat;
     }
 
 // Text Inputs & Areas
@@ -617,10 +598,6 @@
         }
         &.Viper-disabled {
             opacity: 0.3;
-
-            .Viper-browserVer-msie8 & {
-                filter: ~"alpha(opacity = 40)";
-            }
         }
 
         .Viper-subSectionRow > & {
@@ -697,10 +674,6 @@
             -moz-transition-duration: 0.3s;
             -webkit-transition-property: color, background;
             -webkit-transition-duration: 0.3s;
-
-            .Viper-browserVer-msie8 .Viper-disabled & {
-                filter: ~"alpha(opacity = 40)";
-            }
         }
 
         .Viper-textbox.Viper-active .Viper-textbox-title,
@@ -751,11 +724,6 @@
                 text-decoration: line-through;
                 color: #CCC;
             }
-
-            .Viper-browserVer-msie8 .Viper-disabled & {
-                filter: ~"alpha(opacity = 40)";
-            }
-
         }
 
         .Viper-textbox-textArea {
@@ -807,12 +775,6 @@
         right: 2px;
         top: 50%;
         margin-top: -9px;
-
-        /* PNG fallback for older trowsers */
-
-            .Viper-browserVer-msie8 & {
-                background-image: url("../Images/viperTools.png");
-            }
     }
 
         // Required
@@ -848,19 +810,11 @@
             .Viper-textbox.Viper-actionClear .Viper-textbox-action {
                 display: block;
                 opacity: 0.6;
-
-                .Viper-browserVer-msie8 & {
-                    filter: ~"alpha(opacity = 60)";
-                }
             }
 
             .Viper-textbox.Viper-actionRevert .Viper-textbox-action:hover,
             .Viper-textbox.Viper-actionClear .Viper-textbox-action:hover {
                 opacity: 1;
-
-                .Viper-browserVer-msie8 & {
-                    filter: ~"alpha(opacity = 100)";
-                }
             }
 
             .Viper-textbox.Viper-actionClear .Viper-textbox-action {
@@ -885,10 +839,6 @@
 
             &.Viper-disabled {
                 opacity: 0.4;
-
-                .Viper-browserVer-msie8 & {
-                    filter: ~"alpha(opacity = 40)";
-                }
             }
         }
 
@@ -958,22 +908,8 @@
                 -moz-transition: 0.2s opacity ease-in;
                 -webkit-transition: 0.2s opacity ease-in;
 
-                .Viper-browserVer-msie8 & {
-                    filter: ~"alpha(opacity = 0)";
-                }
-
-                /* PNG fallback for older trowsers */
-
-                    .Viper-browserVer-msie8 & {
-                        background-image: url("../Images/viperTools.png");
-                    }
-
                 .Viper-checkbox.Viper-active & {
                     opacity: 1;
-
-                    .Viper-browserVer-msie8 & {
-                        filter: ~"alpha(opacity = 100)";
-                    }
                 }
             }
 
@@ -1040,12 +976,6 @@
         .Viper-popup .ui-resizable-se {
             position: absolute;
             background-image: url("../Images/viperTools.svg");
-
-            // PNG fallback for older trowsers
-
-                .Viper-browserVer-msie8 & {
-                    background-image: url("../Images/viperTools.png");
-                }
         }
 
     // Close Icon
@@ -1058,18 +988,10 @@
             opacity: 0.5;
             cursor: pointer;
             background: none;
-
-            .Viper-browserVer-msie8 & {
-                filter: ~"alpha(opacity = 50)";
-            }
         }
 
         .Viper-popup-closeIcon:hover {
             opacity: 1;
-
-            .Viper-browserVer-msie8 & {
-                filter: ~"alpha(opacity = 100)";
-            }
         }
 
         .Viper-popup-closeIcon:after {
@@ -1136,13 +1058,6 @@
         // Colours
             color: #171717;
             background-color: #EDEDED;
-
-        // Fallback for older trowsers
-
-            .Viper-browserVer-msie8 & {
-                border: 1px solid #d7d7d7;
-                filter: ~"alpha(opacity = 85)";
-            }
     }
 
 // Popout Panel
@@ -1157,11 +1072,6 @@
         // Colours
             background-color: #FFF;
             box-shadow: 0 0 8px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 0, 0, 0.14);
-
-            // Give IE8 a border since it doesnt support box-shadow borders
-                .Viper-browserVer-msie8 & {
-                    border: 1px solid #BBB;
-                }
 
         animation-duration: 90ms;
         animation-timing-function: ease-out;
@@ -1231,10 +1141,6 @@
                     opacity: 0;
                     transform: scale(0.1);
                     transition: transform 0.1s ease-out;
-
-                    .Viper-browserVer-msie8 & {
-                        filter: ~"alpha(opacity = 0)";
-                    }
                 }
 
                 &.selected {
@@ -1256,13 +1162,6 @@
                         top: 50%;
                         margin-top: -4px;
                         background: transparent url("../Images/viperTools.svg") 0 -240px no-repeat;
-
-                        // PNG fallback for older trowsers
-
-                            .Viper-browserVer-msie8 & {
-                                filter: ~"alpha(opacity = 100)";
-                                background-image: url("../Images/viperTools.png");
-                            }
                     }
                 }
             }
