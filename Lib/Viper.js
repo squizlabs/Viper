@@ -1547,7 +1547,7 @@
                         return false;
                     }
 
-                    var nextContainer = range.getNextContainer(range.endContainer, null, false, true);
+                    var nextContainer = range.getNextContainer(range.endContainer, null, true, true);
                     if (this.isOutOfBounds(nextContainer) === false) {
                         return false;
                     }
