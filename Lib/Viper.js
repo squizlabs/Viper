@@ -3036,6 +3036,14 @@
                 range.collapse(false);
 
                 var startNode = range.getStartNode();
+                if (Viper.Util.isStubElement(startNode) === true && Viper.Util.isBlockElement(startNode) === true) {
+                    // E.g. img
+                    var tmpText = document.createTextNode('');
+                    Viper.Util.insertAfter(startNode, tmpText);
+                    range.setStart(tmpText, 0);
+                    range.collapse(true);
+                }
+
                 range.insertNode(endBookmark);
                 if (Viper.Util.isChildOf(endBookmark, this.element) === false) {
                     this.element.appendChild(endBookmark);
