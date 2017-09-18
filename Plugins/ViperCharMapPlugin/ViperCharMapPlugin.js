@@ -38,7 +38,7 @@
             this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', 'ViperCharMapPlugin', function(data) {
                 if (data.range) {
                     var nodeSelection = data.range.getNodeSelection();
-                    if (nodeSelection && ViperUtil.isStubElement(nodeSelection) === true) {
+                    if (nodeSelection && ViperUtil.isStubElement(nodeSelection) === true && ViperUtil.isTag(nodeSelection, 'br') === false) {
                         self.viper.Tools.disableButton('insertCharacter');
                         return;
                     }
@@ -164,9 +164,18 @@
                 range = this.viper.deleteRangeContent();
             }
 
-            var newNode = document.createTextNode(String.fromCharCode(charCode));
+            var newNode   = document.createTextNode(String.fromCharCode(charCode));
+            var startNode = range.getStartNode();
+            if (ViperUtil.isStubElement(startNode) === true) {
+                if (ViperUtil.isTag(startNode, 'br') === true) {
+                    ViperUtil.insertBefore(startNode, newNode);
+                } else {
+                    ViperUtil.insertAfter(startNode, newNode);
+                }
+            } else {
+                range.insertNode(newNode);
+            }
 
-            range.insertNode(newNode);
             range.setStart(newNode, 1);
 
             if (ViperUtil.isBrowser('msie', '<11') === true) {
