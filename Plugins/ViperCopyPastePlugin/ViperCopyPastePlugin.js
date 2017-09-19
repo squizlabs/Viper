@@ -1436,6 +1436,20 @@
             var docIdElem = ViperUtil.find(tmp, '[id^="docs-internal-guid-"]');
             if (docIdElem.length > 0) {
                 ViperUtil.removeAttr(docIdElem, 'id');
+            } else if (tmp.id && tmp.id.indexOf('docs-internal-guid-') === 0) {
+                if (ViperUtil.isBlockElement(tmp) === false && ViperUtil.hasBlockChildren(tmp) === true) {
+                    // Move all elements inside a new div.
+                    var newDocElem = document.createElement('div');
+                    while (tmp.firstChild) {
+                        newDocElem.appendChild(tmp.firstChild);
+                    }
+
+                    ViperUtil.insertBefore(tmp, newDocElem);
+                    ViperUtil.remove(tmp);
+                    tmp = newDocElem;
+                } else {
+                    ViperUtil.removeAttr(tmp, 'id');
+                }
             }
 
             // Remove the wrapping b tag.
@@ -1537,6 +1551,11 @@
             var lists = ViperUtil.find(parentElement, 'ol');
             for (var i = lists.length - 1; i >= 0; i--) {
                 var list  = lists[i];
+                if (!list.firstChild) {
+                    ViperUtil.remove(list);
+                    continue;
+                }
+
                 var start = parseInt(ViperUtil.attr(list, 'start')) || 1;
                 if (start > 1 && i > 0) {
                     // The start attribute is set. Check if the list before this has (start - 1).
@@ -1545,15 +1564,19 @@
                     if (prevStart === (start - 1)) {
                         var elemsBetween = ViperUtil.getElementsBetween(prevList, list);
 
-                        // Move elements in between to the prevList last child.
-                        var lastLi = ViperUtil.find(prevList, ' > li')[0];
-                        for (var j = 0; j < elemsBetween.length; j++) {
-                            lastLi.appendChild(elemsBetween[j]);
-                        }
+                        try {
+                            // Move elements in between to the prevList last child.
+                            var lastLi = ViperUtil.find(prevList, ' > li')[0];
+                            for (var j = 0; j < elemsBetween.length; j++) {
+                                lastLi.appendChild(elemsBetween[j]);
+                            }
 
-                        // Move the child list items of the current list to previous list.
-                        while (list.firstChild) {
-                            prevList.appendChild(list.firstChild)
+                            // Move the child list items of the current list to previous list.
+                            while (list.firstChild) {
+                                prevList.appendChild(list.firstChild)
+                            }
+                        } catch (e) {
+                            continue;
                         }
 
                         ViperUtil.remove(list);
@@ -2688,7 +2711,7 @@
         _updateSelection: function()
         {
             try {
-                if (this._tmpNode !== null 
+                if (this._tmpNode !== null
                     && (ViperUtil.isPartOfDOM(this._tmpNode, this.viper.getViperElement()) === true
                         || (ViperUtil.isBrowser('msie') === true && ViperUtil.isChildOf(this._tmpNode, this.viper.getViperElement()) === true))
                 ) {

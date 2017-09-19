@@ -290,6 +290,8 @@
                 return;
             }
 
+            this._viperElementHolder = Viper.Util.getid(this.getId() + '-elementHolder');
+
             if (!this._viperElementHolder) {
                 this._viperElementHolder = this._createElementHolder();
             }
@@ -301,6 +303,7 @@
         _createElementHolder: function()
         {
             var holder = document.createElement('div');
+            holder.id  = this.getId() + '-elementHolder';
             Viper.document.body.appendChild(holder);
 
             // Add browser type.
@@ -475,8 +478,6 @@
                 elem = this.element;
             }
 
-            this._document = elem.ownerDocument;
-            Viper.document = this._document;
             if (this._document.defaultView) {
                 Viper.window = this._document.defaultView;
             } else {
@@ -494,12 +495,12 @@
                     return self.mouseUp(e);
                 });
             } else {
-                Viper.Util.addEvent(Viper.Util.getDocuments(), 'mouseup.' + namespace, function(e) {
+                Viper.Util.addEvent(this._document, 'mouseup.' + namespace, function(e) {
                     return self.mouseUp(e);
                 });
             }
 
-            Viper.Util.addEvent(Viper.Util.getDocuments(), 'mousedown.' + namespace, function(e) {
+            Viper.Util.addEvent(this._document, 'mousedown.' + namespace, function(e) {
                 return self.mouseDown(e);
             });
 
@@ -830,6 +831,10 @@
                 Viper.Util.setStyle(this.element, 'outline', 'invert');
             }
 
+            this._document = elem.ownerDocument;
+            Viper.document = this._document;
+            Viper.window   = Viper.document.defaultView;
+
             this.setEnabled(false);
             this.element = elem;
             Viper.Util.setViperElement(elem);
@@ -1057,7 +1062,7 @@
 
         addMemberElements: function(elements)
         {
-            this._memberElements.concat(elements);
+            this._memberElements = this._memberElements.concat(elements);
 
         },
 
@@ -1542,7 +1547,7 @@
                         return false;
                     }
 
-                    var nextContainer = range.getNextContainer(range.endContainer, null, false, true);
+                    var nextContainer = range.getNextContainer(range.endContainer, null, true, true);
                     if (this.isOutOfBounds(nextContainer) === false) {
                         return false;
                     }
@@ -3031,6 +3036,14 @@
                 range.collapse(false);
 
                 var startNode = range.getStartNode();
+                if (Viper.Util.isStubElement(startNode) === true && Viper.Util.isBlockElement(startNode) === true) {
+                    // E.g. img
+                    var tmpText = document.createTextNode('');
+                    Viper.Util.insertAfter(startNode, tmpText);
+                    range.setStart(tmpText, 0);
+                    range.collapse(true);
+                }
+
                 range.insertNode(endBookmark);
                 if (Viper.Util.isChildOf(endBookmark, this.element) === false) {
                     this.element.appendChild(endBookmark);
@@ -3642,7 +3655,11 @@
             var target = Viper.Util.getMouseEventTarget(e);
             var inside = true;
 
-            if (this.element !== target && Viper.Util.isChildOfElems(target, [this.element]) !== true && this.isMemberElement(target) !== true) {
+            if (this.element !== target
+                && Viper.Util.isChildOfElems(target, [this.element]) !== true
+                && this.isMemberElement(target) !== true
+                && Viper.Util.isChildOfElems(target, this._memberElements) !== true
+            ) {
                 inside = false;
 
                 // Ask plugins if its one of their element.
