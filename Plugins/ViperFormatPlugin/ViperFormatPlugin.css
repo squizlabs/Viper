@@ -25,12 +25,6 @@
     margin-top: -7px;
 }
 
-/* PNG fallback for older trowsers */
-
-    .Viper-browserVer-msie8 .ViperFormatPlugin-stylePickerButton:after {
-        background-image: url("../../Images/viperTools.png");
-    }
-
 .ViperFormatPlugin-stylePicker-title {
     line-height: 30px;
     text-shadow: none;

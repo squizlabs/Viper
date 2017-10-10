@@ -26,12 +26,6 @@
         box-shadow: 0 0 8px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(0, 0, 0, 0.14);
     }
 
-    /* IE 8 needs a border to handle no box-shadow support */
-
-    .Viper-browserVer-msie8 .ViperITP {
-        border: 1px solid #BBB;
-    }
-
     /* Positional tweaks for when the inline toolbar needs to point to the topbar */
 
     .ViperITP.Viper-forTopbar {
@@ -89,12 +83,6 @@
 
             /* Colours */
                 border-bottom-color: #ededed;
-        }
-
-        .Viper-browserVer-msie8 .ViperITP.Viper-forTopbar:before {
-
-            /* Colours */
-                border-top-color: #919097;
         }
 
      /* Orientation Tweaks */
@@ -308,13 +296,7 @@
     color: #797979;
 }
 
-/* PNG fallback for older trowsers */
-
-    .Viper-browserVer-msie8  .ViperITP-lineage .ViperITP-lineageItem:after {
-        background-image: url("../../Images/viperTools.png");
-    }
-
- .ViperITP-lineage .ViperITP-lineageItem.Viper-selected {
+.ViperITP-lineage .ViperITP-lineageItem.Viper-selected {
     color: #1E59A1;
     font-weight: bold;
 }
@@ -414,33 +396,6 @@
     text-align: center;
     padding: 1em;
     background-image: none;
-}
-.ViperITP-msgBox.Viper-pass {
-    background-color: #54874b;
-    border-color: #6aaa60;
-    color: #c7e7c2;
-    background-image: url(../../Images/msg-pass.png);
-}
-.ViperITP-msgBox.Viper-fail {
-    background-color: #952424;
-    border-color: #ad4c4c;
-    color: #f8d6d6;
-    background-image: url(../../Images/msg-fail.png);
-}
-.ViperITP-msgBox.Viper-failAccessibility {
-    background-color: #4faadf;
-    border-color: #87cef6;
-    color: #dbecf6;
-    background-image: url(../../Images/msg-failAccessibility.png);
-}
-.Viper-failAccessibility a,
-.Viper-failAccessibility a:visited {
-    color: #dbecf6;
-    text-decoration: none;
-    border-bottom: 1px solid #b1d6eb;
-}
-.Viper-failAccessibility a:hover {
-    border-color: #FFF;
 }
 
 /* Temp new styles for tweaking Link in new window button layout */

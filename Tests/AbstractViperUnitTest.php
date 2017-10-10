@@ -596,11 +596,6 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
         $this->sikuli->setAutoWaitTimeout(0.5, $this->getTopToolbar());
         $this->sikuli->setAutoWaitTimeout(1);
 
-        if ($this->sikuli->getBrowserid() === 'ie8') {
-            // Give some time for IE to catch up....
-            sleep(2);
-        }
-
     }//end _waitForViper()
 
 
@@ -737,10 +732,6 @@ abstract class AbstractViperUnitTest extends PHPUnit_Framework_TestCase
                          '_disabled'    => ' Viper-disabled',
                          '_active-selected' => 'Viper-selected Viper-active',
                         );
-
-        if ($this->sikuli->getBrowserid() === 'ie8') {
-            $browserClass = 'Viper-browser-msie Viper-browserVer-msie8';
-        }
 
         $buttonCount = count($buttonNames);
         for ($i = 0; $i < $buttonCount; $i++) {
