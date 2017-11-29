@@ -363,7 +363,7 @@ div.Viper-image-status {
 .Viper-varietyChooser .Viper-varietyChooser-right-arrow::after {
     content: "";
     position: absolute;
-    background: transparent url(./Images/10.svg) 0 -80px no-repeat;
+    background: transparent url("../../Images/viperTools.svg") 0 -80px no-repeat;
     width: 9px;
     height: 14px;
     right: 10px;
