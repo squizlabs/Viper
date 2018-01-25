@@ -1151,7 +1151,13 @@
                                         self.viper.fireCallbacks('ViperImagePlugin:imageResized', {image: image, size: rect});
 
                                         // Need to set the pos and size of resize box incase the image moves around.
-                                        var rect = ViperUtil.getBoundingRectangle(image);
+                                        var rect   = ViperUtil.getBoundingRectangle(image);
+                                        var offset = ViperUtil.getDocumentOffset();
+                                        rect.x1 += offset.x;
+                                        rect.x2 += offset.x;
+                                        rect.y1 += offset.y;
+                                        rect.y2 += offset.y;
+
                                         if (document !== image.ownerDocument) {
                                             rect.x1 -= scrollCoords.x;
                                             rect.x2 -= scrollCoords.x;
