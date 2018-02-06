@@ -395,7 +395,7 @@
 
         // if in Matrix backend mode
         if(typeof EasyEditAssetManager === 'undefined') {
-            var jsMap = parent.frames.sq_sidenav.JS_Asset_Map;
+            var jsMap = JS_Asset_Map;
             var name =idPrefix;
             var safeName = idPrefix;
             var closeOnExit = function() {
@@ -610,7 +610,7 @@
                     }, 1, true);
                 }
                 else {
-                    var jsMap = parent.frames.sq_sidenav.JS_Asset_Map;
+                    var jsMap = JS_Asset_Map;
                     jsMap.doRequest({
                         _attributes: {
                             action: 'get attributes'

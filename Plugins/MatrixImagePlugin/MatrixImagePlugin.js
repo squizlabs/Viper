@@ -511,7 +511,7 @@
                 });
             }
             else {
-                var jsMap = parent.frames.sq_sidenav.JS_Asset_Map;
+                var jsMap = JS_Asset_Map;
                 jsMap.doRequest({
                     _attributes: {
                         action: 'get attributes'
@@ -1131,8 +1131,8 @@
                             }
 
                             // refresh asset map
-                            if (top.frames.sq_sidenav != null && top.frames.sq_sidenav.JS_Asset_Map && response.root_node) {
-                                top.frames.sq_sidenav.JS_Asset_Map.refreshTree(response.root_node);
+                            if (JS_Asset_Map && response.root_node) {
+                                JS_Asset_Map.refreshTree(response.root_node);
                             }
                         }
                     }
@@ -1400,7 +1400,7 @@
 
         // if in Matrix backend mode
         if(!this._isEditPlus()) {
-            var jsMap = parent.frames.sq_sidenav.JS_Asset_Map;
+            var jsMap = JS_Asset_Map;
             var name =idPrefix;
             var safeName = idPrefix;
             var closeOnExit = function() {
