@@ -51,8 +51,12 @@ float: left;\
 height: 22px;\
 outline: 0;\
 padding: 0 7px;\
-width: 214px;\
+width: 240px;\
 margin: 0;\
+}\
+.ace_searchbtn {\
+text-align: center;\
+min-width: 20px;\
 }\
 .ace_searchbtn,\
 .ace_replacebtn {\
@@ -63,7 +67,9 @@ cursor: pointer;\
 float: left;\
 height: 22px;\
 margin: 0;\
+text-align: center;\
 position: relative;\
+padding: 0 5px;\
 }\
 .ace_searchbtn:last-child,\
 .ace_replacebtn:last-child {\
@@ -77,13 +83,16 @@ cursor: default;\
 .ace_searchbtn {\
 background-position: 50% 50%;\
 background-repeat: no-repeat;\
-width: 27px;\
 }\
 .ace_searchbtn.prev {\
 background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAFCAYAAAB4ka1VAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADFJREFUeNpiSU1NZUAC/6E0I0yACYskCpsJiySKIiY0SUZk40FyTEgCjGgKwTRAgAEAQJUIPCE+qfkAAAAASUVORK5CYII=);    \
 }\
 .ace_searchbtn.next {\
 background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAFCAYAAAB4ka1VAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADRJREFUeNpiTE1NZQCC/0DMyIAKwGJMUAYDEo3M/s+EpvM/mkKwCQxYjIeLMaELoLMBAgwAU7UJObTKsvAAAAAASUVORK5CYII=);    \
+}\
+.ace_searchbtn.next,\
+.ace_searchbtn.prev {\
+width: 28px;\
 }\
 .ace_searchbtn_close {\
 background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAcCAYAAABRVo5BAAAAZ0lEQVR42u2SUQrAMAhDvazn8OjZBilCkYVVxiis8H4CT0VrAJb4WHT3C5xU2a2IQZXJjiQIRMdkEoJ5Q2yMqpfDIo+XY4k6h+YXOyKqTIj5REaxloNAd0xiKmAtsTHqW8sR2W5f7gCu5nWFUpVjZwAAAABJRU5ErkJggg==) no-repeat 50% 0;\
@@ -96,6 +105,8 @@ font: 16px/16px Arial;\
 height: 14px;\
 margin: 5px 1px 9px 5px;\
 padding: 0;\
+position: relative;\
+bottom: 3px;\
 text-align: center;\
 width: 14px;\
 }\
@@ -109,6 +120,9 @@ width: 54px\
 }\
 .ace_replacebtn.next {\
 width: 27px\
+}\
+.ace_replacebtn { \
+width: auto;\
 }\
 .ace_button {\
 margin-left: 2px;\
