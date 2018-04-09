@@ -175,8 +175,6 @@
 		select.setAttribute("name", name);
 		select.setAttribute("id", id);
 
-
-
 		// add initial options
 		if (options !== null) {
 		    for( var key in options) {
@@ -201,15 +199,31 @@
 			return selected.value;
 		    },
 		    setValue: function(options) {
-			 for( var key in options) {
-			    if (options.hasOwnProperty(key)) {
-				var option = document.createElement("option");
-				option.setAttribute("value", key);
-				option.innerHTML = options[key];
-				select.appendChild(option);
-			    }
+			var arr = [];
+			for (key in options) {
+				if (options.hasOwnProperty(key)) {
+					arr.push({
+						'key': key,
+						'value': options[key]
+					});
+				}
 			}
-		    }
+			arr.sort(function(a, b) {
+				if(a.value < b.value) { return -1; }
+				if(a.value > b.value) { return 1; }
+				return 0;
+			});
+
+			arr.forEach(function(obj, index) {
+				if (options.hasOwnProperty(obj.key)) {
+					var option = document.createElement("option");
+					option.setAttribute("value", obj.key);
+					option.innerHTML = options[obj.key];
+					select.appendChild(option);
+				}
+			});
+			}
+			
 		});
 		
 		main.appendChild(select);
@@ -254,7 +268,31 @@
 		this.viper.fireNodesChanged([this.viper.getViperElement()]);
 		this.viper.fireSelectionChanged(range);
 
-	    }
+		},
+
+		_sortKeywords: function(options)
+		{
+			var arr = [];
+			for (key in options) {
+				if (options.hasOwnProperty(key)) {
+					arr.push({
+						'key': key,
+						'value': options[key]
+					});
+				}
+			}
+			arr.sort(function(a, b) {
+				if(a.value < b.value) {
+					return -1;
+				}
+				if(a.value > b.value) {
+					return 1;
+				}
+				return 0;
+			});
+
+			return arr;
+		}
 		    
 		    
 	};
