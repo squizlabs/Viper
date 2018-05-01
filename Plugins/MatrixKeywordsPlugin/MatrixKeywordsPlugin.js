@@ -93,33 +93,41 @@
 		    // populate option lists for plugins
 		    this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', prefix, function() {
 			var editableElement = self.viper.getEditableElement();
+			var keywordSelectorElement = ViperUtil.$(editableElement).data('keyword-selector');
 			
 			// get the keywords current editting div
 			var datasetKeywords = ViperUtil.$(editableElement).data('keywords');
-			if(typeof datasetKeywords !== 'undefined' && datasetKeywords !== '') {
-			    // make sure it's valid JSON assoicate array, not an array object.
-			    if(typeof datasetKeywords.length === 'undefined') {
-				// enable button and insert those keywords as options
-				tools.enableButton('insertKeywords');
-				var selectField  = tools.getItem(prefix + ':insertKeywordSelect');
-				if(selectField.getValue() === null) {
-				    tools.getItem(prefix + ':insertKeywordSelect').setValue(datasetKeywords);
-				}
-			    }
-			}
-			
-			// get snippet for current div
-			var datasetSnippets = ViperUtil.$(editableElement).data('snippets');
-			    if(typeof datasetSnippets !== 'undefined' && datasetSnippets !== '') {
-			    if(typeof datasetSnippets.length === 'undefined') {		
-				// enable button and insert those snippets as options
-				tools.enableButton('insertSnippets');
-				var selectField  = tools.getItem(prefix + ':insertSnippetSelect');
-				if(selectField.getValue() === null) {
-				    tools.getItem(prefix + ':insertSnippetSelect').setValue(datasetSnippets);
-				}
-			    }
-			}
+			if(typeof keywordSelectorElement !== 'undefined') {
+                tools.enableButton('insertKeywords');
+                var selectField = tools.getItem(prefix + ':insertKeywordSelect');
+                var select = document.getElementById(keywordSelectorElement);
+                tools.getItem(prefix + ':insertKeywordSelect').setHtml(select);
+            } else if(typeof datasetKeywords !== 'undefined' && datasetKeywords !== '') {
+             // make sure it's valid JSON assoicate array, not an array object.
+             if(typeof datasetKeywords.length === 'undefined') {
+                    // enable button and insert those keywords as options
+                    tools.enableButton('insertKeywords');
+                    var selectField = tools.getItem(prefix + ':insertKeywordSelect');
+                    if(selectField.getValue() === null) {
+                        tools.getItem(prefix + ':insertKeywordSelect').setValue(datasetKeywords);
+                    }
+             }
+            }
+            
+            // get snippet for current div
+            var datasetSnippets = ViperUtil.$(editableElement).data('snippets');
+             if(typeof datasetSnippets !== 'undefined' && datasetSnippets !== '') {
+                    if(typeof datasetSnippets.length === 'undefined') {     
+                        // enable button and insert those snippets as options
+                        tools.enableButton('insertSnippets');
+                        var selectField = tools.getItem(prefix + ':insertSnippetSelect');
+                        if(selectField.getValue() === null) {
+                            selectField.setValue(datasetSnippets);                          
+                        }
+
+                        selectField.initialiseSelect('-- Insert snippet --');
+                 }
+            }
 		    });
 	    },
 
@@ -137,55 +145,47 @@
 	 */
 	    _createSelection: function(id, name, label, options)
 	    {
-		var selectionArea = document.createElement('div');
-		ViperUtil.addClass(selectionArea, 'Matrix-Viper-selection');
-
-		var labelEl = document.createElement('label');
-		ViperUtil.addClass(labelEl, 'Matrix-Viper-selection-label');
-		selectionArea.appendChild(labelEl);
-
-		var main = document.createElement('div');
-		ViperUtil.addClass(main, 'Matrix-Viper-selection-main');
-		labelEl.appendChild(main);
-
-		var title = document.createElement('span');
-		ViperUtil.addClass(title, 'Matrix-Viper-selection-title');
-		ViperUtil.setHtml(title, label);
-		
-		// add padding-left css property to the title, 
-		var width = 0;
-		// Wrap the element in a generic class so the width calculation is correct
-		// for the font size.
-		var tmp = document.createElement('div');
-		ViperUtil.addClass(tmp, 'ViperITP');
-
-		if (navigator.userAgent.match(/iPad/i) !== null) {
-		    ViperUtil.addClass(tmp, 'device-ipad');
-		}
-		ViperUtil.setStyle(tmp, 'display', 'block');
-		tmp.appendChild(title);
-		this.viper.addElement(tmp);
-		width = (ViperUtil.getElementWidth(title) + 10) + 'px';
-		tmp.parentNode.removeChild(tmp);
-		ViperUtil.setStyle(main, 'padding-left', width);
-		main.appendChild(title);
-
-		var select = document.createElement("select");
-		ViperUtil.addClass(select, 'Matrix-Viper-selection-input');
-		select.setAttribute("name", name);
-		select.setAttribute("id", id);
-
-		// add initial options
-		if (options !== null) {
-		    for( var key in options) {
-			if (options.hasOwnProperty(key)) {
-			    var option = document.createElement("option");
-			    option.setAttribute("value", key);
-			    option.innerHTML = options[key];
-			    select.appendChild(option);
+			var selectionArea = document.createElement('div');
+			ViperUtil.addClass(selectionArea, 'Matrix-Viper-selection');
+	
+			var labelEl = document.createElement('label');
+			ViperUtil.addClass(labelEl, 'Matrix-Viper-selection-label');
+			selectionArea.appendChild(labelEl);
+	
+			var main = document.createElement('div');
+			ViperUtil.addClass(main, 'Matrix-Viper-selection-main');
+			labelEl.appendChild(main);
+	
+			// add padding-left css property to the title, 
+			var width = 0;
+			// Wrap the element in a generic class so the width calculation is correct
+			// for the font size.
+			var tmp = document.createElement('div');
+			ViperUtil.addClass(tmp, 'ViperITP');
+	
+			if (navigator.userAgent.match(/iPad/i) !== null) {
+				ViperUtil.addClass(tmp, 'device-ipad');
 			}
-		    }
-		}
+			ViperUtil.setStyle(tmp, 'display', 'block');
+			this.viper.addElement(tmp);
+			tmp.parentNode.removeChild(tmp);
+			
+			var select = document.createElement("select");
+			ViperUtil.addClass(select, 'Matrix-Viper-selection-input');
+			select.setAttribute("name", name);
+			select.setAttribute("id", id);
+	
+			// add initial options
+			if (options !== null) {
+			 for( var key in options) {
+				if (options.hasOwnProperty(key)) {
+				 var option = document.createElement("option");
+				 option.setAttribute("value", key);
+				 option.innerHTML = options[key];
+				 select.appendChild(option);
+				}
+			 }
+			}
 	    
 		// add the selection input to tool item stack
 		this.viper.Tools.addItem(id, {
@@ -208,11 +208,6 @@
 					});
 				}
 			}
-			arr.sort(function(a, b) {
-				if(a.value < b.value) { return -1; }
-				if(a.value > b.value) { return 1; }
-				return 0;
-			});
 
 			arr.forEach(function(obj, index) {
 				if (options.hasOwnProperty(obj.key)) {
@@ -222,7 +217,94 @@
 					select.appendChild(option);
 				}
 			});
-			}
+
+			},
+
+			setHtml: function(optionGroups) {
+                optionGroups.childNodes.forEach(function(node) {
+                    select.appendChild(node);
+                });
+
+                ViperUtil.addClass(select, 'matrix-select2');
+                ViperUtil.setStyle(select, 'width', '600px');
+
+                //need custom select2 initialisor for keywords
+                ViperUtil.$(select).select2({
+                    allowClear: true,
+                    placeholder: '-- Insert keywords --',
+                    templateResult: formatKeyword,
+                    matcher: matchValueAndText,
+                    width: 'resolve',
+                });
+
+                //formats the option value into the option value string
+                function formatKeyword (optionElement) {
+                    if (!optionElement.id) {
+                        return optionElement.text;
+                    }
+                    var state = $('<span class="matrix-select-option-container"><span class="matrix-select-key flex-item">' +
+                                    optionElement.element.value + '</span> <span class="matrix-select-value flex-item">' + optionElement.text + '</span></span>');
+                    return state;
+                };
+        
+                //search on the value and text of the options
+                function matchValueAndText (params, data) {
+                    if ($.trim(params.term) === '') { return data; }
+        
+                    // Do not display the item if there is no 'text' property
+                    if (typeof data.text === 'undefined') { return null; }
+        
+                    var text = data.text.toUpperCase();
+                    var value = '';
+        
+                    if (typeof data.id !== 'undefined') {
+                        value = data.id.toUpperCase();
+                    }
+        
+                    var term = params.term.toUpperCase();
+        
+                    // Check if the text contains the term
+                    if (text.indexOf(term) > -1 || (value !== '' && value.indexOf(term) > -1)) {
+                     return data;
+                    }
+        
+                    // Do a recursive check for options with children
+                    if (data.children && data.children.length > 0) {
+                     // Clone the data object if there are children
+                     // This is required as we modify the object to remove any non-matches
+                     var match = $.extend(true, {}, data);
+        
+                     // Check each child of the option
+                     for (var c = data.children.length - 1; c >= 0; c--) {
+                        var child = data.children[c];
+        
+                        var matches = matchValueAndText(params, child);
+        
+                        // If there wasn't a match, remove the object in the array
+                        if (matches == null) {
+                         match.children.splice(c, 1);
+                        }
+                     }
+        
+                     // If any children matched, return the new object
+                     if (match.children.length > 0) {
+                        return match;
+                     }
+        
+                     // If there were no matching children, check just the plain object
+                     return matchValueAndText(params, match);
+                    }
+        
+                    // If it doesn't contain the term, don't return anything
+                    return null;
+                };
+
+            },
+
+            initialiseSelect: function(placeholder)
+            {
+                ViperUtil.$(select).select2({ placeholder: placeholder });
+            }
 			
 		});
 		
@@ -268,32 +350,7 @@
 		this.viper.fireNodesChanged([this.viper.getViperElement()]);
 		this.viper.fireSelectionChanged(range);
 
-		},
-
-		_sortKeywords: function(options)
-		{
-			var arr = [];
-			for (key in options) {
-				if (options.hasOwnProperty(key)) {
-					arr.push({
-						'key': key,
-						'value': options[key]
-					});
-				}
-			}
-			arr.sort(function(a, b) {
-				if(a.value < b.value) {
-					return -1;
-				}
-				if(a.value > b.value) {
-					return 1;
-				}
-				return 0;
-			});
-
-			return arr;
-		}
-		    
+		}    
 		    
 	};
 })(Viper.Util, Viper.Selection, Viper._);
