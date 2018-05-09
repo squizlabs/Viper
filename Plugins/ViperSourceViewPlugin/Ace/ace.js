@@ -3330,7 +3330,6 @@ exports.loadScript = function(path, callback) {
 
     s.src = path;
     head.appendChild(s);
-
     s.onload = s.onreadystatechange = function(_, isAbort) {
         if (isAbort || !s.readyState || s.readyState == "loaded" || s.readyState == "complete") {
             s = s.onload = s.onreadystatechange = null;
@@ -3701,6 +3700,7 @@ exports.loadModule = function(moduleName, onLoad) {
 
     if (!exports.get("packaged"))
         return afterLoad();
+
     net.loadScript(exports.moduleUrl(moduleName, moduleType), afterLoad);
 };
 init(true);function init(packaged) {
