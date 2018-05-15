@@ -30,6 +30,7 @@
   -webkit-transition-duration: 0.3s;
   color: #5A8BD0;
   border: 1px solid #BFBFBF;
+  font-size: 12px;
 }
 .Matrix-Viper-selection.Viper-active .Viper-selection-label {
   background: #205caf;

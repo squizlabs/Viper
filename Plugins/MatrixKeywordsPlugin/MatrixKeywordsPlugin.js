@@ -92,42 +92,27 @@
 		    // Update the buttons when the toolbar updates it self.
 		    // populate option lists for plugins
 		    this.viper.registerCallback('ViperToolbarPlugin:updateToolbar', prefix, function() {
-			var editableElement = self.viper.getEditableElement();
-			var keywordSelectorElement = ViperUtil.$(editableElement).data('keyword-selector');
-			
-			// get the keywords current editting div
-			var datasetKeywords = ViperUtil.$(editableElement).data('keywords');
-			if(typeof keywordSelectorElement !== 'undefined') {
-                tools.enableButton('insertKeywords');
-                var selectField = tools.getItem(prefix + ':insertKeywordSelect');
-                var select = document.getElementById(keywordSelectorElement);
-                tools.getItem(prefix + ':insertKeywordSelect').setHtml(select);
-            } else if(typeof datasetKeywords !== 'undefined' && datasetKeywords !== '') {
-             // make sure it's valid JSON assoicate array, not an array object.
-             if(typeof datasetKeywords.length === 'undefined') {
-                    // enable button and insert those keywords as options
-                    tools.enableButton('insertKeywords');
-                    var selectField = tools.getItem(prefix + ':insertKeywordSelect');
-                    if(selectField.getValue() === null) {
-                        tools.getItem(prefix + ':insertKeywordSelect').setValue(datasetKeywords);
-                    }
-             }
-            }
-            
-            // get snippet for current div
-            var datasetSnippets = ViperUtil.$(editableElement).data('snippets');
-             if(typeof datasetSnippets !== 'undefined' && datasetSnippets !== '') {
-                    if(typeof datasetSnippets.length === 'undefined') {     
-                        // enable button and insert those snippets as options
-                        tools.enableButton('insertSnippets');
-                        var selectField = tools.getItem(prefix + ':insertSnippetSelect');
-                        if(selectField.getValue() === null) {
-                            selectField.setValue(datasetSnippets);                          
-                        }
-
-                        selectField.initialiseSelect('-- Insert snippet --');
-                 }
-            }
+				var editableElement = self.viper.getEditableElement();
+				
+				
+				// get the keywords current editting div
+				var keywordSelectorElement = ViperUtil.$(editableElement).data('keyword-selector');
+				if(typeof keywordSelectorElement !== 'undefined') {
+					tools.enableButton('insertKeywords');
+					var selectField = tools.getItem(prefix + ':insertKeywordSelect');
+					var select = document.getElementById(keywordSelectorElement);
+					tools.getItem(prefix + ':insertKeywordSelect').setHtml(select);
+				} 
+				
+				// get snippet for current div
+				var datasetSnippets = ViperUtil.$(editableElement).data('snippets');
+				var snippetSelectorElement = ViperUtil.$(editableElement).data('snippet-selector');
+				if(typeof snippetSelectorElement !== 'undefined') {
+					tools.enableButton('insertSnippets');
+					var selectField = tools.getItem(prefix + ':insertSnippetSelect');
+					var select = document.getElementById(snippetSelectorElement);
+					tools.getItem(prefix + ':insertSnippetSelect').setHtml(select);
+				} 
 		    });
 	    },
 
@@ -220,22 +205,34 @@
 
 			},
 
-			setHtml: function(optionGroups) {
-                optionGroups.childNodes.forEach(function(node) {
+			setHtml: function(optionArray, type) {
+                optionArray.childNodes.forEach(function(node) {
                     select.appendChild(node);
                 });
 
                 ViperUtil.addClass(select, 'matrix-select2');
-                ViperUtil.setStyle(select, 'width', '600px');
+				ViperUtil.setStyle(select, 'width', '600px');
 
-                //need custom select2 initialisor for keywords
-                ViperUtil.$(select).select2({
-                    allowClear: true,
-                    placeholder: '-- Insert keywords --',
-                    templateResult: formatKeyword,
-                    matcher: matchValueAndText,
-                    width: 'resolve',
-                });
+				var elementId = select.getAttribute('id');
+
+				if(elementId == 'MatrixKeywordsPlugin:insertKeywordSelect') {
+					//need custom select2 initialisor for keywords
+					ViperUtil.$(select).select2({
+						allowClear: true,
+						placeholder: '-- Insert keywords --',
+						templateResult: formatKeyword,
+						matcher: matchValueAndText,
+						width: 'resolve',
+					});
+				}
+
+				if(elementId == 'MatrixKeywordsPlugin:insertSnippetSelect') {
+					//need custom select2 initialisor for keywords
+					ViperUtil.$(select).select2({
+						allowClear: true,
+						placeholder: '-- Insert snippet --',
+					});
+				}
 
                 //formats the option value into the option value string
                 function formatKeyword (optionElement) {
@@ -300,11 +297,6 @@
                 };
 
             },
-
-            initialiseSelect: function(placeholder)
-            {
-                ViperUtil.$(select).select2({ placeholder: placeholder });
-            }
 			
 		});
 		
