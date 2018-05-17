@@ -19,6 +19,7 @@
          this._loadCallbacks   = {};
          this._includedCSS     = [];
          this._standard        = 'WCAG2AAA';
+         this._lang            = 'en';
          this._dismissedIssues = {};
          this._htmlcsWrapper   = document.createElement('div');
 
@@ -56,6 +57,10 @@
                  this._standard = settings.standard;
              }
 
+             if (settings.lang) {
+                 this._lang = settings.lang;
+             }
+
          },
 
          getIssues: function()
@@ -80,6 +85,7 @@
              HTMLCSAuditor.run(this._standard, this.viper.getViperElement(), {
                  noHeader: true,
                  includeCss: false,
+                 lang: self._lang,
                  parentElement: self._htmlcsWrapper,
                  customIssueSource: function(id, issue, standard, resolutionElem, detailsElem) {
                      self._createIssueDetail(id, issue, resolutionElem, detailsElem);

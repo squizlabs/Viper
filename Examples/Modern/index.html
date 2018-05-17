@@ -42,6 +42,7 @@
                 viper.setSetting('defaultBlockTag', 'P');
                 viper.setEditableElement(document.getElementById('content'));
                 viper.getPluginManager().setPluginSettings('ViperFormatPlugin', formatPluginSettings);
+                viper.getPluginManager().setPluginSettings('ViperAccessibilityPlugin', {lang: 'en'});
             });
         };
 
