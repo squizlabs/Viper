@@ -1,475 +1,751 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Polish translation for Viper\n"
-"POT-Creation-Date: 2014-03-26 14:55+1000\n"
-"PO-Revision-Date: 2014-04-03 12:03+0100\n"
-"Last-Translator: Luke Wright <lwright@squiz.com.au>\n"
+"POT-Creation-Date: 2018-04-04 17:09+0200\n"
+"PO-Revision-Date: 2018-04-04 17:09+0200\n"
+"Last-Translator: Damian Dąbrowa <ddabrowa@squiz.pl>\n"
 "Language-Team: \n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.4\n"
+"X-Generator: Poedit 2.0.6\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
-"X-Poedit-Basepath: ../\n"
+"X-Poedit-Basepath: ..\n"
 "X-Poedit-SearchPath-0: ./Plugins\n"
 "X-Poedit-SearchPath-1: ./Lib\n"
 
-msgid "Insert Matrix Keywords"
-msgstr "Wstaw słowa kluczowe Matrix"
-
-msgid "Insert Matrix Snippet"
-msgstr "Wstaw snippet Matrix"
-
-msgid "Keyword"
-msgstr "Słowo kluczowe"
-
-msgid "Snippet"
-msgstr "Snippet"
-
-msgid "Insert"
-msgstr "Wstaw"
-
-msgid "Locate Element"
-msgstr "Znajdź element"
-
-msgid "Show in Source View"
-msgstr "Pokaż w widoku kodu źródłowego"
-
-msgid "Refresh Issue"
-msgstr "Odśwież problem"
-
-msgid "Accessibility Auditor"
-msgstr "Kontrola dostępności"
-
-msgid "Re-checking issue"
-msgstr "Ponowne sprawdzanie problemu"
-
-msgid "This issue has not been resolved"
-msgstr "Problem nie został rozwiązany"
-
-msgid "OK"
-msgstr "OK"
-
-msgid "Insert Character"
-msgstr "Wstaw znak"
-
-msgid "Symbols"
-msgstr "Symbole"
-
-msgid "Latin"
-msgstr "Łaciński"
-
-msgid "Mathematics"
-msgstr "Matematyczne"
-
-msgid "Currency"
-msgstr "Symbole walut"
-
-msgid ""
-"Paste your content into the box below and it will be automatically inserted "
-"and cleaned up."
-msgstr ""
-"Wklej treść w poniższe okienko. Zostanie ona automatycznie wstawiona i "
-"uporządkowana."
-
-msgid "Avoid this step for future pastes using the keyboard shortcut %s."
-msgstr ""
-"Aby uniknąć tego kroku przy kolejnych operacjach wklejania, użyj skrótu "
-"klawiaturowego %s."
-
-msgid "Bold"
-msgstr "Pogrubienie"
-
-msgid "Italic"
-msgstr "Kursywa"
-
-msgid "Remove Format"
-msgstr "Usuń formatowanie"
-
-msgid "Subscript"
-msgstr "Indeks dolny"
-
-msgid "Superscript"
-msgstr "Indeks górny"
-
-msgid "Strikethrough"
-msgstr "Przekreślenie"
-
-msgid "Left Justify"
-msgstr "Wyrównaj do lewej"
-
-msgid "Center Justify"
-msgstr "Wyrównaj centralnie"
-
-msgid "Right Justify"
-msgstr "Wyrównaj do prawej"
-
-msgid "Block Justify"
-msgstr "Wyjustuj"
-
-msgid "Horizontal Rule"
-msgstr "Linia pozioma"
-
-msgid "Justification"
-msgstr "Justowanie"
-
-msgid "Toggle Justification"
-msgstr "Przełącz justowanie"
-
-msgid "Heading 1"
-msgstr "Nagłówek 1"
-
-msgid "Heading 2"
-msgstr "Nagłówek 2"
-
-msgid "Heading 3"
-msgstr "Nagłówek 3"
-
-msgid "Heading 4"
-msgstr "Nagłówek 4"
-
-msgid "Heading 5"
-msgstr "Nagłówek 5"
-
-msgid "Heading 6"
-msgstr "Nagłówek 6"
-
-msgid "Paragraph"
-msgstr "Akapit"
-
-msgid "Preformatted"
-msgstr "Wstępnie sformatowane"
-
-msgid "Address"
-msgstr "Adres"
-
-msgid "Quote"
-msgstr "Cytat"
-
-msgid "Convert to Heading %s"
-msgstr "Zamień na nagłówek %s"
-
-msgid "Convert to %s"
-msgstr "Zamień na %s"
-
-msgid "ID"
-msgstr "ID"
-
-msgid "Class"
-msgstr "Klasa"
-
-msgid "Toggle Formats"
-msgstr "Przełącz formaty"
-
-msgid "Toggle Headings"
-msgstr "Przełącz nagłówki"
-
-msgid "Anchor name (ID)"
-msgstr "Nazwa kotwicy (ID)"
-
-msgid "Class name"
-msgstr "Nazwa klasy"
-
-msgid "Formats"
-msgstr "Formaty"
-
-msgid "Headings"
-msgstr "Nagłówki"
-
-msgid "Anchor ID"
-msgstr "ID kotwicy"
-
-msgid "Undo"
-msgstr "Cofnij"
-
-msgid "Redo"
-msgstr "Wykonaj ponownie"
-
-msgid "Insert Image"
-msgstr "Wstaw obrazek"
-
-msgid "Toggle Image Options"
-msgstr "Przełączaj opcje obrazów"
-
-msgid "URL"
-msgstr "Adres URL"
-
-msgid "Image is decorative"
-msgstr "Obraz dekoracyjny"
-
-msgid "Alt"
-msgstr "Alternatywny"
-
-msgid "Title"
-msgstr "Tytuł"
-
-msgid ""
-"The selected image will be moved to the next location you click. To cancel "
-"press the move icon again or ESC"
-msgstr ""
-"Wybrany obraz zostanie przeniesiony do następnej zaznaczonej lokalizacji. "
-"Aby anulować, ponownie naciśnij ikonę Przenieś lub ESC."
-
-msgid "Move Image"
-msgstr "Przenieś obrazek"
-
-msgid "Loading preview"
-msgstr "Ładowanie podglądu"
-
-msgid "Failed to load image"
-msgstr "Błąd wczytywania obrazka"
-
-msgid "Underline"
-msgstr "Podkreślenie"
-
-msgid "Item"
-msgstr "Obiekt"
-
-msgid "List"
-msgstr "Lista"
-
-msgid "Cell"
-msgstr "Komórka"
-
-msgid "Row"
-msgstr "Wiersz"
-
-msgid "Header"
-msgstr "Nagłówek"
-
-msgid "Link"
-msgstr "Łącze"
-
-msgid "Image"
-msgstr "Obrazek"
-
-msgid "Selection"
-msgstr "Wybór"
-
-msgid "Acronym"
-msgstr "Skrótowiec"
-
-msgid "Abbreviation"
-msgstr "Skrót"
-
-msgid "Language"
-msgstr "Język"
-
-msgid "Language Tools"
-msgstr "Narzędzia językowe"
-
-msgid "Toggle Language Tools"
-msgstr "Przełączaj narzędzia językowe"
-
-msgid "Toggle Acronym Options"
-msgstr "Przełączaj opcje skrótowców"
-
-msgid "Toggle Abbreviation Options"
-msgstr "Przełączaj opcje skrótów"
-
-msgid "Toggle Language Options"
-msgstr "Przełączaj opcje językowe"
-
-msgid "Subject"
-msgstr "Temat"
-
-msgid "Open a New Window"
-msgstr "Otwórz nowe okno"
-
-msgid "Toggle Link Options"
-msgstr "Przełączaj opcje łączy"
-
-msgid "Remove Link"
-msgstr "Usuń łącze"
-
-msgid "Insert Link"
-msgstr "Wstaw łącze"
-
-msgid "Make Unordered List"
-msgstr "Utwórz listę wypunktowaną "
-
-msgid "Make Ordered List"
-msgstr "Utwórz listę numerowaną"
-
-msgid "Indent List"
-msgstr "Zwiększ wcięcie"
-
-msgid "Outdent List"
-msgstr "Zmniejsz wcięcie"
-
-msgid "Search"
-msgstr "Szukaj"
-
-msgid "Replace"
-msgstr "Zamień"
-
-msgid "Replace All"
-msgstr "Zamień wszystko"
-
-msgid "Find Next"
-msgstr "Znajdź następny"
-
-msgid "Search & Replace"
-msgstr "Szukaj i zamień"
-
-msgid "Toggle Source View"
-msgstr "Przełączaj widok kodu źródłowego"
-
-msgid "Discard"
-msgstr "Porzuć"
-
-msgid "Discard Changes"
-msgstr "Porzuć zmiany"
-
+#: Lib/Tools.js:152 Lib/Tools.js:347 Lib/Tools.js:365 Lib/Tools.js:366
+msgid "Not available"
+msgstr "Niedostępne"
+
+#: Lib/Tools.js:461 Lib/Tools.js:742
+msgid "required"
+msgstr "wymagane"
+
+#: Lib/Tools.js:1858 Plugins/ViperSourceViewPlugin/ViperSourceViewPlugin.js:368
+#: Plugins/ViperSourceViewPlugin/ViperSourceViewPlugin.js:393
+#: Plugins/ViperToolbarPlugin/ViperToolbarPlugin.js:453
 msgid "Apply Changes"
 msgstr "Zastosuj zmiany"
 
+#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:144
+msgid "Locate Element"
+msgstr "Znajdź element"
+
+#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:148
+msgid "Show in Source View"
+msgstr "Pokaż w widoku kodu źródłowego"
+
+#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:170
+msgid "Refresh Issue"
+msgstr "Odśwież problem"
+
+#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:227
+#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:240
+#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:329
+msgid "Accessibility Auditor"
+msgstr "Audytor dostępności"
+
+#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:255
+msgid "Re-checking issue"
+msgstr "Ponowne sprawdzanie problemu"
+
+#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:278
+msgid "This issue has not been resolved"
+msgstr "Problem nie został rozwiązany"
+
+#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:279
+msgid "OK"
+msgstr "OK"
+
+#: Plugins/ViperCharMapPlugin/ViperCharMapPlugin.js:99
+#: Plugins/ViperCharMapPlugin/ViperCharMapPlugin.js:101
+msgid "Insert Character"
+msgstr "Wstaw znak"
+
+#: Plugins/ViperCharMapPlugin/ViperCharMapPlugin.js:232
+msgid "Symbols"
+msgstr "Symbole"
+
+#: Plugins/ViperCharMapPlugin/ViperCharMapPlugin.js:237
+msgid "Latin"
+msgstr "Łacina"
+
+#: Plugins/ViperCharMapPlugin/ViperCharMapPlugin.js:242
+msgid "Mathematics"
+msgstr "Matematyczne"
+
+#: Plugins/ViperCharMapPlugin/ViperCharMapPlugin.js:247
+msgid "Currency"
+msgstr "Symbole walut"
+
+#: Plugins/ViperCharMapPlugin/ViperCharMapPlugin.js:252
+msgid "Greek"
+msgstr "Greka"
+
+#: Plugins/ViperCoreStylesPlugin/ViperCoreStylesPlugin.js:85
+#: Plugins/ViperCoreStylesPlugin/ViperCoreStylesPlugin.js:221
+#: Plugins/ViperCoreStylesPlugin/ViperCoreStylesPlugin.js:1084
+#: Plugins/ViperInlineToolbarPlugin/ViperInlineToolbarPlugin.js:251
+msgid "Bold"
+msgstr "Pogrubienie"
+
+#: Plugins/ViperCoreStylesPlugin/ViperCoreStylesPlugin.js:88
+#: Plugins/ViperCoreStylesPlugin/ViperCoreStylesPlugin.js:220
+#: Plugins/ViperCoreStylesPlugin/ViperCoreStylesPlugin.js:1087
+#: Plugins/ViperInlineToolbarPlugin/ViperInlineToolbarPlugin.js:260
+msgid "Italic"
+msgstr "Kursywa"
+
+#: Plugins/ViperCoreStylesPlugin/ViperCoreStylesPlugin.js:91
+msgid "Remove Format"
+msgstr "Usuń formatowanie"
+
+#: Plugins/ViperCoreStylesPlugin/ViperCoreStylesPlugin.js:101
+#: Plugins/ViperCoreStylesPlugin/ViperCoreStylesPlugin.js:222
+#: Plugins/ViperInlineToolbarPlugin/ViperInlineToolbarPlugin.js:301
+msgid "Subscript"
+msgstr "Indeks dolny"
+
+#: Plugins/ViperCoreStylesPlugin/ViperCoreStylesPlugin.js:104
+#: Plugins/ViperCoreStylesPlugin/ViperCoreStylesPlugin.js:223
+#: Plugins/ViperInlineToolbarPlugin/ViperInlineToolbarPlugin.js:305
+msgid "Superscript"
+msgstr "Indeks górny"
+
+#: Plugins/ViperCoreStylesPlugin/ViperCoreStylesPlugin.js:107
+#: Plugins/ViperCoreStylesPlugin/ViperCoreStylesPlugin.js:224
+#: Plugins/ViperInlineToolbarPlugin/ViperInlineToolbarPlugin.js:309
+msgid "Strikethrough"
+msgstr "Przekreślenie"
+
+#: Plugins/ViperCoreStylesPlugin/ViperCoreStylesPlugin.js:110
+#: Plugins/ViperCoreStylesPlugin/ViperCoreStylesPlugin.js:225
+#: Plugins/ViperCoreStylesPlugin/ViperCoreStylesPlugin.js:1090
+msgid "Code"
+msgstr "Kod"
+
+#: Plugins/ViperCoreStylesPlugin/ViperCoreStylesPlugin.js:122
+msgid "Left Justify"
+msgstr "Do lewej"
+
+#: Plugins/ViperCoreStylesPlugin/ViperCoreStylesPlugin.js:125
+msgid "Center Justify"
+msgstr "Wyśrodkuj"
+
+#: Plugins/ViperCoreStylesPlugin/ViperCoreStylesPlugin.js:128
+msgid "Right Justify"
+msgstr "Do prawej"
+
+#: Plugins/ViperCoreStylesPlugin/ViperCoreStylesPlugin.js:131
+msgid "Block Justify"
+msgstr "Do lewej i prawej"
+
+#: Plugins/ViperCoreStylesPlugin/ViperCoreStylesPlugin.js:141
+msgid "Horizontal Rule"
+msgstr "Linia pozioma"
+
+#: Plugins/ViperCoreStylesPlugin/ViperCoreStylesPlugin.js:152
+msgid "Justification"
+msgstr "Wyrównanie"
+
+#: Plugins/ViperCoreStylesPlugin/ViperCoreStylesPlugin.js:153
+msgid "Toggle Justification"
+msgstr "Zmień wyrównanie"
+
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:19
+msgid "Heading 1"
+msgstr "Nagłówek 1"
+
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:20
+msgid "Heading 2"
+msgstr "Nagłówek 2"
+
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:21
+msgid "Heading 3"
+msgstr "Nagłówek 3"
+
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:22
+msgid "Heading 4"
+msgstr "Nagłówek 4"
+
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:23
+msgid "Heading 5"
+msgstr "Nagłówek 5"
+
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:24
+msgid "Heading 6"
+msgstr "Nagłówek 6"
+
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:25
+msgid "Paragraph"
+msgstr "Akapit"
+
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:26
+msgid "Preformatted"
+msgstr "Wstępnie sformatowane"
+
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:27
+msgid "Address"
+msgstr "Adres"
+
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:28
+#: Plugins/ViperInlineToolbarPlugin/ViperInlineToolbarPlugin.js:289
+msgid "Quote"
+msgstr "Cytat"
+
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:248
+#, javascript-format
+msgid "Convert to Heading %s"
+msgstr "Zamień na nagłówek %s"
+
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:269
+#, javascript-format
+msgid "Convert to %s"
+msgstr "Zamień na %s"
+
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:287
+msgid "ID"
+msgstr "ID"
+
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:303
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:917
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:936
+msgid "Class"
+msgstr "Klasa"
+
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:322
+msgid "Choose Styles"
+msgstr "Wybierz styl"
+
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:345
+msgid "Custom Class"
+msgstr "Niestandardowa klasa"
+
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:588
+msgid "Toggle Formats"
+msgstr "Zmień formatowanie"
+
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:592
+msgid "Toggle Headings"
+msgstr "Zmień nagłówek"
+
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:600
+msgid "Anchor name (ID)"
+msgstr "Nazwa kotwicy (ID)"
+
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:611
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:1474
+msgid "Class name"
+msgstr "Nazwa klasy"
+
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:867
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:1053
+msgid "Insert Anchor"
+msgstr "Wstaw kotwicę"
+
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:868
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:884
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:1054
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:1086
+msgid "Apply Styles"
+msgstr "Zastosuj style"
+
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:878
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:1075
+msgid "Update Anchor"
+msgstr "Aktualizuj kotwicę"
+
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:909
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:923
+msgid "Formats"
+msgstr "Formatowanie"
+
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:910
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:926
+msgid "Headings"
+msgstr "Nagłówki"
+
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:916
+#: Plugins/ViperFormatPlugin/ViperFormatPlugin.js:929
+msgid "Anchor ID"
+msgstr "ID kotwicy"
+
+#: Plugins/ViperHistoryPlugin/ViperHistoryPlugin.js:32
+msgid "Undo"
+msgstr "Cofnij"
+
+#: Plugins/ViperHistoryPlugin/ViperHistoryPlugin.js:35
+msgid "Redo"
+msgstr "Ponów"
+
+#: Plugins/ViperImagePlugin/ViperImagePlugin.js:506
+#: Plugins/ViperImagePlugin/ViperImagePlugin.js:669
+msgid "Insert Image"
+msgstr "Wstaw grafikę"
+
+#: Plugins/ViperImagePlugin/ViperImagePlugin.js:514
+#: Plugins/ViperImagePlugin/ViperImagePlugin.js:737
+msgid "Toggle Image Options"
+msgstr "Zmień ustawienia grafiki"
+
+#: Plugins/ViperImagePlugin/ViperImagePlugin.js:529
+#: Plugins/ViperLinkPlugin/ViperLinkPlugin.js:544
+msgid "URL"
+msgstr "URL"
+
+#: Plugins/ViperImagePlugin/ViperImagePlugin.js:556
+msgid "Image is decorative"
+msgstr "Grafika dekoracyjna"
+
+#: Plugins/ViperImagePlugin/ViperImagePlugin.js:570
+msgid "Alt"
+msgstr "Alternatywny"
+
+#: Plugins/ViperImagePlugin/ViperImagePlugin.js:574
+#: Plugins/ViperLinkPlugin/ViperLinkPlugin.js:545
+msgid "Title"
+msgstr "Tytuł"
+
+#: Plugins/ViperImagePlugin/ViperImagePlugin.js:661
+msgid "Update Image"
+msgstr "Aktualizuj grafikę"
+
+#: Plugins/ViperImagePlugin/ViperImagePlugin.js:732
+msgid ""
+"The selected image will be moved to the next location you click. To cancel, "
+"press the move icon again, or ESC"
+msgstr ""
+"Wybrana grafika zostanie przeniesiona do następnej klikniętej pozycji. "
+"Kliknij ikonę Przenieś grafikę ponownie lub naciśnij ESC aby anulować"
+
+#: Plugins/ViperImagePlugin/ViperImagePlugin.js:744
+msgid "Move Image"
+msgstr "Przenieś grafikę"
+
+#: Plugins/ViperImagePlugin/ViperImagePlugin.js:931
+msgid "Loading preview"
+msgstr "Ładowanie podglądu"
+
+#: Plugins/ViperImagePlugin/ViperImagePlugin.js:937
+msgid "Failed to load image"
+msgstr "Błąd wczytywania grafiki"
+
+#: Plugins/ViperImagePlugin/ViperImagePlugin.js:1262
+msgid "Maximum"
+msgstr "Maksimum"
+
+#: Plugins/ViperImagePlugin/ViperImagePlugin.js:1267
+msgid "Reset Size"
+msgstr "Przywróć rozmiar"
+
+#: Plugins/ViperInlineToolbarPlugin/ViperInlineToolbarPlugin.js:255
+msgid "Underline"
+msgstr "Podkreślenie"
+
+#: Plugins/ViperInlineToolbarPlugin/ViperInlineToolbarPlugin.js:264
+msgid "Item"
+msgstr "Element"
+
+#: Plugins/ViperInlineToolbarPlugin/ViperInlineToolbarPlugin.js:269
+msgid "List"
+msgstr "Lista"
+
+#: Plugins/ViperInlineToolbarPlugin/ViperInlineToolbarPlugin.js:273
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1037
+msgid "Cell"
+msgstr "Komórka"
+
+#: Plugins/ViperInlineToolbarPlugin/ViperInlineToolbarPlugin.js:277
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1003
+msgid "Row"
+msgstr "Wiersz"
+
+#: Plugins/ViperInlineToolbarPlugin/ViperInlineToolbarPlugin.js:281
+msgid "Header"
+msgstr "Nagłówek"
+
+#: Plugins/ViperInlineToolbarPlugin/ViperInlineToolbarPlugin.js:285
+msgid "Link"
+msgstr "Link"
+
+#: Plugins/ViperInlineToolbarPlugin/ViperInlineToolbarPlugin.js:293
+msgid "Image"
+msgstr "Grafika"
+
+#: Plugins/ViperInlineToolbarPlugin/ViperInlineToolbarPlugin.js:297
+#: Plugins/ViperLangToolsPlugin/ViperLangToolsPlugin.js:391
+#: Plugins/ViperLangToolsPlugin/ViperLangToolsPlugin.js:453
+msgid "Abbreviation"
+msgstr "Skrót"
+
+#: Plugins/ViperInlineToolbarPlugin/ViperInlineToolbarPlugin.js:313
+msgid "Table Header"
+msgstr "Nagłówek tabeli"
+
+#: Plugins/ViperInlineToolbarPlugin/ViperInlineToolbarPlugin.js:317
+msgid "Table Footer"
+msgstr "Stopka tabeli"
+
+#: Plugins/ViperInlineToolbarPlugin/ViperInlineToolbarPlugin.js:321
+msgid "Table Body"
+msgstr "Tabela"
+
+#: Plugins/ViperInlineToolbarPlugin/ViperInlineToolbarPlugin.js:448
+msgid "Selection"
+msgstr "Zaznaczenie"
+
+#: Plugins/ViperLangToolsPlugin/ViperLangToolsPlugin.js:379
+#: Plugins/ViperLangToolsPlugin/ViperLangToolsPlugin.js:449
+msgid "Acronym"
+msgstr "Skrótowiec"
+
+#: Plugins/ViperLangToolsPlugin/ViperLangToolsPlugin.js:403
+#: Plugins/ViperLangToolsPlugin/ViperLangToolsPlugin.js:457
+msgid "Language"
+msgstr "Język"
+
+#: Plugins/ViperLangToolsPlugin/ViperLangToolsPlugin.js:436
+msgid "Language Tools"
+msgstr "Przełączanie języka"
+
+#: Plugins/ViperLangToolsPlugin/ViperLangToolsPlugin.js:444
+msgid "Toggle Language Tools"
+msgstr "Zmień język"
+
+#: Plugins/ViperLangToolsPlugin/ViperLangToolsPlugin.js:449
+msgid "Toggle Acronym Options"
+msgstr "Zmień ustawienia skrótowca"
+
+#: Plugins/ViperLangToolsPlugin/ViperLangToolsPlugin.js:453
+msgid "Toggle Abbreviation Options"
+msgstr "Zmień ustawienia skrótu"
+
+#: Plugins/ViperLangToolsPlugin/ViperLangToolsPlugin.js:457
+msgid "Toggle Language Options"
+msgstr "Zmień język"
+
+#: Plugins/ViperLangToolsPlugin/ViperLangToolsPlugin.js:519
+msgid "Insert Abbreviation"
+msgstr "Wstaw skrót"
+
+#: Plugins/ViperLangToolsPlugin/ViperLangToolsPlugin.js:520
+msgid "Insert Acronym"
+msgstr "Wstaw skrótowiec"
+
+#: Plugins/ViperLangToolsPlugin/ViperLangToolsPlugin.js:521
+msgid "Insert Language"
+msgstr "Oznacz język frazy"
+
+#: Plugins/ViperLangToolsPlugin/ViperLangToolsPlugin.js:535
+msgid "Update Abbreviation"
+msgstr "Aktualizuj skrót"
+
+#: Plugins/ViperLangToolsPlugin/ViperLangToolsPlugin.js:539
+msgid "Update Acronym"
+msgstr "Aktualizuj skrótowiec"
+
+#: Plugins/ViperLangToolsPlugin/ViperLangToolsPlugin.js:546
+msgid "Update Language"
+msgstr "Aktualizuj język frazy"
+
+#: Plugins/ViperLinkPlugin/ViperLinkPlugin.js:546
+msgid "Subject"
+msgstr "Temat"
+
+#: Plugins/ViperLinkPlugin/ViperLinkPlugin.js:547
+msgid "Open a New Window"
+msgstr "Otwórz nowe okno"
+
+#: Plugins/ViperLinkPlugin/ViperLinkPlugin.js:623
+#: Plugins/ViperLinkPlugin/ViperLinkPlugin.js:753
+msgid "Toggle Link Options"
+msgstr "Zmień ustawienia linku"
+
+#: Plugins/ViperLinkPlugin/ViperLinkPlugin.js:624
+#: Plugins/ViperLinkPlugin/ViperLinkPlugin.js:754
+msgid "Remove Link"
+msgstr "Usuń link"
+
+#: Plugins/ViperLinkPlugin/ViperLinkPlugin.js:768
+#: Plugins/ViperLinkPlugin/ViperLinkPlugin.js:878
+#: Plugins/ViperLinkPlugin/ViperLinkPlugin.js:928
+msgid "Insert Link"
+msgstr "Wstaw link"
+
+#: Plugins/ViperLinkPlugin/ViperLinkPlugin.js:876
+#: Plugins/ViperLinkPlugin/ViperLinkPlugin.js:926
+msgid "Update Link"
+msgstr "Aktualizuj link"
+
+#: Plugins/ViperListPlugin/ViperListPlugin.js:42
+#: Plugins/ViperListPlugin/ViperListPlugin.js:176
+msgid "Make Unordered List"
+msgstr "Utwórz listę wypunktowaną"
+
+#: Plugins/ViperListPlugin/ViperListPlugin.js:46
+#: Plugins/ViperListPlugin/ViperListPlugin.js:181
+msgid "Make Ordered List"
+msgstr "Utwórz listę numerowaną"
+
+#: Plugins/ViperListPlugin/ViperListPlugin.js:50
+#: Plugins/ViperListPlugin/ViperListPlugin.js:189
+msgid "Indent List"
+msgstr "Zwiększ wcięcie"
+
+#: Plugins/ViperListPlugin/ViperListPlugin.js:59
+#: Plugins/ViperListPlugin/ViperListPlugin.js:192
+msgid "Outdent List"
+msgstr "Zmniejsz wcięcie"
+
+#: Plugins/ViperReplacementPlugin/ViperReplacementPlugin.js:426
+msgid "Keyword"
+msgstr "Słowo kluczowe"
+
+#: Plugins/ViperSearchReplacePlugin/ViperSearchReplacePlugin.js:66
+msgid "Search"
+msgstr "Szukaj"
+
+#: Plugins/ViperSearchReplacePlugin/ViperSearchReplacePlugin.js:85
+#: Plugins/ViperSearchReplacePlugin/ViperSearchReplacePlugin.js:116
+msgid "Replace"
+msgstr "Zamień"
+
+#: Plugins/ViperSearchReplacePlugin/ViperSearchReplacePlugin.js:108
+msgid "Replace All"
+msgstr "Zamień wszystko"
+
+#: Plugins/ViperSearchReplacePlugin/ViperSearchReplacePlugin.js:145
+msgid "Find Next"
+msgstr "Znajdź następny"
+
+#: Plugins/ViperSearchReplacePlugin/ViperSearchReplacePlugin.js:155
+#: Plugins/ViperSearchReplacePlugin/ViperSearchReplacePlugin.js:159
+msgid "Search & Replace"
+msgstr "Szukaj i zamień"
+
+#: Plugins/ViperSourceViewPlugin/ViperSourceViewPlugin.js:50
+msgid "Toggle Source View"
+msgstr "Przełącz widok kodu źródłowego"
+
+#: Plugins/ViperSourceViewPlugin/ViperSourceViewPlugin.js:365
+msgid "Discard"
+msgstr "Porzuć"
+
+#: Plugins/ViperSourceViewPlugin/ViperSourceViewPlugin.js:365
+msgid "Discard Changes"
+msgstr "Porzuć zmiany"
+
+#: Plugins/ViperSourceViewPlugin/ViperSourceViewPlugin.js:372
 msgid "Would you like to apply your changes?"
 msgstr "Czy chcesz zastosować zmiany?"
 
+#: Plugins/ViperSourceViewPlugin/ViperSourceViewPlugin.js:387
 msgid "Open In new window"
 msgstr "Otwórz w nowym oknie"
 
+#: Plugins/ViperSourceViewPlugin/ViperSourceViewPlugin.js:402
 msgid "Source Editor"
 msgstr "Edytor kodu źródłowego"
 
+#: Plugins/ViperSourceViewPlugin/ViperSourceViewPlugin.js:707
+#: Plugins/ViperSourceViewPlugin/ViperSourceViewPlugin.js:744
 msgid "Viper Source View"
 msgstr "Widok kodu źródłowego Viper"
 
+#: Plugins/ViperSourceViewPlugin/ViperSourceViewPlugin.js:768
 msgid ""
 "Source code changes will be reflected in your edit preview window in real "
 "time."
 msgstr ""
-"Zmiany w kodzie źródłowym będą widoczne w oknie podglądu edycji w czasie "
+"Zmiany w kodzie źródłowym będą widoczne w oknie podglądu w czasie "
 "rzeczywistym."
 
+#: Plugins/ViperSourceViewPlugin/ViperSourceViewPlugin.js:769
 msgid "Revert Changes"
 msgstr "Cofnij zmiany"
 
+#: Plugins/ViperSourceViewPlugin/ViperSourceViewPlugin.js:770
 msgid "Close Source View"
 msgstr "Zamknij widok kodu źródłowego"
 
+#: Plugins/ViperSourceViewPlugin/ViperSourceViewPlugin.js:770
 msgid "Close Window"
 msgstr "Zamknij okno"
 
-# a cóż to może być? jakiś kontekst?
-msgid "commmandKeyBinding"
-msgstr "commmandKeyBinding"
-
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:277
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:3397
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:3403
 msgid "Insert Table"
 msgstr "Wstaw tabelę"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:549
 msgid "Show Table tools"
 msgstr "Pokaż narzędzia tabeli"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:552
 msgid "Show Row tools"
 msgstr "Pokaż narzędzia wiersza"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:555
 msgid "Show Column tools"
 msgstr "Pokaż narzędzia kolumny"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:558
 msgid "Show Cell tools"
 msgstr "Pokaż narzędzia komórki"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:987
 msgid "Table"
 msgstr "Tabela"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1021
 msgid "Column"
 msgstr "Kolumna"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1235
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1339
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1447
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1530
 msgid "Toggle Settings"
 msgstr "Przełącz ustawienia"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1251
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1369
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1464
 msgid "Heading"
 msgstr "Nagłówek"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1257
 msgid "Split Vertically"
 msgstr "Podziel pionowo"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1264
 msgid "Split Horizontally"
 msgstr "Podziel poziomo"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1276
 msgid "Merge Up"
 msgstr "Połącz w górę"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1282
 msgid "Merge Down"
 msgstr "Połącz w dół"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1288
 msgid "Merge Left"
 msgstr "Połącz w lewo"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1300
 msgid "Merge Right"
 msgstr "Połącz w prawo"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1324
 msgid "Toggle Merge/Split Options"
 msgstr "Przełącz opcje Połącz/Podziel"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1366
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1549
 msgid "Width"
 msgstr "Szerokość"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1374
 msgid "Insert Column Before"
 msgstr "Wstaw kolumnę z lewej"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1380
 msgid "Insert Column After"
 msgstr "Wstaw kolumnę z prawej"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1392
 msgid "Move Left"
 msgstr "Przesuń w lewo"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1402
 msgid "Move Right"
 msgstr "Przesuń w prawo"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1418
 msgid "Remove Column"
 msgstr "Usuń kolumnę"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1469
 msgid "Insert Row Before"
 msgstr "Wstaw wiersz powyżej"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1475
 msgid "Insert Row After"
 msgstr "Wstaw wiersz poniżej"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1485
 msgid "Move Up"
 msgstr "Przesuń w górę"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1490
 msgid "Move Down"
 msgstr "Przesuń w dół"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1500
 msgid "Remove Row"
 msgstr "Usuń wiersz"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1553
 msgid "Summary"
 msgstr "Podsumowanie"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1557
 msgid "Use Caption"
 msgstr "Użyj podpisu"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:1560
 msgid "Remove Table"
 msgstr "Usuń tabelę"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:3292
 msgid "None"
 msgstr "Brak"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:3292
 msgid "Left"
 msgstr "Lewa"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:3292
 msgid "Top"
 msgstr "Góra"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:3292
 msgid "Both"
 msgstr "Oba"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:3293
 msgid "Headers"
 msgstr "Nagłówki"
 
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:3333
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:3348
+#: Plugins/ViperTableEditorPlugin/ViperTableEditorPlugin.js:3382
 msgid "Size"
 msgstr "Rozmiar"
 
-msgid "Not available"
-msgstr "Niedostępne"
+#~ msgid ""
+#~ "Paste your content into the box below and it will be automatically "
+#~ "inserted and cleaned up."
+#~ msgstr ""
+#~ "Wklej treść w poniższe okienko, aby wstawić ją automatycznie i "
+#~ "uporządkować."
 
-msgid "required"
-msgstr "wymagane"
+#~ msgid "Avoid this step for future pastes using the keyboard shortcut %s."
+#~ msgstr ""
+#~ "Aby uniknąć tego kroku przy kolejnych operacjach wklejania, użyj skrótu "
+#~ "klawiaturowego %s."
+
+#~ msgid ""
+#~ "The selected image will be moved to the next location you click. To "
+#~ "cancel press the move icon again or ESC"
+#~ msgstr ""
+#~ "Wybrany obraz zostanie przeniesiony do następnej zaznaczonej lokalizacji. "
+#~ "Aby anulować, ponownie naciśnij ikonę Przenieś lub ESC."
 
 #~ msgid "Viper by Squiz"
 #~ msgstr "Viper firmy Squiz"
