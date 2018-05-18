@@ -11,7 +11,14 @@
     <script type="text/javascript">
         var viperTest = null;
         jQuery(document).ready(function() {
-            viperTest = new Viper('test', {language: 'en'}, function(viperTest) {
+            var lang = 'en';
+            var search = window.location.search;
+            if (search && search.indexOf('?lang=') === 0) {
+                lang = search.replace('?lang=', '');
+                Viper.Util.getid('langSelector').value = lang;
+            }
+
+            viperTest = new Viper('test', {language: lang}, function(viperTest) {
                 viperTest.getPluginManager().setPlugins(['ViperCoreStylesPlugin', 'ViperInlineToolbarPlugin', 'ViperHistoryPlugin', 'ViperListPlugin', 'ViperFormatPlugin', 'ViperToolbarPlugin', 'ViperTableEditorPlugin', 'ViperCopyPastePlugin', 'ViperImagePlugin', 'ViperLinkPlugin', 'ViperAccessibilityPlugin', 'ViperSourceViewPlugin', 'ViperSearchReplacePlugin', 'ViperLangToolsPlugin', 'ViperCharMapPlugin']);
                 viperTest.setEditableElement(document.getElementById('content'));
 
@@ -21,6 +28,10 @@
                 viperTest.getPluginManager().setPluginSettings('ViperSourceViewPlugin', {jqueryURL: '../jquery.js'});
             });
         });
+
+        function changeLang(lang) {
+            window.location = Viper.Util.baseUrl(window.location.href) + '?lang=' + lang;
+        }
     </script>
 </head>
 <body spellcheck="false">
@@ -36,6 +47,14 @@
         <li class="lineage-home"><a title="Central Home" href="#"><span class="screen_hide">Home</span></a></li>
         <li class="lineage-item"><a href="#">Articles</a></li>
         <li class="lineage-item"><a href="#">Viper Example</a></li>
+        <li class="lineage-item">Viper Language:
+            <select id="langSelector" onchange="changeLang(this.value);">
+                <option value="en" selected="true">English</option>
+                <option value="tr">Turkish</option>
+                <option value="ko">Korean</option>
+                <option value="pl">Polish</option>
+            </select>
+        </li>
     </ol>
 </div>
 
