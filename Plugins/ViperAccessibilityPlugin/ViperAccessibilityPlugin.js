@@ -19,11 +19,12 @@
          this._loadCallbacks   = {};
          this._includedCSS     = [];
          this._standard        = 'WCAG2AAA';
+         this._lang            = 'en';
          this._dismissedIssues = {};
          this._htmlcsWrapper   = document.createElement('div');
 
          var url = this.viper.getViperPath();
-         url    += '/Plugins/ViperAccessibilityPlugin/HTML_CodeSniffer/';
+         url    += '/Plugins/ViperAccessibilityPlugin/HTMLCS/';
          this._htmlCSsrc = url;
 
      }
@@ -56,6 +57,10 @@
                  this._standard = settings.standard;
              }
 
+             if (settings.lang) {
+                 this._lang = settings.lang;
+             }
+
          },
 
          getIssues: function()
@@ -63,15 +68,13 @@
              var self = this;
              if (typeof HTMLCSAuditor === 'undefined') {
                  this.includeScript(this._htmlCSsrc + '/HTMLCS.js', function() {
-                     self.includeScript(self._htmlCSsrc + 'Auditor/HTMLCSAuditor.js', function() {
-                         var link   = document.createElement('link');
-                         link.rel   = 'stylesheet';
-                         link.media = 'screen';
-                         link.href  = self._htmlCSsrc + 'Auditor/HTMLCSAuditor.css';
-                         document.getElementsByTagName('head')[0].appendChild(link);
+                     var link   = document.createElement('link');
+                     link.rel   = 'stylesheet';
+                     link.media = 'screen';
+                     link.href  = self._htmlCSsrc + '/HTMLCS.css';
+                     document.getElementsByTagName('head')[0].appendChild(link);
 
-                         self.getIssues();
-                     });
+                     self.getIssues();
                  });
 
                  return;
@@ -82,6 +85,7 @@
              HTMLCSAuditor.run(this._standard, this.viper.getViperElement(), {
                  noHeader: true,
                  includeCss: false,
+                 lang: self._lang,
                  parentElement: self._htmlcsWrapper,
                  customIssueSource: function(id, issue, standard, resolutionElem, detailsElem) {
                      self._createIssueDetail(id, issue, resolutionElem, detailsElem);
@@ -111,6 +115,7 @@
              if (typeof HTMLCS !== 'undefined') {
                  callback.call(this);
              } else {
+                 this.includeCss(this._htmlCSsrc + '/HTMLCS.css');
                  this.includeScript(this._htmlCSsrc + '/HTMLCS.js', callback);
              }
 
