@@ -348,9 +348,6 @@
                     ViperUtil.$(applyButton1.element).html(_('Upload Image'));
                     ViperUtil.$(applyButton2.element).html(_('Upload Image'));
 
-                    // enable the apply button (only if we are not in uploading status)
-                    this.viper.Tools.enableButton('ViperImagePlugin:bubbleSubSection-applyButton');
-                    this.viper.Tools.enableButton('vitpImagePlugin:bubbleSubSection-applyButton');
                     // hide the URL row and display the file row
                     ViperUtil.$('.Viper-chooseAssetRow').hide();
                     ViperUtil.$('.Viper-imageUploadFileRow').show();
@@ -442,7 +439,6 @@
             self._inlineUploadForm.get(0).reset();
 
             if (image && ViperUtil.isTag(image, 'img') === true) {
-                tools.setButtonActive('image');
 
                 var src = this.viper.getAttribute(image, 'src');
 
@@ -455,12 +451,16 @@
                 tools.getItem(toolbarPrefix + ':altInput').setValue(this.viper.getAttribute(image, 'alt') || '');
                 tools.getItem(toolbarPrefix + ':titleInput').setValue(this.viper.getAttribute(image, 'title') || '');
 
-                if (!image.getAttribute('alt')) {
-                    tools.getItem(toolbarPrefix + ':isDecorative').setValue(true);
-                } else {
-                    tools.getItem(toolbarPrefix + ':isDecorative').setValue(false);
+                // for dropped in image use the default "isDecorative" setting, and disable the upload button
+                var droppedImage = image.dataset && image.dataset.imagepaste && image.dataset.imagepaste == 'true' && image.dataset.id;
+                if (!droppedImage) {
+                    tools.setButtonActive('image');
+                    if (!image.getAttribute('alt')) {
+                        tools.getItem(toolbarPrefix + ':isDecorative').setValue(true);
+                    } else {
+                        tools.getItem(toolbarPrefix + ':isDecorative').setValue(false);
+                    }
                 }
-
 
                 // if it's a "droped in content" image upload, we need to prepare ourself
                 self._prepareDropppedImageUpload(toolbarPrefix);
@@ -1703,13 +1703,8 @@
                     var applyButton2 = this.viper.Tools.getItem('vitpImagePlugin:bubbleSubSection-applyButton');
                     ViperUtil.$(applyButton1.element).html(_('Upload Image'));
                     ViperUtil.$(applyButton2.element).html(_('Upload Image'));
-
-
-                    // enable the apply button (only if we are not in uploading status)
-                    if(!image.dataset.imagepasteStatus || image.dataset.imagepasteStatus != 'loading') {
-                        this.viper.Tools.enableButton('ViperImagePlugin:bubbleSubSection-applyButton');
-                        this.viper.Tools.enableButton('vitpImagePlugin:bubbleSubSection-applyButton');
-                    }
+                    this.viper.Tools.disableButton('ViperImagePlugin:bubbleSubSection-applyButton');
+                    this.viper.Tools.disableButton('vitpImagePlugin:bubbleSubSection-applyButton');
 
                     // display previous upload error message
                     var errorMessage = image.dataset.error;
@@ -1753,6 +1748,9 @@
                     }
                     this.viper.Tools.getItem(prefix + ':fileInput').setValue(fileName);
                 }
+                // Disable upload button by default for dropped in image
+                this.viper.Tools.disableButton('ViperImagePlugin:bubbleSubSection-applyButton');
+                this.viper.Tools.disableButton('vitpImagePlugin:bubbleSubSection-applyButton');
             }
             else {
                     // remove those image preview specific settings from plugin interface
