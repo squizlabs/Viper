@@ -469,7 +469,7 @@
                 tools.enableButton('image');
                 tools.setButtonInactive('image');
 
-                tools.getItem(toolbarPrefix + ':isDecorative').setValue(true);
+                tools.getItem(toolbarPrefix + ':isDecorative').setValue(false);
                 tools.getItem(toolbarPrefix + ':urlInput').setValue('');
                 tools.getItem(toolbarPrefix + ':altInput').setValue('');
                 tools.getItem(toolbarPrefix + ':titleInput').setValue('');
