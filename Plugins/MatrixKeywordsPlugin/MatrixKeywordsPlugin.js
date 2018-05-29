@@ -221,7 +221,6 @@
 					//need custom select2 initialisor for keywords
 					ViperUtil.$(select).select2({
 						allowClear: true,
-						closeOnSelect: false,
 						placeholder: '-- Insert keywords --',
 						templateResult: formatKeyword,
 						matcher: matchValueAndText,
