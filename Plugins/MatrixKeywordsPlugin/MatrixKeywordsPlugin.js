@@ -113,7 +113,8 @@
 					var select = document.getElementById(snippetSelectorElement);
 					tools.getItem(prefix + ':insertSnippetSelect').setHtml(select);
 				} 
-		    });
+			});
+			
 	    },
 
 
@@ -206,6 +207,7 @@
 			},
 
 			setHtml: function(optionArray, type) {
+				//create blank element for placeholder
                 optionArray.childNodes.forEach(function(node) {
                     select.appendChild(node);
                 });
@@ -219,10 +221,12 @@
 					//need custom select2 initialisor for keywords
 					ViperUtil.$(select).select2({
 						allowClear: true,
+						closeOnSelect: false,
 						placeholder: '-- Insert keywords --',
 						templateResult: formatKeyword,
 						matcher: matchValueAndText,
 						width: 'resolve',
+						templateSelection: formatSelection
 					});
 				}
 
@@ -240,9 +244,18 @@
                         return optionElement.text;
                     }
                     var state = $('<span class="matrix-select-option-container"><span class="matrix-select-key flex-item">' +
-                                    optionElement.element.value + '</span> <span class="matrix-select-value flex-item">' + optionElement.text + '</span></span>');
+									'%' + optionElement.element.value + '%</span> ' +
+									'<span class="matrix-select-value flex-item">' + optionElement.text + '</span></span>');
                     return state;
-                };
+				};
+				
+				//formats the selected item so it displays the keyword instead of the description
+				function formatSelection(item) {
+					if(!item.id) {
+						return item.text;
+					}
+					return '%' + item.id + '%';
+				}
         
                 //search on the value and text of the options
                 function matchValueAndText (params, data) {
@@ -296,7 +309,7 @@
                     return null;
                 };
 
-            },
+			},
 			
 		});
 		
