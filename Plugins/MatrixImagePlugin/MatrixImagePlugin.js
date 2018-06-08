@@ -1165,14 +1165,6 @@
                     tools.enableButton(prefix + ':assetPickerParentRootNode');
                     tools.getItem(prefix + ':parentRootNode').setRequired(true);
                 }
-                // enable the apply button
-                if(self.viper.Tools.getItem('ViperImagePlugin:bubbleSubSection-applyButton')) {
-                    self.viper.Tools.enableButton('ViperImagePlugin:bubbleSubSection-applyButton');
-                }
-                if(self.viper.Tools.getItem('vitpImagePlugin:bubbleSubSection-applyButton')) {
-                    self.viper.Tools.enableButton('vitpImagePlugin:bubbleSubSection-applyButton');
-                }
-
             });
             content.appendChild(useCurrentLocation);
 
