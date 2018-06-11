@@ -214,7 +214,8 @@
                 var applyButton2 = self.viper.Tools.getItem('vitpImagePlugin:bubbleSubSection-applyButton');
                 ViperUtil.$(applyButton1.element).html(_('Apply Changes'));
                 ViperUtil.$(applyButton2.element).html(_('Apply Changes'));
-
+                tools.disableButton('ViperImagePlugin:bubbleSubSection-applyButton');
+                tools.disableButton('vitpImagePlugin:bubbleSubSection-applyButton');
             })
             $uploadTab.click(function(e) {
                 ViperUtil.preventDefault(e);
@@ -259,6 +260,8 @@
                 var applyButton2 = self.viper.Tools.getItem('vitpImagePlugin:bubbleSubSection-applyButton');
                 ViperUtil.$(applyButton1.element).html(_('Upload Image'));
                 ViperUtil.$(applyButton2.element).html(_('Upload Image'));
+               tools.disableButton('ViperImagePlugin:bubbleSubSection-applyButton');
+               tools.disableButton('vitpImagePlugin:bubbleSubSection-applyButton');
             })
             $urlTab.click(function(e) {
                 ViperUtil.preventDefault(e);
@@ -307,7 +310,8 @@
                 var applyButton2 = self.viper.Tools.getItem('vitpImagePlugin:bubbleSubSection-applyButton');
                 ViperUtil.$(applyButton1.element).html(_('Apply Changes'));
                 ViperUtil.$(applyButton2.element).html(_('Apply Changes'));
-
+                tools.disableButton('ViperImagePlugin:bubbleSubSection-applyButton');
+                tools.disableButton('vitpImagePlugin:bubbleSubSection-applyButton');
             });
 
             $fileUploadButton.click(function(e) {
