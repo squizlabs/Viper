@@ -999,17 +999,16 @@
                     self.viper.Tools.getItem(prefix + ':parentRootNode').disable();
                     // reset the use current location checkbox
                     self.viper.Tools.getItem(prefix + ':useCurrentLocation').setValue(true);
-
-
-
+					
                     // enable the apply button
+					var enableApplyBtn = self.viper.Tools.getItem(prefix + ':isDecorative').getValue() || self.viper.Tools.getItem(prefix + ':altInput').getValue().length;
                     var button1 = self.viper.Tools.getItem('ViperImagePlugin:bubbleSubSection-applyButton');
                     var button2 = self.viper.Tools.getItem('vitpImagePlugin:bubbleSubSection-applyButton');
-                    if(button1) {
+                    if(button1 && enableApplyBtn) {
                         ViperUtil.$(button1.element).html(_('Upload Image'));
                         self.viper.Tools.enableButton('ViperImagePlugin:bubbleSubSection-applyButton');
                     }
-                    if(button2) {
+                    if(button2 && enableApplyBtn) {
                         ViperUtil.$(button2.element).html(_('Upload Image'));
                         self.viper.Tools.enableButton('vitpImagePlugin:bubbleSubSection-applyButton');
                     }
@@ -1169,6 +1168,15 @@
                     tools.enableButton(prefix + ':assetPickerParentRootNode');
                     tools.getItem(prefix + ':parentRootNode').setRequired(true);
                 }
+				var enableApplyBtn = self.viper.Tools.getItem(prefix + ':isDecorative').getValue() || self.viper.Tools.getItem(prefix + ':altInput').getValue().length;
+                // enable the apply button
+                if (enableApplyBtn && self.viper.Tools.getItem('ViperImagePlugin:bubbleSubSection-applyButton')) {
+                    self.viper.Tools.enableButton('ViperImagePlugin:bubbleSubSection-applyButton');
+                }
+                if (enableApplyBtn && self.viper.Tools.getItem('vitpImagePlugin:bubbleSubSection-applyButton')) {
+                    self.viper.Tools.enableButton('vitpImagePlugin:bubbleSubSection-applyButton');
+                }
+
             });
             content.appendChild(useCurrentLocation);
 
