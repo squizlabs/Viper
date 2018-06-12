@@ -4321,6 +4321,7 @@
         setHtml: function(contents, callback, element)
         {
             contents = this.removeInvalidCharacters(contents);
+
             var self = this;
             this.fireCallbacks('Viper:setHtmlContent', contents, function(data, newContents) {
                 self._setHTML(newContents, callback, element);
@@ -4354,8 +4355,10 @@
             this.removeEmptyNodes(clone);
 
             var self = this;
+
             this.fireCallbacks('Viper:setHtml', {element: clone}, function() {
                 var html = Viper.Util.getHtml(clone);
+
                 if (Viper.Util.isBrowser('msie', 8) === true) {
                     // IE8 has problems with param tags, it removes them from the content
                     // so Viper needs to change the tag name when content is being set
@@ -4521,7 +4524,7 @@
             if (node === this.element) {
                 return;
             }
-
+            
             if (node.nodeType === Viper.Util.ELEMENT_NODE) {
                 var tagName = node.tagName.toLowerCase();
                 if (tag && tag !== tagName) {
@@ -4548,79 +4551,6 @@
                 }
 
                 switch (tagName) {
-                    case 'br':
-                        if (!node.nextSibling
-                            || (node.hasAttribute && node.hasAttribute('_moz_dirty'))
-                        ) {
-                            if (!node.previousSibling
-                                && (Viper.Util.isTag(node.parentNode, 'td') === true
-                                || Viper.Util.isTag(node.parentNode, 'th') === true)
-                            ) {
-                                // This BR element is the only child of the table cell,
-                                // depending on emptyTableCellContent, set the cell's
-                                // content.
-                                var emptyTableCellContent = this.getSetting('emptyTableCellContent');
-                                Viper.Util.setHtml(node.parentNode, emptyTableCellContent);
-                                return;
-                            }
-
-                            // Remove all BR tags and spaces just before this one.
-                            var prev = node.previousSibling;
-                            while (prev) {
-                                if (Viper.Util.isTag(prev, 'br') === true
-                                    || (prev.nodeType === Viper.Util.TEXT_NODE && Viper.Util.trim(prev.nodeValue) === '')
-                                ) {
-                                    var removeNode = prev;
-                                    prev       = prev.previousSibling;
-                                    Viper.Util.remove(removeNode);
-                                } else {
-                                    break;
-                                }
-                            }
-
-                            if (tag) {
-                                var newNode = Viper.document.createTextNode(' ');
-                                Viper.Util.insertBefore(node, newNode);
-                            }
-
-                            Viper.Util.remove(node);
-                        } else {
-                            // Also remove the br tags that are at the end of an element.
-                            // They are usually added to give the empty element height/width.
-                            var next   = node.nextSibling;
-                            var brLast = true;
-                            while (next) {
-                                if (next.nodeType !== Viper.Util.TEXT_NODE || Viper.Util.trim(next.nodeValue) !== '') {
-                                    brLast = false;
-                                    break;
-                                }
-
-                                next = next.nextSibling;
-                            }
-
-                            if (brLast === true) {
-                                // Rmove all BR tags just before this one.
-                                var prev = node.previousSibling;
-                                while (prev) {
-                                    if (Viper.Util.isTag(prev, 'br') === true
-                                        || (prev.nodeType === Viper.Util.TEXT_NODE && Viper.Util.trim(prev.nodeValue) === '')
-                                    ) {
-                                        var removeNode = prev;
-                                        prev       = prev.previousSibling;
-                                        Viper.Util.remove(removeNode);
-                                    } else {
-                                        break;
-                                    }
-                                }
-
-                                Viper.Util.remove(node);
-                            } else if (Viper.Util.isTag(node.nextSibling, ['ol', 'ul']) === true && Viper.Util.isTag(node.parentNode, 'li') === true) {
-                                // BR before sublist.
-                                Viper.Util.remove(node);
-                            }
-                        }//end if
-                    break;
-
                     case 'a':
                         if (!node.getAttribute('name') && !node.firstChild) {
                             Viper.Util.remove(node);
@@ -4671,7 +4601,7 @@
                         if ((Viper.Util.isStubElement(node) === false
                             && !node.firstChild)
                             || cont === '&nbsp;'
-                            || (cont === '' && Viper.Util.isTag(node, ['p', 'div']))
+                            || (cont === '' && Viper.Util.isTag(node, ['div']))
                         ) {
                             if (this.isSpecialElement(node) !== true) {
                                 Viper.Util.remove(node);
@@ -4740,7 +4670,7 @@
                 }
             } else {
                 return;
-            }
+            }   
 
             this.cleanDOM(element);
 
