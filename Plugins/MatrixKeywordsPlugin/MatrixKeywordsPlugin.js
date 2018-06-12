@@ -114,6 +114,15 @@
 					tools.getItem(prefix + ':insertSnippetSelect').setHtml(select);
 				} 
 			});
+
+			/** Fix for an issue where clicking on the Select2 scrollbar was 
+			 * closing the keyword/snippet dropdown */
+			Viper.Util.$(document).on("mouseup", function(e){
+				if(e.target.id == 'select2-MatrixKeywordsPlugininsertKeywordSelect-results' || 
+					e.target.id == 'select2-MatrixKeywordsPlugininsertSnippetSelect-results') {
+					e.stopImmediatePropagation();
+				}
+			});
 			
 	    },
 
@@ -216,10 +225,11 @@
 				ViperUtil.setStyle(select, 'width', '600px');
 
 				var elementId = select.getAttribute('id');
+				var bugaloo;
 
 				if(elementId == 'MatrixKeywordsPlugin:insertKeywordSelect') {
 					//need custom select2 initialisor for keywords
-					ViperUtil.$(select).select2({
+					bugaloo = ViperUtil.$(select).select2({
 						allowClear: true,
 						placeholder: '-- Insert keywords --',
 						templateResult: formatKeyword,
@@ -230,8 +240,8 @@
 				}
 
 				if(elementId == 'MatrixKeywordsPlugin:insertSnippetSelect') {
-					//need custom select2 initialisor for keywords
-					ViperUtil.$(select).select2({
+					//need custom select2 initialisor for snippets
+					bugaloo = ViperUtil.$(select).select2({
 						allowClear: true,
 						placeholder: '-- Insert snippet --',
 					});
