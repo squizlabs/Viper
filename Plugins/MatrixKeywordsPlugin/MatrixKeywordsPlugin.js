@@ -65,9 +65,6 @@
 		var snippetSelect = this._createSelection(prefix + ':insertSnippetSelect', prefix + ':insertSnippetSelect', _('Snippet'), null);
 		insertSnippetContent.appendChild(snippetSelect);
 
-		
-		
-		
 		// insert buttons
 		var insertKeywordButton = tools.createButton(prefix + ':insertKeywordButton', _('Insert'), _('Insert'), 'Viper-insertButton', function() {
 		    var keywordToInsert = tools.getItem(prefix + ':insertKeywordSelect').getValue();
@@ -216,20 +213,43 @@
 			},
 
 			setHtml: function(optionArray, type) {
+
+				//no point doing any processing here
+				if(optionArray == null || optionArray.childNodes.length <= 1) {
+					return;
+				}
+
 				//create blank element for placeholder
                 optionArray.childNodes.forEach(function(node) {
-                    select.appendChild(node);
-                });
+					var nextElement = node.nextElementSibling;
+					var nextNode = node.nextSibling;
+
+					while(nextNode !== null) {
+
+						if(!select.contains(nextNode)) {
+							select.appendChild(nextNode);
+						}
+						nextElement = node.nextElementSibling;
+						nextNode = node.nextSibling;
+					}
+				});
+
+				//once we have populate the keyword and snippet selectors
+				//we should remove the source so it doesn't append
+				//duplicate values from multiple containers
+				var selectSources = document.querySelectorAll( '.' + optionArray.classList[0] );
+				selectSources.forEach(function(source) {
+					source.parentNode.removeChild(source);
+				});
 
                 ViperUtil.addClass(select, 'matrix-select2');
 				ViperUtil.setStyle(select, 'width', '600px');
 
 				var elementId = select.getAttribute('id');
-				var bugaloo;
 
 				if(elementId == 'MatrixKeywordsPlugin:insertKeywordSelect') {
 					//need custom select2 initialisor for keywords
-					bugaloo = ViperUtil.$(select).select2({
+					ViperUtil.$(select).select2({
 						allowClear: true,
 						placeholder: '-- Insert keywords --',
 						templateResult: formatKeyword,
@@ -241,7 +261,7 @@
 
 				if(elementId == 'MatrixKeywordsPlugin:insertSnippetSelect') {
 					//need custom select2 initialisor for snippets
-					bugaloo = ViperUtil.$(select).select2({
+					ViperUtil.$(select).select2({
 						allowClear: true,
 						placeholder: '-- Insert snippet --',
 					});
