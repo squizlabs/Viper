@@ -48,6 +48,8 @@
         }
 
         this.setSetting('emptyTableCellContent', '<br />');
+        this.setSetting('stripExtraBrTags', true);
+        this.setSetting('keepEmptyTags', []);
 
         this.init();
 
@@ -63,6 +65,9 @@
         }
 
         if (options) {
+
+            console.log(JSON.stringify(options));
+
             var self = this;
             this._processOptions(options, function() {
                 if (callback) {
@@ -4549,57 +4554,31 @@
 
                 switch (tagName) {
                     case 'br':
-                        if (!node.nextSibling
-                            || (node.hasAttribute && node.hasAttribute('_moz_dirty'))
-                        ) {
-                            if (!node.previousSibling
-                                && (Viper.Util.isTag(node.parentNode, 'td') === true
-                                || Viper.Util.isTag(node.parentNode, 'th') === true)
+
+                        /**
+                         *  @todo 
+                         * */
+
+                        var stripExtraBrTags = this.getSetting('stripExtraBrTags');
+
+                        if(stripExtraBrTags) {
+
+                            if (!node.nextSibling
+                                || (node.hasAttribute && node.hasAttribute('_moz_dirty'))
                             ) {
-                                // This BR element is the only child of the table cell,
-                                // depending on emptyTableCellContent, set the cell's
-                                // content.
-                                var emptyTableCellContent = this.getSetting('emptyTableCellContent');
-                                Viper.Util.setHtml(node.parentNode, emptyTableCellContent);
-                                return;
-                            }
-
-                            // Remove all BR tags and spaces just before this one.
-                            var prev = node.previousSibling;
-                            while (prev) {
-                                if (Viper.Util.isTag(prev, 'br') === true
-                                    || (prev.nodeType === Viper.Util.TEXT_NODE && Viper.Util.trim(prev.nodeValue) === '')
+                                if (!node.previousSibling
+                                    && (Viper.Util.isTag(node.parentNode, 'td') === true
+                                    || Viper.Util.isTag(node.parentNode, 'th') === true)
                                 ) {
-                                    var removeNode = prev;
-                                    prev       = prev.previousSibling;
-                                    Viper.Util.remove(removeNode);
-                                } else {
-                                    break;
-                                }
-                            }
-
-                            if (tag) {
-                                var newNode = Viper.document.createTextNode(' ');
-                                Viper.Util.insertBefore(node, newNode);
-                            }
-
-                            Viper.Util.remove(node);
-                        } else {
-                            // Also remove the br tags that are at the end of an element.
-                            // They are usually added to give the empty element height/width.
-                            var next   = node.nextSibling;
-                            var brLast = true;
-                            while (next) {
-                                if (next.nodeType !== Viper.Util.TEXT_NODE || Viper.Util.trim(next.nodeValue) !== '') {
-                                    brLast = false;
-                                    break;
+                                    // This BR element is the only child of the table cell,
+                                    // depending on emptyTableCellContent, set the cell's
+                                    // content.
+                                    var emptyTableCellContent = this.getSetting('emptyTableCellContent');
+                                    Viper.Util.setHtml(node.parentNode, emptyTableCellContent);
+                                    return;
                                 }
 
-                                next = next.nextSibling;
-                            }
-
-                            if (brLast === true) {
-                                // Rmove all BR tags just before this one.
+                                // Remove all BR tags and spaces just before this one.
                                 var prev = node.previousSibling;
                                 while (prev) {
                                     if (Viper.Util.isTag(prev, 'br') === true
@@ -4612,13 +4591,53 @@
                                         break;
                                     }
                                 }
+                                
+
+                                if (tag) {
+                                    var newNode = Viper.document.createTextNode(' ');
+                                    Viper.Util.insertBefore(node, newNode);
+                                }
 
                                 Viper.Util.remove(node);
-                            } else if (Viper.Util.isTag(node.nextSibling, ['ol', 'ul']) === true && Viper.Util.isTag(node.parentNode, 'li') === true) {
-                                // BR before sublist.
-                                Viper.Util.remove(node);
-                            }
-                        }//end if
+                            } else {
+                                // Also remove the br tags that are at the end of an element.
+                                // They are usually added to give the empty element height/width.
+
+                                    var next   = node.nextSibling;
+                                    var brLast = true;
+                                    while (next) {
+                                        if (next.nodeType !== Viper.Util.TEXT_NODE || Viper.Util.trim(next.nodeValue) !== '') {
+                                            brLast = false;
+                                            break;
+                                        }
+
+                                        next = next.nextSibling;
+                                    }
+
+                                    if (brLast === true) {
+                                        // Rmove all BR tags just before this one.
+                                        var prev = node.previousSibling;
+                                        while (prev) {
+                                            if (Viper.Util.isTag(prev, 'br') === true
+                                                || (prev.nodeType === Viper.Util.TEXT_NODE && Viper.Util.trim(prev.nodeValue) === '')
+                                            ) {
+                                                var removeNode = prev;
+                                                prev       = prev.previousSibling;
+                                                Viper.Util.remove(removeNode);
+                                            } else {
+                                                break;
+                                            }
+                                        }
+
+                                        Viper.Util.remove(node);
+                                    } else if (Viper.Util.isTag(node.nextSibling, ['ol', 'ul']) === true && Viper.Util.isTag(node.parentNode, 'li') === true) {
+                                        // BR before sublist.
+                                        Viper.Util.remove(node);
+                                    }
+                                
+                            }//end if
+
+                        }
                     break;
 
                     case 'a':
@@ -4668,10 +4687,13 @@
 
                     default:
                         var cont = Viper.Util.trim(Viper.Util.getHtml(node));
-                        if ((Viper.Util.isStubElement(node) === false
-                            && !node.firstChild)
+
+                        var keepEmptyTags = this.getSetting('keepEmptyTags');
+
+                        if (Viper.Util.isTag(node, keepEmptyTags) === false
+                            && ((Viper.Util.isStubElement(node) === false && !node.firstChild)
                             || cont === '&nbsp;'
-                            || (cont === '' && Viper.Util.isTag(node, ['p', 'div']))
+                            || (cont === ''))
                         ) {
                             if (this.isSpecialElement(node) !== true) {
                                 Viper.Util.remove(node);
