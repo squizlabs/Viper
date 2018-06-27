@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Polish translation for Viper\n"
-"POT-Creation-Date: 2018-04-04 17:09+0200\n"
-"PO-Revision-Date: 2018-04-04 17:09+0200\n"
+"POT-Creation-Date: 2018-06-27 17:54+0200\n"
+"PO-Revision-Date: 2018-06-27 17:54+0200\n"
 "Last-Translator: Damian Dąbrowa <ddabrowa@squiz.pl>\n"
 "Language-Team: \n"
 "Language: pl\n"
@@ -12,8 +12,13 @@ msgstr ""
 "X-Generator: Poedit 2.0.6\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
 "X-Poedit-Basepath: ..\n"
-"X-Poedit-SearchPath-0: ./Plugins\n"
-"X-Poedit-SearchPath-1: ./Lib\n"
+"X-Poedit-SearchPath-0: Plugins\n"
+"X-Poedit-SearchPath-1: Lib\n"
+"X-Poedit-SearchPathExcluded-0: Plugins/MatrixCommentsPlugin\n"
+"X-Poedit-SearchPathExcluded-1: Plugins/MatrixCopyPastePlugin\n"
+"X-Poedit-SearchPathExcluded-2: Plugins/MatrixImagePlugin\n"
+"X-Poedit-SearchPathExcluded-3: Plugins/MatrixKeywordsPlugin\n"
+"X-Poedit-SearchPathExcluded-4: Plugins/MatrixLinkPlugin\n"
 
 #: Lib/Tools.js:152 Lib/Tools.js:347 Lib/Tools.js:365 Lib/Tools.js:366
 msgid "Not available"
@@ -29,33 +34,33 @@ msgstr "wymagane"
 msgid "Apply Changes"
 msgstr "Zastosuj zmiany"
 
-#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:144
+#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:149
 msgid "Locate Element"
 msgstr "Znajdź element"
 
-#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:148
+#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:153
 msgid "Show in Source View"
 msgstr "Pokaż w widoku kodu źródłowego"
 
-#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:170
+#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:175
 msgid "Refresh Issue"
 msgstr "Odśwież problem"
 
-#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:227
-#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:240
-#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:329
+#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:232
+#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:245
+#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:334
 msgid "Accessibility Auditor"
 msgstr "Audytor dostępności"
 
-#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:255
+#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:260
 msgid "Re-checking issue"
 msgstr "Ponowne sprawdzanie problemu"
 
-#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:278
+#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:283
 msgid "This issue has not been resolved"
 msgstr "Problem nie został rozwiązany"
 
-#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:279
+#: Plugins/ViperAccessibilityPlugin/ViperAccessibilityPlugin.js:284
 msgid "OK"
 msgstr "OK"
 

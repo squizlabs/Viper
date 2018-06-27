@@ -1,475 +1,718 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Polish translation for Viper\n"
-"POT-Creation-Date: 2014-03-26 14:55+1000\n"
-"PO-Revision-Date: 2014-04-03 12:03+0100\n"
-"Last-Translator: Luke Wright <lwright@squiz.com.au>\n"
+"POT-Creation-Date: 2018-06-27 17:53+0200\n"
+"PO-Revision-Date: 2018-06-27 17:54+0200\n"
+"Last-Translator: Damian Dąbrowa <ddabrowa@squiz.pl>\n"
 "Language-Team: \n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.4\n"
+"X-Generator: Poedit 2.0.6\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
-"X-Poedit-Basepath: ../\n"
-"X-Poedit-SearchPath-0: ./Plugins\n"
-"X-Poedit-SearchPath-1: ./Lib\n"
+"X-Poedit-Basepath: ../Plugins\n"
+"X-Poedit-SearchPath-0: MatrixCommentsPlugin\n"
+"X-Poedit-SearchPath-1: MatrixCopyPastePlugin\n"
+"X-Poedit-SearchPath-2: MatrixImagePlugin\n"
+"X-Poedit-SearchPath-3: MatrixKeywordsPlugin\n"
+"X-Poedit-SearchPath-4: MatrixLinkPlugin\n"
 
-msgid "Insert Matrix Keywords"
-msgstr "Wstaw słowa kluczowe Matrix"
+#: MatrixCommentsPlugin/MatrixCommentsPlugin.js:311
+msgid "Add Comment"
+msgstr "Dodaj komentarz"
 
-msgid "Insert Matrix Snippet"
-msgstr "Wstaw snippet Matrix"
+#: MatrixCommentsPlugin/MatrixCommentsPlugin.js:772
+msgid "New Comment"
+msgstr "Nowy komentarz"
 
-msgid "Keyword"
-msgstr "Słowo kluczowe"
+#: MatrixCommentsPlugin/MatrixCommentsPlugin.js:780
+#: MatrixCommentsPlugin/MatrixCommentsPlugin.js:1021
+#: MatrixCommentsPlugin/MatrixCommentsPlugin.js:1275
+msgid "Cancel"
+msgstr "Anuluj"
 
-msgid "Snippet"
-msgstr "Snippet"
+#: MatrixCommentsPlugin/MatrixCommentsPlugin.js:781
+msgid "Comment"
+msgstr "Komentarz"
 
-msgid "Insert"
-msgstr "Wstaw"
+#: MatrixCommentsPlugin/MatrixCommentsPlugin.js:878
+msgid "Go to previous comment thread"
+msgstr "Przejdź do poprzedniego wątku komentarzy"
 
-msgid "Locate Element"
-msgstr "Znajdź element"
+#: MatrixCommentsPlugin/MatrixCommentsPlugin.js:879
+msgid "Go to next comment thread"
+msgstr "Przejdź do następnego wątku komentarzy"
 
-msgid "Show in Source View"
-msgstr "Pokaż w widoku kodu źródłowego"
+#: MatrixCommentsPlugin/MatrixCommentsPlugin.js:883
+#: MatrixCommentsPlugin/MatrixCommentsPlugin.js:1355
+msgid "Mark as resolved"
+msgstr "Oznacz jako rozwiązany"
 
-msgid "Refresh Issue"
-msgstr "Odśwież problem"
+#: MatrixCommentsPlugin/MatrixCommentsPlugin.js:884
+msgid "Mark this comment thread as resolved"
+msgstr "Oznacz ten wątek komentarzy jako rozwiązany"
 
-msgid "Accessibility Auditor"
-msgstr "Kontrola dostępności"
+#: MatrixCommentsPlugin/MatrixCommentsPlugin.js:889
+#: MatrixCommentsPlugin/MatrixCommentsPlugin.js:1348
+msgid "Resolved"
+msgstr "Rozwiązany"
 
-msgid "Re-checking issue"
-msgstr "Ponowne sprawdzanie problemu"
+#: MatrixCommentsPlugin/MatrixCommentsPlugin.js:964
+#: MatrixCommentsPlugin/MatrixCommentsPlugin.js:1189
+msgid "Edited"
+msgstr "Edytowany"
 
-msgid "This issue has not been resolved"
-msgstr "Problem nie został rozwiązany"
+#: MatrixCommentsPlugin/MatrixCommentsPlugin.js:1002
+msgid "Show more"
+msgstr "Pokaż wiecej"
 
-msgid "OK"
-msgstr "OK"
+#: MatrixCommentsPlugin/MatrixCommentsPlugin.js:1022
+msgid "Save"
+msgstr "Zapisz"
 
-msgid "Insert Character"
-msgstr "Wstaw znak"
+#: MatrixCommentsPlugin/MatrixCommentsPlugin.js:1054
+msgid "Delete Comment"
+msgstr "Usuń komentarz"
 
-msgid "Symbols"
-msgstr "Symbole"
+#: MatrixCommentsPlugin/MatrixCommentsPlugin.js:1058
+msgid "Unmark For Deletion"
+msgstr "Odznacz do usunięcia"
 
-msgid "Latin"
-msgstr "Łaciński"
+#: MatrixCommentsPlugin/MatrixCommentsPlugin.js:1061
+msgid "Mark For Deletion"
+msgstr "Oznacz do usunięcia"
 
-msgid "Mathematics"
-msgstr "Matematyczne"
+#: MatrixCommentsPlugin/MatrixCommentsPlugin.js:1065
+msgid "Edit Comment"
+msgstr "Edytuj komentarz"
 
-msgid "Currency"
-msgstr "Symbole walut"
+#: MatrixCommentsPlugin/MatrixCommentsPlugin.js:1269
+msgid "Add a reply..."
+msgstr "Dodaj odpowiedź"
 
-msgid ""
-"Paste your content into the box below and it will be automatically inserted "
-"and cleaned up."
-msgstr ""
-"Wklej treść w poniższe okienko. Zostanie ona automatycznie wstawiona i "
-"uporządkowana."
+#: MatrixCommentsPlugin/MatrixCommentsPlugin.js:1276
+msgid "Reply"
+msgstr "Odpowiedz"
 
-msgid "Avoid this step for future pastes using the keyboard shortcut %s."
-msgstr ""
-"Aby uniknąć tego kroku przy kolejnych operacjach wklejania, użyj skrótu "
-"klawiaturowego %s."
+#: MatrixCommentsPlugin/MatrixCommentsPlugin.js:1346
+msgid "Marked as resolved"
+msgstr "Oznaczony jako rozwiązany"
 
-msgid "Bold"
-msgstr "Pogrubienie"
+#: MatrixCommentsPlugin/MatrixCommentsPlugin.js:1354
+msgid "Re-opened"
+msgstr "Ponownie otwarty"
 
-msgid "Italic"
-msgstr "Kursywa"
+#: MatrixImagePlugin/MatrixImagePlugin.js:43
+msgid "Choose Image from Matrix Asset"
+msgstr "Wybierz graficzny element w Matrix’ie"
 
-msgid "Remove Format"
-msgstr "Usuń formatowanie"
+#: MatrixImagePlugin/MatrixImagePlugin.js:43
+msgid "Asset"
+msgstr "Element"
 
-msgid "Subscript"
-msgstr "Indeks dolny"
+#: MatrixImagePlugin/MatrixImagePlugin.js:44
+msgid "Upload an Image"
+msgstr "Prześlij grafikę"
 
-msgid "Superscript"
-msgstr "Indeks górny"
+#: MatrixImagePlugin/MatrixImagePlugin.js:44
+msgid "Upload"
+msgstr "Prześlij"
 
-msgid "Strikethrough"
-msgstr "Przekreślenie"
+#: MatrixImagePlugin/MatrixImagePlugin.js:45
+msgid "Image from an URL"
+msgstr "Adres URL grafiki"
 
-msgid "Left Justify"
-msgstr "Wyrównaj do lewej"
-
-msgid "Center Justify"
-msgstr "Wyrównaj centralnie"
-
-msgid "Right Justify"
-msgstr "Wyrównaj do prawej"
-
-msgid "Block Justify"
-msgstr "Wyjustuj"
-
-msgid "Horizontal Rule"
-msgstr "Linia pozioma"
-
-msgid "Justification"
-msgstr "Justowanie"
-
-msgid "Toggle Justification"
-msgstr "Przełącz justowanie"
-
-msgid "Heading 1"
-msgstr "Nagłówek 1"
-
-msgid "Heading 2"
-msgstr "Nagłówek 2"
-
-msgid "Heading 3"
-msgstr "Nagłówek 3"
-
-msgid "Heading 4"
-msgstr "Nagłówek 4"
-
-msgid "Heading 5"
-msgstr "Nagłówek 5"
-
-msgid "Heading 6"
-msgstr "Nagłówek 6"
-
-msgid "Paragraph"
-msgstr "Akapit"
-
-msgid "Preformatted"
-msgstr "Wstępnie sformatowane"
-
-msgid "Address"
-msgstr "Adres"
-
-msgid "Quote"
-msgstr "Cytat"
-
-msgid "Convert to Heading %s"
-msgstr "Zamień na nagłówek %s"
-
-msgid "Convert to %s"
-msgstr "Zamień na %s"
-
-msgid "ID"
-msgstr "ID"
-
-msgid "Class"
-msgstr "Klasa"
-
-msgid "Toggle Formats"
-msgstr "Przełącz formaty"
-
-msgid "Toggle Headings"
-msgstr "Przełącz nagłówki"
-
-msgid "Anchor name (ID)"
-msgstr "Nazwa kotwicy (ID)"
-
-msgid "Class name"
-msgstr "Nazwa klasy"
-
-msgid "Formats"
-msgstr "Formaty"
-
-msgid "Headings"
-msgstr "Nagłówki"
-
-msgid "Anchor ID"
-msgstr "ID kotwicy"
-
-msgid "Undo"
-msgstr "Cofnij"
-
-msgid "Redo"
-msgstr "Wykonaj ponownie"
-
-msgid "Insert Image"
-msgstr "Wstaw obrazek"
-
-msgid "Toggle Image Options"
-msgstr "Przełączaj opcje obrazów"
-
+#: MatrixImagePlugin/MatrixImagePlugin.js:45
+#: MatrixImagePlugin/MatrixImagePlugin.js:840
 msgid "URL"
 msgstr "Adres URL"
 
-msgid "Image is decorative"
-msgstr "Obraz dekoracyjny"
+#: MatrixImagePlugin/MatrixImagePlugin.js:91
+msgid "Loading Quick Edit..."
+msgstr "Ładuję Szybką Edycję"
 
-msgid "Alt"
-msgstr "Alternatywny"
+#: MatrixImagePlugin/MatrixImagePlugin.js:128
+#: MatrixImagePlugin/MatrixImagePlugin.js:644
+#: MatrixImagePlugin/MatrixImagePlugin.js:658
+msgid "Original Image"
+msgstr "Oryginalna grafika"
 
-msgid "Title"
-msgstr "Tytuł"
+#: MatrixImagePlugin/MatrixImagePlugin.js:138
+msgid "Choose File"
+msgstr "Wybierz plik"
 
-msgid ""
-"The selected image will be moved to the next location you click. To cancel "
-"press the move icon again or ESC"
-msgstr ""
-"Wybrany obraz zostanie przeniesiony do następnej zaznaczonej lokalizacji. "
-"Aby anulować, ponownie naciśnij ikonę Przenieś lub ESC."
+#: MatrixImagePlugin/MatrixImagePlugin.js:139
+msgid "Drop image here or"
+msgstr "Upuść grafikę tu lub "
 
-msgid "Move Image"
-msgstr "Przenieś obrazek"
-
-msgid "Loading preview"
-msgstr "Ładowanie podglądu"
-
-msgid "Failed to load image"
-msgstr "Błąd wczytywania obrazka"
-
-msgid "Underline"
-msgstr "Podkreślenie"
-
-msgid "Item"
-msgstr "Obiekt"
-
-msgid "List"
-msgstr "Lista"
-
-msgid "Cell"
-msgstr "Komórka"
-
-msgid "Row"
-msgstr "Wiersz"
-
-msgid "Header"
-msgstr "Nagłówek"
-
-msgid "Link"
-msgstr "Łącze"
-
-msgid "Image"
-msgstr "Obrazek"
-
-msgid "Selection"
-msgstr "Wybór"
-
-msgid "Acronym"
-msgstr "Skrótowiec"
-
-msgid "Abbreviation"
-msgstr "Skrót"
-
-msgid "Language"
-msgstr "Język"
-
-msgid "Language Tools"
-msgstr "Narzędzia językowe"
-
-msgid "Toggle Language Tools"
-msgstr "Przełączaj narzędzia językowe"
-
-msgid "Toggle Acronym Options"
-msgstr "Przełączaj opcje skrótowców"
-
-msgid "Toggle Abbreviation Options"
-msgstr "Przełączaj opcje skrótów"
-
-msgid "Toggle Language Options"
-msgstr "Przełączaj opcje językowe"
-
-msgid "Subject"
-msgstr "Temat"
-
-msgid "Open a New Window"
-msgstr "Otwórz nowe okno"
-
-msgid "Toggle Link Options"
-msgstr "Przełączaj opcje łączy"
-
-msgid "Remove Link"
-msgstr "Usuń łącze"
-
-msgid "Insert Link"
-msgstr "Wstaw łącze"
-
-msgid "Make Unordered List"
-msgstr "Utwórz listę wypunktowaną "
-
-msgid "Make Ordered List"
-msgstr "Utwórz listę numerowaną"
-
-msgid "Indent List"
-msgstr "Zwiększ wcięcie"
-
-msgid "Outdent List"
-msgstr "Zmniejsz wcięcie"
-
-msgid "Search"
-msgstr "Szukaj"
-
-msgid "Replace"
-msgstr "Zamień"
-
-msgid "Replace All"
-msgstr "Zamień wszystko"
-
-msgid "Find Next"
-msgstr "Znajdź następny"
-
-msgid "Search & Replace"
-msgstr "Szukaj i zamień"
-
-msgid "Toggle Source View"
-msgstr "Przełączaj widok kodu źródłowego"
-
-msgid "Discard"
-msgstr "Porzuć"
-
-msgid "Discard Changes"
-msgstr "Porzuć zmiany"
-
+#: MatrixImagePlugin/MatrixImagePlugin.js:215
+#: MatrixImagePlugin/MatrixImagePlugin.js:216
+#: MatrixImagePlugin/MatrixImagePlugin.js:311
+#: MatrixImagePlugin/MatrixImagePlugin.js:312
+#: MatrixImagePlugin/MatrixImagePlugin.js:1771
+#: MatrixImagePlugin/MatrixImagePlugin.js:1772
 msgid "Apply Changes"
 msgstr "Zastosuj zmiany"
 
-msgid "Would you like to apply your changes?"
-msgstr "Czy chcesz zastosować zmiany?"
+#: MatrixImagePlugin/MatrixImagePlugin.js:261
+#: MatrixImagePlugin/MatrixImagePlugin.js:262
+#: MatrixImagePlugin/MatrixImagePlugin.js:352
+#: MatrixImagePlugin/MatrixImagePlugin.js:353
+#: MatrixImagePlugin/MatrixImagePlugin.js:1008
+#: MatrixImagePlugin/MatrixImagePlugin.js:1012
+#: MatrixImagePlugin/MatrixImagePlugin.js:1708
+#: MatrixImagePlugin/MatrixImagePlugin.js:1709
+msgid "Upload Image"
+msgstr "Prześlij grafikę"
 
-msgid "Open In new window"
-msgstr "Otwórz w nowym oknie"
+#: MatrixImagePlugin/MatrixImagePlugin.js:722
+msgid "Loading preview"
+msgstr "Ładowanie podglądu"
 
-msgid "Source Editor"
-msgstr "Edytor kodu źródłowego"
+#: MatrixImagePlugin/MatrixImagePlugin.js:728
+msgid "Could not load preview"
+msgstr "Nie udało się załadować podglądu"
 
-msgid "Viper Source View"
-msgstr "Widok kodu źródłowego Viper"
+#: MatrixImagePlugin/MatrixImagePlugin.js:863
+msgid "Image is decorative"
+msgstr "Obraz dekoracyjny"
 
+#: MatrixImagePlugin/MatrixImagePlugin.js:877
+msgid "Alt"
+msgstr "Alternatywny"
+
+#: MatrixImagePlugin/MatrixImagePlugin.js:881
+msgid "Title"
+msgstr "Tytuł"
+
+#: MatrixImagePlugin/MatrixImagePlugin.js:893
+msgid "File"
+msgstr "Plik"
+
+#: MatrixImagePlugin/MatrixImagePlugin.js:945
+#: MatrixImagePlugin/MatrixImagePlugin.js:946
+msgid "Incorrect file type"
+msgstr "Niewłaściwy typ pliku"
+
+#: MatrixImagePlugin/MatrixImagePlugin.js:1061
+msgid "Uploading image..."
+msgstr "Przesyłanie grafiki…"
+
+#: MatrixImagePlugin/MatrixImagePlugin.js:1161
+msgid "Use current asset as upload location"
+msgstr "Użyj bieżącego elementu, jako rodzica dla przesyłanego pliku"
+
+#: MatrixImagePlugin/MatrixImagePlugin.js:1185
+msgid "Location"
+msgstr "Lokalizacja"
+
+#: MatrixImagePlugin/MatrixImagePlugin.js:1195
+msgid "Show in menu"
+msgstr "Pokaż w menu"
+
+#: MatrixImagePlugin/MatrixImagePlugin.js:1506
 msgid ""
-"Source code changes will be reflected in your edit preview window in real "
-"time."
+"You have selected a %1 asset. Only image, thumbnail or image variety assets "
+"can be selected."
 msgstr ""
-"Zmiany w kodzie źródłowym będą widoczne w oknie podglądu edycji w czasie "
-"rzeczywistym."
+"Wybrano element typu %1. Należy wybrać element typu grafika, miniatura lub "
+"wariacja."
 
-msgid "Revert Changes"
-msgstr "Cofnij zmiany"
+#: MatrixImagePlugin/MatrixImagePlugin.js:1725
+msgid "Low resolution preview."
+msgstr "Podgląd w niskiej rozdzielczości."
 
-msgid "Close Source View"
-msgstr "Zamknij widok kodu źródłowego"
+#: MatrixImagePlugin/MatrixImagePlugin.js:1725
+msgid "Upload the image to use it in the content."
+msgstr "Prześlij grafikę, aby użyć jej w treści."
 
-msgid "Close Window"
-msgstr "Zamknij okno"
+#: MatrixImagePlugin/MatrixImagePlugin.js:1844
+msgid "bytes"
+msgstr "bitów"
+
+#: MatrixImagePlugin/MatrixImagePlugin.js:1845
+msgid "kb"
+msgstr "kb"
+
+#: MatrixImagePlugin/MatrixImagePlugin.js:1846
+msgid "MB"
+msgstr "MB"
+
+#: MatrixImagePlugin/MatrixImagePlugin.js:1847
+msgid "GB"
+msgstr "GB"
+
+#: MatrixImagePlugin/MatrixImagePlugin.js:1848
+msgid "TB"
+msgstr "TB"
+
+#: MatrixImagePlugin/MatrixImagePlugin.js:1849
+msgid "PB"
+msgstr "PB"
+
+#: MatrixKeywordsPlugin/MatrixKeywordsPlugin.js:47
+#: MatrixKeywordsPlugin/MatrixKeywordsPlugin.js:55
+msgid "Insert Matrix Keywords"
+msgstr "Wstaw słowa kluczowe Matrix"
+
+#: MatrixKeywordsPlugin/MatrixKeywordsPlugin.js:48
+#: MatrixKeywordsPlugin/MatrixKeywordsPlugin.js:58
+msgid "Insert Matrix Snippet"
+msgstr "Wstaw snippet Matrix"
+
+#: MatrixKeywordsPlugin/MatrixKeywordsPlugin.js:61
+msgid "Keyword"
+msgstr "Słowo kluczowe"
+
+#: MatrixKeywordsPlugin/MatrixKeywordsPlugin.js:65
+msgid "Snippet"
+msgstr "Snippet"
+
+#: MatrixKeywordsPlugin/MatrixKeywordsPlugin.js:69
+#: MatrixKeywordsPlugin/MatrixKeywordsPlugin.js:75
+msgid "Insert"
+msgstr "Wstaw"
+
+#: MatrixLinkPlugin/MatrixLinkPlugin.js:485
+msgid "Use Link Destination"
+msgstr "Użyj adresu docelowego"
+
+#: MatrixLinkPlugin/MatrixLinkPlugin.js:487
+msgid "Use Redirect Link Destination"
+msgstr "Użyj docelowego adresu przekierowania"
+
+#: MatrixLinkPlugin/MatrixLinkPlugin.js:519
+#: MatrixLinkPlugin/MatrixLinkPlugin.js:527
+msgid "Specified asset does not exist."
+msgstr "Wskazany element nie istnieje."
+
+#: MatrixLinkPlugin/MatrixLinkPlugin.js:522
+msgid "Linking to non-live asset not allowed."
+msgstr "Nie można linkować do nieopublikowanego elementu."
+
+#~ msgid "Locate Element"
+#~ msgstr "Znajdź element"
+
+#~ msgid "Show in Source View"
+#~ msgstr "Pokaż w widoku kodu źródłowego"
+
+#~ msgid "Refresh Issue"
+#~ msgstr "Odśwież problem"
+
+#~ msgid "Accessibility Auditor"
+#~ msgstr "Kontrola dostępności"
+
+#~ msgid "Re-checking issue"
+#~ msgstr "Ponowne sprawdzanie problemu"
+
+#~ msgid "This issue has not been resolved"
+#~ msgstr "Problem nie został rozwiązany"
+
+#~ msgid "OK"
+#~ msgstr "OK"
+
+#~ msgid "Insert Character"
+#~ msgstr "Wstaw znak"
+
+#~ msgid "Symbols"
+#~ msgstr "Symbole"
+
+#~ msgid "Latin"
+#~ msgstr "Łaciński"
+
+#~ msgid "Mathematics"
+#~ msgstr "Matematyczne"
+
+#~ msgid "Currency"
+#~ msgstr "Symbole walut"
+
+#~ msgid ""
+#~ "Paste your content into the box below and it will be automatically "
+#~ "inserted and cleaned up."
+#~ msgstr ""
+#~ "Wklej treść w poniższe okienko. Zostanie ona automatycznie wstawiona i "
+#~ "uporządkowana."
+
+#~ msgid "Avoid this step for future pastes using the keyboard shortcut %s."
+#~ msgstr ""
+#~ "Aby uniknąć tego kroku przy kolejnych operacjach wklejania, użyj skrótu "
+#~ "klawiaturowego %s."
+
+#~ msgid "Bold"
+#~ msgstr "Pogrubienie"
+
+#~ msgid "Italic"
+#~ msgstr "Kursywa"
+
+#~ msgid "Remove Format"
+#~ msgstr "Usuń formatowanie"
+
+#~ msgid "Subscript"
+#~ msgstr "Indeks dolny"
+
+#~ msgid "Superscript"
+#~ msgstr "Indeks górny"
+
+#~ msgid "Strikethrough"
+#~ msgstr "Przekreślenie"
+
+#~ msgid "Left Justify"
+#~ msgstr "Wyrównaj do lewej"
+
+#~ msgid "Center Justify"
+#~ msgstr "Wyrównaj centralnie"
+
+#~ msgid "Right Justify"
+#~ msgstr "Wyrównaj do prawej"
+
+#~ msgid "Block Justify"
+#~ msgstr "Wyjustuj"
+
+#~ msgid "Horizontal Rule"
+#~ msgstr "Linia pozioma"
+
+#~ msgid "Justification"
+#~ msgstr "Justowanie"
+
+#~ msgid "Toggle Justification"
+#~ msgstr "Przełącz justowanie"
+
+#~ msgid "Heading 1"
+#~ msgstr "Nagłówek 1"
+
+#~ msgid "Heading 2"
+#~ msgstr "Nagłówek 2"
+
+#~ msgid "Heading 3"
+#~ msgstr "Nagłówek 3"
+
+#~ msgid "Heading 4"
+#~ msgstr "Nagłówek 4"
+
+#~ msgid "Heading 5"
+#~ msgstr "Nagłówek 5"
+
+#~ msgid "Heading 6"
+#~ msgstr "Nagłówek 6"
+
+#~ msgid "Paragraph"
+#~ msgstr "Akapit"
+
+#~ msgid "Preformatted"
+#~ msgstr "Wstępnie sformatowane"
+
+#~ msgid "Address"
+#~ msgstr "Adres"
+
+#~ msgid "Quote"
+#~ msgstr "Cytat"
+
+#~ msgid "Convert to Heading %s"
+#~ msgstr "Zamień na nagłówek %s"
+
+#~ msgid "Convert to %s"
+#~ msgstr "Zamień na %s"
+
+#~ msgid "ID"
+#~ msgstr "ID"
+
+#~ msgid "Class"
+#~ msgstr "Klasa"
+
+#~ msgid "Toggle Formats"
+#~ msgstr "Przełącz formaty"
+
+#~ msgid "Toggle Headings"
+#~ msgstr "Przełącz nagłówki"
+
+#~ msgid "Anchor name (ID)"
+#~ msgstr "Nazwa kotwicy (ID)"
+
+#~ msgid "Class name"
+#~ msgstr "Nazwa klasy"
+
+#~ msgid "Formats"
+#~ msgstr "Formaty"
+
+#~ msgid "Headings"
+#~ msgstr "Nagłówki"
+
+#~ msgid "Anchor ID"
+#~ msgstr "ID kotwicy"
+
+#~ msgid "Undo"
+#~ msgstr "Cofnij"
+
+#~ msgid "Redo"
+#~ msgstr "Wykonaj ponownie"
+
+#~ msgid "Insert Image"
+#~ msgstr "Wstaw obrazek"
+
+#~ msgid "Toggle Image Options"
+#~ msgstr "Przełączaj opcje obrazów"
+
+#~ msgid ""
+#~ "The selected image will be moved to the next location you click. To "
+#~ "cancel press the move icon again or ESC"
+#~ msgstr ""
+#~ "Wybrany obraz zostanie przeniesiony do następnej zaznaczonej lokalizacji. "
+#~ "Aby anulować, ponownie naciśnij ikonę Przenieś lub ESC."
+
+#~ msgid "Move Image"
+#~ msgstr "Przenieś obrazek"
+
+#~ msgid "Failed to load image"
+#~ msgstr "Błąd wczytywania obrazka"
+
+#~ msgid "Underline"
+#~ msgstr "Podkreślenie"
+
+#~ msgid "Item"
+#~ msgstr "Obiekt"
+
+#~ msgid "List"
+#~ msgstr "Lista"
+
+#~ msgid "Cell"
+#~ msgstr "Komórka"
+
+#~ msgid "Row"
+#~ msgstr "Wiersz"
+
+#~ msgid "Header"
+#~ msgstr "Nagłówek"
+
+#~ msgid "Link"
+#~ msgstr "Łącze"
+
+#~ msgid "Image"
+#~ msgstr "Obrazek"
+
+#~ msgid "Selection"
+#~ msgstr "Wybór"
+
+#~ msgid "Acronym"
+#~ msgstr "Skrótowiec"
+
+#~ msgid "Abbreviation"
+#~ msgstr "Skrót"
+
+#~ msgid "Language"
+#~ msgstr "Język"
+
+#~ msgid "Language Tools"
+#~ msgstr "Narzędzia językowe"
+
+#~ msgid "Toggle Language Tools"
+#~ msgstr "Przełączaj narzędzia językowe"
+
+#~ msgid "Toggle Acronym Options"
+#~ msgstr "Przełączaj opcje skrótowców"
+
+#~ msgid "Toggle Abbreviation Options"
+#~ msgstr "Przełączaj opcje skrótów"
+
+#~ msgid "Toggle Language Options"
+#~ msgstr "Przełączaj opcje językowe"
+
+#~ msgid "Subject"
+#~ msgstr "Temat"
+
+#~ msgid "Open a New Window"
+#~ msgstr "Otwórz nowe okno"
+
+#~ msgid "Toggle Link Options"
+#~ msgstr "Przełączaj opcje łączy"
+
+#~ msgid "Remove Link"
+#~ msgstr "Usuń łącze"
+
+#~ msgid "Insert Link"
+#~ msgstr "Wstaw łącze"
+
+#~ msgid "Make Unordered List"
+#~ msgstr "Utwórz listę wypunktowaną "
+
+#~ msgid "Make Ordered List"
+#~ msgstr "Utwórz listę numerowaną"
+
+#~ msgid "Indent List"
+#~ msgstr "Zwiększ wcięcie"
+
+#~ msgid "Outdent List"
+#~ msgstr "Zmniejsz wcięcie"
+
+#~ msgid "Search"
+#~ msgstr "Szukaj"
+
+#~ msgid "Replace"
+#~ msgstr "Zamień"
+
+#~ msgid "Replace All"
+#~ msgstr "Zamień wszystko"
+
+#~ msgid "Find Next"
+#~ msgstr "Znajdź następny"
+
+#~ msgid "Search & Replace"
+#~ msgstr "Szukaj i zamień"
+
+#~ msgid "Toggle Source View"
+#~ msgstr "Przełączaj widok kodu źródłowego"
+
+#~ msgid "Discard"
+#~ msgstr "Porzuć"
+
+#~ msgid "Discard Changes"
+#~ msgstr "Porzuć zmiany"
+
+#~ msgid "Would you like to apply your changes?"
+#~ msgstr "Czy chcesz zastosować zmiany?"
+
+#~ msgid "Open In new window"
+#~ msgstr "Otwórz w nowym oknie"
+
+#~ msgid "Source Editor"
+#~ msgstr "Edytor kodu źródłowego"
+
+#~ msgid "Viper Source View"
+#~ msgstr "Widok kodu źródłowego Viper"
+
+#~ msgid ""
+#~ "Source code changes will be reflected in your edit preview window in real "
+#~ "time."
+#~ msgstr ""
+#~ "Zmiany w kodzie źródłowym będą widoczne w oknie podglądu edycji w czasie "
+#~ "rzeczywistym."
+
+#~ msgid "Revert Changes"
+#~ msgstr "Cofnij zmiany"
+
+#~ msgid "Close Source View"
+#~ msgstr "Zamknij widok kodu źródłowego"
+
+#~ msgid "Close Window"
+#~ msgstr "Zamknij okno"
 
 # a cóż to może być? jakiś kontekst?
-msgid "commmandKeyBinding"
-msgstr "commmandKeyBinding"
+#~ msgid "commmandKeyBinding"
+#~ msgstr "commmandKeyBinding"
 
-msgid "Insert Table"
-msgstr "Wstaw tabelę"
+#~ msgid "Insert Table"
+#~ msgstr "Wstaw tabelę"
 
-msgid "Show Table tools"
-msgstr "Pokaż narzędzia tabeli"
+#~ msgid "Show Table tools"
+#~ msgstr "Pokaż narzędzia tabeli"
 
-msgid "Show Row tools"
-msgstr "Pokaż narzędzia wiersza"
+#~ msgid "Show Row tools"
+#~ msgstr "Pokaż narzędzia wiersza"
 
-msgid "Show Column tools"
-msgstr "Pokaż narzędzia kolumny"
+#~ msgid "Show Column tools"
+#~ msgstr "Pokaż narzędzia kolumny"
 
-msgid "Show Cell tools"
-msgstr "Pokaż narzędzia komórki"
+#~ msgid "Show Cell tools"
+#~ msgstr "Pokaż narzędzia komórki"
 
-msgid "Table"
-msgstr "Tabela"
+#~ msgid "Table"
+#~ msgstr "Tabela"
 
-msgid "Column"
-msgstr "Kolumna"
+#~ msgid "Column"
+#~ msgstr "Kolumna"
 
-msgid "Toggle Settings"
-msgstr "Przełącz ustawienia"
+#~ msgid "Toggle Settings"
+#~ msgstr "Przełącz ustawienia"
 
-msgid "Heading"
-msgstr "Nagłówek"
+#~ msgid "Heading"
+#~ msgstr "Nagłówek"
 
-msgid "Split Vertically"
-msgstr "Podziel pionowo"
+#~ msgid "Split Vertically"
+#~ msgstr "Podziel pionowo"
 
-msgid "Split Horizontally"
-msgstr "Podziel poziomo"
+#~ msgid "Split Horizontally"
+#~ msgstr "Podziel poziomo"
 
-msgid "Merge Up"
-msgstr "Połącz w górę"
+#~ msgid "Merge Up"
+#~ msgstr "Połącz w górę"
 
-msgid "Merge Down"
-msgstr "Połącz w dół"
+#~ msgid "Merge Down"
+#~ msgstr "Połącz w dół"
 
-msgid "Merge Left"
-msgstr "Połącz w lewo"
+#~ msgid "Merge Left"
+#~ msgstr "Połącz w lewo"
 
-msgid "Merge Right"
-msgstr "Połącz w prawo"
+#~ msgid "Merge Right"
+#~ msgstr "Połącz w prawo"
 
-msgid "Toggle Merge/Split Options"
-msgstr "Przełącz opcje Połącz/Podziel"
+#~ msgid "Toggle Merge/Split Options"
+#~ msgstr "Przełącz opcje Połącz/Podziel"
 
-msgid "Width"
-msgstr "Szerokość"
+#~ msgid "Width"
+#~ msgstr "Szerokość"
 
-msgid "Insert Column Before"
-msgstr "Wstaw kolumnę z lewej"
+#~ msgid "Insert Column Before"
+#~ msgstr "Wstaw kolumnę z lewej"
 
-msgid "Insert Column After"
-msgstr "Wstaw kolumnę z prawej"
+#~ msgid "Insert Column After"
+#~ msgstr "Wstaw kolumnę z prawej"
 
-msgid "Move Left"
-msgstr "Przesuń w lewo"
+#~ msgid "Move Left"
+#~ msgstr "Przesuń w lewo"
 
-msgid "Move Right"
-msgstr "Przesuń w prawo"
+#~ msgid "Move Right"
+#~ msgstr "Przesuń w prawo"
 
-msgid "Remove Column"
-msgstr "Usuń kolumnę"
+#~ msgid "Remove Column"
+#~ msgstr "Usuń kolumnę"
 
-msgid "Insert Row Before"
-msgstr "Wstaw wiersz powyżej"
+#~ msgid "Insert Row Before"
+#~ msgstr "Wstaw wiersz powyżej"
 
-msgid "Insert Row After"
-msgstr "Wstaw wiersz poniżej"
+#~ msgid "Insert Row After"
+#~ msgstr "Wstaw wiersz poniżej"
 
-msgid "Move Up"
-msgstr "Przesuń w górę"
+#~ msgid "Move Up"
+#~ msgstr "Przesuń w górę"
 
-msgid "Move Down"
-msgstr "Przesuń w dół"
+#~ msgid "Move Down"
+#~ msgstr "Przesuń w dół"
 
-msgid "Remove Row"
-msgstr "Usuń wiersz"
+#~ msgid "Remove Row"
+#~ msgstr "Usuń wiersz"
 
-msgid "Summary"
-msgstr "Podsumowanie"
+#~ msgid "Summary"
+#~ msgstr "Podsumowanie"
 
-msgid "Use Caption"
-msgstr "Użyj podpisu"
+#~ msgid "Use Caption"
+#~ msgstr "Użyj podpisu"
 
-msgid "Remove Table"
-msgstr "Usuń tabelę"
+#~ msgid "Remove Table"
+#~ msgstr "Usuń tabelę"
 
-msgid "None"
-msgstr "Brak"
+#~ msgid "None"
+#~ msgstr "Brak"
 
-msgid "Left"
-msgstr "Lewa"
+#~ msgid "Left"
+#~ msgstr "Lewa"
 
-msgid "Top"
-msgstr "Góra"
+#~ msgid "Top"
+#~ msgstr "Góra"
 
-msgid "Both"
-msgstr "Oba"
+#~ msgid "Both"
+#~ msgstr "Oba"
 
-msgid "Headers"
-msgstr "Nagłówki"
+#~ msgid "Headers"
+#~ msgstr "Nagłówki"
 
-msgid "Size"
-msgstr "Rozmiar"
+#~ msgid "Size"
+#~ msgstr "Rozmiar"
 
-msgid "Not available"
-msgstr "Niedostępne"
+#~ msgid "Not available"
+#~ msgstr "Niedostępne"
 
-msgid "required"
-msgstr "wymagane"
+#~ msgid "required"
+#~ msgstr "wymagane"
 
 #~ msgid "Viper by Squiz"
 #~ msgstr "Viper firmy Squiz"
