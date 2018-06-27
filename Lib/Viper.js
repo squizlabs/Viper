@@ -66,8 +66,6 @@
 
         if (options) {
 
-            console.log(JSON.stringify(options));
-
             var self = this;
             this._processOptions(options, function() {
                 if (callback) {
