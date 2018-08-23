@@ -297,13 +297,13 @@
 
         isInToolbarBounds: function(yPoint)
         {
-            var gap             = 30;
-            var visibleToolbars = this.viper.Tools.getVisibleToolbarRectangles();
-            for (var i = 0; i < visibleToolbars.length; i++) {
-                if (yPoint >= (visibleToolbars[i].y1 - gap) && yPoint <= (visibleToolbars[i].y2 + gap)) {
-                    return true;
-                }
-            }
+            // var gap             = 30;
+            // var visibleToolbars = this.viper.Tools.getVisibleToolbarRectangles();
+            // for (var i = 0; i < visibleToolbars.length; i++) {
+            //     if (yPoint >= (visibleToolbars[i].y1 - gap) && yPoint <= (visibleToolbars[i].y2 + gap)) {
+            //         return true;
+            //     }
+            // }
 
             return false;
 
