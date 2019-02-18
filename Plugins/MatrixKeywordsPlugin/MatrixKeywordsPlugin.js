@@ -99,7 +99,22 @@
 					var selectField = tools.getItem(prefix + ':insertKeywordSelect');
 					var select = document.getElementById(keywordSelectorElement);
 					tools.getItem(prefix + ':insertKeywordSelect').setHtml(select);
-				} 
+				} else {
+					// Select2 isn't available (such as in Edit+). Go back to the
+					// old method, using the data-keywords array.
+					var datasetKeywords = ViperUtil.$(editableElement).data('keywords');
+					if (typeof datasetKeywords !== 'undefined' && datasetKeywords !== '') {
+						// make sure it's valid JSON associative array, not an array object.
+						if (typeof datasetKeywords.length === 'undefined') {
+							// enable button and insert those keywords as options
+							tools.enableButton('insertKeywords');
+							var selectField  = tools.getItem(prefix + ':insertKeywordSelect');
+							if (selectField.getValue() === null) {
+								tools.getItem(prefix + ':insertKeywordSelect').setValue(datasetKeywords);
+							}
+						}
+					}
+				}
 				
 				// get snippet for current div
 				var datasetSnippets = ViperUtil.$(editableElement).data('snippets');
@@ -109,7 +124,20 @@
 					var selectField = tools.getItem(prefix + ':insertSnippetSelect');
 					var select = document.getElementById(snippetSelectorElement);
 					tools.getItem(prefix + ':insertSnippetSelect').setHtml(select);
-				} 
+				} else {
+					// Select2 not available.
+					var datasetSnippets = ViperUtil.$(editableElement).data('snippets');
+					if (typeof datasetSnippets !== 'undefined' && datasetSnippets !== '') {
+						if (typeof datasetSnippets.length === 'undefined') {
+							// enable button and insert those snippets as options
+							tools.enableButton('insertSnippets');
+							var selectField  = tools.getItem(prefix + ':insertSnippetSelect');
+							if (selectField.getValue() === null) {
+								tools.getItem(prefix + ':insertSnippetSelect').setValue(datasetSnippets);
+							}
+						}
+					}
+				}
 			});
 
 			/** Fix for an issue where clicking on the Select2 scrollbar was 
