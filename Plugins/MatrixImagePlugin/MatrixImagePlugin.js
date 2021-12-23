@@ -852,6 +852,17 @@
                      ViperUtil.setStyle(prefix == 'vitpImagePlugin' ? this._vitpPreviewBox : this._previewBox, 'display', 'none');
                      tools.setFieldErrors(prefix + ':urlInput', []);
                 } else {
+                    // if asset picker is used, then alt field value will be set
+                    // but if user directly insert assetid or copy pasted assetid
+                    // alt field will not be set
+                    // make sure alt field value will be set
+                    var assetid = parseInt(url);
+                    if (isNaN(assetid) === false) {
+                        self.retrieveAssetDetails(url, function(data) {
+                            var altValue = data.attributes.alt !== undefined ? data.attributes.alt : ''
+                            tools.getItem(prefix + ':altInput').setValue(altValue, false);
+                        });
+                    }
                     // After a time period update the image preview.
                     inputTimeout = setTimeout(function() {
                         self.updateImagePreview(url, prefix);
