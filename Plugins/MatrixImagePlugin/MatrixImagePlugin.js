@@ -852,20 +852,23 @@
                      ViperUtil.setStyle(prefix == 'vitpImagePlugin' ? this._vitpPreviewBox : this._previewBox, 'display', 'none');
                      tools.setFieldErrors(prefix + ':urlInput', []);
                 } else {
-                    // if asset picker is used, then alt field value will be set
-                    // but if user directly insert assetid or copy pasted assetid
-                    // alt field will not be set
-                    // make sure alt field value will be set
-                    var assetid = parseInt(url);
-                    if (isNaN(assetid) === false) {
-                        self.retrieveAssetDetails(url, function(data) {
-                            var altValue = data.attributes.alt !== undefined ? data.attributes.alt : ''
-                            tools.getItem(prefix + ':altInput').setValue(altValue, false);
-                        });
-                    }
-                    // After a time period update the image preview.
+                    // After a time period update the image preview and alt value
                     inputTimeout = setTimeout(function() {
-                        self.updateImagePreview(url, prefix);
+                        self.updateImagePreview(url, prefix, function(img) {
+                            // if asset picker is used, then alt field value will be set
+                            // but if user directly insert assetid or copy pasted assetid
+                            // alt field will not be set
+                            // make sure alt field value will be set
+                            if (img !== false) {
+                                var assetid = parseInt(url);
+                                if (isNaN(assetid) === false) {
+                                    self.retrieveAssetDetails(url, function(data) {
+                                        var altValue = data.attributes.alt !== undefined ? data.attributes.alt : ''
+                                        tools.getItem(prefix + ':altInput').setValue(altValue, false);
+                                    });
+                                }
+                            }
+                        });
                     }, 500);
                 }
             });
@@ -1220,7 +1223,7 @@
         },
 
 
-        updateImagePreview: function(url, prefix)
+        updateImagePreview: function(url, prefix, callback)
         {
             var self = this;
             if (this._isInternalLink(url) === true) {
@@ -1247,6 +1250,7 @@
 
             this._getImage(url, function(img) {
                 self.setPreviewContent(img, false, prefix);
+                typeof callback === 'function' && callback.call(this, img);
             });
         },
 
